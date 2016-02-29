@@ -1,0 +1,12 @@
+body{
+    background: #000;
+}
+#buffer{
+    display: none;
+}
+canvas{
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    top: 0;
+}

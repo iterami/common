@@ -1,0 +1,55 @@
+a{
+    color: #4c4;
+    cursor: pointer;
+    text-decoration: underline;
+}
+a:hover{
+    color: #777;
+}
+body{
+    background: #000;
+    color: #aaa;
+    font-family: sans-serif;
+    font-size: 125%;
+    text-align: center;
+}
+body > div{
+    display: inline-block;
+    text-align: left;
+    vertical-align: top;
+}
+body > div > div{
+    padding: 4px;
+}
+#buffer{
+    display: none;
+}
+canvas{
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+hr{
+    border: 4px solid #222;
+    margin: 4px 0;
+}
+input{
+    background: #000;
+    color: #aaa;
+    font-size: 100%;
+    text-align: center;
+    width: 75px;
+}
+input[disabled]{
+    border: 0;
+}
+input[type=color],
+input[type=range]{
+    cursor: pointer;
+}
+.right{
+    border-left: 8px solid #222;
+}
+ul{
+    margin: 0;
+}
