@@ -1,0 +1,14 @@
+a{
+    color: #4c4;
+}
+a:hover{
+    color: #777;
+}
+body{
+    background: #000;
+    color: #aaa;
+    font-family: sans-serif;
+}
+pre{
+    white-space: pre-wrap;
+}
