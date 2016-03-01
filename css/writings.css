@@ -9,6 +9,12 @@ body{
     color: #aaa;
     font-family: sans-serif;
 }
+hr{
+    border: 2px solid #333;
+}
 pre{
     white-space: pre-wrap;
+}
+ul{
+    margin: 0;
 }

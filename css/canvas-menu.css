@@ -21,10 +21,12 @@ body > div{
 body > div > div{
     padding: 4px;
 }
-#buffer{
+#buffer,
+#buffer-static{
     display: none;
 }
 canvas{
+    cursor: pointer;
     left: 0;
     position: absolute;
     top: 0;
@@ -43,8 +45,10 @@ input{
 input[disabled]{
     border: 0;
 }
+input[type=checkbox],
 input[type=color],
-input[type=range]{
+input[type=range],
+label{
     cursor: pointer;
 }
 .right{
