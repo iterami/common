@@ -12,9 +12,10 @@ body{
 hr{
     border: 2px solid #333;
 }
-pre{
-    white-space: pre-wrap;
-}
+ol,
 ul{
     margin: 0;
+}
+pre{
+    white-space: pre-wrap;
 }
