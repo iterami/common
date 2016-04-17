@@ -52,10 +52,10 @@ function resize(){
 }
 
 var buffer = document.getElementById('buffer').getContext('2d', {
-  'alpha': false,
+  //'alpha': false,
 });
 var canvas = document.getElementById('canvas').getContext('2d', {
-  'alpha': false,
+  //'alpha': false,
 });
 var height = 0;
 var width = 0;
