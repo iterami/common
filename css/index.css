@@ -26,6 +26,9 @@ td{
     border-bottom: 1px solid #555;
     line-height: 3em;
 }
+td:nth-child(2){
+    text-align: center;
+}
 td:nth-child(2) a{
     color: #f70;
 }
