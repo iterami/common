@@ -46,7 +46,9 @@ function resize(){
     document.getElementById('canvas').width = width;
     x = width / 2;
 
-    resize_logic();
+    if(typeof resize_logic == 'function'){
+        resize_logic();
+    }
 }
 
 var buffer = document.getElementById('buffer').getContext('2d', {
