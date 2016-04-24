@@ -2,8 +2,7 @@
 
 function init_settings(newsettings, newprefix){
     for(var setting in newsettings){
-        defaults[setting] = newsettings[setting]['default'];
-        settings[setting] = newsettings[setting]['value'];
+        settings[setting] = newsettings[setting];
     }
 
     prefix = newprefix;
@@ -15,7 +14,7 @@ function reset(){
     }
 
     for(var setting in settings){
-        settings[setting] = defaults[setting];
+        settings[setting]['value'] = settings[setting]['default'];
     }
 
     save();
@@ -23,12 +22,16 @@ function reset(){
 
 function save(){
     for(var setting in settings){
-        settings[setting] = document.getElementById(setting).value;
+        var value = document.getElementById(setting).value;
+        if(typeof settings[setting]['todo'] == 'function'){
+            value = settings[setting]['todo'](value);
+        }
+        settings[setting]['value'] = value;
 
-        if(settings[setting] !== defaults[setting]){
+        if(settings[setting]['value'] !== settings[setting]['default']){
             window.localStorage.setItem(
               prefix + setting,
-              settings[setting]
+              settings[setting]['value']
             );
 
         }else{
@@ -37,6 +40,5 @@ function save(){
     }
 }
 
-var defaults = {};
 var prefix = '';
 var settings = {};
