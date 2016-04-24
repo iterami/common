@@ -15,9 +15,7 @@ function reset(){
     }
 
     for(var setting in settings){
-        if(settings[setting] !== defaults[setting]){
-            settings[setting] = defaults[setting];
-        }
+        settings[setting] = defaults[setting];
     }
 
     save();
