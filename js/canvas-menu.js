@@ -22,7 +22,7 @@ function draw(){
       0
     );
 
-    window.requestAnimationFrame(draw);
+    animationFrame = window.requestAnimationFrame(draw);
 }
 
 function init_canvas(){
