@@ -50,13 +50,14 @@ function resize(){
     }
 }
 
-function setmode(newmode){
+function setmode(newmode, newgame){
     window.cancelAnimationFrame(animationFrame);
     window.clearInterval(interval);
 
     mode = newmode;
+    newgame = newgame || false;
 
-    setmode_logic();
+    setmode_logic(newgame);
 
     if(mode === 0){
         // Main menu mode.
@@ -64,22 +65,24 @@ function setmode(newmode){
         canvas = 0;
 
     }else{
-        document.body.innerHTML =
-          '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
+        if(newgame){
+            document.body.innerHTML =
+              '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
 
-        var contextAttributes = {
-          'alpha': false,
-        };
-        buffer = document.getElementById('buffer').getContext(
-          '2d',
-          contextAttributes
-        );
-        canvas = document.getElementById('canvas').getContext(
-          '2d',
-          contextAttributes
-        );
+            var contextAttributes = {
+              'alpha': false,
+            };
+            buffer = document.getElementById('buffer').getContext(
+              '2d',
+              contextAttributes
+            );
+            canvas = document.getElementById('canvas').getContext(
+              '2d',
+              contextAttributes
+            );
 
-        resize();
+            resize();
+        }
 
         animationFrame = window.requestAnimationFrame(draw);
         interval = window.setInterval(
