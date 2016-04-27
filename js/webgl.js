@@ -1,6 +1,10 @@
 'use strict';
 
 function draw(){
+    buffer.clear(buffer.COLOR_BUFFER_BIT | buffer.DEPTH_BUFFER_BIT);
+
+    draw_logic();
+
     canvas.clearRect(
       0,
       0,
@@ -43,7 +47,7 @@ function resize(){
 }
 
 var buffer = document.getElementById('buffer').getContext('webgl');
-var canvas = document.getElementById('canvas').getContext('webgl');
+var canvas = document.getElementById('canvas').getContext('2d');
 var height = 0;
 var width = 0;
 var x = 0;
