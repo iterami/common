@@ -42,8 +42,8 @@ function resize(){
     }
 }
 
-var buffer = 0;
-var canvas = 0;
+var buffer = document.getElementById('buffer').getContext('webgl');
+var canvas = document.getElementById('canvas').getContext('webgl');
 var height = 0;
 var width = 0;
 var x = 0;
