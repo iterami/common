@@ -148,3 +148,10 @@ function select_spell(id){
     document.getElementById('canvas').style.cursor =
       player['spellbook'][player['spellbar'][id]]['cursor'] || 'auto';
 }
+
+var npcs = [];
+var particles = [];
+var player = {};
+var ui = 0;
+var world_dynamic = [];
+var world_static = [];
