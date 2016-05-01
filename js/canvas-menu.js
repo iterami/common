@@ -21,8 +21,11 @@ function draw(){
       0,
       0
     );
+}
 
-    animationFrame = window.requestAnimationFrame(draw);
+function drawloop(){
+    draw();
+    animationFrame = window.requestAnimationFrame(drawloop);
 }
 
 function init_canvas(){
@@ -88,7 +91,7 @@ function setmode(newmode, newgame){
             load_level(mode);
         }
 
-        animationFrame = window.requestAnimationFrame(draw);
+        animationFrame = window.requestAnimationFrame(drawloop);
         interval = window.setInterval(
           logic,
           settings['ms-per-frame']

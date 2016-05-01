@@ -16,8 +16,11 @@ function draw(){
       0,
       0
     );
+}
 
-    animationFrame = window.requestAnimationFrame(draw);
+function drawloop(){
+    draw();
+    animationFrame = window.requestAnimationFrame(drawloop);
 }
 
 function init_webgl(){
@@ -70,7 +73,7 @@ function setmode(newmode, newgame){
             resize();
         }
 
-        animationFrame = window.requestAnimationFrame(draw);
+        animationFrame = window.requestAnimationFrame(drawloop);
         interval = window.setInterval(
           logic,
           settings['ms-per-frame']

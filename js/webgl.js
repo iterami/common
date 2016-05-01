@@ -16,14 +16,17 @@ function draw(){
       0,
       0
     );
+}
 
-    window.requestAnimationFrame(draw);
+function drawloop(){
+    draw();
+    window.requestAnimationFrame(drawloop);
 }
 
 function init_webgl(){
     resize();
 
-    window.requestAnimationFrame(draw);
+    window.requestAnimationFrame(drawloop);
     window.setInterval(
       logic,
       30
