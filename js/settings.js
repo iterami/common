@@ -1,6 +1,6 @@
 'use strict';
 
-function init_settings(newsettings, newprefix){
+function init_settings(newprefix, newsettings){
     for(var setting in newsettings){
         settings[setting] = newsettings[setting];
     }

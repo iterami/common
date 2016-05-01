@@ -81,6 +81,10 @@ function setmode(newmode, newgame){
               contextAttributes
             );
 
+            if(typeof load_level == 'function'){
+                load_level(mode);
+            }
+
             resize();
         }
 

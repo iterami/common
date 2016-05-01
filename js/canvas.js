@@ -28,11 +28,13 @@ function draw(){
 function init_canvas(){
     resize();
 
-    window.requestAnimationFrame(draw);
-    window.setInterval(
-      logic,
-      30
-    );
+    if(typeof draw_logic == 'function'){
+        window.requestAnimationFrame(draw);
+        window.setInterval(
+          logic,
+          30
+        );
+    }
 }
 
 function resize(){
