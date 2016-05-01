@@ -31,7 +31,7 @@ function drawloop(){
 function init_canvas(){
     resize();
 
-    if(typeof draw_logic == 'function'){
+    if(typeof logic == 'function'){
         window.requestAnimationFrame(drawloop);
         window.setInterval(
           logic,

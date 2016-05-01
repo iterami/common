@@ -26,11 +26,13 @@ function drawloop(){
 function init_webgl(){
     resize();
 
-    window.requestAnimationFrame(drawloop);
-    window.setInterval(
-      logic,
-      30
-    );
+    if(typeof logic == 'function'){
+        window.requestAnimationFrame(drawloop);
+        window.setInterval(
+          logic,
+          30
+        );
+    }
 }
 
 function resize(){

@@ -73,7 +73,7 @@ function setmode(newmode, newgame){
               '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
 
             var contextAttributes = {
-              'alpha': false,
+              //'alpha': false,
             };
             buffer = document.getElementById('buffer').getContext(
               '2d',

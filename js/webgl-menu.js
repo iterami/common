@@ -73,6 +73,10 @@ function setmode(newmode, newgame){
             resize();
         }
 
+        if(typeof load_level == 'function'){
+            load_level(mode);
+        }
+
         animationFrame = window.requestAnimationFrame(drawloop);
         interval = window.setInterval(
           logic,
