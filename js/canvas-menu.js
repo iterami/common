@@ -91,11 +91,16 @@ function setmode(newmode, newgame){
             load_level(mode);
         }
 
-        animationFrame = window.requestAnimationFrame(drawloop);
-        interval = window.setInterval(
-          logic,
-          settings['ms-per-frame']
-        );
+        if(typeof draw_logic == 'function'){
+            animationFrame = window.requestAnimationFrame(drawloop);
+        }
+
+        if(typeof logic == 'function'){
+            interval = window.setInterval(
+              logic,
+              settings['ms-per-frame']
+            );
+        }
     }
 }
 
