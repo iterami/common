@@ -1,7 +1,15 @@
 'use strict';
 
 function draw(){
+    buffer.viewport(
+      0,
+      0,
+      buffer.viewportWidth,
+      buffer.viewportHeight
+    );
     buffer.clear(buffer.COLOR_BUFFER_BIT | buffer.DEPTH_BUFFER_BIT);
+
+    matrix_identity('camera');
 
     draw_logic();
 
@@ -35,6 +43,30 @@ function init_webgl(){
     }
 }
 
+function matrix_clone(id, newid){
+}
+
+function matrix_copy(id, newid){
+}
+
+function matrix_create(id){
+}
+
+function matrix_identity(id){
+    for(var key in matricies[id]){
+        matricies[id][key] =
+          key % (matricies[id]['width'] + 1) === 0
+            ? 1
+            : 0;
+    }
+}
+
+function matrix_rotate(id, dimensions){
+}
+
+function matrix_translate(id, dimensions){
+}
+
 function resize(){
     height = window.innerHeight;
     document.getElementById('buffer').height = height;
@@ -54,6 +86,7 @@ function resize(){
 var buffer = document.getElementById('buffer').getContext('webgl');
 var canvas = document.getElementById('canvas').getContext('2d');
 var height = 0;
+var matricies = {};
 var width = 0;
 var x = 0;
 var y = 0;
