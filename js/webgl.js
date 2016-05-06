@@ -10,6 +10,14 @@ function draw(){
     buffer.clear(buffer.COLOR_BUFFER_BIT | buffer.DEPTH_BUFFER_BIT);
 
     matrix_identity('camera');
+    matrix_rotate(
+      'camera',
+      {}
+    );
+    matrix_translate(
+      'camera',
+      {}
+    );
 
     draw_logic();
 
@@ -32,6 +40,8 @@ function drawloop(){
 }
 
 function init_webgl(){
+    matrix_create('camera');
+
     resize();
 
     if(typeof logic == 'function'){
@@ -44,12 +54,21 @@ function init_webgl(){
 }
 
 function matrix_clone(id, newid){
+    matrix_create(newid);
+    matrix_copy(
+      id,
+      newid
+    );
 }
 
 function matrix_copy(id, newid){
+    for(var key in matricies[id]){
+        matricies[newid] = matricies[id];
+    }
 }
 
 function matrix_create(id){
+    matricies[id] = new Float32Array(args['length']);
 }
 
 function matrix_identity(id){
