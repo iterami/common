@@ -125,6 +125,18 @@ function matrix_rotate(id, dimensions){
 }
 
 function matrix_translate(id, dimensions){
+    matricies[id][12] -= matricies[id][0] * args['dimensions'][0]
+      + matricies[id][4] * args['dimensions'][1]
+      + matricies[id][8] * args['dimensions'][2];
+    matricies[id][13] -= matricies[id][1] * args['dimensions'][0]
+      + matricies[id][5] * args['dimensions'][1]
+      + matricies[id][9] * args['dimensions'][2];
+    matricies[id][14] -= matricies[id][2] * args['dimensions'][0]
+      + matricies[id][6] * args['dimensions'][1]
+      + matricies[id][10] * args['dimensions'][2];
+    args['matrix']['value'][15] -= matricies[id][3] * args['dimensions'][0]
+      + matricies[id][7] * args['dimensions'][1]
+      + matricies[id][11] * args['dimensions'][2];
 }
 
 function resize(){
