@@ -56,12 +56,8 @@ function resize(){
     }
 }
 
-var buffer = document.getElementById('buffer').getContext('2d', {
-  //'alpha': false,
-});
-var canvas = document.getElementById('canvas').getContext('2d', {
-  //'alpha': false,
-});
+var buffer = document.getElementById('buffer').getContext('2d');
+var canvas = document.getElementById('canvas').getContext('2d');
 var height = 0;
 var width = 0;
 var x = 0;

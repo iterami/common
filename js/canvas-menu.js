@@ -72,17 +72,8 @@ function setmode(newmode, newgame){
             document.body.innerHTML =
               '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
 
-            var contextAttributes = {
-              //'alpha': false,
-            };
-            buffer = document.getElementById('buffer').getContext(
-              '2d',
-              contextAttributes
-            );
-            canvas = document.getElementById('canvas').getContext(
-              '2d',
-              contextAttributes
-            );
+            buffer = document.getElementById('buffer').getContext('2d');
+            canvas = document.getElementById('canvas').getContext('2d');
 
             resize();
         }
