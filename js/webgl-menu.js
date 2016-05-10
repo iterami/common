@@ -1,5 +1,12 @@
 'use strict';
 
+function degrees_to_radians(degrees, decimals){
+    return round(
+      degrees * degree,
+      decimals
+    );
+}
+
 function draw(){
     buffer.viewport(
       0,
@@ -12,11 +19,19 @@ function draw(){
     matrix_identity('camera');
     matrix_rotate(
       'camera',
-      {}
+      [
+        degrees_to_radians(camera['rotate-x']),
+        degrees_to_radians(camera['rotate-y']),
+        degrees_to_radians(camera['rotate-z']),
+      ]
     );
     matrix_translate(
       'camera',
-      {}
+      [
+        camera['x'],
+        camera['y'],
+        camera['z'],
+      ]
     );
 
     draw_logic();
@@ -184,6 +199,7 @@ function setmode(newmode, newgame){
     window.cancelAnimationFrame(animationFrame);
     window.clearInterval(interval);
 
+    camera = {};
     mode = newmode;
     newgame = newgame || false;
 
@@ -205,6 +221,14 @@ function setmode(newmode, newgame){
             resize();
         }
 
+        camera = {
+          'rotate-x': 0,
+          'rotate-y': 0,
+          'rotate-z': 0,
+          'x': 0,
+          'y': 0,
+          'z': 0,
+        };
         matrix_create('camera');
 
         if(typeof load_level == 'function'){
@@ -222,6 +246,7 @@ function setmode(newmode, newgame){
             );
         }
     }
+
 }
 
 function round(number, decimals){
@@ -233,10 +258,11 @@ function round(number, decimals){
     );
 }
 
-
 var animationFrame = 0;
 var buffer = 0;
+var camera = {};
 var canvas = 0;
+var degree = Math.PI / 180;
 var height = 0;
 var interval = 0;
 var matricies = {};

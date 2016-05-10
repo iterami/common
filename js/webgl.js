@@ -1,5 +1,12 @@
 'use strict';
 
+function degrees_to_radians(degrees, decimals){
+    return round(
+      degrees * degree,
+      decimals
+    );
+}
+
 function draw(){
     buffer.viewport(
       0,
@@ -12,11 +19,19 @@ function draw(){
     matrix_identity('camera');
     matrix_rotate(
       'camera',
-      {}
+      [
+        degrees_to_radians(camera['rotate-x']),
+        degrees_to_radians(camera['rotate-y']),
+        degrees_to_radians(camera['rotate-z']),
+      ]
     );
     matrix_translate(
       'camera',
-      {}
+      [
+        camera['x'],
+        camera['y'],
+        camera['z'],
+      ]
     );
 
     draw_logic();
@@ -195,7 +210,16 @@ function round(number, decimals){
 }
 
 var buffer = document.getElementById('buffer').getContext('webgl');
+var camera = {
+  'rotate-x': 0,
+  'rotate-y': 0,
+  'rotate-z': 0,
+  'x': 0,
+  'y': 0,
+  'z': 0,
+};
 var canvas = document.getElementById('canvas').getContext('2d');
+var degree = Math.PI / 180;
 var height = 0;
 var matricies = {};
 var width = 0;
