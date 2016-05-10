@@ -48,6 +48,12 @@ function create_particle(properties){
     properties['owner'] = properties['owner'] !== void 0
       ? properties['owner']
       : -1;
+    properties['speed-x'] = properties['speed-x'] !== void 0
+      ? properties['speed-x']
+      : 1;
+    properties['speed-y'] = properties['speed-y'] !== void 0
+      ? properties['speed-y']
+      : 1;
     properties['width'] = properties['width'] !== void 0
       ? properties['width']
       : 10;
@@ -152,6 +158,84 @@ function get_movement_speed(x0, y0, x1, y1){
       Math.cos(angle),
       Math.sin(angle),
     ];
+}
+
+function handle_particles(){
+    particleloop:
+    for(var particle in particles){
+        particles[particle]['x'] += particles[particle]['dx'] * particles[particle]['speed-x'];
+        particles[particle]['y'] += particles[particle]['dy'] * particles[particle]['speed-y'];
+
+        if(particles[particle]['lifespan'] < 0){
+            particles.splice(
+              particle,
+              1
+            );
+            continue;
+        }
+        particles[particle]['lifespan'] -= 1;
+
+        for(var object in world_dynamic){
+            if(!world_dynamic[object]['collision']
+              || particles[particle]['x'] <= world_dynamic[object]['x']
+              || particles[particle]['x'] >= world_dynamic[object]['x'] + world_dynamic[object]['width']
+              || particles[particle]['y'] <= world_dynamic[object]['y']
+              || particles[particle]['y'] >= world_dynamic[object]['y'] + world_dynamic[object]['height']){
+                continue;
+            }
+
+            particles.splice(
+              particle,
+              1
+            );
+            continue particleloop;
+        }
+
+        // Handle particles not owned by player.
+        if(particles[particle]['owner'] > -1){
+            if(particles[particle]['x'] > player['x'] - 17
+              && particles[particle]['x'] < player['x'] + 17
+              && particles[particle]['y'] > player['y'] - 17
+              && particles[particle]['y'] < player['y'] + 17){
+                effect_player(
+                  'health',
+                  particles[particle]['damage']
+                );
+
+                particles.splice(
+                  particle,
+                  1
+                );
+            }
+
+            continue;
+        }
+
+        // Handle particles owned by player.
+        for(var npc in npcs){
+            if(npcs[npc]['team'] === 0
+              || particles[particle]['x'] <= npcs[npc]['x'] - npcs[npc]['width'] / 2
+              || particles[particle]['x'] >= npcs[npc]['x'] + npcs[npc]['width'] / 2
+              || particles[particle]['y'] <= npcs[npc]['y'] - npcs[npc]['height'] / 2
+              || particles[particle]['y'] >= npcs[npc]['y'] + npcs[npc]['height'] / 2){
+                continue;
+            }
+
+            npcs[npc]['stats']['health']['current'] -= particles[particle]['damage'];
+            if(npcs[npc]['stats']['health']['current'] <= 0){
+                npcs.splice(
+                  npc,
+                  1
+                );
+            }
+
+            particles.splice(
+              particle,
+              1
+            );
+            continue particleloop;
+        }
+    }
 }
 
 function select_spell(id){
