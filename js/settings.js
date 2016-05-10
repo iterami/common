@@ -1,11 +1,28 @@
 'use strict';
 
-function init_settings(newprefix, newsettings){
-    for(var setting in newsettings){
-        settings[setting] = newsettings[setting];
-    }
+function convert_type(setting){
+    if(!isNaN(parseFloat(defaults[setting]))){
+        settings[setting] = parseFloat(settings[setting]);
 
+    }else if(typeof(defaults[setting]) === 'boolean'){
+        settings[setting] = settings[setting] === 'true';
+    }
+}
+
+function init_settings(newprefix, newsettings){
     prefix = newprefix;
+
+    for(var setting in newsettings){
+        defaults[setting] = newsettings[setting];
+        settings[setting] = window.localStorage.getItem(prefix + setting);
+
+        if(settings[setting] === null){
+            settings[setting] = defaults[setting];
+            continue;
+        }
+
+        convert_type(setting);
+    }
 }
 
 function reset(){
@@ -14,7 +31,12 @@ function reset(){
     }
 
     for(var setting in settings){
-        settings[setting]['value'] = settings[setting]['default'];
+        document.getElementById(setting)[
+          typeof(defaults[setting]) === 'boolean'
+            ? 'checked'
+            : 'value'
+        ] = defaults[setting];
+        settings[setting] = defaults[setting];
     }
 
     save();
@@ -22,16 +44,18 @@ function reset(){
 
 function save(){
     for(var setting in settings){
-        var value = document.getElementById(setting).value;
-        if(typeof settings[setting]['todo'] == 'function'){
-            value = settings[setting]['todo'](value);
-        }
-        settings[setting]['value'] = value;
+        settings[setting] = document.getElementById(setting)[
+          typeof(defaults[setting]) === 'boolean'
+            ? 'checked'
+            : 'value'
+        ];
 
-        if(settings[setting]['value'] !== settings[setting]['default']){
+        convert_type(setting);
+
+        if(settings[setting] !== defaults[setting]){
             window.localStorage.setItem(
               prefix + setting,
-              settings[setting]['value']
+              settings[setting]
             );
 
         }else{
@@ -40,5 +64,6 @@ function save(){
     }
 }
 
+var defaults = {};
 var prefix = '';
 var settings = {};
