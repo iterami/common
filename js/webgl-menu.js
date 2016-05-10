@@ -44,6 +44,16 @@ function init_webgl(){
     setmode(0);
 }
 
+function matrix_camera(){
+    matrix_create('perspective');
+
+    matricies['perspective'][0] = .5;
+    matricies['perspective'][5] = 1;
+    matricies['perspective'][10] = -1;
+    matricies['perspective'][11] = -1;
+    matricies['perspective'][14] = -2;
+}
+
 function matrix_clone(id, newid){
     matrix_create(newid);
     matrix_copy(
@@ -124,19 +134,30 @@ function matrix_rotate(id, dimensions){
     matricies[id][7] = matricies['cache'][7] * cosine - matricies['cache'][3] * sine;
 }
 
+function matrix_round(id, decimals){
+    for(var key in matricies[id]){
+        matricies[id][key] = round(
+          matricies[id][key],
+          decimals
+        );
+    }
+}
+
 function matrix_translate(id, dimensions){
-    matricies[id][12] -= matricies[id][0] * args['dimensions'][0]
-      + matricies[id][4] * args['dimensions'][1]
-      + matricies[id][8] * args['dimensions'][2];
-    matricies[id][13] -= matricies[id][1] * args['dimensions'][0]
-      + matricies[id][5] * args['dimensions'][1]
-      + matricies[id][9] * args['dimensions'][2];
-    matricies[id][14] -= matricies[id][2] * args['dimensions'][0]
-      + matricies[id][6] * args['dimensions'][1]
-      + matricies[id][10] * args['dimensions'][2];
-    args['matrix']['value'][15] -= matricies[id][3] * args['dimensions'][0]
-      + matricies[id][7] * args['dimensions'][1]
-      + matricies[id][11] * args['dimensions'][2];
+    matricies[id][12] -= matricies[id][0] * dimensions[0]
+      + matricies[id][4] * dimensions[1]
+      + matricies[id][8] * dimensions[2];
+    matricies[id][13] -= matricies[id][1] * dimensions[0]
+      + matricies[id][5] * dimensions[1]
+      + matricies[id][9] * dimensions[2];
+    matricies[id][14] -= matricies[id][2] * dimensions[0]
+      + matricies[id][6] * dimensions[1]
+      + matricies[id][10] * dimensions[2];
+   matricies[id][15] -= matricies[id][3] * dimensions[0]
+      + matricies[id][7] * dimensions[1]
+      + matricies[id][11] * dimensions[2];
+
+    matrix_round(id);
 }
 
 function resize(){
@@ -202,6 +223,16 @@ function setmode(newmode, newgame){
         }
     }
 }
+
+function round(number, decimals){
+    decimals = decimals || 7;
+
+    return Number(
+      Number.parseFloat(number + 'e+' + decimals)
+        + 'e-' + decimals
+    );
+}
+
 
 var animationFrame = 0;
 var buffer = 0;
