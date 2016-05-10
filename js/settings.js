@@ -50,7 +50,6 @@ function save(){
             ? 'checked'
             : 'value'
         ];
-        console.log(settings[setting]);
 
         convert_type(setting);
 
