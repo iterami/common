@@ -4,7 +4,8 @@ function convert_type(setting){
     if(!isNaN(parseFloat(defaults[setting]))){
         settings[setting] = parseFloat(settings[setting]);
 
-    }else if(typeof(defaults[setting]) === 'boolean'){
+    }else if(typeof(defaults[setting]) === 'boolean'
+      && typeof(settings[setting]) !== 'boolean'){
         settings[setting] = settings[setting] === 'true';
     }
 }
@@ -49,6 +50,7 @@ function save(){
             ? 'checked'
             : 'value'
         ];
+        console.log(settings[setting]);
 
         convert_type(setting);
 
