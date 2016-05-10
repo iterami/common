@@ -4,17 +4,25 @@ function create_npc(properties){
     properties = properties || {};
 
     properties['color'] = properties['color'] || '#fff';
-    properties['height'] = properties['height'] || 20;
+    properties['height'] = properties['height'] !== void 0
+      ? properties['height']
+      : 20;
     properties['height-half'] = properties['height'] / 2;
-    properties['team'] = properties['team'] || 1;
-    properties['width'] = properties['width'] || 20;
+    properties['team'] = properties['team'] !== void 0
+      ? properties['team']
+      : 1;
+    properties['width'] = properties['width'] !== void 0
+      ? properties['width']
+      : 20;
     properties['width-half'] = properties['width'] / 2;
     properties['x'] = properties['x'] || 0;
     properties['y'] = properties['y'] || 0;
 
     properties['stats'] = properties['stats'] || {};
       properties['stats']['health'] = properties['stats']['health'] || {};
-        properties['stats']['health']['current'] = properties['stats']['health']['current'] || 1;
+        properties['stats']['health']['current'] = properties['stats']['health']['current'] === void 0
+          ? properties['stats']['health']['current']
+          : 1;
         properties['stats']['health']['max'] = properties['stats']['health']['max'] || 1;
 
     properties['selected'] = properties['selected'] || void 0;
@@ -27,16 +35,22 @@ function create_particle(properties){
     properties = properties || {};
 
     properties['color'] = properties['color'] || '#fff';
-    properties['damage'] = properties['damage'] || 1;
+    properties['damage'] = properties['damage'] || 0;
     properties['dx'] = properties['dx'] || 0;
     properties['dy'] = properties['dy'] || 0;
-    properties['height'] = properties['height'] || 10;
+    properties['height'] = properties['height'] !== void 0
+      ? properties['height']
+      : 10;
     properties['height-half'] = properties['height'] / 2;
-    properties['lifespan'] = properties['lifespan'] || 10;
-    properties['owner'] = properties['owner'] === void 0
-      ? -1
-      : properties['owner'];
-    properties['width'] = properties['width'] || 10;
+    properties['lifespan'] = properties['lifespan'] !== void 0
+      ? properties['lifespan']
+      : 10;
+    properties['owner'] = properties['owner'] !== void 0
+      ? properties['owner']
+      : -1;
+    properties['width'] = properties['width'] !== void 0
+      ? properties['width']
+      : 10;
     properties['width-half'] = properties['width'] / 2;
     properties['x'] = properties['x'] || 0;
     properties['y'] = properties['y'] || 0;
@@ -86,9 +100,13 @@ function create_world_dynamic(properties){
     properties['color'] = properties['color'] || '#fff';
     properties['effect'] = properties['effect'] || {};
     properties['effect-stat'] = properties['effect-stat'] || 'health';
-    properties['height'] = properties['height'] || 25;
+    properties['height'] = properties['height'] !== void 0
+      ? properties['height']
+      : 25;
     properties['type'] = properties['type'] || 'stone';
-    properties['width'] = properties['width'] || 25;
+    properties['width'] = properties['width'] !== void 0
+      ? properties['width']
+      : 25;
     properties['x'] = properties['x'] || 0;
     properties['y'] = properties['y'] || 0;
 
