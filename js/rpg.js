@@ -4,9 +4,9 @@ function create_npc(properties){
     properties = properties || {};
 
     properties['color'] = properties['color'] || '#fff';
-    properties['friendly'] = properties['friendly'] || false;
     properties['height'] = properties['height'] || 20;
     properties['height-half'] = properties['height'] / 2;
+    properties['team'] = properties['team'] || 1;
     properties['width'] = properties['width'] || 20;
     properties['width-half'] = properties['width'] / 2;
     properties['x'] = properties['x'] || 0;
