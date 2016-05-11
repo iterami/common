@@ -76,6 +76,10 @@ function create_player(properties){
       'neck': void 0,
       'torso': void 0,
     };
+    properties['height'] = properties['height'] !== void 0
+      ? properties['height']
+      : 34;
+    properties['height-half'] = properties['height'] / 2;
     properties['inventory'] = properties['inventory'] || [];
     properties['selected'] = properties['selected'] || 1;
     properties['spellbar'] = properties['spellbar'] || {
@@ -92,6 +96,10 @@ function create_player(properties){
     };
     properties['spellbook'] = properties['spellbook'] || {};
     properties['stats'] = properties['stats'] || {};
+    properties['width'] = properties['width'] !== void 0
+      ? properties['width']
+      : 34;
+    properties['width-half'] = properties['width'] / 2;
     properties['x'] = properties['x'] || 0;
     properties['y'] = properties['y'] || 0;
     properties['y-velocity'] = properties['y-velocity'] || 0;
@@ -234,10 +242,10 @@ function handle_particles(){
 
         // Handle particles not owned by player.
         if(particles[particle]['owner'] > -1){
-            if(particles[particle]['x'] > player['x'] - 17
-              && particles[particle]['x'] < player['x'] + 17
-              && particles[particle]['y'] > player['y'] - 17
-              && particles[particle]['y'] < player['y'] + 17){
+            if(particles[particle]['x'] > player['x'] - player['width-half']
+              && particles[particle]['x'] < player['x'] + player['width-half']
+              && particles[particle]['y'] > player['y'] - player['height-half']
+              && particles[particle]['y'] < player['y'] + player['height-half']){
                 effect_player(
                   'health',
                   particles[particle]['damage']
