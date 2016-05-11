@@ -38,9 +38,8 @@ function reset(){
             : 'value'
         ] = defaults[setting];
         settings[setting] = defaults[setting];
+        window.localStorage.removeItem(prefix + setting);
     }
-
-    save();
 }
 
 function save(){
