@@ -36,6 +36,9 @@ function draw(){
 
     draw_logic();
 
+    for(var entity in entities){
+    }
+
     canvas.clearRect(
       0,
       0,
@@ -60,7 +63,7 @@ function init_webgl(){
 }
 
 function matrix_camera(){
-    matrix_create('perspective');
+    matricies['perspective'] = matrix_create();
 
     matricies['perspective'][0] = .5;
     matricies['perspective'][5] = 1;
@@ -70,7 +73,7 @@ function matrix_camera(){
 }
 
 function matrix_clone(id, newid){
-    matrix_create(newid);
+    matricies[newid] = matrix_create();
     matrix_copy(
       id,
       newid
@@ -83,8 +86,8 @@ function matrix_copy(id, newid){
     }
 }
 
-function matrix_create(id){
-    matricies[id] = new Float32Array(16);
+function matrix_create(){
+    return new Float32Array(16);
 }
 
 function matrix_identity(id){
@@ -263,6 +266,7 @@ var buffer = 0;
 var camera = {};
 var canvas = 0;
 var degree = Math.PI / 180;
+var entities = {};
 var height = 0;
 var interval = 0;
 var matricies = {};
