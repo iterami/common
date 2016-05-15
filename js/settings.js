@@ -32,14 +32,11 @@ function reset(){
     }
 
     for(var setting in settings){
-        document.getElementById(setting)[
-          typeof(defaults[setting]) === 'boolean'
-            ? 'checked'
-            : 'value'
-        ] = defaults[setting];
         settings[setting] = defaults[setting];
         window.localStorage.removeItem(prefix + setting);
     }
+
+    update_settings();
 }
 
 function save(){
@@ -61,6 +58,16 @@ function save(){
         }else{
             window.localStorage.removeItem(prefix + setting);
         }
+    }
+}
+
+function update_settings(){
+    for(var setting in settings){
+        document.getElementById(setting)[
+          typeof(defaults[setting]) === 'boolean'
+            ? 'checked'
+            : 'value'
+        ] = settings[setting];
     }
 }
 
