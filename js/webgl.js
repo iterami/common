@@ -59,6 +59,7 @@ function drawloop(){
 
 function init_webgl(){
     matricies['camera'] = matrix_create();
+    matrix_perspective();
 
     buffer.clearColor(0, 0, 0, 1);
     buffer.clearDepth(1);
@@ -75,16 +76,6 @@ function init_webgl(){
           30
         );
     }
-}
-
-function matrix_camera(){
-    matricies['perspective'] = matrix_create();
-
-    matricies['perspective'][0] = .5;
-    matricies['perspective'][5] = 1;
-    matricies['perspective'][10] = -1;
-    matricies['perspective'][11] = -1;
-    matricies['perspective'][14] = -2;
 }
 
 function matrix_clone(id, newid){
@@ -112,6 +103,16 @@ function matrix_identity(id){
             ? 1
             : 0;
     }
+}
+
+function matrix_perspective(){
+    matricies['perspective'] = matrix_create();
+
+    matricies['perspective'][0] = .5;
+    matricies['perspective'][5] = 1;
+    matricies['perspective'][10] = -1;
+    matricies['perspective'][11] = -1;
+    matricies['perspective'][14] = -2;
 }
 
 function matrix_rotate(id, dimensions){
@@ -203,6 +204,10 @@ function resize(){
     document.getElementById('buffer').width = width;
     document.getElementById('canvas').width = width;
     x = width / 2;
+
+    buffer.viewportHeight = height;
+    buffer.viewportWidth = width;
+    buffer.viewport(0, 0, height, width);
 
     if(typeof resize_logic == 'function'){
         resize_logic();
