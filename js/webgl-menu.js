@@ -221,6 +221,12 @@ function setmode(newmode, newgame){
             buffer = document.getElementById('buffer').getContext('webgl');
             canvas = document.getElementById('canvas').getContext('2d');
 
+            buffer.clearColor(0, 0, 0, 1);
+            buffer.clearDepth(1);
+            buffer.enable(buffer.CULL_FACE);
+            buffer.enable(buffer.DEPTH_TEST);
+            buffer.depthFunc(buffer.LEQUAL);
+
             resize();
         }
 

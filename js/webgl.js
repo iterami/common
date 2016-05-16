@@ -60,6 +60,12 @@ function drawloop(){
 function init_webgl(){
     matricies['camera'] = matrix_create();
 
+    buffer.clearColor(0, 0, 0, 1);
+    buffer.clearDepth(1);
+    buffer.enable(buffer.CULL_FACE);
+    buffer.enable(buffer.DEPTH_TEST);
+    buffer.depthFunc(buffer.LEQUAL);
+
     resize();
 
     if(typeof logic == 'function'){
