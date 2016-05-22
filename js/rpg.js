@@ -314,19 +314,19 @@ function handle_player(){
 
     // Check if player wants to fire selected spell
     //   and fire it if they do and it can be fired.
-    var selected = player['spellbar'][player['selected']];
+    var selected = player['spellbook'][player['spellbar'][player['selected']]];
 
     if(mouse_lock_x > -1
-      && player['spellbook'][selected]['current'] >= player['spellbook'][selected]['reload']
-      && player['stats'][player['spellbook'][selected]['costs']]['current'] >= player['spellbook'][selected]['cost']){
-        player['spellbook'][selected]['current'] = 0;
-        player['stats'][player['spellbook'][selected]['costs']]['current'] = Math.max(
-          player['stats'][player['spellbook'][selected]['costs']]['current'] - player['spellbook'][selected]['cost'],
+      && selected['current'] >= selected['reload']
+      && player['stats'][selected['costs']]['current'] >= selected['cost']){
+        selected['current'] = 0;
+        player['stats'][selected['costs']]['current'] = Math.max(
+          player['stats'][selected['costs']]['current'] - selected['cost'],
           0
         );
 
         // Handle particle-creating spells.
-        if(player['spellbook'][selected]['type'] === 'particle'){
+        if(selected['type'] === 'particle'){
             var speeds = get_movement_speed(
               player['x'],
               player['y'],
@@ -334,8 +334,8 @@ function handle_player(){
               player['y'] + mouse_y - y
             );
             var particle = {};
-            for(var property in player['spellbook'][selected]['particle']){
-                particle[property] = player['spellbook'][selected]['particle'][property];
+            for(var property in selected['particle']){
+                particle[property] = selected['particle'][property];
             }
             particle['dx'] = mouse_x > x ? speeds[0] : -speeds[0];
             particle['dy'] = mouse_y > y ? speeds[1] : -speeds[1];
@@ -344,16 +344,16 @@ function handle_player(){
 
             create_particle(particle);
 
-        }else if(player['spellbook'][selected]['type'] === 'stat'){
+        }else if(selected['type'] === 'stat'){
             effect_player(
-              player['spellbook'][selected]['effect']['stat'],
-              player['spellbook'][selected]['effect']['damage']
+              selected['effect']['stat'],
+              selected['effect']['damage']
             );
 
-        }else if(player['spellbook'][selected]['type'] === 'world-dynamic'){
+        }else if(selected['type'] === 'world-dynamic'){
             var worlddynamic = {};
-            for(var property in player['spellbook'][selected]['world-dynamic']){
-                worlddynamic[property] = player['spellbook'][selected]['world-dynamic'][property];
+            for(var property in selected['world-dynamic']){
+                worlddynamic[property] = selected['world-dynamic'][property];
             }
             worlddynamic['x'] = player['x'] + mouse_x - x;
             worlddynamic['y'] = player['y'] + mouse_y - y;
