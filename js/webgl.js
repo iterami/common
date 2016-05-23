@@ -75,14 +75,6 @@ function draw(){
             entities[entity]['position']['z'],
           ]
         );
-        matrix_scale(
-          'camera',
-          [
-            entities[entity]['scale']['x'],
-            entities[entity]['scale']['y'],
-            -entities[entity]['scale']['z'],
-          ]
-        );
         matrix_rotate(
           'camera',
           [
@@ -143,7 +135,8 @@ function draw(){
             programs['shaders'],
             'mat_perspectiveMatrix'
           ),
-          0
+          0,
+          matricies['perspective']
         );
         buffer.uniformMatrix4fv(
           buffer.getUniformLocation(
@@ -404,6 +397,62 @@ function round(number, decimals){
     return Number(
       Number.parseFloat(number + 'e+' + decimals)
         + 'e-' + decimals
+    );
+}
+
+function set_buffer(vertexData, textureData, indexData){
+    var vertexBuffer = buffer.createBuffer();
+    buffer.bindBuffer(
+      buffer.ARRAY_BUFFER,
+      vertexBuffer
+    );
+    buffer.bufferData(
+      buffer.ARRAY_BUFFER,
+      new Float32Array(vertexData),
+      buffer.STATIC_DRAW
+    );
+
+    var textureBuffer = buffer.createBuffer();
+    buffer.bindBuffer(
+      buffer.ARRAY_BUFFER,
+      textureBuffer
+    );
+    buffer.bufferData(
+      buffer.ARRAY_BUFFER,
+      new Float32Array(textureData),
+      buffer.STATIC_DRAW
+    );
+
+    var indexBuffer = buffer.createBuffer();
+    buffer.bindBuffer(
+      buffer.ARRAY_BUFFER,
+      indexBuffer
+    );
+    buffer.bufferData(
+      buffer.ARRAY_BUFFER,
+      new Uint16Array(indexData),
+      buffer.STATIC_DRAW
+    );
+
+    return {
+      'index': indexBuffer,
+      'texture': textureBuffer,
+      'vertex': vertexBuffer,
+    }
+}
+
+function set_entity(id, properties){
+    entities[id] = properties;
+
+    entities[id]['buffer'] = set_buffer(
+      entities[id]['verticies'],
+      [
+        0.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+      ],
+      entities[id]['index']
     );
 }
 
