@@ -80,6 +80,52 @@ function init_webgl(){
     buffer.enable(buffer.DEPTH_TEST);
     buffer.depthFunc(buffer.LEQUAL);
 
+    create_shader(
+      'fragment',
+      buffer.FRAGMENT_SHADER,
+      'precision mediump float;'
+      //+ 'varying float float_fogDistance;'
+      //+ 'varying vec4 vec_fragmentColor;'
+        + 'varying vec2 vec_textureCoord;'
+        + 'uniform sampler2D sampler;'
+        + 'void main(void){'
+      /*
+        +   'gl_FragColor = mix('
+        +     'vec4('
+        +       engine.webgl.clearColor[args['target']][0].toFixed(1) + ','
+        +       engine.webgl.clearColor[args['target']][1].toFixed(1) + ','
+        +       engine.webgl.clearColor[args['target']][2].toFixed(1) + ','
+        +       engine.webgl.clearColor[args['target']][3].toFixed(1)
+        +     '),'
+        +     'vec_fragmentColor,'
+        +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+        +   ');'
+      */
+        +   'gl_FragColor = texture2D('
+        +     'sampler,'
+        +     'vec_textureCoord.st'
+        +   ');'
+        + '}'
+    );
+    create_shader(
+      'vertex',
+      buffer.VERTEX_SHADER,
+      'attribute vec3 vec_vertexPosition;'
+      //+ 'attribute vec4 vec_vertexColor;'
+        + 'attribute vec2 vec_texturePosition;'
+        + 'uniform mat4 mat_cameraMatrix;'
+        + 'uniform mat4 mat_perspectiveMatrix;'
+      //+ 'varying float float_fogDistance;'
+      //+ 'varying vec4 vec_fragmentColor;'
+        + 'varying vec2 vec_textureCoord;'
+        + 'void main(void){'
+        +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);'
+      //+   'vec_fragmentColor = vec_vertexColor;'
+      //+   'float_fogDistance = length(gl_Position.xyz);'
+        +   'vec_textureCoord = vec_texturePosition;'
+        + '}'
+    );
+
     if(typeof logic == 'function'){
         window.requestAnimationFrame(drawloop);
         window.setInterval(
