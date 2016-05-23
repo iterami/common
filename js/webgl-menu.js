@@ -515,6 +515,46 @@ function set_entity(id, properties){
       ],
       entities[id]['index']
     );
+
+    set_texture2d(
+      id,
+      texture_default
+    );
+}
+
+function set_texture2d(entityid, image){
+    entities[entityid]['texture'] = buffer.createTexture();
+    entities[entityid]['image'] = new Image();
+    entities[entityid]['image'].onload = function(){
+        buffer.bindTexture(
+          buffer.TEXTURE_2D,
+          entities[entityid]['texture']
+        );
+        buffer.texImage2D(
+          buffer.TEXTURE_2D,
+          0,
+          buffer.RGBA,
+          buffer.RGBA,
+          buffer.UNSIGNED_BYTE,
+          entities[entityid]['image']
+        );
+        buffer.texParameteri(
+          buffer.TEXTURE_2D,
+          buffer.TEXTURE_MAG_FILTER,
+          buffer.NEAREST
+        );
+        buffer.texParameteri(
+          buffer.TEXTURE_2D,
+          buffer.TEXTURE_MIN_FILTER,
+          buffer.NEAREST
+        );
+        buffer.bindTexture(
+          buffer.TEXTURE_2D,
+          void 0
+        );
+    };
+
+    entities[entityid]['image'].src = image;
 }
 
 function set_vertexattribarray(attribute){
@@ -538,6 +578,7 @@ var matricies = {};
 var mode = 0;
 var programs = {};
 var shaders = {};
+var texture_default = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==';
 var width = 0;
 var x = 0;
 var y = 0;
