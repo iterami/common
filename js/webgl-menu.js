@@ -1,5 +1,19 @@
 'use strict';
 
+function create_program(id, shaderlist){
+    var program = buffer.createProgram();
+    for(var shader in shaderlist){
+        buffer.attachShader(
+          program,
+          shaderlist[shader]
+        );
+    }
+    buffer.linkProgram(program);
+    buffer.useProgram(program);
+
+    programs[id] = program;
+}
+
 function create_shader(id, type, source){
     var shader = buffer.createShader(type);
     buffer.shaderSource(
@@ -300,6 +314,14 @@ function setmode(newmode, newgame){
               //+   'float_fogDistance = length(gl_Position.xyz);'
                 +   'vec_textureCoord = vec_texturePosition;'
                 + '}'
+            );
+
+            create_program(
+              'shaders',
+              [
+                shaders['fragment'],
+                shaders['vertex'],
+              ]
             );
         }
 
