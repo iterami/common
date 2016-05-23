@@ -222,16 +222,26 @@ function setmode(newmode, newgame){
             document.body.innerHTML =
               '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
 
-            buffer = document.getElementById('buffer').getContext('webgl');
+            buffer = document.getElementById('buffer').getContext(
+              'webgl',
+              {
+                'alpha': false,
+                'antialias': true,
+                'depth': true,
+                'preserveDrawingBuffer': false,
+                'premultipliedAlpha': false,
+                'stencil': false,
+              }
+            );
             canvas = document.getElementById('canvas').getContext('2d');
+
+            resize();
 
             buffer.clearColor(0, 0, 0, 1);
             buffer.clearDepth(1);
             buffer.enable(buffer.CULL_FACE);
             buffer.enable(buffer.DEPTH_TEST);
             buffer.depthFunc(buffer.LEQUAL);
-
-            resize();
         }
 
         camera = {

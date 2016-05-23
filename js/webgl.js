@@ -58,6 +58,8 @@ function drawloop(){
 }
 
 function init_webgl(){
+    resize();
+
     matricies['camera'] = matrix_create();
     matrix_perspective();
 
@@ -66,8 +68,6 @@ function init_webgl(){
     buffer.enable(buffer.CULL_FACE);
     buffer.enable(buffer.DEPTH_TEST);
     buffer.depthFunc(buffer.LEQUAL);
-
-    resize();
 
     if(typeof logic == 'function'){
         window.requestAnimationFrame(drawloop);
@@ -223,7 +223,17 @@ function round(number, decimals){
     );
 }
 
-var buffer = document.getElementById('buffer').getContext('webgl');
+var buffer = document.getElementById('buffer').getContext(
+  'webgl',
+  {
+    'alpha': false,
+    'antialias': true,
+    'depth': true,
+    'preserveDrawingBuffer': false,
+    'premultipliedAlpha': false,
+    'stencil': false,
+  }
+);
 var camera = {
   'rotate-x': 0,
   'rotate-y': 0,
