@@ -148,6 +148,9 @@ function init_webgl(){
       ]
     );
 
+    set_vertexattribarray('vec_vertexPosition');
+    set_vertexattribarray('vec_texturePosition');
+
     if(typeof logic == 'function'){
         window.requestAnimationFrame(drawloop);
         window.setInterval(
@@ -299,6 +302,15 @@ function round(number, decimals){
     return Number(
       Number.parseFloat(number + 'e+' + decimals)
         + 'e-' + decimals
+    );
+}
+
+function set_vertexattribarray(attribute){
+    buffer.enableVertexAttribArray(
+      buffer.getAttribLocation(
+        programs['shaders'],
+        attribute
+      )
     );
 }
 

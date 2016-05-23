@@ -323,6 +323,9 @@ function setmode(newmode, newgame){
                 shaders['vertex'],
               ]
             );
+
+            set_vertexattribarray('vec_vertexPosition');
+            set_vertexattribarray('vec_texturePosition');
         }
 
         camera = {
@@ -360,6 +363,15 @@ function round(number, decimals){
     return Number(
       Number.parseFloat(number + 'e+' + decimals)
         + 'e-' + decimals
+    );
+}
+
+function set_vertexattribarray(attribute){
+    buffer.enableVertexAttribArray(
+      buffer.getAttribLocation(
+        programs['shaders'],
+        attribute
+      )
     );
 }
 
