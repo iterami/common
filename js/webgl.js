@@ -1,5 +1,16 @@
 'use strict';
 
+function create_shader(id, type, source){
+    var shader = buffer.createShader(type);
+    buffer.shaderSource(
+      shader,
+      source
+    );
+    buffer.compileShader(shader);
+
+    shaders[id] = shader;
+}
+
 function degrees_to_radians(degrees, decimals){
     return round(
       degrees * degree,
@@ -247,6 +258,8 @@ var degree = Math.PI / 180;
 var entities = {};
 var height = 0;
 var matricies = {};
+var programs = {};
+var shaders = {};
 var width = 0;
 var x = 0;
 var y = 0;

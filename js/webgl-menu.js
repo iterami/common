@@ -1,5 +1,16 @@
 'use strict';
 
+function create_shader(id, type, source){
+    var shader = buffer.createShader(type);
+    buffer.shaderSource(
+      shader,
+      source
+    );
+    buffer.compileShader(shader);
+
+    shaders[id] = shader;
+}
+
 function degrees_to_radians(degrees, decimals){
     return round(
       degrees * degree,
@@ -209,6 +220,8 @@ function setmode(newmode, newgame){
     camera = {};
     mode = newmode;
     newgame = newgame || false;
+    programs = {};
+    shaders = {};
 
     setmode_logic(newgame);
 
@@ -292,6 +305,8 @@ var height = 0;
 var interval = 0;
 var matricies = {};
 var mode = 0;
+var programs = {};
+var shaders = {};
 var width = 0;
 var x = 0;
 var y = 0;
