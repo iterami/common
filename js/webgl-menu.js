@@ -62,6 +62,108 @@ function draw(){
     draw_logic();
 
     for(var entity in entities){
+        matrix_clone(
+          'camera',
+          'cache'
+        );
+
+        matrix_translate(
+          'camera',
+          [
+            -entities[entity]['position']['x'],
+            -entities[entity]['position']['y'],
+            entities[entity]['position']['z'],
+          ]
+        );
+        matrix_scale(
+          'camera',
+          [
+            entities[entity]['scale']['x'],
+            entities[entity]['scale']['y'],
+            -entities[entity]['scale']['z'],
+          ]
+        );
+        matrix_rotate(
+          'camera',
+          [
+            degrees_to_radians(entities[entity]['rotate']['x']),
+            degrees_to_radians(entities[entity]['rotate']['y']),
+            degrees_to_radians(entities[entity]['rotate']['z']),
+          ]
+        );
+
+        buffer.bindBuffer(
+          buffer.ARRAY_BUFFER,
+          entities[entity]['buffer']['vertex']
+        );
+        buffer.vertexAttribPointer(
+          attributes['vec_vertexPosition'],
+          3,
+          buffer.FLOAT,
+          false,
+          0,
+          0,
+          buffer
+        );
+
+        buffer.bindBuffer(
+          buffer.ARRAY_BUFFER,
+          entities[entity]['buffer']['texture']
+        );
+        buffer.vertexAttribPointer(
+          attributes['vec_texturePosition'],
+          2,
+          buffer.FLOAT,
+          false,
+          0,
+          0,
+          buffer
+        );
+
+        buffer.activeTexture(buffer.TEXTURE0);
+        buffer.bindTexture(
+          buffer.TEXTURE_2D,
+          entities[entity]['texture']
+        );
+        buffer.uniform1i(
+          buffer.getUniformLocation(
+            programs['shaders'],
+            'sampler'
+          ),
+          0
+        );
+
+        buffer.bindBuffer(
+          buffer.ARRAY_BUFFER,
+          entities[entity]['buffer']['index']
+        );
+
+        buffer.uniformMatrix4fv(
+          buffer.getUniformLocation(
+            programs['shaders'],
+            'mat_perspectiveMatrix'
+          ),
+          0
+        );
+        buffer.uniformMatrix4fv(
+          buffer.getUniformLocation(
+            programs['shaders'],
+            'mat_cameraMatrix'
+          ),
+          0,
+          matricies['camera']
+        );
+
+        buffer.drawArrays(
+          buffer[entities[entity]['mode']],
+          0,
+          entities[entity]['verticies'] / 3
+        );
+
+        matrix_copy(
+          'cache',
+          'camera'
+        );
     }
 
     canvas.clearRect(
@@ -367,15 +469,15 @@ function round(number, decimals){
 }
 
 function set_vertexattribarray(attribute){
-    buffer.enableVertexAttribArray(
-      buffer.getAttribLocation(
-        programs['shaders'],
-        attribute
-      )
+    attributes[attribute] = buffer.getAttribLocation(
+      programs['shaders'],
+      attribute
     );
+    buffer.enableVertexAttribArray(attributes[attribute]);
 }
 
 var animationFrame = 0;
+var attributes = {};
 var buffer = 0;
 var camera = {};
 var canvas = 0;
