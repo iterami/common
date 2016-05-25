@@ -1,0 +1,31 @@
+a{
+    color: #4c4;
+    cursor: pointer;
+    text-decoration: underline;
+}
+a:hover{
+    color: #777;
+}
+body{
+    background: #000;
+    color: #aaa;
+    font-family: sans-serif;
+}
+hr{
+    border: 2px solid #333;
+}
+input,
+textarea{
+    background: #000;
+    color: #aaa;
+}
+input[type=button]:not([disabled]),
+input[type=color]:not([disabled]),
+input[type=range]:not([disabled]),
+select:not([disabled]){
+    cursor: pointer;
+}
+pre,
+ul{
+    margin: 0;
+}
