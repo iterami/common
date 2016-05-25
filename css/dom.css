@@ -15,6 +15,9 @@ body{
 hr{
     border: 2px solid #333;
 }
+input{
+    text-align: center;
+}
 input,
 textarea{
     background: #000;
