@@ -94,8 +94,7 @@ function draw(){
           buffer.FLOAT,
           false,
           0,
-          0,
-          buffer
+          0
         );
 
         buffer.bindBuffer(
@@ -108,8 +107,7 @@ function draw(){
           buffer.FLOAT,
           false,
           0,
-          0,
-          buffer
+          0
         );
 
         buffer.activeTexture(buffer.TEXTURE0);
