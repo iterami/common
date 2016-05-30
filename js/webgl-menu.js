@@ -315,7 +315,7 @@ function resize(){
     buffer.viewportWidth = width;
     buffer.viewport(0, 0, height, width);
 
-    if(typeof resize_logic == 'function'){
+    if(typeof resize_logic === 'function'){
         resize_logic();
     }
 }
@@ -432,15 +432,15 @@ function setmode(newmode, newgame){
         matricies['camera'] = matrix_create();
         matrix_perspective();
 
-        if(typeof load_level == 'function'){
+        if(typeof load_level === 'function'){
             load_level(mode);
         }
 
-        if(typeof draw_logic == 'function'){
+        if(typeof draw_logic === 'function'){
             animationFrame = window.requestAnimationFrame(drawloop);
         }
 
-        if(typeof logic == 'function'){
+        if(typeof logic === 'function'){
             interval = window.setInterval(
               logic,
               settings['ms-per-frame']

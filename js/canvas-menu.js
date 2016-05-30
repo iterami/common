@@ -48,7 +48,7 @@ function resize(){
     document.getElementById('canvas').width = width;
     x = width / 2;
 
-    if(typeof resize_logic == 'function'){
+    if(typeof resize_logic === 'function'){
         resize_logic();
     }
 }
@@ -78,15 +78,15 @@ function setmode(newmode, newgame){
             resize();
         }
 
-        if(typeof load_level == 'function'){
+        if(typeof load_level === 'function'){
             load_level(mode);
         }
 
-        if(typeof draw_logic == 'function'){
+        if(typeof draw_logic === 'function'){
             animationFrame = window.requestAnimationFrame(drawloop);
         }
 
-        if(typeof logic == 'function'){
+        if(typeof logic === 'function'){
             interval = window.setInterval(
               logic,
               settings['ms-per-frame']

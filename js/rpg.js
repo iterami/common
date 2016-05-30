@@ -110,7 +110,7 @@ function create_player(properties){
 function create_world_dynamic(properties){
     properties = properties || {};
 
-    properties['collision'] = properties['collision'] == void 0;
+    properties['collision'] = properties['collision'] === void 0;
     properties['color'] = properties['color'] || '#fff';
     properties['effect'] = properties['effect'] || {};
     properties['effect-stat'] = properties['effect-stat'] || 'health';
@@ -170,7 +170,7 @@ function get_movement_speed(x0, y0, x1, y1){
 
 function handle_npcs(){
     for(var npc in npcs){
-        if(npcs[npc]['selected'] == void 0){
+        if(npcs[npc]['selected'] === void 0){
             continue;
         }
 

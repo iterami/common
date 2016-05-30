@@ -244,7 +244,7 @@ function init_webgl(){
     set_vertexattribarray('vec_vertexPosition');
     set_vertexattribarray('vec_texturePosition');
 
-    if(typeof logic == 'function'){
+    if(typeof logic === 'function'){
         window.requestAnimationFrame(drawloop);
         window.setInterval(
           logic,
@@ -384,7 +384,7 @@ function resize(){
     buffer.viewportWidth = width;
     buffer.viewport(0, 0, height, width);
 
-    if(typeof resize_logic == 'function'){
+    if(typeof resize_logic === 'function'){
         resize_logic();
     }
 }
