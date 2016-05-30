@@ -148,7 +148,7 @@ function draw(){
         buffer.drawArrays(
           buffer[entities[entity]['mode']],
           0,
-          entities[entity]['verticies'] / 3
+          entities[entity]['vertices'] / 3
         );
 
         matrix_copy(
@@ -443,7 +443,7 @@ function set_entity(id, properties){
     entities[id] = properties;
 
     entities[id]['buffer'] = set_buffer(
-      entities[id]['verticies'],
+      entities[id]['vertices'],
       [
         0.0, 1.0,
         0.0, 0.0,
