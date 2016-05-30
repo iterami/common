@@ -148,7 +148,7 @@ function draw(){
         buffer.drawArrays(
           buffer[entities[entity]['mode']],
           0,
-          entities[entity]['vertices'] / 3
+          entities[entity]['vertices'].length / 3
         );
 
         matrix_copy(
