@@ -180,6 +180,16 @@ function init_webgl(){
     setmode(0);
 }
 
+function logicloop(){
+    for(var entity in entities){
+        if(entities[entity]['logic']){
+            entities[entity]['logic']();
+        }
+    }
+
+    logic();
+}
+
 function matrix_clone(id, newid){
     matricies[newid] = matrix_create();
     matrix_copy(
@@ -442,7 +452,7 @@ function setmode(newmode, newgame){
 
         if(typeof logic === 'function'){
             interval = window.setInterval(
-              logic,
+              logicloop,
               settings['ms-per-frame']
             );
         }

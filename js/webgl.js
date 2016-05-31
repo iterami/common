@@ -247,10 +247,20 @@ function init_webgl(){
     if(typeof logic === 'function'){
         window.requestAnimationFrame(drawloop);
         window.setInterval(
-          logic,
+          logicloop,
           30
         );
     }
+}
+
+function logicloop(){
+    for(var entity in entities){
+        if(entities[entity]['logic']){
+            entities[entity]['logic']();
+        }
+    }
+
+    logic();
 }
 
 function matrix_clone(id, newid){
