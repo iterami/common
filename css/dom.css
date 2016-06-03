@@ -26,16 +26,26 @@ input[type=range]:not([disabled]),
 select:not([disabled]){
     cursor: pointer;
 }
-pre,
-ul{
-    margin: 0;
+pre{
+    text-align: left;
 }
 table{
     border-collapse: collapse;
+}
+td{
+    border: 1px solid #444;
+    padding: 5px;
 }
 textarea{
     background: #000;
     color: #aaa;
     height: 230px;
     width: 420px;
+}
+tr:first-child,
+tr:hover{
+    background: #333;
+}
+ul{
+    margin: 0;
 }
