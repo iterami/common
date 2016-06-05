@@ -387,6 +387,10 @@ function move_camera(speed, y, strafe){
     camera['z'] += round(speed * Math.cos(radians), 7);
 }
 
+function onpointerlockchange(e){
+    pointerlock = document.pointerLockElement === document.getElementById('canvas');
+};
+
 function resize(){
     height = window.innerHeight;
     document.getElementById('buffer').height = height;
@@ -549,11 +553,14 @@ var degree = Math.PI / 180;
 var entities = {};
 var height = 0;
 var matricies = {};
+var pointerlock = false;
 var programs = {};
 var shaders = {};
 var texture_default = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==';
 var width = 0;
 var x = 0;
 var y = 0;
+
+document.onpointerlockchange = onpointerlockchange;
 
 window.onresize = resize;
