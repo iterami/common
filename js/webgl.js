@@ -381,11 +381,10 @@ function matrix_translate(id, dimensions){
 
 function move_camera(speed, y, strafe){
     strafe = strafe || false;
-    var radians = degrees_to_radians(camera['rotation-x'] + (strafe ? 90 : 0));
-    console
-    camera['x'] += speed * Math.sin(radians);
+    var radians = degrees_to_radians(camera['rotate-x'] + (strafe ? 90 : 0));
+    camera['x'] += round(speed * Math.sin(radians), 7);
     camera['y'] += y;
-    camera['z'] += speed * Math.cos(radians);
+    camera['z'] += round(speed * Math.cos(radians), 7);
 }
 
 function resize(){
@@ -410,6 +409,10 @@ function resize(){
 
 function round(number, decimals){
     decimals = decimals || 7;
+
+    if(String(number).indexOf('e') >= 0){
+        number = Number(number.toFixed(decimals));
+    }
 
     return Number(
       Math.round(number + 'e+' + decimals)
