@@ -379,6 +379,15 @@ function matrix_translate(id, dimensions){
     matrix_round(id);
 }
 
+function move_camera(speed, y, strafe){
+    strafe = strafe || false;
+    var radians = degrees_to_radians(camera['rotation-x'] + (strafe ? 90 : 0));
+    console
+    camera['x'] += speed * Math.sin(radians);
+    camera['y'] += y;
+    camera['z'] += speed * Math.cos(radians);
+}
+
 function resize(){
     height = window.innerHeight;
     document.getElementById('buffer').height = height;
@@ -403,7 +412,7 @@ function round(number, decimals){
     decimals = decimals || 7;
 
     return Number(
-      Number.parseFloat(number + 'e+' + decimals)
+      Math.round(number + 'e+' + decimals)
         + 'e-' + decimals
     );
 }

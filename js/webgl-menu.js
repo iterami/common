@@ -306,6 +306,15 @@ function matrix_translate(id, dimensions){
     matrix_round(id);
 }
 
+function move_camera(speed, y, strafe){
+    strafe = strafe || false;
+    var radians = degrees_to_radians(camera['rotation-x'] + (strafe ? 90 : 0));
+    console
+    camera['x'] += speed * Math.sin(radians);
+    camera['y'] += y;
+    camera['z'] += speed * Math.cos(radians);
+}
+
 function resize(){
     if(mode <= 0){
         return;
@@ -328,6 +337,15 @@ function resize(){
     if(typeof resize_logic === 'function'){
         resize_logic();
     }
+}
+
+function round(number, decimals){
+    decimals = decimals || 7;
+
+    return Number(
+      Math.round(number + 'e+' + decimals)
+        + 'e-' + decimals
+    );
 }
 
 function setmode(newmode, newgame){
@@ -458,15 +476,6 @@ function setmode(newmode, newgame){
         }
     }
 
-}
-
-function round(number, decimals){
-    decimals = decimals || 7;
-
-    return Number(
-      Number.parseFloat(number + 'e+' + decimals)
-        + 'e-' + decimals
-    );
 }
 
 function set_buffer(vertexData, textureData, indexData){
