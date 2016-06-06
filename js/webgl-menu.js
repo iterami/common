@@ -1,5 +1,16 @@
 'use strict';
 
+function clamp(value, min, max){
+    var diff = max - min;
+
+    while(value < min){
+        value += diff;
+    }
+    while(value >= max){
+        value -= diff;
+    }
+}
+
 function create_program(id, shaderlist){
     var program = buffer.createProgram();
     for(var shader in shaderlist){
@@ -340,6 +351,24 @@ function resize(){
     if(typeof resize_logic === 'function'){
         resize_logic();
     }
+}
+
+function rotate_camera(x, y, z){
+    camera['rotate-x'] = clamp(
+      camera['rotate-x'] + x,
+      0,
+      360
+    );
+    camera['rotate-y'] = clamp(
+      camera['rotate-y'] + y,
+      0,
+      360
+    );
+    camera['rotate-z'] = clamp(
+      camera['rotate-z'] + z,
+      0,
+      360
+    );
 }
 
 function round(number, decimals){
