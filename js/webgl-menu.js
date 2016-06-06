@@ -9,6 +9,8 @@ function clamp(value, min, max){
     while(value >= max){
         value -= diff;
     }
+
+    return value;
 }
 
 function create_program(id, shaderlist){
@@ -355,17 +357,26 @@ function resize(){
 
 function rotate_camera(x, y, z){
     camera['rotate-x'] = clamp(
-      camera['rotate-x'] + x,
+      round(
+        camera['rotate-x'] + x,
+        7
+      ),
       0,
       360
     );
     camera['rotate-y'] = clamp(
-      camera['rotate-y'] + y,
+      round(
+        camera['rotate-y'] + y,
+        7
+      ),
       0,
       360
     );
     camera['rotate-z'] = clamp(
-      camera['rotate-z'] + z,
+      round(
+        camera['rotate-z'] + z,
+        7
+      ),
       0,
       360
     );
