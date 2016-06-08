@@ -20,6 +20,9 @@ input{
     color: #aaa;
     text-align: center;
 }
+input[readonly]{
+    border: 0;
+}
 input[type=button]:not([disabled]),
 input[type=color]:not([disabled]),
 input[type=range]:not([disabled]),
@@ -49,4 +52,5 @@ tr:hover{
 }
 ul{
     margin: 0;
+    text-align: left;
 }
