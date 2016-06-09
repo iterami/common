@@ -321,7 +321,7 @@ function matrix_translate(id, dimensions){
 
 function move_camera(speed, y, strafe){
     strafe = strafe || false;
-    var radians = degrees_to_radians(camera['rotate-x'] + (strafe ? 90 : 0));
+    var radians = -degrees_to_radians(camera['rotate-y'] - (strafe ? 90 : 0));
     camera['x'] += round(speed * Math.sin(radians), 7);
     camera['y'] += y;
     camera['z'] += round(speed * Math.cos(radians), 7);
