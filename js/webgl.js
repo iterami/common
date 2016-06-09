@@ -220,8 +220,8 @@ function init_webgl(){
       */
         +   'gl_FragColor = texture2D('
         +     'sampler,'
-        +     'vec_textureCoord.st'
-        +   ');'
+        +     'vec_textureCoord'
+        +   ');' // * vec_fragmentColor;';
         + '}'
     );
     create_shader(
