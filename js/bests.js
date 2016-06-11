@@ -15,8 +15,7 @@ function reset_best(){
     }
 
     best = 0;
-
-    update_best();
+    update_best(0);
 }
 
 function update_best(value){
@@ -35,4 +34,5 @@ function update_best(value){
     }
 }
 
+var best = 0;
 var prefix = '';
