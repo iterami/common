@@ -10,7 +10,7 @@ function convert_type(setting){
     }
 }
 
-function init_settings(newprefix, newsettings){
+function init_settings(newprefix, newsettings, trackbest){
     prefix = newprefix;
 
     for(var setting in newsettings){
@@ -23,6 +23,13 @@ function init_settings(newprefix, newsettings){
         }
 
         convert_type(setting);
+    }
+
+    if(trackbest){
+        best = parseInt(
+          window.localStorage.getItem(prefix + '-best'),
+          10
+        ) || 0;
     }
 }
 
@@ -37,6 +44,17 @@ function reset(){
     }
 
     update_settings();
+}
+
+function reset_best(){
+    if(!window.confirm('Reset best?')){
+        return;
+    }
+
+    best = 0;
+
+    update_best();
+    setmode(0);
 }
 
 function save(){
@@ -61,6 +79,22 @@ function save(){
     }
 }
 
+function update_best(value){
+    if(value > best){
+        best = value;
+    }
+
+    if(best > 0){
+        window.localStorage.setItem(
+          prefix + '-best',
+          best
+        );
+
+    }else{
+        window.localStorage.removeItem(prefix + '-best');
+    }
+}
+
 function update_settings(){
     for(var setting in settings){
         document.getElementById(setting)[
@@ -71,6 +105,7 @@ function update_settings(){
     }
 }
 
+var best = 0;
 var defaults = {};
 var prefix = '';
 var settings = {};
