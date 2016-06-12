@@ -59,9 +59,14 @@ function init_input(keybinds, mousebinds){
       'down': false,
       'down-x': 0,
       'down-y': 0,
+      'todo': {},
       'x': 0,
       'y': 0,
     };
+    for(var mousebind in mousebinds){
+        mouse['todo'][key]['loop'] = mousebinds[mousebind]['loop'] || false;
+        mouse['todo'][key]['todo'] = mousebinds[mousebind]['todo'];
+    }
 
     if('onmousewheel' in window){
         window.onmousewheel = handle_mousewheel;
@@ -79,6 +84,11 @@ function repeat_input_todos(){
     for(var key in keys){
         if(keys[key]['loop']){
             keys[key]['todo']();
+        }
+    }
+    for(var mousebind in mouse['todo']){
+        if(mouse['todo'][mousebind]['loop']){
+            mouse['todo'][mousebind]['todo']();
         }
     }
 }
