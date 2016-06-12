@@ -48,11 +48,17 @@ function handle_mousewheel(event){
 
 function init_input(keybinds, mousebinds){
     keys = {};
-    for(var key in keybinds){
-        keys[key] = {};
-        keys[key]['loop'] = keybinds[key]['loop'] || false;
-        keys[key]['state'] = false;
-        keys[key]['todo'] = keybinds[key]['todo'];
+    keybinds = keybinds || false;
+    if(keybinds !== false){
+        for(var key in keybinds){
+            keys[key] = {};
+            keys[key]['loop'] = keybinds[key]['loop'] || false;
+            keys[key]['state'] = false;
+            keys[key]['todo'] = keybinds[key]['todo'];
+        }
+
+        window.onkeydown = handle_keydown;
+        window.onkeyup = handle_keyup;
     }
 
     mouse = {
@@ -63,20 +69,30 @@ function init_input(keybinds, mousebinds){
       'x': 0,
       'y': 0,
     };
-    for(var mousebind in mousebinds){
-        mouse['todo'][key]['loop'] = mousebinds[mousebind]['loop'] || false;
-        mouse['todo'][key]['todo'] = mousebinds[mousebind]['todo'];
-    }
+    mousebinds = mousebinds || false;
+    if(mousebinds !== false){
+        for(var mousebind in mousebinds){
+            mouse['todo'][key]['loop'] = mousebinds[mousebind]['loop'] || false;
+            mouse['todo'][key]['todo'] = mousebinds[mousebind]['todo'];
+        }
 
-    if('onmousewheel' in window){
-        window.onmousewheel = handle_mousewheel;
+        window.onmousedown = handle_mousedown;
+        window.onmousemove = handle_mousemove;
+        window.onmouseup = handle_mouseup;
+        window.ontouchend = handle_mouseup;
+        window.ontouchmove = handle_mousemove;
+        window.ontouchstart = handle_mousedown;
 
-    }else{
-        document.addEventListener(
-          'DOMMouseScroll',
-          handle_mousewheel
-          false
-        );
+        if('onmousewheel' in window){
+            window.onmousewheel = handle_mousewheel;
+
+        }else{
+            document.addEventListener(
+              'DOMMouseScroll',
+              handle_mousewheel
+              false
+            );
+        }
     }
 }
 
@@ -95,12 +111,3 @@ function repeat_input_todos(){
 
 var keys = {};
 var mouse = {};
-
-window.onkeydown = handle_keydown;
-window.onkeyup = handle_keyup;
-window.onmousedown = handle_mousedown;
-window.onmousemove = handle_mousemove;
-window.onmouseup = handle_mouseup;
-window.ontouchend = handle_mouseup;
-window.ontouchmove = handle_mousemove;
-window.ontouchstart = handle_mousedown;
