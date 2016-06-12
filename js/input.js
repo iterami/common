@@ -10,10 +10,18 @@ function get_keycode(event){
 
 function handle_keydown(event){
     var key = get_keycode(event);
+
+    if(keys.hasOwnProperty(key)){
+        keys[key]['state'] = true;
+    }
 }
 
 function handle_keyup(event){
     var key = get_keycode(event);
+
+    if(keys.hasOwnProperty(key)){
+        keys[key]['state'] = false;
+    }
 }
 
 function handle_mousedown(event){
@@ -38,8 +46,15 @@ function handle_mousewheel(event){
     );
 }
 
-function init_input(){
+function init_input(keybinds, mousebinds){
     keys = {};
+    for(var key in keybinds){
+        keys[key] = {};
+        keys[key]['loop'] = keybinds[key]['loop'] || false;
+        keys[key]['state'] = false;
+        keys[key]['todo'] = keybinds[key]['todo'];
+    }
+
     mouse = {
       'down': false,
       'down-x': 0,
@@ -57,6 +72,14 @@ function init_input(){
           handle_mousewheel
           false
         );
+    }
+}
+
+function repeat_input_todos(){
+    for(var key in keys){
+        if(keys[key]['loop']){
+            keys[key]['todo']();
+        }
     }
 }
 
