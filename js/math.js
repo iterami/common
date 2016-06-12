@@ -1,10 +1,24 @@
 'use strict';
 
+function clamp(value, min, max){
+    var diff = max - min;
+
+    while(value < min){
+        value += diff;
+    }
+    while(value >= max){
+        value -= diff;
+    }
+
+    return value;
+}
+
 function degrees_to_radians(degrees, decimals){
     return round(
       degrees * degree,
       decimals
     );
+}
 
 function matrix_clone(id, newid){
     matricies[newid] = matrix_create();
@@ -125,8 +139,12 @@ function matrix_translate(id, dimensions){
 function round(number, decimals){
     decimals = decimals || 7;
 
+    if(String(number).indexOf('e') >= 0){
+        number = Number(number.toFixed(decimals));
+    }
+
     return Number(
-      Number.parseFloat(number + 'e+' + decimals)
+      Math.round(number + 'e+' + decimals)
         + 'e-' + decimals
     );
 }
