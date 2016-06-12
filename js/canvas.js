@@ -29,6 +29,8 @@ function drawloop(){
 }
 
 function init_canvas(){
+    buffer = document.getElementById('buffer').getContext('2d');
+    canvas = document.getElementById('canvas').getContext('2d');
     resize();
 
     if(typeof logic === 'function'){
@@ -56,8 +58,8 @@ function resize(){
     }
 }
 
-var buffer = document.getElementById('buffer').getContext('2d');
-var canvas = document.getElementById('canvas').getContext('2d');
+var buffer = 0;
+var canvas = 0;
 var height = 0;
 var width = 0;
 var x = 0;

@@ -169,6 +169,18 @@ function drawloop(){
 }
 
 function init_webgl(){
+    buffer = document.getElementById('buffer').getContext(
+      'webgl',
+      {
+        'alpha': false,
+        'antialias': true,
+        'depth': true,
+        'preserveDrawingBuffer': false,
+        'premultipliedAlpha': false,
+        'stencil': false,
+      }
+    );
+    canvas = document.getElementById('canvas').getContext('2d');
     resize();
 
     buffer.clearColor(0, 0, 0, 1);
@@ -420,17 +432,7 @@ function set_vertexattribarray(attribute){
 }
 
 var attributes = {};
-var buffer = document.getElementById('buffer').getContext(
-  'webgl',
-  {
-    'alpha': false,
-    'antialias': true,
-    'depth': true,
-    'preserveDrawingBuffer': false,
-    'premultipliedAlpha': false,
-    'stencil': false,
-  }
-);
+var buffer = 0;
 var camera = {
   'rotate-x': 0,
   'rotate-y': 0,
@@ -439,7 +441,7 @@ var camera = {
   'y': 0,
   'z': 0,
 };
-var canvas = document.getElementById('canvas').getContext('2d');
+var canvas = 0;
 var entities = {};
 var height = 0;
 var matricies = {};
