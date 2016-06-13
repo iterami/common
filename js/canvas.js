@@ -58,8 +58,8 @@ function setmode(newmode, newgame){
     window.clearInterval(interval);
 
     mode = newmode;
-    newgame = newgame || false;
     var msperframe = 0;
+    newgame = newgame || false;
 
     if(typeof setmode_logic === 'function'){
         setmode_logic(newgame);
