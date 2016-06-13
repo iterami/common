@@ -3,10 +3,8 @@
 function init_bests(newprefix){
     prefix = newprefix;
 
-    best = parseInt(
-      window.localStorage.getItem(prefix + '-best'),
-      10
-    ) || 0;
+    best = parseFloat(window.localStorage.getItem(prefix + '-best'))
+      || 0;
 }
 
 function reset_best(){
@@ -15,7 +13,7 @@ function reset_best(){
     }
 
     best = 0;
-    update_best(0);
+    update_best(best);
 }
 
 function update_best(value){
@@ -23,7 +21,7 @@ function update_best(value){
         best = value;
     }
 
-    if(best > 0){
+    if(best !== 0){
         window.localStorage.setItem(
           prefix + '-best',
           best
