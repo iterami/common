@@ -61,7 +61,7 @@ function setmode(newmode, newgame){
     newgame = newgame || false;
     var msperframe = 0;
 
-    if(typeof setmode_logic === ' function'){
+    if(typeof setmode_logic === 'function'){
         setmode_logic(newgame);
 
     }else{
