@@ -266,11 +266,12 @@ function setmode(newmode, newgame){
         msperframe = 33;
     }
 
+    // Main menu mode.
     if(mode === 0){
-        // Main menu mode.
         buffer = 0;
         canvas = 0;
 
+    // Simulation modes.
     }else{
         if(newgame){
             document.body.innerHTML =
