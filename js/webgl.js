@@ -191,7 +191,7 @@ function move_camera(speed, y, strafe){
     camera['z'] += round(speed * Math.cos(radians), 7);
 }
 
-function onpointerlockchange(e){
+function onpointerlockchange(event){
     pointerlock = document.pointerLockElement === document.getElementById('canvas');
 };
 
