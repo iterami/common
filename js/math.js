@@ -164,6 +164,10 @@ function movement_speed(x0, y0, x1, y1){
     ];
 }
 
+function random_integer(max){
+    return Math.floor(Math.random() * max);
+}
+
 function round(number, decimals){
     decimals = decimals || 7;
 
