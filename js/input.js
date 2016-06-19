@@ -72,8 +72,8 @@ function init_input(keybinds, mousebinds){
     mousebinds = mousebinds || false;
     if(mousebinds !== false){
         for(var mousebind in mousebinds){
-            mouse['todo'][key]['loop'] = mousebinds[mousebind]['loop'] || false;
-            mouse['todo'][key]['todo'] = mousebinds[mousebind]['todo'];
+            mouse['todo'][mousebind]['loop'] = mousebinds[mousebind]['loop'] || false;
+            mouse['todo'][mousebind]['todo'] = mousebinds[mousebind]['todo'];
         }
 
         window.onmousedown = handle_mousedown;
