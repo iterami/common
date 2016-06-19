@@ -20,6 +20,26 @@ function degrees_to_radians(degrees, decimals){
     );
 }
 
+function distance(x0, y0, x1, y1){
+    return Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
+}
+
+function get_fixed_length_line(x0, y0, x1, y1, length){
+    var line_distance = distance(
+      x0, y0, x1, y1
+    );
+
+    x1 /= line_distance;
+    x1 *= length;
+    y1 /= line_distance;
+    y1 *= length;
+
+    return {
+      'x': x1,
+      'y': y1,
+    };
+}
+
 function matrix_clone(id, newid){
     matricies[newid] = matrix_create();
     matrix_copy(
@@ -151,3 +171,4 @@ function round(number, decimals){
 
 var degree = Math.PI / 180;
 var matricies = {};
+var tau = Math.PI * 2;
