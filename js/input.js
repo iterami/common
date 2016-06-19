@@ -73,7 +73,7 @@ function init_input(keybinds, mousebinds){
             keys[key] = {};
             keys[key]['loop'] = keybinds[key]['loop'] || false;
             keys[key]['state'] = false;
-            keys[key]['todo'] = keybinds[key]['todo'];
+            keys[key]['todo'] = keybinds[key]['todo'] || function(){};
         }
 
         window.onkeydown = handle_keydown;
@@ -93,7 +93,7 @@ function init_input(keybinds, mousebinds){
         for(var mousebind in mousebinds){
             mouse['todo'][mousebind] = {};
             mouse['todo'][mousebind]['loop'] = mousebinds[mousebind]['loop'] || false;
-            mouse['todo'][mousebind]['todo'] = mousebinds[mousebind]['todo'];
+            mouse['todo'][mousebind]['todo'] = mousebinds[mousebind]['todo'] || function(){};
         }
 
         window.onmousedown = handle_mousedown;
