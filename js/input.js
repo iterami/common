@@ -24,6 +24,11 @@ function handle_keydown(event){
             keys[key['code']]['todo']();
         }
     }
+
+    if(keys.hasOwnProperty('all')
+      && !keys['all']['loop']){
+        keys['all']['todo']();
+    }
 }
 
 function handle_keyup(event){
