@@ -89,7 +89,7 @@ function init_input(keybinds, mousebinds){
         }else{
             document.addEventListener(
               'DOMMouseScroll',
-              handle_mousewheel
+              handle_mousewheel,
               false
             );
         }
