@@ -24,7 +24,7 @@ function distance(x0, y0, x1, y1){
     return Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
 }
 
-function get_fixed_length_line(x0, y0, x1, y1, length){
+function fixed_length_line(x0, y0, x1, y1, length){
     var line_distance = distance(
       x0, y0, x1, y1
     );
@@ -154,6 +154,14 @@ function matrix_translate(id, dimensions){
       + matricies[id][11] * dimensions[2];
 
     matrix_round(id);
+}
+
+function movement_speed(x0, y0, x1, y1){
+    var angle = Math.atan(Math.abs(y0 - y1) / Math.abs(x0 - x1));
+    return [
+      Math.cos(angle),
+      Math.sin(angle),
+    ];
 }
 
 function round(number, decimals){
