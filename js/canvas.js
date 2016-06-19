@@ -33,6 +33,13 @@ function init_canvas(){
     setmode(0);
 }
 
+function new_image(src, todo){
+    var image = new Image();
+    image.onload = todo || function(){};
+    image.src = src;
+    return image;
+}
+
 function resize(){
     if(mode <= 0){
         return;

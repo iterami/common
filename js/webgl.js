@@ -191,6 +191,13 @@ function move_camera(speed, y, strafe){
     camera['z'] += round(speed * Math.cos(radians), 7);
 }
 
+function new_image(src, todo){
+    var image = new Image();
+    image.onload = todo || function(){};
+    image.src = src;
+    return image;
+}
+
 function onpointerlockchange(event){
     pointerlock = document.pointerLockElement === document.getElementById('canvas');
 };
@@ -448,37 +455,37 @@ function set_entity(id, properties){
 
 function set_texture2d(entityid, image){
     entities[entityid]['texture'] = buffer.createTexture();
-    entities[entityid]['image'] = new Image();
-    entities[entityid]['image'].onload = function(){
-        buffer.bindTexture(
-          buffer.TEXTURE_2D,
-          entities[entityid]['texture']
-        );
-        buffer.texImage2D(
-          buffer.TEXTURE_2D,
-          0,
-          buffer.RGBA,
-          buffer.RGBA,
-          buffer.UNSIGNED_BYTE,
-          entities[entityid]['image']
-        );
-        buffer.texParameteri(
-          buffer.TEXTURE_2D,
-          buffer.TEXTURE_MAG_FILTER,
-          buffer.NEAREST
-        );
-        buffer.texParameteri(
-          buffer.TEXTURE_2D,
-          buffer.TEXTURE_MIN_FILTER,
-          buffer.NEAREST
-        );
-        buffer.bindTexture(
-          buffer.TEXTURE_2D,
-          void 0
-        );
-    };
-
-    entities[entityid]['image'].src = image;
+    entities[entityid]['image'] = new_image(
+      image,
+      function(){
+          buffer.bindTexture(
+            buffer.TEXTURE_2D,
+            entities[entityid]['texture']
+          );
+          buffer.texImage2D(
+            buffer.TEXTURE_2D,
+            0,
+            buffer.RGBA,
+            buffer.RGBA,
+            buffer.UNSIGNED_BYTE,
+            entities[entityid]['image']
+          );
+          buffer.texParameteri(
+            buffer.TEXTURE_2D,
+            buffer.TEXTURE_MAG_FILTER,
+            buffer.NEAREST
+          );
+          buffer.texParameteri(
+            buffer.TEXTURE_2D,
+            buffer.TEXTURE_MIN_FILTER,
+            buffer.NEAREST
+          );
+          buffer.bindTexture(
+            buffer.TEXTURE_2D,
+            void 0
+          );
+      }
+    );
 }
 
 function set_vertexattribarray(attribute){
