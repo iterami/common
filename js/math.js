@@ -81,53 +81,53 @@ function matrix_rotate(id, dimensions){
     // Rotate X.
     matrix_clone(
       id,
-      'cache'
+      'rotate-cache'
     );
     var cosine = Math.cos(dimensions[0]);
     var sine = Math.sin(dimensions[0]);
 
-    matricies[id][4] = matricies['cache'][4] * cosine + matricies['cache'][8] * sine;
-    matricies[id][5] = matricies['cache'][5] * cosine + matricies['cache'][9] * sine;
-    matricies[id][6] = matricies['cache'][6] * cosine + matricies['cache'][10] * sine;
-    matricies[id][7] = matricies['cache'][7] * cosine + matricies['cache'][11] * sine;
-    matricies[id][8] = matricies['cache'][8] * cosine - matricies['cache'][4] * sine;
-    matricies[id][9] = matricies['cache'][9] * cosine - matricies['cache'][5] * sine;
-    matricies[id][10] = matricies['cache'][10] * cosine - matricies['cache'][6] * sine;
-    matricies[id][11] = matricies['cache'][11] * cosine - matricies['cache'][7] * sine;
+    matricies[id][4] = matricies['rotate-cache'][4] * cosine + matricies['rotate-cache'][8] * sine;
+    matricies[id][5] = matricies['rotate-cache'][5] * cosine + matricies['rotate-cache'][9] * sine;
+    matricies[id][6] = matricies['rotate-cache'][6] * cosine + matricies['rotate-cache'][10] * sine;
+    matricies[id][7] = matricies['rotate-cache'][7] * cosine + matricies['rotate-cache'][11] * sine;
+    matricies[id][8] = matricies['rotate-cache'][8] * cosine - matricies['rotate-cache'][4] * sine;
+    matricies[id][9] = matricies['rotate-cache'][9] * cosine - matricies['rotate-cache'][5] * sine;
+    matricies[id][10] = matricies['rotate-cache'][10] * cosine - matricies['rotate-cache'][6] * sine;
+    matricies[id][11] = matricies['rotate-cache'][11] * cosine - matricies['rotate-cache'][7] * sine;
 
     // Rotate Y.
     matrix_copy(
       id,
-      'cache'
+      'rotate-cache'
     );
     cosine = Math.cos(dimensions[1]);
     sine = Math.sin(dimensions[1]);
 
-    matricies[id][0] = matricies['cache'][0] * cosine - matricies['cache'][8] * sine;
-    matricies[id][1] = matricies['cache'][1] * cosine - matricies['cache'][9] * sine;
-    matricies[id][2] = matricies['cache'][2] * cosine - matricies['cache'][10] * sine;
-    matricies[id][3] = matricies['cache'][3] * cosine - matricies['cache'][11] * sine;
-    matricies[id][8] = matricies['cache'][8] * cosine + matricies['cache'][0] * sine;
-    matricies[id][9] = matricies['cache'][9] * cosine + matricies['cache'][1] * sine;
-    matricies[id][10] = matricies['cache'][10] * cosine + matricies['cache'][2] * sine;
-    matricies[id][11] = matricies['cache'][11] * cosine + matricies['cache'][3] * sine;
+    matricies[id][0] = matricies['rotate-cache'][0] * cosine - matricies['rotate-cache'][8] * sine;
+    matricies[id][1] = matricies['rotate-cache'][1] * cosine - matricies['rotate-cache'][9] * sine;
+    matricies[id][2] = matricies['rotate-cache'][2] * cosine - matricies['rotate-cache'][10] * sine;
+    matricies[id][3] = matricies['rotate-cache'][3] * cosine - matricies['rotate-cache'][11] * sine;
+    matricies[id][8] = matricies['rotate-cache'][8] * cosine + matricies['rotate-cache'][0] * sine;
+    matricies[id][9] = matricies['rotate-cache'][9] * cosine + matricies['rotate-cache'][1] * sine;
+    matricies[id][10] = matricies['rotate-cache'][10] * cosine + matricies['rotate-cache'][2] * sine;
+    matricies[id][11] = matricies['rotate-cache'][11] * cosine + matricies['rotate-cache'][3] * sine;
 
     // Rotate Z.
     matrix_copy(
       id,
-      'cache'
+      'rotate-cache'
     );
     cosine = Math.cos(dimensions[2]);
     sine = Math.sin(dimensions[2]);
 
-    matricies[id][0] = matricies['cache'][0] * cosine + matricies['cache'][4] * sine;
-    matricies[id][1] = matricies['cache'][1] * cosine + matricies['cache'][5] * sine;
-    matricies[id][2] = matricies['cache'][2] * cosine + matricies['cache'][6] * sine;
-    matricies[id][3] = matricies['cache'][3] * cosine + matricies['cache'][7] * sine;
-    matricies[id][4] = matricies['cache'][4] * cosine - matricies['cache'][0] * sine;
-    matricies[id][5] = matricies['cache'][5] * cosine - matricies['cache'][1] * sine;
-    matricies[id][6] = matricies['cache'][6] * cosine - matricies['cache'][2] * sine;
-    matricies[id][7] = matricies['cache'][7] * cosine - matricies['cache'][3] * sine;
+    matricies[id][0] = matricies['rotate-cache'][0] * cosine + matricies['rotate-cache'][4] * sine;
+    matricies[id][1] = matricies['rotate-cache'][1] * cosine + matricies['rotate-cache'][5] * sine;
+    matricies[id][2] = matricies['rotate-cache'][2] * cosine + matricies['rotate-cache'][6] * sine;
+    matricies[id][3] = matricies['rotate-cache'][3] * cosine + matricies['rotate-cache'][7] * sine;
+    matricies[id][4] = matricies['rotate-cache'][4] * cosine - matricies['rotate-cache'][0] * sine;
+    matricies[id][5] = matricies['rotate-cache'][5] * cosine - matricies['rotate-cache'][1] * sine;
+    matricies[id][6] = matricies['rotate-cache'][6] * cosine - matricies['rotate-cache'][2] * sine;
+    matricies[id][7] = matricies['rotate-cache'][7] * cosine - matricies['rotate-cache'][3] * sine;
 }
 
 function matrix_round(id, decimals){
