@@ -246,7 +246,8 @@ function rotate_camera(x, y, z){
         7
       ),
       0,
-      360
+      360,
+      true
     );
     camera['rotate-y'] = clamp(
       round(
@@ -254,7 +255,8 @@ function rotate_camera(x, y, z){
         7
       ),
       0,
-      360
+      360,
+      true
     );
     camera['rotate-z'] = clamp(
       round(
@@ -262,7 +264,8 @@ function rotate_camera(x, y, z){
         7
       ),
       0,
-      360
+      360,
+      true
     );
 }
 
@@ -541,7 +544,8 @@ var mode = 0;
 var pointerlock = false;
 var programs = {};
 var shaders = {};
-var texture_default = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==';
+var texture_debug = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==';
+var texture_default = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==';
 var width = 0;
 var x = 0;
 var y = 0;

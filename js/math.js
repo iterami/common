@@ -1,13 +1,26 @@
 'use strict';
 
-function clamp(value, min, max){
-    var diff = max - min;
+function clamp(value, min, max, wrap){
+    wrap = wrap || false;
 
-    while(value < min){
-        value += diff;
-    }
-    while(value >= max){
-        value -= diff;
+    if(wrap){
+        var diff = max - min;
+        while(value < min){
+            value += diff;
+        }
+        while(value >= max){
+            value -= diff;
+        }
+
+    }else{
+        value = Math.max(
+          value,
+          min
+        );
+        value = Math.min(
+          value,
+          max
+        );
     }
 
     return value;
