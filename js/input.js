@@ -130,7 +130,8 @@ function init_input(keybinds, mousebinds){
 
 function repeat_input_todos(){
     for(var key in keys){
-        if(keys[key]['loop']){
+        if(keys[key]['loop']
+          && keys[key]['state']){
             keys[key]['todo']();
         }
     }
