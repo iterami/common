@@ -79,6 +79,19 @@ function draw(){
 
         buffer.bindBuffer(
           buffer.ARRAY_BUFFER,
+          entities[entity]['buffer']['color']
+        );
+        buffer.vertexAttribPointer(
+          attributes['vec_vertexColor'],
+          4,
+          buffer.FLOAT,
+          false,
+          0,
+          0
+        );
+
+        buffer.bindBuffer(
+          buffer.ARRAY_BUFFER,
           entities[entity]['buffer']['vertex']
         );
         buffer.vertexAttribPointer(
@@ -348,7 +361,7 @@ function setmode(newmode, newgame){
                 + 'attribute vec2 vec_texturePosition;'
                 + 'void main(void){'
                 +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);'
-                +   'vec_fragmentColor = vec4(1, 1, 1, 1) - vec_vertexColor;'
+                +   'vec_fragmentColor = vec_vertexColor;'
               //+   'float_fogDistance = length(gl_Position.xyz);'
                 +   'vec_textureCoord = vec_texturePosition;'
                 + '}'
@@ -362,6 +375,7 @@ function setmode(newmode, newgame){
               ]
             );
 
+            set_vertexattribarray('vec_vertexColor');
             set_vertexattribarray('vec_vertexPosition');
             set_vertexattribarray('vec_texturePosition');
         }
@@ -395,7 +409,18 @@ function setmode(newmode, newgame){
 
 }
 
-function set_buffer(vertexData, textureData, indexData){
+function set_buffer(colorData, vertexData, textureData, indexData){
+    var colorBuffer = buffer.createBuffer();
+    buffer.bindBuffer(
+      buffer.ARRAY_BUFFER,
+      colorBuffer
+    );
+    buffer.bufferData(
+      buffer.ARRAY_BUFFER,
+      new Float32Array(colorData),
+      buffer.STATIC_DRAW
+    );
+
     var vertexBuffer = buffer.createBuffer();
     buffer.bindBuffer(
       buffer.ARRAY_BUFFER,
@@ -430,6 +455,7 @@ function set_buffer(vertexData, textureData, indexData){
     );
 
     return {
+      'color': colorBuffer,
       'index': indexBuffer,
       'texture': textureBuffer,
       'vertex': vertexBuffer,
@@ -440,6 +466,7 @@ function set_entity(id, properties){
     entities[id] = properties;
 
     entities[id]['buffer'] = set_buffer(
+      entities[id]['color'],
       entities[id]['vertices'],
       [
         0.0, 1.0,
