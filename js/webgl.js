@@ -299,8 +299,13 @@ function setmode(newmode, newgame){
 
             resize();
 
-            buffer.clearColor(0, 0, 0, 1);
-            buffer.clearDepth(1);
+            buffer.clearColor(
+              clearcolor[0],
+              clearcolor[1],
+              clearcolor[2],
+              clearcolor[3]
+            );
+            buffer.clearDepth(cleardepth);
             buffer.enable(buffer.CULL_FACE);
             buffer.enable(buffer.DEPTH_TEST);
             buffer.depthFunc(buffer.LEQUAL);
@@ -310,12 +315,11 @@ function setmode(newmode, newgame){
               buffer.FRAGMENT_SHADER,
               'precision mediump float;'
               //+ 'varying float float_fogDistance;'
+                + 'uniform sampler2D sampler;'
                 + 'varying vec4 vec_fragmentColor;'
                 + 'varying vec2 vec_textureCoord;'
-                + 'uniform sampler2D sampler;'
                 + 'void main(void){'
-              /*
-                +   'gl_FragColor = mix('
+              /*+   'gl_FragColor = mix('
                 +     'vec4('
                 +       engine.webgl.clearColor[args['target']][0].toFixed(1) + ','
                 +       engine.webgl.clearColor[args['target']][1].toFixed(1) + ','
@@ -325,27 +329,26 @@ function setmode(newmode, newgame){
                 +     'vec_fragmentColor,'
                 +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
                 +   ');'
-              */
-                +   'gl_FragColor = texture2D('
+              */+   'gl_FragColor = texture2D('
                 +     'sampler,'
                 +     'vec_textureCoord'
-                +   ') * vec4(1, 1, 1, 1);' // * vec_fragmentColor;';
+                +   ') * vec_fragmentColor;'
                 + '}'
             );
             create_shader(
               'vertex',
               buffer.VERTEX_SHADER,
               'attribute vec3 vec_vertexPosition;'
-                + 'attribute vec4 vec_vertexColor;'
-                + 'attribute vec2 vec_texturePosition;'
+              //+ 'varying float float_fogDistance;'
                 + 'uniform mat4 mat_cameraMatrix;'
                 + 'uniform mat4 mat_perspectiveMatrix;'
-              //+ 'varying float float_fogDistance;'
                 + 'varying vec4 vec_fragmentColor;'
+                + 'attribute vec4 vec_vertexColor;'
                 + 'varying vec2 vec_textureCoord;'
+                + 'attribute vec2 vec_texturePosition;'
                 + 'void main(void){'
                 +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);'
-                +   'vec_fragmentColor = vec_vertexColor;'
+                +   'vec_fragmentColor = vec4(1, 1, 1, 1) - vec_vertexColor;'
               //+   'float_fogDistance = length(gl_Position.xyz);'
                 +   'vec_textureCoord = vec_texturePosition;'
                 + '}'
@@ -501,6 +504,8 @@ var attributes = {};
 var buffer = 0;
 var camera = {};
 var canvas = 0;
+var clearcolor = [0, 0, 0, 1];
+var cleardepth = 1;
 var entities = {};
 var height = 0;
 var interval = 0;
