@@ -182,7 +182,7 @@ function drawloop(){
 }
 
 function group_add(group, entitylist){
-    if(!group in groups){
+    if(!(group in groups)){
         groups[group] = {};
     }
 
@@ -191,9 +191,11 @@ function group_add(group, entitylist){
     }
 }
 
-function group_modify(group, todo){
-    for(var entity in groups[group]){
-        todo(groups[group][entity]);
+function group_modify(grouplist, todo){
+    for(var group in grouplist){
+        for(var entity in grouplist[group]){
+            todo(grouplist[group][entity]);
+        }
     }
 }
 
