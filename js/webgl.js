@@ -269,6 +269,16 @@ function rotate_camera(x, y, z){
     );
 }
 
+function set_clearcolor(color){
+    clearcolor = color;
+    buffer.clearColor(
+      color[0],
+      color[1],
+      color[2],
+      color[3]
+    );
+}
+
 function setmode(newmode, newgame){
     window.cancelAnimationFrame(animationFrame);
     window.clearInterval(interval);
@@ -315,12 +325,7 @@ function setmode(newmode, newgame){
 
             resize();
 
-            buffer.clearColor(
-              clearcolor[0],
-              clearcolor[1],
-              clearcolor[2],
-              clearcolor[3]
-            );
+            set_clearcolor(clearcolor);
             buffer.clearDepth(cleardepth);
             buffer.enable(buffer.CULL_FACE);
             buffer.enable(buffer.DEPTH_TEST);
@@ -337,10 +342,10 @@ function setmode(newmode, newgame){
                 + 'void main(void){'
               /*+   'gl_FragColor = mix('
                 +     'vec4('
-                +       engine.webgl.clearColor[args['target']][0].toFixed(1) + ','
-                +       engine.webgl.clearColor[args['target']][1].toFixed(1) + ','
-                +       engine.webgl.clearColor[args['target']][2].toFixed(1) + ','
-                +       engine.webgl.clearColor[args['target']][3].toFixed(1)
+                +       clearcolor[0] + ','
+                +       clearcolor[1] + ','
+                +       clearcolor[2] + ','
+                +       clearcolor[3]
                 +     '),'
                 +     'vec_fragmentColor,'
                 +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
