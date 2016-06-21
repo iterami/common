@@ -193,8 +193,8 @@ function group_add(group, entitylist){
 
 function group_modify(grouplist, todo){
     for(var group in grouplist){
-        for(var entity in grouplist[group]){
-            todo(grouplist[group][entity]);
+        for(var entity in groups[grouplist[group]]){
+            todo(entity);
         }
     }
 }
