@@ -181,6 +181,33 @@ function drawloop(){
     animationFrame = window.requestAnimationFrame(drawloop);
 }
 
+function group_add(group, entity){
+    if(!group in groups){
+        groups[group] = {};
+    }
+
+    groups[group][entity] = true;
+}
+
+function group_modify(group, todo){
+    for(var entity in groups[group]){
+        todo(groups[group][entity]);
+    }
+}
+
+function group_remove(group, entity, remove){
+    remove = remove || false;
+
+    if(group in groups){
+        delete groups[group][entity];
+    }
+
+    if(remove
+      && groups[group].length === 0){
+        delete groups[group];
+    }
+}
+
 function init_webgl(){
     resize();
     setmode(0);
@@ -542,6 +569,7 @@ var canvas = 0;
 var clearcolor = [0, 0, 0, 1];
 var cleardepth = 1;
 var entities = {};
+var groups = {};
 var height = 0;
 var interval = 0;
 var matricies = {};
