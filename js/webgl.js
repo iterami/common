@@ -504,6 +504,29 @@ function set_buffer(colorData, vertexData, textureData, indexData){
 }
 
 function set_entity(id, properties){
+    properties['position'] = properties['position'] || [
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+      1, 1, 1, 1,
+    ];
+    properties['mode'] = properties['mode'] || 'TRIANGLE_FAN';
+    properties['position'] = properties['position'] || {
+      'x': 0,
+      'y': 0,
+      'z': 0,
+    };
+    properties['rotate'] = properties['rotate'] || {
+      'x': 0,
+      'y': 0,
+      'z': 0,
+    };
+    properties['scale'] = properties['scale'] || {
+      'x': 1,
+      'y': 1,
+      'z': 1
+    };
+
     entities[id] = properties;
 
     entities[id]['buffer'] = set_buffer(
