@@ -181,12 +181,14 @@ function drawloop(){
     animationFrame = window.requestAnimationFrame(drawloop);
 }
 
-function group_add(group, entity){
+function group_add(group, entitylist){
     if(!group in groups){
         groups[group] = {};
     }
 
-    groups[group][entity] = true;
+    for(var entity in entitylist){
+        groups[group][entitylist[entity]] = true;
+    }
 }
 
 function group_modify(group, todo){
@@ -195,11 +197,13 @@ function group_modify(group, todo){
     }
 }
 
-function group_remove(group, entity, remove){
+function group_remove(group, entitylist, remove){
     remove = remove || false;
 
     if(group in groups){
-        delete groups[group][entity];
+        for(var entity in entitylist){
+            delete groups[group][entitylist[entity]];
+        }
     }
 
     if(remove
