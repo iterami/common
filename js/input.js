@@ -19,15 +19,17 @@ function handle_keydown(event){
     var key = get_keycode(event);
 
     if(keys.hasOwnProperty(key['code'])){
-        keys[key['code']]['state'] = true;
         if(!keys[key['code']]['loop']){
             keys[key['code']]['todo']();
         }
+        keys[key['code']]['state'] = true;
     }
 
-    if(keys.hasOwnProperty('all')
-      && !keys['all']['loop']){
-        keys['all']['todo']();
+    if(keys.hasOwnProperty('all')){
+        if(!keys['all']['loop']){
+            keys['all']['todo']();
+        }
+        keys['all']['state'] = true;
     }
 }
 
@@ -36,6 +38,20 @@ function handle_keyup(event){
 
     if(keys.hasOwnProperty(key['code'])){
         keys[key['code']]['state'] = false;
+    }
+
+    if(keys.hasOwnProperty('all')){
+        var all = false;
+        for(var key in keys){
+            if(key === 'all'){
+                continue;
+            }
+            if(keys[key]['state']){
+                all = true;
+                break;
+            }
+        }
+        keys['all']['state'] = all;
     }
 }
 

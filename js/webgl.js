@@ -216,6 +216,14 @@ function group_remove(group, entitylist, remove){
 
 function init_webgl(){
     resize();
+
+    clearcolor = {
+      'alpha': 1,
+      'blue': 1,
+      'green': 1,
+      'red': 1,
+    };
+
     setmode(0);
 }
 
@@ -375,14 +383,14 @@ function setmode(newmode, newgame){
                 + 'void main(void){'
               /*+   'gl_FragColor = mix('
                 +     'vec4('
-                +       clearcolor[0] + ','
-                +       clearcolor[1] + ','
-                +       clearcolor[2] + ','
-                +       clearcolor[3]
+                +       clearcolor['red'] + ','
+                +       clearcolor['green'] + ','
+                +       clearcolor['blue'] + ','
+                +       clearcolor['alpha']
                 +     '),'
                 +     'vec_fragmentColor,'
                 +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
-                +   ');'
+                +   ') * vec_fragmentColor;'
               */+   'gl_FragColor = texture2D('
                 +     'sampler,'
                 +     'vec_textureCoord'
@@ -595,7 +603,7 @@ var attributes = {};
 var buffer = 0;
 var camera = {};
 var canvas = 0;
-var clearcolor = [0, 0, 0, 1];
+var clearcolor = {};
 var cleardepth = 1;
 var entities = {};
 var groups = {};
