@@ -64,6 +64,8 @@ function handle_mousedown(event){
 }
 
 function handle_mousemove(event){
+    mouse['movement-x'] = event.movementX;
+    mouse['movement-y'] = event.movementY;
     mouse['x'] = event.pageX;
     mouse['y'] = event.pageY;
     check_todo(
@@ -110,6 +112,8 @@ function init_input(keybinds, mousebinds){
       'down': false,
       'down-x': 0,
       'down-y': 0,
+      'movement-x': 0,
+      'movement-y': 0,
       'todo': {},
       'x': 0,
       'y': 0,
