@@ -43,10 +43,8 @@ function handle_keyup(event){
     if(keys.hasOwnProperty('all')){
         var all = false;
         for(var key in keys){
-            if(key === 'all'){
-                continue;
-            }
-            if(keys[key]['state']){
+            if(key !== 'all'
+              && keys[key]['state']){
                 all = true;
                 break;
             }
