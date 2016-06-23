@@ -512,11 +512,14 @@ function set_buffer(colorData, vertexData, textureData, indexData){
 }
 
 function set_entity(id, properties){
-    properties['position'] = properties['position'] || [
+    properties['color'] = properties['color'] || [
       1, 1, 1, 1,
       1, 1, 1, 1,
       1, 1, 1, 1,
       1, 1, 1, 1,
+    ];
+    properties['index'] = properties['index'] || [
+      0, 1, 2, 0, 2, 3,
     ];
     properties['mode'] = properties['mode'] || 'TRIANGLE_FAN';
     properties['position'] = properties['position'] || {
