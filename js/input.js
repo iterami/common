@@ -160,5 +160,9 @@ function repeat_input_todos(){
     }
 }
 
+function requestpointerlock(id){
+    document.getElementById(id).requestPointerLock();
+}
+
 var keys = {};
 var mouse = {};
