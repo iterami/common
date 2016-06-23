@@ -219,9 +219,9 @@ function init_webgl(){
 
     clearcolor = {
       'alpha': 1,
-      'blue': 1,
-      'green': 1,
-      'red': 1,
+      'blue': 0,
+      'green': 0,
+      'red': 0,
     };
 
     setmode(0);
@@ -313,10 +313,10 @@ function rotate_camera(x, y, z){
 function set_clearcolor(color){
     clearcolor = color;
     buffer.clearColor(
-      color[0],
-      color[1],
-      color[2],
-      color[3]
+      color['red'],
+      color['green'],
+      color['blue'],
+      color['alpha']
     );
 }
 
