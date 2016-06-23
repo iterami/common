@@ -199,8 +199,8 @@ function group_modify(grouplist, todo){
     }
 }
 
-function group_remove(group, entitylist, remove){
-    remove = remove || false;
+function group_remove(group, entitylist, delete_empty){
+    delete_empty = delete_empty || false;
 
     if(group in groups){
         for(var entity in entitylist){
@@ -208,7 +208,7 @@ function group_remove(group, entitylist, remove){
         }
     }
 
-    if(remove
+    if(delete_empty
       && groups[group].length === 0){
         delete groups[group];
     }
