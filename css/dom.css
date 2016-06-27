@@ -30,6 +30,7 @@ input[type=range]:not([disabled]),
 select:not([disabled]){
     cursor: pointer;
 }
+.left,
 pre{
     text-align: left;
 }
