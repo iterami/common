@@ -44,6 +44,9 @@ ul{
     margin: 0;
     text-align: left;
 }
+.right{
+    text-align: right;
+}
 select{
     font-size: 100%;
 }
