@@ -12,6 +12,9 @@ body{
     font-family: sans-serif;
     text-align: center;
 }
+.hidden{
+    display: none;
+}
 hr{
     border: 2px solid #333;
 }
