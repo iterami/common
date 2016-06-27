@@ -36,7 +36,8 @@ select:not([disabled]){
 .left{
     text-align: left;
 }
-pre{
+pre,
+ul{
     margin: 0;
     text-align: left;
 }
@@ -60,8 +61,4 @@ textarea{
 tr:first-child,
 tr:hover{
     background: #333;
-}
-ul{
-    margin: 0;
-    text-align: left;
 }
