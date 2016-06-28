@@ -9,8 +9,16 @@ a:hover{
 body{
     background: #000;
     color: #aaa;
-    font-family: sans-serif;
+    font-family: monospace;
+    font-size: 110%;
     text-align: center;
+}
+.box{
+    background: #000;
+    border: 1px solid #aaa;
+    height: 6em;
+    vertical-align: bottom;
+    width: 250px;
 }
 .hidden{
     display: none;
@@ -24,8 +32,12 @@ hr{
 input{
     background: #000;
     color: #aaa;
-    font-size: 100%;
+    font-family: monospace;
+    font-size: 110%;
     text-align: center;
+}
+input:not([type]){
+    height: 1.4em;
 }
 input[readonly]{
     border: 0;
