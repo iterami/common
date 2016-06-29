@@ -609,6 +609,7 @@ var canvas = 0;
 var clearcolor = {};
 var cleardepth = 1;
 var entities = {};
+var font = '23px monospace';
 var groups = {};
 var height = 0;
 var interval = 0;
