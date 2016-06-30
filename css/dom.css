@@ -33,9 +33,6 @@ hr{
 .inline{
     display: inline-block;
 }
-input:not([type]){
-    height: 1.4em;
-}
 input[readonly]{
     border: 0;
 }
@@ -55,9 +52,6 @@ ul{
 }
 .right{
     text-align: right;
-}
-select{
-    font-size: 100%;
 }
 table{
     border-collapse: collapse;
