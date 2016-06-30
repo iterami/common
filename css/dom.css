@@ -20,6 +20,10 @@ body{
     vertical-align: bottom;
     width: 250px;
 }
+.header,
+tr:hover{
+    background: #333;
+}
 .hidden{
     display: none;
 }
@@ -75,8 +79,4 @@ textarea{
     color: #aaa;
     height: 230px;
     width: 420px;
-}
-tr:first-child,
-tr:hover{
-    background: #333;
 }
