@@ -6,11 +6,11 @@ a{
 a:hover{
     color: #777;
 }
-body{
+body,
+input{
     background: #000;
     color: #aaa;
     font-family: monospace;
-    font-size: 110%;
     text-align: center;
 }
 .box{
@@ -32,13 +32,6 @@ hr{
 }
 .inline{
     display: inline-block;
-}
-input{
-    background: #000;
-    color: #aaa;
-    font-family: monospace;
-    font-size: 110%;
-    text-align: center;
 }
 input:not([type]){
     height: 1.4em;
