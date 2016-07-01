@@ -610,6 +610,11 @@ var clearcolor = {};
 var cleardepth = 1;
 var entities = {};
 var font = '23px monospace';
+var fonts = {
+  'big': '300% monospace',
+  'medium': '200% monospace',
+  'small': '100% monospace',
+};
 var groups = {};
 var height = 0;
 var interval = 0;
