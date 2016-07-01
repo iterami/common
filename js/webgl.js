@@ -275,6 +275,8 @@ function resize(){
     buffer.viewportWidth = width;
     buffer.viewport(0, 0, height, width);
 
+    buffer.font = fonts['medium'];
+
     if(typeof resize_logic === 'function'){
         resize_logic();
     }

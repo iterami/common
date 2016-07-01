@@ -55,6 +55,8 @@ function resize(){
     document.getElementById('canvas').width = width;
     x = width / 2;
 
+    buffer.font = fonts['medium'];
+
     if(typeof resize_logic === 'function'){
         resize_logic();
     }
