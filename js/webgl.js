@@ -611,7 +611,6 @@ var canvas = 0;
 var clearcolor = {};
 var cleardepth = 1;
 var entities = {};
-var font = '23px monospace';
 var fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',

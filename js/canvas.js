@@ -116,7 +116,6 @@ function setmode(newmode, newgame){
 var animationFrame = 0;
 var buffer = 0;
 var canvas = 0;
-var font = '23px monospace';
 var fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
