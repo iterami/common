@@ -17,6 +17,7 @@ input{
     background: #000;
     border: 1px solid #aaa;
     height: 6em;
+    margin: auto;
     vertical-align: bottom;
     width: 250px;
 }
