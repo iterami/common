@@ -1,12 +1,5 @@
 'use strict';
 
-function check_todo(object, key){
-    if(object.hasOwnProperty(key)
-      && !object[key]['loop']){
-        object[key]['todo']();
-    }
-}
-
 function get_keycode(event){
     var code = event.keyCode || event.which;
     return {
@@ -15,30 +8,45 @@ function get_keycode(event){
     };
 }
 
+function handle_event(object, key, todo, state){
+    if(object.hasOwnProperty(key)){
+        if(todo !== void 0
+          && !object[key]['loop']){
+            object[key]['todo']();
+        }
+
+        if(state !== void 0){
+            object[key]['state'] = state;
+        }
+    }
+}
+
 function handle_keydown(event){
     var key = get_keycode(event);
 
-    if(keys.hasOwnProperty(key['code'])){
-        if(!keys[key['code']]['loop']){
-            keys[key['code']]['todo']();
-        }
-        keys[key['code']]['state'] = true;
-    }
-
-    if(keys.hasOwnProperty('all')){
-        if(!keys['all']['loop']){
-            keys['all']['todo']();
-        }
-        keys['all']['state'] = true;
-    }
+    handle_event(
+      keys,
+      key['code'],
+      true,
+      true
+    );
+    handle_event(
+      keys,
+      'all',
+      true,
+      true
+    );
 }
 
 function handle_keyup(event){
     var key = get_keycode(event);
 
-    if(keys.hasOwnProperty(key['code'])){
-        keys[key['code']]['state'] = false;
-    }
+    handle_event(
+      keys,
+      key['code'],
+      void 0,
+      false
+    );
 
     if(keys.hasOwnProperty('all')){
         var all = false;
@@ -57,9 +65,10 @@ function handle_mousedown(event){
     mouse['down'] = true;
     mouse['down-x'] = mouse['x'];
     mouse['down-y'] = mouse['y'];
-    check_todo(
+    handle_event(
       mouse['todo'],
-      'mousedown'
+      'mousedown',
+      true
     );
 }
 
@@ -68,17 +77,19 @@ function handle_mousemove(event){
     mouse['movement-y'] = event.movementY;
     mouse['x'] = event.pageX;
     mouse['y'] = event.pageY;
-    check_todo(
+    handle_event(
       mouse['todo'],
-      'mousemove'
+      'mousemove',
+      true
     );
 }
 
 function handle_mouseup(event){
     mouse['down'] = false;
-    check_todo(
+    handle_event(
       mouse['todo'],
-      'mouseup'
+      'mouseup',
+      true
     );
 }
 
@@ -87,9 +98,10 @@ function handle_mousewheel(event){
       event.wheelDelta
         || -event.detail
     );
-    check_todo(
+    handle_event(
       mouse['todo'],
-      'mousewheel'
+      'mousewheel',
+      true
     );
 }
 
