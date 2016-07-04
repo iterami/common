@@ -1,12 +1,12 @@
 'use strict';
 
-function create_audio(id, properties){
+function audio_create(id, properties){
     for(var property in properties){
         audio[id] = properties[property];
     }
 }
 
-function play_audio(id){
+function audio_play(id){
     //if(settings['audio-volume'] <= 0){
     //    return;
     //}
