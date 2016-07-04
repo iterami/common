@@ -94,15 +94,12 @@ function handle_mousewheel(event){
 }
 
 function init_input(keybinds, mousebinds){
-    keys = {};
     keybinds = keybinds || false;
     if(keybinds !== false){
-        for(var key in keybinds){
-            keys[key] = {};
-            keys[key]['loop'] = keybinds[key]['loop'] || false;
-            keys[key]['state'] = false;
-            keys[key]['todo'] = keybinds[key]['todo'] || function(){};
-        }
+        update_keys(
+          keybinds,
+          true
+        );
 
         window.onkeydown = handle_keydown;
         window.onkeyup = handle_keyup;
@@ -120,11 +117,10 @@ function init_input(keybinds, mousebinds){
     };
     mousebinds = mousebinds || false;
     if(mousebinds !== false){
-        for(var mousebind in mousebinds){
-            mouse['todo'][mousebind] = {};
-            mouse['todo'][mousebind]['loop'] = mousebinds[mousebind]['loop'] || false;
-            mouse['todo'][mousebind]['todo'] = mousebinds[mousebind]['todo'] || function(){};
-        }
+        update_mousebinds(
+          mousebinds,
+          true
+        );
 
         window.onmousedown = handle_mousedown;
         window.onmousemove = handle_mousemove;
@@ -162,6 +158,33 @@ function repeat_input_todos(){
 
 function requestpointerlock(id){
     document.getElementById(id).requestPointerLock();
+}
+
+function update_keybinds(keybinds, clear){
+    clear = clear || false;
+    if(clear){
+        keys = {};
+    }
+
+    for(var key in keybinds){
+        keys[key] = {};
+        keys[key]['loop'] = keybinds[key]['loop'] || false;
+        keys[key]['state'] = false;
+        keys[key]['todo'] = keybinds[key]['todo'] || function(){};
+    }
+}
+
+function update_mousebinds(mousebinds){
+    clear = clear || false;
+    if(clear){
+        mouse['todo'] = {};
+    }
+
+    for(var mousebind in mousebinds){
+        mouse['todo'][mousebind] = {};
+        mouse['todo'][mousebind]['loop'] = mousebinds[mousebind]['loop'] || false;
+        mouse['todo'][mousebind]['todo'] = mousebinds[mousebind]['todo'] || function(){};
+    }
 }
 
 var keys = {};
