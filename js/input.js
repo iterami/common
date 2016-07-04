@@ -96,7 +96,7 @@ function handle_mousewheel(event){
 function init_input(keybinds, mousebinds){
     keybinds = keybinds || false;
     if(keybinds !== false){
-        update_keys(
+        update_keybinds(
           keybinds,
           true
         );
@@ -174,7 +174,7 @@ function update_keybinds(keybinds, clear){
     }
 }
 
-function update_mousebinds(mousebinds){
+function update_mousebinds(mousebinds, clear){
     clear = clear || false;
     if(clear){
         mouse['todo'] = {};
