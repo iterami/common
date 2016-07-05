@@ -1,36 +1,40 @@
 'use strict';
 
-function init_bests(newprefix){
+function bests_init(newprefix, bests){
     prefix = newprefix;
 
-    best = parseFloat(window.localStorage.getItem(prefix + 'best'))
-      || 0;
+    for(var best in bests){
+        bests_bests[best] = parseFloat(window.localStorage.getItem(prefix + best))
+          || bests[best];
+    }
 }
 
-function reset_best(){
+function bests_reset(){
     if(!window.confirm('Reset best?')){
         return;
     }
 
-    best = 0;
-    update_best(best);
+    for(var best in bests_bests){
+        bests_bests[best] = 0;
+        bests_update(bests_bests[best]);
+    }
 }
 
-function update_best(value){
-    if(value > best){
-        best = value;
+function bests_update(key, value){
+    if(value > bests_bests[key]){
+        bests_bests[key] = value;
     }
 
-    if(best !== 0){
+    if(bests_bests[key] !== 0){
         window.localStorage.setItem(
-          prefix + 'best',
-          best
+          prefix + key,
+          bests_bests[key]
         );
 
     }else{
-        window.localStorage.removeItem(prefix + 'best');
+        window.localStorage.removeItem(prefix + key);
     }
 }
 
-var best = 0;
+var bests_bests = {};
 var prefix = '';
