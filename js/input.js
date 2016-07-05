@@ -18,18 +18,26 @@ function handle_event(object, key, todo, state){
         if(state !== void 0){
             object[key]['state'] = state;
         }
+
+        return object[key]['solo'];
     }
+
+    return false;
 }
 
 function handle_keydown(event){
     var key = get_keycode(event);
 
-    handle_event(
+    var solo = handle_event(
       keys,
       key['code'],
       true,
       true
     );
+    if(solo){
+        return;
+    }
+
     handle_event(
       keys,
       'all',
@@ -41,12 +49,15 @@ function handle_keydown(event){
 function handle_keyup(event){
     var key = get_keycode(event);
 
-    handle_event(
+    var solo = handle_event(
       keys,
       key['code'],
       void 0,
       false
     );
+    if(solo){
+        return;
+    }
 
     if(keys.hasOwnProperty('all')){
         var all = false;
@@ -181,6 +192,7 @@ function update_keybinds(keybinds, clear){
     for(var key in keybinds){
         keys[key] = {};
         keys[key]['loop'] = keybinds[key]['loop'] || false;
+        keys[key]['solo'] = keybinds[key]['solo'] || false;
         keys[key]['state'] = false;
         keys[key]['todo'] = keybinds[key]['todo'] || function(){};
     }
