@@ -14,6 +14,9 @@ select{
     font-family: monospace;
     text-align: center;
 }
+.big{
+    font-size: 300%;
+}
 .box{
     background: #000;
     border: 1px solid #aaa;
@@ -46,6 +49,9 @@ select:not([disabled]){
 }
 .left{
     text-align: left;
+}
+.medium{
+    font-size: 200%;
 }
 pre,
 ul{
