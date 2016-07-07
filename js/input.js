@@ -8,8 +8,12 @@ function get_keycode(event){
     };
 }
 
-function handle_event(object, key, todo, state){
+function handle_event(event, object, key, todo, state){
     if(object.hasOwnProperty(key)){
+        if(object[key]['preventDefault']){
+            event.preventDefault();
+        }
+
         if(todo !== void 0
           && !object[key]['loop']){
             object[key]['todo']();
@@ -29,6 +33,7 @@ function handle_keydown(event){
     var key = get_keycode(event);
 
     var solo = handle_event(
+      event,
       keys,
       key['code'],
       true,
@@ -39,6 +44,7 @@ function handle_keydown(event){
     }
 
     handle_event(
+      event,
       keys,
       'all',
       true,
@@ -50,6 +56,7 @@ function handle_keyup(event){
     var key = get_keycode(event);
 
     var solo = handle_event(
+      event,
       keys,
       key['code'],
       void 0,
@@ -77,6 +84,7 @@ function handle_mousedown(event){
     mouse['down-x'] = mouse['x'];
     mouse['down-y'] = mouse['y'];
     handle_event(
+      event,
       mouse['todo'],
       'mousedown',
       true
@@ -89,6 +97,7 @@ function handle_mousemove(event){
     mouse['x'] = event.pageX;
     mouse['y'] = event.pageY;
     handle_event(
+      event,
       mouse['todo'],
       'mousemove',
       true
@@ -98,6 +107,7 @@ function handle_mousemove(event){
 function handle_mouseup(event){
     mouse['down'] = false;
     handle_event(
+      event,
       mouse['todo'],
       'mouseup',
       true
@@ -110,6 +120,7 @@ function handle_mousewheel(event){
         || -event.detail
     );
     handle_event(
+      event,
       mouse['todo'],
       'mousewheel',
       true
