@@ -26,7 +26,6 @@ td{
 tr:first-child{
     background: #333;
     font-weight: bold;
-    text-align: center;
 }
 tr:hover{
     background: #333;
