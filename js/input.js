@@ -203,6 +203,7 @@ function update_keybinds(keybinds, clear){
     for(var key in keybinds){
         keys[key] = {};
         keys[key]['loop'] = keybinds[key]['loop'] || false;
+        keys[key]['preventDefault'] = keybinds[key]['preventDefault'] || false;
         keys[key]['solo'] = keybinds[key]['solo'] || false;
         keys[key]['state'] = false;
         keys[key]['todo'] = keybinds[key]['todo'] || function(){};
@@ -218,6 +219,7 @@ function update_mousebinds(mousebinds, clear){
     for(var mousebind in mousebinds){
         mouse['todo'][mousebind] = {};
         mouse['todo'][mousebind]['loop'] = mousebinds[mousebind]['loop'] || false;
+        mouse['todo'][mousebind]['preventDefault'] = mousebinds[mousebind]['preventDefault'] || false;
         mouse['todo'][mousebind]['todo'] = mousebinds[mousebind]['todo'] || function(){};
     }
 }
