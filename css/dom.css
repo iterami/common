@@ -25,6 +25,13 @@ select{
     vertical-align: bottom;
     width: 250px;
 }
+.gamebutton{
+    border-width: 0;
+    height: 30px;
+    margin: 1px;
+    vertical-align: top;
+    width: 30px !important;
+}
 .header,
 tr:hover{
     background: #333;
