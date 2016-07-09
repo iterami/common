@@ -15,4 +15,4 @@ function audio_play(id){
     document.getElementById(id).play();
 }
 
-var audio = {};
+var audio_audio = {};
