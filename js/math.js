@@ -169,6 +169,15 @@ function matrix_translate(id, dimensions){
     matrix_round(id);
 }
 
+function move_3d(speed, angle, strafe){
+    strafe = strafe || false;
+    var radians = -degrees_to_radians(angle - (strafe ? 90 : 0));
+    return {
+      'x': round(speed * Math.sin(radians), 7),
+      'z': round(speed * Math.cos(radians), 7),
+    };
+}
+
 function movement_speed(x0, y0, x1, y1){
     var angle = Math.atan(Math.abs(y0 - y1) / Math.abs(x0 - x1));
     return [

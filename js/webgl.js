@@ -238,11 +238,14 @@ function logicloop(){
 }
 
 function move_camera(speed, y, strafe){
-    strafe = strafe || false;
-    var radians = -degrees_to_radians(camera['rotate-y'] - (strafe ? 90 : 0));
-    camera['x'] += round(speed * Math.sin(radians), 7);
     camera['y'] += y;
-    camera['z'] += round(speed * Math.cos(radians), 7);
+    var movement = move_3d(
+      speed,
+      camera['rotate-y'],
+      strafe
+    );
+    camera['x'] += movement['x'];
+    camera['z'] += movement['z'];
 }
 
 function new_image(src, todo){
