@@ -1,76 +1,76 @@
 'use strict';
 
-function convert_type(setting){
-    if(!isNaN(parseFloat(defaults[setting]))){
-        settings[setting] = parseFloat(settings[setting]);
-
-    }else if(typeof(defaults[setting]) === 'boolean'
-      && typeof(settings[setting]) !== 'boolean'){
-        settings[setting] = settings[setting] === 'true';
-    }
-}
-
-function init_settings(newprefix, newsettings){
-    prefix = newprefix;
+function settings_init(newprefix, newsettings){
+    settings_prefix = newprefix;
 
     for(var setting in newsettings){
-        defaults[setting] = newsettings[setting];
-        settings[setting] = window.localStorage.getItem(prefix + setting);
+        settings_defaults[setting] = newsettings[setting];
+        settings_settings[setting] = window.localStorage.getItem(settings_prefix + setting);
 
-        if(settings[setting] === null){
-            settings[setting] = defaults[setting];
+        if(settings_settings[setting] === null){
+            settings_settings[setting] = settings_defaults[setting];
             continue;
         }
 
-        convert_type(setting);
+        settings_type_convert(setting);
     }
 }
 
-function reset(){
+function settings_reset(){
     if(!window.confirm('Reset settings?')){
         return;
     }
 
-    for(var setting in settings){
-        settings[setting] = defaults[setting];
-        window.localStorage.removeItem(prefix + setting);
+    for(var setting in settings_settings){
+        settings_settings[setting] = settings_defaults[setting];
+        window.localStorage.removeItem(settings_prefix + setting);
     }
 
-    update_settings();
+    settings_update();
 }
 
-function save(){
-    for(var setting in settings){
-        settings[setting] = document.getElementById(setting)[
-          typeof(defaults[setting]) === 'boolean'
+function settings_save(){
+    for(var setting in settings_settings){
+        settings_settings[setting] = document.getElementById(setting)[
+          typeof(settings_defaults[setting]) === 'boolean'
             ? 'checked'
             : 'value'
         ];
 
-        convert_type(setting);
+        settings_type_convert(setting);
 
-        if(settings[setting] !== defaults[setting]){
+        if(settings_settings[setting] !== settings_defaults[setting]){
             window.localStorage.setItem(
-              prefix + setting,
-              settings[setting]
+              settings_prefix + setting,
+              settings_settings[setting]
             );
 
         }else{
-            window.localStorage.removeItem(prefix + setting);
+            window.localStorage.removeItem(settings_prefix + setting);
         }
     }
 }
 
-function update_settings(){
-    for(var setting in settings){
-        document.getElementById(setting)[
-          typeof(defaults[setting]) === 'boolean'
-            ? 'checked'
-            : 'value'
-        ] = settings[setting];
+function settings_type_convert(setting){
+    if(!isNaN(parseFloat(settings_defaults[setting]))){
+        settings_settings[setting] = parseFloat(settings_settings[setting]);
+
+    }else if(typeof(settings_defaults[setting]) === 'boolean'
+      && typeof(settings_settings[setting]) !== 'boolean'){
+        settings_settings[setting] = settings_settings[setting] === 'true';
     }
 }
 
-var defaults = {};
-var prefix = '';
-var settings = {};
+function settings_update(){
+    for(var setting in settings_settings){
+        document.getElementById(setting)[
+          typeof(settings_defaults[setting]) === 'boolean'
+            ? 'checked'
+            : 'value'
+        ] = settings_settings[setting];
+    }
+}
+
+var settings_defaults = {};
+var settings_prefix = '';
+var settings_settings = {};

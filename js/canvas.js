@@ -107,7 +107,7 @@ function setmode(newmode, newgame){
         if(typeof logic === 'function'){
             interval = window.setInterval(
               logic,
-              msperframe || settings['ms-per-frame']
+              msperframe || settings_settings['ms-per-frame']
             );
         }
     }
