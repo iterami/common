@@ -1,511 +1,52 @@
 'use strict';
 
-function create_program(id, shaderlist){
-    var program = buffer.createProgram();
-    for(var shader in shaderlist){
-        buffer.attachShader(
-          program,
-          shaderlist[shader]
-        );
-    }
-    buffer.linkProgram(program);
-    buffer.useProgram(program);
-
-    programs[id] = program;
-}
-
-function create_shader(id, type, source){
-    var shader = buffer.createShader(type);
-    buffer.shaderSource(
-      shader,
-      source
-    );
-    buffer.compileShader(shader);
-
-    shaders[id] = shader;
-}
-
-function draw(){
-    buffer.viewport(
-      0,
-      0,
-      buffer.viewportWidth,
-      buffer.viewportHeight
-    );
-    buffer.clear(buffer.COLOR_BUFFER_BIT | buffer.DEPTH_BUFFER_BIT);
-
-    matrix_identity('camera');
-    matrix_rotate(
-      'camera',
-      [
-        degrees_to_radians(camera['rotate-x']),
-        degrees_to_radians(camera['rotate-y']),
-        degrees_to_radians(camera['rotate-z']),
-      ]
-    );
-    matrix_translate(
-      'camera',
-      [
-        camera['x'],
-        camera['y'],
-        camera['z'],
-      ]
-    );
-
-    draw_logic();
-
-    for(var entity in entities){
-        matrix_clone(
-          'camera',
-          'cache'
-        );
-
-        matrix_translate(
-          'camera',
-          [
-            -entities[entity]['position']['x'],
-            -entities[entity]['position']['y'],
-            entities[entity]['position']['z'],
-          ]
-        );
-        matrix_rotate(
-          'camera',
-          [
-            degrees_to_radians(entities[entity]['rotate']['x']),
-            degrees_to_radians(entities[entity]['rotate']['y']),
-            degrees_to_radians(entities[entity]['rotate']['z']),
-          ]
-        );
-
-        buffer.bindBuffer(
-          buffer.ARRAY_BUFFER,
-          entities[entity]['buffer']['color']
-        );
-        buffer.vertexAttribPointer(
-          attributes['vec_vertexColor'],
-          4,
-          buffer.FLOAT,
-          false,
-          0,
-          0
-        );
-
-        buffer.bindBuffer(
-          buffer.ARRAY_BUFFER,
-          entities[entity]['buffer']['vertex']
-        );
-        buffer.vertexAttribPointer(
-          attributes['vec_vertexPosition'],
-          3,
-          buffer.FLOAT,
-          false,
-          0,
-          0
-        );
-
-        buffer.bindBuffer(
-          buffer.ARRAY_BUFFER,
-          entities[entity]['buffer']['texture']
-        );
-        buffer.vertexAttribPointer(
-          attributes['vec_texturePosition'],
-          2,
-          buffer.FLOAT,
-          false,
-          0,
-          0
-        );
-
-        buffer.activeTexture(buffer.TEXTURE0);
-        buffer.bindTexture(
-          buffer.TEXTURE_2D,
-          entities[entity]['texture']
-        );
-        buffer.uniform1i(
-          buffer.getUniformLocation(
-            programs['shaders'],
-            'sampler'
-          ),
-          0
-        );
-
-        buffer.bindBuffer(
-          buffer.ARRAY_BUFFER,
-          entities[entity]['buffer']['index']
-        );
-
-        buffer.uniformMatrix4fv(
-          buffer.getUniformLocation(
-            programs['shaders'],
-            'mat_perspectiveMatrix'
-          ),
-          0,
-          matricies['perspective']
-        );
-        buffer.uniformMatrix4fv(
-          buffer.getUniformLocation(
-            programs['shaders'],
-            'mat_cameraMatrix'
-          ),
-          0,
-          matricies['camera']
-        );
-
-        buffer.drawArrays(
-          buffer[entities[entity]['mode']],
-          0,
-          entities[entity]['vertices'].length / 3
-        );
-
-        matrix_copy(
-          'cache',
-          'camera'
-        );
-    }
-
-    canvas.clearRect(
-      0,
-      0,
-      width,
-      height
-    );
-    canvas.drawImage(
-      document.getElementById('buffer'),
-      0,
-      0
-    );
-}
-
-function drawloop(){
-    draw();
-    animationFrame = window.requestAnimationFrame(drawloop);
-}
-
-function group_add(group, entitylist){
-    if(!(group in groups)){
-        groups[group] = {};
-    }
-
-    for(var entity in entitylist){
-        groups[group][entitylist[entity]] = true;
-    }
-}
-
-function group_modify(grouplist, todo){
-    for(var group in grouplist){
-        for(var entity in groups[grouplist[group]]){
-            todo(entity);
-        }
-    }
-}
-
-function group_remove(group, entitylist, delete_empty){
-    delete_empty = delete_empty || false;
-
-    if(group in groups){
-        for(var entity in entitylist){
-            delete groups[group][entitylist[entity]];
-        }
-    }
-
-    if(delete_empty
-      && groups[group].length === 0){
-        delete groups[group];
-    }
-}
-
-function init_webgl(){
-    resize();
-
-    clearcolor = {
-      'alpha': 1,
-      'blue': 0,
-      'green': 0,
-      'red': 0,
-    };
-
-    setmode(0);
-}
-
-function logicloop(){
-    for(var entity in entities){
-        if(entities[entity]['logic']){
-            entities[entity]['logic']();
-        }
-    }
-
-    logic();
-}
-
-function move_camera(speed, y, strafe){
-    camera['y'] += y;
-    var movement = move_3d(
-      speed,
-      camera['rotate-y'],
-      strafe
-    );
-    camera['x'] += movement['x'];
-    camera['z'] += movement['z'];
-}
-
-function new_image(src, todo){
-    var image = new Image();
-    image.onload = todo || function(){};
-    image.src = src;
-    return image;
-}
-
 function onpointerlockchange(event){
     pointerlock = document.pointerLockElement === document.getElementById('canvas');
 };
 
-function resize(){
-    if(mode <= 0){
-        return;
-    }
-
-    height = window.innerHeight;
-    document.getElementById('buffer').height = height;
-    document.getElementById('canvas').height = height;
-    y = height / 2;
-
-    width = window.innerWidth;
-    document.getElementById('buffer').width = width;
-    document.getElementById('canvas').width = width;
-    x = width / 2;
-
-    buffer.viewportHeight = height;
-    buffer.viewportWidth = width;
-    buffer.viewport(0, 0, height, width);
-
-    buffer.font = fonts['medium'];
-
-    if(typeof resize_logic === 'function'){
-        resize_logic();
-    }
-}
-
-function rotate_camera(x, y, z){
-    camera['rotate-x'] = clamp(
-      round(
-        camera['rotate-x'] + x,
-        7
-      ),
-      0,
-      360,
-      true
-    );
-    camera['rotate-y'] = clamp(
-      round(
-        camera['rotate-y'] + y,
-        7
-      ),
-      0,
-      360,
-      true
-    );
-    camera['rotate-z'] = clamp(
-      round(
-        camera['rotate-z'] + z,
-        7
-      ),
-      0,
-      360,
-      true
-    );
-}
-
-function set_clearcolor(color){
-    clearcolor = color;
-    buffer.clearColor(
-      color['red'],
-      color['green'],
-      color['blue'],
-      color['alpha']
-    );
-}
-
-function setmode(newmode, newgame){
-    window.cancelAnimationFrame(animationFrame);
-    window.clearInterval(interval);
-
-    camera = {};
-    mode = newmode;
-    var msperframe = 0;
-    newgame = newgame || false;
-    programs = {};
-    shaders = {};
-
-    if(typeof setmode_logic === 'function'){
-        setmode_logic(newgame);
-
-    }else{
-        mode = 1;
-        newgame = true;
-        msperframe = 33;
-    }
-
-    // Main menu mode.
-    if(mode === 0){
-        buffer = 0;
-        canvas = 0;
-
-    // Simulation modes.
-    }else{
-        if(newgame){
-            document.body.innerHTML =
-              '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
-
-            buffer = document.getElementById('buffer').getContext(
-              'webgl',
-              {
-                'alpha': false,
-                'antialias': true,
-                'depth': true,
-                'preserveDrawingBuffer': false,
-                'premultipliedAlpha': false,
-                'stencil': false,
-              }
-            );
-            canvas = document.getElementById('canvas').getContext('2d');
-
-            resize();
-
-            set_clearcolor(clearcolor);
-            buffer.clearDepth(cleardepth);
-            buffer.enable(buffer.CULL_FACE);
-            buffer.enable(buffer.DEPTH_TEST);
-            buffer.depthFunc(buffer.LEQUAL);
-
-            create_shader(
-              'fragment',
-              buffer.FRAGMENT_SHADER,
-              'precision mediump float;'
-              //+ 'varying float float_fogDistance;'
-                + 'uniform sampler2D sampler;'
-                + 'varying vec4 vec_fragmentColor;'
-                + 'varying vec2 vec_textureCoord;'
-                + 'void main(void){'
-              /*+   'gl_FragColor = mix('
-                +     'vec4('
-                +       clearcolor['red'] + ','
-                +       clearcolor['green'] + ','
-                +       clearcolor['blue'] + ','
-                +       clearcolor['alpha']
-                +     '),'
-                +     'vec_fragmentColor,'
-                +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
-                +   ') * vec_fragmentColor;'
-              */+   'gl_FragColor = texture2D('
-                +     'sampler,'
-                +     'vec_textureCoord'
-                +   ') * vec_fragmentColor;'
-                + '}'
-            );
-            create_shader(
-              'vertex',
-              buffer.VERTEX_SHADER,
-              'attribute vec3 vec_vertexPosition;'
-              //+ 'varying float float_fogDistance;'
-                + 'uniform mat4 mat_cameraMatrix;'
-                + 'uniform mat4 mat_perspectiveMatrix;'
-                + 'varying vec4 vec_fragmentColor;'
-                + 'attribute vec4 vec_vertexColor;'
-                + 'varying vec2 vec_textureCoord;'
-                + 'attribute vec2 vec_texturePosition;'
-                + 'void main(void){'
-                +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);'
-                +   'vec_fragmentColor = vec_vertexColor;'
-              //+   'float_fogDistance = length(gl_Position.xyz);'
-                +   'vec_textureCoord = vec_texturePosition;'
-                + '}'
-            );
-
-            create_program(
-              'shaders',
-              [
-                shaders['fragment'],
-                shaders['vertex'],
-              ]
-            );
-
-            set_vertexattribarray('vec_vertexColor');
-            set_vertexattribarray('vec_vertexPosition');
-            set_vertexattribarray('vec_texturePosition');
-        }
-
-        camera = {
-          'rotate-x': 0,
-          'rotate-y': 0,
-          'rotate-z': 0,
-          'x': 0,
-          'y': 0,
-          'z': 0,
-        };
-        matricies['camera'] = matrix_create();
-        matrix_perspective();
-
-        if(typeof load_level === 'function'){
-            load_level(mode);
-        }
-
-        if(typeof draw_logic === 'function'){
-            animationFrame = window.requestAnimationFrame(drawloop);
-        }
-
-        if(typeof logic === 'function'){
-            interval = window.setInterval(
-              logicloop,
-              msperframe || settings['ms-per-frame']
-            );
-        }
-    }
-
-}
-
-function set_buffer(colorData, vertexData, textureData, indexData){
-    var colorBuffer = buffer.createBuffer();
-    buffer.bindBuffer(
-      buffer.ARRAY_BUFFER,
+function webgl_buffer_set(colorData, vertexData, textureData, indexData){
+    var colorBuffer = webgl_buffer.createBuffer();
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
       colorBuffer
     );
-    buffer.bufferData(
-      buffer.ARRAY_BUFFER,
+    webgl_buffer.bufferData(
+      webgl_buffer.ARRAY_BUFFER,
       new Float32Array(colorData),
-      buffer.STATIC_DRAW
+      webgl_buffer.STATIC_DRAW
     );
 
-    var vertexBuffer = buffer.createBuffer();
-    buffer.bindBuffer(
-      buffer.ARRAY_BUFFER,
+    var vertexBuffer = webgl_buffer.createBuffer();
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
       vertexBuffer
     );
-    buffer.bufferData(
-      buffer.ARRAY_BUFFER,
+    webgl_buffer.bufferData(
+      webgl_buffer.ARRAY_BUFFER,
       new Float32Array(vertexData),
-      buffer.STATIC_DRAW
+      webgl_buffer.STATIC_DRAW
     );
 
-    var textureBuffer = buffer.createBuffer();
-    buffer.bindBuffer(
-      buffer.ARRAY_BUFFER,
+    var textureBuffer = webgl_buffer.createBuffer();
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
       textureBuffer
     );
-    buffer.bufferData(
-      buffer.ARRAY_BUFFER,
+    webgl_buffer.bufferData(
+      webgl_buffer.ARRAY_BUFFER,
       new Float32Array(textureData),
-      buffer.STATIC_DRAW
+      webgl_buffer.STATIC_DRAW
     );
 
-    var indexBuffer = buffer.createBuffer();
-    buffer.bindBuffer(
-      buffer.ARRAY_BUFFER,
+    var indexBuffer = webgl_buffer.createBuffer();
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
       indexBuffer
     );
-    buffer.bufferData(
-      buffer.ARRAY_BUFFER,
+    webgl_buffer.bufferData(
+      webgl_buffer.ARRAY_BUFFER,
       new Uint16Array(indexData),
-      buffer.STATIC_DRAW
+      webgl_buffer.STATIC_DRAW
     );
 
     return {
@@ -516,7 +57,214 @@ function set_buffer(colorData, vertexData, textureData, indexData){
     }
 }
 
-function set_entity(id, properties){
+function webgl_camera_move(speed, y, strafe){
+    webgl_camera['y'] += y;
+    var movement = move_3d(
+      speed,
+      webgl_camera['rotate-y'],
+      strafe
+    );
+    webgl_camera['x'] += movement['x'];
+    webgl_camera['z'] += movement['z'];
+}
+
+function webgl_camera_rotate(x, y, z){
+    webgl_camera['rotate-x'] = clamp(
+      round(
+        webgl_camera['rotate-x'] + x,
+        7
+      ),
+      0,
+      360,
+      true
+    );
+    webgl_camera['rotate-y'] = clamp(
+      round(
+        webgl_camera['rotate-y'] + y,
+        7
+      ),
+      0,
+      360,
+      true
+    );
+    webgl_camera['rotate-z'] = clamp(
+      round(
+        webgl_camera['rotate-z'] + z,
+        7
+      ),
+      0,
+      360,
+      true
+    );
+}
+
+function webgl_clearcolor_set(color){
+    webgl_clearcolor = color;
+    webgl_buffer.clearColor(
+      color['red'],
+      color['green'],
+      color['blue'],
+      color['alpha']
+    );
+}
+
+function webgl_draw(){
+    webgl_buffer.viewport(
+      0,
+      0,
+      webgl_buffer.viewportWidth,
+      webgl_buffer.viewportHeight
+    );
+    webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
+
+    matrix_identity('camera');
+    matrix_rotate(
+      'camera',
+      [
+        degrees_to_radians(webgl_camera['rotate-x']),
+        degrees_to_radians(webgl_camera['rotate-y']),
+        degrees_to_radians(webgl_camera['rotate-z']),
+      ]
+    );
+    matrix_translate(
+      'camera',
+      [
+        webgl_camera['x'],
+        webgl_camera['y'],
+        webgl_camera['z'],
+      ]
+    );
+
+    draw_logic();
+
+    for(var entity in webgl_entities){
+        matrix_clone(
+          'camera',
+          'cache'
+        );
+
+        matrix_translate(
+          'camera',
+          [
+            -webgl_entities[entity]['position']['x'],
+            -webgl_entities[entity]['position']['y'],
+            webgl_entities[entity]['position']['z'],
+          ]
+        );
+        matrix_rotate(
+          'camera',
+          [
+            degrees_to_radians(webgl_entities[entity]['rotate']['x']),
+            degrees_to_radians(webgl_entities[entity]['rotate']['y']),
+            degrees_to_radians(webgl_entities[entity]['rotate']['z']),
+          ]
+        );
+
+        webgl_buffer.bindBuffer(
+          webgl_buffer.ARRAY_BUFFER,
+          webgl_entities[entity]['buffer']['color']
+        );
+        webgl_buffer.vertexAttribPointer(
+          webgl_attributes['vec_vertexColor'],
+          4,
+          webgl_buffer.FLOAT,
+          false,
+          0,
+          0
+        );
+
+        webgl_buffer.bindBuffer(
+          webgl_buffer.ARRAY_BUFFER,
+          webgl_entities[entity]['buffer']['vertex']
+        );
+        webgl_buffer.vertexAttribPointer(
+          webgl_attributes['vec_vertexPosition'],
+          3,
+          webgl_buffer.FLOAT,
+          false,
+          0,
+          0
+        );
+
+        webgl_buffer.bindBuffer(
+          webgl_buffer.ARRAY_BUFFER,
+          webgl_entities[entity]['buffer']['texture']
+        );
+        webgl_buffer.vertexAttribPointer(
+          webgl_attributes['vec_texturePosition'],
+          2,
+          webgl_buffer.FLOAT,
+          false,
+          0,
+          0
+        );
+
+        webgl_buffer.activeTexture(webgl_buffer.TEXTURE0);
+        webgl_buffer.bindTexture(
+          webgl_buffer.TEXTURE_2D,
+          webgl_entities[entity]['texture']
+        );
+        webgl_buffer.uniform1i(
+          webgl_buffer.getUniformLocation(
+            webgl_programs['shaders'],
+            'sampler'
+          ),
+          0
+        );
+
+        webgl_buffer.bindBuffer(
+          webgl_buffer.ARRAY_BUFFER,
+          webgl_entities[entity]['buffer']['index']
+        );
+
+        webgl_buffer.uniformMatrix4fv(
+          webgl_buffer.getUniformLocation(
+            webgl_programs['shaders'],
+            'mat_perspectiveMatrix'
+          ),
+          0,
+          matrices['perspective']
+        );
+        webgl_buffer.uniformMatrix4fv(
+          webgl_buffer.getUniformLocation(
+            webgl_programs['shaders'],
+            'mat_cameraMatrix'
+          ),
+          0,
+          matrices['camera']
+        );
+
+        webgl_buffer.drawArrays(
+          webgl_buffer[webgl_entities[entity]['mode']],
+          0,
+          webgl_entities[entity]['vertices'].length / 3
+        );
+
+        matrix_copy(
+          'cache',
+          'camera'
+        );
+    }
+
+    webgl_canvas.clearRect(
+      0,
+      0,
+      webgl_width,
+      webgl_height
+    );
+    webgl_canvas.drawImage(
+      document.getElementById('buffer'),
+      0,
+      0
+    );
+}
+
+function webgl_drawloop(){
+    webgl_draw();
+    webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
+}
+
+function webgl_entity_set(id, properties){
     properties['color'] = properties['color'] || [
       1, 1, 1, 1,
       1, 1, 1, 1,
@@ -543,95 +291,348 @@ function set_entity(id, properties){
       'z': 1
     };
 
-    entities[id] = properties;
+    webgl_entities[id] = properties;
 
-    entities[id]['buffer'] = set_buffer(
-      entities[id]['color'],
-      entities[id]['vertices'],
+    webgl_entities[id]['buffer'] = webgl_buffer_set(
+      webgl_entities[id]['color'],
+      webgl_entities[id]['vertices'],
       [
         0.0, 1.0,
         0.0, 0.0,
         1.0, 0.0,
         1.0, 1.0,
       ],
-      entities[id]['index']
+      webgl_entities[id]['index']
     );
 
-    set_texture2d(
+    webgl_texture_set(
       id,
-      texture_default
+      webgl_textures['_default']
     );
 }
 
-function set_texture2d(entityid, image){
-    entities[entityid]['texture'] = buffer.createTexture();
-    entities[entityid]['image'] = new_image(
+function webgl_group_add(group, entitylist){
+    if(!(group in webgl_groups)){
+        webgl_groups[group] = {};
+    }
+
+    for(var entity in entitylist){
+        webgl_groups[group][entitylist[entity]] = true;
+    }
+}
+
+function webgl_group_modify(grouplist, todo){
+    for(var group in grouplist){
+        for(var entity in webgl_groups[grouplist[group]]){
+            todo(entity);
+        }
+    }
+}
+
+function webgl_group_remove(group, entitylist, delete_empty){
+    delete_empty = delete_empty || false;
+
+    if(group in webgl_groups){
+        for(var entity in entitylist){
+            delete webgl_groups[group][entitylist[entity]];
+        }
+    }
+
+    if(delete_empty
+      && webgl_groups[group].length === 0){
+        delete webgl_groups[group];
+    }
+}
+
+function webgl_image_new(src, todo){
+    var image = new Image();
+    image.onload = todo || function(){};
+    image.src = src;
+    return image;
+}
+
+function webgl_init(){
+    webgl_resize();
+
+    webgl_clearcolor = {
+      'alpha': 1,
+      'blue': 0,
+      'green': 0,
+      'red': 0,
+    };
+
+    webgl_setmode(0);
+}
+
+function webgl_logicloop(){
+    for(var entity in webgl_entities){
+        if(webgl_entities[entity]['logic']){
+            webgl_entities[entity]['logic']();
+        }
+    }
+
+    logic();
+}
+
+function webgl_program_create(id, shaderlist){
+    var program = webgl_buffer.createProgram();
+    for(var shader in shaderlist){
+        webgl_buffer.attachShader(
+          program,
+          shaderlist[shader]
+        );
+    }
+    webgl_buffer.linkProgram(program);
+    webgl_buffer.useProgram(program);
+
+    webgl_programs[id] = program;
+}
+
+function webgl_resize(){
+    if(webgl_mode <= 0){
+        return;
+    }
+
+    webgl_height = window.innerHeight;
+    document.getElementById('buffer').height = webgl_height;
+    document.getElementById('canvas').height = webgl_height;
+    webgl_y = webgl_height / 2;
+
+    webgl_width = window.innerWidth;
+    document.getElementById('buffer').width = webgl_width;
+    document.getElementById('canvas').width = webgl_width;
+    webgl_x = webgl_width / 2;
+
+    webgl_buffer.viewportHeight = webgl_height;
+    webgl_buffer.viewportWidth = webgl_width;
+    webgl_buffer.viewport(0, 0, webgl_height, webgl_width);
+
+    webgl_buffer.font = webgl_fonts['medium'];
+
+    if(typeof resize_logic === 'function'){
+        resize_logic();
+    }
+}
+
+function webgl_setmode(newmode, newgame){
+    window.cancelAnimationFrame(webgl_animationFrame);
+    window.clearInterval(webgl_interval);
+
+    webgl_camera = {};
+    webgl_mode = newmode;
+    var msperframe = 0;
+    newgame = newgame || false;
+    webgl_programs = {};
+    webgl_shaders = {};
+
+    if(typeof setmode_logic === 'function'){
+        setmode_logic(newgame);
+
+    }else{
+        webgl_mode = 1;
+        newgame = true;
+        msperframe = 33;
+    }
+
+    // Main menu mode.
+    if(webgl_mode === 0){
+        webgl_buffer = 0;
+        webgl_canvas = 0;
+
+    // Simulation modes.
+    }else{
+        if(newgame){
+            document.body.innerHTML =
+              '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
+
+            webgl_buffer = document.getElementById('buffer').getContext(
+              'webgl',
+              {
+                'alpha': false,
+                'antialias': true,
+                'depth': true,
+                'preserveDrawingBuffer': false,
+                'premultipliedAlpha': false,
+                'stencil': false,
+              }
+            );
+            webgl_canvas = document.getElementById('canvas').getContext('2d');
+
+            webgl_resize();
+
+            webgl_clearcolor_set(webgl_clearcolor);
+            webgl_buffer.clearDepth(webgl_cleardepth);
+            webgl_buffer.enable(webgl_buffer.CULL_FACE);
+            webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
+            webgl_buffer.depthFunc(webgl_buffer.LEQUAL);
+
+            webgl_shader_create(
+              'fragment',
+              webgl_buffer.FRAGMENT_SHADER,
+              'precision mediump float;'
+              //+ 'varying float float_fogDistance;'
+                + 'uniform sampler2D sampler;'
+                + 'varying vec4 vec_fragmentColor;'
+                + 'varying vec2 vec_textureCoord;'
+                + 'void main(void){'
+              /*+   'gl_FragColor = mix('
+                +     'vec4('
+                +       webgl_clearcolor['red'] + ','
+                +       webgl_clearcolor['green'] + ','
+                +       webgl_clearcolor['blue'] + ','
+                +       webgl_clearcolor['alpha']
+                +     '),'
+                +     'vec_fragmentColor,'
+                +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+                +   ') * vec_fragmentColor;'
+              */+   'gl_FragColor = texture2D('
+                +     'sampler,'
+                +     'vec_textureCoord'
+                +   ') * vec_fragmentColor;'
+                + '}'
+            );
+            webgl_shader_create(
+              'vertex',
+              webgl_buffer.VERTEX_SHADER,
+              'attribute vec3 vec_vertexPosition;'
+              //+ 'varying float float_fogDistance;'
+                + 'uniform mat4 mat_cameraMatrix;'
+                + 'uniform mat4 mat_perspectiveMatrix;'
+                + 'varying vec4 vec_fragmentColor;'
+                + 'attribute vec4 vec_vertexColor;'
+                + 'varying vec2 vec_textureCoord;'
+                + 'attribute vec2 vec_texturePosition;'
+                + 'void main(void){'
+                +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);'
+                +   'vec_fragmentColor = vec_vertexColor;'
+              //+   'float_fogDistance = length(gl_Position.xyz);'
+                +   'vec_textureCoord = vec_texturePosition;'
+                + '}'
+            );
+
+            webgl_program_create(
+              'shaders',
+              [
+                webgl_shaders['fragment'],
+                webgl_shaders['vertex'],
+              ]
+            );
+
+            webgl_vertexattribarray_set('vec_vertexColor');
+            webgl_vertexattribarray_set('vec_vertexPosition');
+            webgl_vertexattribarray_set('vec_texturePosition');
+        }
+
+        webgl_camera = {
+          'rotate-x': 0,
+          'rotate-y': 0,
+          'rotate-z': 0,
+          'x': 0,
+          'y': 0,
+          'z': 0,
+        };
+        matrices['camera'] = matrix_create();
+        matrix_perspective();
+
+        if(typeof load_level === 'function'){
+            load_level(webgl_mode);
+        }
+
+        if(typeof draw_logic === 'function'){
+            webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
+        }
+
+        if(typeof logic === 'function'){
+            webgl_interval = window.setInterval(
+              webgl_logicloop,
+              msperframe || settings['ms-per-frame']
+            );
+        }
+    }
+
+}
+
+function webgl_shader_create(id, type, source){
+    var shader = webgl_buffer.createShader(type);
+    webgl_buffer.shaderSource(
+      shader,
+      source
+    );
+    webgl_buffer.compileShader(shader);
+
+    webgl_shaders[id] = shader;
+}
+
+function webgl_texture_set(entityid, image){
+    webgl_entities[entityid]['texture'] = webgl_buffer.createTexture();
+    webgl_entities[entityid]['image'] = webgl_image_new(
       image,
       function(){
-          buffer.bindTexture(
-            buffer.TEXTURE_2D,
-            entities[entityid]['texture']
+          webgl_buffer.bindTexture(
+            webgl_buffer.TEXTURE_2D,
+            webgl_entities[entityid]['texture']
           );
-          buffer.texImage2D(
-            buffer.TEXTURE_2D,
+          webgl_buffer.texImage2D(
+            webgl_buffer.TEXTURE_2D,
             0,
-            buffer.RGBA,
-            buffer.RGBA,
-            buffer.UNSIGNED_BYTE,
-            entities[entityid]['image']
+            webgl_buffer.RGBA,
+            webgl_buffer.RGBA,
+            webgl_buffer.UNSIGNED_BYTE,
+            webgl_entities[entityid]['image']
           );
-          buffer.texParameteri(
-            buffer.TEXTURE_2D,
-            buffer.TEXTURE_MAG_FILTER,
-            buffer.NEAREST
+          webgl_buffer.texParameteri(
+            webgl_buffer.TEXTURE_2D,
+            webgl_buffer.TEXTURE_MAG_FILTER,
+            webgl_buffer.NEAREST
           );
-          buffer.texParameteri(
-            buffer.TEXTURE_2D,
-            buffer.TEXTURE_MIN_FILTER,
-            buffer.NEAREST
+          webgl_buffer.texParameteri(
+            webgl_buffer.TEXTURE_2D,
+            webgl_buffer.TEXTURE_MIN_FILTER,
+            webgl_buffer.NEAREST
           );
-          buffer.bindTexture(
-            buffer.TEXTURE_2D,
+          webgl_buffer.bindTexture(
+            webgl_buffer.TEXTURE_2D,
             void 0
           );
       }
     );
 }
 
-function set_vertexattribarray(attribute){
-    attributes[attribute] = buffer.getAttribLocation(
-      programs['shaders'],
+function webgl_vertexattribarray_set(attribute){
+    webgl_attributes[attribute] = webgl_buffer.getAttribLocation(
+      webgl_programs['shaders'],
       attribute
     );
-    buffer.enableVertexAttribArray(attributes[attribute]);
+    webgl_buffer.enableVertexAttribArray(webgl_attributes[attribute]);
 }
 
-var animationFrame = 0;
-var attributes = {};
-var buffer = 0;
-var camera = {};
-var canvas = 0;
-var clearcolor = {};
-var cleardepth = 1;
-var entities = {};
-var fonts = {
+var pointerlock = false;
+var webgl_animationFrame = 0;
+var webgl_attributes = {};
+var webgl_buffer = 0;
+var webgl_camera = {};
+var webgl_canvas = 0;
+var webgl_clearcolor = {};
+var webgl_cleardepth = 1;
+var webgl_entities = {};
+var webgl_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var groups = {};
-var height = 0;
-var interval = 0;
-var matricies = {};
-var mode = 0;
-var pointerlock = false;
-var programs = {};
-var shaders = {};
-var texture_debug = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==';
-var texture_default = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==';
-var width = 0;
-var x = 0;
-var y = 0;
+var webgl_groups = {};
+var webgl_height = 0;
+var webgl_interval = 0;
+var webgl_mode = 0;
+var webgl_programs = {};
+var webgl_shaders = {};
+var webgl_textures = {
+  '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
+  '_default': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
+};
+var webgl_width = 0;
+var webgl_x = 0;
+var webgl_y = 0;
 
 document.onpointerlockchange = onpointerlockchange;
-window.onresize = resize;
+window.onresize = webgl_resize;
