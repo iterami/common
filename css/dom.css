@@ -25,14 +25,14 @@ select{
     vertical-align: bottom;
     width: 250px;
 }
-.gamebutton{
+.gridbutton{
     border-width: 0;
     height: 25px;
     margin: 1px;
     vertical-align: top;
     width: 25px !important;
 }
-.gamebuttonclickable{
+.gridbuttonclickable{
     border-width: 0;
     color: #000;
     font-size: 200%;
