@@ -1,6 +1,6 @@
 'use strict';
 
-function create_npc(properties){
+function rpg_npc_create(properties){
     properties = properties || {};
 
     properties['color'] = properties['color'] || '#fff';
@@ -28,10 +28,51 @@ function create_npc(properties){
     properties['selected'] = properties['selected'] || void 0;
     properties['spellbook'] = properties['spellbook'] || {};
 
-    npcs.push(properties);
+    rpg_npcs.push(properties);
 }
 
-function create_particle(properties){
+function rpg_npc_handle(){
+    for(var npc in rpg_npcs){
+        if(rpg_npcs[npc]['selected'] === void 0){
+            continue;
+        }
+
+        for(var spell in rpg_npcs[npc]['spellbook']){
+            if(rpg_npcs[npc]['spellbook'][spell]['current'] < rpg_npcs[npc]['spellbook'][spell]['reload']){
+                rpg_npcs[npc]['spellbook'][spell]['current'] += 1;
+                continue;
+            }
+
+            if(rpg_npcs[npc]['selected'] !== spell){
+                continue;
+            }
+
+            rpg_npcs[npc]['spellbook'][spell]['current'] = 0;
+
+            // Create NPC-created particle.
+            var speeds = movement_speed(
+              rpg_npcs[npc]['x'],
+              rpg_npcs[npc]['y'],
+              rpg_player['x'],
+              rpg_player['y']
+            );
+            var particle = {};
+            for(var property in rpg_npcs[npc]['spellbook'][spell]){
+                particle[property] = rpg_npcs[npc]['spellbook'][spell][property];
+            }
+            particle['dx'] = rpg_player['x'] > rpg_npcs[npc]['x'] ? speeds[0] : -speeds[0];
+            particle['dy'] = rpg_player['y'] > rpg_npcs[npc]['y'] ? speeds[1] : -speeds[1];
+            particle['owner'] = npc;
+            particle['x'] = rpg_npcs[npc]['x'];
+            particle['y'] = rpg_npcs[npc]['y'];
+
+            rpg_particle_create(particle);
+            break;
+        }
+    }
+}
+
+function rpg_particle_create(properties){
     properties = properties || {};
 
     properties['color'] = properties['color'] || '#fff';
@@ -61,10 +102,99 @@ function create_particle(properties){
     properties['x'] = properties['x'] || 0;
     properties['y'] = properties['y'] || 0;
 
-    particles.push(properties);
+    rpg_particles.push(properties);
 }
 
-function create_player(properties){
+function rpg_particle_handle(){
+    particleloop:
+    for(var particle in rpg_particles){
+        rpg_particles[particle]['x'] += rpg_particles[particle]['dx'] * rpg_particles[particle]['speed-x'];
+        rpg_particles[particle]['y'] += rpg_particles[particle]['dy'] * rpg_particles[particle]['speed-y'];
+
+        if(rpg_particles[particle]['lifespan'] < 0){
+            rpg_particles.splice(
+              particle,
+              1
+            );
+            continue;
+        }
+        rpg_particles[particle]['lifespan'] -= 1;
+
+        for(var object in rpg_world_dynamic){
+            if(!rpg_world_dynamic[object]['collision']
+              || rpg_particles[particle]['x'] <= rpg_world_dynamic[object]['x']
+              || rpg_particles[particle]['x'] >= rpg_world_dynamic[object]['x'] + rpg_world_dynamic[object]['width']
+              || rpg_particles[particle]['y'] <= rpg_world_dynamic[object]['y']
+              || rpg_particles[particle]['y'] >= rpg_world_dynamic[object]['y'] + rpg_world_dynamic[object]['height']){
+                continue;
+            }
+
+            rpg_particles.splice(
+              particle,
+              1
+            );
+            continue particleloop;
+        }
+
+        // Handle particles not owned by player.
+        if(rpg_particles[particle]['owner'] > -1){
+            if(rpg_particles[particle]['x'] > rpg_player['x'] - rpg_player['width-half']
+              && rpg_particles[particle]['x'] < rpg_player['x'] + rpg_player['width-half']
+              && rpg_particles[particle]['y'] > rpg_player['y'] - rpg_player['height-half']
+              && rpg_particles[particle]['y'] < rpg_player['y'] + rpg_player['height-half']){
+                rpg_player_affect(
+                  'health',
+                  rpg_particles[particle]['damage']
+                );
+
+                rpg_particles.splice(
+                  particle,
+                  1
+                );
+            }
+
+            continue;
+        }
+
+        // Handle particles owned by player.
+        for(var npc in rpg_npcs){
+            if(rpg_npcs[npc]['team'] === 0
+              || rpg_particles[particle]['x'] <= rpg_npcs[npc]['x'] - rpg_npcs[npc]['width'] / 2
+              || rpg_particles[particle]['x'] >= rpg_npcs[npc]['x'] + rpg_npcs[npc]['width'] / 2
+              || rpg_particles[particle]['y'] <= rpg_npcs[npc]['y'] - rpg_npcs[npc]['height'] / 2
+              || rpg_particles[particle]['y'] >= rpg_npcs[npc]['y'] + rpg_npcs[npc]['height'] / 2){
+                continue;
+            }
+
+            rpg_npcs[npc]['stats']['health']['current'] -= rpg_particles[particle]['damage'];
+            if(rpg_npcs[npc]['stats']['health']['current'] <= 0){
+                rpg_npcs.splice(
+                  npc,
+                  1
+                );
+            }
+
+            rpg_particles.splice(
+              particle,
+              1
+            );
+            continue particleloop;
+        }
+    }
+}
+
+function rpg_player_affect(stat, effect){
+    rpg_player['stats'][stat]['current'] -= effect;
+    if(rpg_player['stats'][stat]['current'] <= 0){
+        rpg_player['stats'][stat]['current'] = 0;
+
+    }else if(rpg_player['stats'][stat]['current'] >= rpg_player['stats'][stat]['max']){
+        rpg_player['stats'][stat]['current'] = rpg_player['stats'][stat]['max'];
+        rpg_player['stats'][stat]['regeneration']['current'] = 0;
+    }
+}
+
+function rpg_player_create(properties){
     properties = properties || {};
 
     properties['equipment'] = properties['equipment'] || {
@@ -104,10 +234,103 @@ function create_player(properties){
     properties['y'] = properties['y'] || 0;
     properties['y-velocity'] = properties['y-velocity'] || 0;
 
-    player = properties;
+    rpg_player = properties;
 }
 
-function create_world_dynamic(properties){
+function rpg_player_handle(){
+    // Regenerate player health and mana.
+    if(rpg_player['stats']['health']['current'] < rpg_player['stats']['health']['max']){
+        rpg_player['stats']['health']['regeneration']['current'] += 1;
+        if(rpg_player['stats']['health']['regeneration']['current'] >= rpg_player['stats']['health']['regeneration']['max']){
+            rpg_player['stats']['health']['current'] += 1;
+            rpg_player['stats']['health']['regeneration']['current'] = 0;
+        }
+    }
+
+    if(rpg_player['stats']['mana']['current'] < rpg_player['stats']['mana']['max']){
+        rpg_player['stats']['mana']['regeneration']['current'] += 1;
+        if(rpg_player['stats']['mana']['regeneration']['current'] >= rpg_player['stats']['mana']['regeneration']['max']){
+            rpg_player['stats']['mana']['current'] += 1;
+            rpg_player['stats']['mana']['regeneration']['current'] = 0;
+        }
+    }
+
+    // Update player spells.
+    for(var spell in rpg_player['spellbook']){
+        if(rpg_player['spellbook'][spell]['current'] < rpg_player['spellbook'][spell]['reload']){
+            rpg_player['spellbook'][spell]['current'] += 1;
+        }
+    }
+
+    // Check if player wants to fire selected spell
+    //   and fire it if they do and it can be fired.
+    var selected = rpg_player['spellbook'][rpg_player['spellbar'][rpg_player['selected']]];
+
+    if(mouse_lock_x > -1
+      && selected['current'] >= selected['reload']
+      && rpg_player['stats'][selected['costs']]['current'] >= selected['cost']){
+        selected['current'] = 0;
+        rpg_player['stats'][selected['costs']]['current'] = Math.max(
+          rpg_player['stats'][selected['costs']]['current'] - selected['cost'],
+          0
+        );
+
+        // Handle particle-creating spells.
+        if(selected['type'] === 'particle'){
+            var speeds = movement_speed(
+              rpg_player['x'],
+              rpg_player['y'],
+              rpg_player['x'] + mouse_x - x,
+              rpg_player['y'] + mouse_y - y
+            );
+            var particle = {};
+            for(var property in selected['particle']){
+                particle[property] = selected['particle'][property];
+            }
+            particle['dx'] = mouse_x > x ? speeds[0] : -speeds[0];
+            particle['dy'] = mouse_y > y ? speeds[1] : -speeds[1];
+            particle['x'] = rpg_player['x'];
+            particle['y'] = rpg_player['y'];
+
+            rpg_particle_create(particle);
+
+        }else if(selected['type'] === 'stat'){
+            rpg_player_affect(
+              selected['effect']['stat'],
+              selected['effect']['damage']
+            );
+
+        }else if(selected['type'] === 'world-dynamic'){
+            var worlddynamic = {};
+            for(var property in selected['world-dynamic']){
+                worlddynamic[property] = selected['world-dynamic'][property];
+            }
+            worlddynamic['x'] = rpg_player['x'] + mouse_x - x;
+            worlddynamic['y'] = rpg_player['y'] + mouse_y - y;
+
+            rpg_world_dynamic_create(worlddynamic);
+        }
+    }
+
+    if(rpg_player['stats']['health']['current'] <= 0){
+        game_running = false;
+    }
+}
+
+function rpg_spell_select(id){
+    if(id < 1){
+        id = 10;
+
+    }else if(id > 10){
+        id = 1;
+    }
+
+    rpg_player['selected'] = id;
+    document.getElementById('canvas').style.cursor =
+      rpg_player['spellbook'][rpg_player['spellbar'][id]]['cursor'] || 'auto';
+}
+
+function rpg_world_dynamic_create(properties){
     properties = properties || {};
 
     properties['collision'] = properties['collision'] === void 0;
@@ -124,266 +347,13 @@ function create_world_dynamic(properties){
     properties['x'] = properties['x'] || 0;
     properties['y'] = properties['y'] || 0;
 
-    world_dynamic.push(properties);
-}
-
-function effect_player(stat, effect){
-    player['stats'][stat]['current'] -= effect;
-    if(player['stats'][stat]['current'] <= 0){
-        player['stats'][stat]['current'] = 0;
-
-    }else if(player['stats'][stat]['current'] >= player['stats'][stat]['max']){
-        player['stats'][stat]['current'] = player['stats'][stat]['max'];
-        player['stats'][stat]['regeneration']['current'] = 0;
-    }
-}
-
-function get_fixed_length_line(x0, y0, x1, y1, length){
-    var distance = Math.sqrt(
-      Math.pow(
-        x1 - x0,
-        2
-      ) + Math.pow(
-        y1 - y0,
-        2
-      )
-    );
-
-    x1 /= distance;
-    x1 *= length;
-    y1 /= distance;
-    y1 *= length;
-
-    return {
-      'x': x1,
-      'y': y1,
-    };
-}
-
-function get_movement_speed(x0, y0, x1, y1){
-    var angle = Math.atan(Math.abs(y0 - y1) / Math.abs(x0 - x1));
-    return [
-      Math.cos(angle),
-      Math.sin(angle),
-    ];
-}
-
-function handle_npcs(){
-    for(var npc in npcs){
-        if(npcs[npc]['selected'] === void 0){
-            continue;
-        }
-
-        for(var spell in npcs[npc]['spellbook']){
-            if(npcs[npc]['spellbook'][spell]['current'] < npcs[npc]['spellbook'][spell]['reload']){
-                npcs[npc]['spellbook'][spell]['current'] += 1;
-                continue;
-            }
-
-            if(npcs[npc]['selected'] !== spell){
-                continue;
-            }
-
-            npcs[npc]['spellbook'][spell]['current'] = 0;
-
-            // Create NPC-created particle.
-            var speeds = get_movement_speed(
-              npcs[npc]['x'],
-              npcs[npc]['y'],
-              player['x'],
-              player['y']
-            );
-            var particle = {};
-            for(var property in npcs[npc]['spellbook'][spell]){
-                particle[property] = npcs[npc]['spellbook'][spell][property];
-            }
-            particle['dx'] = player['x'] > npcs[npc]['x'] ? speeds[0] : -speeds[0];
-            particle['dy'] = player['y'] > npcs[npc]['y'] ? speeds[1] : -speeds[1];
-            particle['owner'] = npc;
-            particle['x'] = npcs[npc]['x'];
-            particle['y'] = npcs[npc]['y'];
-
-            create_particle(particle);
-            break;
-        }
-    }
-}
-
-function handle_particles(){
-    particleloop:
-    for(var particle in particles){
-        particles[particle]['x'] += particles[particle]['dx'] * particles[particle]['speed-x'];
-        particles[particle]['y'] += particles[particle]['dy'] * particles[particle]['speed-y'];
-
-        if(particles[particle]['lifespan'] < 0){
-            particles.splice(
-              particle,
-              1
-            );
-            continue;
-        }
-        particles[particle]['lifespan'] -= 1;
-
-        for(var object in world_dynamic){
-            if(!world_dynamic[object]['collision']
-              || particles[particle]['x'] <= world_dynamic[object]['x']
-              || particles[particle]['x'] >= world_dynamic[object]['x'] + world_dynamic[object]['width']
-              || particles[particle]['y'] <= world_dynamic[object]['y']
-              || particles[particle]['y'] >= world_dynamic[object]['y'] + world_dynamic[object]['height']){
-                continue;
-            }
-
-            particles.splice(
-              particle,
-              1
-            );
-            continue particleloop;
-        }
-
-        // Handle particles not owned by player.
-        if(particles[particle]['owner'] > -1){
-            if(particles[particle]['x'] > player['x'] - player['width-half']
-              && particles[particle]['x'] < player['x'] + player['width-half']
-              && particles[particle]['y'] > player['y'] - player['height-half']
-              && particles[particle]['y'] < player['y'] + player['height-half']){
-                effect_player(
-                  'health',
-                  particles[particle]['damage']
-                );
-
-                particles.splice(
-                  particle,
-                  1
-                );
-            }
-
-            continue;
-        }
-
-        // Handle particles owned by player.
-        for(var npc in npcs){
-            if(npcs[npc]['team'] === 0
-              || particles[particle]['x'] <= npcs[npc]['x'] - npcs[npc]['width'] / 2
-              || particles[particle]['x'] >= npcs[npc]['x'] + npcs[npc]['width'] / 2
-              || particles[particle]['y'] <= npcs[npc]['y'] - npcs[npc]['height'] / 2
-              || particles[particle]['y'] >= npcs[npc]['y'] + npcs[npc]['height'] / 2){
-                continue;
-            }
-
-            npcs[npc]['stats']['health']['current'] -= particles[particle]['damage'];
-            if(npcs[npc]['stats']['health']['current'] <= 0){
-                npcs.splice(
-                  npc,
-                  1
-                );
-            }
-
-            particles.splice(
-              particle,
-              1
-            );
-            continue particleloop;
-        }
-    }
-}
-
-function handle_player(){
-    // Regenerate player health and mana.
-    if(player['stats']['health']['current'] < player['stats']['health']['max']){
-        player['stats']['health']['regeneration']['current'] += 1;
-        if(player['stats']['health']['regeneration']['current'] >= player['stats']['health']['regeneration']['max']){
-            player['stats']['health']['current'] += 1;
-            player['stats']['health']['regeneration']['current'] = 0;
-        }
-    }
-
-    if(player['stats']['mana']['current'] < player['stats']['mana']['max']){
-        player['stats']['mana']['regeneration']['current'] += 1;
-        if(player['stats']['mana']['regeneration']['current'] >= player['stats']['mana']['regeneration']['max']){
-            player['stats']['mana']['current'] += 1;
-            player['stats']['mana']['regeneration']['current'] = 0;
-        }
-    }
-
-    // Update player spells.
-    for(var spell in player['spellbook']){
-        if(player['spellbook'][spell]['current'] < player['spellbook'][spell]['reload']){
-            player['spellbook'][spell]['current'] += 1;
-        }
-    }
-
-    // Check if player wants to fire selected spell
-    //   and fire it if they do and it can be fired.
-    var selected = player['spellbook'][player['spellbar'][player['selected']]];
-
-    if(mouse_lock_x > -1
-      && selected['current'] >= selected['reload']
-      && player['stats'][selected['costs']]['current'] >= selected['cost']){
-        selected['current'] = 0;
-        player['stats'][selected['costs']]['current'] = Math.max(
-          player['stats'][selected['costs']]['current'] - selected['cost'],
-          0
-        );
-
-        // Handle particle-creating spells.
-        if(selected['type'] === 'particle'){
-            var speeds = get_movement_speed(
-              player['x'],
-              player['y'],
-              player['x'] + mouse_x - x,
-              player['y'] + mouse_y - y
-            );
-            var particle = {};
-            for(var property in selected['particle']){
-                particle[property] = selected['particle'][property];
-            }
-            particle['dx'] = mouse_x > x ? speeds[0] : -speeds[0];
-            particle['dy'] = mouse_y > y ? speeds[1] : -speeds[1];
-            particle['x'] = player['x'];
-            particle['y'] = player['y'];
-
-            create_particle(particle);
-
-        }else if(selected['type'] === 'stat'){
-            effect_player(
-              selected['effect']['stat'],
-              selected['effect']['damage']
-            );
-
-        }else if(selected['type'] === 'world-dynamic'){
-            var worlddynamic = {};
-            for(var property in selected['world-dynamic']){
-                worlddynamic[property] = selected['world-dynamic'][property];
-            }
-            worlddynamic['x'] = player['x'] + mouse_x - x;
-            worlddynamic['y'] = player['y'] + mouse_y - y;
-
-            create_world_dynamic(worlddynamic);
-        }
-    }
-
-    if(player['stats']['health']['current'] <= 0){
-        game_running = false;
-    }
-}
-
-function select_spell(id){
-    if(id < 1){
-        id = 10;
-
-    }else if(id > 10){
-        id = 1;
-    }
-
-    player['selected'] = id;
-    document.getElementById('canvas').style.cursor =
-      player['spellbook'][player['spellbar'][id]]['cursor'] || 'auto';
+    rpg_world_dynamic.push(properties);
 }
 
 var game_running = false;
-var npcs = [];
-var particles = [];
-var player = {};
-var ui = 0;
-var world_dynamic = [];
-var world_static = [];
+var rpg_npcs = [];
+var rpg_particles = [];
+var rpg_player = {};
+var rpg_ui = 0;
+var rpg_world_dynamic = [];
+var rpg_world_static = [];
