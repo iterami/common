@@ -50,7 +50,7 @@ function rpg_npc_handle(){
             rpg_npcs[npc]['spellbook'][spell]['current'] = 0;
 
             // Create NPC-created particle.
-            var speeds = movement_speed(
+            var speeds = math_movement_speed(
               rpg_npcs[npc]['x'],
               rpg_npcs[npc]['y'],
               rpg_player['x'],
@@ -277,7 +277,7 @@ function rpg_player_handle(){
 
         // Handle particle-creating spells.
         if(selected['type'] === 'particle'){
-            var speeds = movement_speed(
+            var speeds = math_movement_speed(
               rpg_player['x'],
               rpg_player['y'],
               rpg_player['x'] + mouse_x - x,

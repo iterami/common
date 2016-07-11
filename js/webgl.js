@@ -59,7 +59,7 @@ function webgl_buffer_set(colorData, vertexData, textureData, indexData){
 
 function webgl_camera_move(speed, y, strafe){
     webgl_camera['y'] += y;
-    var movement = move_3d(
+    var movement = math_move_3d(
       speed,
       webgl_camera['rotate-y'],
       strafe
@@ -69,8 +69,8 @@ function webgl_camera_move(speed, y, strafe){
 }
 
 function webgl_camera_rotate(x, y, z){
-    webgl_camera['rotate-x'] = clamp(
-      round(
+    webgl_camera['rotate-x'] = math_clamp(
+      math_round(
         webgl_camera['rotate-x'] + x,
         7
       ),
@@ -78,8 +78,8 @@ function webgl_camera_rotate(x, y, z){
       360,
       true
     );
-    webgl_camera['rotate-y'] = clamp(
-      round(
+    webgl_camera['rotate-y'] = math_clamp(
+      math_round(
         webgl_camera['rotate-y'] + y,
         7
       ),
@@ -87,8 +87,8 @@ function webgl_camera_rotate(x, y, z){
       360,
       true
     );
-    webgl_camera['rotate-z'] = clamp(
-      round(
+    webgl_camera['rotate-z'] = math_clamp(
+      math_round(
         webgl_camera['rotate-z'] + z,
         7
       ),
@@ -117,16 +117,16 @@ function webgl_draw(){
     );
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
-    matrix_identity('camera');
-    matrix_rotate(
+    math_matrix_identity('camera');
+    math_matrix_rotate(
       'camera',
       [
-        degrees_to_radians(webgl_camera['rotate-x']),
-        degrees_to_radians(webgl_camera['rotate-y']),
-        degrees_to_radians(webgl_camera['rotate-z']),
+        math_degrees_to_radians(webgl_camera['rotate-x']),
+        math_degrees_to_radians(webgl_camera['rotate-y']),
+        math_degrees_to_radians(webgl_camera['rotate-z']),
       ]
     );
-    matrix_translate(
+    math_matrix_translate(
       'camera',
       [
         webgl_camera['x'],
@@ -138,12 +138,12 @@ function webgl_draw(){
     draw_logic();
 
     for(var entity in webgl_entities){
-        matrix_clone(
+        math_matrix_clone(
           'camera',
           'cache'
         );
 
-        matrix_translate(
+        math_matrix_translate(
           'camera',
           [
             -webgl_entities[entity]['position']['x'],
@@ -151,12 +151,12 @@ function webgl_draw(){
             webgl_entities[entity]['position']['z'],
           ]
         );
-        matrix_rotate(
+        math_matrix_rotate(
           'camera',
           [
-            degrees_to_radians(webgl_entities[entity]['rotate']['x']),
-            degrees_to_radians(webgl_entities[entity]['rotate']['y']),
-            degrees_to_radians(webgl_entities[entity]['rotate']['z']),
+            math_degrees_to_radians(webgl_entities[entity]['rotate']['x']),
+            math_degrees_to_radians(webgl_entities[entity]['rotate']['y']),
+            math_degrees_to_radians(webgl_entities[entity]['rotate']['z']),
           ]
         );
 
@@ -240,7 +240,7 @@ function webgl_draw(){
           webgl_entities[entity]['vertices'].length / 3
         );
 
-        matrix_copy(
+        math_matrix_copy(
           'cache',
           'camera'
         );
@@ -531,8 +531,8 @@ function webgl_setmode(newmode, newgame){
           'y': 0,
           'z': 0,
         };
-        matrices['camera'] = matrix_create();
-        matrix_perspective();
+        matrices['camera'] = math_matrix_create();
+        math_matrix_perspective();
 
         if(typeof load_level === 'function'){
             load_level(webgl_mode);

@@ -1,6 +1,6 @@
 'use strict';
 
-function clamp(value, min, max, wrap){
+function math_clamp(value, min, max, wrap){
     wrap = wrap || false;
 
     if(wrap){
@@ -26,19 +26,19 @@ function clamp(value, min, max, wrap){
     return value;
 }
 
-function degrees_to_radians(degrees, decimals){
-    return round(
+function math_degrees_to_radians(degrees, decimals){
+    return math_round(
       degrees * degree,
       decimals
     );
 }
 
-function distance(x0, y0, x1, y1){
+function math_distance(x0, y0, x1, y1){
     return Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
 }
 
-function fixed_length_line(x0, y0, x1, y1, length){
-    var line_distance = distance(
+function math_fixed_length_line(x0, y0, x1, y1, length){
+    var line_distance = math_distance(
       x0, y0, x1, y1
     );
 
@@ -53,25 +53,25 @@ function fixed_length_line(x0, y0, x1, y1, length){
     };
 }
 
-function matrix_clone(id, newid){
-    matrices[newid] = matrix_create();
-    matrix_copy(
+function math_matrix_clone(id, newid){
+    matrices[newid] = math_matrix_create();
+    math_matrix_copy(
       id,
       newid
     );
 }
 
-function matrix_copy(id, newid){
+function math_matrix_copy(id, newid){
     for(var key in matrices[id]){
         matrices[newid][key] = matrices[id][key];
     }
 }
 
-function matrix_create(){
+function math_matrix_create(){
     return new Float32Array(16);
 }
 
-function matrix_identity(id){
+function math_matrix_identity(id){
     for(var key in matrices[id]){
         matrices[id][key] =
           key % 5 === 0
@@ -80,8 +80,8 @@ function matrix_identity(id){
     }
 }
 
-function matrix_perspective(){
-    matrices['perspective'] = matrix_create();
+function math_matrix_perspective(){
+    matrices['perspective'] = math_matrix_create();
 
     matrices['perspective'][0] = .5;
     matrices['perspective'][5] = 1;
@@ -90,9 +90,9 @@ function matrix_perspective(){
     matrices['perspective'][14] = -2;
 }
 
-function matrix_rotate(id, dimensions){
+function math_matrix_rotate(id, dimensions){
     // Rotate X.
-    matrix_clone(
+    math_matrix_clone(
       id,
       'rotate-cache'
     );
@@ -109,7 +109,7 @@ function matrix_rotate(id, dimensions){
     matrices[id][11] = matrices['rotate-cache'][11] * cosine - matrices['rotate-cache'][7] * sine;
 
     // Rotate Y.
-    matrix_copy(
+    math_matrix_copy(
       id,
       'rotate-cache'
     );
@@ -126,7 +126,7 @@ function matrix_rotate(id, dimensions){
     matrices[id][11] = matrices['rotate-cache'][11] * cosine + matrices['rotate-cache'][3] * sine;
 
     // Rotate Z.
-    matrix_copy(
+    math_matrix_copy(
       id,
       'rotate-cache'
     );
@@ -143,16 +143,16 @@ function matrix_rotate(id, dimensions){
     matrices[id][7] = matrices['rotate-cache'][7] * cosine - matrices['rotate-cache'][3] * sine;
 }
 
-function matrix_round(id, decimals){
+function math_matrix_round(id, decimals){
     for(var key in matrices[id]){
-        matrices[id][key] = round(
+        matrices[id][key] = math_round(
           matrices[id][key],
           decimals
         );
     }
 }
 
-function matrix_translate(id, dimensions){
+function math_matrix_translate(id, dimensions){
     matrices[id][12] -= matrices[id][0] * dimensions[0]
       + matrices[id][4] * dimensions[1]
       + matrices[id][8] * dimensions[2];
@@ -166,19 +166,19 @@ function matrix_translate(id, dimensions){
       + matrices[id][7] * dimensions[1]
       + matrices[id][11] * dimensions[2];
 
-    matrix_round(id);
+    math_matrix_round(id);
 }
 
-function move_3d(speed, angle, strafe){
+function math_move_3d(speed, angle, strafe){
     strafe = strafe || false;
-    var radians = -degrees_to_radians(angle - (strafe ? 90 : 0));
+    var radians = -math_degrees_to_radians(angle - (strafe ? 90 : 0));
     return {
-      'x': round(speed * Math.sin(radians), 7),
-      'z': round(speed * Math.cos(radians), 7),
+      'x': math_round(speed * Math.sin(radians), 7),
+      'z': math_round(speed * Math.cos(radians), 7),
     };
 }
 
-function movement_speed(x0, y0, x1, y1){
+function math_movement_speed(x0, y0, x1, y1){
     var angle = Math.atan(Math.abs(y0 - y1) / Math.abs(x0 - x1));
     return [
       Math.cos(angle),
@@ -186,11 +186,11 @@ function movement_speed(x0, y0, x1, y1){
     ];
 }
 
-function random_integer(max){
+function math_random_integer(max){
     return Math.floor(Math.random() * max);
 }
 
-function round(number, decimals){
+function math_round(number, decimals){
     decimals = decimals || 7;
 
     if(String(number).indexOf('e') >= 0){
