@@ -119,6 +119,10 @@ function input_handle_mousewheel(event){
     );
 }
 
+function input_handle_onpointerlockchange(event){
+    input_mouse['pointerlock-state'] = document.pointerLockElement === document.getElementById(input_mouse['pointerlock-id']);
+};
+
 function input_init(keybinds, mousebinds){
     keybinds = keybinds || false;
     if(keybinds !== false){
@@ -137,6 +141,8 @@ function input_init(keybinds, mousebinds){
       'down-y': 0,
       'movement-x': 0,
       'movement-y': 0,
+      'pointerlock-id': 'canvas',
+      'pointerlock-state': false,
       'todo': {},
       'x': 0,
       'y': 0,
@@ -148,6 +154,7 @@ function input_init(keybinds, mousebinds){
           true
         );
 
+        document.onpointerlockchange = input_handle_onpointerlockchange;
         window.onmousedown = input_handle_mousedown;
         window.onmousemove = input_handle_mousemove;
         window.onmouseup = input_handle_mouseup;
@@ -208,6 +215,8 @@ function input_mousebinds_update(mousebinds, clear){
 
 function input_requestpointerlock(id){
     document.getElementById(id).requestPointerLock();
+
+    input_mouse['pointerlock-id'] = id;
 }
 
 function input_todos_repeat(){

@@ -1,9 +1,5 @@
 'use strict';
 
-function onpointerlockchange(event){
-    pointerlock = document.pointerLockElement === document.getElementById('canvas');
-};
-
 function webgl_buffer_set(colorData, vertexData, textureData, indexData){
     var colorBuffer = webgl_buffer.createBuffer();
     webgl_buffer.bindBuffer(
@@ -606,7 +602,6 @@ function webgl_vertexattribarray_set(attribute){
     webgl_buffer.enableVertexAttribArray(webgl_attributes[attribute]);
 }
 
-var pointerlock = false;
 var webgl_animationFrame = 0;
 var webgl_attributes = {};
 var webgl_buffer = 0;
@@ -634,5 +629,4 @@ var webgl_width = 0;
 var webgl_x = 0;
 var webgl_y = 0;
 
-document.onpointerlockchange = onpointerlockchange;
 window.onresize = webgl_resize;
