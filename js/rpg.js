@@ -280,15 +280,15 @@ function rpg_player_handle(){
             var speeds = math_movement_speed(
               rpg_player['x'],
               rpg_player['y'],
-              rpg_player['x'] + mouse_x - x,
-              rpg_player['y'] + mouse_y - y
+              rpg_player['x'] + mouse_x - canvas_x,
+              rpg_player['y'] + mouse_y - canvas_y
             );
             var particle = {};
             for(var property in selected['particle']){
                 particle[property] = selected['particle'][property];
             }
-            particle['dx'] = mouse_x > x ? speeds[0] : -speeds[0];
-            particle['dy'] = mouse_y > y ? speeds[1] : -speeds[1];
+            particle['dx'] = mouse_x > canvas_x ? speeds[0] : -speeds[0];
+            particle['dy'] = mouse_y > canvas_y ? speeds[1] : -speeds[1];
             particle['x'] = rpg_player['x'];
             particle['y'] = rpg_player['y'];
 
@@ -305,8 +305,8 @@ function rpg_player_handle(){
             for(var property in selected['world-dynamic']){
                 worlddynamic[property] = selected['world-dynamic'][property];
             }
-            worlddynamic['x'] = rpg_player['x'] + mouse_x - x;
-            worlddynamic['y'] = rpg_player['y'] + mouse_y - y;
+            worlddynamic['x'] = rpg_player['x'] + mouse_x - canvas_x;
+            worlddynamic['y'] = rpg_player['y'] + mouse_y - canvas_y;
 
             rpg_world_dynamic_create(worlddynamic);
         }

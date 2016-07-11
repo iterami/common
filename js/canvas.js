@@ -1,72 +1,72 @@
 'use strict';
 
-function draw(){
-    buffer.clearRect(
+function canvas_draw(){
+    canvas_buffer.clearRect(
       0,
       0,
-      width,
-      height
+      canvas_width,
+      canvas_height
     );
 
     draw_logic();
 
-    canvas.clearRect(
+    canvas_canvas.clearRect(
       0,
       0,
-      width,
-      height
+      canvas_width,
+      canvas_height
     );
-    canvas.drawImage(
+    canvas_canvas.drawImage(
       document.getElementById('buffer'),
       0,
       0
     );
 }
 
-function drawloop(){
-    draw();
-    animationFrame = window.requestAnimationFrame(drawloop);
+function canvas_drawloop(){
+    canvas_draw();
+    canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 }
 
-function init_canvas(){
-    resize();
-    setmode(0);
-}
-
-function new_image(src, todo){
+function canvas_image_new(src, todo){
     var image = new Image();
     image.onload = todo || function(){};
     image.src = src;
     return image;
 }
 
-function resize(){
-    if(mode <= 0){
+function canvas_init(){
+    canvas_resize();
+    canvas_setmode(0);
+}
+
+function canvas_resize(){
+    if(canvas_mode <= 0){
         return;
     }
 
-    height = window.innerHeight;
-    document.getElementById('buffer').height = height;
-    document.getElementById('canvas').height = height;
-    y = height / 2;
+    canvas_height = window.innerHeight;
+    document.getElementById('buffer').height = canvas_height;
+    document.getElementById('canvas').height = canvas_height;
+    canvas_y = canvas_height / 2;
 
-    width = window.innerWidth;
-    document.getElementById('buffer').width = width;
-    document.getElementById('canvas').width = width;
-    x = width / 2;
+    canvas_width = window.innerWidth;
+    document.getElementById('buffer').width = canvas_width;
+    document.getElementById('canvas').width = canvas_width;
+    canvas_x = canvas_width / 2;
 
-    buffer.font = fonts['medium'];
+    canvas_buffer.font = canvas_fonts['medium'];
 
     if(typeof resize_logic === 'function'){
         resize_logic();
     }
 }
 
-function setmode(newmode, newgame){
-    window.cancelAnimationFrame(animationFrame);
-    window.clearInterval(interval);
+function canvas_setmode(newmode, newgame){
+    window.cancelAnimationFrame(canvas_animationFrame);
+    window.clearInterval(canvas_interval);
 
-    mode = newmode;
+    canvas_mode = newmode;
     var msperframe = 0;
     newgame = newgame || false;
 
@@ -74,15 +74,15 @@ function setmode(newmode, newgame){
         setmode_logic(newgame);
 
     }else{
-        mode = 1;
+        canvas_mode = 1;
         newgame = true;
         msperframe = 33;
     }
 
     // Main menu mode.
-    if(mode === 0){
-        buffer = 0;
-        canvas = 0;
+    if(canvas_mode === 0){
+        canvas_buffer = 0;
+        canvas_canvas = 0;
 
     // Simulation modes.
     }else{
@@ -90,22 +90,22 @@ function setmode(newmode, newgame){
             document.body.innerHTML =
               '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
 
-            buffer = document.getElementById('buffer').getContext('2d');
-            canvas = document.getElementById('canvas').getContext('2d');
+            canvas_buffer = document.getElementById('buffer').getContext('2d');
+            canvas_canvas = document.getElementById('canvas').getContext('2d');
 
-            resize();
+            canvas_resize();
         }
 
         if(typeof load_level === 'function'){
-            load_level(mode);
+            load_level(canvas_mode);
         }
 
         if(typeof draw_logic === 'function'){
-            animationFrame = window.requestAnimationFrame(drawloop);
+            canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
         }
 
         if(typeof logic === 'function'){
-            interval = window.setInterval(
+            canvas_interval = window.setInterval(
               logic,
               msperframe || settings_settings['ms-per-frame']
             );
@@ -113,19 +113,19 @@ function setmode(newmode, newgame){
     }
 }
 
-var animationFrame = 0;
-var buffer = 0;
-var canvas = 0;
-var fonts = {
+var canvas_animationFrame = 0;
+var canvas_buffer = 0;
+var canvas_canvas = 0;
+var canvas_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var height = 0;
-var interval = 0;
-var mode = 0;
-var width = 0;
-var x = 0;
-var y = 0;
+var canvas_height = 0;
+var canvas_interval = 0;
+var canvas_mode = 0;
+var canvas_width = 0;
+var canvas_x = 0;
+var canvas_y = 0;
 
-window.onresize = resize;
+window.onresize = canvas_resize;
