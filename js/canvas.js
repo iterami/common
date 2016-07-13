@@ -87,8 +87,14 @@ function canvas_setmode(newmode, newgame){
     // Simulation modes.
     }else{
         if(newgame){
+            var properties = '';
+
+            if(!canvas_oncontextmenu){
+                properties = ' oncontextmenu="return false" ';
+            }
+
             document.body.innerHTML =
-              '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
+              '<canvas id=canvas ' + properties + '></canvas><canvas id=buffer></canvas>';
 
             canvas_buffer = document.getElementById('buffer').getContext('2d');
             canvas_canvas = document.getElementById('canvas').getContext('2d');
@@ -124,6 +130,7 @@ var canvas_fonts = {
 var canvas_height = 0;
 var canvas_interval = 0;
 var canvas_mode = 0;
+var canvas_oncontextmenu = true;
 var canvas_width = 0;
 var canvas_x = 0;
 var canvas_y = 0;

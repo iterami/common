@@ -438,8 +438,14 @@ function webgl_setmode(newmode, newgame){
     // Simulation modes.
     }else{
         if(newgame){
+            var properties = '';
+
+            if(!webgl_oncontextmenu){
+                properties = ' oncontextmenu="return false" ';
+            }
+
             document.body.innerHTML =
-              '<canvas id=canvas></canvas><canvas id=buffer></canvas>';
+              '<canvas id=canvas ' + properties + '></canvas><canvas id=buffer></canvas>';
 
             webgl_buffer = document.getElementById('buffer').getContext(
               'webgl',
@@ -619,6 +625,7 @@ var webgl_groups = {};
 var webgl_height = 0;
 var webgl_interval = 0;
 var webgl_mode = 0;
+var webgl_oncontextmenu = true;
 var webgl_programs = {};
 var webgl_shaders = {};
 var webgl_textures = {
