@@ -340,13 +340,6 @@ function webgl_group_remove(group, entitylist, delete_empty){
     }
 }
 
-function webgl_image_new(src, todo){
-    var image = new Image();
-    image.onload = todo || function(){};
-    image.src = src;
-    return image;
-}
-
 function webgl_init(){
     webgl_resize();
 
@@ -567,7 +560,8 @@ function webgl_shader_create(id, type, source){
 
 function webgl_texture_set(entityid, image){
     webgl_entities[entityid]['texture'] = webgl_buffer.createTexture();
-    webgl_entities[entityid]['image'] = webgl_image_new(
+    webgl_entities[entityid]['image'] = images_new(
+      entityid + '-texture',
       image,
       function(){
           webgl_buffer.bindTexture(
