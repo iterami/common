@@ -153,18 +153,11 @@ function math_matrix_round(id, decimals){
 }
 
 function math_matrix_translate(id, dimensions){
-    matrices[id][12] -= matrices[id][0] * dimensions[0]
-      + matrices[id][4] * dimensions[1]
-      + matrices[id][8] * dimensions[2];
-    matrices[id][13] -= matrices[id][1] * dimensions[0]
-      + matrices[id][5] * dimensions[1]
-      + matrices[id][9] * dimensions[2];
-    matrices[id][14] -= matrices[id][2] * dimensions[0]
-      + matrices[id][6] * dimensions[1]
-      + matrices[id][10] * dimensions[2];
-   matrices[id][15] -= matrices[id][3] * dimensions[0]
-      + matrices[id][7] * dimensions[1]
-      + matrices[id][11] * dimensions[2];
+    for(var i = 0; i < 4; i++){
+        matrices[id][i + 12] -= matrices[id][i] * dimensions[0]
+          + matrices[id][i + 4] * dimensions[1]
+          + matrices[id][i + 8] * dimensions[2];
+    }
 
     math_matrix_round(id);
 }
