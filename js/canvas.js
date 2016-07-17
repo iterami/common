@@ -28,13 +28,6 @@ function canvas_drawloop(){
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 }
 
-function canvas_image_new(src, todo){
-    var image = new Image();
-    image.onload = todo || function(){};
-    image.src = src;
-    return image;
-}
-
 function canvas_init(){
     canvas_resize();
     canvas_setmode(0);
