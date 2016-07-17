@@ -22,8 +22,9 @@ function random_rgb(){
   };
 }
 
-function random_integer(max){
-    return Math.floor(Math.random() * max);
+function random_integer(max, todo){
+    todo = todo || 'floor';
+    return Math[todo](Math.random() * max);
 }
 
 function random_string(length, characters){
