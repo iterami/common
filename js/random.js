@@ -6,15 +6,12 @@ function random_boolean(){
 
 function random_hex(){
     var color = random_rgb();
-    var result = '';
 
     var blue = '0' + color['blue'].toString(16);
     var green = '0' + color['green'].toString(16);
     var red = '0' + color['red'].toString(16);
 
-    result = red.slice(-2) + green.slice(-2) + blue.slice(-2);
-
-    return result;
+    return '#' + red.slice(-2) + green.slice(-2) + blue.slice(-2);
 }
 
 function random_rgb(){
