@@ -5,6 +5,7 @@ function images_new(id, src, todo){
     image.onload = todo || function(){};
     image.src = src;
     images_images[id] = image;
+    return image;
 }
 
 var images_images = {};
