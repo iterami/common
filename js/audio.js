@@ -6,6 +6,10 @@ function audio_create(id, properties){
     }
 }
 
+function audio_init(default_volume){
+    audio_volume = default_volume;
+}
+
 function audio_play(id){
     //if(settings['audio-volume'] <= 0){
     //    return;
@@ -16,3 +20,4 @@ function audio_play(id){
 }
 
 var audio_audio = {};
+var audio_volume = 1;
