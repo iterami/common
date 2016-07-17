@@ -1,10 +1,10 @@
 'use strict';
 
 function bests_init(newprefix, bests){
-    prefix = newprefix;
+    bests_prefix = newprefix;
 
     for(var best in bests){
-        bests_bests[best] = parseFloat(window.localStorage.getItem(prefix + best))
+        bests_bests[best] = parseFloat(window.localStorage.getItem(bests_prefix + best))
           || bests[best];
     }
 }
@@ -27,14 +27,14 @@ function bests_update(key, value){
 
     if(bests_bests[key] !== 0){
         window.localStorage.setItem(
-          prefix + key,
+          bests_prefix + key,
           bests_bests[key]
         );
 
     }else{
-        window.localStorage.removeItem(prefix + key);
+        window.localStorage.removeItem(bests_prefix + key);
     }
 }
 
 var bests_bests = {};
-var prefix = '';
+var bests_prefix = '';
