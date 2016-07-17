@@ -83,39 +83,39 @@ function canvas_setmode(newmode, newgame){
     if(canvas_mode === 0){
         canvas_buffer = 0;
         canvas_canvas = 0;
+        return;
+    }
 
     // Simulation modes.
-    }else{
-        if(newgame){
-            var properties = '';
+    if(newgame){
+        var properties = '';
 
-            if(!canvas_oncontextmenu){
-                properties = ' oncontextmenu="return false" ';
-            }
-
-            document.body.innerHTML =
-              '<canvas id=canvas ' + properties + '></canvas><canvas id=buffer></canvas>';
-
-            canvas_buffer = document.getElementById('buffer').getContext('2d');
-            canvas_canvas = document.getElementById('canvas').getContext('2d');
-
-            canvas_resize();
+        if(!canvas_oncontextmenu){
+            properties = ' oncontextmenu="return false" ';
         }
 
-        if(typeof load_level === 'function'){
-            load_level(canvas_mode);
-        }
+        document.body.innerHTML =
+          '<canvas id=canvas ' + properties + '></canvas><canvas id=buffer></canvas>';
 
-        if(typeof draw_logic === 'function'){
-            canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
-        }
+        canvas_buffer = document.getElementById('buffer').getContext('2d');
+        canvas_canvas = document.getElementById('canvas').getContext('2d');
 
-        if(typeof logic === 'function'){
-            canvas_interval = window.setInterval(
-              logic,
-              msperframe || settings_settings['ms-per-frame']
-            );
-        }
+        canvas_resize();
+    }
+
+    if(typeof load_level === 'function'){
+        load_level(canvas_mode);
+    }
+
+    if(typeof draw_logic === 'function'){
+        canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
+    }
+
+    if(typeof logic === 'function'){
+        canvas_interval = window.setInterval(
+          logic,
+          msperframe || settings_settings['ms-per-frame']
+        );
     }
 }
 
