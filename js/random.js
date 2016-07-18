@@ -9,7 +9,9 @@ function random_boolean(chance){
 }
 
 function random_hex(hash){
-    hash = hash || false;
+    hash = hash !== void 0
+      ? false
+      : true;
     var color = random_rgb();
 
     var blue = '0' + color['blue'].toString(16);
