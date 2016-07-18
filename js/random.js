@@ -1,7 +1,11 @@
 'use strict';
 
-function random_boolean(){
-    return random_integer(2) === 1;
+function random_boolean(chance){
+    chance = chance !== void 0
+      ? chance
+      : .5;
+
+    return Math.random() <= chance;
 }
 
 function random_hex(){

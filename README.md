@@ -16,6 +16,7 @@ Currently used by:
 * [iterami/Click.htm](https://github.com/iterami/Click.htm)
 * [iterami/ColorDrops.htm](https://github.com/iterami/ColorDrops.htm)
 * [iterami/ColorSelector.htm](https://github.com/iterami/ColorSelector.htm)
+* [iterami/ColorSquares.htm](https://github.com/iterami/ColorSquares.htm)
 * [iterami/ColorSteps.htm](https://github.com/iterami/ColorSteps.htm)
 * [iterami/ColorWaves.htm](https://github.com/iterami/ColorWaves.htm)
 * [iterami/Countdown.htm](https://github.com/iterami/Countdown.htm)
