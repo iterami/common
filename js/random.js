@@ -5,7 +5,7 @@ function random_boolean(chance){
       ? chance
       : .5;
 
-    return Math.random() <= chance;
+    return Math.random() < chance;
 }
 
 function random_hex(hash){
