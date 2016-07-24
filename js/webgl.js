@@ -219,7 +219,7 @@ function webgl_draw(){
             'mat_perspectiveMatrix'
           ),
           0,
-          matrices['perspective']
+          math_matrices['perspective']
         );
         webgl_buffer.uniformMatrix4fv(
           webgl_buffer.getUniformLocation(
@@ -227,7 +227,7 @@ function webgl_draw(){
             'mat_cameraMatrix'
           ),
           0,
-          matrices['camera']
+          math_matrices['camera']
         );
 
         webgl_buffer.drawArrays(
@@ -527,7 +527,7 @@ function webgl_setmode(newmode, newgame){
       'y': 0,
       'z': 0,
     };
-    matrices['camera'] = math_matrix_create();
+    math_matrices['camera'] = math_matrix_create();
     math_matrix_perspective();
 
     if(typeof load_level === 'function'){
