@@ -176,6 +176,7 @@ function math_movement_speed(x0, y0, x1, y1){
     return [
       Math.cos(angle),
       Math.sin(angle),
+      angle,
     ];
 }
 
