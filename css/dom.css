@@ -54,6 +54,7 @@ hr{
 .inline{
     display: inline-block;
 }
+input[disabled],
 input[readonly]{
     border: 0;
 }
