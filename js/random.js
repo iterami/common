@@ -9,16 +9,15 @@ function random_boolean(chance){
 }
 
 function random_hex(hash){
-    hash = hash !== void 0
-      ? false
-      : true;
     var color = random_rgb();
 
     var blue = '0' + color['blue'].toString(16);
     var green = '0' + color['green'].toString(16);
     var red = '0' + color['red'].toString(16);
 
-    var hex = hash ? '#' : '';
+    var hex = hash === void 0
+      ? '#'
+      : '';
     hex += red.slice(-2) + green.slice(-2) + blue.slice(-2);
 
     return hex;
