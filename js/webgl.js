@@ -326,15 +326,13 @@ function webgl_group_modify(grouplist, todo){
 }
 
 function webgl_group_remove(group, entitylist, delete_empty){
-    delete_empty = delete_empty || false;
-
     if(group in webgl_groups){
         for(var entity in entitylist){
             delete webgl_groups[group][entitylist[entity]];
         }
     }
 
-    if(delete_empty
+    if((delete_empty || false)
       && webgl_groups[group].length === 0){
         delete webgl_groups[group];
     }
@@ -410,7 +408,6 @@ function webgl_setmode(newmode, newgame){
     webgl_camera = {};
     webgl_mode = newmode;
     var msperframe = 0;
-    newgame = newgame || false;
     webgl_programs = {};
     webgl_shaders = {};
 
@@ -431,7 +428,7 @@ function webgl_setmode(newmode, newgame){
     }
 
     // Simulation modes.
-    if(newgame){
+    if(newgame || false){
         var properties = '';
 
         if(!webgl_oncontextmenu){

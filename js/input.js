@@ -176,8 +176,7 @@ function input_init(keybinds, mousebinds){
 }
 
 function input_keybinds_update(keybinds, clear){
-    clear = clear || false;
-    if(clear){
+    if(clear || false){
         input_keys = {};
     }
 
@@ -200,8 +199,7 @@ function input_keyinfo_get(event){
 }
 
 function input_mousebinds_update(mousebinds, clear){
-    clear = clear || false;
-    if(clear){
+    if(clear || false){
         input_mouse['todo'] = {};
     }
 

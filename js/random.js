@@ -32,8 +32,7 @@ function random_rgb(){
 }
 
 function random_integer(max, todo){
-    todo = todo || 'floor';
-    return Math[todo](Math.random() * max);
+    return Math[(todo || 'floor')](Math.random() * max);
 }
 
 function random_string(length, characters){

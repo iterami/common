@@ -20,10 +20,8 @@ function build_building(player, building_type, building_x, building_y, fog_overr
         building_y = -settings_settings['level-size'];
     }
 
-    fog_override = fog_override || false;
-
     if(player === 0
-      && !fog_override){
+      && !(fog_override || false)){
         // Don't allow building on fog.
         var loop_counter = fog.length - 1;
         if(loop_counter >= 0){

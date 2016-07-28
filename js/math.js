@@ -1,9 +1,7 @@
 'use strict';
 
 function math_clamp(value, min, max, wrap){
-    wrap = wrap || false;
-
-    if(wrap){
+    if(wrap || false){
         var diff = max - min;
         while(value < min){
             value += diff;
@@ -163,8 +161,13 @@ function math_matrix_translate(id, dimensions){
 }
 
 function math_move_3d(speed, angle, strafe){
-    strafe = strafe || false;
-    var radians = -math_degrees_to_radians(angle - (strafe ? 90 : 0));
+    var radians = -math_degrees_to_radians(
+      angle
+      - ((strafe || false)
+        ? 90
+        : 0
+      )
+    );
     return {
       'x': math_round(speed * Math.sin(radians), 7),
       'z': math_round(speed * Math.cos(radians), 7),
