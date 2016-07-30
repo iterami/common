@@ -11,6 +11,8 @@ function canvas_draw(){
     draw_logic();
 
     if(canvas_menu){
+        canvas_buffer.save();
+
         canvas_buffer.fillStyle = '#111';
         canvas_buffer.fillRect(
           canvas_x - 100,
@@ -32,6 +34,8 @@ function canvas_draw(){
           canvas_x,
           canvas_y + 35
         );
+
+        canvas_buffer.restore();
     }
 
     canvas_canvas.clearRect(
