@@ -10,6 +10,30 @@ function canvas_draw(){
 
     draw_logic();
 
+    if(canvas_menu){
+        canvas_buffer.fillStyle = '#111';
+        canvas_buffer.fillRect(
+          canvas_x - 100,
+          canvas_y - 50,
+          200,
+          100
+        );
+
+        canvas_buffer.font = canvas_fonts['medium'];
+        canvas_buffer.fillStyle = '#fff';
+        canvas_buffer.textAlign = 'center';
+        canvas_buffer.fillText(
+          'ESC = Resume',
+          canvas_x,
+          canvas_y - 25
+        );
+        canvas_buffer.fillText(
+          'Q = Main Menu',
+          canvas_x,
+          canvas_y + 35
+        );
+    }
+
     canvas_canvas.clearRect(
       0,
       0,
@@ -31,6 +55,16 @@ function canvas_drawloop(){
 function canvas_init(){
     canvas_resize();
     canvas_setmode(0);
+}
+
+function canvas_menu_quit(){
+    if(canvas_menu){
+        canvas_setmode(0);
+    }
+}
+
+function canvas_menu_toggle(){
+    canvas_menu = !canvas_menu;
 }
 
 function canvas_resize(){
@@ -59,6 +93,7 @@ function canvas_setmode(newmode, newgame){
     window.cancelAnimationFrame(canvas_animationFrame);
     window.clearInterval(canvas_interval);
 
+    canvas_menu = false;
     canvas_mode = newmode;
     var msperframe = 0;
     newgame = newgame || false;
