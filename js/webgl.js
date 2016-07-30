@@ -253,6 +253,17 @@ function webgl_draw(){
       0,
       0
     );
+
+    for(var text in webgl_text){
+        for(var property in webgl_text[text]['properties']){
+            webgl_canvas[property] = webgl_text[text]['properties'][property];
+        }
+        webgl_canvas.fillText(
+          webgl_text[text]['text'],
+          webgl_text[text]['x'],
+          webgl_text[text]['y']
+        );
+    }
 }
 
 function webgl_drawloop(){
@@ -619,6 +630,7 @@ var webgl_mode = 0;
 var webgl_oncontextmenu = true;
 var webgl_programs = {};
 var webgl_shaders = {};
+var webgl_text = {};
 var webgl_textures = {
   '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
   '_default': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
