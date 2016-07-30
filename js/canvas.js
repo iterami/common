@@ -24,6 +24,7 @@ function canvas_draw(){
         canvas_buffer.font = canvas_fonts['medium'];
         canvas_buffer.fillStyle = '#fff';
         canvas_buffer.textAlign = 'center';
+        canvas_buffer.textBaseline = 'middle';
         canvas_buffer.fillText(
           'ESC = Resume',
           canvas_x,
@@ -32,7 +33,7 @@ function canvas_draw(){
         canvas_buffer.fillText(
           'Q = Main Menu',
           canvas_x,
-          canvas_y + 35
+          canvas_y + 25
         );
 
         canvas_buffer.restore();
