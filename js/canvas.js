@@ -122,6 +122,7 @@ var canvas_fonts = {
 };
 var canvas_height = 0;
 var canvas_interval = 0;
+var canvas_menu = false;
 var canvas_mode = 0;
 var canvas_oncontextmenu = true;
 var canvas_width = 0;
