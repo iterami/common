@@ -28,6 +28,7 @@ Currently used by:
 * [iterami/Duel.htm](https://github.com/iterami/Duel.htm)
 * [iterami/EmojiText.htm](https://github.com/iterami/EmojiText.htm)
 * [iterami/ESP-Test.htm](https://github.com/iterami/ESP-Test.htm)
+* [iterami/ExperienceCalculator.htm](https://github.com/iterami/ExperienceCalculator.htm)
 * [iterami/Fireworks-2D.htm](https://github.com/iterami/Fireworks-2D.htm)
 * [iterami/FractalRunner-2D3D.htm](https://github.com/iterami/FractalRunner-2D3D.htm)
 * [iterami/GitHub-API.htm](https://github.com/iterami/GitHub-API.htm)
