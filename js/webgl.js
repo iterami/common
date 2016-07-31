@@ -417,7 +417,14 @@ function webgl_setmode(newmode, newgame){
     window.clearInterval(webgl_interval);
 
     newgame = newgame || false;
-    webgl_camera = {};
+    webgl_camera = {
+      'rotate-x': 0,
+      'rotate-y': 0,
+      'rotate-z': 0,
+      'x': 0,
+      'y': 0,
+      'z': 0,
+    };
     webgl_mode = newmode;
     var msperframe = 0;
     webgl_programs = {};
@@ -528,16 +535,28 @@ function webgl_setmode(newmode, newgame){
         webgl_vertexattribarray_set('vec_texturePosition');
     }
 
-    webgl_camera = {
-      'rotate-x': 0,
-      'rotate-y': 0,
-      'rotate-z': 0,
-      'x': 0,
-      'y': 0,
-      'z': 0,
-    };
     math_matrices['camera'] = math_matrix_create();
     math_matrix_perspective();
+
+    for(var entity in webgl_entities){
+        if(webgl_entities[entity]['_init'] === true){
+            var group = webgl_entities[entity]['_group'] || void 0;
+
+            webgl_entity_set(
+              entity,
+              webgl_entities[entity]
+            );
+
+            if(group !== void 0){
+                webgl_group_add(
+                  entity,
+                  [
+                    entity,
+                  ]
+                );
+            }
+        }
+    }
 
     if(typeof load_level === 'function'){
         load_level(webgl_mode);
@@ -550,7 +569,7 @@ function webgl_setmode(newmode, newgame){
     if(typeof logic === 'function'){
         webgl_interval = window.setInterval(
           webgl_logicloop,
-          msperframe || settings['ms-per-frame']
+          msperframe || settings_settings['ms-per-frame']
         );
     }
 
