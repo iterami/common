@@ -264,6 +264,35 @@ function webgl_draw(){
           webgl_text[text]['y']
         );
     }
+
+    if(webgl_menu){
+        webgl_canvas.save();
+
+        webgl_canvas.fillStyle = '#111';
+        webgl_canvas.fillRect(
+          webgl_x - 100,
+          webgl_y - 50,
+          200,
+          100
+        );
+
+        webgl_canvas.font = webgl_fonts['medium'];
+        webgl_canvas.fillStyle = '#fff';
+        webgl_canvas.textAlign = 'center';
+        webgl_canvas.textBaseline = 'middle';
+        webgl_canvas.fillText(
+          'ESC = Resume',
+          webgl_x,
+          webgl_y - 25
+        );
+        webgl_canvas.fillText(
+          'Q = Main Menu',
+          webgl_x,
+          webgl_y + 25
+        );
+
+        webgl_canvas.restore();
+    }
 }
 
 function webgl_drawloop(){
@@ -372,6 +401,16 @@ function webgl_logicloop(){
     logic();
 }
 
+function webgl_menu_quit(){
+    if(webgl_menu){
+        webgl_setmode(0);
+    }
+}
+
+function webgl_menu_toggle(){
+    webgl_menu = !webgl_menu;
+}
+
 function webgl_program_create(id, shaderlist){
     var program = webgl_buffer.createProgram();
     for(var shader in shaderlist){
@@ -425,6 +464,7 @@ function webgl_setmode(newmode, newgame){
       'y': 0,
       'z': 0,
     };
+    webgl_menu = false;
     webgl_mode = newmode;
     var msperframe = 0;
     webgl_programs = {};
@@ -646,6 +686,7 @@ var webgl_fonts = {
 var webgl_groups = {};
 var webgl_height = 0;
 var webgl_interval = 0;
+var webgl_menu = false;
 var webgl_mode = 0;
 var webgl_oncontextmenu = true;
 var webgl_programs = {};
