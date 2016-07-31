@@ -416,6 +416,7 @@ function webgl_setmode(newmode, newgame){
     window.cancelAnimationFrame(webgl_animationFrame);
     window.clearInterval(webgl_interval);
 
+    newgame = newgame || false;
     webgl_camera = {};
     webgl_mode = newmode;
     var msperframe = 0;
@@ -439,7 +440,7 @@ function webgl_setmode(newmode, newgame){
     }
 
     // Simulation modes.
-    if(newgame || false){
+    if(newgame){
         var properties = '';
 
         if(!webgl_oncontextmenu){
