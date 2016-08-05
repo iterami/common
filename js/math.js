@@ -184,7 +184,9 @@ function math_movement_speed(x0, y0, x1, y1){
 }
 
 function math_round(number, decimals){
-    decimals = decimals || 7;
+    decimals = decimals === void 0
+      ? 7
+      : decimals;
 
     if(String(number).indexOf('e') >= 0){
         number = Number(number.toFixed(decimals));
