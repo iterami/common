@@ -52,6 +52,10 @@ function settings_save(){
 }
 
 function settings_type_convert(setting){
+    if(typeof settings_defaults[setting] === 'string'){
+        return;
+    }
+
     if(!isNaN(parseFloat(settings_defaults[setting]))){
         settings_settings[setting] = parseFloat(settings_settings[setting]);
 
