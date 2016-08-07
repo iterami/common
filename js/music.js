@@ -41,18 +41,18 @@ function iterateTracks(direction){
 }
 
 function pauseTrack(reset){
-    window.clearInterval(interval);
+    window.clearInterval(music_interval);
 
     document.getElementById('play-button').value = 'Play [SPACE]';
     document.getElementById('play-button').onclick = playTrack;
 
     document.getElementById('audio-player').pause();
 
-    playing = false;
+    music_playing = false;
 }
 
 function playTrack(){
-    window.clearInterval(interval);
+    window.clearInterval(music_interval);
 
     // Check if tracks table has any tracks.
     if(!document.getElementById('tracks').firstChild){
@@ -69,21 +69,21 @@ function playTrack(){
 
     document.getElementById('audio-player').play();
 
-    playing = true;
+    music_playing = true;
     setTitle(document.getElementById('audio-player').src.split('/').pop());
-    interval = window.setInterval(
+    music_interval = window.setInterval(
       updateProgress,
-      parseFloat(1000 / playbackrate) || 1000
+      parseFloat(1000 / music_playbackrate) || 1000
     );
 
     updateProgress();
 }
 
 function resize(){
-    width = window.innerWidth;
-    document.getElementById('music-display').width = width;
+    music_width = window.innerWidth;
+    document.getElementById('music-display').width = music_width;
 
-    canvas.fillStyle = '#7a7';
+    music_canvas.fillStyle = '#7a7';
     draw();
 }
 
@@ -119,39 +119,39 @@ function setTrack(track){
     track.className = 'playing';
     document.getElementById('audio-player').src =
       document.getElementsByClassName('playing')[0].firstChild.childNodes[0].innerHTML;
-    document.getElementById('audio-player').playbackRate = playbackrate;
+    document.getElementById('audio-player').playbackRate = music_playbackrate;
 
-    percent = 0;
+    music_percent = 0;
 
     playTrack();
 }
 
-var canvas = document.getElementById('music-display').getContext('2d', {
+var music_canvas = document.getElementById('music-display').getContext('2d', {
   'alpha': false,
 });
-var interval = 0;
-var mouse_drag = false;
-var percent = 0;
-var playbackrate = 1;
-var playing = false;
-var volume = 1;
-var width = 0;
+var music_interval = 0;
+var music_mouse_drag = false;
+var music_percent = 0;
+var music_playbackrate = 1;
+var music_playing = false;
+var music_volume = 1;
+var music_width = 0;
 
 document.getElementById('audio-mute').onclick = function(e){
     document.getElementById('audio-player').volume = document.getElementById('audio-mute').checked
       ? 0
-      : volume;
+      : music_volume;
 };
 
 document.getElementById('music-display').onmousedown =
   document.getElementById('music-display').ontouchstart = function(e){
-    if(!playing){
+    if(!music_playing){
         playTrack();
     }
 
-    mouse_drag = true;
-    percent = e.pageX / width;
-    seek(percent);
+    music_mouse_drag = true;
+    music_percent = e.pageX / music_width;
+    seek(music_percent);
     updateProgress();
 };
 
@@ -176,7 +176,7 @@ window.onkeydown = function(e){
     if(key === 32){
         e.preventDefault();
 
-        if(playing){
+        if(music_playing){
             pauseTrack(false);
 
         }else{
@@ -196,18 +196,18 @@ window.onkeydown = function(e){
 };
 
 window.onmousemove = function(e){
-    if(!playing
-      || !mouse_drag){
+    if(!music_playing
+      || !music_mouse_drag){
         return;
     }
 
-    percent = e.pageX / width;
-    seek(percent);
+    music_percent = e.pageX / music_width;
+    seek(music_percent);
     draw();
 };
 
 window.onmouseup = function(e){
-    mouse_drag = false;
+    music_mouse_drag = false;
 };
 
 window.onresize = resize;
