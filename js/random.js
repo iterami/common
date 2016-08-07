@@ -23,16 +23,16 @@ function random_hex(hash){
     return hex;
 }
 
+function random_integer(max, todo){
+    return Math[(todo || 'floor')](Math.random() * max);
+}
+
 function random_rgb(){
   return {
     'blue': random_integer(256),
     'green': random_integer(256),
     'red': random_integer(256),
   };
-}
-
-function random_integer(max, todo){
-    return Math[(todo || 'floor')](Math.random() * max);
 }
 
 function random_string(length, characters){
