@@ -21,6 +21,15 @@ function input_handle_event(event, object, key, todo, state){
     return false;
 }
 
+function input_handle_gamepadconnected(event){
+    var gamepad = event.gamepad;
+    input_gamepads[gamepad.index] = gamepad;
+}
+
+function input_handle_gamepaddisconnected(event){
+    delete input_gamepads[event.gamepad.index];
+}
+
 function input_handle_keydown(event){
     var key = input_keyinfo_get(event);
 
@@ -173,6 +182,9 @@ function input_init(keybinds, mousebinds){
             );
         }
     }
+
+    window.ongamepadconnected = input_handle_gamepadconnected;
+    window.ongamepaddisconnected = input_handle_gamepaddisconnected;
 }
 
 function input_keybinds_update(keybinds, clear){
@@ -231,5 +243,6 @@ function input_todos_repeat(){
     }
 }
 
+var input_gamepads = {};
 var input_keys = {};
 var input_mouse = {};
