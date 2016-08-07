@@ -3,7 +3,7 @@ a{
     display: block;
 }
 a:hover,
-.dl td:first-child a:hover,
+.dl a:hover,
 td:nth-child(2) a:hover{
     color: #777;
 }
@@ -13,7 +13,7 @@ body{
     font-family: monospace;
     text-align: center;
 }
-.dl td:first-child a{
+.dl a{
     color: #19f;
 }
 table{
@@ -25,9 +25,6 @@ table{
 td{
     border-bottom: 1px solid #555;
     line-height: 3em;
-}
-td:nth-child(2){
-    text-align: center;
 }
 td:nth-child(2) a{
     color: #f70;
