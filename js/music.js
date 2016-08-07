@@ -1,6 +1,6 @@
 'use strict';
 
-function iterateTracks(direction){
+function music_iterateTracks(direction){
     // Check if tracks table has any tracks.
     if(!document.getElementById('tracks').firstChild){
         return;
@@ -10,7 +10,7 @@ function iterateTracks(direction){
     if(document.getElementById('shuffle').checked){
         var number_of_tracks = document.getElementById('tracks').childNodes.length;
 
-        setTrack(
+        music_setTrack(
           document.getElementById('tracks').childNodes[random_integer(number_of_tracks)]
         );
 
@@ -22,7 +22,7 @@ function iterateTracks(direction){
 
     // Next track.
     if(direction > 0){
-        setTrack(
+        music_setTrack(
           (track == null
             || !track.nextSibling)
               ? document.getElementById('tracks').firstChild
@@ -31,7 +31,7 @@ function iterateTracks(direction){
 
     // Previous track.
     }else{
-        setTrack(
+        music_setTrack(
           (track == null
             || !track.previousSibling)
               ? document.getElementById('tracks').lastChild
@@ -40,18 +40,18 @@ function iterateTracks(direction){
     }
 }
 
-function pauseTrack(reset){
+function music_pauseTrack(reset){
     window.clearInterval(music_interval);
 
     document.getElementById('play-button').value = 'Play [SPACE]';
-    document.getElementById('play-button').onclick = playTrack;
+    document.getElementById('play-button').onclick = music_playTrack;
 
     document.getElementById('audio-player').pause();
 
     music_playing = false;
 }
 
-function playTrack(){
+function music_playTrack(){
     window.clearInterval(music_interval);
 
     // Check if tracks table has any tracks.
@@ -65,12 +65,12 @@ function playTrack(){
     }
 
     document.getElementById('play-button').value = 'Pause [SPACE]';
-    document.getElementById('play-button').onclick = pauseTrack;
+    document.getElementById('play-button').onclick = music_pauseTrack;
 
     document.getElementById('audio-player').play();
 
     music_playing = true;
-    setTitle(document.getElementById('audio-player').src.split('/').pop());
+    music_setTitle(document.getElementById('audio-player').src.split('/').pop());
     music_interval = window.setInterval(
       updateProgress,
       parseFloat(1000 / music_playbackrate) || 1000
@@ -79,7 +79,7 @@ function playTrack(){
     updateProgress();
 }
 
-function resize(){
+function music_resize(){
     music_width = window.innerWidth;
     document.getElementById('music-display').width = music_width;
 
@@ -87,7 +87,7 @@ function resize(){
     draw();
 }
 
-function setTitle(title){
+function music_setTitle(title){
     title = title || '';
 
     document.getElementById('title').innerHTML = title;
@@ -99,7 +99,7 @@ function setTitle(title){
     document.title = title + 'Music-Server.htm';
 }
 
-function setTrack(track){
+function music_setTrack(track){
     track = track || document.getElementById('tracks').childNodes[0];
 
     if(track == void 0){
@@ -107,7 +107,7 @@ function setTrack(track){
     }
 
     // Pause any playing tracks.
-    pauseTrack(true);
+    music_pauseTrack(true);
 
     // Remove the `playing` class from all <tbody>s.
     var tracks = document.getElementsByTagName('tbody');
@@ -123,7 +123,7 @@ function setTrack(track){
 
     music_percent = 0;
 
-    playTrack();
+    music_playTrack();
 }
 
 var music_canvas = document.getElementById('music-display').getContext('2d', {
@@ -146,7 +146,7 @@ document.getElementById('audio-mute').onclick = function(e){
 document.getElementById('music-display').onmousedown =
   document.getElementById('music-display').ontouchstart = function(e){
     if(!music_playing){
-        playTrack();
+        music_playTrack();
     }
 
     music_mouse_drag = true;
@@ -177,21 +177,21 @@ window.onkeydown = function(e){
         e.preventDefault();
 
         if(music_playing){
-            pauseTrack(false);
+            music_pauseTrack(false);
 
         }else{
-            playTrack();
+            music_playTrack();
         }
 
     // Left or Up: previous track
     }else if(key === 37
       || key === 38){
-        iterateTracks(-1);
+        music_iterateTracks(-1);
 
     // Right or Down: next track
     }else if(key === 39
       || key === 40){
-        iterateTracks(1);
+        music_iterateTracks(1);
     }
 };
 
@@ -210,4 +210,4 @@ window.onmouseup = function(e){
     music_mouse_drag = false;
 };
 
-window.onresize = resize;
+window.onresize = music_resize;
