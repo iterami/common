@@ -24,7 +24,7 @@ function random_hex(hash){
 }
 
 function random_integer(max, todo){
-    return Math[(todo || 'floor')](Math.random() * max);
+    return Math[todo || 'floor'](Math.random() * max);
 }
 
 function random_rgb(){
