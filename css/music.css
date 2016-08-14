@@ -12,8 +12,8 @@ canvas{
     width: 100%;
 }
 #controls{
-    right: 60%;
     position: fixed;
+    right: 60%;
     text-align: right;
     top: 55px;
 }

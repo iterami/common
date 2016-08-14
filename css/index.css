@@ -19,8 +19,8 @@ body{
 table{
     display: inline-block;
     margin: auto;
-    vertical-align: top;
     text-align: left;
+    vertical-align: top;
 }
 td{
     border-bottom: 1px solid #555;
