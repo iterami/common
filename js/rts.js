@@ -99,6 +99,282 @@ function rts_building_fog(){
     }
 }
 
+function rts_building_handle(){
+    for(var building in rts_players[1]['buildings']){
+        if(rts_players[1]['buildings'][building]['range'] <= 0){
+            continue;
+        }
+
+        // If reloading, decrease reload,...
+        if(rts_players[1]['buildings'][building]['reload-current'] > 0){
+            rts_players[1]['buildings'][building]['reload-current'] -= 1;
+
+        // ...else look for nearby p0 units to fire at.
+        }else{
+            var check_for_buildings = true;
+            for(var p0_unit in rts_players[0]['units']){
+                if(math_distance(
+                  rts_players[1]['buildings'][building]['x'],
+                  rts_players[1]['buildings'][building]['y'],
+                  rts_players[0]['units'][p0_unit]['x'],
+                  rts_players[0]['units'][p0_unit]['y']
+                ) > rts_players[1]['buildings'][building]['range']){
+                    continue;
+                }
+
+                rts_players[1]['buildings'][building]['reload-current'] = rts_players[1]['buildings'][building]['reload'];
+                rts_bullets.push({
+                  'color': '#f66',
+                  'damage': rts_players[1]['buildings'][building]['damage'],
+                  'destination-x': rts_players[0]['units'][p0_unit]['x'],
+                  'destination-y': rts_players[0]['units'][p0_unit]['y'],
+                  'player': 1,
+                  'x': rts_players[1]['buildings'][building]['x']
+                    + buildings[rts_players[1]['buildings'][building]['type']]['width'] / 2,
+                  'y': rts_players[1]['buildings'][building]['y']
+                    + buildings[rts_players[1]['buildings'][building]['type']]['height'] / 2,
+                });
+                check_for_buildings = false;
+                break;
+            }
+
+            // If no units in range, look for buildings to fire at.
+            if(check_for_buildings){
+                for(var p0_building in rts_players[0]['buildings']){
+                    if(math_distance(
+                      rts_players[1]['buildings'][building]['x'],
+                      rts_players[1]['buildings'][building]['y'],
+                      rts_players[0]['buildings'][p0_building]['x']
+                        + rts_buildings[rts_players[0]['buildings'][p0_building]['type']]['width'] / 2,
+                      rts_players[0]['buildings'][p0_building]['y']
+                        + rts_buildings[rts_players[0]['buildings'][p0_building]['type']]['height'] / 2
+                    ) > rts_players[1]['buildings'][building]['range']){
+                        continue;
+                    }
+
+                    rts_players[1]['buildings'][building]['reload-current'] = rts_players[1]['buildings'][building]['reload'];
+                    rts_bullets.push({
+                      'color': '#f66',
+                      'damage': rts_players[1]['buildings'][building]['damage'],
+                      'destination-x': rts_players[0]['buildings'][p0_building]['x']
+                        + rts_buildings[rts_players[0]['buildings'][p0_building]['type']]['width'] / 2,
+                      'destination-y': rts_players[0]['buildings'][p0_building]['y']
+                        + rts_buildings[rts_players[0]['buildings'][p0_building]['type']]['height'] / 2,
+                      'player': 1,
+                      'x': rts_players[1]['buildings'][building]['x']
+                        + rts_buildings[rts_players[1]['buildings'][building]['type']]['width'] / 2,
+                      'y': rts_players[1]['buildings'][building]['y']
+                        + rts_buildings[rts_players[1]['buildings'][building]['type']]['height'] / 2,
+                    });
+                    break;
+                }
+            }
+        }
+    }
+
+    for(building in rts_players[0]['buildings']){
+        if(rts_players[0]['buildings'][building]['range'] <= 0){
+            continue;
+        }
+
+        // If reloading, decrease reload,...
+        if(rts_players[0]['buildings'][building]['reload-current'] > 0){
+            rts_players[0]['buildings'][building]['reload-current'] -= 1;
+
+        // ...else look for nearby p0 units to fire at.
+        }else{
+            var check_for_buildings = true;
+            for(var p1_unit in rts_players[1]['units']){
+                if(math_distance(
+                  rts_players[0]['buildings'][building]['x'],
+                  rts_players[0]['buildings'][building]['y'],
+                  rts_players[1]['units'][p1_unit]['x'],
+                  rts_players[1]['units'][p1_unit]['y']
+                ) > rts_players[0]['buildings'][building]['range']){
+                    continue;
+                }
+
+                rts_players[0]['buildings'][building]['reload-current'] = rts_players[0]['buildings'][building]['reload'];
+                rts_bullets.push({
+                  'color': '#f66',
+                  'damage': rts_players[0]['buildings'][building]['damage'],
+                  'destination-x': rts_players[1]['units'][p1_unit]['x'],
+                  'destination-y': rts_players[1]['units'][p1_unit]['y'],
+                  'player': 0,
+                  'x': rts_players[0]['buildings'][building]['x']
+                    + rts_buildings[rts_players[0]['buildings'][building]['type']]['width'] / 2,
+                  'y': rts_players[0]['buildings'][building]['y']
+                    + rts_buildings[rts_players[0]['buildings'][building]['type']]['height'] / 2,
+                });
+                check_for_buildings = false;
+                break;
+            }
+
+            // If no units in range, look for buildings to fire at.
+            if(check_for_buildings){
+                for(var p1_building in rts_players[1]['buildings']){
+                    if(math_distance(
+                      rts_players[0]['buildings'][building]['x'],
+                      rts_players[0]['buildings'][building]['y'],
+                      rts_players[1]['buildings'][p1_building]['x']
+                        + rts_buildings[rts_players[1]['buildings'][p1_building]['type']]['width'] / 2,
+                      rts_players[1]['buildings'][p1_building]['y']
+                        + rts_buildings[rts_players[1]['buildings'][p1_building]['type']]['height'] / 2
+                    ) > rts_players[0]['buildings'][building]['range']){
+                        continue;
+                    }
+
+                    rts_players[0]['buildings'][building]['reload-current'] = rts_players[0]['buildings'][building]['reload'];
+                    rts_bullets.push({
+                      'color': '#f66',
+                      'damage': rts_players[0]['buildings'][building]['damage'],
+                      'destination-x': rts_players[1]['buildings'][p1_building]['x']
+                        + rts_buildings[rts_players[1]['buildings'][p1_building]['type']]['width'] / 2,
+                      'destination-y': rts_players[1]['buildings'][p1_building]['y']
+                        + rts_buildings[rts_players[1]['buildings'][p1_building]['type']]['height'] / 2,
+                      'player': 0,
+                      'x': rts_players[0]['buildings'][building]['x']
+                        + rts_buildings[rts_players[0]['buildings'][building]['type']]['width'] / 2,
+                      'y': rts_players[0]['buildings'][building]['y']
+                        + rts_buildings[rts_players[0]['buildings'][building]['type']]['height'] / 2,
+                    });
+                    break;
+                }
+            }
+        }
+    }
+}
+
+function rts_bullet_handle(){
+    for(var bullet in rts_bullets){
+        // Calculate bullet movement.
+        var speeds = math_movement_speed(
+          rts_bullets[bullet]['x'],
+          rts_bullets[bullet]['y'],
+          rts_bullets[bullet]['destination-x'],
+          rts_bullets[bullet]['destination-y']
+        );
+
+        // Move bullet x.
+        if(rts_bullets[bullet]['x'] != rts_bullets[bullet]['destination-x']){
+            rts_bullets[bullet]['x'] +=
+              10
+              * (rts_bullets[bullet]['x'] > rts_bullets[bullet]['destination-x']
+                ? -speeds[0]
+                : speeds[0]
+              );
+        }
+
+        // Move bullet y.
+        if(rts_bullets[bullet]['y'] != rts_bullets[bullet]['destination-y']){
+            rts_bullets[bullet]['y'] +=
+              10
+              * (rts_bullets[bullet]['y'] > rts_bullets[bullet]['destination-y']
+                ? -speeds[1]
+                : speeds[1]
+              );
+        }
+
+        // If bullet reaches destination, check for collisions.
+        if(rts_bullets[bullet]['x'] <= rts_bullets[bullet]['destination-x'] - 10
+          || rts_bullets[bullet]['x'] >= rts_bullets[bullet]['destination-x'] + 10
+          || rts_bullets[bullet]['y'] <= rts_bullets[bullet]['destination-y'] - 10
+          || rts_bullets[bullet]['y'] >= rts_bullets[bullet]['destination-y'] + 10){
+            continue;
+        }
+
+        if(rts_bullets[bullet]['player'] === 1){
+            for(var unit in rts_players[0]['units']){
+                if(rts_bullets[bullet]['x'] <= rts_players[0]['units'][unit]['x'] - 15
+                  || rts_bullets[bullet]['x'] >= rts_players[0]['units'][unit]['x'] + 15
+                  || rts_bullets[bullet]['y'] <= rts_players[0]['units'][unit]['y'] - 15
+                  || rts_bullets[bullet]['y'] >= rts_players[0]['units'][unit]['y'] + 15){
+                    continue;
+                }
+
+                rts_players[0]['units'][unit]['health'] -= rts_bullets[bullet]['damage'];
+                if(rts_players[0]['units'][unit]['health'] <= 0){
+                    rts_players[0]['units'].splice(
+                      unit,
+                      1
+                    );
+                }
+
+                break;
+            }
+
+            for(var building in rts_players[0]['buildings']){
+                if(rts_bullets[bullet]['x'] <= rts_players[0]['buildings'][building]['x']
+                  || rts_bullets[bullet]['x'] >= rts_players[0]['buildings'][building]['x'] + 100
+                  || rts_bullets[bullet]['y'] <= rts_players[0]['buildings'][building]['y']
+                  || rts_bullets[bullet]['y'] >= rts_players[0]['buildings'][building]['y'] + 100){
+                    continue;
+                }
+
+                rts_players[0]['buildings'][building]['health'] -= rts_bullets[bullet]['damage'];
+                if(rts_players[0]['buildings'][building]['health'] <= 0){
+                    if(rts_selected_id === building){
+                        rts_build_mode = '';
+                        rts_selected_id = -1;
+                        rts_selected_type = '';
+                    }
+
+                    rts_players[0]['buildings'].splice(
+                      building,
+                      1
+                    );
+                }
+
+                break;
+            }
+
+        }else{
+            for(var unit in rts_players[1]['units']){
+                if(rts_bullets[bullet]['x'] <= rts_players[1]['units'][unit]['x'] - 15
+                  || rts_bullets[bullet]['x'] >= rts_players[1]['units'][unit]['x'] + 15
+                  || rts_bullets[bullet]['y'] <= rts_players[1]['units'][unit]['y'] - 15
+                  || rts_bullets[bullet]['y'] >= rts_players[1]['units'][unit]['y'] + 15){
+                    continue;
+                }
+
+                rts_players[1]['units'][unit]['health'] -= rts_bullets[bullet]['damage'];
+                if(rts_players[1]['units'][unit]['health'] <= 0){
+                    rts_players[1]['units'].splice(
+                      unit,
+                      1
+                    );
+                }
+
+                break;
+            }
+
+            for(var building in rts_players[1]['buildings']){
+                if(rts_bullets[bullet]['x'] <= rts_players[1]['buildings'][building]['x']
+                  || rts_bullets[bullet]['x'] >= rts_players[1]['buildings'][building]['x'] + 100
+                  || rts_bullets[bullet]['y'] <= rts_players[1]['buildings'][building]['y']
+                  || rts_bullets[bullet]['y'] >= rts_players[1]['buildings'][building]['y'] + 100){
+                    continue;
+                }
+
+                rts_players[1]['buildings'][building]['health'] -= rts_bullets[bullet]['damage'];
+                if(rts_players[1]['buildings'][building]['health'] <= 0){
+                    rts_players[1]['buildings'].splice(
+                      building,
+                      1
+                    );
+                }
+
+                break;
+            }
+        }
+
+        rts_bullets.splice(
+          bullet,
+          1
+        );
+    }
+}
+
 function rts_camera_validatemove(mouse_x, mouse_y){
     camera_x = -rts_math[0] * (mouse_x - 100);
     if(camera_x > settings_settings['level-size']){
@@ -255,6 +531,259 @@ function rts_unit_build(player, unit_type){
     }
 
     rts_players[player]['units'].push(unit);
+}
+
+function rts_unit_handle(){
+
+    for(var unit in rts_players[1]['units']){
+        // If reloading, decrease reload,...
+        if(rts_players[1]['units'][unit]['reload-current'] > 0){
+            rts_players[1]['units'][unit]['reload-current'] -= 1;
+
+        // ...else look for nearby p0 units to fire at.
+        }else{
+            var check_for_buildings = true;
+            for(var p0_unit in rts_players[0]['units']){
+                if(math_distance(
+                  rts_players[1]['units'][unit]['x'],
+                  rts_players[1]['units'][unit]['y'],
+                  rts_players[0]['units'][p0_unit]['x'],
+                  rts_players[0]['units'][p0_unit]['y']
+                ) > rts_players[1]['units'][unit]['range']){
+                    continue;
+                }
+
+                rts_players[1]['units'][unit]['reload-current'] = rts_players[1]['units'][unit]['reload'];
+                rts_bullets.push({
+                  'color': '#f66',
+                  'damage': rts_players[1]['units'][unit]['damage'],
+                  'destination-x': rts_players[0]['units'][p0_unit]['x'],
+                  'destination-y': rts_players[0]['units'][p0_unit]['y'],
+                  'player': 1,
+                  'x': rts_players[1]['units'][unit]['x'],
+                  'y': rts_players[1]['units'][unit]['y'],
+                });
+                check_for_buildings = false;
+                break;
+            }
+
+            // If no units in range, look for buildings to fire at.
+            if(check_for_buildings){
+                for(var building in rts_players[0]['buildings']){
+                    if(math_distance(
+                      rts_players[1]['units'][unit]['x'],
+                      rts_players[1]['units'][unit]['y'],
+                      rts_players[0]['buildings'][building]['x']
+                        + rts_buildings[rts_players[0]['buildings'][building]['type']]['width'] / 2,
+                      rts_players[0]['buildings'][building]['y']
+                        + rts_buildings[rts_players[0]['buildings'][building]['type']]['height'] / 2
+                    ) > rts_players[1]['units'][unit]['range']){
+                        continue;
+                    }
+
+                    rts_players[1]['units'][unit]['reload-current'] = rts_players[1]['units'][unit]['reload'];
+                    rts_bullets.push({
+                      'color': '#f66',
+                      'damage': rts_players[1]['units'][unit]['damage'],
+                      'destination-x': rts_players[0]['buildings'][building]['x']
+                        + rts_buildings[rts_players[0]['buildings'][building]['type']]['width'] / 2,
+                      'destination-y': rts_players[0]['buildings'][building]['y']
+                        + rts_buildings[rts_players[0]['buildings'][building]['type']]['height'] / 2,
+                      'player': 1,
+                      'x': rts_players[1]['units'][unit]['x'],
+                      'y': rts_players[1]['units'][unit]['y'],
+                    });
+                    break;
+                }
+            }
+        }
+
+        // Movement "AI", pick new destination once destination is reached.
+        if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']
+          || rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
+            var speeds = math_movement_speed(
+              rts_players[1]['units'][unit]['x'],
+              rts_players[1]['units'][unit]['y'],
+              rts_players[1]['units'][unit]['destination-x'],
+              rts_players[1]['units'][unit]['destination-y']
+            );
+
+            if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']){
+                rts_players[1]['units'][unit]['x'] +=
+                  (rts_players[1]['units'][unit]['x'] > rts_players[1]['units'][unit]['destination-x']
+                    ? -speeds[0]
+                    : speeds[0]
+                  ) * .7;
+            }
+
+            if(rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
+                rts_players[1]['units'][unit]['y'] +=
+                  (rts_players[1]['units'][unit]['y'] > rts_players[1]['units'][unit]['destination-y']
+                    ? -speeds[1]
+                    : speeds[1]
+                  ) * .7;
+            }
+
+            if(rts_players[1]['units'][unit]['x'] > rts_players[1]['units'][unit]['destination-x'] - 5
+              && rts_players[1]['units'][unit]['x'] < rts_players[1]['units'][unit]['destination-x'] + 5
+              && rts_players[1]['units'][unit]['y'] > rts_players[1]['units'][unit]['destination-y'] - 5
+              && rts_players[1]['units'][unit]['y'] < rts_players[1]['units'][unit]['destination-y'] + 5){
+                rts_players[1]['units'][unit]['destination-x'] = random_integer(settings_settings['level-size'] * 2)
+                  - settings_settings['level-size'];
+                rts_players[1]['units'][unit]['destination-y'] = random_integer(settings_settings['level-size'] * 2)
+                  - settings_settings['level-size'];
+            }
+        }
+    }
+
+    for(unit in rts_players[0]['units']){
+        var update_fog = false;
+
+        // If not yet reached destination, move unit.
+        if(Math.abs(rts_players[0]['units'][unit]['x'] - rts_players[0]['units'][unit]['destination-x']) > 1
+          && Math.abs(rts_players[0]['units'][unit]['y'] - rts_players[0]['units'][unit]['destination-y']) > 1){
+            var speeds = math_movement_speed(
+              rts_players[0]['units'][unit]['x'],
+              rts_players[0]['units'][unit]['y'],
+              rts_players[0]['units'][unit]['destination-x'],
+              rts_players[0]['units'][unit]['destination-y']
+            );
+
+            if(rts_players[0]['units'][unit]['x'] != rts_players[0]['units'][unit]['destination-x']){
+                rts_players[0]['units'][unit]['x'] +=
+                  (rts_players[0]['units'][unit]['x'] > rts_players[0]['units'][unit]['destination-x']
+                    ? -speeds[0]
+                    : speeds[0]
+                  ) * .7;
+            }
+
+            if(rts_players[0]['units'][unit]['y'] != rts_players[0]['units'][unit]['destination-y']){
+                rts_players[0]['units'][unit]['y'] +=
+                  (rts_players[0]['units'][unit]['y'] > rts_players[0]['units'][unit]['destination-y']
+                    ? -speeds[1]
+                    : speeds[1]
+                  ) * .7;
+            }
+
+            update_fog = true;
+
+        // Destination reached, make sure units don't overlap.
+        }else{
+            for(var other_unit in rts_players[0]['units']){
+                if(unit === other_unit){
+                    continue;
+                }
+
+                if(math_distance(
+                  rts_players[0]['units'][unit]['x'],
+                  rts_players[0]['units'][unit]['y'],
+                  rts_players[0]['units'][other_unit]['x'],
+                  rts_players[0]['units'][other_unit]['y']
+                ) < 20){
+                    rts_players[0]['units'][unit]['destination-x'] = rts_players[0]['units'][unit]['x']
+                      + random_integer(40) - 20;
+                    rts_players[0]['units'][unit]['destination-y'] = rts_players[0]['units'][unit]['y']
+                      + random_integer(40) - 20;
+
+                    rts_destionation_validate(
+                      'units',
+                      unit
+                    );
+
+                    break;
+                }
+            }
+        }
+
+        // Update fog.
+        if(settings_settings['fog-type'] === 2
+          || update_fog){
+            var loop_counter = rts_fog.length - 1;
+            if(loop_counter >= 0){
+                do{
+                    if(math_distance(
+                      rts_players[0]['units'][unit]['x'],
+                      rts_players[0]['units'][unit]['y'],
+                      rts_fog[loop_counter]['x'] - settings_settings['level-size'] + 50,
+                      rts_fog[loop_counter]['y'] - settings_settings['level-size'] + 50
+                    ) < 290){
+                        if(settings_settings['fog-type'] === 2){
+                            rts_fog[loop_counter]['display'] = false;
+
+                        }else{
+                            rts_fog.splice(
+                              loop_counter,
+                              1
+                            );
+                        }
+                    }
+                }while(loop_counter--);
+            }
+        }
+
+        // If reloading, decrease reload,...
+        if(rts_players[0]['units'][unit]['reload-current'] > 0){
+            rts_players[0]['units'][unit]['reload-current'] -= 1;
+            continue;
+        }
+
+        var check_for_buildings = true;
+        for(var p1_unit in rts_players[1]['units']){
+            if(math_distance(
+              rts_players[0]['units'][unit]['x'],
+              rts_players[0]['units'][unit]['y'],
+              rts_players[1]['units'][p1_unit]['x'],
+              rts_players[1]['units'][p1_unit]['y']
+            ) > rts_players[0]['units'][unit]['range']){
+                continue;
+            }
+
+            rts_players[0]['units'][unit]['reload-current'] = rts_players[0]['units'][unit]['reload'];
+            rts_bullets.push({
+              'color': '#090',
+              'damage': rts_players[0]['units'][unit]['damage'],
+              'destination-x': rts_players[1]['units'][p1_unit]['x'],
+              'destination-y': rts_players[1]['units'][p1_unit]['y'],
+              'player': 0,
+              'x': rts_players[0]['units'][unit]['x'],
+              'y': rts_players[0]['units'][unit]['y'],
+            });
+            check_for_buildings = false;
+            break;
+        }
+
+        // If not checking for buildings, continue;
+        if(!check_for_buildings){
+            continue;
+        }
+
+        for(var building in rts_players[1]['buildings']){
+            if(math_distance(
+              rts_players[0]['units'][unit]['x'],
+              rts_players[0]['units'][unit]['y'],
+              rts_players[1]['buildings'][building]['x']
+                + rts_buildings[rts_players[1]['buildings'][building]['type']]['width'] / 2,
+              rts_players[1]['buildings'][building]['y']
+                + rts_buildings[rts_players[1]['buildings'][building]['type']]['width'] / 2
+            ) > rts_players[0]['units'][unit]['range']){
+                continue;
+            }
+
+            rts_players[0]['units'][unit]['reload-current'] = rts_players[0]['units'][unit]['reload'];
+            rts_bullets.push({
+              'color': '#090',
+              'damage': rts_players[0]['units'][unit]['damage'],
+              'destination-x': rts_players[1]['buildings'][building]['x']
+                + rts_buildings[rts_players[1]['buildings'][building]['type']]['width'] / 2,
+              'destination-y': rts_players[1]['buildings'][building]['y']
+                + rts_buildings[rts_players[1]['buildings'][building]['type']]['height'] / 2,
+              'player': 0,
+              'x': rts_players[0]['units'][unit]['x'],
+              'y': rts_players[0]['units'][unit]['y'],
+            });
+            break;
+        }
+    }
 }
 
 var rts_buildings = {};
