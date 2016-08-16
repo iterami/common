@@ -495,7 +495,7 @@ function webgl_setmode(newmode, newgame){
         }
 
         document.body.innerHTML =
-          '<canvas id=canvas ' + properties + '></canvas><canvas id=buffer></canvas>';
+          '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>';
 
         webgl_buffer = document.getElementById('buffer').getContext(
           'webgl',

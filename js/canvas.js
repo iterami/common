@@ -128,7 +128,7 @@ function canvas_setmode(newmode, newgame){
         }
 
         document.body.innerHTML =
-          '<canvas id=canvas ' + properties + '></canvas><canvas id=buffer></canvas>';
+          '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>';
 
         canvas_buffer = document.getElementById('buffer').getContext('2d');
         canvas_canvas = document.getElementById('canvas').getContext('2d');
