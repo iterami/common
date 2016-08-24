@@ -6,6 +6,9 @@ a{
 a:hover{
     color: #777;
 }
+.big{
+    font-size: 300%;
+}
 body,
 input,
 select{
@@ -13,9 +16,6 @@ select{
     color: #aaa;
     font-family: monospace;
     text-align: center;
-}
-.big{
-    font-size: 300%;
 }
 .box{
     background: #000;
