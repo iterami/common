@@ -15,7 +15,7 @@ function bests_reset(){
     }
 
     for(var best in bests_bests){
-        bests_bests[best] = 0;
+        bests_bests[best] = bests_default;
         bests_update(bests_bests[best]);
     }
 }
@@ -25,7 +25,7 @@ function bests_update(key, value){
         bests_bests[key] = value;
     }
 
-    if(bests_bests[key] !== 0){
+    if(bests_bests[key] !== bests_default){
         window.localStorage.setItem(
           bests_prefix + key,
           bests_bests[key]
@@ -37,4 +37,5 @@ function bests_update(key, value){
 }
 
 var bests_bests = {};
+var bests_default = 0;
 var bests_prefix = '';
