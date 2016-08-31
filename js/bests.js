@@ -1,6 +1,7 @@
 'use strict';
 
-function bests_init(newprefix, bests){
+function bests_init(newprefix, bests, defaultvalue){
+    bests_default = defaultvalue || 0;
     bests_prefix = newprefix;
 
     for(var best in bests){
