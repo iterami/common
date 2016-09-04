@@ -11,7 +11,7 @@ function bests_init(newprefix, bests, default_default){
 }
 
 function bests_reset(){
-    if(!window.confirm('Reset best?')){
+    if(!window.confirm(bests_reset_confirm)){
         return;
     }
 
@@ -40,3 +40,4 @@ function bests_update(key, value){
 var bests_bests = {};
 var bests_default = 0;
 var bests_prefix = '';
+var bests_reset_confirm = 'Reset best?';
