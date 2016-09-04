@@ -333,7 +333,7 @@ function webgl_entity_set(id, properties){
     properties['scale'] = properties['scale'] || {
       'x': 1,
       'y': 1,
-      'z': 1
+      'z': 1,
     };
 
     webgl_entities[id] = properties;
