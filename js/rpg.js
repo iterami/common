@@ -188,6 +188,10 @@ function rpg_player_affect(stat, effect){
     if(rpg_player['stats'][stat]['current'] <= 0){
         rpg_player['stats'][stat]['current'] = 0;
 
+        if(stat === 'health'){
+            rpg_player['dead'] = true;
+        }
+
     }else if(rpg_player['stats'][stat]['current'] >= rpg_player['stats'][stat]['max']){
         rpg_player['stats'][stat]['current'] = rpg_player['stats'][stat]['max'];
         rpg_player['stats'][stat]['regeneration']['current'] = 0;
@@ -197,6 +201,7 @@ function rpg_player_affect(stat, effect){
 function rpg_player_create(properties){
     properties = properties || {};
 
+    properties['dead'] = false;
     properties['equipment'] = properties['equipment'] || {
       'feet': void 0,
       'head': void 0,
@@ -238,6 +243,10 @@ function rpg_player_create(properties){
 }
 
 function rpg_player_handle(){
+    if(rpg_player['dead']){
+        return;
+    }
+
     // Regenerate player health and mana.
     if(rpg_player['stats']['health']['current'] < rpg_player['stats']['health']['max']){
         rpg_player['stats']['health']['regeneration']['current'] += 1;
@@ -311,10 +320,6 @@ function rpg_player_handle(){
             rpg_world_dynamic_create(worlddynamic);
         }
     }
-
-    if(rpg_player['stats']['health']['current'] <= 0){
-        game_running = false;
-    }
 }
 
 function rpg_spell_select(id){
@@ -350,7 +355,6 @@ function rpg_world_dynamic_create(properties){
     rpg_world_dynamic.push(properties);
 }
 
-var game_running = false;
 var rpg_npcs = [];
 var rpg_particles = [];
 var rpg_player = {};
