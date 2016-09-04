@@ -281,12 +281,12 @@ function webgl_draw(){
         webgl_canvas.textAlign = 'center';
         webgl_canvas.textBaseline = 'middle';
         webgl_canvas.fillText(
-          'ESC = Resume',
+          webgl_resume,
           webgl_x,
           webgl_y - 25
         );
         webgl_canvas.fillText(
-          'Q = Main Menu',
+          webgl_quit,
           webgl_x,
           webgl_y + 25
         );
@@ -690,6 +690,8 @@ var webgl_menu = false;
 var webgl_mode = 0;
 var webgl_oncontextmenu = true;
 var webgl_programs = {};
+var webgl_quit = 'Q = Main Menu';
+var webgl_resume = 'ESC = Resume';
 var webgl_shaders = {};
 var webgl_text = {};
 var webgl_textures = {
