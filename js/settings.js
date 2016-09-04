@@ -17,7 +17,7 @@ function settings_init(newprefix, newsettings){
 }
 
 function settings_reset(){
-    if(!window.confirm('Reset settings?')){
+    if(!window.confirm(settings_reset_confirm)){
         return;
     }
 
@@ -77,4 +77,5 @@ function settings_update(){
 
 var settings_defaults = {};
 var settings_prefix = '';
+var settings_reset_confirm = 'Reset settings?';
 var settings_settings = {};
