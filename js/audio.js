@@ -9,6 +9,7 @@ function audio_create(id, properties){
 
 function audio_html(id){
     var html = '<audio'
+      + ' id="' + id + '"'
       + ' src="' + audio_audio[id]['src'] + '"'
       + '></audio>';
     return html;
