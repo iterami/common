@@ -26,12 +26,12 @@ function canvas_draw(){
         canvas_buffer.textAlign = 'center';
         canvas_buffer.textBaseline = 'middle';
         canvas_buffer.fillText(
-          'ESC = Resume',
+          canvas_resume,
           canvas_x,
           canvas_y - 25
         );
         canvas_buffer.fillText(
-          'Q = Main Menu',
+          canvas_quit,
           canvas_x,
           canvas_y + 25
         );
@@ -165,6 +165,8 @@ var canvas_interval = 0;
 var canvas_menu = false;
 var canvas_mode = 0;
 var canvas_oncontextmenu = true;
+var canvas_quit = 'Q = Main Menu';
+var canvas_resume = 'ESC = Resume';
 var canvas_width = 0;
 var canvas_x = 0;
 var canvas_y = 0;
