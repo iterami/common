@@ -96,7 +96,7 @@ function music_setTitle(title){
         title += ' - ';
     }
 
-    document.title = title + 'Music-Server.htm';
+    document.title = title + music_prefix;
 }
 
 function music_setTrack(track){
@@ -134,6 +134,7 @@ var music_mouse_drag = false;
 var music_percent = 0;
 var music_playbackrate = 1;
 var music_playing = false;
+var music_prefix = '';
 var music_volume = 1;
 var music_width = 0;
 
@@ -153,6 +154,59 @@ document.getElementById('music-display').onmousedown =
     music_percent = e.pageX / music_width;
     seek(music_percent);
     updateProgress();
+};
+
+document.getElementById('audio-volume').oninput = function(e){
+    music_volume = document.getElementById('audio-volume').value;
+    document.getElementById('audio-player').volume = music_volume;
+
+    if(music_volume < 1){
+        window.localStorage.setItem(
+          music_prefix + '-audio-volume',
+          music_volume
+        );
+
+    }else{
+        window.localStorage.removeItem(music_prefix + '-audio-volume');
+    }
+
+    document.getElementById('audio-mute').checked = false;
+};
+
+document.getElementById('autoplay').onchange = function(e){
+    var state = document.getElementById('autoplay').checked;
+
+    if(!state){
+        window.localStorage.setItem(
+          music_prefix + '-autoplay',
+          1
+        );
+
+    }else{
+        window.localStorage.removeItem(music_prefix + '-autoplay');
+    }
+};
+
+document.getElementById('playbackrate').oninput = function(e){
+    music_playbackrate = parseFloat(document.getElementById('playbackrate').value) || 1;
+
+    if(music_playbackrate != 1){
+        window.localStorage.setItem(
+          music_prefix + '-playbackrate',
+          music_playbackrate
+        );
+
+    }else{
+        window.localStorage.removeItem(music_prefix + '-playbackrate');
+    }
+
+    document.getElementById('audio-player').playbackRate = music_playbackrate;
+
+    window.clearInterval(music_interval);
+    music_interval = window.setInterval(
+      updateProgress,
+      parseFloat(1000 / music_playbackrate) || 1000
+    );
 };
 
 document.getElementById('shuffle').onchange = function(e){
