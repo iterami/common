@@ -1,9 +1,17 @@
 'use strict';
 
 function audio_create(id, properties){
+    audio_audio[id] = audio_audio[id] || {};
     for(var property in properties){
-        audio[id] = properties[property];
+        audio_audio[id][property] = properties[property];
     }
+}
+
+function audio_html(id){
+    var html = '<audio'
+      + ' src="' + audio_audio[id]['src'] + '"'
+      + '></audio>';
+    return html;
 }
 
 function audio_init(default_volume){
