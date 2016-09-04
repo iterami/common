@@ -139,6 +139,10 @@ function webgl_draw(){
           'cache'
         );
 
+        if(webgl_entities[entity]['depth_ignore']){
+            webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
+        }
+
         math_matrix_translate(
           'camera',
           [
@@ -236,6 +240,10 @@ function webgl_draw(){
           webgl_entities[entity]['vertices'].length / 3
         );
 
+        if(webgl_entities[entity]['depth_ignore']){
+            webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
+        }
+
         math_matrix_copy(
           'cache',
           'camera'
@@ -307,6 +315,7 @@ function webgl_entity_set(id, properties){
       1, 1, 1, 1,
       1, 1, 1, 1,
     ];
+    properties['depth_ignore'] = properties['depth_ignore'] || false;
     properties['index'] = properties['index'] || [
       0, 1, 2, 0, 2, 3,
     ];
