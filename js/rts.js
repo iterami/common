@@ -634,7 +634,7 @@ function rts_unit_handle(){
               rts_players[1]['units'][unit]['y'],
               rts_players[1]['units'][unit]['destination-x'],
               rts_players[1]['units'][unit]['destination-y']
-            ) > 5){
+            ) < 5){
                 rts_players[1]['units'][unit]['destination-x'] = random_integer(settings_settings['level-size'] * 2)
                   - settings_settings['level-size'];
                 rts_players[1]['units'][unit]['destination-y'] = random_integer(settings_settings['level-size'] * 2)
