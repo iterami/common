@@ -21,8 +21,8 @@ function canvas_draw(){
           100
         );
 
-        canvas_buffer.font = canvas_fonts['medium'];
         canvas_buffer.fillStyle = '#fff';
+        canvas_buffer.font = canvas_fonts['medium'];
         canvas_buffer.textAlign = 'center';
         canvas_buffer.textBaseline = 'middle';
         canvas_buffer.fillText(

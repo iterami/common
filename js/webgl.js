@@ -284,8 +284,8 @@ function webgl_draw(){
           100
         );
 
-        webgl_canvas.font = webgl_fonts['medium'];
         webgl_canvas.fillStyle = '#fff';
+        webgl_canvas.font = webgl_fonts['medium'];
         webgl_canvas.textAlign = 'center';
         webgl_canvas.textBaseline = 'middle';
         webgl_canvas.fillText(
