@@ -15,9 +15,9 @@ function random_hex(hash){
     var green = '0' + color['green'].toString(16);
     var red = '0' + color['red'].toString(16);
 
-    var hex = hash === void 0
-      ? '#'
-      : '';
+    var hex = hash !== void 0
+      ? ''
+      : '#';
     hex += red.slice(-2) + green.slice(-2) + blue.slice(-2);
 
     return hex;

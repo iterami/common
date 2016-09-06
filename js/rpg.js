@@ -20,7 +20,7 @@ function rpg_npc_create(properties){
 
     properties['stats'] = properties['stats'] || {};
       properties['stats']['health'] = properties['stats']['health'] || {};
-        properties['stats']['health']['current'] = properties['stats']['health']['current'] === void 0
+        properties['stats']['health']['current'] = properties['stats']['health']['current'] !== void 0
           ? properties['stats']['health']['current']
           : 1;
         properties['stats']['health']['max'] = properties['stats']['health']['max'] || 1;

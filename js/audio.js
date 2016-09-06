@@ -16,7 +16,9 @@ function audio_html(id){
 }
 
 function audio_init(default_volume){
-    audio_volume = default_volume;
+    audio_volume = default_volume !== void 0
+      ? default_value
+      : 1;
 }
 
 function audio_play(id){

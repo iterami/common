@@ -102,7 +102,7 @@ function music_setTitle(title){
 function music_setTrack(track){
     track = track || document.getElementById('tracks').childNodes[0];
 
-    if(track == void 0){
+    if(track === void 0){
         return;
     }
 
