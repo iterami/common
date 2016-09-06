@@ -21,8 +21,7 @@ body > div{
 body > div > div{
     padding: 4px;
 }
-#buffer,
-#buffer-static{
+#buffer{
     display: none;
 }
 canvas{
