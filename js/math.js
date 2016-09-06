@@ -41,7 +41,10 @@ function math_distance(x0, y0, x1, y1){
 
 function math_fixed_length_line(x0, y0, x1, y1, length){
     var line_distance = math_distance(
-      x0, y0, x1, y1
+      x0,
+      y0,
+      x1,
+      y1
     );
 
     x1 /= line_distance;
@@ -177,8 +180,8 @@ function math_move_3d(speed, angle, strafe){
       )
     );
     return {
-      'x': math_round(speed * Math.sin(radians), 7),
-      'z': math_round(speed * Math.cos(radians), 7),
+      'x': math_round(Math.sin(radians) * speed),
+      'z': math_round(Math.cos(radians) * speed),
     };
 }
 
