@@ -512,8 +512,8 @@ function webgl_setmode(newmode, newgame){
             'alpha': false,
             'antialias': true,
             'depth': true,
-            'preserveDrawingBuffer': false,
             'premultipliedAlpha': false,
+            'preserveDrawingBuffer': false,
             'stencil': false,
           }
         );
