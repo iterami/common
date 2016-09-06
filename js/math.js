@@ -25,6 +25,10 @@ function math_clamp(value, min, max, wrap){
 }
 
 function math_degrees_to_radians(degrees, decimals){
+    decimals = decimals !== void 0
+      ? decimals
+      : math_decimals;
+
     return math_round(
       degrees * math_degree,
       decimals
@@ -142,6 +146,10 @@ function math_matrix_rotate(id, dimensions){
 }
 
 function math_matrix_round(id, decimals){
+    decimals = decimals !== void 0
+      ? decimals
+      : math_decimals;
+
     for(var key in math_matrices[id]){
         math_matrices[id][key] = math_round(
           math_matrices[id][key],
@@ -186,7 +194,7 @@ function math_movement_speed(x0, y0, x1, y1){
 function math_round(number, decimals){
     decimals = decimals !== void 0
       ? decimals
-      : 7;
+      : math_decimals;
 
     if(String(number).indexOf('e') >= 0){
         number = Number(number.toFixed(decimals));
@@ -198,6 +206,7 @@ function math_round(number, decimals){
     );
 }
 
+var math_decimals = 7;
 var math_degree = Math.PI / 180;
 var math_matrices = {};
 var math_tau = Math.PI * 2;
