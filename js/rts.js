@@ -276,19 +276,23 @@ function rts_bullet_handle(){
         }
 
         // If bullet reaches destination, check for collisions.
-        if(rts_bullets[bullet]['x'] <= rts_bullets[bullet]['destination-x'] - 10
-          || rts_bullets[bullet]['x'] >= rts_bullets[bullet]['destination-x'] + 10
-          || rts_bullets[bullet]['y'] <= rts_bullets[bullet]['destination-y'] - 10
-          || rts_bullets[bullet]['y'] >= rts_bullets[bullet]['destination-y'] + 10){
+        if(math_distance(
+          rts_bullets[bullet]['x'],
+          rts_bullets[bullet]['y'],
+          rts_bullets[bullet]['destination-x'],
+          rts_bullets[bullet]['destination-y']
+        ) > 10){
             continue;
         }
 
         if(rts_bullets[bullet]['player'] === 1){
             for(var unit in rts_players[0]['units']){
-                if(rts_bullets[bullet]['x'] <= rts_players[0]['units'][unit]['x'] - 15
-                  || rts_bullets[bullet]['x'] >= rts_players[0]['units'][unit]['x'] + 15
-                  || rts_bullets[bullet]['y'] <= rts_players[0]['units'][unit]['y'] - 15
-                  || rts_bullets[bullet]['y'] >= rts_players[0]['units'][unit]['y'] + 15){
+                if(math_distance(
+                  rts_bullets[bullet]['x'],
+                  rts_bullets[bullet]['y'],
+                  rts_players[0]['units'][unit]['x'],
+                  rts_players[0]['units'][unit]['y']
+                ) > 15){
                     continue;
                 }
 
@@ -330,10 +334,12 @@ function rts_bullet_handle(){
 
         }else{
             for(var unit in rts_players[1]['units']){
-                if(rts_bullets[bullet]['x'] <= rts_players[1]['units'][unit]['x'] - 15
-                  || rts_bullets[bullet]['x'] >= rts_players[1]['units'][unit]['x'] + 15
-                  || rts_bullets[bullet]['y'] <= rts_players[1]['units'][unit]['y'] - 15
-                  || rts_bullets[bullet]['y'] >= rts_players[1]['units'][unit]['y'] + 15){
+                if(math_distance(
+                  rts_bullets[bullet]['x'],
+                  rts_bullets[bullet]['y'],
+                  rts_players[1]['units'][unit]['x'],
+                  rts_players[1]['units'][unit]['y']
+                ) > 15){
                     continue;
                 }
 
@@ -534,7 +540,6 @@ function rts_unit_build(player, unit_type){
 }
 
 function rts_unit_handle(){
-
     for(var unit in rts_players[1]['units']){
         // If reloading, decrease reload,...
         if(rts_players[1]['units'][unit]['reload-current'] > 0){
@@ -624,10 +629,12 @@ function rts_unit_handle(){
                   ) * .7;
             }
 
-            if(rts_players[1]['units'][unit]['x'] > rts_players[1]['units'][unit]['destination-x'] - 5
-              && rts_players[1]['units'][unit]['x'] < rts_players[1]['units'][unit]['destination-x'] + 5
-              && rts_players[1]['units'][unit]['y'] > rts_players[1]['units'][unit]['destination-y'] - 5
-              && rts_players[1]['units'][unit]['y'] < rts_players[1]['units'][unit]['destination-y'] + 5){
+            if(math_distance(
+              rts_players[1]['units'][unit]['x'],
+              rts_players[1]['units'][unit]['y'],
+              rts_players[1]['units'][unit]['destination-x'],
+              rts_players[1]['units'][unit]['destination-y']
+            ) > 5){
                 rts_players[1]['units'][unit]['destination-x'] = random_integer(settings_settings['level-size'] * 2)
                   - settings_settings['level-size'];
                 rts_players[1]['units'][unit]['destination-y'] = random_integer(settings_settings['level-size'] * 2)
