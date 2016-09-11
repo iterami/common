@@ -279,9 +279,9 @@ function rpg_player_handle(){
       && selected['current'] >= selected['reload']
       && rpg_player['stats'][selected['costs']]['current'] >= selected['cost']){
         selected['current'] = 0;
-        rpg_player['stats'][selected['costs']]['current'] = Math.max(
-          rpg_player['stats'][selected['costs']]['current'] - selected['cost'],
-          0
+        rpg_player_affect(
+          selected['costs'],
+          selected['cost']
         );
 
         // Handle particle-creating spells.
