@@ -233,7 +233,7 @@ function rpg_player_create(properties){
     properties['stats'] = properties['stats'] || {};
     properties['width'] = properties['width'] !== void 0
       ? properties['width']
-      : 34;
+      : 23;
     properties['width-half'] = properties['width'] / 2;
     properties['x'] = properties['x'] || 0;
     properties['y'] = properties['y'] || 0;
