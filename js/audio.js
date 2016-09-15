@@ -2,6 +2,7 @@
 
 function audio_create(id, properties){
     audio_audio[id] = audio_audio[id] || {};
+    properties = properties || {};
     audio_audio[id]['gain'] = audio_context.createGain();
     audio_audio[id]['gain']['gain']['value'] = properties['volume'] || audio_volume;
     audio_audio[id]['oscillator'] = audio_context.createOscillator();
