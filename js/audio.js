@@ -16,9 +16,9 @@ function audio_create_oscillator(id){
     audio_oscillators[id]['oscillator']['frequency']['value'] = audio_audio[id]['frequency'] || 100;
     audio_oscillators[id]['oscillator']['id'] = id;
     audio_oscillators[id]['oscillator']['onended'] = function(){
-    audio_oscillators[id]['start'] = audio_audio[id]['start'] || 0;
         audio_onended(this);
     };
+    audio_oscillators[id]['start'] = audio_audio[id]['start'] || 0;
     audio_oscillators[id]['oscillator']['type'] = audio_audio[id]['type'] || 'sine';
 
     audio_oscillators[id]['oscillator'].connect(audio_oscillators[id]['gain']);
@@ -39,8 +39,9 @@ function audio_onended(that){
 function audio_start(id){
     audio_create_oscillator(id);
 
-    audio_oscillators[id]['oscillator'].start(audio_oscillators[id]['start']);
-    audio_oscillators[id]['oscillator'].stop(audio_oscillators[id]['duration']);
+    var currentTime = audio_context.currentTime;
+    audio_oscillators[id]['oscillator'].start(currentTime + audio_oscillators[id]['start']);
+    audio_oscillators[id]['oscillator'].stop(currentTime + audio_oscillators[id]['start'] + audio_oscillators[id]['duration']);
 }
 
 function audio_stop(id, when){
