@@ -53,7 +53,7 @@ function audio_start(id, volume_multiplier){
 }
 
 function audio_stop(id, when){
-    audio_oscillators[id]['oscillator'].stop(when);
+    audio_oscillators[id]['oscillator'].stop(when || void 0);
     delete audio_oscillators[id];
 }
 
