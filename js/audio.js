@@ -7,11 +7,19 @@ function audio_create(id, properties){
     }
 }
 
-function audio_create_oscillator(id){
+function audio_create_oscillator(id, volume_multiplier){
+    var volume = audio_audio[id]['volume'] || audio_volume;
+    volume_multiplier = volume_multiplier !== void 0
+      ? volume_multiplier
+      : false;
+    if(volume_multiplier !== false){
+        volume *= volume_multiplier;
+    }
+
     audio_oscillators[id] = {};
     audio_oscillators[id]['duration'] = audio_audio[id]['duration'] || 0;
     audio_oscillators[id]['gain'] = audio_context.createGain();
-    audio_oscillators[id]['gain']['gain']['value'] = audio_audio[id]['volume'] || audio_volume;
+    audio_oscillators[id]['gain']['gain']['value'] = volume;
     audio_oscillators[id]['oscillator'] = audio_context.createOscillator();
     audio_oscillators[id]['oscillator']['frequency']['value'] = audio_audio[id]['frequency'] || 100;
     audio_oscillators[id]['oscillator']['id'] = id;
@@ -36,8 +44,8 @@ function audio_onended(that){
     delete audio_oscillators[that.id];
 }
 
-function audio_start(id){
-    audio_create_oscillator(id);
+function audio_start(id, volume_multiplier){
+    audio_create_oscillator(id, volume_multiplier);
 
     var currentTime = audio_context.currentTime;
     audio_oscillators[id]['oscillator'].start(currentTime + audio_oscillators[id]['start']);
