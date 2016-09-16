@@ -47,9 +47,9 @@ function audio_onended(that){
 function audio_start(id, volume_multiplier){
     audio_create_oscillator(id, volume_multiplier);
 
-    var currentTime = audio_context.currentTime;
-    audio_oscillators[id]['oscillator'].start(currentTime + audio_oscillators[id]['start']);
-    audio_oscillators[id]['oscillator'].stop(currentTime + audio_oscillators[id]['start'] + audio_oscillators[id]['duration']);
+    var startTime = audio_context.currentTime + audio_oscillators[id]['start'];
+    audio_oscillators[id]['oscillator'].start(startTime);
+    audio_oscillators[id]['oscillator'].stop(startTime + audio_oscillators[id]['duration']);
 }
 
 function audio_stop(id, when){
