@@ -49,7 +49,10 @@ function audio_start(id, volume_multiplier){
 
     var startTime = audio_context.currentTime + audio_oscillators[id]['start'];
     audio_oscillators[id]['oscillator'].start(startTime);
-    audio_oscillators[id]['oscillator'].stop(startTime + audio_oscillators[id]['duration']);
+    audio_stop(
+      id,
+      startTime + audio_oscillators[id]['duration']
+    );
 }
 
 function audio_stop(id, when){
