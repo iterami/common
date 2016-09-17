@@ -7,7 +7,26 @@ function audio_create(id, properties){
     }
 }
 
-function audio_create_oscillator(id, volume_multiplier){
+function audio_init(default_volume){
+    audio_context = new window.AudioContext();
+    audio_volume = default_volume !== void 0
+      ? default_value
+      : 1;
+}
+
+function audio_onended(that){
+    delete audio_oscillators[that.id];
+}
+
+function audio_oscillator_connect(id, connections){
+    for(var i = 0; i < connections.length - 1; i++){
+        audio_oscillators[id][connections[i]].connect(audio_oscillators[id][connections[i + 1]]);
+    }
+
+    audio_oscillators[id][connections[connections.length - 1]].connect(audio_context.destination);
+}
+
+function audio_oscillator_create(id, volume_multiplier){
     var volume = audio_audio[id]['volume'] || audio_volume;
     volume_multiplier = volume_multiplier !== void 0
       ? volume_multiplier
@@ -29,19 +48,13 @@ function audio_create_oscillator(id, volume_multiplier){
     audio_oscillators[id]['start'] = audio_audio[id]['start'] || 0;
     audio_oscillators[id]['oscillator']['type'] = audio_audio[id]['type'] || 'sine';
 
-    audio_oscillators[id]['oscillator'].connect(audio_oscillators[id]['gain']);
-    audio_oscillators[id]['gain'].connect(audio_context.destination);
-}
-
-function audio_init(default_volume){
-    audio_context = new window.AudioContext();
-    audio_volume = default_volume !== void 0
-      ? default_value
-      : 1;
-}
-
-function audio_onended(that){
-    delete audio_oscillators[that.id];
+    audio_oscillator_connect(
+      id,
+      [
+        'oscillator',
+        'gain',
+      ]
+    );
 }
 
 function audio_start(id, volume_multiplier){
@@ -49,7 +62,7 @@ function audio_start(id, volume_multiplier){
         return;
     }
 
-    audio_create_oscillator(id, volume_multiplier);
+    audio_oscillator_create(id, volume_multiplier);
 
     var startTime = audio_context.currentTime + audio_oscillators[id]['start'];
     audio_oscillators[id]['oscillator'].start(startTime);
