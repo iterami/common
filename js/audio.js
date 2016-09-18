@@ -69,7 +69,6 @@ function audio_start(id, volume_multiplier){
     }
 
     if(audio_audio[id]['playing']){
-        return;
         audio_stop(id);
     }
 
