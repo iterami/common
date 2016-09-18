@@ -5,6 +5,8 @@ function audio_create(id, properties){
     for(var property in properties){
         audio_audio[id][property] = properties[property];
     }
+
+    audio_audio[id]['playing'] = false;
 }
 
 function audio_init(default_volume){
@@ -15,10 +17,12 @@ function audio_init(default_volume){
 }
 
 function audio_onended(that){
+    audio_audio[that.id]['playing'] = false;
+
     if(audio_audio[that.id]['repeat']){
         window.setTimeout(
           'audio_start("' + that.id + '");',
-          audio_audio[that.id]['duration'] * 1000
+          audio_audio[that.id]['duration'] * 100000000
         );
     }
 
@@ -64,6 +68,11 @@ function audio_start(id, volume_multiplier){
         return;
     }
 
+    if(audio_audio[id]['playing']){
+        return;
+        audio_stop(id);
+    }
+
     audio_oscillator_create(
       id,
       audio_audio[id]['connections'],
@@ -71,6 +80,7 @@ function audio_start(id, volume_multiplier){
     );
 
     var startTime = audio_context.currentTime + audio_oscillators[id]['start'];
+    audio_audio[id]['playing'] = true;
     audio_oscillators[id]['oscillator'].start(startTime);
     audio_stop(
       id,
