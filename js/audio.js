@@ -15,6 +15,13 @@ function audio_init(default_volume){
 }
 
 function audio_onended(that){
+    if(audio_audio[that.id]['repeat']){
+        window.setTimeout(
+          'audio_start("' + that.id + '");',
+          audio_audio[that.id]['duration'] * 1000
+        );
+    }
+
     delete audio_oscillators[that.id];
 }
 
