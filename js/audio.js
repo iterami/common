@@ -32,18 +32,19 @@ function audio_oscillator_create(id, connections, volume_multiplier){
         volume *= volume_multiplier;
     }
 
-    audio_oscillators[id] = {};
-    audio_oscillators[id]['duration'] = audio_audio[id]['duration'] || 0;
-    audio_oscillators[id]['gain'] = audio_context.createGain();
+    audio_oscillators[id] = {
+      'duration': audio_audio[id]['duration'] || 0,
+      'gain': audio_context.createGain(),
+      'oscillator': audio_context.createOscillator(),
+      'start': audio_audio[id]['start'] || 0,
+    };
     audio_oscillators[id]['gain']['gain']['value'] = volume;
-    audio_oscillators[id]['oscillator'] = audio_context.createOscillator();
     audio_oscillators[id]['oscillator']['frequency']['value'] = audio_audio[id]['frequency'] || 100;
     audio_oscillators[id]['oscillator']['id'] = id;
     audio_oscillators[id]['oscillator']['onended'] = function(){
         audio_onended(this);
     };
     audio_oscillators[id]['oscillator']['type'] = audio_audio[id]['type'] || 'sine';
-    audio_oscillators[id]['start'] = audio_audio[id]['start'] || 0;
 
     for(var i = 0; i < connections.length - 1; i++){
         audio_oscillators[id][connections[i]].connect(audio_oscillators[id][connections[i + 1]]);
