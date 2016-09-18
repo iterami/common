@@ -42,8 +42,8 @@ function audio_oscillator_create(id, connections, volume_multiplier){
     audio_oscillators[id]['oscillator']['onended'] = function(){
         audio_onended(this);
     };
-    audio_oscillators[id]['start'] = audio_audio[id]['start'] || 0;
     audio_oscillators[id]['oscillator']['type'] = audio_audio[id]['type'] || 'sine';
+    audio_oscillators[id]['start'] = audio_audio[id]['start'] || 0;
 
     for(var i = 0; i < connections.length - 1; i++){
         audio_oscillators[id][connections[i]].connect(audio_oscillators[id][connections[i + 1]]);
