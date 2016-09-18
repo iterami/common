@@ -19,6 +19,11 @@ function audio_onended(that){
 }
 
 function audio_oscillator_create(id, connections, volume_multiplier){
+    connections = connections || [
+      'oscillator',
+      'gain',
+    ];
+
     var volume = audio_audio[id]['volume'] || audio_volume;
     volume_multiplier = volume_multiplier !== void 0
       ? volume_multiplier
@@ -53,10 +58,7 @@ function audio_start(id, volume_multiplier){
 
     audio_oscillator_create(
       id,
-      [
-        'oscillator',
-        'gain',
-      ],
+      audio_audio[id]['connections'],
       volume_multiplier
     );
 
