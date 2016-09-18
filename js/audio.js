@@ -10,7 +10,7 @@ function audio_create(id, properties){
 function audio_init(default_volume){
     audio_context = new window.AudioContext();
     audio_volume = default_volume !== void 0
-      ? default_value
+      ? default_volume
       : 1;
 }
 
