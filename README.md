@@ -40,7 +40,6 @@ Currently used by:
 * [iterami/HS-TheoryCraft.htm](https://github.com/iterami/HS-TheoryCraft.htm)
 * [iterami/InterestCalculator.htm](https://github.com/iterami/InterestCalculator.htm)
 * [iterami/Jetpack-2D.htm](https://github.com/iterami/Jetpack-2D.htm)
-* [iterami/KeyInfo.htm](https://github.com/iterami/KeyInfo.htm)
 * [iterami/LayeredSnake-2D3D.htm](https://github.com/iterami/LayeredSnake-2D3D.htm)
 * [iterami/LocalStorage.htm](https://github.com/iterami/LocalStorage.htm)
 * [iterami/Match.htm)](https://github.com/iterami/Match.htm)
