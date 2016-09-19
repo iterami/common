@@ -1,12 +1,12 @@
 'use strict';
 
 function audio_create(id, properties){
-    audio_audio[id] = audio_audio[id] || {};
+    audio_audio[id] = {};
+    audio_audio[id]['playing'] = false;
+
     for(var property in properties){
         audio_audio[id][property] = properties[property];
     }
-
-    audio_audio[id]['playing'] = false;
 }
 
 function audio_init(default_volume){
