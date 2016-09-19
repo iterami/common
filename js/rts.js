@@ -676,6 +676,9 @@ function rts_unit_handle(){
 
         // Destination reached, make sure units don't overlap.
         }else{
+            rts_players[0]['units'][unit]['destination-x'] = rts_players[0]['units'][unit]['x'];
+            rts_players[0]['units'][unit]['destination-y'] = rts_players[0]['units'][unit]['y'];
+
             for(var other_unit in rts_players[0]['units']){
                 if(unit === other_unit){
                     continue;
