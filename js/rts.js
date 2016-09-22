@@ -48,6 +48,7 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
       'damage': 0,
       'destination-x': building_x + rts_buildings[building_type]['width'] / 2,
       'destination-y': building_y + rts_buildings[building_type]['height'] / 2,
+      'fog-radius': 290,
       'range': 0,
       'reload': 0,
       'reload-current': 0,
@@ -74,7 +75,7 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
 
 function rts_building_fog(){
     for(var building in rts_players[0]['buildings']){
-        // Check if fog is within 390px of a building.
+        // Check if fog is within fog disance of a building.
         var loop_counter = rts_fog.length - 1;
         do{
             if(math_distance(
@@ -82,7 +83,7 @@ function rts_building_fog(){
               rts_players[0]['buildings'][building]['y'],
               rts_fog[loop_counter]['x'] - settings_settings['level-size'],
               rts_fog[loop_counter]['y'] - settings_settings['level-size']
-            ) > 390){
+            ) > rts_players[0]['buildings'][building]['fog-radius']){
                 continue;
             }
 
@@ -521,6 +522,7 @@ function rts_unit_build(player, unit_type){
       'destination-y': player > 0
         ? random_integer(settings_settings['level-size'] * 2) - settings_settings['level-size']
         : rts_players[player]['buildings'][temp_selected_id]['destination-y'],
+      'fog-radius': 1290,
       'health': 100,
       'selected': false,
       'range': 240,
@@ -716,7 +718,7 @@ function rts_unit_handle(){
                       rts_players[0]['units'][unit]['y'],
                       rts_fog[loop_counter]['x'] - settings_settings['level-size'] + 50,
                       rts_fog[loop_counter]['y'] - settings_settings['level-size'] + 50
-                    ) < 290){
+                    ) < rts_players[0]['units'][unit]['fog-radius']){
                         if(settings_settings['fog-type'] === 2){
                             rts_fog[loop_counter]['display'] = false;
 
