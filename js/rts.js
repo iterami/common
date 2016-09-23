@@ -1,5 +1,25 @@
 'use strict';
 
+function rts_ai_handle(){
+    if(rts_players[1]['buildings'].length > 1){
+        rts_unit_build(
+          1,
+          rts_players[1]['ai']['unit']
+        );
+
+    }else if(rts_players[1]['buildings'].length > 0
+      && rts_players[1]['buildings'][0]['type'] === 'HQ'){
+        rts_building_build(
+          1,
+          rts_players[1]['ai']['building'],
+          rts_players[1]['buildings'][0]['x'] > 0
+            ? rts_players[1]['buildings'][0]['x'] - 125
+            : rts_players[1]['buildings'][0]['x'] + 125,
+          rts_players[1]['buildings'][0]['y']
+        );
+    }
+}
+
 function rts_building_build(player, building_type, building_x, building_y, fog_override){
     if(rts_players[player]['money'] < rts_buildings[building_type]['cost']){
         return;
