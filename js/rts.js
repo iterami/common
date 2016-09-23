@@ -79,7 +79,7 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
 }
 
 function rts_building_destroy(player, building){
-    rts_player[player]['income'] -= rts_players[player]['buildings'][building]['income'] || 0;
+    rts_players[player]['income'] -= rts_players[player]['buildings'][building]['income'] || 0;
 
     rts_players[player]['buildings'].splice(
       building,
