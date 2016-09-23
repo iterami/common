@@ -1,25 +1,5 @@
 'use strict';
 
-function rts_ai_handle(){
-    if(rts_players[1]['buildings'].length > 1){
-        rts_unit_build(
-          1,
-          rts_players[1]['ai']['unit']
-        );
-
-    }else if(rts_players[1]['buildings'].length > 0
-      && rts_players[1]['buildings'][0]['type'] === 'HQ'){
-        rts_building_build(
-          1,
-          rts_players[1]['ai']['building'],
-          rts_players[1]['buildings'][0]['x'] > 0
-            ? rts_players[1]['buildings'][0]['x'] - 125
-            : rts_players[1]['buildings'][0]['x'] + 125,
-          rts_players[1]['buildings'][0]['y']
-        );
-    }
-}
-
 function rts_building_build(player, building_type, building_x, building_y, fog_override){
     if(rts_players[player]['money'] < rts_buildings[building_type]['cost']){
         return;
@@ -473,6 +453,39 @@ function rts_destionation_validate(type, id){
         rts_players[0][type][id]['destination-y'] = settings_settings['level-size'];
     }else if(rts_players[0][type][id]['destination-y'] < -settings_settings['level-size']){
         rts_players[0][type][id]['destination-y'] = -settings_settings['level-size'];
+    }
+}
+
+function rts_players_handle(){
+    rts_money_timer -= 1;
+    if(rts_money_timer < 0){
+        rts_money_timer = -1;
+    }
+
+    for(var player in rts_players){
+        if(rts_money_timer === -1){
+            rts_players[player]['money'] += rts_players[player]['income'];
+        }
+
+        if(rts_players[player]['ai'] !== false){
+            if(rts_players[player]['buildings'].length > 1){
+                rts_unit_build(
+                  player,
+                  rts_players[player]['ai']['unit']
+                );
+
+            }else if(rts_players[player]['buildings'].length > 0
+              && rts_players[player]['buildings'][0]['type'] === 'HQ'){
+                rts_building_build(
+                  player,
+                  rts_players[player]['ai']['building'],
+                  rts_players[player]['buildings'][0]['x'] > 0
+                    ? rts_players[player]['buildings'][0]['x'] - 125
+                    : rts_players[player]['buildings'][0]['x'] + 125,
+                  rts_players[player]['buildings'][0]['y']
+                );
+            }
+        }
     }
 }
 
