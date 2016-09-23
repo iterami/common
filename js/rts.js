@@ -48,7 +48,7 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
       'damage': 0,
       'destination-x': building_x + rts_buildings[building_type]['width'] / 2,
       'destination-y': building_y + rts_buildings[building_type]['height'] / 2,
-      'fog-radius': 290,
+      'fog-radius': rts_buildings[building_type]['fog-radius'] || 290,
       'income': rts_buildings[building_type]['income'] || 0,
       'range': 0,
       'reload': 0,
@@ -569,7 +569,7 @@ function rts_unit_build(player, unit_type){
       'destination-y': player > 0
         ? random_integer(settings_settings['level-size'] * 2) - settings_settings['level-size']
         : rts_players[player]['buildings'][temp_selected_id]['destination-y'],
-      'fog-radius': 290,
+      'fog-radius': rts_units[unit_type]['fog-radius'] || 290,
       'health': 100,
       'selected': false,
       'range': 240,
