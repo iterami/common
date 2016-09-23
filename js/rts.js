@@ -313,9 +313,9 @@ function rts_bullet_handle(){
 
                 rts_players[0]['units'][unit]['health'] -= rts_bullets[bullet]['damage'];
                 if(rts_players[0]['units'][unit]['health'] <= 0){
-                    rts_players[0]['units'].splice(
-                      unit,
-                      1
+                    rts_unit_destroy(
+                      0,
+                      unit
                     );
                 }
 
@@ -360,9 +360,9 @@ function rts_bullet_handle(){
 
                 rts_players[1]['units'][unit]['health'] -= rts_bullets[bullet]['damage'];
                 if(rts_players[1]['units'][unit]['health'] <= 0){
-                    rts_players[1]['units'].splice(
-                      unit,
-                      1
+                    rts_unit_destroy(
+                      1,
+                      unit
                     );
                 }
 
@@ -413,7 +413,7 @@ function rts_camera_validatemove(mouse_x, mouse_y){
 }
 
 function rts_destionation_set(on_minimap){
-    if(rts_selected_type === 'Unit'){
+    if(rts_selected_type === 'unit'){
         for(var unit in rts_players[0]['units']){
             if(!rts_players[0]['units'][unit]['selected']){
                 continue;
@@ -522,7 +522,7 @@ function rts_select(){
 
         if(rts_players[0]['units'][unit]['selected']){
             rts_selected_id = unit;
-            rts_selected_type = 'Unit';
+            rts_selected_type = 'unit';
         }
     }
 
@@ -548,6 +548,21 @@ function rts_select(){
             rts_selected_id = building;
             rts_selected_type = rts_players[0]['buildings'][building]['type'];
         }
+    }
+}
+
+function rts_selected_destroy(){
+    if(rts_selected_type === 'unit'){
+        rts_unit_destroy(
+          0,
+          rts_selected_id
+        );
+
+    }else if(rts_selected_type !== ''){
+        rts_building_destroy(
+          0,
+          rts_selected_id
+        );
     }
 }
 
@@ -586,6 +601,13 @@ function rts_unit_build(player, unit_type){
     }
 
     rts_players[player]['units'].push(unit);
+}
+
+function rts_unit_destroy(player, unit){
+    rts_players[player]['units'].splice(
+      unit,
+      1
+    );
 }
 
 function rts_unit_handle(){
