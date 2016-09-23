@@ -79,6 +79,12 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
 }
 
 function rts_building_destroy(player, building){
+    if(rts_selected_id === building){
+        rts_build_mode = '';
+        rts_selected_id = -1;
+        rts_selected_type = '';
+    }
+
     rts_players[player]['income'] -= rts_players[player]['buildings'][building]['income'] || 0;
 
     rts_players[player]['buildings'].splice(
@@ -332,12 +338,6 @@ function rts_bullet_handle(){
 
                 rts_players[0]['buildings'][building]['health'] -= rts_bullets[bullet]['damage'];
                 if(rts_players[0]['buildings'][building]['health'] <= 0){
-                    if(rts_selected_id === building){
-                        rts_build_mode = '';
-                        rts_selected_id = -1;
-                        rts_selected_type = '';
-                    }
-
                     rts_building_destroy(
                       0,
                       building
@@ -604,6 +604,12 @@ function rts_unit_build(player, unit_type){
 }
 
 function rts_unit_destroy(player, unit){
+    if(rts_selected_id === 'unit'){
+        rts_build_mode = '';
+        rts_selected_id = -1;
+        rts_selected_type = '';
+    }
+
     rts_players[player]['units'].splice(
       unit,
       1
