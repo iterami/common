@@ -49,6 +49,7 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
       'destination-x': building_x + rts_buildings[building_type]['width'] / 2,
       'destination-y': building_y + rts_buildings[building_type]['height'] / 2,
       'fog-radius': 290,
+      'income': rts_buildings[building_type]['income'] || 0,
       'range': 0,
       'reload': 0,
       'reload-current': 0,
@@ -63,6 +64,10 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
     }
 
     rts_players[player]['buildings'].push(building);
+
+    if(building['income'] != 0){
+        rts_players[player]['income'] += building['income'];
+    }
 
     if(player === 0){
         rts_build_mode = '';
