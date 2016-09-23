@@ -560,7 +560,7 @@ function rts_unit_build(player, unit_type){
       'destination-y': player > 0
         ? random_integer(settings_settings['level-size'] * 2) - settings_settings['level-size']
         : rts_players[player]['buildings'][temp_selected_id]['destination-y'],
-      'fog-radius': 1290,
+      'fog-radius': 290,
       'health': 100,
       'selected': false,
       'range': 240,
