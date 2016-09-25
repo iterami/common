@@ -77,6 +77,22 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
         }
     }
 
+    // Don't allow building on dynamic world elements.
+    for(var element in rts_world_dynamic){
+        if(math_rectangle_overlap(
+          building_x,
+          building_y,
+          rts_buildings[building_type]['height'],
+          rts_buildings[building_type]['width'],
+          rts_world_dynamic[element]['x'],
+          rts_world_dynamic[element]['y'],
+          rts_world_dynamic[element]['height'],
+          rts_world_dynamic[element]['width']
+        )){
+            return;
+        }
+    }
+
     rts_players[player]['money'] -= rts_buildings[building_type]['cost'];
 
     var building = {
@@ -918,4 +934,5 @@ var rts_players = {};
 var rts_selected_id = -1;
 var rts_selected_type = '';
 var rts_units = {};
+var rts_world_dynamic = [];
 var rts_world_static = [];
