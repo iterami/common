@@ -44,12 +44,16 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
 
     // Don't allow building on other buildings.
     for(var building in rts_players[player]['buildings']){
-        if(math_distance(
+        if(math_rectangle_overlap(
           building_x,
           building_y,
+          rts_buildings[building_type]['height'],
+          rts_buildings[building_type]['width'],
           rts_players[player]['buildings'][building]['x'],
-          rts_players[player]['buildings'][building]['y']
-        ) < 100){
+          rts_players[player]['buildings'][building]['y'],
+          rts_players[player]['buildings'][building]['height'],
+          rts_players[player]['buildings'][building]['width']
+        )){
             return;
         }
     }
