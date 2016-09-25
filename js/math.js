@@ -194,6 +194,19 @@ function math_movement_speed(x0, y0, x1, y1){
     ];
 }
 
+function math_rectangle_overlap(x0, y0, h0, w0, x1, y1, h1, w1){
+    var boolean = false;
+
+    if(x0 < x1 + w1
+      && x0 + w0 > x1
+      && y0 < y1 + h1
+      && y0 + h0 > y1){
+        boolean = true;
+    }
+
+    return boolean;
+}
+
 function math_round(number, decimals){
     decimals = decimals !== void 0
       ? decimals
