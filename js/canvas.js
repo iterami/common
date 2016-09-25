@@ -108,8 +108,8 @@ function canvas_setmode(newmode, newgame){
 
     }else{
         canvas_mode = 1;
-        newgame = true;
         msperframe = 33;
+        newgame = true;
     }
 
     // Main menu mode.
