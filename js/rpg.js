@@ -314,8 +314,8 @@ function rpg_player_handle(){
             for(var property in selected['world-dynamic']){
                 worlddynamic[property] = selected['world-dynamic'][property];
             }
-            worlddynamic['x'] = rpg_player['x'] + mouse_x - canvas_x;
-            worlddynamic['y'] = rpg_player['y'] + mouse_y - canvas_y;
+            worlddynamic['x'] = rpg_player['x'] + mouse_x - canvas_x - 12.5;
+            worlddynamic['y'] = rpg_player['y'] + mouse_y - canvas_y - 12.5;
 
             rpg_world_dynamic_create(worlddynamic);
         }
