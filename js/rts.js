@@ -42,6 +42,25 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
         }
     }
 
+    // Don't allow building too far from another building.
+    if(rts_players[player]['buildings'].length > 0){
+        var build = false;
+        for(var building in rts_players[player]['buildings']){
+            if(math_distance(
+              building_x,
+              building_y,
+              rts_players[player]['buildings'][building]['x'],
+              rts_players[player]['buildings'][building]['y']
+            ) < 200){
+                build = true;
+                break;
+            }
+        }
+        if(!build){
+            return;
+        }
+    }
+
     // Don't allow building on other buildings.
     for(var building in rts_players[player]['buildings']){
         if(math_rectangle_overlap(
