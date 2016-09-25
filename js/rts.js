@@ -5,7 +5,7 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
         return;
     }
 
-    // Make sure building is within buildable limit.
+    // Don't allow building outside of level.
     if(building_x > settings_settings['level-size'] - rts_buildings[building_type]['width']){
         building_x = settings_settings['level-size'] - rts_buildings[building_type]['width'];
 
@@ -20,9 +20,9 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
         building_y = -settings_settings['level-size'];
     }
 
+    // Don't allow building on fog.
     if(player === 0
       && !(fog_override || false)){
-        // Don't allow building on fog.
         var loop_counter = rts_fog.length - 1;
         if(loop_counter >= 0){
             do{
@@ -39,6 +39,18 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
                     return;
                 }
             }while(loop_counter--);
+        }
+    }
+
+    // Don't allow building on other buildings.
+    for(var building in rts_players[player]['buildings']){
+        if(math_distance(
+          building_x,
+          building_y,
+          rts_players[player]['buildings'][building]['x'],
+          rts_players[player]['buildings'][building]['y']
+        ) < 100){
+            return;
         }
     }
 
