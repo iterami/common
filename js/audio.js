@@ -22,7 +22,7 @@ function audio_onended(that){
     if(audio_audio[that.id]['repeat']){
         window.setTimeout(
           'audio_start("' + that.id + '");',
-          audio_audio[that.id]['duration'] * 100000000
+          audio_audio[that.id]['duration'] * 1000
         );
     }
 
