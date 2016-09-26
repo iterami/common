@@ -22,7 +22,7 @@ function audio_onended(that){
     if(audio_audio[that.id]['repeat']){
         window.setTimeout(
           'audio_start("' + that.id + '");',
-          audio_audio[that.id]['duration'] * 1000
+          audio_audio[that.id]['duration'] * audio_audio[that.id]['timeout']
         );
     }
 
@@ -48,6 +48,7 @@ function audio_oscillator_create(id, connections, volume_multiplier){
       'gain': audio_context.createGain(),
       'oscillator': audio_context.createOscillator(),
       'start': audio_audio[id]['start'] || 0,
+      'timeout': audio_audio[id]['timeout'] || 1000,
     };
     audio_oscillators[id]['gain']['gain']['value'] = volume;
     audio_oscillators[id]['oscillator']['frequency']['value'] = audio_audio[id]['frequency'] || 100;
