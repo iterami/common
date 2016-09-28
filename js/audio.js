@@ -20,10 +20,15 @@ function audio_onended(that){
     audio_audio[that.id]['playing'] = false;
 
     if(audio_audio[that.id]['repeat']){
-        window.setTimeout(
-          'audio_start("' + that.id + '");',
-          audio_audio[that.id]['duration'] * audio_audio[that.id]['timeout']
-        );
+        if(audio_audio[that.id]['timeout'] <= 0){
+            audio_start(that.id);
+f
+        }else{
+            window.setTimeout(
+              'audio_start("' + that.id + '");',
+              audio_audio[that.id]['duration'] * audio_audio[that.id]['timeout']
+            );
+        }
     }
 
     delete audio_oscillators[that.id];
