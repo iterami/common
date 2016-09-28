@@ -94,13 +94,12 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
     }
 
     rts_players[player]['money'] -= rts_buildings[building_type]['cost'];
-
     var building = {
       'damage': 0,
       'destination-x': building_x + rts_buildings[building_type]['width'] / 2,
       'destination-y': building_y + rts_buildings[building_type]['height'] / 2,
-      'fog-radius': rts_buildings[building_type]['fog-radius'] || 290,
-      'income': rts_buildings[building_type]['income'] || 0,
+      'fog-radius': 290,
+      'income': 0,
       'range': 0,
       'reload': 0,
       'reload-current': 0,
@@ -109,7 +108,6 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
       'x': building_x,
       'y': building_y,
     };
-
     for(var property in rts_buildings[building_type]){
         building[property] = rts_buildings[building_type][property];
     }
@@ -623,7 +621,6 @@ function rts_unit_build(player, unit_type){
     }
 
     rts_players[player]['money'] -= rts_units[unit_type]['cost'];
-
     var temp_selected_id = player > 0
       ? 1
       : rts_selected_id;
@@ -635,7 +632,7 @@ function rts_unit_build(player, unit_type){
       'destination-y': player > 0
         ? random_integer(settings_settings['level-size'] * 2) - settings_settings['level-size']
         : rts_players[player]['buildings'][temp_selected_id]['destination-y'],
-      'fog-radius': rts_units[unit_type]['fog-radius'] || 290,
+      'fog-radius': 290,
       'health': 100,
       'selected': false,
       'range': 240,
@@ -646,7 +643,6 @@ function rts_unit_build(player, unit_type){
       'y': rts_players[player]['buildings'][temp_selected_id]['y']
         + rts_buildings[rts_players[player]['buildings'][temp_selected_id]['type']]['height'] / 2,
     };
-
     for(var property in rts_units[unit_type]){
         unit[property] = rts_units[unit_type][property];
     }
