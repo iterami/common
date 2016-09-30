@@ -22,6 +22,7 @@ canvas{
 }
 input{
     background: #000;
+    border-color: #aaa;
     color: #aaa;
     font-size: 142%;
     vertical-align: middle;

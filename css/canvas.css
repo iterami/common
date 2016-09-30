@@ -35,6 +35,7 @@ hr{
     margin: 4px 0;
 }
 input{
+    border-color: #aaa;
     width: 75px;
 }
 input[disabled]{
