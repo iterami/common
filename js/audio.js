@@ -16,6 +16,23 @@ function audio_init(default_volume){
       : 1;
 }
 
+function audio_node_create(id, properties){
+    var source = audio_context['create' + properties['label']]();
+
+    for(var property in properties){
+        if(typeof properties[property] === 'object'){
+            for(var subproperty in properties[property]){
+                source[property][subproperty] = properties[property][subproperty];
+            }
+
+        }else{
+            source[property] = properties[property];
+        }
+    }
+
+    audio_sources[id][properties['label']] = source;
+}
+
 function audio_onended(that){
     audio_audio[that.id]['playing'] = false;
 
@@ -31,15 +48,10 @@ f
         }
     }
 
-    delete audio_oscillators[that.id];
+    delete audio_sources[that.id];
 }
 
-function audio_oscillator_create(id, connections, volume_multiplier){
-    connections = connections || [
-      'oscillator',
-      'gain',
-    ];
-
+function audio_source_create(id, connections, volume_multiplier){
     var volume = audio_audio[id]['volume'] || audio_volume;
     volume_multiplier = volume_multiplier !== void 0
       ? volume_multiplier
@@ -48,25 +60,42 @@ function audio_oscillator_create(id, connections, volume_multiplier){
         volume *= volume_multiplier;
     }
 
-    audio_oscillators[id] = {
+    connections = connections || [
+      {
+        'frequency': {
+          'value': audio_audio[id]['frequency'] || 100,
+        },
+        'id': id,
+        'label': 'Oscillator',
+        'onended': function(){
+            audio_onended(this);
+        },
+        'type': audio_audio[id]['type'] || 'sine',
+      },
+      {
+        'gain': {
+          'value': volume,
+        },
+        'label': 'Gain',
+      },
+    ];
+
+    audio_sources[id] = {
       'duration': audio_audio[id]['duration'] || 0,
-      'gain': audio_context.createGain(),
-      'oscillator': audio_context.createOscillator(),
       'start': audio_audio[id]['start'] || 0,
       'timeout': audio_audio[id]['timeout'] || 1000,
     };
-    audio_oscillators[id]['gain']['gain']['value'] = volume;
-    audio_oscillators[id]['oscillator']['frequency']['value'] = audio_audio[id]['frequency'] || 100;
-    audio_oscillators[id]['oscillator']['id'] = id;
-    audio_oscillators[id]['oscillator']['onended'] = function(){
-        audio_onended(this);
-    };
-    audio_oscillators[id]['oscillator']['type'] = audio_audio[id]['type'] || 'sine';
 
-    for(var i = 0; i < connections.length - 1; i++){
-        audio_oscillators[id][connections[i]].connect(audio_oscillators[id][connections[i + 1]]);
+    for(var i = 0; i < connections.length; i++){
+        audio_node_create(
+          id,
+          connections[i]
+        );
     }
-    audio_oscillators[id][connections[connections.length - 1]].connect(audio_context.destination);
+    for(i = 0; i < connections.length - 1; i++){
+        audio_sources[id][connections[i]['label']].connect(audio_sources[id][connections[i + 1]['label']]);
+    }
+    audio_sources[id][connections[connections.length - 1]['label']].connect(audio_context.destination);
 }
 
 function audio_start(id, volume_multiplier){
@@ -78,32 +107,32 @@ function audio_start(id, volume_multiplier){
         audio_stop(id);
     }
 
-    audio_oscillator_create(
+    audio_source_create(
       id,
       audio_audio[id]['connections'],
       volume_multiplier
     );
 
-    var startTime = audio_context.currentTime + audio_oscillators[id]['start'];
+    var startTime = audio_context.currentTime + audio_sources[id]['start'];
     audio_audio[id]['playing'] = true;
-    audio_oscillators[id]['oscillator'].start(startTime);
+    audio_sources[id]['Oscillator'].start(startTime);
     audio_stop(
       id,
-      startTime + audio_oscillators[id]['duration']
+      startTime + audio_sources[id]['duration']
     );
 }
 
 function audio_stop(id, when){
-    audio_oscillators[id]['oscillator'].stop(when || void 0);
+    audio_sources[id]['Oscillator'].stop(when || void 0);
 }
 
 function audio_stop_all(){
-    for(var id in audio_oscillators){
+    for(var id in audio_sources){
         audio_stop(id);
     }
 }
 
 var audio_audio = {};
 var audio_context = 0;
-var audio_oscillators = {};
+var audio_sources = {};
 var audio_volume = 1;
