@@ -2,10 +2,6 @@
 
 function audio_create(id, properties){
     audio_audio[id] = {};
-    audio_audio[id]['id'] = id;
-    audio_audio[id]['onended'] = function(){
-        audio_onended(this);
-    };
     audio_audio[id]['playing'] = false;
 
     for(var property in properties){
@@ -27,6 +23,11 @@ function audio_create(id, properties){
         'label': 'Gain',
       },
     ];
+
+    audio_audio[id]['connections'][0]['id'] = id;
+    audio_audio[id]['connections'][0]['onended'] = function(){
+        audio_onended(this);
+    };
 }
 
 function audio_init(default_volume){
