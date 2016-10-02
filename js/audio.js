@@ -7,6 +7,20 @@ function audio_create(id, properties){
     for(var property in properties){
         audio_audio[id][property] = properties[property];
     }
+
+    audio_audio[id]['connections'] = properties['connections'] || [
+      {
+        'frequency': {
+          'value': audio_audio[id]['frequency'] || 100,
+        },
+        'id': id,
+        'label': 'Oscillator',
+        'onended': function(){
+            audio_onended(this);
+        },
+        'type': audio_audio[id]['type'] || 'sine',
+      },
+    ];
 }
 
 function audio_init(default_volume){
@@ -51,7 +65,14 @@ f
     delete audio_sources[that.id];
 }
 
-function audio_source_create(id, connections, volume_multiplier){
+function audio_source_create(id, volume_multiplier){
+    audio_sources[id] = {
+      'duration': audio_audio[id]['duration'] || 0,
+      'start': audio_audio[id]['start'] || 0,
+      'timeout': audio_audio[id]['timeout'] || 1000,
+    };
+
+    var connections_length = audio_audio[id]['connections'].length;
     var volume = audio_audio[id]['volume'] || audio_volume;
     volume_multiplier = volume_multiplier !== void 0
       ? volume_multiplier
@@ -60,42 +81,31 @@ function audio_source_create(id, connections, volume_multiplier){
         volume *= volume_multiplier;
     }
 
-    connections = connections || [
-      {
-        'frequency': {
-          'value': audio_audio[id]['frequency'] || 100,
-        },
-        'id': id,
-        'label': 'Oscillator',
-        'onended': function(){
-            audio_onended(this);
-        },
-        'type': audio_audio[id]['type'] || 'sine',
-      },
+    // Create audio nodes.
+    for(var i = 0; i < connections_length; i++){
+        audio_node_create(
+          id,
+          audio_audio[id]['connections'][i]
+        );
+    }
+    audio_node_create(
+      id,
       {
         'gain': {
           'value': volume,
         },
         'label': 'Gain',
-      },
-    ];
+      }
+    );
 
-    audio_sources[id] = {
-      'duration': audio_audio[id]['duration'] || 0,
-      'start': audio_audio[id]['start'] || 0,
-      'timeout': audio_audio[id]['timeout'] || 1000,
-    };
-
-    for(var i = 0; i < connections.length; i++){
-        audio_node_create(
-          id,
-          connections[i]
-        );
+    // Connect audio nodes.
+    if(connections_length > 2){
+        for(i = 0; i < connections_length - 1; i++){
+            audio_sources[id][audio_audio[id]['connections'][i]['label']].connect(audio_sources[id][audio_audio[id]['connections'][i + 1]['label']]);
+        }
     }
-    for(i = 0; i < connections.length - 1; i++){
-        audio_sources[id][connections[i]['label']].connect(audio_sources[id][connections[i + 1]['label']]);
-    }
-    audio_sources[id][connections[connections.length - 1]['label']].connect(audio_context.destination);
+    audio_sources[id][audio_audio[id]['connections'][connections_length - 1]['label']].connect(audio_sources[id]['Gain']);
+    audio_sources[id]['Gain'].connect(audio_context.destination);
 }
 
 function audio_start(id, volume_multiplier){
@@ -109,7 +119,6 @@ function audio_start(id, volume_multiplier){
 
     audio_source_create(
       id,
-      audio_audio[id]['connections'],
       volume_multiplier
     );
 
