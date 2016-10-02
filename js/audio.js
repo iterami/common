@@ -20,6 +20,12 @@ function audio_create(id, properties){
         },
         'type': audio_audio[id]['type'] || 'sine',
       },
+      {
+        'gain': {
+          'value': properties['volume'] || audio_volume,
+        },
+        'label': 'Gain',
+      },
     ];
 }
 
@@ -76,40 +82,31 @@ function audio_source_create(id, volume_multiplier){
       'timeout': audio_audio[id]['timeout'] || 1000,
     };
 
-    var connections_length = audio_audio[id]['connections'].length;
-    var volume = audio_audio[id]['volume'] || audio_volume;
-    volume_multiplier = volume_multiplier !== void 0
-      ? volume_multiplier
-      : false;
-    if(volume_multiplier !== false){
-        volume *= volume_multiplier;
-    }
-
     // Create audio nodes.
+    var connections_length = audio_audio[id]['connections'].length;
     for(var i = 0; i < connections_length; i++){
         audio_node_create(
           id,
           audio_audio[id]['connections'][i]
         );
-    }
-    audio_node_create(
-      id,
-      {
-        'gain': {
-          'value': volume,
-        },
-        'label': 'Gain',
-      }
-    );
 
-    // Connect audio nodes.
-    if(connections_length > 2){
-        for(i = 0; i < connections_length - 1; i++){
-            audio_sources[id][audio_audio[id]['connections'][i]['label']].connect(audio_sources[id][audio_audio[id]['connections'][i + 1]['label']]);
+        if(audio_audio[id]['connections'][i]['label'] === 'Gain'){
+            var volume = audio_audio[id]['volume'] || audio_volume;
+            volume_multiplier = volume_multiplier !== void 0
+              ? volume_multiplier
+              : false;
+            if(volume_multiplier !== false){
+                volume *= volume_multiplier;
+            }
+            audio_sources[id]['Gain']['gain']['value'] = volume;
         }
     }
-    audio_sources[id][audio_audio[id]['connections'][connections_length - 1]['label']].connect(audio_sources[id]['Gain']);
-    audio_sources[id]['Gain'].connect(audio_context.destination);
+
+    // Connect audio nodes.
+    for(i = 0; i < connections_length - 1; i++){
+        audio_sources[id][audio_audio[id]['connections'][i]['label']].connect(audio_sources[id][audio_audio[id]['connections'][i + 1]['label']]);
+    }
+    audio_sources[id][audio_audio[id]['connections'][connections_length - 1]['label']].connect(audio_context.destination);
 }
 
 function audio_start(id, volume_multiplier){
