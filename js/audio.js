@@ -31,7 +31,11 @@ function audio_init(default_volume){
 }
 
 function audio_node_create(id, properties){
-    var source = audio_context['create' + properties['label']]();
+    var source = audio_context['create' + properties['label']](
+      properties['arg0'],
+      properties['arg1'],
+      properties['arg2']
+    );
 
     for(var property in properties){
         if(typeof properties[property] === 'object'){
@@ -124,7 +128,7 @@ function audio_start(id, volume_multiplier){
 
     var startTime = audio_context.currentTime + audio_sources[id]['start'];
     audio_audio[id]['playing'] = true;
-    audio_sources[id]['Oscillator'].start(startTime);
+    audio_sources[id][audio_audio[id]['connections'][0]['label']].start(startTime);
     audio_stop(
       id,
       startTime + audio_sources[id]['duration']
@@ -132,7 +136,7 @@ function audio_start(id, volume_multiplier){
 }
 
 function audio_stop(id, when){
-    audio_sources[id]['Oscillator'].stop(when || void 0);
+    audio_sources[id][audio_audio[id]['connections'][0]['label']].stop(when || void 0);
 }
 
 function audio_stop_all(){
