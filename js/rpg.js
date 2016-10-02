@@ -1,5 +1,30 @@
 'use strict';
 
+function rpg_item_create(properties, type){
+    properties = properties || {};
+    type = type || 'any';
+
+    properties['equipped'] = properties['equipped'] || false;
+    properties['owner'] = properties['owner'] || 'player';
+
+    rpg_items.push(properties);
+}
+
+function rpg_item_toggle(id){
+    if(rpg_items[id]['owner'] === false){
+        return;
+    }
+
+    rpg_items[id]['equipped'] = !rpg_items[id]['equipped'];
+
+    // Toggle item on plyer.
+    if(rpg_items[id]['owner'] === 'player'){
+
+    // Toggle item on NPC.
+    }else{
+    }
+}
+
 function rpg_npc_create(properties){
     properties = properties || {};
 
@@ -205,10 +230,10 @@ function rpg_player_create(properties){
     properties['equipment'] = properties['equipment'] || {
       'feet': void 0,
       'head': void 0,
-      'off-hand': void 0,
       'legs': void 0,
       'main-hand': void 0,
       'neck': void 0,
+      'off-hand': void 0,
       'torso': void 0,
     };
     properties['height'] = properties['height'] !== void 0
@@ -355,6 +380,7 @@ function rpg_world_dynamic_create(properties){
     rpg_world_dynamic.push(properties);
 }
 
+var rpg_items = [];
 var rpg_npcs = [];
 var rpg_particles = [];
 var rpg_player = {};
