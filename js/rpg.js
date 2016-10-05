@@ -221,6 +221,7 @@ function rpg_particle_create(properties){
     properties['speed-y'] = properties['speed-y'] !== void 0
       ? properties['speed-y']
       : 1;
+    properties['stat'] = properties['stat'] || 'health';
     properties['width'] = properties['width'] !== void 0
       ? properties['width']
       : 10;
@@ -274,7 +275,7 @@ function rpg_particle_handle(){
 
             rpg_character_affect(
               character,
-              'health',
+              rpg_particles[particle]['stat'],
               rpg_particles[particle]['damage']
             );
 
