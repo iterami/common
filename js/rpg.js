@@ -127,6 +127,7 @@ function rpg_character_handle(){
                         }
                         particle['dx'] = mouse_x > canvas_x ? speeds[0] : -speeds[0];
                         particle['dy'] = mouse_y > canvas_y ? speeds[1] : -speeds[1];
+                        particle['owner'] = 0;
                         particle['x'] = rpg_characters[0]['x'];
                         particle['y'] = rpg_characters[0]['y'];
 
@@ -265,7 +266,7 @@ function rpg_particle_handle(){
 
         // Handle collisions with characters.
         for(var character in rpg_characters){
-            if(rpg_particles[particle]['owner'] === character
+            if(rpg_particles[particle]['owner'] === parseInt(character, 10)
               || rpg_particles[particle]['x'] <= rpg_characters[character]['x'] - rpg_characters[character]['width'] / 2
               || rpg_particles[particle]['x'] >= rpg_characters[character]['x'] + rpg_characters[character]['width'] / 2
               || rpg_particles[particle]['y'] <= rpg_characters[character]['y'] - rpg_characters[character]['height'] / 2
