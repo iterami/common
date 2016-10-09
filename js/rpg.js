@@ -35,20 +35,7 @@ function rpg_character_create(properties){
     properties['height-half'] = properties['height'] / 2;
     properties['inventory'] = properties['inventory'] || [];
     properties['player'] = properties['player'] || false;
-    properties['selected'] = properties['selected'] || 1;
-    properties['spellbar'] = properties['spellbar'] || {
-      0: void 0,
-      1: void 0,
-      2: void 0,
-      3: void 0,
-      4: void 0,
-      5: void 0,
-      6: void 0,
-      7: void 0,
-      8: void 0,
-      9: void 0,
-    };
-    properties['spellbook'] = properties['spellbook'] || {};
+    properties['selected'] = properties['selected'] || 0;
     properties['team'] = properties['team'] !== void 0
       ? properties['team']
       : 1;
@@ -91,17 +78,18 @@ function rpg_character_handle(){
             }
         }
 
-        for(var spell in rpg_characters[character]['spellbook']){
-            if(rpg_characters[character]['spellbook'][spell]['current'] < rpg_characters[character]['spellbook'][spell]['reload']){
-                rpg_characters[character]['spellbook'][spell]['current'] += 1;
+        // Handle character inventory.
+        for(var item in rpg_characters[character]['inventory']){
+            var selected = rpg_characters[character]['inventory'][item];
+
+            if(selected['current'] < selected['reload']){
+                selected['current'] += 1;
                 continue;
             }
 
-            if(rpg_characters[character]['spellbar'][rpg_characters[character]['selected']] !== spell){
+            if(rpg_characters[character]['selected'] != item){
                 continue;
             }
-
-            var selected = rpg_characters[character]['spellbook'][rpg_characters[character]['spellbar'][rpg_characters[character]['selected']]];
 
             if(selected['cost'] !== 0
               && rpg_characters[character]['stats'][selected['costs']]['current'] < selected['cost']){
@@ -196,6 +184,25 @@ function rpg_item_create(properties, type){
     properties['owner'] = properties['owner'] || 'player';
 
     rpg_items.push(properties);
+}
+
+function rpg_item_select(character, id){
+    character = character || 0;
+
+    var length = rpg_characters[character]['inventory'].length - 1;
+    if(id < 0){
+        id = length;
+
+    }else if(id > length){
+        id = 0;
+    }
+
+    rpg_characters[character]['selected'] = id;
+
+    if(character === 0){
+        document.getElementById('canvas').style.cursor =
+          rpg_characters[0]['inventory'][id]['cursor'] || 'auto';
+    }
 }
 
 function rpg_item_toggle(id){
@@ -298,24 +305,6 @@ function rpg_particle_handle(){
     }
 }
 
-function rpg_spell_select(character, id){
-    character = character || 0;
-
-    if(id < 1){
-        id = 10;
-
-    }else if(id > 10){
-        id = 1;
-    }
-
-    rpg_characters[character]['selected'] = id;
-
-    if(character === 0){
-        document.getElementById('canvas').style.cursor =
-          rpg_characters[0]['spellbook'][rpg_characters[0]['spellbar'][id]]['cursor'] || 'auto';
-    }
-}
-
 function rpg_world_dynamic_create(properties){
     properties = properties || {};
 
@@ -339,6 +328,5 @@ function rpg_world_dynamic_create(properties){
 var rpg_characters = [];
 var rpg_items = [];
 var rpg_particles = [];
-var rpg_ui = 0;
 var rpg_world_dynamic = [];
 var rpg_world_static = [];
