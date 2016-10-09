@@ -101,78 +101,86 @@ function rpg_character_handle(){
                 continue;
             }
 
+            var selected = rpg_characters[character]['spellbook'][rpg_characters[character]['spellbar'][rpg_characters[character]['selected']]];
+
+            if(selected['cost'] !== 0
+              && rpg_characters[character]['stats'][selected['costs']]['current'] < selected['cost']){
+                continue;
+            }
+
+            var dx = 0;
+            var dy = 0;
+            var speeds = 0;
+            var target_x = 0;
+            var target_y = 0;
+
             if(character === '0'){
-                var selected = rpg_characters[0]['spellbook'][rpg_characters[0]['spellbar'][rpg_characters[0]['selected']]];
-
-                if(mouse_lock_x > -1
-                  && rpg_characters[0]['stats'][selected['costs']]['current'] >= selected['cost']){
-                    selected['current'] = 0;
-                    rpg_character_affect(
-                      character,
-                      selected['costs'],
-                      selected['cost']
-                    );
-
-                    // Handle particle-creating spells.
-                    if(selected['type'] === 'particle'){
-                        var speeds = math_movement_speed(
-                          rpg_characters[0]['x'],
-                          rpg_characters[0]['y'],
-                          rpg_characters[0]['x'] + mouse_x - canvas_x,
-                          rpg_characters[0]['y'] + mouse_y - canvas_y
-                        );
-                        var particle = {};
-                        for(var property in selected['particle']){
-                            particle[property] = selected['particle'][property];
-                        }
-                        particle['dx'] = mouse_x > canvas_x ? speeds[0] : -speeds[0];
-                        particle['dy'] = mouse_y > canvas_y ? speeds[1] : -speeds[1];
-                        particle['owner'] = 0;
-                        particle['x'] = rpg_characters[0]['x'];
-                        particle['y'] = rpg_characters[0]['y'];
-
-                        rpg_particle_create(particle);
-
-                    }else if(selected['type'] === 'stat'){
-                        rpg_character_affect(
-                          character,
-                          selected['effect']['stat'],
-                          selected['effect']['damage']
-                        );
-
-                    }else if(selected['type'] === 'world-dynamic'){
-                        var worlddynamic = {};
-                        for(var property in selected['world-dynamic']){
-                            worlddynamic[property] = selected['world-dynamic'][property];
-                        }
-                        worlddynamic['x'] = Math.round(rpg_characters[0]['x'] + mouse_x - canvas_x - 12.5);
-                        worlddynamic['y'] = Math.round(rpg_characters[0]['y'] + mouse_y - canvas_y - 12.5);
-
-                        rpg_world_dynamic_create(worlddynamic);
-                    }
+                if(mouse_lock_x < 0){
+                    continue;
                 }
 
-            }else{
-                rpg_characters[character]['spellbook'][spell]['current'] = 0;
+                target_x = rpg_characters[character]['x'] + mouse_x - canvas_x;
+                target_y = rpg_characters[character]['y'] + mouse_y - canvas_y;
 
-                // Create character-created particle.
-                var speeds = math_movement_speed(
+                speeds = math_movement_speed(
+                  rpg_characters[character]['x'],
+                  rpg_characters[character]['y'],
+                  target_x,
+                  target_y
+                );
+
+                dx = mouse_x > canvas_x ? speeds[0] : -speeds[0];
+                dy = mouse_y > canvas_y ? speeds[1] : -speeds[1];
+
+            }else{
+                speeds = math_movement_speed(
                   rpg_characters[character]['x'],
                   rpg_characters[character]['y'],
                   rpg_characters[0]['x'],
                   rpg_characters[0]['y']
                 );
+
+                dx = rpg_characters[0]['x'] > rpg_characters[character]['x'] ? speeds[0] : -speeds[0];
+                dy = rpg_characters[0]['y'] > rpg_characters[character]['y'] ? speeds[1] : -speeds[1];
+            }
+
+            selected['current'] = 0;
+            rpg_character_affect(
+              character,
+              selected['costs'],
+              selected['cost']
+            );
+
+            // Handle particle-creating spells.
+            if(selected['type'] === 'particle'){
                 var particle = {};
-                for(var property in rpg_characters[character]['spellbook'][spell]){
-                    particle[property] = rpg_characters[character]['spellbook'][spell][property];
+                for(var property in selected['particle']){
+                    particle[property] = selected['particle'][property];
                 }
-                particle['dx'] = rpg_characters[0]['x'] > rpg_characters[character]['x'] ? speeds[0] : -speeds[0];
-                particle['dy'] = rpg_characters[0]['y'] > rpg_characters[character]['y'] ? speeds[1] : -speeds[1];
+                particle['dx'] = dx;
+                particle['dy'] = dy;
                 particle['owner'] = character;
                 particle['x'] = rpg_characters[character]['x'];
                 particle['y'] = rpg_characters[character]['y'];
 
                 rpg_particle_create(particle);
+
+            }else if(selected['type'] === 'stat'){
+                rpg_character_affect(
+                  character,
+                  selected['effect']['stat'],
+                  selected['effect']['damage']
+                );
+
+            }else if(selected['type'] === 'world-dynamic'){
+                var worlddynamic = {};
+                for(var property in selected['world-dynamic']){
+                    worlddynamic[property] = selected['world-dynamic'][property];
+                }
+                worlddynamic['x'] = Math.round(target_x - 12.5);
+                worlddynamic['y'] = Math.round(target_y - 12.5);
+
+                rpg_world_dynamic_create(worlddynamic);
             }
 
             break;
@@ -266,7 +274,7 @@ function rpg_particle_handle(){
 
         // Handle collisions with characters.
         for(var character in rpg_characters){
-            if(rpg_particles[particle]['owner'] === parseInt(character, 10)
+            if(rpg_particles[particle]['owner'] == character
               || rpg_particles[particle]['x'] <= rpg_characters[character]['x'] - rpg_characters[character]['width'] / 2
               || rpg_particles[particle]['x'] >= rpg_characters[character]['x'] + rpg_characters[character]['width'] / 2
               || rpg_particles[particle]['y'] <= rpg_characters[character]['y'] - rpg_characters[character]['height'] / 2
