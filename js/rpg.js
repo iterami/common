@@ -20,15 +20,6 @@ function rpg_character_create(properties){
 
     properties['color'] = properties['color'] || '#fff';
     properties['dead'] = false;
-    properties['equipment'] = properties['equipment'] || {
-      'feet': void 0,
-      'head': void 0,
-      'legs': void 0,
-      'main-hand': void 0,
-      'neck': void 0,
-      'off-hand': void 0,
-      'torso': void 0,
-    };
     properties['height'] = properties['height'] !== void 0
       ? properties['height']
       : 20;
@@ -52,8 +43,23 @@ function rpg_character_create(properties){
       properties['stats']['health'] = properties['stats']['health'] || {};
         properties['stats']['health']['current'] = properties['stats']['health']['current'] !== void 0
           ? properties['stats']['health']['current']
-          : 1;
-        properties['stats']['health']['max'] = properties['stats']['health']['max'] || 1;
+          : 10;
+        properties['stats']['health']['max'] = properties['stats']['health']['max'] || properties['stats']['health']['current'];
+        properties['stats']['health']['regeneration'] = properties['stats']['health']['regeneration'] || {};
+          properties['stats']['health']['regeneration']['current'] = properties['stats']['health']['regeneration']['current'] !== void 0
+            ? properties['stats']['health']['regeneration']['current']
+            : 0;
+          properties['stats']['health']['regeneration']['max'] = properties['stats']['health']['regeneration']['max'] || 1000;
+      properties['stats']['mana'] = properties['stats']['mana'] || {};
+        properties['stats']['mana']['current'] = properties['stats']['mana']['current'] !== void 0
+          ? properties['stats']['mana']['current']
+          : 10;
+        properties['stats']['mana']['max'] = properties['stats']['mana']['max'] || properties['stats']['mana']['current'];
+        properties['stats']['mana']['regeneration'] = properties['stats']['mana']['regeneration'] || {};
+          properties['stats']['mana']['regeneration']['current'] = properties['stats']['mana']['regeneration']['current'] !== void 0
+            ? properties['stats']['mana']['regeneration']['current']
+            : 0;
+          properties['stats']['mana']['regeneration']['max'] = properties['stats']['mana']['regeneration']['max'] || 100;
 
     rpg_characters.push(properties);
 }
@@ -78,12 +84,12 @@ function rpg_character_handle(){
             }
         }
 
-        // Handle character inventory.
+        // Handle character inventory item spells.
         for(var item in rpg_characters[character]['inventory']){
-            var selected = rpg_characters[character]['inventory'][item];
+            var selected = rpg_characters[character]['inventory'][item]['spell'];
 
-            if(selected['current'] < selected['reload']){
-                selected['current'] += 1;
+            if(selected['reload-current'] < selected['reload']){
+                selected['reload-current'] += 1;
                 continue;
             }
 
@@ -132,7 +138,7 @@ function rpg_character_handle(){
                 dy = rpg_characters[0]['y'] > rpg_characters[character]['y'] ? speeds[1] : -speeds[1];
             }
 
-            selected['current'] = 0;
+            selected['reload-current'] = 0;
             rpg_character_affect(
               character,
               selected['costs'],
@@ -142,8 +148,8 @@ function rpg_character_handle(){
             // Handle particle-creating spells.
             if(selected['type'] === 'particle'){
                 var particle = {};
-                for(var property in selected['particle']){
-                    particle[property] = selected['particle'][property];
+                for(var property in selected){
+                    particle[property] = selected[property];
                 }
                 particle['dx'] = dx;
                 particle['dy'] = dy;
@@ -180,10 +186,25 @@ function rpg_item_create(properties, type){
     properties = properties || {};
     type = type || 'any';
 
+    properties['cursor'] = properties['cursor'] || 'auto';
     properties['equipped'] = properties['equipped'] || false;
-    properties['owner'] = properties['owner'] || 'player';
+    properties['label'] = properties['label'] || '';
+    properties['owner'] = properties['owner'] || 0;
+    properties['slot'] = properties['slot'] || 'spellbook';
+    properties['spell'] = properties['spell'] || {};
+      properties['spell']['cost'] = properties['spell']['cost'] || 0;
+      properties['spell']['costs'] = properties['spell']['costs'] || 'mana';
+      properties['spell']['color'] = properties['spell']['color'] || '#fff';
+      properties['spell']['damage'] = properties['spell']['damage'] || 0;
+      properties['spell']['damages'] = properties['spell']['damages'] || 'health';
+      properties['spell']['lifespan'] = properties['spell']['lifespan'] || 50;
+      properties['spell']['reload'] = properties['spell']['reload'] || 0;
+      properties['spell']['reload-current'] = properties['spell']['reload-current'] || properties['spell']['reload'];
+      properties['spell']['speed-x'] = properties['spell']['speed-x'] || 5;
+      properties['spell']['speed-y'] = properties['spell']['speed-y'] || 5;
+      properties['spell']['type'] = properties['spell']['type'] || 'particle';
 
-    rpg_items.push(properties);
+    return properties;
 }
 
 function rpg_item_select(character, id){
@@ -205,6 +226,7 @@ function rpg_item_select(character, id){
     }
 }
 
+/*
 function rpg_item_toggle(id){
     if(rpg_items[id]['owner'] === false){
         return;
@@ -213,6 +235,7 @@ function rpg_item_toggle(id){
     // Toggle item on character.
     rpg_items[id]['equipped'] = !rpg_items[id]['equipped'];
 }
+*/
 
 function rpg_particle_create(properties){
     properties = properties || {};
@@ -326,7 +349,6 @@ function rpg_world_dynamic_create(properties){
 }
 
 var rpg_characters = [];
-var rpg_items = [];
 var rpg_particles = [];
 var rpg_world_dynamic = [];
 var rpg_world_static = [];
