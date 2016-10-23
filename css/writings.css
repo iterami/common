@@ -9,6 +9,9 @@ body{
     color: #aaa;
     font-family: monospace;
 }
+.center{
+    text-align: center;
+}
 hr{
     border: 2px solid #333;
 }
