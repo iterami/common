@@ -27,6 +27,8 @@ function rpg_character_create(properties){
     properties['inventory'] = properties['inventory'] || [];
     properties['player'] = properties['player'] || false;
     properties['selected'] = properties['selected'] || 0;
+    properties['target-x'] = properties['target-x'] || 0;
+    properties['target-y'] = properties['target-y'] || 0;
     properties['team'] = properties['team'] !== void 0
       ? properties['team']
       : 1;
@@ -84,6 +86,16 @@ function rpg_character_handle(){
             }
         }
 
+        // Update target.
+        if(character === '0'){
+            rpg_characters[character]['target-x'] = rpg_characters[character]['x'] + mouse_x - canvas_x;
+            rpg_characters[character]['target-y'] = rpg_characters[character]['y'] + mouse_y - canvas_y;
+
+        }else{
+            rpg_characters[character]['target-x'] = rpg_characters[0]['x'];
+            rpg_characters[character]['target-y'] = rpg_characters[0]['y'];
+        }
+
         // Handle character inventory item spells.
         for(var item in rpg_characters[character]['inventory']){
             var selected = rpg_characters[character]['inventory'][item]['spell'];
@@ -102,41 +114,19 @@ function rpg_character_handle(){
                 continue;
             }
 
-            var dx = 0;
-            var dy = 0;
-            var speeds = 0;
-            var target_x = 0;
-            var target_y = 0;
-
-            if(character === '0'){
-                if(mouse_lock_x < 0){
-                    continue;
-                }
-
-                target_x = rpg_characters[character]['x'] + mouse_x - canvas_x;
-                target_y = rpg_characters[character]['y'] + mouse_y - canvas_y;
-
-                speeds = math_movement_speed(
-                  rpg_characters[character]['x'],
-                  rpg_characters[character]['y'],
-                  target_x,
-                  target_y
-                );
-
-                dx = mouse_x > canvas_x ? speeds[0] : -speeds[0];
-                dy = mouse_y > canvas_y ? speeds[1] : -speeds[1];
-
-            }else{
-                speeds = math_movement_speed(
-                  rpg_characters[character]['x'],
-                  rpg_characters[character]['y'],
-                  rpg_characters[0]['x'],
-                  rpg_characters[0]['y']
-                );
-
-                dx = rpg_characters[0]['x'] > rpg_characters[character]['x'] ? speeds[0] : -speeds[0];
-                dy = rpg_characters[0]['y'] > rpg_characters[character]['y'] ? speeds[1] : -speeds[1];
+            if(character === '0'
+              && mouse_lock_x < 0){
+                continue;
             }
+
+            var speeds = math_movement_speed(
+              rpg_characters[character]['x'],
+              rpg_characters[character]['y'],
+              rpg_characters[character]['target-x'],
+              rpg_characters[character]['target-y']
+            );
+            var dx = rpg_characters[character]['target-x'] > rpg_characters[character]['x'] ? speeds[0] : -speeds[0];
+            var dy = rpg_characters[character]['target-y'] > rpg_characters[character]['y'] ? speeds[1] : -speeds[1];
 
             selected['reload-current'] = 0;
             rpg_character_affect(
