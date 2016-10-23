@@ -162,19 +162,15 @@ function rpg_character_handle(){
             }else if(selected['type'] === 'stat'){
                 rpg_character_affect(
                   character,
-                  selected['effect']['stat'],
-                  selected['effect']['damage']
+                  selected['damages'],
+                  selected['damage']
                 );
 
-            }else if(selected['type'] === 'world-dynamic'){
-                var worlddynamic = {};
-                for(var property in selected['world-dynamic']){
-                    worlddynamic[property] = selected['world-dynamic'][property];
-                }
-                worlddynamic['x'] = Math.round(target_x - 12.5);
-                worlddynamic['y'] = Math.round(target_y - 12.5);
-
-                rpg_world_dynamic_create(worlddynamic);
+            }else if(selected['type'] === 'character'){
+                rpg_character_create({
+                  'x': Math.round(target_x - 12.5),
+                  'y': Math.round(target_y - 12.5),
+                });
             }
 
             break;
