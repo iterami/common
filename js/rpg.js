@@ -158,8 +158,8 @@ function rpg_character_handle(){
 
             }else if(selected['type'] === 'character'){
                 rpg_character_create({
-                  'x': Math.round(target_x - 12.5),
-                  'y': Math.round(target_y - 12.5),
+                  'x': rpg_characters[character]['target-x'],
+                  'y': rpg_characters[character]['target-y'],
                 });
             }
 
