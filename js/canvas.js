@@ -57,6 +57,27 @@ function canvas_drawloop(){
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 }
 
+function canvas_draw_path(vertices, properties, style){
+    canvas_buffer.beginPath();
+    for(var vertex in vertices){
+        canvas_buffer[vertices[vertex]['type'] || 'lineTo'](
+          vertices[vertex]['x'],
+          vertices[vertex]['y'],
+          vertices[vertex]['radius'],
+          vertices[vertex]['startAngle'],
+          vertices[vertex]['endAngle'],
+          vertices[vertex]['antiClockwise']
+        );
+    }
+    canvas_buffer.closePath();
+
+    for(var property in properties){
+        canvas_buffer[property] = properties[property];
+    }
+
+    canvas_buffer[style || 'fill']();
+}
+
 function canvas_init(){
     canvas_resize();
     canvas_setmode(0);
