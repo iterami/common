@@ -2,6 +2,7 @@ body{
     background: #000;
     color: #aaa;
     font-family: monospace;
+    font-size: 14px;
     margin: 0;
 }
 canvas{

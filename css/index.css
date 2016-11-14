@@ -11,6 +11,7 @@ body{
     background: #000;
     color: #aaa;
     font-family: monospace;
+    font-size: 14px;
     text-align: center;
 }
 .dl a{
