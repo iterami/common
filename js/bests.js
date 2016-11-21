@@ -20,7 +20,7 @@ function bests_reset(){
 
     for(var best in bests_bests){
         bests_bests[best] = bests_info[best]['default'];
-        bests_update(bests_bests[best]);
+        bests_update(best);
     }
 }
 
