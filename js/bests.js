@@ -6,7 +6,7 @@ function bests_init(newprefix, bests){
     for(var best in bests){
         bests_info[best] = {
           'default': bests[best]['default'],
-          'more': bests[best]['more'] || false,
+          'more': bests[best]['more'] || true,
         };
         bests_bests[best] = parseFloat(window.localStorage.getItem(bests_prefix + best))
           || bests_info[best]['default'];
