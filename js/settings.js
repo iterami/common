@@ -18,7 +18,7 @@ function settings_init(newprefix, newsettings){
 
 function settings_reset(){
     if(!window.confirm(settings_reset_confirm)){
-        return;
+        return false;
     }
 
     for(var setting in settings_settings){
