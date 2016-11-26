@@ -1,145 +1,189 @@
 'use strict';
 
-function audio_create(id, properties){
-    audio_audio[id] = {};
-    audio_audio[id]['playing'] = false;
+// Required args: id
+// Optional args: properties
+function audio_create(args){
+    args['properties'] = args['properties'] || {};
 
-    for(var property in properties){
-        audio_audio[id][property] = properties[property];
+    audio_audio[args['id']] = {};
+    audio_audio[args['id']]['playing'] = false;
+
+    for(var property in args['properties']){
+        audio_audio[args['id']][property] = args['properties'][property];
     }
 
-    audio_audio[id]['connections'] = properties['connections'] || [
+    audio_audio[args['id']]['connections'] = args['properties']['connections'] || [
       {
         'frequency': {
-          'value': audio_audio[id]['frequency'] || 100,
+          'value': audio_audio[args['id']]['frequency'] || 100,
         },
         'label': 'Oscillator',
-        'type': audio_audio[id]['type'] || 'sine',
+        'type': audio_audio[args['id']]['type'] || 'sine',
       },
       {
         'gain': {
-          'value': properties['volume'] || audio_volume,
+          'value': args['properties']['volume'] || audio_volume,
         },
         'label': 'Gain',
       },
     ];
 
-    audio_audio[id]['connections'][0]['id'] = id;
-    audio_audio[id]['connections'][0]['onended'] = function(){
-        audio_onended(this);
+    audio_audio[args['id']]['connections'][0]['id'] = args['id'];
+    audio_audio[args['id']]['connections'][0]['onended'] = function(){
+        audio_onended({
+          'this': this,
+        });
     };
 }
 
-function audio_init(default_volume){
-    audio_context = new window.AudioContext();
-    audio_volume = default_volume !== void 0
-      ? default_volume
+// Optional args: volume
+function audio_init(args){
+    args = args || {};
+    args['volume'] = args['volume'] !== void 0
+      ? args['volume']
       : 1;
+
+    audio_context = new window.AudioContext();
+    audio_volume = args['volume'];
 }
 
-function audio_node_create(id, properties){
-    var source = audio_context['create' + properties['label']](
-      properties['arg0'],
-      properties['arg1'],
-      properties['arg2']
+// Optional args: id, properties
+function audio_node_create(args){
+    args = args || {};
+    args['id'] = args['id'] !== void 0
+      ? args['id']
+      : false;
+    args['properties'] = args['properties'] || {};
+
+    var source = audio_context['create' + args['properties']['label']](
+      args['properties']['arg0'],
+      args['properties']['arg1'],
+      args['properties']['arg2']
     );
 
-    for(var property in properties){
-        if(typeof properties[property] === 'object'){
-            for(var subproperty in properties[property]){
-                source[property][subproperty] = properties[property][subproperty];
+    for(var property in args['properties']){
+        if(typeof args['properties'][property] === 'object'){
+            for(var subproperty in args['properties'][property]){
+                source[property][subproperty] = args['properties'][property][subproperty];
             }
 
         }else{
-            source[property] = properties[property];
+            source[property] = args['properties'][property];
         }
     }
 
-    audio_sources[id][properties['label']] = source;
+    if(args['id'] === false){
+        return source;
+    }
+
+    audio_sources[args['id']][args['properties']['label']] = source;
 }
 
-function audio_onended(that){
-    audio_audio[that.id]['playing'] = false;
+// Required args: this
+function audio_onended(args){
+    audio_audio[args['this'].id]['playing'] = false;
 
-    if(audio_audio[that.id]['repeat']){
-        if(audio_audio[that.id]['timeout'] <= 0){
-            audio_start(that.id);
+    if(audio_audio[args['this'].id]['repeat']){
+        if(audio_audio[args['this'].id]['timeout'] <= 0){
+            audio_start({
+              'id': args['this'].id,
+            });
 f
         }else{
             window.setTimeout(
-              'audio_start("' + that.id + '");',
-              audio_audio[that.id]['duration'] * audio_audio[that.id]['timeout']
+              'audio_start({id:"' + args['this'].id + '"});',
+              audio_audio[args['this'].id]['duration'] * audio_audio[args['this'].id]['timeout']
             );
         }
     }
 
-    delete audio_sources[that.id];
+    delete audio_sources[args['this'].id];
 }
 
-function audio_source_create(id, volume_multiplier){
-    audio_sources[id] = {
-      'duration': audio_audio[id]['duration'] || 0,
-      'start': audio_audio[id]['start'] || 0,
-      'timeout': audio_audio[id]['timeout'] || 1000,
+// Required args: id
+// Optional args: volume-multiplier
+function audio_source_create(args){
+    args['volume-multiplier'] = args['volume-multiplier'] !== void 0
+      ? args['volume-multiplier']
+      : 1;
+
+    audio_sources[args['id']] = {
+      'duration': audio_audio[args['id']]['duration'] || 0,
+      'start': audio_audio[args['id']]['start'] || 0,
+      'timeout': audio_audio[args['id']]['timeout'] || 1000,
     };
 
     // Create audio nodes.
-    var connections_length = audio_audio[id]['connections'].length;
+    var connections_length = audio_audio[args['id']]['connections'].length;
     for(var i = 0; i < connections_length; i++){
-        audio_node_create(
-          id,
-          audio_audio[id]['connections'][i]
-        );
+        audio_node_create({
+          'id': args['id'],
+          'properties': audio_audio[args['id']]['connections'][i],
+        });
 
-        if(audio_audio[id]['connections'][i]['label'] === 'Gain'){
-            var volume = audio_audio[id]['volume'] || audio_volume;
-            volume_multiplier = volume_multiplier !== void 0
-              ? volume_multiplier
-              : false;
-            if(volume_multiplier !== false){
-                volume *= volume_multiplier;
-            }
-            audio_sources[id]['Gain']['gain']['value'] = volume;
+        if(audio_audio[args['id']]['connections'][i]['label'] === 'Gain'){
+            var volume = audio_audio[args['id']]['volume'] || audio_volume;
+            audio_sources[args['id']]['Gain']['gain']['value'] =
+              (audio_audio[args['id']]['volume'] || audio_volume)
+                * args['volume-multiplier'];
         }
     }
 
     // Connect audio nodes.
     for(i = 0; i < connections_length - 1; i++){
-        audio_sources[id][audio_audio[id]['connections'][i]['label']].connect(audio_sources[id][audio_audio[id]['connections'][i + 1]['label']]);
+        audio_sources[args['id']][audio_audio[args['id']]['connections'][i]['label']].connect(
+          audio_sources[args['id']][audio_audio[args['id']]['connections'][i + 1]['label']]
+        );
     }
-    audio_sources[id][audio_audio[id]['connections'][connections_length - 1]['label']].connect(audio_context.destination);
+    audio_sources[args['id']][audio_audio[args['id']]['connections'][connections_length - 1]['label']].connect(
+      audio_context.destination
+    );
 }
 
-function audio_start(id, volume_multiplier){
-    if(volume_multiplier === 0){
+// Required args: id
+// Optional args: volume-multiplier
+function audio_start(args){
+    args['volume-multiplier'] = args['volume-multiplier'] !== void 0
+      ? args['volume-multiplier']
+      : 1;
+
+    if(args['volume-multiplier'] === 0){
         return;
     }
 
-    if(audio_audio[id]['playing']){
-        audio_stop(id);
+    if(audio_audio[args['id']]['playing']){
+        audio_stop({
+          'id': args['id'],
+        });
     }
 
-    audio_source_create(
-      id,
-      volume_multiplier
-    );
+    audio_source_create({
+      'id': args['id'],
+      'volume-multiplier': args['volume-multiplier'],
+    });
 
-    var startTime = audio_context.currentTime + audio_sources[id]['start'];
-    audio_audio[id]['playing'] = true;
-    audio_sources[id][audio_audio[id]['connections'][0]['label']].start(startTime);
-    audio_stop(
-      id,
-      startTime + audio_sources[id]['duration']
-    );
+    var startTime = audio_context.currentTime + audio_sources[args['id']]['start'];
+    audio_audio[args['id']]['playing'] = true;
+    audio_sources[args['id']][audio_audio[args['id']]['connections'][0]['label']].start(startTime);
+    audio_stop({
+      'id': args['id'],
+      'when': startTime + audio_sources[args['id']]['duration'],
+    });
 }
 
-function audio_stop(id, when){
-    audio_sources[id][audio_audio[id]['connections'][0]['label']].stop(when || void 0);
+// Required args: id
+// Optional args: when
+function audio_stop(args){
+    args['when'] = args['when'] || void 0;
+
+    audio_sources[args['id']][audio_audio[args['id']]['connections'][0]['label']].stop(args['when']);
 }
 
 function audio_stop_all(){
     for(var id in audio_sources){
-        audio_stop(id);
+        audio_stop({
+          'id': id,
+        });
     }
 }
 
