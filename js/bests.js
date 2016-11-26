@@ -6,7 +6,7 @@ function bests_init(newprefix, bests){
     for(var best in bests){
         bests_info[best] = {
           'default': bests[best]['default'],
-          'more': bests[best]['more'] || true,
+          'less': bests[best]['less'] || false,
         };
         var best_localstorage = window.localStorage.getItem(bests_prefix + best);
         if(typeof bests_info[best]['default'] === 'number'){
@@ -34,7 +34,7 @@ function bests_reset(){
 
 function bests_update(key, value){
     if(typeof bests_info[key]['default'] === 'number'){
-        if(!bests_info[key]['more'] || false){
+        if(bests_info[key]['less'] || false){
             if(value < bests_bests[key]){
                 bests_bests[key] = value;
             }
