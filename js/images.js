@@ -1,10 +1,14 @@
 'use strict';
 
-function images_new(id, src, todo){
+// Required args: id, src
+// Optional args: todo
+function images_new(args){
+    args['todo'] = args['todo'] || function(){};
+
     var image = new Image();
-    image.onload = todo || function(){};
-    image.src = src;
-    images_images[id] = image;
+    image.onload = args['todo'];
+    image.src = args['src'];
+    images_images[args['id']] = image;
     return image;
 }
 

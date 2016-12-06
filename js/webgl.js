@@ -637,10 +637,10 @@ function webgl_shader_create(id, type, source){
 
 function webgl_texture_set(entityid, image){
     webgl_entities[entityid]['texture'] = webgl_buffer.createTexture();
-    webgl_entities[entityid]['image'] = images_new(
-      entityid + '-texture',
-      image,
-      function(){
+    webgl_entities[entityid]['image'] = images_new({
+      'id': entityid + '-texture',
+      'src': image,
+      'todo': function(){
           webgl_buffer.bindTexture(
             webgl_buffer.TEXTURE_2D,
             webgl_entities[entityid]['texture']
@@ -667,8 +667,8 @@ function webgl_texture_set(entityid, image){
             webgl_buffer.TEXTURE_2D,
             void 0
           );
-      }
-    );
+      },
+    });
 }
 
 function webgl_vertexattribarray_set(attribute){
