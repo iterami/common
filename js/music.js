@@ -1,6 +1,10 @@
 'use strict';
 
-function music_iterateTracks(direction){
+// Optional args: back
+function music_iterateTracks(args){
+    args = args || {};
+    args['back'] = args['back'] || false;
+
     // Check if tracks table has any tracks.
     if(!document.getElementById('tracks').firstChild){
         return;
@@ -10,9 +14,9 @@ function music_iterateTracks(direction){
     if(document.getElementById('shuffle').checked){
         var number_of_tracks = document.getElementById('tracks').childNodes.length;
 
-        music_setTrack(
-          document.getElementById('tracks').childNodes[random_integer(number_of_tracks)]
-        );
+        music_setTrack({
+          'track': document.getElementById('tracks').childNodes[random_integer(number_of_tracks)],
+        });
 
         return;
     }
@@ -21,26 +25,26 @@ function music_iterateTracks(direction){
     var track = document.getElementsByClassName('playing')[0];
 
     // Next track.
-    if(direction > 0){
-        music_setTrack(
-          (track == null
+    if(args['back']){
+        music_setTrack({
+          'track': (track == null
             || !track.nextSibling)
               ? document.getElementById('tracks').firstChild
-              : track.nextSibling
-        );
+              : track.nextSibling,
+        });
 
     // Previous track.
     }else{
-        music_setTrack(
-          (track == null
+        music_setTrack({
+          'track': (track == null
             || !track.previousSibling)
               ? document.getElementById('tracks').lastChild
-              : track.previousSibling
-        );
+              : track.previousSibling,
+        });
     }
 }
 
-function music_pauseTrack(reset){
+function music_pauseTrack(){
     window.clearInterval(music_interval);
 
     document.getElementById('play-button').value = 'Play [SPACE]';
@@ -70,7 +74,9 @@ function music_playTrack(){
     document.getElementById('audio-player').play();
 
     music_playing = true;
-    music_setTitle(document.getElementById('audio-player').src.split('/').pop());
+    music_setTitle({
+      'title': document.getElementById('audio-player').src.split('/').pop(),
+    });
     music_interval = window.setInterval(
       updateProgress,
       parseFloat(1000 / music_playbackrate) || 1000
@@ -87,27 +93,31 @@ function music_resize(){
     draw();
 }
 
-function music_setTitle(title){
-    title = title || '';
+// Optional args: title
+function music_setTitle(args){
+    args = args || {};
+    args['title'] = args['title'] || '';
 
-    document.getElementById('title').innerHTML = title;
+    document.getElementById('title').innerHTML = args['title'];
 
-    if(title.length > 0){
-        title += ' - ';
+    if(args['title'].length > 0){
+        args['title'] += ' - ';
     }
 
-    document.title = title + music_prefix;
+    document.title = args['title'] + music_prefix;
 }
 
-function music_setTrack(track){
-    track = track || document.getElementById('tracks').childNodes[0];
+// Optional args: track
+function music_setTrack(args){
+    args = args || {};
+    args['track'] = args['track'] || document.getElementById('tracks').childNodes[0];
 
-    if(track === void 0){
+    if(args['track'] === void 0){
         return;
     }
 
     // Pause any playing tracks.
-    music_pauseTrack(true);
+    music_pauseTrack();
 
     // Remove the `playing` class from all <tbody>s.
     var tracks = document.getElementsByTagName('tbody');
@@ -116,7 +126,7 @@ function music_setTrack(track){
     }
 
     // Add the `playing` class to the <tbody> of this track.
-    track.className = 'playing';
+    args['track'].className = 'playing';
     document.getElementById('audio-player').src =
       document.getElementsByClassName('playing')[0].firstChild.childNodes[0].innerHTML;
     document.getElementById('audio-player').playbackRate = music_playbackrate;
@@ -138,25 +148,25 @@ var music_prefix = '';
 var music_volume = 1;
 var music_width = 0;
 
-document.getElementById('audio-mute').onclick = function(e){
+document.getElementById('audio-mute').onclick = function(event){
     document.getElementById('audio-player').volume = document.getElementById('audio-mute').checked
       ? 0
       : music_volume;
 };
 
 document.getElementById('music-display').onmousedown =
-  document.getElementById('music-display').ontouchstart = function(e){
+  document.getElementById('music-display').ontouchstart = function(event){
     if(!music_playing){
         music_playTrack();
     }
 
     music_mouse_drag = true;
-    music_percent = e.pageX / music_width;
+    music_percent = event.pageX / music_width;
     seek(music_percent);
     updateProgress();
 };
 
-document.getElementById('audio-volume').oninput = function(e){
+document.getElementById('audio-volume').oninput = function(event){
     music_volume = document.getElementById('audio-volume').value;
     document.getElementById('audio-player').volume = music_volume;
 
@@ -173,7 +183,7 @@ document.getElementById('audio-volume').oninput = function(e){
     document.getElementById('audio-mute').checked = false;
 };
 
-document.getElementById('autoplay').onchange = function(e){
+document.getElementById('autoplay').onchange = function(event){
     var state = document.getElementById('autoplay').checked;
 
     if(!state){
@@ -187,7 +197,7 @@ document.getElementById('autoplay').onchange = function(e){
     }
 };
 
-document.getElementById('playbackrate').oninput = function(e){
+document.getElementById('playbackrate').oninput = function(event){
     music_playbackrate = parseFloat(document.getElementById('playbackrate').value) || 1;
 
     if(music_playbackrate != 1){
@@ -209,7 +219,7 @@ document.getElementById('playbackrate').oninput = function(e){
     );
 };
 
-document.getElementById('shuffle').onchange = function(e){
+document.getElementById('shuffle').onchange = function(event){
     var state = document.getElementById('shuffle').checked;
 
     if(!state){
@@ -223,15 +233,15 @@ document.getElementById('shuffle').onchange = function(e){
     }
 };
 
-window.onkeydown = function(e){
-    var key = e.keyCode || e.which;
+window.onkeydown = function(event){
+    var key = event.keyCode || event.which;
 
     // Space: pause or play
     if(key === 32){
-        e.preventDefault();
+        event.preventDefault();
 
         if(music_playing){
-            music_pauseTrack(false);
+            music_pauseTrack();
 
         }else{
             music_playTrack();
@@ -249,18 +259,18 @@ window.onkeydown = function(e){
     }
 };
 
-window.onmousemove = function(e){
+window.onmousemove = function(event){
     if(!music_playing
       || !music_mouse_drag){
         return;
     }
 
-    music_percent = e.pageX / music_width;
+    music_percent = event.pageX / music_width;
     seek(music_percent);
     draw();
 };
 
-window.onmouseup = function(e){
+window.onmouseup = function(event){
     music_mouse_drag = false;
 };
 
