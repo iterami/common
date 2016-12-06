@@ -1,12 +1,13 @@
 'use strict';
 
-function bests_init(newprefix, bests){
-    bests_prefix = newprefix;
+// Required args: bests, prefix
+function bests_init(args){
+    bests_prefix = args['prefix'];
 
-    for(var best in bests){
+    for(var best in args['bests']){
         bests_info[best] = {
-          'default': bests[best]['default'],
-          'less': bests[best]['less'] || false,
+          'default': args['bests'][best]['default'],
+          'less': args['bests'][best]['less'] || false,
         };
         var best_localstorage = window.localStorage.getItem(bests_prefix + best);
         if(typeof bests_info[best]['default'] === 'number'){
@@ -32,25 +33,26 @@ function bests_reset(){
     }
 }
 
-function bests_update(key, value){
-    if(typeof bests_info[key]['default'] === 'number'){
-        if(bests_info[key]['less'] || false){
-            if(value < bests_bests[key]){
-                bests_bests[key] = value;
+// Required args: key, value
+function bests_update(args){
+    if(typeof bests_info[args['key']]['default'] === 'number'){
+        if(bests_info[args['key']]['less'] || false){
+            if(args['value'] < bests_bests[args['key']]){
+                bests_bests[args['key']] = args['value'];
             }
 
-        }else if(value > bests_bests[key]){
-            bests_bests[key] = value;
+        }else if(args['value'] > bests_bests[args['key']]){
+            bests_bests[args['key']] = args['value'];
         }
 
-        if(bests_bests[key] !== bests_info[key]['default']){
+        if(bests_bests[args['key']] !== bests_info[args['key']]['default']){
             window.localStorage.setItem(
-              bests_prefix + key,
-              bests_bests[key]
+              bests_prefix + args['key'],
+              bests_bests[args['key']]
             );
 
         }else{
-            window.localStorage.removeItem(bests_prefix + key);
+            window.localStorage.removeItem(bests_prefix + args['key']);
         }
 
     }else{
