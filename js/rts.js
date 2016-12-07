@@ -1,28 +1,31 @@
 'use strict';
 
-function rts_building_build(player, building_type, building_x, building_y, fog_override){
-    if(rts_players[player]['money'] < rts_buildings[building_type]['cost']){
+// Required args: player, type, x, y
+// Optional args: fog
+function rts_building_build(args){
+    if(rts_players[args['player']]['money'] < rts_buildings[args['type']]['cost']){
         return;
     }
 
     // Don't allow building outside of level.
-    if(building_x > settings_settings['level-size'] - rts_buildings[building_type]['width']){
-        building_x = settings_settings['level-size'] - rts_buildings[building_type]['width'];
+    if(args['x'] > settings_settings['level-size'] - rts_buildings[args['type']]['width']){
+        args['x'] = settings_settings['level-size'] - rts_buildings[args['type']]['width'];
 
-    }else if(building_x < -settings_settings['level-size']){
-        building_x = -settings_settings['level-size'];
+    }else if(args['x'] < -settings_settings['level-size']){
+        args['x'] = -settings_settings['level-size'];
     }
 
-    if(building_y > settings_settings['level-size'] - rts_buildings[building_type]['height']){
-        building_y = settings_settings['level-size'] - rts_buildings[building_type]['height'];
+    if(args['y'] > settings_settings['level-size'] - rts_buildings[args['type']]['height']){
+        args['y'] = settings_settings['level-size'] - rts_buildings[args['type']]['height'];
 
-    }else if(building_y < -settings_settings['level-size']){
-        building_y = -settings_settings['level-size'];
+    }else if(args['y'] < -settings_settings['level-size']){
+        args['y'] = -settings_settings['level-size'];
     }
 
     // Don't allow building on fog.
-    if(player === 0
-      && !(fog_override || false)){
+    args['fog'] = args['fog'] || false;
+    if(args['player'] === 0
+      && !args['fog']){
         var loop_counter = rts_fog.length - 1;
         if(loop_counter >= 0){
             do{
@@ -31,10 +34,10 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
                 }
 
                 if(math_distance(
-                  building_x,
-                  building_y,
-                  rts_fog[loop_counter]['x'] - settings_settings['level-size'] + rts_buildings[building_type]['width'] / 2,
-                  rts_fog[loop_counter]['y'] - settings_settings['level-size'] + rts_buildings[building_type]['height'] / 2
+                  args['x'],
+                  args['y'],
+                  rts_fog[loop_counter]['x'] - settings_settings['level-size'] + rts_buildings[args['type']]['width'] / 2,
+                  rts_fog[loop_counter]['y'] - settings_settings['level-size'] + rts_buildings[args['type']]['height'] / 2
                 ) < 70){
                     return;
                 }
@@ -43,14 +46,14 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
     }
 
     // Don't allow building too far from another building.
-    if(rts_players[player]['buildings'].length > 0){
+    if(rts_players[args['player']]['buildings'].length > 0){
         var build = false;
-        for(var building in rts_players[player]['buildings']){
+        for(var building in rts_players[args['player']]['buildings']){
             if(math_distance(
-              building_x,
-              building_y,
-              rts_players[player]['buildings'][building]['x'],
-              rts_players[player]['buildings'][building]['y']
+              args['x'],
+              args['y'],
+              rts_players[args['player']]['buildings'][building]['x'],
+              rts_players[args['player']]['buildings'][building]['y']
             ) < 200){
                 build = true;
                 break;
@@ -62,16 +65,16 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
     }
 
     // Don't allow building on other buildings.
-    for(var building in rts_players[player]['buildings']){
+    for(var building in rts_players[args['player']]['buildings']){
         if(math_rectangle_overlap(
-          building_x,
-          building_y,
-          rts_buildings[building_type]['height'],
-          rts_buildings[building_type]['width'],
-          rts_players[player]['buildings'][building]['x'],
-          rts_players[player]['buildings'][building]['y'],
-          rts_players[player]['buildings'][building]['height'],
-          rts_players[player]['buildings'][building]['width']
+          args['x'],
+          args['y'],
+          rts_buildings[args['type']]['height'],
+          rts_buildings[args['type']]['width'],
+          rts_players[args['player']]['buildings'][building]['x'],
+          rts_players[args['player']]['buildings'][building]['y'],
+          rts_players[args['player']]['buildings'][building]['height'],
+          rts_players[args['player']]['buildings'][building]['width']
         )){
             return;
         }
@@ -80,10 +83,10 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
     // Don't allow building on dynamic world elements.
     for(var element in rts_world_dynamic){
         if(math_rectangle_overlap(
-          building_x,
-          building_y,
-          rts_buildings[building_type]['height'],
-          rts_buildings[building_type]['width'],
+          args['x'],
+          args['y'],
+          rts_buildings[args['type']]['height'],
+          rts_buildings[args['type']]['width'],
           rts_world_dynamic[element]['x'],
           rts_world_dynamic[element]['y'],
           rts_world_dynamic[element]['height'],
@@ -93,32 +96,32 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
         }
     }
 
-    rts_players[player]['money'] -= rts_buildings[building_type]['cost'];
+    rts_players[args['player']]['money'] -= rts_buildings[args['type']]['cost'];
     var building = {
       'damage': 0,
-      'destination-x': building_x + rts_buildings[building_type]['width'] / 2,
-      'destination-y': building_y + rts_buildings[building_type]['height'] / 2,
+      'destination-x': args['x'] + rts_buildings[args['type']]['width'] / 2,
+      'destination-y': args['y'] + rts_buildings[args['type']]['height'] / 2,
       'fog-radius': 290,
       'income': 0,
       'range': 0,
       'reload': 0,
       'reload-current': 0,
       'selected': false,
-      'type': building_type,
-      'x': building_x,
-      'y': building_y,
+      'type': args['type'],
+      'x': args['x'],
+      'y': args['y'],
     };
-    for(var property in rts_buildings[building_type]){
-        building[property] = rts_buildings[building_type][property];
+    for(var property in rts_buildings[args['type']]){
+        building[property] = rts_buildings[args['type']][property];
     }
 
-    rts_players[player]['buildings'].push(building);
+    rts_players[args['player']]['buildings'].push(building);
 
     if(building['income'] != 0){
-        rts_players[player]['income'] += building['income'];
+        rts_players[args['player']]['income'] += building['income'];
     }
 
-    if(player === 0){
+    if(args['player'] === 0){
         rts_build_mode = '';
 
         if(rts_fog.length > 0){
@@ -127,17 +130,18 @@ function rts_building_build(player, building_type, building_x, building_y, fog_o
     }
 }
 
-function rts_building_destroy(player, building){
-    if(rts_selected_id === building){
+// Required args: id, player
+function rts_building_destroy(args){
+    if(rts_selected_id === args['id']){
         rts_build_mode = '';
         rts_selected_id = -1;
         rts_selected_type = '';
     }
 
-    rts_players[player]['income'] -= rts_players[player]['buildings'][building]['income'] || 0;
+    rts_players[args['player']]['income'] -= rts_players[args['player']]['buildings'][args['id']]['income'] || 0;
 
-    rts_players[player]['buildings'].splice(
-      building,
+    rts_players[args['player']]['buildings'].splice(
+      args['id'],
       1
     );
 }
@@ -368,10 +372,10 @@ function rts_bullet_handle(){
 
                 rts_players[0]['units'][unit]['health'] -= rts_bullets[bullet]['damage'];
                 if(rts_players[0]['units'][unit]['health'] <= 0){
-                    rts_unit_destroy(
-                      0,
-                      unit
-                    );
+                    rts_unit_destroy({
+                      'id': unit,
+                      'player': 0,
+                    });
                 }
 
                 break;
@@ -387,10 +391,10 @@ function rts_bullet_handle(){
 
                 rts_players[0]['buildings'][building]['health'] -= rts_bullets[bullet]['damage'];
                 if(rts_players[0]['buildings'][building]['health'] <= 0){
-                    rts_building_destroy(
-                      0,
-                      building
-                    );
+                    rts_building_destroy({
+                      'id': building,
+                      'player': 0,
+                    });
                 }
 
                 break;
@@ -409,10 +413,10 @@ function rts_bullet_handle(){
 
                 rts_players[1]['units'][unit]['health'] -= rts_bullets[bullet]['damage'];
                 if(rts_players[1]['units'][unit]['health'] <= 0){
-                    rts_unit_destroy(
-                      1,
-                      unit
-                    );
+                    rts_unit_destroy({
+                      'id': unit,
+                      'player': 1,
+                    });
                 }
 
                 break;
@@ -428,10 +432,10 @@ function rts_bullet_handle(){
 
                 rts_players[1]['buildings'][building]['health'] -= rts_bullets[bullet]['damage'];
                 if(rts_players[1]['buildings'][building]['health'] <= 0){
-                    rts_building_destroy(
-                      1,
-                      building
-                    );
+                    rts_building_destroy({
+                      'id': building,
+                      'player': 1,
+                    });
                 }
 
                 break;
@@ -445,15 +449,16 @@ function rts_bullet_handle(){
     }
 }
 
-function rts_camera_validatemove(mouse_x, mouse_y){
-    camera_x = -rts_math[0] * (mouse_x - 100);
+// Required args: x, y
+function rts_camera_validatemove(args){
+    camera_x = -rts_math[0] * (args['x'] - 100);
     if(camera_x > settings_settings['level-size']){
         camera_x = settings_settings['level-size'];
     }else if(camera_x < -settings_settings['level-size']){
         camera_x = -settings_settings['level-size'];
     }
 
-    camera_y = -rts_math[0] * (mouse_y - canvas_height + 100);
+    camera_y = -rts_math[0] * (args['y'] - canvas_height + 100);
     if(camera_y > settings_settings['level-size']){
         camera_y = settings_settings['level-size'];
     }else if(camera_y < -settings_settings['level-size']){
@@ -461,25 +466,29 @@ function rts_camera_validatemove(mouse_x, mouse_y){
     }
 }
 
-function rts_destionation_set(on_minimap){
+// Optional args: minimap
+function rts_destionation_set(args){
+    args = args || {};
+    args['minimap'] = args['minimap'] || false;
+
     if(rts_selected_type === 'unit'){
         for(var unit in rts_players[0]['units']){
             if(!rts_players[0]['units'][unit]['selected']){
                 continue;
             }
 
-            rts_players[0]['units'][unit]['destination-x'] = on_minimap
+            rts_players[0]['units'][unit]['destination-x'] = args['minimap']
               ? rts_math[0] * (mouse_x - 100)
               : mouse_x - canvas_x - camera_x;
 
-            rts_players[0]['units'][unit]['destination-y'] = on_minimap
+            rts_players[0]['units'][unit]['destination-y'] = args['minimap']
               ? rts_math[0] * (mouse_y - canvas_height + 100)
               : mouse_y - canvas_y - camera_y;
 
-            rts_destionation_validate(
-              'units',
-              unit
-            );
+            rts_destionation_validate({
+              'id': unit,
+              'type': 'units',
+            });
         }
 
         return;
@@ -490,32 +499,33 @@ function rts_destionation_set(on_minimap){
             continue;
         }
 
-        rts_players[0]['buildings'][building]['destination-x'] = on_minimap
+        rts_players[0]['buildings'][building]['destination-x'] = args['minimap']
           ? rts_math[0] * (mouse_x - 100)
           : mouse_x - canvas_x - camera_x;
 
-        rts_players[0]['buildings'][building]['destination-y'] = on_minimap
+        rts_players[0]['buildings'][building]['destination-y'] = args['minimap']
           ? rts_math[0] * (mouse_y - canvas_height + 100)
           : mouse_y - canvas_y - camera_y;
 
-        rts_destionation_validate(
-          'buildings',
-          building
-        );
+        rts_destionation_validate({
+          'id': building,
+          'type': 'buildings',
+        });
     }
 }
 
-function rts_destionation_validate(type, id){
-    if(rts_players[0][type][id]['destination-x'] > settings_settings['level-size']){
-        rts_players[0][type][id]['destination-x'] = settings_settings['level-size'];
-    }else if(rts_players[0][type][id]['destination-x'] < -settings_settings['level-size']){
-        rts_players[0][type][id]['destination-x'] = -settings_settings['level-size'];
+// Required args: id, type
+function rts_destionation_validate(args){
+    if(rts_players[0][args['type']][args['id']]['destination-x'] > settings_settings['level-size']){
+        rts_players[0][args['type']][args['id']]['destination-x'] = settings_settings['level-size'];
+    }else if(rts_players[0][args['type']][args['id']]['destination-x'] < -settings_settings['level-size']){
+        rts_players[0][args['type']][args['id']]['destination-x'] = -settings_settings['level-size'];
     }
 
-    if(rts_players[0][type][id]['destination-y'] > settings_settings['level-size']){
-        rts_players[0][type][id]['destination-y'] = settings_settings['level-size'];
-    }else if(rts_players[0][type][id]['destination-y'] < -settings_settings['level-size']){
-        rts_players[0][type][id]['destination-y'] = -settings_settings['level-size'];
+    if(rts_players[0][args['type']][args['id']]['destination-y'] > settings_settings['level-size']){
+        rts_players[0][args['type']][args['id']]['destination-y'] = settings_settings['level-size'];
+    }else if(rts_players[0][args['type']][args['id']]['destination-y'] < -settings_settings['level-size']){
+        rts_players[0][args['type']][args['id']]['destination-y'] = -settings_settings['level-size'];
     }
 }
 
@@ -532,21 +542,21 @@ function rts_players_handle(){
 
         if(rts_players[player]['ai'] !== false){
             if(rts_players[player]['buildings'].length > 1){
-                rts_unit_build(
-                  player,
-                  rts_players[player]['ai']['unit']
-                );
+                rts_unit_build({
+                  'player': player,
+                  'type': rts_players[player]['ai']['unit'],
+                });
 
             }else if(rts_players[player]['buildings'].length > 0
               && rts_players[player]['buildings'][0]['type'] === 'HQ'){
-                rts_building_build(
-                  player,
-                  rts_players[player]['ai']['building'],
-                  rts_players[player]['buildings'][0]['x'] > 0
+                rts_building_build({
+                  'player': player,
+                  'type': rts_players[player]['ai']['building'],
+                  'x': rts_players[player]['buildings'][0]['x'] > 0
                     ? rts_players[player]['buildings'][0]['x'] - 125
                     : rts_players[player]['buildings'][0]['x'] + 125,
-                  rts_players[player]['buildings'][0]['y']
-                );
+                  'y': rts_players[player]['buildings'][0]['y'],
+                });
             }
         }
     }
@@ -602,63 +612,65 @@ function rts_select(){
 
 function rts_selected_destroy(){
     if(rts_selected_type === 'unit'){
-        rts_unit_destroy(
-          0,
-          rts_selected_id
-        );
+        rts_unit_destroy({
+          'id': rts_selected_id,
+          'type': 0,
+        });
 
     }else if(rts_selected_type !== ''){
-        rts_building_destroy(
-          0,
-          rts_selected_id
-        );
+        rts_building_destroy({
+          'id': rts_selected_id,
+          'player': 0,
+        });
     }
 }
 
-function rts_unit_build(player, unit_type){
-    if(rts_players[player]['money'] < rts_units[unit_type]['cost']){
+// Required args: player, type
+function rts_unit_build(args){
+    if(rts_players[args['player']]['money'] < rts_units[args['type']]['cost']){
         return;
     }
 
-    rts_players[player]['money'] -= rts_units[unit_type]['cost'];
-    var temp_selected_id = player > 0
+    rts_players[args['player']]['money'] -= rts_units[args['type']]['cost'];
+    var temp_selected_id = args['player'] > 0
       ? 1
       : rts_selected_id;
     var unit = {
       'damage': 25,
-      'destination-x': player > 0
+      'destination-x': args['player'] > 0
         ? random_integer(settings_settings['level-size'] * 2) - settings_settings['level-size']
-        : rts_players[player]['buildings'][temp_selected_id]['destination-x'],
-      'destination-y': player > 0
+        : rts_players[args['player']]['buildings'][temp_selected_id]['destination-x'],
+      'destination-y': args['player'] > 0
         ? random_integer(settings_settings['level-size'] * 2) - settings_settings['level-size']
-        : rts_players[player]['buildings'][temp_selected_id]['destination-y'],
+        : rts_players[args['player']]['buildings'][temp_selected_id]['destination-y'],
       'fog-radius': 290,
       'health': 100,
       'selected': false,
       'range': 240,
       'reload': 75,
       'reload-current': 0,
-      'x': rts_players[player]['buildings'][temp_selected_id]['x']
-        + rts_buildings[rts_players[player]['buildings'][temp_selected_id]['type']]['width'] / 2,
-      'y': rts_players[player]['buildings'][temp_selected_id]['y']
-        + rts_buildings[rts_players[player]['buildings'][temp_selected_id]['type']]['height'] / 2,
+      'x': rts_players[args['player']]['buildings'][temp_selected_id]['x']
+        + rts_buildings[rts_players[args['player']]['buildings'][temp_selected_id]['type']]['width'] / 2,
+      'y': rts_players[args['player']]['buildings'][temp_selected_id]['y']
+        + rts_buildings[rts_players[args['player']]['buildings'][temp_selected_id]['type']]['height'] / 2,
     };
-    for(var property in rts_units[unit_type]){
-        unit[property] = rts_units[unit_type][property];
+    for(var property in rts_units[args['type']]){
+        unit[property] = rts_units[args['type']][property];
     }
 
-    rts_players[player]['units'].push(unit);
+    rts_players[args['player']]['units'].push(unit);
 }
 
-function rts_unit_destroy(player, unit){
+// Required args: id, player
+function rts_unit_destroy(args){
     if(rts_selected_id === 'unit'){
         rts_build_mode = '';
         rts_selected_id = -1;
         rts_selected_type = '';
     }
 
-    rts_players[player]['units'].splice(
-      unit,
+    rts_players[args['player']]['units'].splice(
+      args['id'],
       1
     );
 }
@@ -819,10 +831,10 @@ function rts_unit_handle(){
                     rts_players[0]['units'][unit]['destination-y'] = rts_players[0]['units'][unit]['y']
                       + random_integer(40) - 20;
 
-                    rts_destionation_validate(
-                      'units',
-                      unit
-                    );
+                    rts_destionation_validate({
+                      'id': unit,
+                      'type': 'units',
+                    });
 
                     break;
                 }
