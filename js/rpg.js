@@ -1,69 +1,72 @@
 'use strict';
 
-function rpg_character_affect(character, stat, effect){
-    rpg_characters[character]['stats'][stat]['current'] -= effect;
-    if(rpg_characters[character]['stats'][stat]['current'] <= 0){
-        rpg_characters[character]['stats'][stat]['current'] = 0;
+// Required args: character, effect, stat
+function rpg_character_affect(args){
+    rpg_characters[args['character']]['stats'][args['stat']]['current'] -= args['effect'];
+    if(rpg_characters[args['character']]['stats'][args['stat']]['current'] <= 0){
+        rpg_characters[args['character']]['stats'][args['stat']]['current'] = 0;
 
-        if(stat === 'health'){
-            rpg_characters[character]['dead'] = true;
+        if(args['stat'] === 'health'){
+            rpg_characters[args['character']]['dead'] = true;
         }
 
-    }else if(rpg_characters[character]['stats'][stat]['current'] >= rpg_characters[character]['stats'][stat]['max']){
-        rpg_characters[character]['stats'][stat]['current'] = rpg_characters[character]['stats'][stat]['max'];
-        rpg_characters[character]['stats'][stat]['regeneration']['current'] = 0;
+    }else if(rpg_characters[args['character']]['stats'][args['stat']]['current'] >= rpg_characters[args['character']]['stats'][args['stat']]['max']){
+        rpg_characters[args['character']]['stats'][args['stat']]['current'] = rpg_characters[args['character']]['stats'][args['stat']]['max'];
+        rpg_characters[args['character']]['stats'][args['stat']]['regeneration']['current'] = 0;
     }
 }
 
-function rpg_character_create(properties){
-    properties = properties || {};
+// Optional args: properties
+function rpg_character_create(args){
+    args = args || {};
+    args['properties'] = args['properties'] || {};
 
-    properties['color'] = properties['color'] || '#fff';
-    properties['dead'] = false;
-    properties['height'] = properties['height'] !== void 0
-      ? properties['height']
+    args['properties']['color'] = args['properties']['color'] || '#fff';
+    args['properties']['dead'] = false;
+    args['properties']['height'] = args['properties']['height'] !== void 0
+      ? args['properties']['height']
       : 20;
-    properties['height-half'] = properties['height'] / 2;
-    properties['inventory'] = properties['inventory'] || [];
-    properties['player'] = properties['player'] || false;
-    properties['selected'] = properties['selected'] || 0;
-    properties['target-x'] = properties['target-x'] || 0;
-    properties['target-y'] = properties['target-y'] || 0;
-    properties['team'] = properties['team'] !== void 0
-      ? properties['team']
+    args['properties']['height-half'] = args['properties']['height'] / 2;
+    args['properties']['inventory'] = args['properties']['inventory'] || [];
+    args['properties']['player'] = args['properties']['player'] || false;
+    args['properties']['selected'] = args['properties']['selected'] || 0;
+    args['properties']['target-x'] = args['properties']['target-x'] || 0;
+    args['properties']['target-y'] = args['properties']['target-y'] || 0;
+    args['properties']['team'] = args['properties']['team'] !== void 0
+      ? args['properties']['team']
       : 1;
-    properties['width'] = properties['width'] !== void 0
-      ? properties['width']
+    args['properties']['width'] = args['properties']['width'] !== void 0
+      ? args['properties']['width']
       : 20;
-    properties['width-half'] = properties['width'] / 2;
-    properties['x'] = properties['x'] || 0;
-    properties['x-velocity'] = properties['x-velocity'] || 0;
-    properties['y'] = properties['y'] || 0;
-    properties['y-velocity'] = properties['y-velocity'] || 0;
+    args['properties']['width-half'] = args['properties']['width'] / 2;
+    args['properties']['x'] = args['properties']['x'] || 0;
+    args['properties']['x-velocity'] = args['properties']['x-velocity'] || 0;
+    args['properties']['y'] = args['properties']['y'] || 0;
+    args['properties']['y-velocity'] = args['properties']['y-velocity'] || 0;
 
-    properties['stats'] = properties['stats'] || {};
-      properties['stats']['health'] = properties['stats']['health'] || {};
-        properties['stats']['health']['current'] = properties['stats']['health']['current'] !== void 0
-          ? properties['stats']['health']['current']
+    args['properties']['stats'] = args['properties']['stats'] || {};
+      args['properties']['stats']['health'] = args['properties']['stats']['health'] || {};
+        args['properties']['stats']['health']['current'] = args['properties']['stats']['health']['current'] !== void 0
+          ? args['properties']['stats']['health']['current']
           : 10;
-        properties['stats']['health']['max'] = properties['stats']['health']['max'] || properties['stats']['health']['current'];
-        properties['stats']['health']['regeneration'] = properties['stats']['health']['regeneration'] || {};
-          properties['stats']['health']['regeneration']['current'] = properties['stats']['health']['regeneration']['current'] !== void 0
-            ? properties['stats']['health']['regeneration']['current']
+        args['properties']['stats']['health']['max'] = args['properties']['stats']['health']['max'] || args['properties']['stats']['health']['current'];
+        args['properties']['stats']['health']['regeneration'] = args['properties']['stats']['health']['regeneration'] || {};
+          args['properties']['stats']['health']['regeneration']['current'] = args['properties']['stats']['health']['regeneration']['current'] !== void 0
+            ? args['properties']['stats']['health']['regeneration']['current']
             : 0;
-          properties['stats']['health']['regeneration']['max'] = properties['stats']['health']['regeneration']['max'] || 1000;
-      properties['stats']['mana'] = properties['stats']['mana'] || {};
-        properties['stats']['mana']['current'] = properties['stats']['mana']['current'] !== void 0
-          ? properties['stats']['mana']['current']
+          args['properties']['stats']['health']['regeneration']['max'] = args['properties']['stats']['health']['regeneration']['max'] || 1000;
+      args['properties']['stats']['mana'] = args['properties']['stats']['mana'] || {};
+        args['properties']['stats']['mana']['current'] = args['properties']['stats']['mana']['current'] !== void 0
+          ? args['properties']['stats']['mana']['current']
           : 10;
-        properties['stats']['mana']['max'] = properties['stats']['mana']['max'] || properties['stats']['mana']['current'];
-        properties['stats']['mana']['regeneration'] = properties['stats']['mana']['regeneration'] || {};
-          properties['stats']['mana']['regeneration']['current'] = properties['stats']['mana']['regeneration']['current'] !== void 0
-            ? properties['stats']['mana']['regeneration']['current']
+        args['properties']['stats']['mana']['max'] = args['properties']['stats']['mana']['max'] || args['properties']['stats']['mana']['current'];
+        args['properties']['stats']['mana']['regeneration'] = args['properties']['stats']['mana']['regeneration'] || {};
+          args['properties']['stats']['mana']['regeneration']['current'] = args['properties']['stats']['mana']['regeneration']['current'] !== void 0
+            ? args['properties']['stats']['mana']['regeneration']['current']
             : 0;
-          properties['stats']['mana']['regeneration']['max'] = properties['stats']['mana']['regeneration']['max'] || 100;
+          args['properties']['stats']['mana']['regeneration']['max'] = args['properties']['stats']['mana']['regeneration']['max'] || 100;
 
-    rpg_characters.push(properties);
+    rpg_characters.push(args['properties']);
 }
 
 function rpg_character_handle(){
@@ -129,11 +132,11 @@ function rpg_character_handle(){
             var dy = rpg_characters[character]['target-y'] > rpg_characters[character]['y'] ? speeds[1] : -speeds[1];
 
             selected['reload-current'] = 0;
-            rpg_character_affect(
-              character,
-              selected['costs'],
-              selected['cost']
-            );
+            rpg_character_affect({
+              'character': character,
+              'effect': selected['cost'],
+              'stat': selected['costs'],
+            });
 
             // Handle particle-creating spells.
             if(selected['type'] === 'particle'){
@@ -147,19 +150,23 @@ function rpg_character_handle(){
                 particle['x'] = rpg_characters[character]['x'];
                 particle['y'] = rpg_characters[character]['y'];
 
-                rpg_particle_create(particle);
+                rpg_particle_create({
+                  'properties': particle,
+                });
 
             }else if(selected['type'] === 'stat'){
-                rpg_character_affect(
-                  character,
-                  selected['damages'],
-                  selected['damage']
-                );
+                rpg_character_affect({
+                  'character': character,
+                  'effect': selected['damage'],
+                  'stat': selected['damages'],
+                });
 
             }else if(selected['type'] === 'character'){
                 rpg_character_create({
-                  'x': rpg_characters[character]['target-x'],
-                  'y': rpg_characters[character]['target-y'],
+                  'properties': {
+                    'x': rpg_characters[character]['target-x'],
+                    'y': rpg_characters[character]['target-y'],
+                  },
                 });
             }
 
@@ -168,47 +175,51 @@ function rpg_character_handle(){
     }
 }
 
-function rpg_item_create(properties, type){
-    properties = properties || {};
-    type = type || 'any';
+// Optional args: properties, type
+function rpg_item_create(args){
+    args = args || {};
+    args['properties'] = args['properties'] || {};
+    args['type'] = args['type'] || 'any';
 
-    properties['cursor'] = properties['cursor'] || 'auto';
-    properties['equipped'] = properties['equipped'] || false;
-    properties['label'] = properties['label'] || '';
-    properties['owner'] = properties['owner'] || 0;
-    properties['slot'] = properties['slot'] || 'spellbook';
-    properties['spell'] = properties['spell'] || {};
-      properties['spell']['cost'] = properties['spell']['cost'] || 0;
-      properties['spell']['costs'] = properties['spell']['costs'] || 'mana';
-      properties['spell']['color'] = properties['spell']['color'] || '#fff';
-      properties['spell']['damage'] = properties['spell']['damage'] || 0;
-      properties['spell']['damages'] = properties['spell']['damages'] || 'health';
-      properties['spell']['lifespan'] = properties['spell']['lifespan'] || 50;
-      properties['spell']['reload'] = properties['spell']['reload'] || 0;
-      properties['spell']['reload-current'] = properties['spell']['reload-current'] || properties['spell']['reload'];
-      properties['spell']['speed-x'] = properties['spell']['speed-x'] || 5;
-      properties['spell']['speed-y'] = properties['spell']['speed-y'] || 5;
-      properties['spell']['type'] = properties['spell']['type'] || 'particle';
+    args['properties']['cursor'] = args['properties']['cursor'] || 'auto';
+    args['properties']['equipped'] = args['properties']['equipped'] || false;
+    args['properties']['label'] = args['properties']['label'] || '';
+    args['properties']['owner'] = args['properties']['owner'] || 0;
+    args['properties']['slot'] = args['properties']['slot'] || 'spellbook';
+    args['properties']['spell'] = args['properties']['spell'] || {};
+      args['properties']['spell']['cost'] = args['properties']['spell']['cost'] || 0;
+      args['properties']['spell']['costs'] = args['properties']['spell']['costs'] || 'mana';
+      args['properties']['spell']['color'] = args['properties']['spell']['color'] || '#fff';
+      args['properties']['spell']['damage'] = args['properties']['spell']['damage'] || 0;
+      args['properties']['spell']['damages'] = args['properties']['spell']['damages'] || 'health';
+      args['properties']['spell']['lifespan'] = args['properties']['spell']['lifespan'] || 50;
+      args['properties']['spell']['reload'] = args['properties']['spell']['reload'] || 0;
+      args['properties']['spell']['reload-current'] = args['properties']['spell']['reload-current'] || args['properties']['spell']['reload'];
+      args['properties']['spell']['speed-x'] = args['properties']['spell']['speed-x'] || 5;
+      args['properties']['spell']['speed-y'] = args['properties']['spell']['speed-y'] || 5;
+      args['properties']['spell']['type'] = args['properties']['spell']['type'] || 'particle';
 
-    return properties;
+    return args['properties'];
 }
 
-function rpg_item_select(character, id){
-    character = character || 0;
+// Required args: id
+// Optional args: character
+function rpg_item_select(args){
+    args['character'] = args['character'] || 0;
 
-    var length = rpg_characters[character]['inventory'].length - 1;
-    if(id < 0){
-        id = length;
+    var length = rpg_characters[args['character']]['inventory'].length - 1;
+    if(args['id'] < 0){
+        args['id'] = length;
 
-    }else if(id > length){
-        id = 0;
+    }else if(args['id'] > length){
+        args['id'] = 0;
     }
 
-    rpg_characters[character]['selected'] = id;
+    rpg_characters[args['character']]['selected'] = args['id'];
 
-    if(character === 0){
+    if(args['character'] === 0){
         document.getElementById('canvas').style.cursor =
-          rpg_characters[0]['inventory'][id]['cursor'] || 'auto';
+          rpg_characters[0]['inventory'][args['id']]['cursor'] || 'auto';
     }
 }
 
@@ -223,38 +234,40 @@ function rpg_item_toggle(id){
 }
 */
 
-function rpg_particle_create(properties){
-    properties = properties || {};
+// Optional args: properties
+function rpg_particle_create(args){
+    args = args || {};
+    args['properties'] = args['properties'] || {};
 
-    properties['color'] = properties['color'] || '#fff';
-    properties['damage'] = properties['damage'] || 0;
-    properties['dx'] = properties['dx'] || 0;
-    properties['dy'] = properties['dy'] || 0;
-    properties['height'] = properties['height'] !== void 0
-      ? properties['height']
+    args['properties']['color'] = args['properties']['color'] || '#fff';
+    args['properties']['damage'] = args['properties']['damage'] || 0;
+    args['properties']['dx'] = args['properties']['dx'] || 0;
+    args['properties']['dy'] = args['properties']['dy'] || 0;
+    args['properties']['height'] = args['properties']['height'] !== void 0
+      ? args['properties']['height']
       : 10;
-    properties['height-half'] = properties['height'] / 2;
-    properties['lifespan'] = properties['lifespan'] !== void 0
-      ? properties['lifespan']
+    args['properties']['height-half'] = args['properties']['height'] / 2;
+    args['properties']['lifespan'] = args['properties']['lifespan'] !== void 0
+      ? args['properties']['lifespan']
       : 10;
-    properties['owner'] = properties['owner'] !== void 0
-      ? properties['owner']
+    args['properties']['owner'] = args['properties']['owner'] !== void 0
+      ? args['properties']['owner']
       : -1;
-    properties['speed-x'] = properties['speed-x'] !== void 0
-      ? properties['speed-x']
+    args['properties']['speed-x'] = args['properties']['speed-x'] !== void 0
+      ? args['properties']['speed-x']
       : 1;
-    properties['speed-y'] = properties['speed-y'] !== void 0
-      ? properties['speed-y']
+    args['properties']['speed-y'] = args['properties']['speed-y'] !== void 0
+      ? args['properties']['speed-y']
       : 1;
-    properties['stat'] = properties['stat'] || 'health';
-    properties['width'] = properties['width'] !== void 0
-      ? properties['width']
+    args['properties']['stat'] = args['properties']['stat'] || 'health';
+    args['properties']['width'] = args['properties']['width'] !== void 0
+      ? args['properties']['width']
       : 10;
-    properties['width-half'] = properties['width'] / 2;
-    properties['x'] = properties['x'] || 0;
-    properties['y'] = properties['y'] || 0;
+    args['properties']['width-half'] = args['properties']['width'] / 2;
+    args['properties']['x'] = args['properties']['x'] || 0;
+    args['properties']['y'] = args['properties']['y'] || 0;
 
-    rpg_particles.push(properties);
+    rpg_particles.push(args['properties']);
 }
 
 function rpg_particle_handle(){
@@ -298,11 +311,11 @@ function rpg_particle_handle(){
                 continue;
             }
 
-            rpg_character_affect(
-              character,
-              rpg_particles[particle]['stat'],
-              rpg_particles[particle]['damage']
-            );
+            rpg_character_affect({
+              'character': character,
+              'effect': rpg_particles[particle]['damage'],
+              'stat': rpg_particles[particle]['stat'],
+            });
 
             rpg_particles.splice(
               particle,
@@ -314,24 +327,26 @@ function rpg_particle_handle(){
     }
 }
 
-function rpg_world_dynamic_create(properties){
-    properties = properties || {};
+// Optional args: properties
+function rpg_world_dynamic_create(args){
+    args = args || {};
+    args['properties'] = args['properties'] || {};
 
-    properties['collision'] = properties['collision'] === void 0;
-    properties['color'] = properties['color'] || '#fff';
-    properties['effect'] = properties['effect'] || {};
-    properties['effect-stat'] = properties['effect-stat'] || 'health';
-    properties['height'] = properties['height'] !== void 0
-      ? properties['height']
+    args['properties']['collision'] = args['properties']['collision'] === void 0;
+    args['properties']['color'] = args['properties']['color'] || '#fff';
+    args['properties']['effect'] = args['properties']['effect'] || {};
+    args['properties']['effect-stat'] = args['properties']['effect-stat'] || 'health';
+    args['properties']['height'] = args['properties']['height'] !== void 0
+      ? args['properties']['height']
       : 25;
-    properties['type'] = properties['type'] || 'stone';
-    properties['width'] = properties['width'] !== void 0
-      ? properties['width']
+    args['properties']['type'] = args['properties']['type'] || 'stone';
+    args['properties']['width'] = args['properties']['width'] !== void 0
+      ? args['properties']['width']
       : 25;
-    properties['x'] = properties['x'] || 0;
-    properties['y'] = properties['y'] || 0;
+    args['properties']['x'] = args['properties']['x'] || 0;
+    args['properties']['y'] = args['properties']['y'] || 0;
 
-    rpg_world_dynamic.push(properties);
+    rpg_world_dynamic.push(args['properties']);
 }
 
 var rpg_characters = [];
