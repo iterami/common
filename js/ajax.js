@@ -2,7 +2,7 @@
 
 // Required args: url
 // Optional args: todo, type
-function ajax_query(args){
+function ajax_request(args){
     args['todo'] = args['todo'] || false;
     args['type'] = args['type'] || 'GET';
 
