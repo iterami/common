@@ -1,18 +1,15 @@
 'use strict';
 
-// Required args: url
-// Optional args: todo, type
+// Required args: todo, url
+// Optional args: type
 function ajax_request(args){
-    args['todo'] = args['todo'] || false;
     args['type'] = args['type'] || 'GET';
 
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function(){
-        if(ajax.readyState === 4
-          && ajax.status === 200){
-            if(args['todo'] !== false){
-                args['todo'](ajax.responseText);
-            }
+        if(ajax.readyState === ajax_readyState
+          && ajax.status === ajax_status){
+            args['todo'](ajax.responseText);
         }
     };
 
@@ -22,3 +19,6 @@ function ajax_request(args){
     );
     ajax.send(null);
 }
+
+var ajax_readyState = 4;
+var ajax_status = 200;
