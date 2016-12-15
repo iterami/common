@@ -15,9 +15,9 @@ function canvas_draw(){
 
         canvas_buffer.fillStyle = '#111';
         canvas_buffer.fillRect(
-          canvas_x - 100,
+          canvas_x - 125,
           canvas_y - 50,
-          200,
+          250,
           100
         );
 

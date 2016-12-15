@@ -278,9 +278,9 @@ function webgl_draw(){
 
         webgl_canvas.fillStyle = '#111';
         webgl_canvas.fillRect(
-          webgl_x - 100,
+          webgl_x - 125,
           webgl_y - 50,
-          200,
+          250,
           100
         );
 
