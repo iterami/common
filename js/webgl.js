@@ -1,6 +1,7 @@
 'use strict';
 
-function webgl_buffer_set(colorData, vertexData, textureData, indexData){
+// Required args: colorData, indexData, textureData, vertexData
+function webgl_buffer_set(args){
     var colorBuffer = webgl_buffer.createBuffer();
     webgl_buffer.bindBuffer(
       webgl_buffer.ARRAY_BUFFER,
@@ -8,7 +9,7 @@ function webgl_buffer_set(colorData, vertexData, textureData, indexData){
     );
     webgl_buffer.bufferData(
       webgl_buffer.ARRAY_BUFFER,
-      new Float32Array(colorData),
+      new Float32Array(args['colorData']),
       webgl_buffer.STATIC_DRAW
     );
 
@@ -19,7 +20,7 @@ function webgl_buffer_set(colorData, vertexData, textureData, indexData){
     );
     webgl_buffer.bufferData(
       webgl_buffer.ARRAY_BUFFER,
-      new Float32Array(vertexData),
+      new Float32Array(args['vertexData']),
       webgl_buffer.STATIC_DRAW
     );
 
@@ -30,7 +31,7 @@ function webgl_buffer_set(colorData, vertexData, textureData, indexData){
     );
     webgl_buffer.bufferData(
       webgl_buffer.ARRAY_BUFFER,
-      new Float32Array(textureData),
+      new Float32Array(args['textureData']),
       webgl_buffer.STATIC_DRAW
     );
 
@@ -41,7 +42,7 @@ function webgl_buffer_set(colorData, vertexData, textureData, indexData){
     );
     webgl_buffer.bufferData(
       webgl_buffer.ARRAY_BUFFER,
-      new Uint16Array(indexData),
+      new Uint16Array(args['indexData']),
       webgl_buffer.STATIC_DRAW
     );
 
@@ -53,54 +54,49 @@ function webgl_buffer_set(colorData, vertexData, textureData, indexData){
     }
 }
 
-function webgl_camera_move(speed, y, strafe){
-    webgl_camera['y'] += y;
+// Required args: speed, y
+// Optional args: strafe
+function webgl_camera_move(args){
+    args['strafe'] = args['strafe'] || false;
+
+    webgl_camera['y'] += args['y'];
     var movement = math_move_3d(
-      speed,
+      args['speed'],
       webgl_camera['rotate-y'],
-      strafe
+      args['strafe']
     );
     webgl_camera['x'] += movement['x'];
     webgl_camera['z'] += movement['z'];
 }
 
-function webgl_camera_rotate(x, y, z){
-    webgl_camera['rotate-x'] = math_clamp(
-      math_round(
-        webgl_camera['rotate-x'] + x,
-        7
-      ),
-      0,
-      360,
-      true
-    );
-    webgl_camera['rotate-y'] = math_clamp(
-      math_round(
-        webgl_camera['rotate-y'] + y,
-        7
-      ),
-      0,
-      360,
-      true
-    );
-    webgl_camera['rotate-z'] = math_clamp(
-      math_round(
-        webgl_camera['rotate-z'] + z,
-        7
-      ),
-      0,
-      360,
-      true
-    );
+// Required args: x, y, z
+function webgl_camera_rotate(args){
+    var axes = {
+      'x': args['x'],
+      'y': args['y'],
+      'z': args['z'],
+    };
+    for(var axis in axes){
+        webgl_camera['rotate-' + axis] = math_clamp(
+          math_round(
+            webgl_camera['rotate-' + axis] + axes[axis],
+            7
+          ),
+          0,
+          360,
+          true
+        );
+    }
 }
 
-function webgl_clearcolor_set(color){
-    webgl_clearcolor = color;
+// Required args: color
+function webgl_clearcolor_set(args){
+    webgl_clearcolor = args['color'];
     webgl_buffer.clearColor(
-      color['red'],
-      color['green'],
-      color['blue'],
-      color['alpha']
+      args['color']['red'],
+      args['color']['green'],
+      args['color']['blue'],
+      args['color']['alpha']
     );
 }
 
@@ -308,82 +304,90 @@ function webgl_drawloop(){
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
 }
 
-function webgl_entity_set(id, properties){
-    properties['color'] = properties['color'] || [
+// Required args: id
+// Optional args: properties
+function webgl_entity_set(args){
+    args['properties'] = args['properties'];
+
+    args['properties']['color'] = args['properties']['color'] || [
       1, 1, 1, 1,
       1, 1, 1, 1,
       1, 1, 1, 1,
       1, 1, 1, 1,
     ];
-    properties['depth_ignore'] = properties['depth_ignore'] || false;
-    properties['index'] = properties['index'] || [
+    args['properties']['depth_ignore'] = args['properties']['depth_ignore'] || false;
+    args['properties']['index'] = args['properties']['index'] || [
       0, 1, 2, 0, 2, 3,
     ];
-    properties['mode'] = properties['mode'] || 'TRIANGLE_FAN';
-    properties['position'] = properties['position'] || {
+    args['properties']['mode'] = args['properties']['mode'] || 'TRIANGLE_FAN';
+    args['properties']['position'] = args['properties']['position'] || {
       'x': 0,
       'y': 0,
       'z': 0,
     };
-    properties['rotate'] = properties['rotate'] || {
+    args['properties']['rotate'] = args['properties']['rotate'] || {
       'x': 0,
       'y': 0,
       'z': 0,
     };
-    properties['scale'] = properties['scale'] || {
+    args['properties']['scale'] = args['properties']['scale'] || {
       'x': 1,
       'y': 1,
       'z': 1,
     };
 
-    webgl_entities[id] = properties;
+    webgl_entities[args['id']] = args['properties'];
 
-    webgl_entities[id]['buffer'] = webgl_buffer_set(
-      webgl_entities[id]['color'],
-      webgl_entities[id]['vertices'],
-      [
+    webgl_entities[args['id']]['buffer'] = webgl_buffer_set({
+      'colorData': webgl_entities[args['id']]['color'],
+      'vertexData': webgl_entities[args['id']]['vertices'],
+      'textureData': [
         0.0, 1.0,
         0.0, 0.0,
         1.0, 0.0,
         1.0, 1.0,
       ],
-      webgl_entities[id]['index']
-    );
+      'indexData': webgl_entities[args['id']]['index'],
+    });
 
-    webgl_texture_set(
-      id,
-      webgl_textures['_default']
-    );
+    webgl_texture_set({
+      'entityid': args['id'],
+      'image': webgl_textures['_default'],
+    });
 }
 
-function webgl_group_add(group, entitylist){
-    if(!(group in webgl_groups)){
-        webgl_groups[group] = {};
+// Required args: entitylist, group
+function webgl_group_add(args){
+    if(!(args['group'] in webgl_groups)){
+        webgl_groups[args['group']] = {};
     }
 
-    for(var entity in entitylist){
-        webgl_groups[group][entitylist[entity]] = true;
+    for(var entity in args['entitylist']){
+        webgl_groups[args['group']][args['entitylist'][entity]] = true;
     }
 }
 
-function webgl_group_modify(grouplist, todo){
-    for(var group in grouplist){
-        for(var entity in webgl_groups[grouplist[group]]){
-            todo(entity);
+// Required args: grouplist, todo
+function webgl_group_modify(args){
+    for(var group in args['grouplist']){
+        console.log(args['grouplist'][group],webgl_groups);
+        for(var entity in webgl_groups[args['grouplist'][group]]){
+            args['todo'](entity);
         }
     }
 }
 
-function webgl_group_remove(group, entitylist, delete_empty){
-    if(group in webgl_groups){
-        for(var entity in entitylist){
-            delete webgl_groups[group][entitylist[entity]];
+// Required args: delete-empty, entitylist, group
+function webgl_group_remove(args){
+    if(args['group'] in webgl_groups){
+        for(var entity in args['entitylist']){
+            delete webgl_groups[args['group']][args['entitylist'][entity]];
         }
     }
 
-    if((delete_empty || false)
-      && webgl_groups[group].length === 0){
-        delete webgl_groups[group];
+    if((args['delete-empty'] || false)
+      && webgl_groups[args['group']].length === 0){
+        delete webgl_groups[args['group']];
     }
 }
 
@@ -397,7 +401,9 @@ function webgl_init(){
       'red': 0,
     };
 
-    webgl_setmode(0);
+    webgl_setmode({
+      'newmode': 0,
+    });
 }
 
 function webgl_logicloop(){
@@ -412,7 +418,9 @@ function webgl_logicloop(){
 
 function webgl_menu_quit(){
     if(webgl_menu){
-        webgl_setmode(0);
+        webgl_setmode({
+          'newmode': 0,
+        });
     }
 }
 
@@ -420,18 +428,19 @@ function webgl_menu_toggle(){
     webgl_menu = !webgl_menu;
 }
 
-function webgl_program_create(id, shaderlist){
+// Required args: id, shaderlist
+function webgl_program_create(args){
     var program = webgl_buffer.createProgram();
-    for(var shader in shaderlist){
+    for(var shader in args['shaderlist']){
         webgl_buffer.attachShader(
           program,
-          shaderlist[shader]
+          args['shaderlist'][shader]
         );
     }
     webgl_buffer.linkProgram(program);
     webgl_buffer.useProgram(program);
 
-    webgl_programs[id] = program;
+    webgl_programs[args['id']] = program;
 }
 
 function webgl_resize(){
@@ -460,11 +469,14 @@ function webgl_resize(){
     }
 }
 
-function webgl_setmode(newmode, newgame){
+// Required args: newmode
+// Optional args: newgame
+function webgl_setmode(args){
+    args['newgame'] = args['newgame'] || false;
+
     window.cancelAnimationFrame(webgl_animationFrame);
     window.clearInterval(webgl_interval);
 
-    newgame = newgame || false;
     webgl_camera = {
       'rotate-x': 0,
       'rotate-y': 0,
@@ -474,17 +486,17 @@ function webgl_setmode(newmode, newgame){
       'z': 0,
     };
     webgl_menu = false;
-    webgl_mode = newmode;
+    webgl_mode = args['newmode'];
     var msperframe = 0;
     webgl_programs = {};
     webgl_shaders = {};
 
     if(typeof setmode_logic === 'function'){
-        setmode_logic(newgame);
+        setmode_logic(args['newgame']);
 
     }else{
         webgl_mode = 1;
-        newgame = true;
+        args['newgame'] = true;
         msperframe = 33;
     }
 
@@ -496,7 +508,7 @@ function webgl_setmode(newmode, newgame){
     }
 
     // Simulation modes.
-    if(newgame){
+    if(args['newgame']){
         var properties = '';
 
         if(!webgl_oncontextmenu){
@@ -521,16 +533,17 @@ function webgl_setmode(newmode, newgame){
 
         webgl_resize();
 
-        webgl_clearcolor_set(webgl_clearcolor);
+        webgl_clearcolor_set({
+          'color': webgl_clearcolor,
+        });
         webgl_buffer.clearDepth(webgl_cleardepth);
         webgl_buffer.enable(webgl_buffer.CULL_FACE);
         webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
         webgl_buffer.depthFunc(webgl_buffer.LEQUAL);
 
-        webgl_shader_create(
-          'fragment',
-          webgl_buffer.FRAGMENT_SHADER,
-          'precision mediump float;'
+        webgl_shader_create({
+          'id': 'fragment',
+          'source': 'precision mediump float;'
           //+ 'varying float float_fogDistance;'
             + 'uniform sampler2D sampler;'
             + 'varying vec4 vec_fragmentColor;'
@@ -550,12 +563,12 @@ function webgl_setmode(newmode, newgame){
             +     'sampler,'
             +     'vec_textureCoord'
             +   ') * vec_fragmentColor;'
-            + '}'
-        );
-        webgl_shader_create(
-          'vertex',
-          webgl_buffer.VERTEX_SHADER,
-          'attribute vec3 vec_vertexPosition;'
+            + '}',
+          'type': webgl_buffer.FRAGMENT_SHADER,
+        });
+        webgl_shader_create({
+          'id': 'vertex',
+          'source': 'attribute vec3 vec_vertexPosition;'
           //+ 'varying float float_fogDistance;'
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
@@ -568,20 +581,27 @@ function webgl_setmode(newmode, newgame){
             +   'vec_fragmentColor = vec_vertexColor;'
           //+   'float_fogDistance = length(gl_Position.xyz);'
             +   'vec_textureCoord = vec_texturePosition;'
-            + '}'
-        );
+            + '}',
+          'type': webgl_buffer.VERTEX_SHADER,
+        });
 
-        webgl_program_create(
-          'shaders',
-          [
+        webgl_program_create({
+          'id': 'shaders',
+          'shaderlist': [
             webgl_shaders['fragment'],
             webgl_shaders['vertex'],
-          ]
-        );
+          ],
+        });
 
-        webgl_vertexattribarray_set('vec_vertexColor');
-        webgl_vertexattribarray_set('vec_vertexPosition');
-        webgl_vertexattribarray_set('vec_texturePosition');
+        webgl_vertexattribarray_set({
+          'attribute': 'vec_vertexColor',
+        });
+        webgl_vertexattribarray_set({
+          'attribute': 'vec_vertexPosition',
+        });
+        webgl_vertexattribarray_set({
+          'attribute': 'vec_texturePosition',
+        });
     }
 
     math_matrices['camera'] = math_matrix_create();
@@ -591,18 +611,18 @@ function webgl_setmode(newmode, newgame){
         if(webgl_entities[entity]['_init'] === true){
             var group = webgl_entities[entity]['_group'] || void 0;
 
-            webgl_entity_set(
-              entity,
-              webgl_entities[entity]
-            );
+            webgl_entity_set({
+              'id': entity,
+              'properties': webgl_entities[entity],
+            });
 
             if(group !== void 0){
-                webgl_group_add(
-                  entity,
-                  [
+                webgl_group_add({
+                  'entitylist': [
                     entity,
-                  ]
-                );
+                  ],
+                  'id': entity,
+                });
             }
         }
     }
@@ -624,26 +644,31 @@ function webgl_setmode(newmode, newgame){
 
 }
 
-function webgl_shader_create(id, type, source){
-    var shader = webgl_buffer.createShader(type);
+// Required args: id, source, type
+function webgl_shader_create(args){
+    var shader = webgl_buffer.createShader(args['type']);
     webgl_buffer.shaderSource(
       shader,
-      source
+      args['source']
     );
     webgl_buffer.compileShader(shader);
 
-    webgl_shaders[id] = shader;
+    webgl_shaders[args['id']] = shader;
 }
 
-function webgl_texture_set(entityid, image){
-    webgl_entities[entityid]['texture'] = webgl_buffer.createTexture();
-    webgl_entities[entityid]['image'] = images_new({
-      'id': entityid + '-texture',
-      'src': image,
+// Required args: entityid
+// Optional args: image
+function webgl_texture_set(args){
+    args['image'] = args['image'] || webgl_textures['_default'];
+
+    webgl_entities[args['entityid']]['texture'] = webgl_buffer.createTexture();
+    webgl_entities[args['entityid']]['image'] = images_new({
+      'id': args['entityid'] + '-texture',
+      'src': args['image'],
       'todo': function(){
           webgl_buffer.bindTexture(
             webgl_buffer.TEXTURE_2D,
-            webgl_entities[entityid]['texture']
+            webgl_entities[args['entityid']]['texture']
           );
           webgl_buffer.texImage2D(
             webgl_buffer.TEXTURE_2D,
@@ -651,7 +676,7 @@ function webgl_texture_set(entityid, image){
             webgl_buffer.RGBA,
             webgl_buffer.RGBA,
             webgl_buffer.UNSIGNED_BYTE,
-            webgl_entities[entityid]['image']
+            webgl_entities[args['entityid']]['image']
           );
           webgl_buffer.texParameteri(
             webgl_buffer.TEXTURE_2D,
@@ -671,12 +696,13 @@ function webgl_texture_set(entityid, image){
     });
 }
 
-function webgl_vertexattribarray_set(attribute){
-    webgl_attributes[attribute] = webgl_buffer.getAttribLocation(
+// Required args: attribute
+function webgl_vertexattribarray_set(args){
+    webgl_attributes[args['attribute']] = webgl_buffer.getAttribLocation(
       webgl_programs['shaders'],
-      attribute
+      args['attribute']
     );
-    webgl_buffer.enableVertexAttribArray(webgl_attributes[attribute]);
+    webgl_buffer.enableVertexAttribArray(webgl_attributes[args['attribute']]);
 }
 
 var webgl_animationFrame = 0;
