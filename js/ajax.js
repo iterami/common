@@ -3,7 +3,7 @@
 // Required args: todo, url
 // Optional args: type
 function ajax_request(args){
-    args['type'] = args['type'] || 'GET';
+    args['type'] = args['type'] || ajax_type;
 
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function(){
@@ -22,3 +22,4 @@ function ajax_request(args){
 
 var ajax_readyState = 4;
 var ajax_status = 200;
+var ajax_type = 'GET';
