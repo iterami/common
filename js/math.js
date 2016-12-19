@@ -1,74 +1,92 @@
 'use strict';
 
-function math_clamp(value, min, max, wrap){
-    if(wrap || false){
-        var diff = max - min;
-        while(value < min){
-            value += diff;
+// Required args: max, min, value
+// Optional args: wrap
+function math_clamp(args){
+    args['wrap'] = args['wrap'] || false;
+
+    if(args['wrap']){
+        var diff = args['max'] - args['min'];
+        while(args['value'] < args['min']){
+            args['value'] += diff;
         }
-        while(value >= max){
-            value -= diff;
+        while(args['value'] >= args['max']){
+            args['value'] -= diff;
         }
 
     }else{
-        value = Math.max(
-          value,
-          min
+        args['value'] = Math.max(
+          args['value'],
+          args['min']
         );
-        value = Math.min(
-          value,
-          max
+        args['value'] = Math.min(
+          args['value'],
+          args['max']
         );
     }
 
-    return value;
+    return args['value'];
 }
 
-function math_degrees_to_radians(degrees, decimals){
-    decimals = decimals !== void 0
-      ? decimals
+// Required args: degrees
+// Optional args: decimals
+function math_degrees_to_radians(args){
+    args['decimals'] = args['decimals'] !== 0
+      ? void 0
       : math_decimals;
 
-    return math_round(
-      degrees * math_degree,
-      decimals
+    return math_round({
+      'decimals': args['decimals'],
+      'number': args['degrees'] * math_degree,
+    });
+}
+
+// Required args: x0, x1, y0, y1
+function math_distance(args){
+    return Math.sqrt(
+      Math.pow(
+        args['x0'] - args['x1'],
+        2
+      ) + Math.pow(
+        args['y0'] - args['y1'],
+        2
+      )
     );
 }
 
-function math_distance(x0, y0, x1, y1){
-    return Math.sqrt(Math.pow(x0 - x1, 2) + Math.pow(y0 - y1, 2));
-}
+// Required args: length, x0, x1, y0, y1
+function math_fixed_length_line(args){
+    var line_distance = math_distance({
+      'x0': args['x0'],
+      'x1': args['x1'],
+      'y0': args['y0'],
+      'y1': args['y1'],
+    });
 
-function math_fixed_length_line(x0, y0, x1, y1, length){
-    var line_distance = math_distance(
-      x0,
-      y0,
-      x1,
-      y1
-    );
-
-    x1 /= line_distance;
-    x1 *= length;
-    y1 /= line_distance;
-    y1 *= length;
+    args['x1'] /= line_distance;
+    args['x1'] *= args['length'];
+    args['y1'] /= line_distance;
+    args['y1'] *= args['length'];
 
     return {
-      'x': x1,
-      'y': y1,
+      'x': args['x1'],
+      'y': args['y1'],
     };
 }
 
-function math_matrix_clone(id, newid){
-    math_matrices[newid] = math_matrix_create();
-    math_matrix_copy(
-      id,
-      newid
-    );
+// Required args: id, newid
+function math_matrix_clone(args){
+    math_matrices[args['newid']] = math_matrix_create();
+    math_matrix_copy({
+      'id': args['id'],
+      'newid': args['newid'],
+    });
 }
 
-function math_matrix_copy(id, newid){
-    for(var key in math_matrices[id]){
-        math_matrices[newid][key] = math_matrices[id][key];
+// Required args: id, newid
+function math_matrix_copy(args){
+    for(var key in math_matrices[args['id']]){
+        math_matrices[args['newid']][key] = math_matrices[args['id']][key];
     }
 }
 
@@ -76,9 +94,10 @@ function math_matrix_create(){
     return new Float32Array(16);
 }
 
-function math_matrix_identity(id){
-    for(var key in math_matrices[id]){
-        math_matrices[id][key] =
+// Required args: id
+function math_matrix_identity(args){
+    for(var key in math_matrices[args['id']]){
+        math_matrices[args['id']][key] =
           key % 5 === 0
             ? 1
             : 0;
@@ -95,98 +114,112 @@ function math_matrix_perspective(){
     math_matrices['perspective'][14] = -2;
 }
 
-function math_matrix_rotate(id, dimensions){
+// Required args: dimensions, id
+function math_matrix_rotate(args){
     // Rotate X.
-    math_matrix_clone(
-      id,
-      'rotate-cache'
-    );
-    var cosine = Math.cos(dimensions[0]);
-    var sine = Math.sin(dimensions[0]);
+    math_matrix_clone({
+      'id': args['id'],
+      'newid': 'rotate-cache',
+    });
+    var cosine = Math.cos(args['dimensions'][0]);
+    var sine = Math.sin(args['dimensions'][0]);
 
-    math_matrices[id][4] = math_matrices['rotate-cache'][4] * cosine + math_matrices['rotate-cache'][8] * sine;
-    math_matrices[id][5] = math_matrices['rotate-cache'][5] * cosine + math_matrices['rotate-cache'][9] * sine;
-    math_matrices[id][6] = math_matrices['rotate-cache'][6] * cosine + math_matrices['rotate-cache'][10] * sine;
-    math_matrices[id][7] = math_matrices['rotate-cache'][7] * cosine + math_matrices['rotate-cache'][11] * sine;
-    math_matrices[id][8] = math_matrices['rotate-cache'][8] * cosine - math_matrices['rotate-cache'][4] * sine;
-    math_matrices[id][9] = math_matrices['rotate-cache'][9] * cosine - math_matrices['rotate-cache'][5] * sine;
-    math_matrices[id][10] = math_matrices['rotate-cache'][10] * cosine - math_matrices['rotate-cache'][6] * sine;
-    math_matrices[id][11] = math_matrices['rotate-cache'][11] * cosine - math_matrices['rotate-cache'][7] * sine;
+    math_matrices[args['id']][4] = math_matrices['rotate-cache'][4] * cosine + math_matrices['rotate-cache'][8] * sine;
+    math_matrices[args['id']][5] = math_matrices['rotate-cache'][5] * cosine + math_matrices['rotate-cache'][9] * sine;
+    math_matrices[args['id']][6] = math_matrices['rotate-cache'][6] * cosine + math_matrices['rotate-cache'][10] * sine;
+    math_matrices[args['id']][7] = math_matrices['rotate-cache'][7] * cosine + math_matrices['rotate-cache'][11] * sine;
+    math_matrices[args['id']][8] = math_matrices['rotate-cache'][8] * cosine - math_matrices['rotate-cache'][4] * sine;
+    math_matrices[args['id']][9] = math_matrices['rotate-cache'][9] * cosine - math_matrices['rotate-cache'][5] * sine;
+    math_matrices[args['id']][10] = math_matrices['rotate-cache'][10] * cosine - math_matrices['rotate-cache'][6] * sine;
+    math_matrices[args['id']][11] = math_matrices['rotate-cache'][11] * cosine - math_matrices['rotate-cache'][7] * sine;
 
     // Rotate Y.
-    math_matrix_copy(
-      id,
-      'rotate-cache'
-    );
-    cosine = Math.cos(dimensions[1]);
-    sine = Math.sin(dimensions[1]);
+    math_matrix_copy({
+      'id': args['id'],
+      'newid': 'rotate-cache',
+    });
+    cosine = Math.cos(args['dimensions'][1]);
+    sine = Math.sin(args['dimensions'][1]);
 
-    math_matrices[id][0] = math_matrices['rotate-cache'][0] * cosine - math_matrices['rotate-cache'][8] * sine;
-    math_matrices[id][1] = math_matrices['rotate-cache'][1] * cosine - math_matrices['rotate-cache'][9] * sine;
-    math_matrices[id][2] = math_matrices['rotate-cache'][2] * cosine - math_matrices['rotate-cache'][10] * sine;
-    math_matrices[id][3] = math_matrices['rotate-cache'][3] * cosine - math_matrices['rotate-cache'][11] * sine;
-    math_matrices[id][8] = math_matrices['rotate-cache'][8] * cosine + math_matrices['rotate-cache'][0] * sine;
-    math_matrices[id][9] = math_matrices['rotate-cache'][9] * cosine + math_matrices['rotate-cache'][1] * sine;
-    math_matrices[id][10] = math_matrices['rotate-cache'][10] * cosine + math_matrices['rotate-cache'][2] * sine;
-    math_matrices[id][11] = math_matrices['rotate-cache'][11] * cosine + math_matrices['rotate-cache'][3] * sine;
+    math_matrices[args['id']][0] = math_matrices['rotate-cache'][0] * cosine - math_matrices['rotate-cache'][8] * sine;
+    math_matrices[args['id']][1] = math_matrices['rotate-cache'][1] * cosine - math_matrices['rotate-cache'][9] * sine;
+    math_matrices[args['id']][2] = math_matrices['rotate-cache'][2] * cosine - math_matrices['rotate-cache'][10] * sine;
+    math_matrices[args['id']][3] = math_matrices['rotate-cache'][3] * cosine - math_matrices['rotate-cache'][11] * sine;
+    math_matrices[args['id']][8] = math_matrices['rotate-cache'][8] * cosine + math_matrices['rotate-cache'][0] * sine;
+    math_matrices[args['id']][9] = math_matrices['rotate-cache'][9] * cosine + math_matrices['rotate-cache'][1] * sine;
+    math_matrices[args['id']][10] = math_matrices['rotate-cache'][10] * cosine + math_matrices['rotate-cache'][2] * sine;
+    math_matrices[args['id']][11] = math_matrices['rotate-cache'][11] * cosine + math_matrices['rotate-cache'][3] * sine;
 
     // Rotate Z.
-    math_matrix_copy(
-      id,
-      'rotate-cache'
-    );
-    cosine = Math.cos(dimensions[2]);
-    sine = Math.sin(dimensions[2]);
+    math_matrix_copy({
+      'id': args['id'],
+      'newid': 'rotate-cache',
+    });
+    cosine = Math.cos(args['dimensions'][2]);
+    sine = Math.sin(args['dimensions'][2]);
 
-    math_matrices[id][0] = math_matrices['rotate-cache'][0] * cosine + math_matrices['rotate-cache'][4] * sine;
-    math_matrices[id][1] = math_matrices['rotate-cache'][1] * cosine + math_matrices['rotate-cache'][5] * sine;
-    math_matrices[id][2] = math_matrices['rotate-cache'][2] * cosine + math_matrices['rotate-cache'][6] * sine;
-    math_matrices[id][3] = math_matrices['rotate-cache'][3] * cosine + math_matrices['rotate-cache'][7] * sine;
-    math_matrices[id][4] = math_matrices['rotate-cache'][4] * cosine - math_matrices['rotate-cache'][0] * sine;
-    math_matrices[id][5] = math_matrices['rotate-cache'][5] * cosine - math_matrices['rotate-cache'][1] * sine;
-    math_matrices[id][6] = math_matrices['rotate-cache'][6] * cosine - math_matrices['rotate-cache'][2] * sine;
-    math_matrices[id][7] = math_matrices['rotate-cache'][7] * cosine - math_matrices['rotate-cache'][3] * sine;
+    math_matrices[args['id']][0] = math_matrices['rotate-cache'][0] * cosine + math_matrices['rotate-cache'][4] * sine;
+    math_matrices[args['id']][1] = math_matrices['rotate-cache'][1] * cosine + math_matrices['rotate-cache'][5] * sine;
+    math_matrices[args['id']][2] = math_matrices['rotate-cache'][2] * cosine + math_matrices['rotate-cache'][6] * sine;
+    math_matrices[args['id']][3] = math_matrices['rotate-cache'][3] * cosine + math_matrices['rotate-cache'][7] * sine;
+    math_matrices[args['id']][4] = math_matrices['rotate-cache'][4] * cosine - math_matrices['rotate-cache'][0] * sine;
+    math_matrices[args['id']][5] = math_matrices['rotate-cache'][5] * cosine - math_matrices['rotate-cache'][1] * sine;
+    math_matrices[args['id']][6] = math_matrices['rotate-cache'][6] * cosine - math_matrices['rotate-cache'][2] * sine;
+    math_matrices[args['id']][7] = math_matrices['rotate-cache'][7] * cosine - math_matrices['rotate-cache'][3] * sine;
 }
 
-function math_matrix_round(id, decimals){
-    decimals = decimals !== void 0
-      ? decimals
+// Required args: id
+// Optional args: decimals
+function math_matrix_round(args){
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
       : math_decimals;
 
-    for(var key in math_matrices[id]){
-        math_matrices[id][key] = math_round(
-          math_matrices[id][key],
-          decimals
-        );
+    for(var key in math_matrices[args['id']]){
+        math_matrices[args['id']][key] = math_round({
+          'decimals': args['decimals'],
+          'number': math_matrices[args['id']][key],
+        });
     }
 }
 
-function math_matrix_translate(id, dimensions){
+// Required args: dimensions, id
+function math_matrix_translate(args){
     for(var i = 0; i < 4; i++){
-        math_matrices[id][i + 12] -= math_matrices[id][i] * dimensions[0]
-          + math_matrices[id][i + 4] * dimensions[1]
-          + math_matrices[id][i + 8] * dimensions[2];
+        math_matrices[args['id']][i + 12] -= math_matrices[args['id']][i] * args['dimensions'][0]
+          + math_matrices[args['id']][i + 4] * args['dimensions'][1]
+          + math_matrices[args['id']][i + 8] * args['dimensions'][2];
     }
 
-    math_matrix_round(id);
+    math_matrix_round({
+      'id': args['id'],
+    });
 }
 
-function math_move_3d(speed, angle, strafe){
-    var radians = -math_degrees_to_radians(
-      angle
-      - ((strafe || false)
-        ? 90
-        : 0
-      )
-    );
+// Required args; angle, speed
+// Optional args: strafe
+function math_move_3d(args){
+    args['strafe'] = args['strafe'] || false;
+
+    var radians = -math_degrees_to_radians({
+      'degrees': args['angle'] - (args['strafe']
+          ? 90
+          : 0
+        ),
+    });
     return {
-      'x': math_round(Math.sin(radians) * speed),
-      'z': math_round(Math.cos(radians) * speed),
+      'x': math_round({
+        'number': Math.sin(radians) * args['speed'],
+      }),
+      'z': math_round({
+        'number': Math.cos(radians) * args['speed'],
+      }),
     };
 }
 
-function math_movement_speed(x0, y0, x1, y1){
-    var angle = Math.atan(Math.abs(y0 - y1) / Math.abs(x0 - x1));
+// Required args: x0, x1, y0, y1
+function math_movement_speed(args){
+    var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
     return [
       Math.cos(angle),
       Math.sin(angle),
@@ -194,31 +227,32 @@ function math_movement_speed(x0, y0, x1, y1){
     ];
 }
 
-function math_rectangle_overlap(x0, y0, h0, w0, x1, y1, h1, w1){
+// Required args: h0, h1, w0, w1, x0, x1, y0, y1
+function math_rectangle_overlap(args){
     var boolean = false;
-
-    if(x0 < x1 + w1
-      && x0 + w0 > x1
-      && y0 < y1 + h1
-      && y0 + h0 > y1){
+    if(args['x0'] < args['x1'] + args['w1']
+      && args['x0'] + args['w0'] > args['x1']
+      && args['y0'] < args['y1'] + args['h1']
+      && args['y0'] + args['h0'] > args['y1']){
         boolean = true;
     }
-
     return boolean;
 }
 
-function math_round(number, decimals){
-    decimals = decimals !== void 0
-      ? decimals
+// Required args: number
+// Optional args: decimals
+function math_round(args){
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
       : math_decimals;
 
-    if(String(number).indexOf('e') >= 0){
-        number = Number(number.toFixed(decimals));
+    if(String(args['number']).indexOf('e') >= 0){
+        args['number'] = Number(args['number'].toFixed(args['decimals']));
     }
 
     return Number(
-      Math.round(number + 'e+' + decimals)
-        + 'e-' + decimals
+      Math.round(args['number'] + 'e+' + args['decimals'])
+        + 'e-' + args['decimals']
     );
 }
 

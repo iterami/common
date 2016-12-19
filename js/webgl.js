@@ -60,11 +60,11 @@ function webgl_camera_move(args){
     args['strafe'] = args['strafe'] || false;
 
     webgl_camera['y'] += args['y'];
-    var movement = math_move_3d(
-      args['speed'],
-      webgl_camera['rotate-y'],
-      args['strafe']
-    );
+    var movement = math_move_3d({
+      'angle': webgl_camera['rotate-y'],
+      'speed': args['speed'],
+      'strafe': args['strafe'],
+    });
     webgl_camera['x'] += movement['x'];
     webgl_camera['z'] += movement['z'];
 }
@@ -77,15 +77,14 @@ function webgl_camera_rotate(args){
       'z': args['z'],
     };
     for(var axis in axes){
-        webgl_camera['rotate-' + axis] = math_clamp(
-          math_round(
-            webgl_camera['rotate-' + axis] + axes[axis],
-            7
-          ),
-          0,
-          360,
-          true
-        );
+        webgl_camera['rotate-' + axis] = math_clamp({
+          'max': 360,
+          'min': 0,
+          'value': math_round({
+            'number': webgl_camera['rotate-' + axis] + axes[axis],
+          }),
+          'wrap': true,
+        });
     }
 }
 
@@ -109,52 +108,66 @@ function webgl_draw(){
     );
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
-    math_matrix_identity('camera');
-    math_matrix_rotate(
-      'camera',
-      [
-        math_degrees_to_radians(webgl_camera['rotate-x']),
-        math_degrees_to_radians(webgl_camera['rotate-y']),
-        math_degrees_to_radians(webgl_camera['rotate-z']),
-      ]
-    );
-    math_matrix_translate(
-      'camera',
-      [
+    math_matrix_identity({
+      'id': 'camera',
+    });
+    math_matrix_rotate({
+      'dimensions': [
+        math_degrees_to_radians({
+          'degrees': webgl_camera['rotate-x'],
+        }),
+        math_degrees_to_radians({
+          'degrees': webgl_camera['rotate-y'],
+        }),
+        math_degrees_to_radians({
+          'degrees': webgl_camera['rotate-z'],
+        }),
+      ],
+      'id': 'camera',
+    });
+    math_matrix_translate({
+      'dimensions': [
         webgl_camera['x'],
         webgl_camera['y'],
         webgl_camera['z'],
-      ]
-    );
+      ],
+      'id': 'camera',
+    });
 
     draw_logic();
 
     for(var entity in webgl_entities){
-        math_matrix_clone(
-          'camera',
-          'cache'
-        );
+        math_matrix_clone({
+          'id': 'camera',
+          'newid': 'cache',
+        });
 
         if(webgl_entities[entity]['depth_ignore']){
             webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
         }
 
-        math_matrix_translate(
-          'camera',
-          [
+        math_matrix_translate({
+          'dimensions': [
             -webgl_entities[entity]['position']['x'],
             -webgl_entities[entity]['position']['y'],
             webgl_entities[entity]['position']['z'],
-          ]
-        );
-        math_matrix_rotate(
-          'camera',
-          [
-            math_degrees_to_radians(webgl_entities[entity]['rotate']['x']),
-            math_degrees_to_radians(webgl_entities[entity]['rotate']['y']),
-            math_degrees_to_radians(webgl_entities[entity]['rotate']['z']),
-          ]
-        );
+          ],
+          'id': 'camera',
+        });
+        math_matrix_rotate({
+          'dimensions': [
+            math_degrees_to_radians({
+              'degrees': webgl_entities[entity]['rotate']['x'],
+            }),
+            math_degrees_to_radians({
+              'degrees': webgl_entities[entity]['rotate']['y'],
+            }),
+            math_degrees_to_radians({
+              'degrees': webgl_entities[entity]['rotate']['z'],
+            }),
+          ],
+          'id': 'camera',
+        });
 
         webgl_buffer.bindBuffer(
           webgl_buffer.ARRAY_BUFFER,
@@ -240,10 +253,10 @@ function webgl_draw(){
             webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
         }
 
-        math_matrix_copy(
-          'cache',
-          'camera'
-        );
+        math_matrix_copy({
+          'id': 'cache',
+          'newid': 'camera',
+        });
     }
 
     webgl_canvas.clearRect(
@@ -370,7 +383,6 @@ function webgl_group_add(args){
 // Required args: grouplist, todo
 function webgl_group_modify(args){
     for(var group in args['grouplist']){
-        console.log(args['grouplist'][group],webgl_groups);
         for(var entity in webgl_groups[args['grouplist'][group]]){
             args['todo'](entity);
         }
