@@ -1,10 +1,11 @@
 'use strict';
 
-function settings_init(newprefix, newsettings){
-    settings_prefix = newprefix;
+// Required args: prefix, settings
+function settings_init(args){
+    settings_prefix = args['prefix'];
 
-    for(var setting in newsettings){
-        settings_defaults[setting] = newsettings[setting];
+    for(var setting in args['settings']){
+        settings_defaults[setting] = args['settings'][setting];
         settings_settings[setting] = window.localStorage.getItem(settings_prefix + setting);
 
         if(settings_settings[setting] === null){
@@ -12,7 +13,9 @@ function settings_init(newprefix, newsettings){
             continue;
         }
 
-        settings_type_convert(setting);
+        settings_type_convert({
+          'setting': setting,
+        });
     }
 }
 
@@ -37,7 +40,9 @@ function settings_save(){
             : 'value'
         ];
 
-        settings_type_convert(setting);
+        settings_type_convert({
+          'setting': setting,
+        });
 
         if(settings_settings[setting] !== settings_defaults[setting]){
             window.localStorage.setItem(
@@ -51,17 +56,18 @@ function settings_save(){
     }
 }
 
-function settings_type_convert(setting){
-    if(typeof settings_defaults[setting] === 'string'){
+// Required args: setting
+function settings_type_convert(args){
+    if(typeof settings_defaults[args['setting']] === 'string'){
         return;
     }
 
-    if(!isNaN(parseFloat(settings_defaults[setting]))){
-        settings_settings[setting] = parseFloat(settings_settings[setting]);
+    if(!isNaN(parseFloat(settings_defaults[args['setting']]))){
+        settings_settings[args['setting']] = parseFloat(settings_settings[args['setting']]);
 
-    }else if(typeof(settings_defaults[setting]) === 'boolean'
-      && typeof(settings_settings[setting]) !== 'boolean'){
-        settings_settings[setting] = settings_settings[setting] === 'true';
+    }else if(typeof(settings_defaults[args['setting']]) === 'boolean'
+      && typeof(settings_settings[args['setting']]) !== 'boolean'){
+        settings_settings[args['setting']] = settings_settings[args['setting']] === 'true';
     }
 }
 
