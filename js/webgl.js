@@ -1,5 +1,15 @@
 'use strict';
 
+// Required args: entity
+// Optional args: axes
+function webgl_billboard(args){
+    args['axes'] = args['axes'] || ['y'];
+
+    for(var axis in args['axes']){
+        webgl_entities[args['entity']]['rotate'][args['axes'][axis]] = 180 - webgl_camera['rotate-' + args['axes'][axis]];
+    }
+}
+
 // Required args: colorData, indexData, textureData, vertexData
 function webgl_buffer_set(args){
     var colorBuffer = webgl_buffer.createBuffer();
