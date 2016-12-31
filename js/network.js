@@ -2,13 +2,13 @@
 
 // Required args: todo, url
 // Optional args: type
-function ajax_request(args){
-    args['type'] = args['type'] || ajax_type;
+function network_ajax(args){
+    args['type'] = args['type'] || network_ajax_type;
 
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function(){
-        if(ajax.readyState === ajax_readyState
-          && ajax.status === ajax_status){
+        if(ajax.readyState === network_ajax_readyState
+          && ajax.status === network_ajax_status){
             args['todo'](ajax.responseText);
         }
     };
@@ -20,6 +20,6 @@ function ajax_request(args){
     ajax.send(null);
 }
 
-var ajax_readyState = 4;
-var ajax_status = 200;
-var ajax_type = 'GET';
+var network_ajax_readyState = 4;
+var network_ajax_status = 200;
+var network_ajax_type = 'GET';
