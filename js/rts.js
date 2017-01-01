@@ -638,10 +638,14 @@ function rts_unit_build(args){
     var unit = {
       'damage': 25,
       'destination-x': args['player'] > 0
-        ? random_integer(settings_settings['level-size'] * 2) - settings_settings['level-size']
+        ? random_integer({
+          'max': settings_settings['level-size'] * 2,
+        }) - settings_settings['level-size']
         : rts_players[args['player']]['buildings'][temp_selected_id]['destination-x'],
       'destination-y': args['player'] > 0
-        ? random_integer(settings_settings['level-size'] * 2) - settings_settings['level-size']
+        ? random_integer({
+          'max': settings_settings['level-size'] * 2,
+        }) - settings_settings['level-size']
         : rts_players[args['player']]['buildings'][temp_selected_id]['destination-y'],
       'fog-radius': 290,
       'health': 100,
@@ -771,9 +775,13 @@ function rts_unit_handle(){
               'y0': rts_players[1]['units'][unit]['y'],
               'y1': rts_players[1]['units'][unit]['destination-y'],
             }) < 5){
-                rts_players[1]['units'][unit]['destination-x'] = random_integer(settings_settings['level-size'] * 2)
+                rts_players[1]['units'][unit]['destination-x'] = random_integer({
+                  'max': settings_settings['level-size'] * 2,
+                })
                   - settings_settings['level-size'];
-                rts_players[1]['units'][unit]['destination-y'] = random_integer(settings_settings['level-size'] * 2)
+                rts_players[1]['units'][unit]['destination-y'] = random_integer({
+                  'max': settings_settings['level-size'] * 2,
+                })
                   - settings_settings['level-size'];
             }
         }
@@ -827,9 +835,13 @@ function rts_unit_handle(){
                   'y1': rts_players[0]['units'][other_unit]['y'],
                 }) < 20){
                     rts_players[0]['units'][unit]['destination-x'] = rts_players[0]['units'][unit]['x']
-                      + random_integer(40) - 20;
+                      + random_integer({
+                        'max': 40,
+                      }) - 20;
                     rts_players[0]['units'][unit]['destination-y'] = rts_players[0]['units'][unit]['y']
-                      + random_integer(40) - 20;
+                      + random_integer({
+                        'max': 40,
+                      }) - 20;
 
                     rts_destionation_validate({
                       'id': unit,
