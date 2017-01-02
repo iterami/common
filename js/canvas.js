@@ -57,35 +57,44 @@ function canvas_drawloop(){
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 }
 
-function canvas_draw_path(vertices, properties, style){
+// Required args: vertices
+// Optional args: properties, style
+function canvas_draw_path(args){
+    args['properties'] = args['properties'] || {};
+    args['style'] = args['style'] || 'fill';
+
     canvas_buffer.beginPath();
-    for(var vertex in vertices){
-        canvas_buffer[vertices[vertex]['type'] || 'lineTo'](
-          vertices[vertex]['x'],
-          vertices[vertex]['y'],
-          vertices[vertex]['radius'],
-          vertices[vertex]['startAngle'],
-          vertices[vertex]['endAngle'],
-          vertices[vertex]['antiClockwise']
+    for(var vertex in args['vertices']){
+        canvas_buffer[args['vertices'][vertex]['type'] || 'lineTo'](
+          args['vertices'][vertex]['x'],
+          args['vertices'][vertex]['y'],
+          args['vertices'][vertex]['radius'],
+          args['vertices'][vertex]['startAngle'],
+          args['vertices'][vertex]['endAngle'],
+          args['vertices'][vertex]['antiClockwise']
         );
     }
     canvas_buffer.closePath();
 
-    for(var property in properties){
-        canvas_buffer[property] = properties[property];
+    for(var property in args['properties']){
+        canvas_buffer[property] = args['properties'][property];
     }
 
-    canvas_buffer[style || 'fill']();
+    canvas_buffer[args['style']]();
 }
 
 function canvas_init(){
     canvas_resize();
-    canvas_setmode(0);
+    canvas_setmode({
+      'mode': 0,
+    });
 }
 
 function canvas_menu_quit(){
     if(canvas_menu){
-        canvas_setmode(0);
+        canvas_setmode({
+          'mode': 0,
+        });
     }
 }
 
@@ -115,22 +124,25 @@ function canvas_resize(){
     }
 }
 
-function canvas_setmode(newmode, newgame){
+// Required args: mode
+// Optional args: newgame
+function canvas_setmode(args){
+    args['newgame'] = args['newgame'] || false;
+
     window.cancelAnimationFrame(canvas_animationFrame);
     window.clearInterval(canvas_interval);
 
     canvas_menu = false;
-    canvas_mode = newmode;
+    canvas_mode = args['mode'];
     var msperframe = 0;
-    newgame = newgame || false;
 
     if(typeof setmode_logic === 'function'){
-        setmode_logic(newgame);
+        setmode_logic(args['newgame']);
 
     }else{
         canvas_mode = 1;
         msperframe = 33;
-        newgame = true;
+        args['newgame'] = true;
     }
 
     // Main menu mode.
@@ -141,7 +153,7 @@ function canvas_setmode(newmode, newgame){
     }
 
     // Simulation modes.
-    if(newgame){
+    if(args['newgame']){
         var properties = '';
 
         if(!canvas_oncontextmenu){
