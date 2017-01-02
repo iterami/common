@@ -1,21 +1,23 @@
 'use strict';
 
-function input_handle_event(event, object, key, todo, state){
-    if(object.hasOwnProperty(key)){
-        if(object[key]['preventDefault']){
-            event.preventDefault();
+// Required args: event, key, object
+// Optional arsg: state, todo
+function input_handle_event(args){
+    if(args['object'].hasOwnProperty(args['key'])){
+        if(args['object'][args['key']]['preventDefault']){
+            args['event'].preventDefault();
         }
 
-        if(todo !== void 0
-          && !object[key]['loop']){
-            object[key]['todo']();
+        if(args['todo'] !== void 0
+          && !args['object'][args['key']]['loop']){
+            args['object'][args['key']]['todo']();
         }
 
-        if(state !== void 0){
-            object[key]['state'] = state;
+        if(args['state'] !== void 0){
+            args['object'][args['key']]['state'] = args['state'];
         }
 
-        return object[key]['solo'];
+        return args['object'][args['key']]['solo'];
     }
 
     return false;
@@ -33,36 +35,35 @@ function input_handle_gamepaddisconnected(event){
 function input_handle_keydown(event){
     var key = input_keyinfo_get(event);
 
-    var solo = input_handle_event(
-      event,
-      input_keys,
-      key['code'],
-      true,
-      true
-    );
+    var solo = input_handle_event({
+      'event': event,
+      'key': key['code'],
+      'object': input_keys,
+      'state': true,
+      'todo': true,
+    });
     if(solo){
         return;
     }
 
-    input_handle_event(
-      event,
-      input_keys,
-      'all',
-      true,
-      true
-    );
+    input_handle_event({
+      'event': event,
+      'key': 'all',
+      'object': input_keys,
+      'state': true,
+      'todo': true,
+    });
 }
 
 function input_handle_keyup(event){
     var key = input_keyinfo_get(event);
 
-    var solo = input_handle_event(
-      event,
-      input_keys,
-      key['code'],
-      void 0,
-      false
-    );
+    var solo = input_handle_event({
+      'event': event,
+      'key': key['code'],
+      'object': input_keys,
+      'state': false,
+    });
     if(solo){
         return;
     }
@@ -84,12 +85,12 @@ function input_handle_mousedown(event){
     input_mouse['down'] = true;
     input_mouse['down-x'] = input_mouse['x'];
     input_mouse['down-y'] = input_mouse['y'];
-    input_handle_event(
-      event,
-      input_mouse['todo'],
-      'mousedown',
-      true
-    );
+    input_handle_event({
+      'event': event,
+      'key': 'mousedown',
+      'object': input_mouse['todo'],
+      'todo': true,
+    });
 }
 
 function input_handle_mousemove(event){
@@ -97,22 +98,22 @@ function input_handle_mousemove(event){
     input_mouse['movement-y'] = event.movementY;
     input_mouse['x'] = event.pageX;
     input_mouse['y'] = event.pageY;
-    input_handle_event(
-      event,
-      input_mouse['todo'],
-      'mousemove',
-      true
-    );
+    input_handle_event({
+      'event': event,
+      'key': 'mousemove',
+      'object': input_mouse['todo'],
+      'todo': true,
+    });
 }
 
 function input_handle_mouseup(event){
     input_mouse['down'] = false;
-    input_handle_event(
-      event,
-      input_mouse['todo'],
-      'mouseup',
-      true
-    );
+    input_handle_event({
+      'event': event,
+      'key': 'mouseup',
+      'object': input_mouse['todo'],
+      'todo': true,
+    });
 }
 
 function input_handle_mousewheel(event){
@@ -120,25 +121,29 @@ function input_handle_mousewheel(event){
       event.wheelDelta
         || -event.detail
     );
-    input_handle_event(
-      event,
-      input_mouse['todo'],
-      'mousewheel',
-      true
-    );
+    input_handle_event({
+      'event': event,
+      'key': 'mousewheel',
+      'object': input_mouse['todo'],
+      'todo': true,
+    });
 }
 
 function input_handle_onpointerlockchange(event){
     input_mouse['pointerlock-state'] = document.pointerLockElement === document.getElementById(input_mouse['pointerlock-id']);
 };
 
-function input_init(keybinds, mousebinds){
-    keybinds = keybinds || false;
-    if(keybinds !== false){
-        input_keybinds_update(
-          keybinds,
-          true
-        );
+// Optional args: keybinds, mousebinds
+function input_init(args){
+    args = args || {};
+    args['keybinds'] = args['keybinds'] || false;
+    args['mousebinds'] = args['mousebinds'] || false;
+
+    if(args['keybinds'] !== false){
+        input_keybinds_update({
+          'clear': true,
+          'keybinds': args['keybinds'],
+        });
 
         window.onkeydown = input_handle_keydown;
         window.onkeyup = input_handle_keyup;
@@ -156,12 +161,11 @@ function input_init(keybinds, mousebinds){
       'x': 0,
       'y': 0,
     };
-    mousebinds = mousebinds || false;
-    if(mousebinds !== false){
-        input_mousebinds_update(
-          mousebinds,
-          true
-        );
+    if(args['mousebinds'] !== false){
+        input_mousebinds_update({
+          'clear': true,
+          'mousebinds': args['mousebinds'],
+        });
 
         document.onpointerlockchange = input_handle_onpointerlockchange;
         window.onmousedown = input_handle_mousedown;
@@ -187,18 +191,22 @@ function input_init(keybinds, mousebinds){
     window.ongamepaddisconnected = input_handle_gamepaddisconnected;
 }
 
-function input_keybinds_update(keybinds, clear){
-    if(clear || false){
+// Required args: keybinds
+// Optional args: clear
+function input_keybinds_update(args){
+    args['clear'] = args['clear'] || false;
+
+    if(args['clear']){
         input_keys = {};
     }
 
-    for(var key in keybinds){
+    for(var key in args['keybinds']){
         input_keys[key] = {};
-        input_keys[key]['loop'] = keybinds[key]['loop'] || false;
-        input_keys[key]['preventDefault'] = keybinds[key]['preventDefault'] || false;
-        input_keys[key]['solo'] = keybinds[key]['solo'] || false;
+        input_keys[key]['loop'] = args['keybinds'][key]['loop'] || false;
+        input_keys[key]['preventDefault'] = args['keybinds'][key]['preventDefault'] || false;
+        input_keys[key]['solo'] = args['keybinds'][key]['solo'] || false;
         input_keys[key]['state'] = false;
-        input_keys[key]['todo'] = keybinds[key]['todo'] || function(){};
+        input_keys[key]['todo'] = args['keybinds'][key]['todo'] || function(){};
     }
 }
 
@@ -210,23 +218,28 @@ function input_keyinfo_get(event){
     };
 }
 
-function input_mousebinds_update(mousebinds, clear){
-    if(clear || false){
+// Required args: mousebinds
+// Optional args: clear
+function input_mousebinds_update(args){
+    args['clear'] = args['clear'] || false;
+
+    if(args['clear']){
         input_mouse['todo'] = {};
     }
 
-    for(var mousebind in mousebinds){
+    for(var mousebind in args['mousebinds']){
         input_mouse['todo'][mousebind] = {};
-        input_mouse['todo'][mousebind]['loop'] = mousebinds[mousebind]['loop'] || false;
-        input_mouse['todo'][mousebind]['preventDefault'] = mousebinds[mousebind]['preventDefault'] || false;
-        input_mouse['todo'][mousebind]['todo'] = mousebinds[mousebind]['todo'] || function(){};
+        input_mouse['todo'][mousebind]['loop'] = args['mousebinds'][mousebind]['loop'] || false;
+        input_mouse['todo'][mousebind]['preventDefault'] = args['mousebinds'][mousebind]['preventDefault'] || false;
+        input_mouse['todo'][mousebind]['todo'] = args['mousebinds'][mousebind]['todo'] || function(){};
     }
 }
 
-function input_requestpointerlock(id){
-    document.getElementById(id).requestPointerLock();
+// Required args: id
+function input_requestpointerlock(args){
+    document.getElementById(args['id']).requestPointerLock();
 
-    input_mouse['pointerlock-id'] = id;
+    input_mouse['pointerlock-id'] = args['id'];
 }
 
 function input_todos_repeat(){
