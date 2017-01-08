@@ -29,7 +29,10 @@ function bests_reset(){
 
     for(var best in bests_bests){
         bests_bests[best] = bests_info[best]['default'];
-        bests_update(best);
+        bests_update({
+          'key': best,
+          'value': bests_bests[best]['default'],
+        });
     }
 }
 
@@ -57,7 +60,7 @@ function bests_update(args){
 
     }else{
         window.localStorage.setItem(
-          bests_prefix + key,
+          bests_prefix + args['key'],
           JSON.stringify(universe)
         );
     }
