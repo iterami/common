@@ -134,14 +134,12 @@ function canvas_setmode(args){
 
     canvas_menu = false;
     canvas_mode = args['mode'];
-    var msperframe = 0;
 
     if(typeof setmode_logic === 'function'){
         setmode_logic(args['newgame']);
 
     }else{
         canvas_mode = 1;
-        msperframe = 33;
         args['newgame'] = true;
     }
 
@@ -180,7 +178,7 @@ function canvas_setmode(args){
     if(typeof logic === 'function'){
         canvas_interval = window.setInterval(
           logic,
-          msperframe || settings_settings['ms-per-frame']
+          canvas_interval_ms
         );
     }
 }
@@ -195,6 +193,7 @@ var canvas_fonts = {
 };
 var canvas_height = 0;
 var canvas_interval = 0;
+var canvas_interval_ms = 25;
 var canvas_menu = false;
 var canvas_mode = 0;
 var canvas_oncontextmenu = true;
