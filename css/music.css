@@ -3,6 +3,7 @@ body{
     color: #aaa;
     font-family: monospace;
     font-size: 14px;
+    font-weight: bold;
     margin: 0;
 }
 canvas{
