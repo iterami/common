@@ -97,6 +97,7 @@ td{
 textarea{
     background: #000;
     color: #aaa;
+    font-weight: bold;
     height: 150px;
     width: 420px;
 }
