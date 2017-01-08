@@ -34,6 +34,8 @@ function bests_reset(){
           'value': bests_bests[best]['default'],
         });
     }
+
+    return true;
 }
 
 // Required args: key, value
