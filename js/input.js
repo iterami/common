@@ -237,7 +237,9 @@ function input_mousebinds_update(args){
 
 // Required args: id
 function input_requestpointerlock(args){
-    document.getElementById(args['id']).requestPointerLock();
+    var element = document.getElementById(args['id']);
+    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
+    element.requestPointerLock();
 
     input_mouse['pointerlock-id'] = args['id'];
 }
