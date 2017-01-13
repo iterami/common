@@ -17,6 +17,7 @@ body{
 }
 .dl a{
     color: #19f;
+    display: inline-block;
 }
 table{
     display: inline-block;
