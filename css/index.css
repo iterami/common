@@ -19,6 +19,11 @@ body{
     color: #19f;
     display: inline-block;
 }
+.dl a:first-child,
+td:nth-child(2) a{
+    color: #f70;
+}
+
 table{
     display: inline-block;
     margin: auto;
@@ -28,7 +33,4 @@ table{
 td{
     border-bottom: 1px solid #555;
     line-height: 3em;
-}
-td:nth-child(2) a{
-    color: #f70;
 }
