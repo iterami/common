@@ -80,7 +80,10 @@ function webgl_camera_move(args){
 }
 
 // Required args: x, y, z
+// Optional args: xlock
 function webgl_camera_rotate(args){
+    args['xlock'] = args['xlock'] === false || true;
+
     var axes = {
       'x': args['x'],
       'y': args['y'],
@@ -94,6 +97,18 @@ function webgl_camera_rotate(args){
             'number': webgl_camera['rotate-' + axis] + axes[axis],
           }),
           'wrap': true,
+        });
+    }
+
+    if(args['xlock']){
+        var max = 89;
+        if(webgl_camera['rotate-x'] > 180){
+            max += 271;
+        }
+        webgl_camera['rotate-x'] = math_clamp({
+          'max': max,
+          'min': max - 89,
+          'value': webgl_camera['rotate-x'],
         });
     }
 }
