@@ -12,56 +12,40 @@ function webgl_billboard(args){
 
 // Required args: colorData, indexData, textureData, vertexData
 function webgl_buffer_set(args){
-    var colorBuffer = webgl_buffer.createBuffer();
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      colorBuffer
-    );
-    webgl_buffer.bufferData(
-      webgl_buffer.ARRAY_BUFFER,
-      new Float32Array(args['colorData']),
-      webgl_buffer.STATIC_DRAW
-    );
-
-    var vertexBuffer = webgl_buffer.createBuffer();
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      vertexBuffer
-    );
-    webgl_buffer.bufferData(
-      webgl_buffer.ARRAY_BUFFER,
-      new Float32Array(args['vertexData']),
-      webgl_buffer.STATIC_DRAW
-    );
-
-    var textureBuffer = webgl_buffer.createBuffer();
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      textureBuffer
-    );
-    webgl_buffer.bufferData(
-      webgl_buffer.ARRAY_BUFFER,
-      new Float32Array(args['textureData']),
-      webgl_buffer.STATIC_DRAW
-    );
-
-    var indexBuffer = webgl_buffer.createBuffer();
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      indexBuffer
-    );
-    webgl_buffer.bufferData(
-      webgl_buffer.ARRAY_BUFFER,
-      new Uint16Array(args['indexData']),
-      webgl_buffer.STATIC_DRAW
-    );
-
     return {
-      'color': colorBuffer,
-      'index': indexBuffer,
-      'texture': textureBuffer,
-      'vertex': vertexBuffer,
-    }
+      'color': webgl_buffer_set_type({
+        'data': args['colorData'],
+      }),
+      'index': webgl_buffer_set_type({
+        'data': args['indexData'],
+        'type': 'Uint16Array',
+      }),
+      'texture': webgl_buffer_set_type({
+        'data': args['textureData'],
+      }),
+      'vertex': webgl_buffer_set_type({
+        'data': args['vertexData'],
+      }),
+    };
+}
+
+// Required args: data
+// Optional args: type
+function webgl_buffer_set_type(args){
+    args['type'] = args['type'] || 'Float32Array';
+
+    var buffer = webgl_buffer.createBuffer();
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
+      buffer
+    );
+    webgl_buffer.bufferData(
+      webgl_buffer.ARRAY_BUFFER,
+      new window[args['type']](args['data']),
+      webgl_buffer.STATIC_DRAW
+    );
+
+    return buffer;
 }
 
 // Required args: speed, y
@@ -378,14 +362,14 @@ function webgl_entity_set(args){
 
     webgl_entities[args['id']]['buffer'] = webgl_buffer_set({
       'colorData': webgl_entities[args['id']]['color'],
-      'vertexData': webgl_entities[args['id']]['vertices'],
+      'indexData': webgl_entities[args['id']]['index'],
       'textureData': [
         0.0, 1.0,
         0.0, 0.0,
         1.0, 0.0,
         1.0, 1.0,
       ],
-      'indexData': webgl_entities[args['id']]['index'],
+      'vertexData': webgl_entities[args['id']]['vertices'],
     });
 
     webgl_texture_set({
