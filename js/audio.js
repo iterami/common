@@ -41,7 +41,7 @@ function audio_init(args){
     args = args || {};
     args['volume'] = args['volume'] !== void 0
       ? args['volume']
-      : 1;
+      : audio_volume_default;
 
     audio_context = new window.AudioContext();
     audio_volume = args['volume'];
@@ -145,7 +145,7 @@ function audio_source_create(args){
 function audio_start(args){
     args['volume-multiplier'] = args['volume-multiplier'] !== void 0
       ? args['volume-multiplier']
-      : 1;
+      : audio_volume_multiplier;
 
     if(args['volume-multiplier'] === 0){
         return;
@@ -191,3 +191,5 @@ var audio_audio = {};
 var audio_context = 0;
 var audio_sources = {};
 var audio_volume = 1;
+var audio_volume_default = 1;
+var audio_volume_multiplier = 1;

@@ -61,7 +61,7 @@ function canvas_drawloop(){
 // Optional args: properties, style
 function canvas_draw_path(args){
     args['properties'] = args['properties'] || {};
-    args['style'] = args['style'] || 'fill';
+    args['style'] = args['style'] || canvas_style;
 
     canvas_buffer.beginPath();
     for(var vertex in args['vertices']){
@@ -199,6 +199,7 @@ var canvas_mode = 0;
 var canvas_oncontextmenu = true;
 var canvas_quit = 'Q = Main Menu';
 var canvas_resume = 'ESC = Resume';
+var canvas_style = 'fill';
 var canvas_width = 0;
 var canvas_x = 0;
 var canvas_y = 0;
