@@ -18,32 +18,35 @@ function storage_init(args){
           'type': data['type'] || 'setting',
         };
         storage_data[key] = window.localStorage.getItem(storage_prefix + key);
-        if(storage_info[key]['type'] !== 'setting'){
-            storage_info[key]['best'] = storage_data[key];
-        }
 
         if(storage_data[key] === null){
             storage_data[key] = storage_info[key]['default'];
-            continue;
         }
 
         storage_type_convert({
           'key': key,
         });
+
+        if(storage_info[key]['type'] !== 'setting'){
+            storage_info[key]['best'] = storage_data[key];
+        }
     }
 }
 
-// Optional args: type
+// Optional args: bests
 function storage_reset(args){
     args = args || {};
-    args['type'] = args['type'] || 'setting';
+    args['bests'] = args['bests'] || false;
 
     if(!window.confirm('Reset?')){
         return false;
     }
 
     for(var key in storage_data){
-        if(storage_info[key]['type'] !== args['type']){
+        if(args['bests']
+          && storage_info[key]['type'] !== 'setting'){
+            storage_data[key] = storage_info[key]['default'];
+            storage_info[key]['best'] = storage_info[key]['default'];
             continue;
         }
 
@@ -51,7 +54,11 @@ function storage_reset(args){
         window.localStorage.removeItem(storage_prefix + key);
     }
 
+    if(args['bests']){
+        storage_save();
+    }
     storage_update();
+    return true;
 }
 
 function storage_save(){
@@ -115,6 +122,10 @@ function storage_type_convert(args){
 
 function storage_update(){
     for(var key in storage_data){
+        if(storage_info[key]['type'] !== 'setting'){
+            continue;
+        }
+
         document.getElementById(key)[
           typeof(storage_info[key]['default']) === 'boolean'
             ? 'checked'
