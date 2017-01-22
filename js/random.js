@@ -5,7 +5,7 @@ function random_boolean(args){
     args = args || {};
     args['chance'] = args['chance'] !== void 0
       ? args['chance']
-      : .5;
+      : random_boolean_chance;
 
     return Math.random() < args['chance'];
 }
@@ -26,9 +26,10 @@ function random_hex(args){
     return args['hash'] + red.slice(-2) + green.slice(-2) + blue.slice(-2);
 }
 
-// Required args: max
-// Optional args: todo
+// Optional args: max, todo
 function random_integer(args){
+    args = args || {};
+    args['max'] = args['max'] || random_integer_max;
     args['todo'] = args['todo'] || 'floor';
 
     return Math[args['todo']](Math.random() * args['max']);
@@ -36,15 +37,9 @@ function random_integer(args){
 
 function random_rgb(){
   return {
-    'blue': random_integer({
-      'max': 256,
-    }),
-    'green': random_integer({
-      'max': 256,
-    }),
-    'red': random_integer({
-      'max': 256,
-    }),
+    'blue': random_integer(),
+    'green': random_integer(),
+    'red': random_integer(),
   };
 }
 
@@ -59,3 +54,6 @@ function random_string(args){
     }
     return string;
 }
+
+var random_boolean_chance = .5;
+var random_integer_max = 256;
