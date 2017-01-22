@@ -15,6 +15,8 @@ function entity_create(args){
         entity[property] =  args['properties'][property];
     }
 
+    entity_info[args['type']]['todo'](args['id']);
+
     entity_entities[args['id']] = entity;
 }
 
@@ -56,12 +58,14 @@ function entity_group_remove(args){
 }
 
 // Required args: type
-// Optional args: properties
+// Optional args: properties, todo
 function entity_set(args){
     args['properpties'] = args['properties'] || {};
+    args['todo'] = args['todo'] || function(){};
 
     entity_info[args['type']] = {
       'default': args['properties'],
+      'todo': args['todo'],
     };
 }
 
