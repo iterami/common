@@ -15,9 +15,9 @@ function entity_create(args){
         entity[property] =  args['properties'][property];
     }
 
-    entity_info[args['type']]['todo'](args['id']);
-
     entity_entities[args['id']] = entity;
+
+    entity_info[args['type']]['todo'](args['id']);
 }
 
 // Required args: entities, group
