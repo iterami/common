@@ -43,11 +43,12 @@ function storage_reset(args){
     }
 
     for(var key in storage_data){
-        if(args['bests']
-          && storage_info[key]['type'] !== 'setting'){
-            storage_data[key] = storage_info[key]['default'];
+        if(storage_info[key]['type'] !== 'setting'){
+            if(!args['bests']){
+                continue;
+            }
+
             storage_info[key]['best'] = storage_info[key]['default'];
-            continue;
         }
 
         storage_data[key] = storage_info[key]['default'];
