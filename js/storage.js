@@ -23,8 +23,9 @@ function storage_init(args){
             storage_data[key] = storage_info[key]['default'];
         }
 
-        storage_type_convert({
+        storage_data[key] = storage_type_convert({
           'key': key,
+          'value': storage_data[key],
         });
 
         if(storage_info[key]['type'] !== 'setting'){
@@ -68,7 +69,7 @@ function storage_save(args){
     args['bests'] = args['bests'] || false;
 
     for(var key in storage_data){
-        var data = storage_data[key];
+        var data = '';
 
         if(storage_info[key]['type'] === 'setting'){
             if(args['bests']){
@@ -81,9 +82,18 @@ function storage_save(args){
                 : 'value'
             ];
 
-            data = storage_data[key];
+            data = storage_type_convert({
+              'key': key,
+              'value': storage_data[key],
+            });
+            storage_data[key] = data;
 
         }else{
+            data = storage_type_convert({
+              'key': key,
+              'value': storage_data[key],
+            });
+
             if(storage_info[key]['type'] < 0){
                 if(data < storage_info[key]['best']){
                     storage_info[key]['best'] = data;
@@ -92,13 +102,7 @@ function storage_save(args){
             }else if(storage_data[key] > storage_info[key]['best']){
                 storage_info[key]['best'] = data;
             }
-
-            data = storage_info[key]['best'];
         }
-
-        storage_type_convert({
-          'key': key,
-        });
 
         if(data !== storage_info[key]['default']){
             window.localStorage.setItem(
@@ -112,20 +116,19 @@ function storage_save(args){
     }
 }
 
-// Required args: key
+// Required args: key, value
 function storage_type_convert(args){
     var storage_default = storage_info[args['key']]['default'];
 
     if(typeof storage_default === 'string'){
-        return;
-    }
+        return args['value'];
 
-    if(!isNaN(parseFloat(storage_default))){
-        storage_data[args['key']] = parseFloat(storage_data[args['key']]);
+    }else if(!isNaN(parseFloat(storage_default))){
+        return parseFloat(args['value']);
 
     }else if(typeof(storage_default) === 'boolean'
-      && typeof(storage_data[args['key']]) !== 'boolean'){
-        storage_data[args['key']] = storage_data[args['key']] === 'true';
+      && typeof(args['value']) !== 'boolean'){
+        return args['value'] === 'true';
     }
 }
 
