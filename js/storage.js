@@ -34,7 +34,7 @@ function storage_init(args){
 }
 
 // Optional args: type
-function storage_reset(){
+function storage_reset(args){
     args = args || {};
     args['type'] = args['type'] || 'setting';
 
