@@ -383,6 +383,9 @@ function webgl_init(){
       },
       'type': '_webgl',
     });
+    entity_types_default = [
+      '_webgl',
+    ];
 
     webgl_setmode({
       'newmode': 0,

@@ -1,14 +1,17 @@
 'use strict';
 
-// Reqruied args: id, type
-// Optional args: properties
+// Reqruied args: id
+// Optional args: types, properties
 function entity_create(args){
     args['properties'] = args['properties'] || {};
+    args['types'] = args['types'] || entity_types_default;
 
     var entity = {};
 
-    for(var property in entity_info[args['type']]['default']){
-        entity[property] =  entity_info[args['type']]['default'][property];
+    for(var type in args['types']){
+        for(var property in entity_info[args['types'][type]]['default']){
+            entity[property] =  entity_info[args['types'][type]]['default'][property];
+        }
     }
 
     for(property in args['properties']){
@@ -17,7 +20,9 @@ function entity_create(args){
 
     entity_entities[args['id']] = entity;
 
-    entity_info[args['type']]['todo'](args['id']);
+    for(var type in args['types']){
+        entity_info[args['types'][type]]['todo'](args['id']);
+    }
 }
 
 // Required args: entities, group
@@ -69,6 +74,7 @@ function entity_set(args){
     };
 }
 
-var entity_info = {};
 var entity_entities = {};
 var entity_groups = {};
+var entity_info = {};
+var entity_types_default = [];
