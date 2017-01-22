@@ -61,11 +61,19 @@ function storage_reset(args){
     return true;
 }
 
-function storage_save(){
+// Optional args: bests
+function storage_save(args){
+    args = args || {};
+    args['bests'] = args['bests'] || false;
+
     for(var key in storage_data){
         var data = storage_data[key];
 
         if(storage_info[key]['type'] === 'setting'){
+            if(args['bests']){
+                continue;
+            }
+
             storage_data[key] = document.getElementById(key)[
               typeof(storage_info[key]['default']) === 'boolean'
                 ? 'checked'
