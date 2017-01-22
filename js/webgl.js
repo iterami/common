@@ -659,7 +659,7 @@ function webgl_setmode(args){
     if(typeof logic === 'function'){
         webgl_interval = window.setInterval(
           webgl_logicloop,
-          msperframe || settings_settings['ms-per-frame']
+          msperframe || storage_data['ms-per-frame']
         );
     }
 
