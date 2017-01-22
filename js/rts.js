@@ -8,18 +8,18 @@ function rts_building_build(args){
     }
 
     // Don't allow building outside of level.
-    if(args['x'] > settings_settings['level-size'] - rts_buildings[args['type']]['width']){
-        args['x'] = settings_settings['level-size'] - rts_buildings[args['type']]['width'];
+    if(args['x'] > storage_data['level-size'] - rts_buildings[args['type']]['width']){
+        args['x'] = storage_data['level-size'] - rts_buildings[args['type']]['width'];
 
-    }else if(args['x'] < -settings_settings['level-size']){
-        args['x'] = -settings_settings['level-size'];
+    }else if(args['x'] < -storage_data['level-size']){
+        args['x'] = -storage_data['level-size'];
     }
 
-    if(args['y'] > settings_settings['level-size'] - rts_buildings[args['type']]['height']){
-        args['y'] = settings_settings['level-size'] - rts_buildings[args['type']]['height'];
+    if(args['y'] > storage_data['level-size'] - rts_buildings[args['type']]['height']){
+        args['y'] = storage_data['level-size'] - rts_buildings[args['type']]['height'];
 
-    }else if(args['y'] < -settings_settings['level-size']){
-        args['y'] = -settings_settings['level-size'];
+    }else if(args['y'] < -storage_data['level-size']){
+        args['y'] = -storage_data['level-size'];
     }
 
     // Don't allow building on fog.
@@ -35,9 +35,9 @@ function rts_building_build(args){
 
                 if(math_distance({
                   'x0': args['x'],
-                  'x1': rts_fog[loop_counter]['x'] - settings_settings['level-size'] + rts_buildings[args['type']]['width'] / 2,
+                  'x1': rts_fog[loop_counter]['x'] - storage_data['level-size'] + rts_buildings[args['type']]['width'] / 2,
                   'y0': args['y'],
-                  'y1': rts_fog[loop_counter]['y'] - settings_settings['level-size'] + rts_buildings[args['type']]['height'] / 2,
+                  'y1': rts_fog[loop_counter]['y'] - storage_data['level-size'] + rts_buildings[args['type']]['height'] / 2,
                 }) < 70){
                     return;
                 }
@@ -153,14 +153,14 @@ function rts_building_fog(){
         do{
             if(math_distance({
               'x0': rts_players[0]['buildings'][building]['x'],
-              'x1': rts_fog[loop_counter]['x'] - settings_settings['level-size'],
+              'x1': rts_fog[loop_counter]['x'] - storage_data['level-size'],
               'y0': rts_players[0]['buildings'][building]['y'],
-              'y1': rts_fog[loop_counter]['y'] - settings_settings['level-size'],
+              'y1': rts_fog[loop_counter]['y'] - storage_data['level-size'],
             }) > rts_players[0]['buildings'][building]['fog-radius']){
                 continue;
             }
 
-            if(settings_settings['fog-type'] === 2){
+            if(storage_data['fog-type'] === 2){
                 rts_fog[loop_counter]['display'] = false;
 
             }else{
@@ -452,17 +452,17 @@ function rts_bullet_handle(){
 // Required args: x, y
 function rts_camera_validatemove(args){
     camera_x = -rts_math[0] * (args['x'] - 100);
-    if(camera_x > settings_settings['level-size']){
-        camera_x = settings_settings['level-size'];
-    }else if(camera_x < -settings_settings['level-size']){
-        camera_x = -settings_settings['level-size'];
+    if(camera_x > storage_data['level-size']){
+        camera_x = storage_data['level-size'];
+    }else if(camera_x < -storage_data['level-size']){
+        camera_x = -storage_data['level-size'];
     }
 
     camera_y = -rts_math[0] * (args['y'] - canvas_height + 100);
-    if(camera_y > settings_settings['level-size']){
-        camera_y = settings_settings['level-size'];
-    }else if(camera_y < -settings_settings['level-size']){
-        camera_y = -settings_settings['level-size'];
+    if(camera_y > storage_data['level-size']){
+        camera_y = storage_data['level-size'];
+    }else if(camera_y < -storage_data['level-size']){
+        camera_y = -storage_data['level-size'];
     }
 }
 
@@ -516,16 +516,16 @@ function rts_destionation_set(args){
 
 // Required args: id, type
 function rts_destionation_validate(args){
-    if(rts_players[0][args['type']][args['id']]['destination-x'] > settings_settings['level-size']){
-        rts_players[0][args['type']][args['id']]['destination-x'] = settings_settings['level-size'];
-    }else if(rts_players[0][args['type']][args['id']]['destination-x'] < -settings_settings['level-size']){
-        rts_players[0][args['type']][args['id']]['destination-x'] = -settings_settings['level-size'];
+    if(rts_players[0][args['type']][args['id']]['destination-x'] > storage_data['level-size']){
+        rts_players[0][args['type']][args['id']]['destination-x'] = storage_data['level-size'];
+    }else if(rts_players[0][args['type']][args['id']]['destination-x'] < -storage_data['level-size']){
+        rts_players[0][args['type']][args['id']]['destination-x'] = -storage_data['level-size'];
     }
 
-    if(rts_players[0][args['type']][args['id']]['destination-y'] > settings_settings['level-size']){
-        rts_players[0][args['type']][args['id']]['destination-y'] = settings_settings['level-size'];
-    }else if(rts_players[0][args['type']][args['id']]['destination-y'] < -settings_settings['level-size']){
-        rts_players[0][args['type']][args['id']]['destination-y'] = -settings_settings['level-size'];
+    if(rts_players[0][args['type']][args['id']]['destination-y'] > storage_data['level-size']){
+        rts_players[0][args['type']][args['id']]['destination-y'] = storage_data['level-size'];
+    }else if(rts_players[0][args['type']][args['id']]['destination-y'] < -storage_data['level-size']){
+        rts_players[0][args['type']][args['id']]['destination-y'] = -storage_data['level-size'];
     }
 }
 
@@ -639,13 +639,13 @@ function rts_unit_build(args){
       'damage': 25,
       'destination-x': args['player'] > 0
         ? random_integer({
-          'max': settings_settings['level-size'] * 2,
-        }) - settings_settings['level-size']
+          'max': storage_data['level-size'] * 2,
+        }) - storage_data['level-size']
         : rts_players[args['player']]['buildings'][temp_selected_id]['destination-x'],
       'destination-y': args['player'] > 0
         ? random_integer({
-          'max': settings_settings['level-size'] * 2,
-        }) - settings_settings['level-size']
+          'max': storage_data['level-size'] * 2,
+        }) - storage_data['level-size']
         : rts_players[args['player']]['buildings'][temp_selected_id]['destination-y'],
       'fog-radius': 290,
       'health': 100,
@@ -776,13 +776,13 @@ function rts_unit_handle(){
               'y1': rts_players[1]['units'][unit]['destination-y'],
             }) < 5){
                 rts_players[1]['units'][unit]['destination-x'] = random_integer({
-                  'max': settings_settings['level-size'] * 2,
+                  'max': storage_data['level-size'] * 2,
                 })
-                  - settings_settings['level-size'];
+                  - storage_data['level-size'];
                 rts_players[1]['units'][unit]['destination-y'] = random_integer({
-                  'max': settings_settings['level-size'] * 2,
+                  'max': storage_data['level-size'] * 2,
                 })
-                  - settings_settings['level-size'];
+                  - storage_data['level-size'];
             }
         }
     }
@@ -854,18 +854,18 @@ function rts_unit_handle(){
         }
 
         // Update fog.
-        if(settings_settings['fog-type'] === 2
+        if(storage_data['fog-type'] === 2
           || update_fog){
             var loop_counter = rts_fog.length - 1;
             if(loop_counter >= 0){
                 do{
                     if(math_distance({
                       'x0': rts_players[0]['units'][unit]['x'],
-                      'x1': rts_fog[loop_counter]['x'] - settings_settings['level-size'] + 50,
+                      'x1': rts_fog[loop_counter]['x'] - storage_data['level-size'] + 50,
                       'y0': rts_players[0]['units'][unit]['y'],
-                      'y1': rts_fog[loop_counter]['y'] - settings_settings['level-size'] + 50,
+                      'y1': rts_fog[loop_counter]['y'] - storage_data['level-size'] + 50,
                     }) < rts_players[0]['units'][unit]['fog-radius']){
-                        if(settings_settings['fog-type'] === 2){
+                        if(storage_data['fog-type'] === 2){
                             rts_fog[loop_counter]['display'] = false;
 
                         }else{
