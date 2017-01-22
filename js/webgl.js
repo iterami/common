@@ -6,7 +6,7 @@ function webgl_billboard(args){
     args['axes'] = args['axes'] || ['y'];
 
     for(var axis in args['axes']){
-        webgl_entities[args['entity']]['rotate'][args['axes'][axis]] = 180 - webgl_camera['rotate-' + args['axes'][axis]];
+        entity_entities[args['entity']]['rotate'][args['axes'][axis]] = 180 - webgl_camera['rotate-' + args['axes'][axis]];
     }
 }
 
@@ -145,34 +145,34 @@ function webgl_draw(){
 
     draw_logic();
 
-    for(var entity in webgl_entities){
+    for(var entity in entity_entities){
         math_matrix_clone({
           'id': 'camera',
           'newid': 'cache',
         });
 
-        if(webgl_entities[entity]['depth_ignore']){
+        if(entity_entities[entity]['depth-ignore']){
             webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
         }
 
         math_matrix_translate({
           'dimensions': [
-            -webgl_entities[entity]['position']['x'],
-            -webgl_entities[entity]['position']['y'],
-            webgl_entities[entity]['position']['z'],
+            -entity_entities[entity]['position']['x'],
+            -entity_entities[entity]['position']['y'],
+            entity_entities[entity]['position']['z'],
           ],
           'id': 'camera',
         });
         math_matrix_rotate({
           'dimensions': [
             math_degrees_to_radians({
-              'degrees': webgl_entities[entity]['rotate']['x'],
+              'degrees': entity_entities[entity]['rotate']['x'],
             }),
             math_degrees_to_radians({
-              'degrees': webgl_entities[entity]['rotate']['y'],
+              'degrees': entity_entities[entity]['rotate']['y'],
             }),
             math_degrees_to_radians({
-              'degrees': webgl_entities[entity]['rotate']['z'],
+              'degrees': entity_entities[entity]['rotate']['z'],
             }),
           ],
           'id': 'camera',
@@ -180,7 +180,7 @@ function webgl_draw(){
 
         webgl_buffer.bindBuffer(
           webgl_buffer.ARRAY_BUFFER,
-          webgl_entities[entity]['buffer']['color']
+          entity_entities[entity]['buffer']['color']
         );
         webgl_buffer.vertexAttribPointer(
           webgl_attributes['vec_vertexColor'],
@@ -193,7 +193,7 @@ function webgl_draw(){
 
         webgl_buffer.bindBuffer(
           webgl_buffer.ARRAY_BUFFER,
-          webgl_entities[entity]['buffer']['vertex']
+          entity_entities[entity]['buffer']['vertex']
         );
         webgl_buffer.vertexAttribPointer(
           webgl_attributes['vec_vertexPosition'],
@@ -206,7 +206,7 @@ function webgl_draw(){
 
         webgl_buffer.bindBuffer(
           webgl_buffer.ARRAY_BUFFER,
-          webgl_entities[entity]['buffer']['texture']
+          entity_entities[entity]['buffer']['texture']
         );
         webgl_buffer.vertexAttribPointer(
           webgl_attributes['vec_texturePosition'],
@@ -220,7 +220,7 @@ function webgl_draw(){
         webgl_buffer.activeTexture(webgl_buffer.TEXTURE0);
         webgl_buffer.bindTexture(
           webgl_buffer.TEXTURE_2D,
-          webgl_entities[entity]['texture']
+          entity_entities[entity]['texture']
         );
         webgl_buffer.uniform1i(
           webgl_buffer.getUniformLocation(
@@ -232,7 +232,7 @@ function webgl_draw(){
 
         webgl_buffer.bindBuffer(
           webgl_buffer.ARRAY_BUFFER,
-          webgl_entities[entity]['buffer']['index']
+          entity_entities[entity]['buffer']['index']
         );
 
         webgl_buffer.uniformMatrix4fv(
@@ -253,12 +253,12 @@ function webgl_draw(){
         );
 
         webgl_buffer.drawArrays(
-          webgl_buffer[webgl_entities[entity]['mode']],
+          webgl_buffer[entity_entities[entity]['mode']],
           0,
-          webgl_entities[entity]['vertices'].length / 3
+          entity_entities[entity]['vertices'].length / 3
         );
 
-        if(webgl_entities[entity]['depth_ignore']){
+        if(entity_entities[entity]['depth-ignore']){
             webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
         }
 
@@ -326,58 +326,6 @@ function webgl_drawloop(){
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
 }
 
-// Required args: id
-// Optional args: properties
-function webgl_entity_set(args){
-    args['properties'] = args['properties'];
-
-    args['properties']['color'] = args['properties']['color'] || [
-      1, 1, 1, 1,
-      1, 1, 1, 1,
-      1, 1, 1, 1,
-      1, 1, 1, 1,
-    ];
-    args['properties']['depth_ignore'] = args['properties']['depth_ignore'] || false;
-    args['properties']['index'] = args['properties']['index'] || [
-      0, 1, 2, 0, 2, 3,
-    ];
-    args['properties']['mode'] = args['properties']['mode'] || 'TRIANGLE_FAN';
-    args['properties']['position'] = args['properties']['position'] || {
-      'x': 0,
-      'y': 0,
-      'z': 0,
-    };
-    args['properties']['rotate'] = args['properties']['rotate'] || {
-      'x': 0,
-      'y': 0,
-      'z': 0,
-    };
-    args['properties']['scale'] = args['properties']['scale'] || {
-      'x': 1,
-      'y': 1,
-      'z': 1,
-    };
-
-    webgl_entities[args['id']] = args['properties'];
-
-    webgl_entities[args['id']]['buffer'] = webgl_buffer_set({
-      'colorData': webgl_entities[args['id']]['color'],
-      'indexData': webgl_entities[args['id']]['index'],
-      'textureData': [
-        0.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-      ],
-      'vertexData': webgl_entities[args['id']]['vertices'],
-    });
-
-    webgl_texture_set({
-      'entityid': args['id'],
-      'image': webgl_textures['_default'],
-    });
-}
-
 function webgl_init(){
     webgl_resize();
 
@@ -388,15 +336,63 @@ function webgl_init(){
       'red': 0,
     };
 
+    entity_set({
+      'properties': {
+        'color': [
+          1, 1, 1, 1,
+          1, 1, 1, 1,
+          1, 1, 1, 1,
+          1, 1, 1, 1,
+        ],
+        'depth-ignore': false,
+        'index': [0, 1, 2, 0, 2, 3,],
+        'mode': 'TRIANGLE_FAN',
+        'position': {
+          'x': 0,
+          'y': 0,
+          'z': 0,
+        },
+        'rotate': {
+          'x': 0,
+          'y': 0,
+          'z': 0,
+        },
+        'scale': {
+          'x': 1,
+          'y': 1,
+          'z': 1,
+        },
+      },
+      'todo': function(entity){
+          entity_entities[entity]['buffer'] = webgl_buffer_set({
+            'colorData': entity_entities[entity]['color'],
+            'indexData': entity_entities[entity]['index'],
+            'textureData': [
+              0.0, 1.0,
+              0.0, 0.0,
+              1.0, 0.0,
+              1.0, 1.0,
+            ],
+            'vertexData': entity_entities[entity]['vertices'],
+          });
+
+          webgl_texture_set({
+            'entityid': entity,
+            'image': webgl_textures['_default'],
+          });
+      },
+      'type': '_webgl',
+    });
+
     webgl_setmode({
       'newmode': 0,
     });
 }
 
 function webgl_logicloop(){
-    for(var entity in webgl_entities){
-        if(webgl_entities[entity]['logic']){
-            webgl_entities[entity]['logic']();
+    for(var entity in entity_entities){
+        if(entity_entities[entity]['logic']){
+            entity_entities[entity]['logic']();
         }
     }
 
@@ -594,13 +590,14 @@ function webgl_setmode(args){
     math_matrices['camera'] = math_matrix_create();
     math_matrix_perspective();
 
-    for(var entity in webgl_entities){
-        if(webgl_entities[entity]['_init'] === true){
-            var group = webgl_entities[entity]['_group'] || void 0;
+    for(var entity in entity_entities){
+        if(entity_entities[entity]['_init'] === true){
+            var group = entity_entities[entity]['_group'] || void 0;
 
-            webgl_entity_set({
+            entity_create({
               'id': entity,
-              'properties': webgl_entities[entity],
+              'properties': entity_entities[entity],
+              'type': '_webgl',
             });
 
             if(group !== void 0){
@@ -648,14 +645,14 @@ function webgl_shader_create(args){
 function webgl_texture_set(args){
     args['image'] = args['image'] || webgl_textures['_default'];
 
-    webgl_entities[args['entityid']]['texture'] = webgl_buffer.createTexture();
-    webgl_entities[args['entityid']]['image'] = images_new({
+    entity_entities[args['entityid']]['texture'] = webgl_buffer.createTexture();
+    entity_entities[args['entityid']]['image'] = images_new({
       'id': args['entityid'] + '-texture',
       'src': args['image'],
       'todo': function(){
           webgl_buffer.bindTexture(
             webgl_buffer.TEXTURE_2D,
-            webgl_entities[args['entityid']]['texture']
+            entity_entities[args['entityid']]['texture']
           );
           webgl_buffer.texImage2D(
             webgl_buffer.TEXTURE_2D,
@@ -663,7 +660,7 @@ function webgl_texture_set(args){
             webgl_buffer.RGBA,
             webgl_buffer.RGBA,
             webgl_buffer.UNSIGNED_BYTE,
-            webgl_entities[args['entityid']]['image']
+            entity_entities[args['entityid']]['image']
           );
           webgl_buffer.texParameteri(
             webgl_buffer.TEXTURE_2D,
@@ -699,7 +696,6 @@ var webgl_camera = {};
 var webgl_canvas = 0;
 var webgl_clearcolor = {};
 var webgl_cleardepth = 1;
-var webgl_entities = {};
 var webgl_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
