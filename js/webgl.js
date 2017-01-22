@@ -66,7 +66,7 @@ function webgl_camera_move(args){
 // Required args: x, y, z
 // Optional args: xlock
 function webgl_camera_rotate(args){
-    args['xlock'] = args['xlock'] === false || true;
+    args['xlock'] = args['xlock'] !== false;
 
     var axes = {
       'x': args['x'],
