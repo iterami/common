@@ -130,6 +130,8 @@ function storage_type_convert(args){
       && typeof(args['value']) !== 'boolean'){
         return args['value'] === 'true';
     }
+
+    return args['value'];
 }
 
 function storage_update(){
