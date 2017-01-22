@@ -29,10 +29,10 @@ function entity_group_add(args){
     }
 }
 
-// Required args: grouplist, todo
+// Required args: groups, todo
 function entity_group_modify(args){
-    for(var group in args['grouplist']){
-        for(var entity in entity_groups[args['grouplist'][group]]){
+    for(var group in args['groups']){
+        for(var entity in entity_groups[args['groups'][group]]){
             args['todo'](entity);
         }
     }
