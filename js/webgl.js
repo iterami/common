@@ -378,40 +378,6 @@ function webgl_entity_set(args){
     });
 }
 
-// Required args: entitylist, group
-function webgl_group_add(args){
-    if(!(args['group'] in webgl_groups)){
-        webgl_groups[args['group']] = {};
-    }
-
-    for(var entity in args['entitylist']){
-        webgl_groups[args['group']][args['entitylist'][entity]] = true;
-    }
-}
-
-// Required args: grouplist, todo
-function webgl_group_modify(args){
-    for(var group in args['grouplist']){
-        for(var entity in webgl_groups[args['grouplist'][group]]){
-            args['todo'](entity);
-        }
-    }
-}
-
-// Required args: delete-empty, entitylist, group
-function webgl_group_remove(args){
-    if(args['group'] in webgl_groups){
-        for(var entity in args['entitylist']){
-            delete webgl_groups[args['group']][args['entitylist'][entity]];
-        }
-    }
-
-    if((args['delete-empty'] || false)
-      && webgl_groups[args['group']].length === 0){
-        delete webgl_groups[args['group']];
-    }
-}
-
 function webgl_init(){
     webgl_resize();
 
@@ -638,11 +604,11 @@ function webgl_setmode(args){
             });
 
             if(group !== void 0){
-                webgl_group_add({
-                  'entitylist': [
+                entity_group_add({
+                  'entities': [
                     entity,
                   ],
-                  'id': entity,
+                  'group': entity,
                 });
             }
         }
@@ -739,7 +705,6 @@ var webgl_fonts = {
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var webgl_groups = {};
 var webgl_height = 0;
 var webgl_interval = 0;
 var webgl_menu = false;
