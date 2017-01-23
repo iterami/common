@@ -51,7 +51,7 @@ function math_distance(args){
       ? args['decimals']
       : math_decimals;
 
-    return Math.round({
+    return math_round({
       'decimals': args['decimals'],
       'number': Math.sqrt(
         Math.pow(
