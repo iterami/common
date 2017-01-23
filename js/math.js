@@ -270,6 +270,19 @@ function math_movement_speed(args){
     ];
 }
 
+// Required args: radians
+// Optional args: decimals
+function math_radians_to_degrees(args){
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
+      : math_decimals;
+
+    return math_round({
+      'decimals': args['decimals'],
+      'number': args['radians'] * math_radian,
+    });
+}
+
 // Required args: h0, h1, w0, w1, x0, x1, y0, y1
 function math_rectangle_overlap(args){
     var boolean = false;
@@ -306,4 +319,5 @@ function math_round(args){
 var math_decimals = 7;
 var math_degree = Math.PI / 180;
 var math_matrices = {};
+var math_radian = 180 / Math.PI;
 var math_tau = Math.PI * 2;

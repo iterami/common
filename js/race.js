@@ -11,7 +11,7 @@ function race_init(){
         'speed': 0,
         'speed-max': 2,
         'target': 0,
-        'turn': .04,
+        'turn': .02,
         'x': 0,
         'y': 0,
         'z': 0,
