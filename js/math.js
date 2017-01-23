@@ -31,8 +31,8 @@ function math_clamp(args){
 // Required args: degrees
 // Optional args: decimals
 function math_degrees_to_radians(args){
-    args['decimals'] = args['decimals'] !== 0
-      ? void 0
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
       : math_decimals;
 
     return math_round({
@@ -197,11 +197,15 @@ function math_matrix_translate(args){
 }
 
 // Required args; angle, speed
-// Optional args: strafe
+// Optional args: decimals, strafe
 function math_move_3d(args){
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
+      : math_decimals;
     args['strafe'] = args['strafe'] || false;
 
     var radians = -math_degrees_to_radians({
+      'decimals': args['decimals'],
       'degrees': args['angle'] - (args['strafe']
           ? 90
           : 0
