@@ -1,8 +1,11 @@
 'use strict';
 
 // Required args: max, min, value
-// Optional args: wrap
+// Optional args: decimals, wrap
 function math_clamp(args){
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
+      : math_decimals;
     args['wrap'] = args['wrap'] || false;
 
     if(args['wrap']){
@@ -42,20 +45,33 @@ function math_degrees_to_radians(args){
 }
 
 // Required args: x0, x1, y0, y1
+// Optional args: decimals
 function math_distance(args){
-    return Math.sqrt(
-      Math.pow(
-        args['x0'] - args['x1'],
-        2
-      ) + Math.pow(
-        args['y0'] - args['y1'],
-        2
-      )
-    );
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
+      : math_decimals;
+
+    return Math.round({
+      'decimals': args['decimals'],
+      'number': Math.sqrt(
+        Math.pow(
+          args['x0'] - args['x1'],
+          2
+        ) + Math.pow(
+          args['y0'] - args['y1'],
+          2
+        )
+      ),
+    });
 }
 
 // Required args: length, x0, x1, y0, y1
+// Optional args: decimals
 function math_fixed_length_line(args){
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
+      : math_decimals;
+
     var line_distance = math_distance({
       'x0': args['x0'],
       'x1': args['x1'],
@@ -69,8 +85,14 @@ function math_fixed_length_line(args){
     args['y1'] *= args['length'];
 
     return {
-      'x': args['x1'],
-      'y': args['y1'],
+      'x': Math.round({
+        'decimals': args['decimals'],
+        'number': args['x1'],
+      }),
+      'y': Math.round({
+        'decimals': args['decimals'],
+        'number': args['y1'],
+      }),
     };
 }
 
@@ -213,20 +235,37 @@ function math_move_3d(args){
     });
     return {
       'x': math_round({
+        'decimals': args['decimals'],
         'number': Math.sin(radians) * args['speed'],
       }),
       'z': math_round({
+        'decimals': args['decimals'],
         'number': Math.cos(radians) * args['speed'],
       }),
     };
 }
 
 // Required args: x0, x1, y0, y1
+// Optional args: decimals
 function math_movement_speed(args){
-    var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
+      : math_decimals;
+
+    var angle = Math.round({
+      'decimals': args['decimals'],
+      'number': Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1'])),
+    });
+
     return [
-      Math.cos(angle),
-      Math.sin(angle),
+      Math.round({
+        'decimals': args['decimals'],
+        'number': Math.cos(angle),
+      }),
+      Math.round({
+        'decimals': args['decimals'],
+        'number': Math.cos(angle),
+      }),
       angle,
     ];
 }
@@ -254,10 +293,14 @@ function math_round(args){
         args['number'] = Number(args['number'].toFixed(args['decimals']));
     }
 
-    return Number(
+    var result = Number(
       Math.round(args['number'] + 'e+' + args['decimals'])
         + 'e-' + args['decimals']
     );
+
+    return isNaN(result)
+      ? 0
+      : result;
 }
 
 var math_decimals = 7;
