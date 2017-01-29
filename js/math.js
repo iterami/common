@@ -85,11 +85,11 @@ function math_fixed_length_line(args){
     args['y1'] *= args['length'];
 
     return {
-      'x': Math.round({
+      'x': math_round({
         'decimals': args['decimals'],
         'number': args['x1'],
       }),
-      'y': Math.round({
+      'y': math_round({
         'decimals': args['decimals'],
         'number': args['y1'],
       }),
@@ -252,17 +252,17 @@ function math_movement_speed(args){
       ? args['decimals']
       : math_decimals;
 
-    var angle = Math.round({
+    var angle = math_round({
       'decimals': args['decimals'],
       'number': Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1'])),
     });
 
     return [
-      Math.round({
+      math_round({
         'decimals': args['decimals'],
         'number': Math.cos(angle),
       }),
-      Math.round({
+      math_round({
         'decimals': args['decimals'],
         'number': Math.cos(angle),
       }),
