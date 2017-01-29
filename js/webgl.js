@@ -318,6 +318,15 @@ function webgl_draw(){
         );
 
         webgl_canvas.restore();
+
+    }else if(webgl_pointer !== false){
+        webgl_canvas.fillStyle = webgl_pointer;
+        webgl_canvas.fillRect(
+          webgl_x - 1,
+          webgl_y - 1,
+          2,
+          2
+        );
     }
 }
 
@@ -709,6 +718,7 @@ var webgl_interval = 0;
 var webgl_menu = false;
 var webgl_mode = 0;
 var webgl_oncontextmenu = true;
+var webgl_pointer = false;
 var webgl_programs = {};
 var webgl_quit = 'Q = Main Menu';
 var webgl_resume = 'ESC = Resume';
