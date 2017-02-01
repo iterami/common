@@ -45,11 +45,10 @@ function random_rgb(){
 
 // Required args: characters, length
 function random_string(args){
-    var characters_length = args['characters'].length - 1;
     var string = '';
     for(var loopCounter = 0; loopCounter < args['length']; loopCounter++){
         string += args['characters'][random_integer({
-          'max': characters_length,
+          'max': args['characters'].length,
         })];
     }
     return string;
