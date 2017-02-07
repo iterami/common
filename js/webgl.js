@@ -602,27 +602,6 @@ function webgl_setmode(args){
     math_matrices['camera'] = math_matrix_create();
     math_matrix_perspective();
 
-    for(var entity in entity_entities){
-        if(entity_entities[entity]['_init'] === true){
-            var group = entity_entities[entity]['_group'] || void 0;
-
-            entity_create({
-              'id': entity,
-              'properties': entity_entities[entity],
-              'type': '_webgl',
-            });
-
-            if(group !== void 0){
-                entity_group_add({
-                  'entities': [
-                    entity,
-                  ],
-                  'group': entity,
-                });
-            }
-        }
-    }
-
     if(typeof load_level === 'function'){
         load_level(webgl_mode);
     }
@@ -637,7 +616,6 @@ function webgl_setmode(args){
           msperframe || storage_data['ms-per-frame']
         );
     }
-
 }
 
 // Required args: id, source, type
