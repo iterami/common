@@ -37,10 +37,21 @@ function entity_group_add(args){
 }
 
 // Required args: groups, todo
+// Optional args: pretodo
 function entity_group_modify(args){
+    args['pretodo'] = args['pretodo'] || false;
+    var pretodo = {};
+
+    if(args['pretodo'] !== false){
+        pretodo = args['pretodo']();
+    }
+
     for(var group in args['groups']){
         for(var entity in entity_groups[args['groups'][group]]){
-            args['todo'](entity);
+            args['todo'](
+              entity,
+              pretodo
+            );
         }
     }
 }
