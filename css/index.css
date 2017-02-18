@@ -2,11 +2,6 @@ a{
     color: #4c4;
     display: block;
 }
-a:hover,
-.dl a:hover,
-td:nth-child(2) a:hover{
-    color: #777;
-}
 body{
     background: #000;
     color: #aaa;
@@ -23,7 +18,6 @@ body{
 td:nth-child(2) a{
     color: #f70;
 }
-
 table{
     display: inline-block;
     margin: auto;
@@ -33,4 +27,10 @@ table{
 td{
     border-bottom: 1px solid #555;
     line-height: 3em;
+}
+
+a:hover,
+.dl a:hover,
+td:nth-child(2) a:hover{
+    color: #777;
 }

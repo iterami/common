@@ -3,9 +3,6 @@ a{
     cursor: pointer;
     text-decoration: underline;
 }
-a:hover{
-    color: #777;
-}
 body,
 input{
     background: #000;
@@ -54,4 +51,8 @@ label{
 }
 ul{
     margin: 0;
+}
+
+a:hover{
+    color: #777;
 }

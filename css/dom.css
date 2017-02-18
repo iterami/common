@@ -3,9 +3,6 @@ a{
     cursor: pointer;
     text-decoration: underline;
 }
-a:hover{
-    color: #777;
-}
 .big{
     font-size: 300%;
 }
@@ -42,10 +39,6 @@ select{
     margin: 1px;
     outline-width: 0;
     width: 75px !important;
-}
-.header,
-tr:hover{
-    background: #333;
 }
 .hidden{
     display: none;
@@ -100,4 +93,12 @@ textarea{
     font-weight: bold;
     height: 150px;
     width: 420px;
+}
+
+a:hover{
+    color: #777;
+}
+.header,
+tr:hover{
+    background: #333;
 }
