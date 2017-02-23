@@ -146,6 +146,12 @@ function webgl_draw(){
     draw_logic();
 
     for(var entity in entity_entities){
+        if(entity_entities[entity]['billboard'] === true){
+            webgl_billboard({
+              'entity': entity,
+            });
+        }
+
         math_matrix_clone({
           'id': 'camera',
           'newid': 'cache',
