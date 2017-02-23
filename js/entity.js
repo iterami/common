@@ -1,5 +1,18 @@
 'use strict';
 
+// Required args: id, newid
+// Optional args: todo
+function entity_clone(args){
+    args['todo'] = args['todo'] || function(){};
+
+    entity_create({
+      'id': args['newid'],
+      'properties': entity_entities[args['id']],
+    });
+
+    args['todo'](args['newid']);
+}
+
 // Reqruied args: id
 // Optional args: types, properties
 function entity_create(args){
@@ -10,12 +23,12 @@ function entity_create(args){
 
     for(var type in args['types']){
         for(var property in entity_info[args['types'][type]]['default']){
-            entity[property] =  entity_info[args['types'][type]]['default'][property];
+            entity[property] = entity_info[args['types'][type]]['default'][property];
         }
     }
 
     for(property in args['properties']){
-        entity[property] =  args['properties'][property];
+        entity[property] = args['properties'][property];
     }
 
     entity_entities[args['id']] = entity;
