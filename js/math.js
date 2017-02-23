@@ -116,6 +116,13 @@ function math_matrix_create(){
     return new Float32Array(16);
 }
 
+// Required args: ids
+function math_matrix_delete(args){
+    for(var id in args['ids']){
+        delete math_matrices[args['ids'][id]];
+    }
+}
+
 // Required args: id
 function math_matrix_identity(args){
     for(var key in math_matrices[args['id']]){
