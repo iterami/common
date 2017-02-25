@@ -7,9 +7,9 @@ function network_ajax(args){
 
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function(){
-        if(ajax.readyState === network_ajax_readyState
-          && ajax.status === network_ajax_status){
-            args['todo'](ajax.responseText);
+        if(this.readyState === network_ajax_readyState
+          && this.status === network_ajax_status){
+            args['todo'](this.responseText);
         }
     };
 
