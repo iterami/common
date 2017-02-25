@@ -101,10 +101,10 @@ function webgl_camera_rotate(args){
 function webgl_clearcolor_set(args){
     webgl_clearcolor = args['color'];
     webgl_buffer.clearColor(
-      args['color']['red'],
-      args['color']['green'],
-      args['color']['blue'],
-      args['color']['alpha']
+      webgl_clearcolor['red'],
+      webgl_clearcolor['green'],
+      webgl_clearcolor['blue'],
+      webgl_clearcolor['alpha']
     );
 }
 
