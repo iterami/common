@@ -265,10 +265,7 @@ function math_movement_speed(args){
       ? args['decimals']
       : math_decimals;
 
-    var angle = math_round({
-      'decimals': args['decimals'],
-      'number': Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1'])),
-    });
+    var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
 
     return [
       math_round({
@@ -277,7 +274,7 @@ function math_movement_speed(args){
       }),
       math_round({
         'decimals': args['decimals'],
-        'number': Math.cos(angle),
+        'number': Math.sin(angle),
       }),
       angle,
     ];
