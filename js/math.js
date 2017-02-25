@@ -231,12 +231,15 @@ function math_matrix_translate(args){
     });
 }
 
-// Required args; angle, speed
-// Optional args: decimals, strafe
+// Required args; angle
+// Optional args: decimals, speed, strafe
 function math_move_3d(args){
     args['decimals'] = args['decimals'] !== void 0
       ? args['decimals']
       : math_decimals;
+    args['speed'] = args['speed'] !== void 0
+      ? args['speed']
+      : 1;
     args['strafe'] = args['strafe'] || false;
 
     var radians = -math_degrees_to_radians({
