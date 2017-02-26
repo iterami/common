@@ -27,7 +27,8 @@ function time_format_date(args){
       + args['date']['day'] + ' '
       + args['date']['hour'] + ':'
       + args['date']['minute'] + ':'
-      + args['date']['second'];
+      + args['date']['second'] + ' ('
+      + args['date']['timezone'] + ')';
 }
 
 // Optional args: timestamp
@@ -54,6 +55,7 @@ function time_timestamp_to_date(args){
       'second': time_two_digits({
         'number': date.getUTCSeconds(),
       }),
+      'timezone': 0,
       'year': date.getUTCFullYear(),
     };
 }
