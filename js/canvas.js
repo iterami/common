@@ -171,9 +171,7 @@ function canvas_setmode(args){
         load_level(canvas_mode);
     }
 
-    if(typeof draw_logic === 'function'){
-        canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
-    }
+    canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 
     if(typeof logic === 'function'){
         canvas_interval = window.setInterval(

@@ -612,16 +612,11 @@ function webgl_setmode(args){
         load_level(webgl_mode);
     }
 
-    if(typeof draw_logic === 'function'){
-        webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
-    }
-
-    if(typeof logic === 'function'){
-        webgl_interval = window.setInterval(
-          webgl_logicloop,
-          msperframe || storage_data['ms-per-frame']
-        );
-    }
+    webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
+    webgl_interval = window.setInterval(
+      webgl_logicloop,
+      msperframe || storage_data['ms-per-frame']
+    );
 }
 
 // Required args: id, source, type
