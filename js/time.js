@@ -20,7 +20,7 @@ function time_date_to_timestamp(args){
 // Optional args: date
 function time_format_date(args){
     args = args || {};
-    args['date'] = args['date'] || time_create_date();
+    args['date'] = args['date'] || time_timestamp_to_date();
 
     return args['date']['year'] + '-'
       + args['date']['month'] + '-'
@@ -50,7 +50,7 @@ function time_timestamp_to_date(args){
         'number': date.getUTCMinutes(),
       }),
       'month': time_two_digits({
-        'number': date.getUTCMonth(),
+        'number': date.getUTCMonth() + 1,
       }),
       'second': time_two_digits({
         'number': date.getUTCSeconds(),
