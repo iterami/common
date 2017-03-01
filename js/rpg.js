@@ -8,6 +8,9 @@ function rpg_character_affect(args){
 
         if(args['stat'] === 'health'){
             rpg_characters[args['character']]['dead'] = true;
+            if(rpg_characters[args['character']]['parent'] !== false){
+                rpg_spawners[rpg_characters[args['character']]['parent']]['charcters'] -= 1;
+            }
         }
 
     }else if(rpg_characters[args['character']]['stats'][args['stat']]['current'] >= rpg_characters[args['character']]['stats'][args['stat']]['max']){
@@ -28,6 +31,9 @@ function rpg_character_create(args){
       : 20;
     args['properties']['height-half'] = args['properties']['height'] / 2;
     args['properties']['inventory'] = args['properties']['inventory'] || [];
+    args['properties']['parent'] = args['properties']['parent'] !== void 0
+      ? args['properties']['parent']
+      : false;
     args['properties']['player'] = args['properties']['player'] || false;
     args['properties']['selected'] = args['properties']['selected'] || 0;
     args['properties']['target-x'] = args['properties']['target-x'] || 0;
@@ -335,9 +341,31 @@ function rpg_particle_handle(){
 
 // Optional args: properties
 function rpg_spawner_create(args){
+    args = args || {};
+    args['properties'] = args['properties'] || {};
+
+    args['properties']['characters'] = 0;
+    args['properties']['max'] = args['properties']['max'] || 1;
+    args['properties']['x'] = args['properties']['x'] || 0;
+    args['properties']['y'] = args['properties']['y'] || 0;
+
+    args['properties']['character'] = args['properties']['character'] || {};
+      args['properties']['character']['parent'] = rpg_spawners.length;
+      args['properties']['character']['x'] = args['properties']['x'];
+      args['properties']['character']['y'] = args['properties']['y'];
+
+    rpg_spawners.push(args['properties']);
 }
 
 function rpg_spawner_handle(){
+    for(var spawner in rpg_spawners){
+        if(rpg_spawners[spawner]['characters'] < rpg_spawners[spawner]['max']){
+            rpg_character_create({
+              'properties': rpg_spawners[spawner]['character'],
+            });
+            rpg_spawners[spawner]['characters'] += 1;
+        }
+    }
 }
 
 function rpg_unload(){
