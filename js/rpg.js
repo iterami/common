@@ -175,6 +175,12 @@ function rpg_character_handle(){
     }
 }
 
+function rpg_handle_all(){
+    rpg_character_handle();
+    rpg_particle_handle();
+    rpg_spawner_handle();
+}
+
 // Optional args: properties, type
 function rpg_item_create(args){
     args = args || {};
@@ -327,9 +333,17 @@ function rpg_particle_handle(){
     }
 }
 
+// Optional args: properties
+function rpg_spawner_create(args){
+}
+
+function rpg_spawner_handle(){
+}
+
 function rpg_unload(){
     rpg_characters.length = 0;
     rpg_particles.length = 0;
+    rpg_spawners.length = 0;
     rpg_world_dynamic.length = 0;
     rpg_world_static.length = 0;
 }
@@ -358,5 +372,6 @@ function rpg_world_dynamic_create(args){
 
 var rpg_characters = [];
 var rpg_particles = [];
+var rpg_spawners = [];
 var rpg_world_dynamic = [];
 var rpg_world_static = [];
