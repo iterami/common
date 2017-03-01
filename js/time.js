@@ -23,12 +23,24 @@ function time_format_date(args){
     args['date'] = args['date'] || time_timestamp_to_date();
 
     return args['date']['year'] + '-'
-      + args['date']['month'] + '-'
-      + args['date']['date'] + ' '
-      + args['date']['hour'] + ':'
-      + args['date']['minute'] + ':'
-      + args['date']['second'] + ' ('
-      + args['date']['timezone'] + ')';
+      + time_two_digits({
+        'number': args['date']['month'],
+      }) + '-'
+      + time_two_digits({
+        'number': args['date']['date'],
+      }) + ' '
+      + time_two_digits({
+        'number': args['date']['hour'],
+      }) + ':'
+      + time_two_digits({
+        'number': args['date']['minute'],
+      }) + ':'
+      + time_two_digits({
+        'number': args['date']['second'],
+      }) + ' ('
+      + time_two_digits({
+        'number': args['date']['timezone'],
+      }) + ')';
 }
 
 // Optional args: timestamp
@@ -40,24 +52,12 @@ function time_timestamp_to_date(args){
 
     var date = new Date(args['timestamp']);
     return {
-      'date': time_two_digits({
-        'number': date.getUTCDate(),
-      }),
-      'day': time_two_digits({
-        'number': date.getUTCDay(),
-      }),
-      'hour': time_two_digits({
-        'number': date.getUTCHours(),
-      }),
-      'minute': time_two_digits({
-        'number': date.getUTCMinutes(),
-      }),
-      'month': time_two_digits({
-        'number': date.getUTCMonth() + 1,
-      }),
-      'second': time_two_digits({
-        'number': date.getUTCSeconds(),
-      }),
+      'date': date.getUTCDate(),
+      'day': date.getUTCDay(),
+      'hour': date.getUTCHours(),
+      'minute': date.getUTCMinutes(),
+      'month': date.getUTCMonth() + 1,
+      'second': date.getUTCSeconds(),
       'timestamp': args['timestamp'],
       'timezone': 0,
       'year': date.getUTCFullYear(),
