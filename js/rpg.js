@@ -327,6 +327,13 @@ function rpg_particle_handle(){
     }
 }
 
+function rpg_unload(){
+    rpg_characters.length = 0;
+    rpg_particles.length = 0;
+    rpg_world_dynamic.length = 0;
+    rpg_world_static.length = 0;
+}
+
 // Optional args: properties
 function rpg_world_dynamic_create(args){
     args = args || {};
