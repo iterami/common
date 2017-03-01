@@ -9,7 +9,7 @@ function time_date_to_timestamp(args){
       Date.UTC(
         args['date']['year'],
         args['date']['month'] - 1,
-        args['date']['day'],
+        args['date']['date'],
         args['date']['hour'],
         args['date']['minute'],
         args['date']['second']
@@ -24,7 +24,7 @@ function time_format_date(args){
 
     return args['date']['year'] + '-'
       + args['date']['month'] + '-'
-      + args['date']['day'] + ' '
+      + args['date']['date'] + ' '
       + args['date']['hour'] + ':'
       + args['date']['minute'] + ':'
       + args['date']['second'] + ' ('
@@ -40,8 +40,11 @@ function time_timestamp_to_date(args){
 
     var date = new Date(args['timestamp']);
     return {
-      'day': time_two_digits({
+      'date': time_two_digits({
         'number': date.getUTCDate(),
+      }),
+      'day': time_two_digits({
+        'number': date.getUTCDay(),
       }),
       'hour': time_two_digits({
         'number': date.getUTCHours(),
