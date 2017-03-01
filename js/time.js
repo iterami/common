@@ -8,13 +8,13 @@ function time_date_to_timestamp(args){
     return new Date(
       Date.UTC(
         args['date']['year'],
-        args['date']['month'],
+        args['date']['month'] - 1,
         args['date']['day'],
         args['date']['hour'],
         args['date']['minute'],
         args['date']['second']
       )
-    );
+    ).getTime();
 }
 
 // Optional args: date
@@ -35,7 +35,7 @@ function time_format_date(args){
 function time_timestamp_to_date(args){
     args = args || {};
     args['timestamp'] = args['timestamp'] !== void 0
-      ? new Date(args['timestamp'])
+      ? new Date(args['timestamp']).getTime()
       : new Date().getTime();
 
     var date = new Date(args['timestamp']);
