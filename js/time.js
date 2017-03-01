@@ -55,6 +55,7 @@ function time_timestamp_to_date(args){
       'second': time_two_digits({
         'number': date.getUTCSeconds(),
       }),
+      'timestamp': args['timestamp'],
       'timezone': 0,
       'year': date.getUTCFullYear(),
     };
