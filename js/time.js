@@ -12,7 +12,8 @@ function time_date_to_timestamp(args){
         args['date']['date'],
         args['date']['hour'],
         args['date']['minute'],
-        args['date']['second']
+        args['date']['second'],
+        args['date']['millisecond']
       )
     ).getTime();
 }
@@ -55,6 +56,7 @@ function time_timestamp_to_date(args){
       'date': date.getUTCDate(),
       'day': date.getUTCDay(),
       'hour': date.getUTCHours(),
+      'millisecond': date.getUTCMilliseconds(),
       'minute': date.getUTCMinutes(),
       'month': date.getUTCMonth() + 1,
       'second': date.getUTCSeconds(),
