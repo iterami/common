@@ -37,9 +37,15 @@ function random_integer(args){
 
 function random_rgb(){
   return {
-    'blue': random_integer(),
-    'green': random_integer(),
-    'red': random_integer(),
+    'blue': random_integer({
+      'max': 256,
+    }),
+    'green': random_integer({
+      'max': 256,
+    }),
+    'red': random_integer({
+      'max': 256,
+    }),
   };
 }
 
@@ -55,4 +61,4 @@ function random_string(args){
 }
 
 var random_boolean_chance = .5;
-var random_integer_max = 256;
+var random_integer_max = 100;
