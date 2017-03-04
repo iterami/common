@@ -11,6 +11,9 @@ body{
 .center{
     text-align: center;
 }
+.done{
+    background: #650;
+}
 .header{
     background: #333;
     font-weight: bold;
