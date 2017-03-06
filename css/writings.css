@@ -14,6 +14,9 @@ body{
 .done{
     background: #650;
 }
+.external{
+    color: #f70;
+}
 .header{
     background: #333;
     font-weight: bold;
