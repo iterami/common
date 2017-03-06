@@ -232,14 +232,17 @@ function math_matrix_translate(args){
 }
 
 // Required args; angle
-// Optional args: decimals, speed, strafe
+// Optional args: decimals, multiplier, speed, strafe
 function math_move_3d(args){
     args['decimals'] = args['decimals'] !== void 0
       ? args['decimals']
       : math_decimals;
-    args['speed'] = args['speed'] !== void 0
-      ? args['speed']
+    args['multiplier'] = args['multiplier'] !== void 0
+      ? args['multiplier']
       : 1;
+    args['speed'] = args['speed'] !== void 0
+      ? args['speed'] * args['multiplier']
+      : args['multiplier'];
     args['strafe'] = args['strafe'] || false;
 
     var radians = -math_degrees_to_radians({
@@ -262,22 +265,25 @@ function math_move_3d(args){
 }
 
 // Required args: x0, x1, y0, y1
-// Optional args: decimals
+// Optional args: decimals, multiplier
 function math_movement_speed(args){
     args['decimals'] = args['decimals'] !== void 0
       ? args['decimals']
       : math_decimals;
+    args['multiplier'] = args['multiplier'] !== void 0
+      ? args['multiplier']
+      : 1;
 
     var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
 
     return [
       math_round({
         'decimals': args['decimals'],
-        'number': Math.cos(angle),
+        'number': Math.cos(angle) * args['multiplier'],
       }),
       math_round({
         'decimals': args['decimals'],
-        'number': Math.sin(angle),
+        'number': Math.sin(angle) * args['multiplier'],
       }),
       angle,
     ];
