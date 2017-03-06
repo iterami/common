@@ -128,7 +128,7 @@ function rpg_character_handle(){
                 continue;
             }
 
-            var speeds = math_movement_speed({
+            var speeds = math_move_2d({
               'x0': rpg_characters[character]['x'],
               'x1': rpg_characters[character]['target-x'],
               'y0': rpg_characters[character]['y'],

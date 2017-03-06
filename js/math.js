@@ -231,6 +231,31 @@ function math_matrix_translate(args){
     });
 }
 
+// Required args: x0, x1, y0, y1
+// Optional args: decimals, multiplier
+function math_move_2d(args){
+    args['decimals'] = args['decimals'] !== void 0
+      ? args['decimals']
+      : math_decimals;
+    args['multiplier'] = args['multiplier'] !== void 0
+      ? args['multiplier']
+      : 1;
+
+    var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
+
+    return [
+      math_round({
+        'decimals': args['decimals'],
+        'number': Math.cos(angle) * args['multiplier'],
+      }),
+      math_round({
+        'decimals': args['decimals'],
+        'number': Math.sin(angle) * args['multiplier'],
+      }),
+      angle,
+    ];
+}
+
 // Required args; angle
 // Optional args: decimals, multiplier, speed, strafe
 function math_move_3d(args){
@@ -262,31 +287,6 @@ function math_move_3d(args){
         'number': Math.cos(radians) * args['speed'],
       }),
     };
-}
-
-// Required args: x0, x1, y0, y1
-// Optional args: decimals, multiplier
-function math_movement_speed(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
-    args['multiplier'] = args['multiplier'] !== void 0
-      ? args['multiplier']
-      : 1;
-
-    var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
-
-    return [
-      math_round({
-        'decimals': args['decimals'],
-        'number': Math.cos(angle) * args['multiplier'],
-      }),
-      math_round({
-        'decimals': args['decimals'],
-        'number': Math.sin(angle) * args['multiplier'],
-      }),
-      angle,
-    ];
 }
 
 // Required args: radians

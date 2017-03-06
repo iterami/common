@@ -322,7 +322,7 @@ function rts_building_handle(){
 function rts_bullet_handle(){
     for(var bullet in rts_bullets){
         // Calculate bullet movement.
-        var speeds = math_movement_speed({
+        var speeds = math_move_2d({
           'x0': rts_bullets[bullet]['x'],
           'x1': rts_bullets[bullet]['destination-x'],
           'y0': rts_bullets[bullet]['y'],
@@ -746,7 +746,7 @@ function rts_unit_handle(){
         // Movement "AI", pick new destination once destination is reached.
         if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']
           || rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
-            var speeds = math_movement_speed({
+            var speeds = math_move_2d({
               'x0': rts_players[1]['units'][unit]['x'],
               'x1': rts_players[1]['units'][unit]['destination-x'],
               'y0': rts_players[1]['units'][unit]['y'],
@@ -793,7 +793,7 @@ function rts_unit_handle(){
         // If not yet reached destination, move unit.
         if(Math.abs(rts_players[0]['units'][unit]['x'] - rts_players[0]['units'][unit]['destination-x']) > 1
           && Math.abs(rts_players[0]['units'][unit]['y'] - rts_players[0]['units'][unit]['destination-y']) > 1){
-            var speeds = math_movement_speed({
+            var speeds = math_move_2d({
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[0]['units'][unit]['destination-x'],
               'y0': rts_players[0]['units'][unit]['y'],
