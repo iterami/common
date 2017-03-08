@@ -19,7 +19,7 @@ body{
 }
 .header{
     background: #333;
-    font-weight: bold;
+    font-size: 15px;
     text-align: center;
 }
 hr{
