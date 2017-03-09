@@ -49,8 +49,12 @@ function random_rgb(){
   };
 }
 
-// Required args: characters, length
+// Optional args: characters, length
 function random_string(args){
+    args = args || {};
+    args['characters'] = args['characters'] || random_string_characters;
+    args['length'] = args['length'] || random_string_length;
+
     var string = '';
     for(var loopCounter = 0; loopCounter < args['length']; loopCounter++){
         string += args['characters'][random_integer({
@@ -62,3 +66,5 @@ function random_string(args){
 
 var random_boolean_chance = .5;
 var random_integer_max = 100;
+var random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var random_string_length = 100;
