@@ -14,7 +14,8 @@ body{
     color: #19f;
     display: inline-block;
 }
-.dl a:first-child{
+.dl a:first-child,
+.external{
     color: #f70;
 }
 table{
