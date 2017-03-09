@@ -15,19 +15,29 @@ function core_args(args){
     return args['args'];
 }
 
+function core_uid(){
+    var uid = core_uid_create();
+
+    while(core_uids[uid] !== void 0){
+        uid = core_uid_create();
+    }
+
+    core_uids[uid] = 1;
+
+    return uid;
+}
+
 function core_uid_create(){
     var uid = '';
 
     for(var i = 0; i < 3; i++){
-        uid += core_uid_make();
+        uid += parseInt(
+          Math.random() * 1e17,
+          10
+        ).toString(34);
     }
 
     return uid;
 }
 
-function core_uid_make(){
-    return parseInt(
-      Math.random() * 1e17,
-      10
-    ).toString(34);
-}
+var core_uids = {};
