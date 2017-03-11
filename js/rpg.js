@@ -134,8 +134,6 @@ function rpg_character_handle(){
               'y0': rpg_characters[character]['y'],
               'y1': rpg_characters[character]['target-y'],
             });
-            var dx = rpg_characters[character]['target-x'] > rpg_characters[character]['x'] ? speeds[0] : -speeds[0];
-            var dy = rpg_characters[character]['target-y'] > rpg_characters[character]['y'] ? speeds[1] : -speeds[1];
 
             selected['reload-current'] = 0;
             rpg_character_affect({
@@ -150,8 +148,8 @@ function rpg_character_handle(){
                 for(var property in selected){
                     particle[property] = selected[property];
                 }
-                particle['dx'] = dx;
-                particle['dy'] = dy;
+                particle['dx'] = speeds['x'];
+                particle['dy'] = speeds['y'];
                 particle['owner'] = character;
                 particle['x'] = rpg_characters[character]['x'];
                 particle['y'] = rpg_characters[character]['y'];

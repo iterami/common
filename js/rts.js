@@ -323,6 +323,7 @@ function rts_bullet_handle(){
     for(var bullet in rts_bullets){
         // Calculate bullet movement.
         var speeds = math_move_2d({
+          'multiplier': 10,
           'x0': rts_bullets[bullet]['x'],
           'x1': rts_bullets[bullet]['destination-x'],
           'y0': rts_bullets[bullet]['y'],
@@ -331,22 +332,12 @@ function rts_bullet_handle(){
 
         // Move bullet x.
         if(rts_bullets[bullet]['x'] != rts_bullets[bullet]['destination-x']){
-            rts_bullets[bullet]['x'] +=
-              10
-              * (rts_bullets[bullet]['x'] > rts_bullets[bullet]['destination-x']
-                ? -speeds[0]
-                : speeds[0]
-              );
+            rts_bullets[bullet]['x'] += speeds['x'];
         }
 
         // Move bullet y.
         if(rts_bullets[bullet]['y'] != rts_bullets[bullet]['destination-y']){
-            rts_bullets[bullet]['y'] +=
-              10
-              * (rts_bullets[bullet]['y'] > rts_bullets[bullet]['destination-y']
-                ? -speeds[1]
-                : speeds[1]
-              );
+            rts_bullets[bullet]['y'] += speeds['y'];
         }
 
         // If bullet reaches destination, check for collisions.
@@ -747,6 +738,7 @@ function rts_unit_handle(){
         if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']
           || rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
             var speeds = math_move_2d({
+              'multiplier': .7,
               'x0': rts_players[1]['units'][unit]['x'],
               'x1': rts_players[1]['units'][unit]['destination-x'],
               'y0': rts_players[1]['units'][unit]['y'],
@@ -754,19 +746,11 @@ function rts_unit_handle(){
             });
 
             if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']){
-                rts_players[1]['units'][unit]['x'] +=
-                  (rts_players[1]['units'][unit]['x'] > rts_players[1]['units'][unit]['destination-x']
-                    ? -speeds[0]
-                    : speeds[0]
-                  ) * .7;
+                rts_players[1]['units'][unit]['x'] += speeds['x'];
             }
 
             if(rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
-                rts_players[1]['units'][unit]['y'] +=
-                  (rts_players[1]['units'][unit]['y'] > rts_players[1]['units'][unit]['destination-y']
-                    ? -speeds[1]
-                    : speeds[1]
-                  ) * .7;
+                rts_players[1]['units'][unit]['y'] += speeds['y'];
             }
 
             if(math_distance({
@@ -794,6 +778,7 @@ function rts_unit_handle(){
         if(Math.abs(rts_players[0]['units'][unit]['x'] - rts_players[0]['units'][unit]['destination-x']) > 1
           && Math.abs(rts_players[0]['units'][unit]['y'] - rts_players[0]['units'][unit]['destination-y']) > 1){
             var speeds = math_move_2d({
+              'multiplier': .7,
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[0]['units'][unit]['destination-x'],
               'y0': rts_players[0]['units'][unit]['y'],
@@ -801,19 +786,11 @@ function rts_unit_handle(){
             });
 
             if(rts_players[0]['units'][unit]['x'] != rts_players[0]['units'][unit]['destination-x']){
-                rts_players[0]['units'][unit]['x'] +=
-                  (rts_players[0]['units'][unit]['x'] > rts_players[0]['units'][unit]['destination-x']
-                    ? -speeds[0]
-                    : speeds[0]
-                  ) * .7;
+                rts_players[0]['units'][unit]['x'] += speeds['x'];
             }
 
             if(rts_players[0]['units'][unit]['y'] != rts_players[0]['units'][unit]['destination-y']){
-                rts_players[0]['units'][unit]['y'] +=
-                  (rts_players[0]['units'][unit]['y'] > rts_players[0]['units'][unit]['destination-y']
-                    ? -speeds[1]
-                    : speeds[1]
-                  ) * .7;
+                rts_players[0]['units'][unit]['y'] += speeds['y'];
             }
 
             update_fog = true;

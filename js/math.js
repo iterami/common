@@ -243,17 +243,27 @@ function math_move_2d(args){
 
     var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
 
-    return [
-      math_round({
-        'decimals': args['decimals'],
-        'number': Math.cos(angle) * args['multiplier'],
-      }),
-      math_round({
-        'decimals': args['decimals'],
-        'number': Math.sin(angle) * args['multiplier'],
-      }),
-      angle,
-    ];
+    var dx = math_round({
+      'decimals': args['decimals'],
+      'number': Math.cos(angle) * args['multiplier'],
+    });
+    var dy = math_round({
+      'decimals': args['decimals'],
+      'number': Math.sin(angle) * args['multiplier'],
+    });
+
+    if(args['x0'] > args['x1']){
+        dx = -dx;
+    }
+    if(args['y0'] > args['y1']){
+        dy = -dy;
+    }
+
+    return {
+      'angle': angle,
+      'x': dx,
+      'y': dy,
+    };
 }
 
 // Required args; angle
