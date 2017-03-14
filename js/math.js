@@ -3,10 +3,13 @@
 // Required args: max, min, value
 // Optional args: decimals, wrap
 function math_clamp(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
-    args['wrap'] = args['wrap'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+        'wrap': false,
+      },
+    });
 
     if(args['wrap']){
         var diff = args['max'] - args['min'];
@@ -34,9 +37,12 @@ function math_clamp(args){
 // Required args: degrees
 // Optional args: decimals
 function math_degrees_to_radians(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+      },
+    });
 
     return math_round({
       'decimals': args['decimals'],
@@ -47,9 +53,12 @@ function math_degrees_to_radians(args){
 // Required args: x0, x1, y0, y1
 // Optional args: decimals
 function math_distance(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+      },
+    });
 
     return math_round({
       'decimals': args['decimals'],
@@ -68,9 +77,12 @@ function math_distance(args){
 // Required args: length, x0, x1, y0, y1
 // Optional args: decimals
 function math_fixed_length_line(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+      },
+    });
 
     var line_distance = math_distance({
       'x0': args['x0'],
@@ -206,9 +218,12 @@ function math_matrix_rotate(args){
 // Required args: id
 // Optional args: decimals
 function math_matrix_round(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+      },
+    });
 
     for(var key in math_matrices[args['id']]){
         math_matrices[args['id']][key] = math_round({
@@ -234,12 +249,13 @@ function math_matrix_translate(args){
 // Required args: x0, x1, y0, y1
 // Optional args: decimals, multiplier
 function math_move_2d(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
-    args['multiplier'] = args['multiplier'] !== void 0
-      ? args['multiplier']
-      : 1;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+        'multiplier': 1,
+      },
+    });
 
     var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
 
@@ -269,16 +285,16 @@ function math_move_2d(args){
 // Required args; angle
 // Optional args: decimals, multiplier, speed, strafe
 function math_move_3d(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
-    args['multiplier'] = args['multiplier'] !== void 0
-      ? args['multiplier']
-      : 1;
-    args['speed'] = args['speed'] !== void 0
-      ? args['speed'] * args['multiplier']
-      : args['multiplier'];
-    args['strafe'] = args['strafe'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+        'multiplier': 1,
+        'speed': 1,
+        'strafe': false,
+      },
+    });
+    args['speed'] *= args['multiplier'];
 
     var radians = -math_degrees_to_radians({
       'decimals': args['decimals'],
@@ -302,9 +318,12 @@ function math_move_3d(args){
 // Required args: radians
 // Optional args: decimals
 function math_radians_to_degrees(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+      },
+    });
 
     return math_round({
       'decimals': args['decimals'],
@@ -327,9 +346,12 @@ function math_rectangle_overlap(args){
 // Required args: number
 // Optional args: decimals
 function math_round(args){
-    args['decimals'] = args['decimals'] !== void 0
-      ? args['decimals']
-      : math_decimals;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': math_decimals,
+      },
+    });
 
     if(String(args['number']).indexOf('e') >= 0){
         args['number'] = Number(args['number'].toFixed(args['decimals']));
