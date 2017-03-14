@@ -3,7 +3,12 @@
 // Required args: todo, url
 // Optional args: type
 function network_ajax(args){
-    args['type'] = args['type'] || network_ajax_type;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'type': network_ajax_type,
+      },
+    });
 
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function(){
