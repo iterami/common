@@ -2,8 +2,12 @@
 
 // Optional args: date
 function time_date_to_timestamp(args){
-    args = args || {};
-    args['date'] = args['date'] || time_timestamp_to_date();
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'date': time_timestamp_to_date(),
+      },
+    });
 
     return new Date(
       Date.UTC(
@@ -20,8 +24,12 @@ function time_date_to_timestamp(args){
 
 // Optional args: date
 function time_format_date(args){
-    args = args || {};
-    args['date'] = args['date'] || time_timestamp_to_date();
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'date': time_timestamp_to_date(),
+      },
+    });
 
     return args['date']['year'] + '-'
       + time_two_digits({
@@ -46,7 +54,9 @@ function time_format_date(args){
 
 // Optional args: timestamp
 function time_timestamp_to_date(args){
-    args = args || {};
+    args = core_args({
+      'args': args,
+    });
     args['timestamp'] = args['timestamp'] !== void 0
       ? new Date(args['timestamp']).getTime()
       : new Date().getTime();
