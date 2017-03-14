@@ -3,7 +3,12 @@
 // Required args: id, newid
 // Optional args: todo
 function entity_clone(args){
-    args['todo'] = args['todo'] || function(){};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'todo': function(){},
+      },
+    });
 
     entity_create({
       'id': args['newid'],
@@ -16,8 +21,13 @@ function entity_clone(args){
 // Reqruied args: id
 // Optional args: types, properties
 function entity_create(args){
-    args['properties'] = args['properties'] || {};
-    args['types'] = args['types'] || entity_types_default;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+        'types': entity_types_default,
+      },
+    });
 
     var entity = {};
 
@@ -52,13 +62,17 @@ function entity_group_add(args){
 // Required args: groups, todo
 // Optional args: pretodo
 function entity_group_modify(args){
-    args['pretodo'] = args['pretodo'] || false;
-    var pretodo = {};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'pretodo': false,
+      },
+    });
 
+    var pretodo = {};
     if(args['pretodo'] !== false){
         pretodo = args['pretodo']();
     }
-
     for(var group in args['groups']){
         for(var entity in entity_groups[args['groups'][group]]){
             args['todo'](
@@ -72,7 +86,12 @@ function entity_group_modify(args){
 // Required args: entities, group
 // Optional args: delete-empty
 function entity_group_remove(args){
-    args['delete-empty'] = args['delete-empty'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'delete-empty': false,
+      },
+    });
 
     if(args['group'] in entity_groups){
         for(var entity in args['entities']){
@@ -89,8 +108,13 @@ function entity_group_remove(args){
 // Required args: type
 // Optional args: properties, todo
 function entity_set(args){
-    args['properpties'] = args['properties'] || {};
-    args['todo'] = args['todo'] || function(){};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+        'todo': function(){},
+      },
+    });
 
     entity_info[args['type']] = {
       'default': args['properties'],
