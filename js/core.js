@@ -25,6 +25,7 @@ function core_call(args){
       },
     });
 
+console.log(args['args']);
     if(core_type({
       'var': window[args['todo']],
     })){

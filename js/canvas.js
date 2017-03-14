@@ -141,7 +141,7 @@ function canvas_setmode(args){
     canvas_mode = args['mode'];
 
     if(core_type({
-      'var': 'setmode_logic',
+      'var': setmode_logic,
     })){
         setmode_logic(args['newgame']);
 
