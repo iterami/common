@@ -3,7 +3,12 @@
 // Required args: entity
 // Optional args: axes
 function webgl_billboard(args){
-    args['axes'] = args['axes'] || ['y'];
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'axes': ['y'],
+      },
+    });
 
     for(var axis in args['axes']){
         entity_entities[args['entity']]['rotate'][args['axes'][axis]] = 180 - webgl_camera['rotate-' + args['axes'][axis]];
@@ -32,7 +37,12 @@ function webgl_buffer_set(args){
 // Required args: data
 // Optional args: type
 function webgl_buffer_set_type(args){
-    args['type'] = args['type'] || 'Float32Array';
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'type': 'Float32Array',
+      },
+    });
 
     var buffer = webgl_buffer.createBuffer();
     webgl_buffer.bindBuffer(
@@ -51,7 +61,12 @@ function webgl_buffer_set_type(args){
 // Required args: speed, y
 // Optional args: strafe
 function webgl_camera_move(args){
-    args['strafe'] = args['strafe'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'strafe': false,
+      },
+    });
 
     webgl_camera['y'] += args['y'];
     var movement = math_move_3d({
@@ -473,7 +488,12 @@ function webgl_resize(){
 // Required args: newmode
 // Optional args: newgame
 function webgl_setmode(args){
-    args['newgame'] = args['newgame'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'newgame': false,
+      },
+    });
 
     window.cancelAnimationFrame(webgl_animationFrame);
     window.clearInterval(webgl_interval);
@@ -634,7 +654,12 @@ function webgl_shader_create(args){
 // Required args: entityid
 // Optional args: image
 function webgl_texture_set(args){
-    args['image'] = args['image'] || webgl_textures['_default'];
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'image': webgl_textures['_default'],
+      },
+    });
 
     entity_entities[args['entityid']]['texture'] = webgl_buffer.createTexture();
     entity_entities[args['entityid']]['image'] = images_new({
