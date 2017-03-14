@@ -23,7 +23,12 @@ function race_init(){
 // Required args: id
 // Optional args: properties
 function race_racer_create(args){
-    args['properties'] = args['properties'] || {};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+      },
+    });
 
     entity_create({
       'id': args['id'],
