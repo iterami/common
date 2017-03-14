@@ -3,7 +3,12 @@
 // Required args: string
 // Optional args: flags
 function string_format_html(args){
-    args['flags'] = args['flags'] || string_flags;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'flags': string_flags,
+      },
+    });
 
     return string_replace_multiple({
       'flags': args['flags'],
@@ -22,7 +27,12 @@ function string_format_html(args){
 // Required args: patterns, string
 // Optional args: flags
 function string_replace_multiple(args){
-    args['flags'] = args['flags'] || string_flags;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'flags': string_flags,
+      },
+    });
 
     for(var pattern in args['patterns']){
         args['string'] = args['string'].replace(
