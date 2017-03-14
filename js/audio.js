@@ -3,7 +3,12 @@
 // Required args: id
 // Optional args: properties
 function audio_create(args){
-    args['properties'] = args['properties'] || {};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+      },
+    });
 
     audio_audio[args['id']] = {};
     audio_audio[args['id']]['playing'] = false;
@@ -38,10 +43,12 @@ function audio_create(args){
 
 // Optional args: volume
 function audio_init(args){
-    args = args || {};
-    args['volume'] = args['volume'] !== void 0
-      ? args['volume']
-      : audio_volume_default;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'volume': audio_volume_default,
+      },
+    });
 
     audio_context = new window.AudioContext();
     audio_volume = args['volume'];
@@ -49,11 +56,13 @@ function audio_init(args){
 
 // Optional args: id, properties
 function audio_node_create(args){
-    args = args || {};
-    args['id'] = args['id'] !== void 0
-      ? args['id']
-      : false;
-    args['properties'] = args['properties'] || {};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': false,
+        'properties': {},
+      },
+    });
 
     var source = audio_context['create' + args['properties']['label']](
       args['properties']['arg0'],
@@ -62,7 +71,10 @@ function audio_node_create(args){
     );
 
     for(var property in args['properties']){
-        if(typeof args['properties'][property] === 'object'){
+        if(core_args({
+          'type': 'object',
+          'var': args['properties'][property],
+        })){
             for(var subproperty in args['properties'][property]){
                 source[property][subproperty] = args['properties'][property][subproperty];
             }
@@ -88,7 +100,7 @@ function audio_onended(args){
             audio_start({
               'id': args['this'].id,
             });
-f
+
         }else{
             window.setTimeout(
               'audio_start({id:"' + args['this'].id + '"});',
@@ -103,9 +115,12 @@ f
 // Required args: id
 // Optional args: volume-multiplier
 function audio_source_create(args){
-    args['volume-multiplier'] = args['volume-multiplier'] !== void 0
-      ? args['volume-multiplier']
-      : 1;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'volume-multiplier': audio_volume_multiplier,
+      },
+    });
 
     audio_sources[args['id']] = {
       'duration': audio_audio[args['id']]['duration'] || 0,
@@ -143,9 +158,12 @@ function audio_source_create(args){
 // Required args: id
 // Optional args: volume-multiplier
 function audio_start(args){
-    args['volume-multiplier'] = args['volume-multiplier'] !== void 0
-      ? args['volume-multiplier']
-      : audio_volume_multiplier;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'volume-multiplier': audio_volume_multiplier,
+      },
+    });
 
     if(args['volume-multiplier'] === 0){
         return;
@@ -174,7 +192,12 @@ function audio_start(args){
 // Required args: id
 // Optional args: when
 function audio_stop(args){
-    args['when'] = args['when'] || void 0;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'when': void 0,
+      },
+    });
 
     audio_sources[args['id']][audio_audio[args['id']]['connections'][0]['label']].stop(args['when']);
 }
