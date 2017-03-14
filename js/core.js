@@ -15,8 +15,16 @@ function core_args(args){
     return args['args'];
 }
 
-// Required args: args, function
+// Required args: function
+// Optional args: args
 function core_call(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'args': void 0,
+      },
+    });
+
     if(core_type({
       'var': window[args['function']],
     })){
