@@ -119,15 +119,20 @@ function canvas_resize(){
 
     canvas_buffer.font = canvas_fonts['medium'];
 
-    if(typeof resize_logic === 'function'){
-        resize_logic();
-    }
+    core_call({
+      'todo': 'resize_logic',
+    });
 }
 
 // Required args: mode
 // Optional args: newgame
 function canvas_setmode(args){
-    args['newgame'] = args['newgame'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'newgame': false,
+      },
+    });
 
     window.cancelAnimationFrame(canvas_animationFrame);
     window.clearInterval(canvas_interval);
@@ -135,7 +140,9 @@ function canvas_setmode(args){
     canvas_menu = false;
     canvas_mode = args['mode'];
 
-    if(typeof setmode_logic === 'function'){
+    if(core_type({
+      'var': 'setmode_logic',
+    })){
         setmode_logic(args['newgame']);
 
     }else{
@@ -167,13 +174,16 @@ function canvas_setmode(args){
         canvas_resize();
     }
 
-    if(typeof load_level === 'function'){
-        load_level(canvas_mode);
-    }
+    core_call({
+      'args': canvas_mode,
+      'todo': 'load_level',
+    });
 
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 
-    if(typeof logic === 'function'){
+    if(core_type({
+      'var': logic,
+    })){
         canvas_interval = window.setInterval(
           logic,
           canvas_interval_ms
