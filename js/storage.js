@@ -36,8 +36,12 @@ function storage_init(args){
 
 // Optional args: bests
 function storage_reset(args){
-    args = args || {};
-    args['bests'] = args['bests'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'bests': false,
+      },
+    });
 
     if(!window.confirm('Reset?')){
         return false;
@@ -65,8 +69,12 @@ function storage_reset(args){
 
 // Optional args: bests
 function storage_save(args){
-    args = args || {};
-    args['bests'] = args['bests'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'bests': false,
+      },
+    });
 
     for(var key in storage_data){
         var data = '';
