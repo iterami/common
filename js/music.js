@@ -2,8 +2,12 @@
 
 // Optional args: back
 function music_iterateTracks(args){
-    args = args || {};
-    args['back'] = args['back'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'back': false,
+      },
+    });
 
     // Check if tracks table has any tracks.
     if(!document.getElementById('tracks').firstChild){
@@ -97,8 +101,12 @@ function music_resize(){
 
 // Optional args: title
 function music_setTitle(args){
-    args = args || {};
-    args['title'] = args['title'] || '';
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'title': '',
+      },
+    });
 
     document.getElementById('title').innerHTML = args['title'];
 
@@ -111,8 +119,12 @@ function music_setTitle(args){
 
 // Optional args: track
 function music_setTrack(args){
-    args = args || {};
-    args['track'] = args['track'] || document.getElementById('tracks').childNodes[0];
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'track': document.getElementById('tracks').childNodes[0],
+      },
+    });
 
     if(args['track'] === void 0){
         return;
