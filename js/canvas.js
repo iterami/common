@@ -182,7 +182,7 @@ function canvas_setmode(args){
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 
     if(core_isfunction({
-      'var': 'logic',
+      'todo': 'logic',
     })){
         canvas_interval = window.setInterval(
           logic,
