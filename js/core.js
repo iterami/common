@@ -15,6 +15,31 @@ function core_args(args){
     return args['args'];
 }
 
+// Required args: args, function
+function core_call(args){
+    if(core_type({
+      'var': window[args['function']],
+    }){
+        window[args['function']](args['args']);
+    }
+}
+
+// Required args: var
+// Optional args: type
+function core_type(args){
+    args = core_args({
+      'args': {
+        'type': args['type'],
+        'var': args['var'],
+      },
+      'defaults': {
+        'type': 'function',
+      },
+    });
+
+    return typeof args['var'] === args['type'];
+}
+
 function core_uid(){
     var uid = core_uid_create();
 
