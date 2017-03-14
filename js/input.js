@@ -137,9 +137,13 @@ function input_handle_onpointerlockchange(event){
 
 // Optional args: keybinds, mousebinds
 function input_init(args){
-    args = args || {};
-    args['keybinds'] = args['keybinds'] || false;
-    args['mousebinds'] = args['mousebinds'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'keybinds': false,
+        'mousebinds': false,
+      },
+    });
 
     if(args['keybinds'] !== false){
         input_keybinds_update({
@@ -197,7 +201,12 @@ function input_init(args){
 // Required args: keybinds
 // Optional args: clear
 function input_keybinds_update(args){
-    args['clear'] = args['clear'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'clear': false,
+      },
+    });
 
     if(args['clear']){
         input_keys = {};
@@ -224,7 +233,12 @@ function input_keyinfo_get(event){
 // Required args: mousebinds
 // Optional args: clear
 function input_mousebinds_update(args){
-    args['clear'] = args['clear'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'clear': false,
+      },
+    });
 
     if(args['clear']){
         input_mouse['todo'] = {};

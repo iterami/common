@@ -25,11 +25,18 @@ function core_call(args){
       },
     });
 
-    if(core_type({
-      'var': window[args['todo']],
+    if(core_isfunction({
+      'todo': args['todo'],
     })){
         window[args['todo']](args['args']);
     }
+}
+
+// Required args: todo
+function core_isfunction(args){
+    return core_type({
+      'var': window[args['todo']],
+    });
 }
 
 // Required args: var

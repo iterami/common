@@ -140,8 +140,8 @@ function canvas_setmode(args){
     canvas_menu = false;
     canvas_mode = args['mode'];
 
-    if(core_type({
-      'var': setmode_logic,
+    if(core_isfunction({
+      'todo': 'setmode_logic',
     })){
         setmode_logic(args['newgame']);
 
