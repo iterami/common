@@ -19,7 +19,7 @@ function core_args(args){
 function core_call(args){
     if(core_type({
       'var': window[args['function']],
-    }){
+    })){
         window[args['function']](args['args']);
     }
 }
