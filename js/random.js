@@ -2,35 +2,35 @@
 
 // Optional args: chance
 function random_boolean(args){
-    args = args || {};
-    args['chance'] = args['chance'] !== void 0
-      ? args['chance']
-      : random_boolean_chance;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'chance': random_boolean_chance,
+      },
+    });
 
     return Math.random() < args['chance'];
 }
 
-// Optional args: hash
-function random_hex(args){
-    args = args || {};
-    args['hash'] = args['hash'] !== void 0
-      ? ''
-      : '#';
-
+function random_hex(){
     var color = random_rgb();
 
     var blue = '0' + color['blue'].toString(16);
     var green = '0' + color['green'].toString(16);
     var red = '0' + color['red'].toString(16);
 
-    return args['hash'] + red.slice(-2) + green.slice(-2) + blue.slice(-2);
+    return red.slice(-2) + green.slice(-2) + blue.slice(-2);
 }
 
 // Optional args: max, todo
 function random_integer(args){
-    args = args || {};
-    args['max'] = args['max'] || random_integer_max;
-    args['todo'] = args['todo'] || 'floor';
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'max': random_integer_max,
+        'todo': 'floor',
+      },
+    });
 
     return Math[args['todo']](Math.random() * args['max']);
 }
@@ -51,9 +51,13 @@ function random_rgb(){
 
 // Optional args: characters, length
 function random_string(args){
-    args = args || {};
-    args['characters'] = args['characters'] || random_string_characters;
-    args['length'] = args['length'] || random_string_length;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'characters': random_string_characters,
+        'length': random_string_length,
+      },
+    });
 
     var string = '';
     for(var loopCounter = 0; loopCounter < args['length']; loopCounter++){
