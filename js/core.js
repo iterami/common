@@ -7,8 +7,8 @@ function core_args(args){
     }
 
     for(var arg in args['defaults']){
-        if(args[arg] === void 0){
-            args[arg] = args['defaults'][arg];
+        if(args['args'][arg] === void 0){
+            args['args'][arg] = args['defaults'][arg];
         }
     }
 
@@ -36,10 +36,7 @@ function core_call(args){
 // Optional args: type
 function core_type(args){
     args = core_args({
-      'args': {
-        'type': args['type'],
-        'var': args['var'],
-      },
+      'args': args,
       'defaults': {
         'type': 'function',
       },
