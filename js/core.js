@@ -22,7 +22,7 @@ function core_uid(){
         uid = core_uid_create();
     }
 
-    core_uids[uid] = 1;
+    core_uids[uid] = true;
 
     return uid;
 }
