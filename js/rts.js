@@ -459,8 +459,12 @@ function rts_camera_validatemove(args){
 
 // Optional args: minimap
 function rts_destionation_set(args){
-    args = args || {};
-    args['minimap'] = args['minimap'] || false;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'minimap': false,
+      },
+    });
 
     if(rts_selected_type === 'unit'){
         for(var unit in rts_players[0]['units']){
