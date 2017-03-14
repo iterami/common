@@ -15,7 +15,7 @@ function core_args(args){
     return args['args'];
 }
 
-// Required args: function
+// Required args: todo
 // Optional args: args
 function core_call(args){
     args = core_args({
@@ -26,9 +26,9 @@ function core_call(args){
     });
 
     if(core_type({
-      'var': window[args['function']],
+      'var': window[args['todo']],
     })){
-        window[args['function']](args['args']);
+        window[args['todo']](args['args']);
     }
 }
 
