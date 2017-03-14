@@ -21,8 +21,12 @@ function rpg_character_affect(args){
 
 // Optional args: properties
 function rpg_character_create(args){
-    args = args || {};
-    args['properties'] = args['properties'] || {};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+      },
+    });
 
     args['properties']['color'] = args['properties']['color'] || '#fff';
     args['properties']['dead'] = false;
@@ -187,9 +191,13 @@ function rpg_handle_all(){
 
 // Optional args: properties, type
 function rpg_item_create(args){
-    args = args || {};
-    args['properties'] = args['properties'] || {};
-    args['type'] = args['type'] || 'any';
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+        'type': 'any',
+      },
+    });
 
     args['properties']['cursor'] = args['properties']['cursor'] || 'auto';
     args['properties']['equipped'] = args['properties']['equipped'] || false;
@@ -215,7 +223,12 @@ function rpg_item_create(args){
 // Required args: id
 // Optional args: character
 function rpg_item_select(args){
-    args['character'] = args['character'] || 0;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': 0,
+      },
+    });
 
     var length = rpg_characters[args['character']]['inventory'].length - 1;
     if(args['id'] < 0){
@@ -246,8 +259,12 @@ function rpg_item_toggle(id){
 
 // Optional args: properties
 function rpg_particle_create(args){
-    args = args || {};
-    args['properties'] = args['properties'] || {};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+      },
+    });
 
     args['properties']['color'] = args['properties']['color'] || '#fff';
     args['properties']['damage'] = args['properties']['damage'] || 0;
@@ -339,8 +356,12 @@ function rpg_particle_handle(){
 
 // Optional args: properties
 function rpg_spawner_create(args){
-    args = args || {};
-    args['properties'] = args['properties'] || {};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+      },
+    });
 
     args['properties']['characters'] = 0;
     args['properties']['max'] = args['properties']['max'] || 1;
@@ -376,8 +397,12 @@ function rpg_unload(){
 
 // Optional args: properties
 function rpg_world_dynamic_create(args){
-    args = args || {};
-    args['properties'] = args['properties'] || {};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+      },
+    });
 
     args['properties']['collision'] = args['properties']['collision'] === void 0;
     args['properties']['color'] = args['properties']['color'] || '#fff';
