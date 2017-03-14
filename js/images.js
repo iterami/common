@@ -3,7 +3,12 @@
 // Required args: id, src
 // Optional args: todo
 function images_new(args){
-    args['todo'] = args['todo'] || function(){};
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'todo': function(){},
+      },
+    });
 
     var image = new Image();
     image.onload = args['todo'];
