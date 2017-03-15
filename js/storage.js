@@ -6,7 +6,10 @@ function storage_init(args){
 
     for(var key in args['data']){
         var data = args['data'][key];
-        if(typeof args['data'][key] !== 'object'){
+        if(!core_type({
+          'type': 'object',
+          'var': args['data'][key],
+        })){
             data = {
               'default': data,
               'type': 'setting',
@@ -85,7 +88,10 @@ function storage_save(args){
             }
 
             storage_data[key] = document.getElementById(key)[
-              typeof(storage_info[key]['default']) === 'boolean'
+              core_type({
+                'type': 'boolean',
+                'var': storage_info[key]['default'],
+              })
                 ? 'checked'
                 : 'value'
             ];
@@ -128,14 +134,22 @@ function storage_save(args){
 function storage_type_convert(args){
     var storage_default = storage_info[args['key']]['default'];
 
-    if(typeof storage_default === 'string'){
+    if(core_type({
+      'type': 'string',
+      'var': storage_default,
+    })){
         return args['value'];
 
     }else if(!isNaN(parseFloat(storage_default))){
         return parseFloat(args['value']);
 
-    }else if(typeof(storage_default) === 'boolean'
-      && typeof(args['value']) !== 'boolean'){
+    }else if(core_type({
+      'type': 'boolean',
+      'var': storage_default,
+    }) && !core_type({
+      'type': 'boolean',
+      'var': args['value'],
+    })){
         return args['value'] === 'true';
     }
 
@@ -149,7 +163,10 @@ function storage_update(){
         }
 
         document.getElementById(key)[
-          typeof(storage_info[key]['default']) === 'boolean'
+          core_type({
+            'type': 'boolean',
+            'var': storage_info[key]['default'],
+          })
             ? 'checked'
             : 'value'
         ] = storage_data[key];
