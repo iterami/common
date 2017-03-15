@@ -1,11 +1,12 @@
 'use strict';
 
 // Required args: todo, url
-// Optional args: type
+// Optional args: data, type
 function network_ajax(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'data': network_ajax_data,
         'type': network_ajax_type,
       },
     });
@@ -22,9 +23,10 @@ function network_ajax(args){
       args['type'],
       args['url']
     );
-    ajax.send(null);
+    ajax.send(args['data']);
 }
 
+var network_ajax_data = null;
 var network_ajax_readyState = 4;
 var network_ajax_status = 200;
 var network_ajax_type = 'GET';
