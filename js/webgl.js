@@ -480,9 +480,9 @@ function webgl_resize(){
 
     webgl_buffer.font = webgl_fonts['medium'];
 
-    if(typeof resize_logic === 'function'){
-        resize_logic();
-    }
+    core_call({
+      'todo': 'resize_logic',
+    });
 }
 
 // Required args: newmode
@@ -512,7 +512,9 @@ function webgl_setmode(args){
     webgl_programs = {};
     webgl_shaders = {};
 
-    if(typeof setmode_logic === 'function'){
+    if(core_isfunction({
+      'todo': 'setmode_logic',
+    })){
         setmode_logic(args['newgame']);
 
     }else{
@@ -628,9 +630,10 @@ function webgl_setmode(args){
     math_matrices['camera'] = math_matrix_create();
     math_matrix_perspective();
 
-    if(typeof load_level === 'function'){
-        load_level(webgl_mode);
-    }
+    core_call({
+      'args': webgl_mode,
+      'todo': 'load_level',
+    });
 
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
     webgl_interval = window.setInterval(
