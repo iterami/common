@@ -60,8 +60,13 @@ function canvas_drawloop(){
 // Required args: vertices
 // Optional args: properties, style
 function canvas_draw_path(args){
-    args['properties'] = args['properties'] || {};
-    args['style'] = args['style'] || canvas_style;
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+        'style': canvas_style,
+      },
+    });
 
     canvas_buffer.beginPath();
     for(var vertex in args['vertices']){
