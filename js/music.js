@@ -1,5 +1,135 @@
 'use strict';
 
+function music_init(){
+    document.getElementById('audio-mute').onclick = function(event){
+        document.getElementById('audio-player').volume = document.getElementById('audio-mute').checked
+          ? 0
+          : music_volume;
+    };
+
+    document.getElementById('music-display').onmousedown =
+      document.getElementById('music-display').ontouchstart = function(event){
+        if(!music_playing){
+            music_playTrack();
+        }
+
+        music_mouse_drag = true;
+        music_percent = event.pageX / music_width;
+        seek(music_percent);
+        updateProgress();
+    };
+
+    document.getElementById('audio-volume').oninput = function(event){
+        music_volume = document.getElementById('audio-volume').value;
+        document.getElementById('audio-player').volume = music_volume;
+
+        if(music_volume < 1){
+            window.localStorage.setItem(
+              music_prefix + '-audio-volume',
+              music_volume
+            );
+
+        }else{
+            window.localStorage.removeItem(music_prefix + '-audio-volume');
+        }
+
+        document.getElementById('audio-mute').checked = false;
+    };
+
+    document.getElementById('autoplay').onchange = function(event){
+        var state = document.getElementById('autoplay').checked;
+
+        if(!state){
+            window.localStorage.setItem(
+              music_prefix + '-autoplay',
+              1
+            );
+
+        }else{
+            window.localStorage.removeItem(music_prefix + '-autoplay');
+        }
+    };
+
+    document.getElementById('playbackrate').oninput = function(event){
+        music_playbackrate = parseFloat(document.getElementById('playbackrate').value) || 1;
+
+        if(music_playbackrate != 1){
+            window.localStorage.setItem(
+              music_prefix + '-playbackrate',
+              music_playbackrate
+            );
+
+        }else{
+            window.localStorage.removeItem(music_prefix + '-playbackrate');
+        }
+
+        document.getElementById('audio-player').playbackRate = music_playbackrate;
+
+        window.clearInterval(music_interval);
+        music_interval = window.setInterval(
+          updateProgress,
+          parseFloat(1000 / music_playbackrate) || 1000
+        );
+    };
+
+    document.getElementById('shuffle').onchange = function(event){
+        var state = document.getElementById('shuffle').checked;
+
+        if(!state){
+            window.localStorage.setItem(
+              'Music-Local.htm-shuffle',
+              1
+            );
+
+        }else{
+            window.localStorage.removeItem('Music-Local.htm-shuffle');
+        }
+    };
+
+    window.onkeydown = function(event){
+        var key = event.keyCode || event.which;
+
+        // Space: pause or play
+        if(key === 32){
+            event.preventDefault();
+
+            if(music_playing){
+                music_pauseTrack();
+
+            }else{
+                music_playTrack();
+            }
+
+        // Left or Up: previous track
+        }else if(key === 37
+          || key === 38){
+            music_iterateTracks(-1);
+
+        // Right or Down: next track
+        }else if(key === 39
+          || key === 40){
+            music_iterateTracks(1);
+        }
+    };
+
+    window.onmousemove = function(event){
+        if(!music_playing
+          || !music_mouse_drag){
+            return;
+        }
+
+        music_percent = event.pageX / music_width;
+        seek(music_percent);
+        draw();
+    };
+
+    window.onmouseup = function(event){
+        music_mouse_drag = false;
+    };
+
+    window.onresize = music_resize;
+}
+
 // Optional args: back
 function music_iterateTracks(args){
     args = core_args({
@@ -161,131 +291,3 @@ var music_playing = false;
 var music_prefix = '';
 var music_volume = 1;
 var music_width = 0;
-
-document.getElementById('audio-mute').onclick = function(event){
-    document.getElementById('audio-player').volume = document.getElementById('audio-mute').checked
-      ? 0
-      : music_volume;
-};
-
-document.getElementById('music-display').onmousedown =
-  document.getElementById('music-display').ontouchstart = function(event){
-    if(!music_playing){
-        music_playTrack();
-    }
-
-    music_mouse_drag = true;
-    music_percent = event.pageX / music_width;
-    seek(music_percent);
-    updateProgress();
-};
-
-document.getElementById('audio-volume').oninput = function(event){
-    music_volume = document.getElementById('audio-volume').value;
-    document.getElementById('audio-player').volume = music_volume;
-
-    if(music_volume < 1){
-        window.localStorage.setItem(
-          music_prefix + '-audio-volume',
-          music_volume
-        );
-
-    }else{
-        window.localStorage.removeItem(music_prefix + '-audio-volume');
-    }
-
-    document.getElementById('audio-mute').checked = false;
-};
-
-document.getElementById('autoplay').onchange = function(event){
-    var state = document.getElementById('autoplay').checked;
-
-    if(!state){
-        window.localStorage.setItem(
-          music_prefix + '-autoplay',
-          1
-        );
-
-    }else{
-        window.localStorage.removeItem(music_prefix + '-autoplay');
-    }
-};
-
-document.getElementById('playbackrate').oninput = function(event){
-    music_playbackrate = parseFloat(document.getElementById('playbackrate').value) || 1;
-
-    if(music_playbackrate != 1){
-        window.localStorage.setItem(
-          music_prefix + '-playbackrate',
-          music_playbackrate
-        );
-
-    }else{
-        window.localStorage.removeItem(music_prefix + '-playbackrate');
-    }
-
-    document.getElementById('audio-player').playbackRate = music_playbackrate;
-
-    window.clearInterval(music_interval);
-    music_interval = window.setInterval(
-      updateProgress,
-      parseFloat(1000 / music_playbackrate) || 1000
-    );
-};
-
-document.getElementById('shuffle').onchange = function(event){
-    var state = document.getElementById('shuffle').checked;
-
-    if(!state){
-        window.localStorage.setItem(
-          'Music-Local.htm-shuffle',
-          1
-        );
-
-    }else{
-        window.localStorage.removeItem('Music-Local.htm-shuffle');
-    }
-};
-
-window.onkeydown = function(event){
-    var key = event.keyCode || event.which;
-
-    // Space: pause or play
-    if(key === 32){
-        event.preventDefault();
-
-        if(music_playing){
-            music_pauseTrack();
-
-        }else{
-            music_playTrack();
-        }
-
-    // Left or Up: previous track
-    }else if(key === 37
-      || key === 38){
-        music_iterateTracks(-1);
-
-    // Right or Down: next track
-    }else if(key === 39
-      || key === 40){
-        music_iterateTracks(1);
-    }
-};
-
-window.onmousemove = function(event){
-    if(!music_playing
-      || !music_mouse_drag){
-        return;
-    }
-
-    music_percent = event.pageX / music_width;
-    seek(music_percent);
-    draw();
-};
-
-window.onmouseup = function(event){
-    music_mouse_drag = false;
-};
-
-window.onresize = music_resize;
