@@ -71,7 +71,7 @@ function audio_node_create(args){
     );
 
     for(var property in args['properties']){
-        if(core_args({
+        if(core_type({
           'type': 'object',
           'var': args['properties'][property],
         })){
