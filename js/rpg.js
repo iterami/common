@@ -407,6 +407,8 @@ function rpg_world_dynamic_create(args){
     args['properties']['collision'] = args['properties']['collision'] === void 0;
     args['properties']['color'] = args['properties']['color'] || '#fff';
     args['properties']['effect'] = args['properties']['effect'] || {};
+    args['properties']['effect-dx'] = args['properties']['effect-dx'] || 0;
+    args['properties']['effect-dy'] = args['properties']['effect-dy'] || 0;
     args['properties']['effect-stat'] = args['properties']['effect-stat'] || 'health';
     args['properties']['height'] = args['properties']['height'] !== void 0
       ? args['properties']['height']
