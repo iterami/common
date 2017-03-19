@@ -372,25 +372,11 @@ function webgl_init(){
     entity_set({
       'properties': {
         'collision': true,
-        'color': [
-          1, 1, 1, 1,
-          1, 1, 1, 1,
-          1, 1, 1, 1,
-          1, 1, 1, 1,
-        ],
+        'color': [],
         'depth-ignore': false,
-        'index': [
-          0, 1,
-          2, 0,
-          2, 3,
-        ],
+        'index': [],
         'mode': 'TRIANGLE_FAN',
-        'normals': [
-          0, 1, 0,
-          0, 1, 0,
-          0, 1, 0,
-          0, 1, 0,
-        ],
+        'normals': [],
         'position': {
           'x': 0,
           'y': 0,
@@ -406,14 +392,27 @@ function webgl_init(){
           'y': 1,
           'z': 1,
         },
-        'textureData': [
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-        ],
+        'textureData': [],
       },
       'todo': function(entity){
+          entity_entities[entity]['index'] = [
+            0, 1,
+            2, 0,
+            2, 3,
+          ];
+          entity_entities[entity]['normals'] = [
+            0, 1, 0,
+            0, 1, 0,
+            0, 1, 0,
+            0, 1, 0,
+          ];
+          entity_entities[entity]['textureData'] = [
+            0, 1,
+            0, 0,
+            1, 0,
+            1, 1,
+          ];
+
           entity_entities[entity]['buffer'] = webgl_buffer_set({
             'colorData': entity_entities[entity]['color'],
             'indexData': entity_entities[entity]['index'],
