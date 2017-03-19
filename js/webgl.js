@@ -371,6 +371,7 @@ function webgl_init(){
 
     entity_set({
       'properties': {
+        'collision': true,
         'color': [
           1, 1, 1, 1,
           1, 1, 1, 1,
@@ -378,7 +379,11 @@ function webgl_init(){
           1, 1, 1, 1,
         ],
         'depth-ignore': false,
-        'index': [0, 1, 2, 0, 2, 3,],
+        'index': [
+          0, 1,
+          2, 0,
+          2, 3,
+        ],
         'mode': 'TRIANGLE_FAN',
         'normals': [
           0, 1, 0,
