@@ -400,12 +400,24 @@ function webgl_init(){
             2, 0,
             2, 3,
           ];
+
+          var normal_x = webgl_normal({
+            'rotation': entity_entities[entity]['rotate']['x'],
+          });
+          var normal_y = webgl_normal({
+            'rotation': entity_entities[entity]['rotate']['y'],
+            'todo': 'cos',
+          });
+          var normal_z = webgl_normal({
+            'rotation': entity_entities[entity]['rotate']['z'],
+          });
           entity_entities[entity]['normals'] = [
-            0, 1, 0,
-            0, 1, 0,
-            0, 1, 0,
-            0, 1, 0,
+            normal_x, normal_y, normal_z,
+            normal_x, normal_y, normal_z,
+            normal_x, normal_y, normal_z,
+            normal_x, normal_y, normal_z,
           ];
+
           entity_entities[entity]['textureData'] = [
             0, 1,
             0, 0,
@@ -457,6 +469,30 @@ function webgl_menu_quit(){
 
 function webgl_menu_toggle(){
     webgl_menu = !webgl_menu;
+}
+
+// Optional args: rotation, todo
+function webgl_normal(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'rotation': 0,
+        'todo': 'sin',
+      },
+    });
+
+    var normal = math_round({
+      'number': Math[args['todo']](math_degrees_to_radians({
+        'degrees': args['rotation'],
+      })),
+    });
+
+
+    if(args['rotation'] > 90){
+        normal *= -1;
+    }
+
+    return normal;
 }
 
 // Required args: id, shaderlist
