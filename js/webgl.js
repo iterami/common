@@ -25,6 +25,9 @@ function webgl_buffer_set(args){
         'data': args['indexData'],
         'type': 'Uint16Array',
       }),
+      'normal': webgl_buffer_set_type({
+        'data': args['normalData'],
+      }),
       'texture': webgl_buffer_set_type({
         'data': args['textureData'],
       }),
@@ -377,6 +380,12 @@ function webgl_init(){
         'depth-ignore': false,
         'index': [0, 1, 2, 0, 2, 3,],
         'mode': 'TRIANGLE_FAN',
+        'normals': [
+          0, 1, 0,
+          0, 1, 0,
+          0, 1, 0,
+          0, 1, 0,
+        ],
         'position': {
           'x': 0,
           'y': 0,
@@ -392,17 +401,19 @@ function webgl_init(){
           'y': 1,
           'z': 1,
         },
+        'textureData': [
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+        ],
       },
       'todo': function(entity){
           entity_entities[entity]['buffer'] = webgl_buffer_set({
             'colorData': entity_entities[entity]['color'],
             'indexData': entity_entities[entity]['index'],
-            'textureData': [
-              0.0, 1.0,
-              0.0, 0.0,
-              1.0, 0.0,
-              1.0, 1.0,
-            ],
+            'normalData': entity_entities[entity]['normals'],
+            'textureData': entity_entities[entity]['textureData'],
             'vertexData': entity_entities[entity]['vertices'],
           });
 
