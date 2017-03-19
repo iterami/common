@@ -371,7 +371,7 @@ function webgl_init(){
 
     entity_set({
       'properties': {
-        'collision': true,
+        'collision': false,
         'color': [],
         'depth-ignore': false,
         'index': [],
