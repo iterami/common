@@ -361,10 +361,11 @@ function math_round(args){
       Math.round(args['number'] + 'e+' + args['decimals'])
         + 'e-' + args['decimals']
     );
+    if(isNaN(result)){
+        result = 0;
+    }
 
-    return isNaN(result)
-      ? 0
-      : result;
+    return result;
 }
 
 var math_decimals = 7;
