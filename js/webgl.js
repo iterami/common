@@ -401,22 +401,11 @@ function webgl_init(){
             2, 3,
           ];
 
-          var normal_x = webgl_normal({
-            'rotation': entity_entities[entity]['rotate']['x'],
+          entity_entities[entity]['normals'] = webgl_normals({
+            'x-rotation': entity_entities[entity]['rotate']['x'],
+            'y-rotation': entity_entities[entity]['rotate']['y'],
+            'z-rotation': entity_entities[entity]['rotate']['z'],
           });
-          var normal_y = webgl_normal({
-            'rotation': entity_entities[entity]['rotate']['y'],
-            'todo': 'cos',
-          });
-          var normal_z = webgl_normal({
-            'rotation': entity_entities[entity]['rotate']['z'],
-          });
-          entity_entities[entity]['normals'] = [
-            normal_x, normal_y, normal_z,
-            normal_x, normal_y, normal_z,
-            normal_x, normal_y, normal_z,
-            normal_x, normal_y, normal_z,
-          ];
 
           entity_entities[entity]['textureData'] = [
             0, 1,
@@ -471,28 +460,53 @@ function webgl_menu_toggle(){
     webgl_menu = !webgl_menu;
 }
 
-// Optional args: rotation, todo
-function webgl_normal(args){
+// Optional args: x-rotation, y-rotation, z-rotation
+function webgl_normals(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'rotation': 0,
-        'todo': 'sin',
+        'x-rotation': 0,
+        'y-rotation': 0,
+        'z-rotation': 0,
       },
     });
 
-    var normal = math_round({
-      'number': Math[args['todo']](math_degrees_to_radians({
-        'degrees': args['rotation'],
-      })),
-    });
+    var normal_x = 0;
+    var normal_y = 0;
+    var normal_z = 0;
 
+    if(args['x-rotation'] !== 0){
+        normal_x = 0;
+        normal_y = 0;
+        normal_z = -math_round({
+          'number': Math.sin(math_degrees_to_radians({
+            'degrees': args['x-rotation'],
+          })),
+        });
 
-    if(args['rotation'] > 90){
-        normal *= -1;
+    }else if(args['z-rotation'] !== 0){
+        normal_x = -math_round({
+          'number': Math.sin(math_degrees_to_radians({
+            'degrees': args['z-rotation'],
+          })),
+        });
+        normal_y = 0;
+        normal_z = 0;
+
+    }else{
+        normal_y = math_round({
+          'number': Math.cos(math_degrees_to_radians({
+            'degrees': args['y-rotation'],
+          })),
+        });
     }
 
-    return normal;
+    return [
+      normal_x, normal_y, normal_z,
+      normal_x, normal_y, normal_z,
+      normal_x, normal_y, normal_z,
+      normal_x, normal_y, normal_z,
+    ];
 }
 
 // Required args: id, shaderlist
