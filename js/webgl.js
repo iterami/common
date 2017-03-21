@@ -443,6 +443,18 @@ function webgl_logicloop(){
         if(entity_entities[entity]['logic']){
             entity_entities[entity]['logic']();
         }
+
+        if(entity_entities[entity]['collision']){
+            for(var other_entity in entity_entities){
+                if(entity !== other_entity
+                  && entity_entities[other_entity]['collision']){
+                    webgl_normals_collision({
+                      'entity0': entity,
+                      'entity1': other_entity,
+                    });
+                }
+            }
+        }
     }
 
     logic();
@@ -507,6 +519,43 @@ function webgl_normals(args){
       normal_x, normal_y, normal_z,
       normal_x, normal_y, normal_z,
     ];
+}
+
+// Required args: entity0id, entity1id
+function webgl_normals_collision(args){
+    var collision_data = false;
+
+    var entity0 = entity_entities[args['entity0id']];
+    var entity1 = entity_entities[args['entity1id']];
+
+    if(entity1['normals']['x'] !== 0){
+        if(entity1['normals']['x'] === 1
+          && entity0['dx'] < 0){
+
+        }else if(entity1['normals']['x'] === -1
+          && entity0['dx'] > 0){
+        }
+    }
+
+    if(entity1['normals']['y'] !== 0){
+        if(entity1['normals']['y'] === 1
+          && entity0['dy'] < 0){
+
+        }else if(entity1['normals']['y'] === -1
+          && entity0['dy'] > 0){
+        }
+    }
+
+    if(entity1['normals']['z'] !== 0){
+        if(entity1['normals']['z'] === 1
+          && entity0['dz'] < 0){
+
+        }else if(entity1['normals']['z'] === -1
+          && entity0['dz'] > 0){
+        }
+    }
+
+    return collision_data;
 }
 
 // Required args: id, shaderlist

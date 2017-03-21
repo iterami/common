@@ -34,11 +34,6 @@ function math_clamp(args){
     return args['value'];
 }
 
-// Required args: entity0, entity1
-function math_collision(args){
-    return false;
-}
-
 // Required args: degrees
 // Optional args: decimals
 function math_degrees_to_radians(args){
