@@ -25,18 +25,12 @@ function core_call(args){
       },
     });
 
-    if(core_isfunction({
-      'todo': args['todo'],
+    if(core_type({
+      'var': args['todo'],
+      'type': 'function',
     })){
         window[args['todo']](args['args']);
     }
-}
-
-// Required args: todo
-function core_isfunction(args){
-    return core_type({
-      'var': window[args['todo']],
-    });
 }
 
 // Required args: var
@@ -48,6 +42,15 @@ function core_type(args){
         'type': 'function',
       },
     });
+
+    if(args['type'] === 'function'){
+        return typeof args['var'] === 'function'
+          || typeof window[args['var']] === 'function';
+    }
+
+    if(args['type'] === 'array'){
+        return Array.isArray(args['var']);
+    }
 
     return typeof args['var'] === args['type'];
 }

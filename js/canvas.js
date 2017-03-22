@@ -145,8 +145,9 @@ function canvas_setmode(args){
     canvas_menu = false;
     canvas_mode = args['mode'];
 
-    if(core_isfunction({
-      'todo': 'setmode_logic',
+    if(core_type({
+      'var': 'setmode_logic',
+      'type': 'function',
     })){
         setmode_logic(args['newgame']);
 
@@ -186,8 +187,9 @@ function canvas_setmode(args){
 
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 
-    if(core_isfunction({
-      'todo': 'logic',
+    if(core_type({
+      'var': 'logic',
+      'type': 'function',
     })){
         canvas_interval = window.setInterval(
           logic,

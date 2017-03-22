@@ -126,6 +126,80 @@ function webgl_clearcolor_set(args){
     );
 }
 
+// Required args: colors, id
+// Optional args: side, x, y, z
+function webgl_cube(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'side': 1,
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    if(core_type({
+      'var': args['colors'][0],
+      'type': 'number',
+    })){
+        var colors = [];
+        for(var i = 0; i < 6; i++){
+            colors.push(args['colors']);
+        }
+        args['colors'] = colors;
+    }
+
+    for(var i = 0; i < 4; i++){
+        entity_create({
+          'id': '_webgl-cube_' + args['id'] + '_' + i,
+          'properties': {
+            'color': args['colors'][i],
+            'position': {
+              'x': args['x'],
+              'y': args['y'],
+              'z': args['z'],
+            },
+            'rotate': {
+              'x': i * 90,
+              'y': 0,
+              'z': 0,
+            },
+            'vertices': [
+              args['side'], args['side'], -args['side'],
+              -args['side'], args['side'], -args['side'],
+              -args['side'], args['side'], args['side'],
+              args['side'], args['side'], args['side'],
+            ],
+          },
+        });
+    }
+    for(var i = 3; i < 5; i++){
+        entity_create({
+          'id': '_webgl-cube_' + args['id'] + '_' + i,
+          'properties': {
+            'color': args['colors'][i],
+            'position': {
+              'x': args['x'],
+              'y': args['y'],
+              'z': args['z'],
+            },
+            'rotate': {
+              'x': 0,
+              'y': i * 180,
+              'z': 90,
+            },
+            'vertices': [
+              args['side'], args['side'], -args['side'],
+              -args['side'], args['side'], -args['side'],
+              -args['side'], args['side'], args['side'],
+              args['side'], args['side'], args['side'],
+            ],
+          },
+        });
+    }
+}
+
 function webgl_draw(){
     webgl_buffer.viewport(
       0,
@@ -626,8 +700,9 @@ function webgl_setmode(args){
     webgl_programs = {};
     webgl_shaders = {};
 
-    if(core_isfunction({
-      'todo': 'setmode_logic',
+    if(core_type({
+      'var': 'setmode_logic',
+      'type': 'function',
     })){
         setmode_logic(args['newgame']);
 
