@@ -150,7 +150,7 @@ function webgl_cube(args){
         args['colors'] = colors;
     }
 
-    for(var i = 0; i < 4; i++){
+    for(var i = 0; i < 5; i++){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_' + i,
           'properties': {
@@ -174,7 +174,7 @@ function webgl_cube(args){
           },
         });
     }
-    for(var i = 3; i < 5; i++){
+    for(var i = 4; i < 6; i++){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_' + i,
           'properties': {
