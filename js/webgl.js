@@ -127,11 +127,12 @@ function webgl_clearcolor_set(args){
 }
 
 // Required args: colors, id
-// Optional args: side, x, y, z
+// Optional args: exclude, side, x, y, z
 function webgl_cube(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'exclude': [],
         'side': 1,
         'x': 0,
         'y': 0,
@@ -150,11 +151,26 @@ function webgl_cube(args){
         args['colors'] = colors;
     }
 
+    var entities = [];
     var prefix = '_webgl-cube_';
+    for(var i = 0; i < 6; i++){
+        if(i in args['exclude']){
+            continue;
+        }
 
-    for(var i = 0; i < 5; i++){
+        var x = i * 90;
+        var y = 0;
+        var z = 0;
+
+        if(i > 3){
+            x = 0;
+            y = (5 - i) * 180;
+            z = 90;
+        }
+
+        var id = prefix + args['id'] + '_' + i;
         entity_create({
-          'id': prefix + args['id'] + '_' + i,
+          'id': id,
           'properties': {
             'color': args['colors'][i],
             'position': {
@@ -163,9 +179,9 @@ function webgl_cube(args){
               'z': args['z'],
             },
             'rotate': {
-              'x': i * 90,
-              'y': 0,
-              'z': 0,
+              'x': x,
+              'y': y,
+              'z': z,
             },
             'vertices': [
               args['side'], args['side'], -args['side'],
@@ -175,41 +191,12 @@ function webgl_cube(args){
             ],
           },
         });
-    }
-    for(var i = 4; i < 6; i++){
-        entity_create({
-          'id': '_webgl-cube_' + args['id'] + '_' + i,
-          'properties': {
-            'color': args['colors'][i],
-            'position': {
-              'x': args['x'],
-              'y': args['y'],
-              'z': args['z'],
-            },
-            'rotate': {
-              'x': 0,
-              'y': i * 180,
-              'z': 90,
-            },
-            'vertices': [
-              args['side'], args['side'], -args['side'],
-              -args['side'], args['side'], -args['side'],
-              -args['side'], args['side'], args['side'],
-              args['side'], args['side'], args['side'],
-            ],
-          },
-        });
+
+        entities.push(id);
     }
 
     entity_group_add({
-      'entities': [
-        prefix + args['id'] + '_0',
-        prefix + args['id'] + '_1',
-        prefix + args['id'] + '_2',
-        prefix + args['id'] + '_3',
-        prefix + args['id'] + '_4',
-        prefix + args['id'] + '_5',
-      ],
+      'entities': entities,
       'group': args['id'],
     });
 }
