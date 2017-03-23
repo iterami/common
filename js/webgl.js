@@ -154,7 +154,7 @@ function webgl_cube(args){
     var entities = [];
     var prefix = '_webgl-cube_';
     for(var i = 0; i < 6; i++){
-        if(i in args['exclude']){
+        if(args['exclude'].indexOf(i) > -1){
             continue;
         }
 
