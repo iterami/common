@@ -150,9 +150,11 @@ function webgl_cube(args){
         args['colors'] = colors;
     }
 
+    var prefix = '_webgl-cube_';
+
     for(var i = 0; i < 5; i++){
         entity_create({
-          'id': '_webgl-cube_' + args['id'] + '_' + i,
+          'id': prefix + args['id'] + '_' + i,
           'properties': {
             'color': args['colors'][i],
             'position': {
@@ -198,6 +200,18 @@ function webgl_cube(args){
           },
         });
     }
+
+    entity_group_add({
+      'entities': [
+        prefix + args['id'] + '_0',
+        prefix + args['id'] + '_1',
+        prefix + args['id'] + '_2',
+        prefix + args['id'] + '_3',
+        prefix + args['id'] + '_4',
+        prefix + args['id'] + '_5',
+      ],
+      'group': args['id'],
+    });
 }
 
 function webgl_draw(){
