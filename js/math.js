@@ -257,7 +257,12 @@ function math_move_2d(args){
       },
     });
 
-    var angle = Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
+    var angle = math_point_angle({
+      'x0': args['x0'],
+      'x1': args['x1'],
+      'y0': args['y0'],
+      'y1': args['y1'],
+    });
 
     var dx = math_round({
       'decimals': args['decimals'],
@@ -313,6 +318,11 @@ function math_move_3d(args){
         'number': Math.cos(radians) * args['speed'],
       }),
     };
+}
+
+// Required args: x0, x1, y0, y1
+function math_point_angle(args){
+    return Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
 }
 
 // Required args: radians

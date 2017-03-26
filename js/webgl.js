@@ -1,18 +1,15 @@
 'use strict';
 
 // Required args: entity
-// Optional args: axes
 function webgl_billboard(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'axes': ['y'],
-      },
+    entity_entities[args['entity']]['rotate']['z'] = math_radians_to_degrees({
+      'radians': math_point_angle({
+        'x0': webgl_camera['x'],
+        'y0': webgl_camera['z'],
+        'x1': entity_entities[args['entity']]['position']['x'],
+        'y1': entity_entities[args['entity']]['position']['z'],
+      }),
     });
-
-    for(var axis in args['axes']){
-        entity_entities[args['entity']]['rotate'][args['axes'][axis]] = 180 - webgl_camera['rotate-' + args['axes'][axis]];
-    }
 }
 
 // Required args: colorData, indexData, textureData, vertexData
@@ -126,12 +123,18 @@ function webgl_clearcolor_set(args){
     );
 }
 
-// Required args: colors, id
-// Optional args: exclude, side, x, y, z
+// Required args: id
+// Optional args: color, exclude, side, x, y, z
 function webgl_cube(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'color': [
+          .2, .2, .2, 1,
+          .1, .1, .1, 1,
+          .2, .2, .2, 1,
+          .1, .1, .1, 1,
+        ],
         'exclude': [],
         'side': 1,
         'x': 0,
@@ -140,19 +143,7 @@ function webgl_cube(args){
       },
     });
 
-    if(core_type({
-      'var': args['colors'][0],
-      'type': 'number',
-    })){
-        var colors = [];
-        for(var i = 0; i < 6; i++){
-            colors.push(args['colors']);
-        }
-        args['colors'] = colors;
-    }
-
     var entities = [];
-    var prefix = '_webgl-cube_';
     for(var i = 0; i < 6; i++){
         if(args['exclude'].indexOf(i) > -1){
             continue;
@@ -168,11 +159,11 @@ function webgl_cube(args){
             z = 90;
         }
 
-        var id = prefix + args['id'] + '_' + i;
+        var id = '_webgl-cube_' + args['id'] + '_' + i;
         entity_create({
           'id': id,
           'properties': {
-            'color': args['colors'][i],
+            'color': args['color'],
             'position': {
               'x': args['x'],
               'y': args['y'],
@@ -886,6 +877,79 @@ function webgl_texture_set(args){
             void 0
           );
       },
+    });
+}
+
+// Required args: id
+// Optional args: color-base, color-leaf, x, y, z
+function webgl_tree(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'color-base': [
+          0.4, 0.2, 0, 1,
+          0.4, 0.2, 0, 1,
+          0.4, 0.2, 0, 1,
+          0.4, 0.2, 0, 1,
+        ],
+        'color-leaf': [
+          0.1, 0.3, 0.1, 1,
+          0.1, 0.3, 0.1, 1,
+          0.1, 0.3, 0.1, 1,
+        ],
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    entity_create({
+      'id': '_webgl-tree_' + args['id'] + '_base',
+      'properties': {
+        'color': args['color-base'],
+        'position': {
+          'x': args['x'],
+          'y': args['y'],
+          'z': args['z'],
+        },
+        'rotate': {
+          'x': 90,
+        },
+        'vertices': [
+          1, 0, -1,
+          -1, 0, -1,
+          -1, 0, 0,
+          1, 0, 0,
+        ],
+      },
+    });
+    entity_create({
+      'id': '_webgl-tree_' + args['id'] + '_leaf',
+      'properties': {
+        'color': args['color-leaf'],
+        'mode': 'TRIANGLES',
+        'position': {
+          'x': args['x'],
+          'y': args['y'],
+          'z': args['z'],
+        },
+        'rotate': {
+          'x': 90,
+        },
+        'vertices': [
+          3, 0, -1,
+          0, 0, -5,
+          -3, 0, -1,
+        ],
+      },
+    });
+
+    entity_group_add({
+      'entities': [
+        '_webgl-tree_' + args['id'] + '_base',
+        '_webgl-tree_' + args['id'] + '_leaf',
+      ],
+      'group': args['id'],
     });
 }
 
