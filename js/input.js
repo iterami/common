@@ -1,7 +1,16 @@
 'use strict';
 
+function input_handle_contextmenu(event){
+    input_handle_event({
+      'event': event,
+      'key': 'contextmenu',
+      'object': input_mouse['todo'],
+      'todo': true,
+    });
+}
+
 // Required args: event, key, object
-// Optional arsg: state, todo
+// Optional args: state, todo
 function input_handle_event(args){
     if(args['object'].hasOwnProperty(args['key'])){
         if(args['object'][args['key']]['preventDefault']){
@@ -82,6 +91,7 @@ function input_handle_keyup(event){
 }
 
 function input_handle_mousedown(event){
+    input_mouse['button'] = event.button;
     input_mouse['down'] = true;
     input_mouse['down-x'] = input_mouse['x'];
     input_mouse['down-y'] = input_mouse['y'];
@@ -107,6 +117,7 @@ function input_handle_mousemove(event){
 }
 
 function input_handle_mouseup(event){
+    input_mouse['button'] = -1;
     input_mouse['down'] = false;
     input_handle_event({
       'event': event,
@@ -156,6 +167,7 @@ function input_init(args){
     }
 
     input_mouse = {
+      'button': -1,
       'down': false,
       'down-x': 0,
       'down-y': 0,
@@ -175,6 +187,7 @@ function input_init(args){
 
         document.onpointerlockchange = input_handle_onpointerlockchange;
         document.onmozpointerlockchange = input_handle_onpointerlockchange;
+        window.oncontextmenu = input_handle_contextmenu;
         window.onmousedown = input_handle_mousedown;
         window.onmousemove = input_handle_mousemove;
         window.onmouseup = input_handle_mouseup;
