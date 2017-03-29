@@ -124,7 +124,7 @@ function webgl_clearcolor_set(args){
 }
 
 // Required args: id
-// Optional args: color, exclude, side, x, y, z
+// Optional args: color, dx, dy, dz, exclude, side, x, y, z
 function webgl_cube(args){
     args = core_args({
       'args': args,
@@ -135,6 +135,9 @@ function webgl_cube(args){
           .2, .2, .2, 1,
           .1, .1, .1, 1,
         ],
+        'dx': 0,
+        'dy': 0,
+        'dz': 0,
         'exclude': [],
         'side': 1,
         'x': 0,
@@ -164,6 +167,9 @@ function webgl_cube(args){
           'id': id,
           'properties': {
             'color': args['color'],
+            'dx': args['dx'],
+            'dy': args['dy'],
+            'dz': args['dz'],
             'position': {
               'x': args['x'],
               'y': args['y'],
@@ -440,6 +446,9 @@ function webgl_init(){
         'collision': false,
         'color': [],
         'depth-ignore': false,
+        'dx': 0,
+        'dy': 0,
+        'dz': 0,
         'index': [],
         'mode': 'TRIANGLE_FAN',
         'normals': [],
@@ -520,6 +529,10 @@ function webgl_logicloop(){
                     });
                 }
             }
+        }
+
+        for(var axis in entity_entities[entity]['position']){
+            entity_entities[entity]['position'][axis] += entity_entities[entity]['d' + axis];
         }
     }
 
@@ -881,7 +894,7 @@ function webgl_texture_set(args){
 }
 
 // Required args: id
-// Optional args: color-base, color-leaf, x, y, z
+// Optional args: color-base, color-leaf, dx, dy, dz, x, y, z
 function webgl_tree(args){
     args = core_args({
       'args': args,
@@ -897,6 +910,9 @@ function webgl_tree(args){
           0.1, 0.3, 0.1, 1,
           0.1, 0.3, 0.1, 1,
         ],
+        'dx': 0,
+        'dy': 0,
+        'dz': 0,
         'x': 0,
         'y': 0,
         'z': 0,
@@ -907,6 +923,9 @@ function webgl_tree(args){
       'id': '_webgl-tree_' + args['id'] + '_base',
       'properties': {
         'color': args['color-base'],
+        'dx': args['dx'],
+        'dy': args['dy'],
+        'dz': args['dz'],
         'position': {
           'x': args['x'],
           'y': args['y'],
@@ -927,6 +946,9 @@ function webgl_tree(args){
       'id': '_webgl-tree_' + args['id'] + '_leaf',
       'properties': {
         'color': args['color-leaf'],
+        'dx': args['dx'],
+        'dy': args['dy'],
+        'dz': args['dz'],
         'mode': 'TRIANGLES',
         'position': {
           'x': args['x'],
