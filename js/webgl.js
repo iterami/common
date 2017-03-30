@@ -681,8 +681,8 @@ function webgl_normals_collision(args){
     if(entity1['normals'][2] !== 0){
         if(entity1['normals'][2] === 1
           && entity0['dz'] < 0){
-            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + 1
-              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - 1
+            if(entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][0] + 1
+              && entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][3] - 1
               && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][8] + 2
               && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][2] - 2
               && entity0['position']['z'] >= entity1['position']['z']
@@ -692,8 +692,8 @@ function webgl_normals_collision(args){
 
         }else if(entity1['normals'][2] === -1
           && entity0['dz'] > 0){
-            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + 1
-              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - 1
+            if(entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][0] + 1
+              && entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][3] - 1
               && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][8] + 2
               && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][2] - 2
               && entity0['position']['z'] >= entity1['position']['z'] - 2
