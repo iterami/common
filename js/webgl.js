@@ -447,9 +447,11 @@ function webgl_init(){
 
     entity_set({
       'properties': {
+        'collides': false,
         'collision': false,
         'color': [],
         'depth-ignore': false,
+        'draw': true,
         'dx': 0,
         'dy': 0,
         'dz': 0,
@@ -519,6 +521,7 @@ function webgl_init(){
     entity_create({
       'id': '_webgl-camera',
       'properties': {
+        'collides': true,
         'draw': false,
       },
     });
@@ -538,7 +541,7 @@ function webgl_logicloop(){
             entity_entities[entity]['logic']();
         }
 
-        if(entity_entities[entity]['collision']){
+        if(entity_entities[entity]['collides']){
             for(var other_entity in entity_entities){
                 if(entity !== other_entity
                   && entity_entities[other_entity]['collision']){
