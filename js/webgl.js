@@ -533,10 +533,6 @@ function webgl_init(){
 
 function webgl_logicloop(){
     for(var entity in entity_entities){
-        if(entity_entities[entity]['draw'] === false){
-            continue;
-        }
-
         if(entity_entities[entity]['logic']){
             entity_entities[entity]['logic']();
         }
@@ -546,11 +542,15 @@ function webgl_logicloop(){
                 if(entity !== other_entity
                   && entity_entities[other_entity]['collision']){
                     webgl_normals_collision({
-                      'entity0': entity,
-                      'entity1': other_entity,
+                      'entity0id': entity,
+                      'entity1id': other_entity,
                     });
                 }
             }
+        }
+
+        if(entity === '_webgl-camera'){
+            continue;
         }
 
         for(var axis in entity_entities[entity]['position']){
