@@ -68,14 +68,15 @@ function webgl_camera_move(args){
       },
     });
 
-    entity_entities['_webgl-camera']['position']['y'] += args['y'];
     var movement = math_move_3d({
       'angle': entity_entities['_webgl-camera']['rotate']['y'],
       'speed': args['speed'],
       'strafe': args['strafe'],
     });
-    entity_entities['_webgl-camera']['position']['x'] += movement['x'];
-    entity_entities['_webgl-camera']['position']['z'] += movement['z'];
+
+    entity_entities['_webgl-camera']['dx'] += movement['x'];
+    entity_entities['_webgl-camera']['dy'] += args['y'];
+    entity_entities['_webgl-camera']['dz'] += movement['z'];
 }
 
 // Required args: x, y, z
@@ -532,6 +533,12 @@ function webgl_init(){
 }
 
 function webgl_logicloop(){
+    entity_entities['_webgl-camera']['dx'] = 0;
+    entity_entities['_webgl-camera']['dy'] = 0;
+    entity_entities['_webgl-camera']['dz'] = 0;
+
+    logic();
+
     for(var entity in entity_entities){
         if(entity_entities[entity]['logic']){
             entity_entities[entity]['logic']();
@@ -549,16 +556,10 @@ function webgl_logicloop(){
             }
         }
 
-        if(entity === '_webgl-camera'){
-            continue;
-        }
-
         for(var axis in entity_entities[entity]['position']){
             entity_entities[entity]['position'][axis] += entity_entities[entity]['d' + axis];
         }
     }
-
-    logic();
 }
 
 function webgl_menu_quit(){
@@ -627,75 +628,75 @@ function webgl_normals_collision(args){
     var entity0 = entity_entities[args['entity0id']];
     var entity1 = entity_entities[args['entity1id']];
 
-    if(entity1['normals']['x'] !== 0){
-        if(entity1['normals']['x'] === 1
+    if(entity1['normals'][0] !== 0){
+        if(entity1['normals'][0] === 1
           && entity0['dx'] < 0){
             if(entity0['position']['x'] >= entity1['position']['x']
-              && entity0['position']['x'] <= entity1['position']['x'] + 1
-              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][0] + .5
-              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][3] - .5
-              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][8] + .5
-              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][2] - .5){
+              && entity0['position']['x'] <= entity1['position']['x'] + 2
+              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][0] + 2
+              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][3] - 2
+              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][8] + 1
+              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][2] - 1){
                 entity0['dx'] = 0;
             }
 
-        }else if(entity1['normals']['x'] === -1
+        }else if(entity1['normals'][0] === -1
           && entity0['dx'] > 0){
-            if(entity0['position']['x'] >= entity1['position']['x'] - 1
+            if(entity0['position']['x'] >= entity1['position']['x'] - 2
               && entity0['position']['x'] <= entity1['position']['x']
-              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][0] + .5
-              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][3] - .5
-              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][8] + .5
-              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][2] - .5){
+              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][0] + 2
+              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][3] - 2
+              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][8] + 1
+              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][2] - 1){
                 entity0['dx'] = 0;
             }
         }
     }
 
-    if(entity1['normals']['y'] !== 0){
-        if(entity1['normals']['y'] === 1
+    if(entity1['normals'][1] !== 0){
+        if(entity1['normals'][1] === 1
           && entity0['dy'] < 0){
-            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + .5
-              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - .5
+            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + 2
+              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - 2
               && entity0['position']['y'] >= entity1['position']['y']
-              && entity0['position']['y'] <= entity1['position']['y'] + 1
-              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][8] + .5
-              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][2] - .5){
+              && entity0['position']['y'] <= entity1['position']['y'] + 2
+              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][8] + 2
+              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][2] - 2){
                 entity0['dy'] = 0;
             }
 
-        }else if(entity1['normals']['y'] === -1
+        }else if(entity1['normals'][1] === -1
           && entity0['dy'] > 0){
-            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + .5
-              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - .5
-              && entity0['position']['y'] >= entity1['position']['y'] - 1
+            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + 2
+              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - 2
+              && entity0['position']['y'] >= entity1['position']['y'] - 2
               && entity0['position']['y'] <= entity1['position']['y']
-              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][8] + .5
-              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][2] - .5){
+              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][8] + 2
+              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][2] - 2){
                 entity0['dy'] = 0;
             }
         }
     }
 
-    if(entity1['normals']['z'] !== 0){
-        if(entity1['normals']['z'] === 1
+    if(entity1['normals'][2] !== 0){
+        if(entity1['normals'][2] === 1
           && entity0['dz'] < 0){
-            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + .5
-              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - .5
-              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][8] + .5
-              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][2] - .5
+            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + 1
+              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - 1
+              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][8] + 2
+              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][2] - 2
               && entity0['position']['z'] >= entity1['position']['z']
-              && entity0['position']['z'] <= entity1['position']['z'] + 1){
+              && entity0['position']['z'] <= entity1['position']['z'] + 2){
                 entity0['dz'] = 0;
             }
 
-        }else if(entity1['normals']['z'] === -1
+        }else if(entity1['normals'][2] === -1
           && entity0['dz'] > 0){
-            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + .5
-              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - .5
-              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][8] + .5
-              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][2] - .5
-              && entity0['position']['z'] >= entity1['position']['z'] - 1
+            if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][0] + 1
+              && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][3] - 1
+              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][8] + 2
+              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][2] - 2
+              && entity0['position']['z'] >= entity1['position']['z'] - 2
               && entity0['position']['z'] <= entity1['position']['z']){
                 entity0['dz'] = 0;
             }
