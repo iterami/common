@@ -27,7 +27,6 @@ function core_call(args){
 
     if(core_type({
       'var': args['todo'],
-      'type': 'function',
     })){
         window[args['todo']](args['args']);
     }
