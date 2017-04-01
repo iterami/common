@@ -635,8 +635,8 @@ function webgl_normals_collision(args){
               && entity0['position']['x'] <= entity1['position']['x'] + 2
               && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][3] - 2
               && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][0] + 2
-              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][2] - 1
-              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][8] + 1){
+              && entity0['position']['z'] >= -entity1['position']['z'] + entity1['vertices'][2] - 1
+              && entity0['position']['z'] <= -entity1['position']['z'] + entity1['vertices'][8] + 1){
                 entity0['dx'] = 0;
             }
 
@@ -646,8 +646,8 @@ function webgl_normals_collision(args){
               && entity0['position']['x'] <= entity1['position']['x']
               && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][3] - 2
               && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][0] + 2
-              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][2] - 1
-              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][8] + 1){
+              && entity0['position']['z'] >= -entity1['position']['z'] + entity1['vertices'][2] - 1
+              && entity0['position']['z'] <= -entity1['position']['z'] + entity1['vertices'][8] + 1){
                 entity0['dx'] = 0;
             }
         }
@@ -660,8 +660,8 @@ function webgl_normals_collision(args){
               && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][0] + 2
               && entity0['position']['y'] >= entity1['position']['y']
               && entity0['position']['y'] <= entity1['position']['y'] + 2
-              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][2] - 2
-              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][8] + 2){
+              && entity0['position']['z'] >= -entity1['position']['z'] + entity1['vertices'][2] - 2
+              && entity0['position']['z'] <= -entity1['position']['z'] + entity1['vertices'][8] + 2){
                 entity0['dy'] = 0;
             }
 
@@ -671,8 +671,8 @@ function webgl_normals_collision(args){
               && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][0] + 2
               && entity0['position']['y'] >= entity1['position']['y'] - 2
               && entity0['position']['y'] <= entity1['position']['y']
-              && entity0['position']['z'] >= entity1['position']['z'] + entity1['vertices'][2] - 2
-              && entity0['position']['z'] <= entity1['position']['z'] + entity1['vertices'][8] + 2){
+              && entity0['position']['z'] >= -entity1['position']['z'] + entity1['vertices'][2] - 2
+              && entity0['position']['z'] <= -entity1['position']['z'] + entity1['vertices'][8] + 2){
                 entity0['dy'] = 0;
             }
         }
