@@ -477,6 +477,12 @@ function webgl_init(){
         'textureData': [],
       },
       'todo': function(entity){
+          entity_entities[entity]['normals'] = webgl_normals({
+            'x-rotation': entity_entities[entity]['rotate']['x'],
+            'y-rotation': entity_entities[entity]['rotate']['y'],
+            'z-rotation': entity_entities[entity]['rotate']['z'],
+          });
+
           if(entity_entities[entity]['draw'] === false){
               return;
           }
@@ -486,13 +492,6 @@ function webgl_init(){
             2, 0,
             2, 3,
           ];
-
-          entity_entities[entity]['normals'] = webgl_normals({
-            'x-rotation': entity_entities[entity]['rotate']['x'],
-            'y-rotation': entity_entities[entity]['rotate']['y'],
-            'z-rotation': entity_entities[entity]['rotate']['z'],
-          });
-
           entity_entities[entity]['textureData'] = [
             0, 1,
             0, 0,
