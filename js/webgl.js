@@ -592,7 +592,7 @@ function webgl_normals(args){
     if(args['x-rotation'] !== 0){
         normal_x = 0;
         normal_y = 0;
-        normal_z = -math_round({
+        normal_z = math_round({
           'number': Math.sin(math_degrees_to_radians({
             'degrees': args['x-rotation'],
           })),
@@ -685,8 +685,8 @@ function webgl_normals_collision(args){
               && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][0] + 1
               && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][2] - 2
               && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][8] + 2
-              && entity0['position']['z'] >= entity1['position']['z']
-              && entity0['position']['z'] <= entity1['position']['z'] + 2){
+              && entity0['position']['z'] >= -entity1['position']['z']
+              && entity0['position']['z'] <= -entity1['position']['z'] + 2){
                 entity0['dz'] = 0;
             }
 
@@ -696,8 +696,8 @@ function webgl_normals_collision(args){
               && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][0] + 1
               && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][2] - 2
               && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][8] + 2
-              && entity0['position']['z'] >= entity1['position']['z'] - 2
-              && entity0['position']['z'] <= entity1['position']['z']){
+              && entity0['position']['z'] >= -entity1['position']['z'] - 2
+              && entity0['position']['z'] <= -entity1['position']['z']){
                 entity0['dz'] = 0;
             }
         }
