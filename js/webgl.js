@@ -551,7 +551,6 @@ function webgl_logicloop(){
               entity_entities[entity]['dy'] - .05,
               webgl_gravity
             );
-            console.log(entity_entities[entity]['dy']);
         }
 
         if(entity_entities[entity]['collides']){
