@@ -51,17 +51,9 @@ function core_handle_defaults(args){
     var object = {};
 
     for(var property in args['var']){
-        if(core_type({
-          'type': 'object',
+        object[property] = core_handle_defaults({
           'var': args['var'][property],
-        })){
-            object[property] = core_handle_defaults({
-              'var': args['var'][property],
-            });
-
-        }else{
-            object[property] = args['var'][property];
-        }
+        });
     }
 
     return object;
