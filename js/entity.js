@@ -33,23 +33,16 @@ function entity_create(args){
 
     for(var type in args['types']){
         for(var property in entity_info[args['types'][type]]['default']){
-            if(core_type({
-              'type': 'object',
+            entity[property] = core_handle_defaults({
               'var': entity_info[args['types'][type]]['default'][property],
-            })){
-                entity[property] = {};
-                for(var value in entity_info[args['types'][type]]['default'][property]){
-                    entity[property][value] = entity_info[args['types'][type]]['default'][property][value];
-                }
-
-            }else{
-                entity[property] = entity_info[args['types'][type]]['default'][property];
-            }
+            });
         }
     }
 
     for(property in args['properties']){
-        entity[property] = args['properties'][property];
+        entity[property] = core_handle_defaults({
+          'var': args['properties'][property],
+        });
     }
 
     entity_entities[args['id']] = entity;

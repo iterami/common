@@ -32,6 +32,41 @@ function core_call(args){
     }
 }
 
+// Optional args: var
+function core_handle_defaults(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'var': {},
+      },
+    });
+
+    if(!core_type({
+      'type': 'object',
+      'var': args['var'],
+    })){
+        return args['var'];
+    }
+
+    var object = {};
+
+    for(var property in args['var']){
+        if(core_type({
+          'type': 'object',
+          'var': args['var'][property],
+        })){
+            object[property] = core_handle_defaults({
+              'var': args['var'][property],
+            });
+
+        }else{
+            object[property] = args['var'][property];
+        }
+    }
+
+    return object;
+}
+
 // Required args: var
 // Optional args: type
 function core_type(args){
@@ -48,7 +83,12 @@ function core_type(args){
     }
 
     if(args['type'] === 'array'){
-        return Array.isArray(args['var']);
+        return args['var'] instanceof Array;
+    }
+
+    if(args['type'] === 'object'){
+        return args['var'] instanceof Object
+          && !(args['var'] instanceof Array);
     }
 
     return typeof args['var'] === args['type'];
