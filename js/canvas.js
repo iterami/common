@@ -58,19 +58,20 @@ function canvas_drawloop(){
 }
 
 // Required args: vertices
-// Optional args: properties, style
+// Optional args: properties, style, type
 function canvas_draw_path(args){
     args = core_args({
       'args': args,
       'defaults': {
         'properties': {},
         'style': canvas_style,
+        'type': 'lineTo',
       },
     });
 
     canvas_buffer.beginPath();
     for(var vertex in args['vertices']){
-        canvas_buffer[args['vertices'][vertex]['type'] || 'lineTo'](
+        canvas_buffer[args['vertices'][vertex]['type'] || args['type']](
           args['vertices'][vertex]['x'],
           args['vertices'][vertex]['y'],
           args['vertices'][vertex]['radius'],
