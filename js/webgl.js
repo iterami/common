@@ -456,6 +456,7 @@ function webgl_init(){
         'dx': 0,
         'dy': 0,
         'dz': 0,
+        'gravity': false,
         'index': [],
         'mode': 'TRIANGLE_FAN',
         'normals': [],
@@ -533,14 +534,24 @@ function webgl_init(){
 
 function webgl_logicloop(){
     entity_entities['_webgl-camera']['dx'] = 0;
-    entity_entities['_webgl-camera']['dy'] = 0;
     entity_entities['_webgl-camera']['dz'] = 0;
+    if(!entity_entities['_webgl-camera']['gravity']){
+        entity_entities['_webgl-camera']['dy'] = 0;
+    }
 
     logic();
 
     for(var entity in entity_entities){
         if(entity_entities[entity]['logic']){
             entity_entities[entity]['logic']();
+        }
+
+        if(entity_entities[entity]['gravity']){
+            entity_entities[entity]['dy'] = Math.max(
+              entity_entities[entity]['dy'] - .05,
+              webgl_gravity
+            );
+            console.log(entity_entities[entity]['dy']);
         }
 
         if(entity_entities[entity]['collides']){
@@ -1065,6 +1076,7 @@ var webgl_fonts = {
   'medium': '200% monospace',
   'small': '100% monospace',
 };
+var webgl_gravity = -1;
 var webgl_height = 0;
 var webgl_interval = 0;
 var webgl_menu = false;
