@@ -141,9 +141,13 @@ function input_handle_mousewheel(event){
 }
 
 function input_handle_onpointerlockchange(event){
-    var pointerlock_element = document.getElementById(input_mouse['pointerlock-id']);
-    input_mouse['pointerlock-state'] = document.pointerLockElement === pointerlock_element
-      || document.mozPointerLockElement === pointerlock_element;
+    var element = document.getElementById(input_mouse['pointerlock-id']);
+    if(!element){
+        return;
+    }
+
+    input_mouse['pointerlock-state'] = document.pointerLockElement === element
+      || document.mozPointerLockElement === element;
 };
 
 // Optional args: keybinds, mousebinds
@@ -268,6 +272,10 @@ function input_mousebinds_update(args){
 // Required args: id
 function input_requestpointerlock(args){
     var element = document.getElementById(args['id']);
+    if(!element){
+        return;
+    }
+
     element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
     element.requestPointerLock();
 
