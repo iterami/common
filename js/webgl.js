@@ -58,13 +58,14 @@ function webgl_buffer_set_type(args){
     return buffer;
 }
 
-// Required args: speed, y
-// Optional args: strafe
+// Optional args: speed, strafe, y
 function webgl_camera_move(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'speed': 1,
         'strafe': false,
+        'y': 0,
       },
     });
 
