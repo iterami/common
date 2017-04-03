@@ -34,13 +34,15 @@ function entity_create(args){
     for(var type in args['types']){
         for(var property in entity_info[args['types'][type]]['default']){
             entity[property] = core_handle_defaults({
+              'default': entity[property],
               'var': entity_info[args['types'][type]]['default'][property],
             });
         }
     }
 
-    for(property in args['properties']){
+    for(var property in args['properties']){
         entity[property] = core_handle_defaults({
+          'default': entity[property],
           'var': args['properties'][property],
         });
     }

@@ -32,11 +32,12 @@ function core_call(args){
     }
 }
 
-// Optional args: var
+// Optional args: default, var
 function core_handle_defaults(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'default': {},
         'var': {},
       },
     });
@@ -48,7 +49,7 @@ function core_handle_defaults(args){
         return args['var'];
     }
 
-    var object = {};
+    var object = args['default'];
 
     for(var property in args['var']){
         object[property] = core_handle_defaults({
