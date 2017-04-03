@@ -149,55 +149,78 @@ function webgl_cube(args){
       },
     });
 
-    var entities = [];
-    for(var i = 0; i < 6; i++){
-        if(args['exclude'].indexOf(i) > -1){
-            continue;
-        }
+    var properties = {
+      'collision': args['collision'],
+      'color': args['color'],
+      'dx': args['dx'],
+      'dy': args['dy'],
+      'dz': args['dz'],
+      'position': {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+      'rotate': {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+      'vertices': [
+        args['side'], 0, -args['side'],
+        -args['side'], 0, -args['side'],
+        -args['side'], 0, args['side'],
+        args['side'], 0, args['side'],
+      ],
+    };
 
-        var x = i * 90;
-        var y = 0;
-        var z = 0;
-
-        if(i > 3){
-            x = 0;
-            y = (5 - i) * 180;
-            z = 90;
-        }
-
-        var id = '_webgl-cube_' + args['id'] + '_' + i;
-        entity_create({
-          'id': id,
-          'properties': {
-            'collision': args['collision'],
-            'color': args['color'],
-            'dx': args['dx'],
-            'dy': args['dy'],
-            'dz': args['dz'],
-            'position': {
-              'x': args['x'],
-              'y': args['y'],
-              'z': args['z'],
-            },
-            'rotate': {
-              'x': x,
-              'y': y,
-              'z': z,
-            },
-            'vertices': [
-              args['side'], args['side'], -args['side'],
-              -args['side'], args['side'], -args['side'],
-              -args['side'], args['side'], args['side'],
-              args['side'], args['side'], args['side'],
-            ],
-          },
-        });
-
-        entities.push(id);
-    }
+    properties['position']['y'] = args['y'] + args['side'];
+    entity_create({
+      'id': '_webgl-cube_' + args['id'] + '_0',
+      'properties': properties,
+    });
+    properties['position']['y'] = args['y'] - args['side'];
+    properties['rotate']['z'] = 180;
+    entity_create({
+      'id': '_webgl-cube_' + args['id'] + '_1',
+      'properties': properties,
+    });
+    properties['position']['x'] = args['x'] + args['side'];
+    properties['position']['y'] = 0;
+    properties['rotate']['z'] = 270;
+    entity_create({
+      'id': '_webgl-cube_' + args['id'] + '_2',
+      'properties': properties,
+    });
+    properties['position']['x'] = args['x'] - args['side'];
+    properties['rotate']['z'] = 90;
+    entity_create({
+      'id': '_webgl-cube_' + args['id'] + '_3',
+      'properties': properties,
+    });
+    properties['position']['x'] = 0;
+    properties['position']['z'] = args['z'] - args['side'];
+    properties['rotate']['x'] = 90;
+    properties['rotate']['z'] = 0;
+    entity_create({
+      'id': '_webgl-cube_' + args['id'] + '_4',
+      'properties': properties,
+    });
+    properties['position']['z'] = args['z'] + args['side'];
+    properties['rotate']['x'] = 270;
+    entity_create({
+      'id': '_webgl-cube_' + args['id'] + '_5',
+      'properties': properties,
+    });
 
     entity_group_add({
-      'entities': entities,
+      'entities': [
+        '_webgl-cube_' + args['id'] + '_0',
+        '_webgl-cube_' + args['id'] + '_1',
+        '_webgl-cube_' + args['id'] + '_2',
+        '_webgl-cube_' + args['id'] + '_3',
+        '_webgl-cube_' + args['id'] + '_4',
+        '_webgl-cube_' + args['id'] + '_5',
+      ],
       'group': args['id'],
     });
 }
