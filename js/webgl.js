@@ -126,11 +126,12 @@ function webgl_clearcolor_set(args){
 }
 
 // Required args: id
-// Optional args: color, dx, dy, dz, exclude, side, x, y, z
+// Optional args: collision, color, dx, dy, dz, exclude, side, x, y, z
 function webgl_cube(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'collision': false,
         'color': [
           .2, .2, .2, 1,
           .1, .1, .1, 1,
@@ -168,6 +169,7 @@ function webgl_cube(args){
         entity_create({
           'id': id,
           'properties': {
+            'collision': args['collision'],
             'color': args['color'],
             'dx': args['dx'],
             'dy': args['dy'],
@@ -554,7 +556,9 @@ function webgl_logicloop(){
             );
 
             if(entity_entities[entity]['position']['y'] < webgl_gravity['min-y']){
+                entity_entities[entity]['position']['x'] = 0;
                 entity_entities[entity]['position']['y'] = 0;
+                entity_entities[entity]['position']['z'] = 0;
             }
         }
 
