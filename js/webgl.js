@@ -559,6 +559,10 @@ function webgl_init(){
 }
 
 function webgl_logicloop(){
+    if(webgl_menu){
+        return;
+    }
+
     entity_entities['_webgl-camera']['dx'] = 0;
     entity_entities['_webgl-camera']['dz'] = 0;
     if(!entity_entities['_webgl-camera']['gravity']){
