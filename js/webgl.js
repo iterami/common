@@ -185,7 +185,7 @@ function webgl_cube(args){
       'properties': properties,
     });
     properties['position']['x'] = args['x'] + args['side'];
-    properties['position']['y'] = 0;
+    properties['position']['y'] = args['y'];
     properties['rotate']['z'] = 270;
     entity_create({
       'id': '_webgl-cube_' + args['id'] + '_2',
@@ -197,7 +197,7 @@ function webgl_cube(args){
       'id': '_webgl-cube_' + args['id'] + '_3',
       'properties': properties,
     });
-    properties['position']['x'] = 0;
+    properties['position']['x'] = args['x'];
     properties['position']['z'] = args['z'] - args['side'];
     properties['rotate']['x'] = 90;
     properties['rotate']['z'] = 0;
