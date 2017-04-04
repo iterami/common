@@ -156,15 +156,11 @@ function webgl_cube(args){
       'dy': args['dy'],
       'dz': args['dz'],
       'position': {
-        'x': 0,
-        'y': 0,
-        'z': 0,
+        'x': args['x'],
+        'y': args['y'],
+        'z': args['z'],
       },
-      'rotate': {
-        'x': 0,
-        'y': 0,
-        'z': 0,
-      },
+      'rotate': {},
       'vertices': [
         args['side'], 0, -args['side'],
         -args['side'], 0, -args['side'],
