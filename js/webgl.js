@@ -132,8 +132,7 @@ function webgl_clearcolor_set(args){
     );
 }
 
-// Required args: id
-// Optional args: collision, color, dx, dy, dz, exclude, side, x, y, z
+// Optional args: collision, color, dx, dy, dz, exclude, id, side, x, y, z
 function webgl_cube(args){
     args = core_args({
       'args': args,
@@ -149,6 +148,7 @@ function webgl_cube(args){
         'dy': 0,
         'dz': 0,
         'exclude': [],
+        'id': core_uid(),
         'side': 1,
         'x': 0,
         'y': 0,
@@ -1011,8 +1011,7 @@ function webgl_texture_set(args){
     });
 }
 
-// Required args: id
-// Optional args: color-base, color-leaf, dx, dy, dz, x, y, z
+// Optional args: color-base, color-leaf, dx, dy, dz, id, x, y, z
 function webgl_tree(args){
     args = core_args({
       'args': args,
@@ -1031,6 +1030,7 @@ function webgl_tree(args){
         'dx': 0,
         'dy': 0,
         'dz': 0,
+        'id': core_uid(),
         'x': 0,
         'y': 0,
         'z': 0,
