@@ -709,6 +709,7 @@ function webgl_normals_collision(args){
               && entity0['position']['z'] >= -entity1['position']['z'] + entity1['vertices'][2] - webgl_collision_range
               && entity0['position']['z'] <= -entity1['position']['z'] + entity1['vertices'][8] + webgl_collision_range){
                 entity0['dy'] = 0;
+                entity0['position']['y'] = entity1['position']['y'] + webgl_collision_range;
             }
 
         }else if(entity1['normals'][1] === -1
@@ -720,6 +721,7 @@ function webgl_normals_collision(args){
               && entity0['position']['z'] >= -entity1['position']['z'] + entity1['vertices'][2] - webgl_collision_range
               && entity0['position']['z'] <= -entity1['position']['z'] + entity1['vertices'][8] + webgl_collision_range){
                 entity0['dy'] = 0;
+                entity0['position']['y'] = entity1['position']['y'] - webgl_collision_range;
             }
         }
     }
