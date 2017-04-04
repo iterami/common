@@ -638,8 +638,6 @@ function webgl_normals(args){
     var normal_z = 0;
 
     if(args['x-rotation'] !== 0){
-        normal_x = 0;
-        normal_y = 0;
         normal_z = math_round({
           'number': Math.sin(math_degrees_to_radians({
             'degrees': args['x-rotation'],
@@ -652,8 +650,6 @@ function webgl_normals(args){
             'degrees': args['z-rotation'],
           })),
         });
-        normal_y = 0;
-        normal_z = 0;
 
     }else{
         normal_y = math_round({
