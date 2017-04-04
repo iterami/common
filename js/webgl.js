@@ -80,9 +80,16 @@ function webgl_camera_move(args){
     entity_entities['_webgl-camera']['dz'] += movement['z'];
 }
 
-// Required args: x, y, z
-// Optional args: xlock
+// Optional args: x, xlock, y, z
 function webgl_camera_rotate(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
     args['xlock'] = args['xlock'] !== false;
 
     var axes = {
