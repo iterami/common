@@ -86,11 +86,11 @@ function webgl_camera_rotate(args){
       'args': args,
       'defaults': {
         'x': 0,
+        'xlock': args['xlock'] !== false,
         'y': 0,
         'z': 0,
       },
     });
-    args['xlock'] = args['xlock'] !== false;
 
     var axes = {
       'x': args['x'],
