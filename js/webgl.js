@@ -177,43 +177,55 @@ function webgl_cube(args){
     };
 
     properties['position']['y'] = args['y'] + args['side'];
-    entity_create({
-      'id': '_webgl-cube_' + args['id'] + '_0',
-      'properties': properties,
-    });
+    if(!args['exclude'].includes(0)){
+        entity_create({
+          'id': '_webgl-cube_' + args['id'] + '_0',
+          'properties': properties,
+        });
+    }
     properties['position']['y'] = args['y'] - args['side'];
     properties['rotate']['z'] = 180;
-    entity_create({
-      'id': '_webgl-cube_' + args['id'] + '_1',
-      'properties': properties,
-    });
+    if(!args['exclude'].includes(1)){
+        entity_create({
+          'id': '_webgl-cube_' + args['id'] + '_1',
+          'properties': properties,
+        });
+    }
     properties['position']['x'] = args['x'] + args['side'];
     properties['position']['y'] = args['y'];
     properties['rotate']['z'] = 270;
-    entity_create({
-      'id': '_webgl-cube_' + args['id'] + '_2',
-      'properties': properties,
-    });
+    if(!args['exclude'].includes(2)){
+        entity_create({
+          'id': '_webgl-cube_' + args['id'] + '_2',
+          'properties': properties,
+        });
+    }
     properties['position']['x'] = args['x'] - args['side'];
     properties['rotate']['z'] = 90;
-    entity_create({
-      'id': '_webgl-cube_' + args['id'] + '_3',
-      'properties': properties,
-    });
+    if(!args['exclude'].includes(3)){
+        entity_create({
+          'id': '_webgl-cube_' + args['id'] + '_3',
+          'properties': properties,
+        });
+    }
     properties['position']['x'] = args['x'];
     properties['position']['z'] = args['z'] - args['side'];
     properties['rotate']['x'] = 90;
     properties['rotate']['z'] = 0;
-    entity_create({
-      'id': '_webgl-cube_' + args['id'] + '_4',
-      'properties': properties,
-    });
+    if(!args['exclude'].includes(4)){
+        entity_create({
+          'id': '_webgl-cube_' + args['id'] + '_4',
+          'properties': properties,
+        });
+    }
     properties['position']['z'] = args['z'] + args['side'];
     properties['rotate']['x'] = 270;
-    entity_create({
-      'id': '_webgl-cube_' + args['id'] + '_5',
-      'properties': properties,
-    });
+    if(!args['exclude'].includes(5)){
+        entity_create({
+          'id': '_webgl-cube_' + args['id'] + '_5',
+          'properties': properties,
+        });
+    }
 
     entity_group_add({
       'entities': [
