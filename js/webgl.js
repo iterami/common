@@ -2,7 +2,13 @@
 
 // Required args: entity
 function webgl_billboard(args){
-    entity_entities[args['entity']]['rotate']['z'] = math_radians_to_degrees({
+    var axis = 'z';
+
+    if(entity_entities[args['entity']]['normals'][0] !== 0){
+        axis = 'y';
+    }
+
+    entity_entities[args['entity']]['rotate'][axis] = math_radians_to_degrees({
       'radians': math_point_angle({
         'x0': entity_entities['_webgl-camera']['position']['x'],
         'y0': entity_entities['_webgl-camera']['position']['z'],
