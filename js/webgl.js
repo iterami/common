@@ -11,8 +11,8 @@ function webgl_billboard(args){
     entity_entities[args['entity']]['rotate'][axis] = math_radians_to_degrees({
       'radians': math_point_angle({
         'x0': entity_entities['_webgl-camera']['position']['x'],
-        'y0': entity_entities['_webgl-camera']['position']['z'],
         'x1': entity_entities[args['entity']]['position']['x'],
+        'y0': entity_entities['_webgl-camera']['position']['z'],
         'y1': entity_entities[args['entity']]['position']['z'],
       }),
     });
