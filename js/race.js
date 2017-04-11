@@ -18,6 +18,9 @@ function race_init(){
       },
       'type': '_racer',
     });
+    entity_types_default = [
+      '_racer',
+    ];
 }
 
 // Required args: id
