@@ -18,9 +18,7 @@ function race_init(){
       },
       'type': '_racer',
     });
-    entity_types_default = [
-      '_racer',
-    ];
+    entity_types_default.push('_racer');
 }
 
 // Required args: id

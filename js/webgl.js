@@ -562,9 +562,7 @@ function webgl_init(){
       },
       'type': '_webgl',
     });
-    entity_types_default = [
-      '_webgl',
-    ];
+    entity_types_default.push('_webgl'),
 
     entity_create({
       'id': '_webgl-camera',
