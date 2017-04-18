@@ -64,7 +64,9 @@ function audio_node_create(args){
       'args': args,
       'defaults': {
         'id': false,
-        'properties': {},
+        'properties': {
+          'label': 'Oscillator',
+        },
       },
     });
 
@@ -75,17 +77,10 @@ function audio_node_create(args){
     );
 
     for(var property in args['properties']){
-        if(core_type({
-          'type': 'object',
+        source[property] = core_handle_defaults({
+          'default': source,
           'var': args['properties'][property],
-        })){
-            for(var subproperty in args['properties'][property]){
-                source[property][subproperty] = args['properties'][property][subproperty];
-            }
-
-        }else{
-            source[property] = args['properties'][property];
-        }
+        });
     }
 
     if(args['id'] === false){
