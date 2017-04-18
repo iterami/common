@@ -10,7 +10,7 @@ function canvas_draw(){
 
     draw_logic();
 
-    if(canvas_menu){
+    if(core_menu_open){
         canvas_buffer.save();
 
         canvas_buffer.fillStyle = '#111';
@@ -128,15 +128,12 @@ function canvas_init(){
 }
 
 function canvas_menu_quit(){
-    if(canvas_menu){
+    if(core_menu_open){
         canvas_setmode({
           'mode': 0,
         });
+        core_menu_open = false;
     }
-}
-
-function canvas_menu_toggle(){
-    canvas_menu = !canvas_menu;
 }
 
 function canvas_resize(){
@@ -174,7 +171,6 @@ function canvas_setmode(args){
     window.cancelAnimationFrame(canvas_animationFrame);
     window.clearInterval(canvas_interval);
 
-    canvas_menu = false;
     canvas_mode = args['mode'];
 
     if(core_type({
@@ -241,7 +237,6 @@ var canvas_fonts = {
 var canvas_height = 0;
 var canvas_interval = 0;
 var canvas_interval_ms = 25;
-var canvas_menu = false;
 var canvas_mode = 0;
 var canvas_oncontextmenu = true;
 var canvas_quit = 'Q = Main Menu';

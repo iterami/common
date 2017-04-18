@@ -631,6 +631,7 @@ function webgl_menu_quit(){
         webgl_setmode({
           'newmode': 0,
         });
+        core_menu_open = false;
     }
 }
 
