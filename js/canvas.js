@@ -108,10 +108,10 @@ function canvas_gradient(args){
       args['width'],
       args['height']
     );
-    for(var step in args['steps']){
+    for(var step in args['stops']){
         gradient.addColorStop(
-          args['steps'][step]['offset'] || 0,
-          args['steps'][step]['color'] || '#000'
+          args['stops'][step]['offset'] || 0,
+          args['stops'][step]['color'] || '#000'
         );
     }
     return gradient;
