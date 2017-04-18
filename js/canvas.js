@@ -89,6 +89,34 @@ function canvas_draw_path(args){
     canvas_buffer[args['style']]();
 }
 
+// Required args: stops
+// Optional args: height, width, x, y
+function canvas_gradient(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'height': 0,
+        'width': 0,
+        'x': 0,
+        'y': 0,
+      },
+    });
+
+    var gradient = canvas_buffer.createLinearGradient(
+      args['x'],
+      args['y'],
+      args['width'],
+      args['height']
+    );
+    for(var step in args['steps']){
+        gradient.addColorStop(
+          args['steps'][step]['offset'] || 0,
+          args['steps'][step]['color'] || '#000'
+        );
+    }
+    return gradient;
+}
+
 function canvas_init(){
     canvas_resize();
     canvas_setmode({
