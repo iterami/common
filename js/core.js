@@ -60,6 +60,10 @@ function core_handle_defaults(args){
     return object;
 }
 
+function core_menu_toggle(){
+    core_menu_open = !core_menu_open;
+}
+
 // Required args: var
 // Optional args: type
 function core_type(args){
@@ -112,4 +116,5 @@ function core_uid_create(){
     return uid;
 }
 
+var core_menu_open = false;
 var core_uids = {};
