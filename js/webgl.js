@@ -439,7 +439,7 @@ function webgl_draw(){
         );
     }
 
-    if(webgl_menu){
+    if(core_menu_open){
         webgl_canvas.save();
 
         webgl_canvas.fillStyle = '#111';
@@ -578,7 +578,7 @@ function webgl_init(){
 }
 
 function webgl_logicloop(){
-    if(webgl_menu){
+    if(core_menu_open){
         return;
     }
 
@@ -627,15 +627,11 @@ function webgl_logicloop(){
 }
 
 function webgl_menu_quit(){
-    if(webgl_menu){
+    if(core_menu_open){
         webgl_setmode({
           'newmode': 0,
         });
     }
-}
-
-function webgl_menu_toggle(){
-    webgl_menu = !webgl_menu;
 }
 
 // Optional args: x-rotation, y-rotation, z-rotation
@@ -831,7 +827,6 @@ function webgl_setmode(args){
     entity_entities['_webgl-camera']['rotate']['y'] = 0;
     entity_entities['_webgl-camera']['rotate']['z'] = 0;
 
-    webgl_menu = false;
     webgl_mode = args['newmode'];
     var msperframe = 0;
     webgl_programs = {};
@@ -1135,7 +1130,6 @@ var webgl_gravity = {
 };
 var webgl_height = 0;
 var webgl_interval = 0;
-var webgl_menu = false;
 var webgl_mode = 0;
 var webgl_oncontextmenu = true;
 var webgl_pointer = false;
