@@ -10,11 +10,15 @@ function audio_create(args){
       },
     });
 
-    audio_audio[args['id']] = {};
-    audio_audio[args['id']]['playing'] = false;
+    audio_audio[args['id']] = {
+      'playing': false,
+    };
 
     for(var property in args['properties']){
-        audio_audio[args['id']][property] = args['properties'][property];
+        audio_audio[args['id']][property] = core_handle_defaults({
+          'default': audio_audio[args['id']],
+          'var': args['properties'][property],
+        });
     }
 
     audio_audio[args['id']]['connections'] = args['properties']['connections'] || [
