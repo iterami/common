@@ -189,8 +189,8 @@ function input_init(args){
           'mousebinds': args['mousebinds'],
         });
 
-        document.onpointerlockchange = input_handle_onpointerlockchange;
         document.onmozpointerlockchange = input_handle_onpointerlockchange;
+        document.onpointerlockchange = input_handle_onpointerlockchange;
         window.oncontextmenu = input_handle_contextmenu;
         window.onmousedown = input_handle_mousedown;
         window.onmousemove = input_handle_mousemove;
