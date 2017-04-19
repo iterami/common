@@ -51,20 +51,20 @@ function storage_reset(args){
     }
 
     for(var key in storage_data){
-        if(storage_info[key]['type'] !== 'setting'){
-            if(!args['bests']){
-                continue;
-            }
-
+        if(args['bests']
+          && storage_info[key]['type'] !== 'setting'){
             storage_info[key]['best'] = storage_info[key]['default'];
         }
+
 
         storage_data[key] = storage_info[key]['default'];
         window.localStorage.removeItem(storage_prefix + key);
     }
 
     if(args['bests']){
-        storage_save();
+        storage_save({
+          'bests': true,
+        });
     }
     storage_update();
     return true;
@@ -158,18 +158,18 @@ function storage_type_convert(args){
 
 function storage_update(){
     for(var key in storage_data){
-        if(storage_info[key]['type'] !== 'setting'){
-            continue;
-        }
-
-        document.getElementById(key)[
-          core_type({
+        var type = core_type({
             'type': 'boolean',
             'var': storage_info[key]['default'],
           })
-            ? 'checked'
-            : 'value'
-        ] = storage_data[key];
+          ? 'checked'
+          : 'value';
+
+        if(storage_info[key]['type'] !== 'setting'){
+            type = 'innerHTML';
+        }
+
+        document.getElementById(key)[type] = storage_data[key];
     }
 }
 
