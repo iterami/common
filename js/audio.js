@@ -77,10 +77,17 @@ function audio_node_create(args){
     );
 
     for(var property in args['properties']){
-        source[property] = core_handle_defaults({
-          'default': source,
+        if(core_type({
+          'type': 'object',
           'var': args['properties'][property],
-        });
+        })){
+            for(var subproperty in args['properties'][property]){
+                source[property][subproperty] = args['properties'][property][subproperty];
+            }
+
+        }else{
+            source[property] = args['properties'][property];
+        }
     }
 
     if(args['id'] === false){
