@@ -269,6 +269,26 @@ function input_mousebinds_update(args){
     }
 }
 
+// Optional args: keybinds, mousebinds
+function input_rebind(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'keybinds': {},
+        'mousebinds': {},
+      },
+    });
+
+    for(var keybind in args['keybinds']){
+        input_keys[keybind] = keybinds[keybind];
+        delete input_keys[args['keybinds'][keybind]];
+    }
+    for(var mousebind in args['mousebinds']){
+        input_mouse['todo'][mousebind] = mousebinds[mousebind];
+        delete input_mouse['todo'][args['mousebinds'][mousebind]];
+    }
+}
+
 // Required args: id
 function input_requestpointerlock(args){
     var element = document.getElementById(args['id']);
