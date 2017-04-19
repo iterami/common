@@ -60,8 +60,40 @@ function core_handle_defaults(args){
     return object;
 }
 
+/*
+// Optional args: content
+function core_menu_create(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'content': {},
+      },
+    });
+
+    var menu = document.createElement('div');
+    menu.id = 'core-menu';
+    menu.style.display = 'none';
+    menu.style.margin = 'auto';
+    menu.style.position = 'absolute';
+    menu.style.top = '0';
+
+    var innerHTML = '';
+    for(var contentid in content){
+    }
+    menu.innerHTML = innerHTML;
+
+    document.body.appendChild(menu);
+}
+*/
+
 function core_menu_toggle(){
     core_menu_open = !core_menu_open;
+
+    /*
+    document.getElementById('core-menu').style.display = core_menu_open
+      ? 'inline-block'
+      : 'none';
+    */
 }
 
 // Required args: var
@@ -120,3 +152,5 @@ var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
 var core_uids = {};
+
+//core_menu_create();
