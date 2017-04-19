@@ -117,4 +117,6 @@ function core_uid_create(){
 }
 
 var core_menu_open = false;
+var core_menu_quit = 'Q = Main Menu';
+var core_menu_resume = 'ESC = Resume';
 var core_uids = {};

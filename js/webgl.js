@@ -455,12 +455,12 @@ function webgl_draw(){
         webgl_canvas.textAlign = 'center';
         webgl_canvas.textBaseline = 'middle';
         webgl_canvas.fillText(
-          webgl_resume,
+          core_menu_resume,
           webgl_x,
           webgl_y - 25
         );
         webgl_canvas.fillText(
-          webgl_quit,
+          core_menu_quit,
           webgl_x,
           webgl_y + 25
         );
@@ -1131,8 +1131,6 @@ var webgl_mode = 0;
 var webgl_oncontextmenu = true;
 var webgl_pointer = false;
 var webgl_programs = {};
-var webgl_quit = 'Q = Main Menu';
-var webgl_resume = 'ESC = Resume';
 var webgl_shaders = {};
 var webgl_text = {};
 var webgl_textures = {

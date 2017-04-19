@@ -26,12 +26,12 @@ function canvas_draw(){
         canvas_buffer.textAlign = 'center';
         canvas_buffer.textBaseline = 'middle';
         canvas_buffer.fillText(
-          canvas_resume,
+          core_menu_resume,
           canvas_x,
           canvas_y - 25
         );
         canvas_buffer.fillText(
-          canvas_quit,
+          core_menu_quit,
           canvas_x,
           canvas_y + 25
         );
@@ -235,8 +235,6 @@ var canvas_interval = 0;
 var canvas_interval_ms = 25;
 var canvas_mode = 0;
 var canvas_oncontextmenu = true;
-var canvas_quit = 'Q = Main Menu';
-var canvas_resume = 'ESC = Resume';
 var canvas_style = 'fill';
 var canvas_width = 0;
 var canvas_x = 0;
