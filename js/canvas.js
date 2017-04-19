@@ -122,16 +122,12 @@ function canvas_gradient(args){
 
 function canvas_init(){
     canvas_resize();
-    canvas_setmode({
-      'mode': 0,
-    });
+    canvas_setmode();
 }
 
 function canvas_menu_quit(){
     if(core_menu_open){
-        canvas_setmode({
-          'mode': 0,
-        });
+        canvas_setmode();
         core_menu_open = false;
     }
 }
@@ -158,12 +154,12 @@ function canvas_resize(){
     });
 }
 
-// Required args: mode
-// Optional args: newgame
+// Optional args: mode, newgame
 function canvas_setmode(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'mode': 0,
         'newgame': false,
       },
     });

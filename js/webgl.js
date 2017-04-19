@@ -572,9 +572,7 @@ function webgl_init(){
       },
     });
 
-    webgl_setmode({
-      'newmode': 0,
-    });
+    webgl_setmode();
 }
 
 function webgl_logicloop(){
@@ -628,9 +626,7 @@ function webgl_logicloop(){
 
 function webgl_menu_quit(){
     if(core_menu_open){
-        webgl_setmode({
-          'newmode': 0,
-        });
+        webgl_setmode();
         core_menu_open = false;
     }
 }
@@ -808,12 +804,12 @@ function webgl_resize(){
     });
 }
 
-// Required args: newmode
-// Optional args: newgame
+// Optional args: mode, newgame
 function webgl_setmode(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'mode': 0,
         'newgame': false,
       },
     });
@@ -828,7 +824,7 @@ function webgl_setmode(args){
     entity_entities['_webgl-camera']['rotate']['y'] = 0;
     entity_entities['_webgl-camera']['rotate']['z'] = 0;
 
-    webgl_mode = args['newmode'];
+    webgl_mode = args['mode'];
     var msperframe = 0;
     webgl_programs = {};
     webgl_shaders = {};
