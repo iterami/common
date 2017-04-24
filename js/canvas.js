@@ -125,6 +125,14 @@ function canvas_init(){
     canvas_setmode();
 }
 
+function canvas_logicloop(){
+    if(core_menu_open){
+        return;
+    }
+
+    logic();
+}
+
 function canvas_menu_quit(){
     if(core_menu_open){
         canvas_setmode();
@@ -216,7 +224,7 @@ function canvas_setmode(args){
       'type': 'function',
     })){
         canvas_interval = window.setInterval(
-          logic,
+          canvas_logicloop,
           canvas_interval_ms
         );
     }
