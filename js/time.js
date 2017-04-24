@@ -71,6 +71,36 @@ function time_format_date(args){
       + ')';
 }
 
+function time_from_inputs(){
+    var date = {
+      'date': 0,
+      'hour': 0,
+      'millisecond': 0,
+      'minute': 0,
+      'month': 0,
+      'second': 0,
+      'timezone': 0,
+      'year': 0,
+    };
+    for(var value in date){
+        var element = document.getElementById(value);
+        if(element){
+            date[value] = parseInt(
+              element.value,
+              10
+            );
+        }
+
+        if(isNaN(date[value])){
+            date[value] = 0;
+        }
+    }
+
+    return time_date_to_timestamp({
+      'date': date,
+    });
+}
+
 // Optional args: timestamp
 function time_timestamp_to_date(args){
     args = core_args({
