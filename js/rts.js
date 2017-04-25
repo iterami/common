@@ -101,6 +101,7 @@ function rts_building_build(args){
       'damage': 0,
       'destination-x': args['x'] + rts_buildings[args['type']]['width'] / 2,
       'destination-y': args['y'] + rts_buildings[args['type']]['height'] / 2,
+      'bullet-speed': 10,
       'fog-radius': 290,
       'income': 0,
       'range': 0,
@@ -203,6 +204,7 @@ function rts_building_handle(){
                   'destination-x': rts_players[0]['units'][p0_unit]['x'],
                   'destination-y': rts_players[0]['units'][p0_unit]['y'],
                   'player': 1,
+                  'speed': rts_players[1]['buildings'][building]['bullet-speed'],
                   'x': rts_players[1]['buildings'][building]['x']
                     + buildings[rts_players[1]['buildings'][building]['type']]['width'] / 2,
                   'y': rts_players[1]['buildings'][building]['y']
@@ -235,6 +237,7 @@ function rts_building_handle(){
                       'destination-y': rts_players[0]['buildings'][p0_building]['y']
                         + rts_buildings[rts_players[0]['buildings'][p0_building]['type']]['height'] / 2,
                       'player': 1,
+                      'speed': rts_players[1]['buildings'][building]['bullet-speed'],
                       'x': rts_players[1]['buildings'][building]['x']
                         + rts_buildings[rts_players[1]['buildings'][building]['type']]['width'] / 2,
                       'y': rts_players[1]['buildings'][building]['y']
@@ -275,6 +278,7 @@ function rts_building_handle(){
                   'destination-x': rts_players[1]['units'][p1_unit]['x'],
                   'destination-y': rts_players[1]['units'][p1_unit]['y'],
                   'player': 0,
+                  'speed': rts_players[0]['buildings'][building]['bullet-speed'],
                   'x': rts_players[0]['buildings'][building]['x']
                     + rts_buildings[rts_players[0]['buildings'][building]['type']]['width'] / 2,
                   'y': rts_players[0]['buildings'][building]['y']
@@ -307,6 +311,7 @@ function rts_building_handle(){
                       'destination-y': rts_players[1]['buildings'][p1_building]['y']
                         + rts_buildings[rts_players[1]['buildings'][p1_building]['type']]['height'] / 2,
                       'player': 0,
+                      'speed': rts_players[0]['buildings'][building]['bullet-speed'],
                       'x': rts_players[0]['buildings'][building]['x']
                         + rts_buildings[rts_players[0]['buildings'][building]['type']]['width'] / 2,
                       'y': rts_players[0]['buildings'][building]['y']
@@ -323,7 +328,7 @@ function rts_bullet_handle(){
     for(var bullet in rts_bullets){
         // Calculate bullet movement.
         var speeds = math_move_2d({
-          'multiplier': 10,
+          'multiplier': rts_bullets[bullet]['speed'],
           'x0': rts_bullets[bullet]['x'],
           'x1': rts_bullets[bullet]['destination-x'],
           'y0': rts_bullets[bullet]['y'],
@@ -631,6 +636,7 @@ function rts_unit_build(args){
       ? 1
       : rts_selected_id;
     var unit = {
+      'bullet-speed': 10,
       'damage': 25,
       'destination-x': args['player'] > 0
         ? random_integer({
@@ -648,6 +654,7 @@ function rts_unit_build(args){
       'range': 240,
       'reload': 75,
       'reload-current': 0,
+      'speed': .7,
       'x': rts_players[args['player']]['buildings'][temp_selected_id]['x']
         + rts_buildings[rts_players[args['player']]['buildings'][temp_selected_id]['type']]['width'] / 2,
       'y': rts_players[args['player']]['buildings'][temp_selected_id]['y']
@@ -700,6 +707,7 @@ function rts_unit_handle(){
                   'destination-x': rts_players[0]['units'][p0_unit]['x'],
                   'destination-y': rts_players[0]['units'][p0_unit]['y'],
                   'player': 1,
+                  'speed': rts_players[1]['units'][unit]['bullet-speed'],
                   'x': rts_players[1]['units'][unit]['x'],
                   'y': rts_players[1]['units'][unit]['y'],
                 });
@@ -730,6 +738,7 @@ function rts_unit_handle(){
                       'destination-y': rts_players[0]['buildings'][building]['y']
                         + rts_buildings[rts_players[0]['buildings'][building]['type']]['height'] / 2,
                       'player': 1,
+                      'speed': rts_players[1]['units'][unit]['bullet-speed'],
                       'x': rts_players[1]['units'][unit]['x'],
                       'y': rts_players[1]['units'][unit]['y'],
                     });
@@ -742,7 +751,7 @@ function rts_unit_handle(){
         if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']
           || rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
             var speeds = math_move_2d({
-              'multiplier': .7,
+              'multiplier': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[1]['units'][unit]['x'],
               'x1': rts_players[1]['units'][unit]['destination-x'],
               'y0': rts_players[1]['units'][unit]['y'],
@@ -782,7 +791,7 @@ function rts_unit_handle(){
         if(Math.abs(rts_players[0]['units'][unit]['x'] - rts_players[0]['units'][unit]['destination-x']) > 1
           && Math.abs(rts_players[0]['units'][unit]['y'] - rts_players[0]['units'][unit]['destination-y']) > 1){
             var speeds = math_move_2d({
-              'multiplier': .7,
+              'multiplier': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[0]['units'][unit]['destination-x'],
               'y0': rts_players[0]['units'][unit]['y'],
@@ -884,6 +893,7 @@ function rts_unit_handle(){
               'destination-x': rts_players[1]['units'][p1_unit]['x'],
               'destination-y': rts_players[1]['units'][p1_unit]['y'],
               'player': 0,
+              'speed': rts_players[0]['units'][unit]['bullet-speed'],
               'x': rts_players[0]['units'][unit]['x'],
               'y': rts_players[0]['units'][unit]['y'],
             });
@@ -917,6 +927,7 @@ function rts_unit_handle(){
               'destination-y': rts_players[1]['buildings'][building]['y']
                 + rts_buildings[rts_players[1]['buildings'][building]['type']]['height'] / 2,
               'player': 0,
+              'speed': rts_players[0]['units'][unit]['bullet-speed'],
               'x': rts_players[0]['units'][unit]['x'],
               'y': rts_players[0]['units'][unit]['y'],
             });
