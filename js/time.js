@@ -36,7 +36,7 @@ function time_diff(args){
     var prefix = '';
     if(diff < 0){
         diff = -diff;
-        prefix = '-';
+        prefix = '- ';
     }
 
     var date = time_timestamp_to_date({
@@ -65,10 +65,7 @@ function time_format_date(args){
       + ':'
       + args['date']['minute']
       + ':'
-      + args['date']['second']
-      + ' ('
-      + args['date']['timezone']
-      + ')';
+      + args['date']['second'];
 }
 
 function time_from_inputs(){
@@ -79,7 +76,6 @@ function time_from_inputs(){
       'minute': 0,
       'month': 0,
       'second': 0,
-      'timezone': 0,
       'year': 0,
     };
     for(var value in date){
@@ -112,7 +108,9 @@ function time_timestamp_to_date(args){
 
     var date = new Date(args['timestamp']);
     return {
-      'date': date.getUTCDate(),
+      'date': time_two_digits({
+        'number': date.getUTCDate(),
+      }),
       'day': time_two_digits({
         'number': date.getUTCDay(),
       }),
@@ -132,14 +130,18 @@ function time_timestamp_to_date(args){
         'number': date.getUTCSeconds(),
       }),
       'timestamp': args['timestamp'],
-      'timezone': 0,
       'year': date.getUTCFullYear(),
     };
 }
 
 // Required args: number
 function time_two_digits(args){
-    return args['number'].toString().length < 2
+    var prefix = args['number'] < 0
+      ? '-'
+      : '';
+    args['number'] = Math.abs(args['number']);
+
+    return prefix + (args['number'].toString().length < 2
       ? '0' + args['number']
-      : args['number'];
+      : args['number']);
 }
