@@ -34,7 +34,6 @@ function race_racer_create(args){
     entity_create({
       'id': args['id'],
       'properties': args['properties'],
-      'types': entity_types_default,
     });
 }
 
