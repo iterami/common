@@ -112,11 +112,12 @@ function entity_group_remove(args){
 }
 
 // Required args: type
-// Optional args: properties, todo
+// Optional args: default, properties, todo
 function entity_set(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'default': false,
         'properties': {},
         'todo': function(){},
       },
@@ -126,6 +127,10 @@ function entity_set(args){
       'default': args['properties'],
       'todo': args['todo'],
     };
+
+    if(args['default']){
+        entity_types_default.push(args['type']);
+    }
 }
 
 var entity_entities = {};

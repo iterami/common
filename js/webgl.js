@@ -494,6 +494,7 @@ function webgl_init(){
     };
 
     entity_set({
+      'default': true,
       'properties': {
         'collides': false,
         'collision': false,
@@ -562,7 +563,6 @@ function webgl_init(){
       },
       'type': '_webgl',
     });
-    entity_types_default.push('_webgl'),
 
     entity_create({
       'id': '_webgl-camera',

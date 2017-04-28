@@ -2,6 +2,7 @@
 
 function race_init(){
     entity_set({
+      'default': true,
       'properties': {
         'acceleration': .01,
         'ai': true,
@@ -18,7 +19,6 @@ function race_init(){
       },
       'type': '_racer',
     });
-    entity_types_default.push('_racer');
 }
 
 // Required args: id
