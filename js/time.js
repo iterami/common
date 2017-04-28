@@ -39,33 +39,48 @@ function time_diff(args){
         prefix = '- ';
     }
 
-    var date = time_timestamp_to_date({
-      'timestamp': diff,
+    return prefix + time_format_date({
+      'date': time_timestamp_to_date({
+        'timestamp': diff,
+      }),
+      'diff': true,
     });
-
-    return prefix + Math.floor(diff / 86400000) + ':' + date['hour'] + ':' + date['minute'] + ':' + date['second'];
 }
 
-// Optional args: date
+// Optional args: date, diff
 function time_format_date(args){
     args = core_args({
       'args': args,
       'defaults': {
         'date': time_timestamp_to_date(),
+        'diff': false,
       },
     });
 
-    return args['date']['year']
-      + '-'
-      + args['date']['month']
-      + '-'
-      + args['date']['date']
-      + ' '
-      + args['date']['hour']
-      + ':'
-      + args['date']['minute']
-      + ':'
-      + args['date']['second'];
+    if(args['diff']){
+        args['date']['date'] -= 1;
+        args['date']['month'] -= 1;
+        args['date']['year'] -= 1970;
+    }
+
+    return time_two_digits({
+        'number': args['date']['year'],
+      }) + '-'
+      + time_two_digits({
+        'number': args['date']['month'],
+      }) + '-'
+      + time_two_digits({
+        'number': args['date']['date'],
+      }) + ' '
+      + time_two_digits({
+        'number': args['date']['hour'],
+      }) + ':'
+      + time_two_digits({
+        'number': args['date']['minute'],
+      }) + ':'
+      + time_two_digits({
+        'number': args['date']['second'],
+      });
 }
 
 function time_from_inputs(){
@@ -108,27 +123,13 @@ function time_timestamp_to_date(args){
 
     var date = new Date(args['timestamp']);
     return {
-      'date': time_two_digits({
-        'number': date.getUTCDate(),
-      }),
-      'day': time_two_digits({
-        'number': date.getUTCDay(),
-      }),
-      'hour': time_two_digits({
-        'number': date.getUTCHours(),
-      }),
-      'millisecond': time_two_digits({
-        'number': date.getUTCMilliseconds(),
-      }),
-      'minute': time_two_digits({
-        'number': date.getUTCMinutes(),
-      }),
-      'month': time_two_digits({
-        'number': date.getUTCMonth() + 1,
-      }),
-      'second': time_two_digits({
-        'number': date.getUTCSeconds(),
-      }),
+      'date': date.getUTCDate(),
+      'day': date.getUTCDay(),
+      'hour': date.getUTCHours(),
+      'millisecond': date.getUTCMilliseconds(),
+      'minute': date.getUTCMinutes(),
+      'month': date.getUTCMonth() + 1,
+      'second': date.getUTCSeconds(),
       'timestamp': args['timestamp'],
       'year': date.getUTCFullYear(),
     };
