@@ -1,23 +1,5 @@
 'use strict';
 
-// Required args: id, newid
-// Optional args: todo
-function entity_clone(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'todo': function(){},
-      },
-    });
-
-    entity_create({
-      'id': args['newid'],
-      'properties': entity_entities[args['id']],
-    });
-
-    args['todo'](args['newid']);
-}
-
 // Reqruied args: id
 // Optional args: types, properties
 function entity_create(args){
