@@ -182,12 +182,15 @@ function webgl_cube(args){
       ],
     };
 
+    var entities = [];
+
     properties['position']['y'] = args['y'] + args['side'];
     if(!args['exclude'].includes(0)){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_0',
           'properties': properties,
         });
+        entities.push('_webgl-cube_' + args['id'] + '_0');
     }
     properties['position']['y'] = args['y'] - args['side'];
     properties['rotate']['z'] = 180;
@@ -196,6 +199,7 @@ function webgl_cube(args){
           'id': '_webgl-cube_' + args['id'] + '_1',
           'properties': properties,
         });
+        entities.push('_webgl-cube_' + args['id'] + '_1');
     }
     properties['position']['x'] = args['x'] + args['side'];
     properties['position']['y'] = args['y'];
@@ -205,6 +209,7 @@ function webgl_cube(args){
           'id': '_webgl-cube_' + args['id'] + '_2',
           'properties': properties,
         });
+        entities.push('_webgl-cube_' + args['id'] + '_2');
     }
     properties['position']['x'] = args['x'] - args['side'];
     properties['rotate']['z'] = 90;
@@ -213,6 +218,7 @@ function webgl_cube(args){
           'id': '_webgl-cube_' + args['id'] + '_3',
           'properties': properties,
         });
+        entities.push('_webgl-cube_' + args['id'] + '_3');
     }
     properties['position']['x'] = args['x'];
     properties['position']['z'] = args['z'] - args['side'];
@@ -223,6 +229,7 @@ function webgl_cube(args){
           'id': '_webgl-cube_' + args['id'] + '_4',
           'properties': properties,
         });
+        entities.push('_webgl-cube_' + args['id'] + '_4');
     }
     properties['position']['z'] = args['z'] + args['side'];
     properties['rotate']['x'] = 270;
@@ -231,17 +238,11 @@ function webgl_cube(args){
           'id': '_webgl-cube_' + args['id'] + '_5',
           'properties': properties,
         });
+        entities.push('_webgl-cube_' + args['id'] + '_5');
     }
 
     entity_group_add({
-      'entities': [
-        '_webgl-cube_' + args['id'] + '_0',
-        '_webgl-cube_' + args['id'] + '_1',
-        '_webgl-cube_' + args['id'] + '_2',
-        '_webgl-cube_' + args['id'] + '_3',
-        '_webgl-cube_' + args['id'] + '_4',
-        '_webgl-cube_' + args['id'] + '_5',
-      ],
+      'entities': entities,
       'group': args['id'],
     });
 }
