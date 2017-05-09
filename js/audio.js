@@ -40,7 +40,7 @@ function audio_create(args){
     audio_audio[args['id']]['connections'][0]['id'] = args['id'];
     audio_audio[args['id']]['connections'][0]['onended'] = function(){
         audio_onended({
-          'this': this,
+          'id': this.id,
         });
     };
 }
@@ -97,9 +97,9 @@ function audio_node_create(args){
     audio_sources[args['id']][args['properties']['label']] = source;
 }
 
-// Required args: this
+// Required args: id
 function audio_onended(args){
-    audio_audio[args['this'].id]['playing'] = false;
+    audio_audio[args['id']]['playing'] = false;
 
     if(audio_audio[args['this'].id]['repeat']){
         if(audio_audio[args['this'].id]['timeout'] <= 0){
