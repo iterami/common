@@ -60,6 +60,23 @@ function core_handle_defaults(args){
     return object;
 }
 
+// Required args: id, src
+// Optional args: todo
+function core_image(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'todo': function(){},
+      },
+    });
+
+    var image = new Image();
+    image.onload = args['todo'];
+    image.src = args['src'];
+    core_images[args['id']] = image;
+    return image;
+}
+
 /*
 // Optional args: content
 function core_menu_create(args){
@@ -148,9 +165,8 @@ function core_uid_create(){
     return uid;
 }
 
+var core_images = {};
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
 var core_uids = {};
-
-//core_menu_create();

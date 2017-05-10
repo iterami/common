@@ -984,7 +984,7 @@ function webgl_texture_set(args){
     });
 
     entity_entities[args['entityid']]['texture'] = webgl_buffer.createTexture();
-    entity_entities[args['entityid']]['image'] = images_new({
+    entity_entities[args['entityid']]['image'] = core_image({
       'id': args['entityid'] + '-texture',
       'src': args['image'],
       'todo': function(){
