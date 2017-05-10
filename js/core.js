@@ -113,6 +113,74 @@ function core_menu_toggle(){
     */
 }
 
+// Optional args: chance
+function core_random_boolean(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'chance': core_random_boolean_chance,
+      },
+    });
+
+    return Math.random() < args['chance'];
+}
+
+function core_random_hex(){
+    var color = core_random_rgb();
+
+    var blue = '0' + color['blue'].toString(16);
+    var green = '0' + color['green'].toString(16);
+    var red = '0' + color['red'].toString(16);
+
+    return red.slice(-2) + green.slice(-2) + blue.slice(-2);
+}
+
+// Optional args: max, todo
+function core_random_integer(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'max': core_random_integer_max,
+        'todo': 'floor',
+      },
+    });
+
+    return Math[args['todo']](Math.random() * args['max']);
+}
+
+function core_random_rgb(){
+  return {
+    'blue': core_random_integer({
+      'max': 256,
+    }),
+    'green': core_random_integer({
+      'max': 256,
+    }),
+    'red': core_random_integer({
+      'max': 256,
+    }),
+  };
+}
+
+// Optional args: characters, length
+function core_random_string(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'characters': core_random_string_characters,
+        'length': core_random_string_length,
+      },
+    });
+
+    var string = '';
+    for(var loopCounter = 0; loopCounter < args['length']; loopCounter++){
+        string += args['characters'][core_random_integer({
+          'max': args['characters'].length,
+        })];
+    }
+    return string;
+}
+
 // Required args: var
 // Optional args: type
 function core_type(args){
@@ -157,7 +225,9 @@ function core_uid_create(){
 
     for(var i = 0; i < 3; i++){
         uid += parseInt(
-          Math.random() * 1e17,
+          core_random_integer({
+            'max': 1e17,
+          }),
           10
         ).toString(34);
     }
@@ -169,4 +239,8 @@ var core_images = {};
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
+var core_random_boolean_chance = .5;
+var core_random_integer_max = 100;
+var core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var core_random_string_length = 100;
 var core_uids = {};

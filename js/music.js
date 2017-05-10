@@ -149,7 +149,7 @@ function music_iterateTracks(args){
         var number_of_tracks = document.getElementById('tracks').childNodes.length;
 
         music_setTrack({
-          'track': document.getElementById('tracks').childNodes[random_integer({
+          'track': document.getElementById('tracks').childNodes[core_random_integer({
             'max': number_of_tracks,
           })],
         });
