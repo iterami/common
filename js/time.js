@@ -95,12 +95,14 @@ function time_from_inputs(){
     };
     for(var value in date){
         var element = document.getElementById(value);
-        if(element){
-            date[value] = parseInt(
-              element.value,
-              10
-            );
+        if(!element){
+            continue;
         }
+
+        date[value] = parseInt(
+          element.value,
+          10
+        );
 
         if(isNaN(date[value])){
             date[value] = 0;
