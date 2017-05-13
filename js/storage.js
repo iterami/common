@@ -56,7 +56,6 @@ function storage_reset(args){
             storage_info[key]['best'] = storage_info[key]['default'];
         }
 
-
         storage_data[key] = storage_info[key]['default'];
         window.localStorage.removeItem(storage_prefix + key);
     }
