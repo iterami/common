@@ -180,7 +180,7 @@ function webgl_cube(args){
     var entities = [];
 
     properties['position']['y'] = args['y'] + args['side'];
-    if(!args['exclude'].includes(0)){
+    if(args['exclude'].indexOf(0) === -1){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_0',
           'properties': properties,
@@ -189,7 +189,7 @@ function webgl_cube(args){
     }
     properties['position']['y'] = args['y'] - args['side'];
     properties['rotate']['z'] = 180;
-    if(!args['exclude'].includes(1)){
+    if(args['exclude'].indexOf(1) === -1){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_1',
           'properties': properties,
@@ -199,7 +199,7 @@ function webgl_cube(args){
     properties['position']['x'] = args['x'] + args['side'];
     properties['position']['y'] = args['y'];
     properties['rotate']['z'] = 270;
-    if(!args['exclude'].includes(2)){
+    if(args['exclude'].indexOf(2) === -1){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_2',
           'properties': properties,
@@ -208,7 +208,7 @@ function webgl_cube(args){
     }
     properties['position']['x'] = args['x'] - args['side'];
     properties['rotate']['z'] = 90;
-    if(!args['exclude'].includes(3)){
+    if(args['exclude'].indexOf(3) === -1){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_3',
           'properties': properties,
@@ -219,7 +219,7 @@ function webgl_cube(args){
     properties['position']['z'] = args['z'] - args['side'];
     properties['rotate']['x'] = 90;
     properties['rotate']['z'] = 0;
-    if(!args['exclude'].includes(4)){
+    if(args['exclude'].indexOf(4) === -1){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_4',
           'properties': properties,
@@ -228,7 +228,7 @@ function webgl_cube(args){
     }
     properties['position']['z'] = args['z'] + args['side'];
     properties['rotate']['x'] = 270;
-    if(!args['exclude'].includes(5)){
+    if(args['exclude'].indexOf(5) === -1){
         entity_create({
           'id': '_webgl-cube_' + args['id'] + '_5',
           'properties': properties,
