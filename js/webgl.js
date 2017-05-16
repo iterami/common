@@ -144,12 +144,7 @@ function webgl_cube(args){
       'args': args,
       'defaults': {
         'collision': false,
-        'color': [
-          .2, .2, .2, 1,
-          .1, .1, .1, 1,
-          .2, .2, .2, 1,
-          .1, .1, .1, 1,
-        ],
+        'color': webgl_vertexcolorarray(),
         'dx': 0,
         'dy': 0,
         'dz': 0,
@@ -1107,6 +1102,38 @@ function webgl_vertexattribarray_set(args){
       args['attribute']
     );
     webgl_buffer.enableVertexAttribArray(webgl_attributes[args['attribute']]);
+}
+
+// Optional args: rgbarray, vertexcount
+function webgl_vertexcolorarray(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'rgbarray': [
+          core_random_rgb(),
+          core_random_rgb(),
+          core_random_rgb(),
+          core_random_rgb(),
+        ],
+        'vertexcount': 4,
+      },
+    });
+
+    while(args['rgbarray'].length < args['vertexcount']){
+        args['rgbarray'].push(args['rgbarray'][0]);
+    }
+
+    var color = [];
+    for(var i = 0; i < args['vertexcount']; i++){
+        color.push(
+          args['rgbarray'][i]['red'] / 256,
+          args['rgbarray'][i]['green'] / 256,
+          args['rgbarray'][i]['blue'] / 256,
+          1,
+        );
+    }
+
+    return color;
 }
 
 var webgl_animationFrame = 0;
