@@ -232,12 +232,22 @@ function core_storage_reset(args){
     }
 
     for(var key in core_storage_data){
-        if(args['bests']
-          && core_storage_info[key]['type'] !== 'setting'){
-            core_storage_info[key]['best'] = core_storage_info[key]['default'];
+        if(args['bests']){
+            if(core_storage_info[key]['type'] !== 'setting'){
+                core_storage_data[key] = core_storage_info[key]['default'];
+                core_storage_info[key]['best'] = core_storage_info[key]['default'];
+
+            }else{
+                continue;
+            }
+
+        }else if(core_storage_info[key]['type'] === 'setting'){
+            core_storage_data[key] = core_storage_info[key]['default'];
+
+        }else{
+            continue;
         }
 
-        core_storage_data[key] = core_storage_info[key]['default'];
         window.localStorage.removeItem(core_storage_prefix + key);
     }
 
@@ -262,11 +272,22 @@ function core_storage_save(args){
     for(var key in core_storage_data){
         var data = '';
 
-        if(core_storage_info[key]['type'] === 'setting'){
-            if(args['bests']){
-                continue;
+        if(args['bests']){
+            data = core_storage_type_convert({
+              'key': key,
+              'value': core_storage_data[key],
+            });
+
+            if(core_storage_info[key]['type'] < 0){
+                if(data < core_storage_info[key]['best']){
+                    core_storage_info[key]['best'] = data;
+                }
+
+            }else if(core_storage_data[key] > core_storage_info[key]['best']){
+                core_storage_info[key]['best'] = data;
             }
 
+        }else if(core_storage_info[key]['type'] === 'setting'){
             core_storage_data[key] = document.getElementById(key)[
               core_type({
                 'type': 'boolean',
@@ -281,21 +302,6 @@ function core_storage_save(args){
               'value': core_storage_data[key],
             });
             core_storage_data[key] = data;
-
-        }else{
-            data = core_storage_type_convert({
-              'key': key,
-              'value': core_storage_data[key],
-            });
-
-            if(core_storage_info[key]['type'] < 0){
-                if(data < core_storage_info[key]['best']){
-                    core_storage_info[key]['best'] = data;
-                }
-
-            }else if(core_storage_data[key] > core_storage_info[key]['best']){
-                core_storage_info[key]['best'] = data;
-            }
         }
 
         if(data !== core_storage_info[key]['default']){
