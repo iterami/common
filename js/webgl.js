@@ -952,7 +952,7 @@ function webgl_setmode(args){
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
     webgl_interval = window.setInterval(
       webgl_logicloop,
-      msperframe || storage_data['ms-per-frame']
+      msperframe || core_storage_data['ms-per-frame']
     );
 }
 

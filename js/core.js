@@ -181,6 +181,178 @@ function core_random_string(args){
     return string;
 }
 
+// Required args: data, prefix
+function core_storage_init(args){
+    core_storage_prefix = args['prefix'];
+
+    for(var key in args['data']){
+        var data = args['data'][key];
+        if(!core_type({
+          'type': 'object',
+          'var': args['data'][key],
+        })){
+            data = {
+              'default': data,
+              'type': 'setting',
+            };
+        }
+
+        core_storage_info[key] = {
+          'default': data['default'],
+          'type': data['type'] || 'setting',
+        };
+        core_storage_data[key] = window.localStorage.getItem(core_storage_prefix + key);
+
+        if(core_storage_data[key] === null){
+            core_storage_data[key] = core_storage_info[key]['default'];
+        }
+
+        core_storage_data[key] = core_storage_type_convert({
+          'key': key,
+          'value': core_storage_data[key],
+        });
+
+        if(core_storage_info[key]['type'] !== 'setting'){
+            core_storage_info[key]['best'] = core_storage_data[key];
+        }
+    }
+}
+
+// Optional args: bests
+function core_storage_reset(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'bests': false,
+      },
+    });
+
+    if(!window.confirm('Reset?')){
+        return false;
+    }
+
+    for(var key in core_storage_data){
+        if(args['bests']
+          && core_storage_info[key]['type'] !== 'setting'){
+            core_storage_info[key]['best'] = core_storage_info[key]['default'];
+        }
+
+        core_storage_data[key] = core_storage_info[key]['default'];
+        window.localStorage.removeItem(core_storage_prefix + key);
+    }
+
+    if(args['bests']){
+        core_storage_save({
+          'bests': true,
+        });
+    }
+    core_storage_update();
+    return true;
+}
+
+// Optional args: bests
+function core_storage_save(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'bests': false,
+      },
+    });
+
+    for(var key in core_storage_data){
+        var data = '';
+
+        if(core_storage_info[key]['type'] === 'setting'){
+            if(args['bests']){
+                continue;
+            }
+
+            core_storage_data[key] = document.getElementById(key)[
+              core_type({
+                'type': 'boolean',
+                'var': core_storage_info[key]['default'],
+              })
+                ? 'checked'
+                : 'value'
+            ];
+
+            data = core_storage_type_convert({
+              'key': key,
+              'value': core_storage_data[key],
+            });
+            core_storage_data[key] = data;
+
+        }else{
+            data = core_storage_type_convert({
+              'key': key,
+              'value': core_storage_data[key],
+            });
+
+            if(core_storage_info[key]['type'] < 0){
+                if(data < core_storage_info[key]['best']){
+                    core_storage_info[key]['best'] = data;
+                }
+
+            }else if(core_storage_data[key] > core_storage_info[key]['best']){
+                core_storage_info[key]['best'] = data;
+            }
+        }
+
+        if(data !== core_storage_info[key]['default']){
+            window.localStorage.setItem(
+              core_storage_prefix + key,
+              data
+            );
+
+        }else{
+            window.localStorage.removeItem(core_storage_prefix + key);
+        }
+    }
+}
+
+// Required args: key, value
+function core_storage_type_convert(args){
+    var core_storage_default = core_storage_info[args['key']]['default'];
+
+    if(core_type({
+      'type': 'string',
+      'var': core_storage_default,
+    })){
+        return args['value'];
+
+    }else if(!isNaN(parseFloat(core_storage_default))){
+        return parseFloat(args['value']);
+
+    }else if(core_type({
+      'type': 'boolean',
+      'var': core_storage_default,
+    }) && !core_type({
+      'type': 'boolean',
+      'var': args['value'],
+    })){
+        return args['value'] === 'true';
+    }
+
+    return args['value'];
+}
+
+function core_storage_update(){
+    for(var key in core_storage_data){
+        var type = core_type({
+            'type': 'boolean',
+            'var': core_storage_info[key]['default'],
+          })
+          ? 'checked'
+          : 'value';
+
+        if(core_storage_info[key]['type'] !== 'setting'){
+            type = 'innerHTML';
+        }
+
+        document.getElementById(key)[type] = core_storage_data[key];
+    }
+}
+
 // Required args: var
 // Optional args: type
 function core_type(args){
@@ -243,4 +415,7 @@ var core_random_boolean_chance = .5;
 var core_random_integer_max = 100;
 var core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var core_random_string_length = 100;
+var core_storage_data = {};
+var core_storage_info = {};
+var core_storage_prefix = '';
 var core_uids = {};
