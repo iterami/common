@@ -77,6 +77,322 @@ function core_image(args){
     return image;
 }
 
+function core_input_handle_contextmenu(event){
+    core_input_handle_event({
+      'event': event,
+      'key': 'contextmenu',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+// Required args: event, key, object
+// Optional args: state, todo
+function core_input_handle_event(args){
+    if(args['object'].hasOwnProperty(args['key'])){
+        if(args['object'][args['key']]['preventDefault']){
+            args['event'].preventDefault();
+        }
+
+        if(args['todo'] !== void 0
+          && !args['object'][args['key']]['loop']){
+            args['object'][args['key']]['todo']();
+        }
+
+        if(args['state'] !== void 0){
+            args['object'][args['key']]['state'] = args['state'];
+        }
+
+        return args['object'][args['key']]['solo'];
+    }
+
+    return false;
+}
+
+function core_input_handle_gamepadconnected(event){
+    var gamepad = event.gamepad;
+    core_input_gamepads[gamepad.index] = gamepad;
+}
+
+function core_input_handle_gamepaddisconnected(event){
+    delete core_input_gamepads[event.gamepad.index];
+}
+
+function core_input_handle_keydown(event){
+    var key = core_input_keyinfo_get(event);
+
+    var solo = core_input_handle_event({
+      'event': event,
+      'key': key['code'],
+      'object': core_input_keys,
+      'state': true,
+      'todo': true,
+    });
+    if(solo){
+        return;
+    }
+
+    core_input_handle_event({
+      'event': event,
+      'key': 'all',
+      'object': core_input_keys,
+      'state': true,
+      'todo': true,
+    });
+}
+
+function core_input_handle_keyup(event){
+    var key = core_input_keyinfo_get(event);
+
+    var solo = core_input_handle_event({
+      'event': event,
+      'key': key['code'],
+      'object': core_input_keys,
+      'state': false,
+    });
+    if(solo){
+        return;
+    }
+
+    if(core_input_keys.hasOwnProperty('all')){
+        var all = false;
+        for(var key in core_input_keys){
+            if(key !== 'all'
+              && core_input_keys[key]['state']){
+                all = true;
+                break;
+            }
+        }
+        core_input_keys['all']['state'] = all;
+    }
+}
+
+function core_input_handle_mousedown(event){
+    core_input_mouse['button'] = event.button;
+    core_input_mouse['down'] = true;
+    core_input_mouse['down-x'] = core_input_mouse['x'];
+    core_input_mouse['down-y'] = core_input_mouse['y'];
+    core_input_handle_event({
+      'event': event,
+      'key': 'mousedown',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_input_handle_mousemove(event){
+    core_input_mouse['movement-x'] = event.movementX;
+    core_input_mouse['movement-y'] = event.movementY;
+    core_input_mouse['x'] = event.pageX;
+    core_input_mouse['y'] = event.pageY;
+    core_input_handle_event({
+      'event': event,
+      'key': 'mousemove',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_input_handle_mouseup(event){
+    core_input_mouse['button'] = -1;
+    core_input_mouse['down'] = false;
+    core_input_handle_event({
+      'event': event,
+      'key': 'mouseup',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_input_handle_mousewheel(event){
+    var delta = Number(
+      event.wheelDelta
+        || -event.detail
+    );
+    core_input_handle_event({
+      'event': event,
+      'key': 'mousewheel',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_input_handle_onpointerlockchange(event){
+    var element = document.getElementById(core_input_mouse['pointerlock-id']);
+    if(!element){
+        return;
+    }
+
+    core_input_mouse['pointerlock-state'] = document.pointerLockElement === element
+      || document.mozPointerLockElement === element;
+};
+
+// Optional args: keybinds, mousebinds
+function core_input_init(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'keybinds': false,
+        'mousebinds': false,
+      },
+    });
+
+    if(args['keybinds'] !== false){
+        core_input_keybinds_update({
+          'clear': true,
+          'keybinds': args['keybinds'],
+        });
+
+        window.onkeydown = core_input_handle_keydown;
+        window.onkeyup = core_input_handle_keyup;
+    }
+
+    core_input_mouse = {
+      'button': -1,
+      'down': false,
+      'down-x': 0,
+      'down-y': 0,
+      'movement-x': 0,
+      'movement-y': 0,
+      'pointerlock-id': 'canvas',
+      'pointerlock-state': false,
+      'todo': {},
+      'x': 0,
+      'y': 0,
+    };
+    if(args['mousebinds'] !== false){
+        core_input_mousebinds_update({
+          'clear': true,
+          'mousebinds': args['mousebinds'],
+        });
+
+        document.onmozpointerlockchange = core_input_handle_onpointerlockchange;
+        document.onpointerlockchange = core_input_handle_onpointerlockchange;
+        window.oncontextmenu = core_input_handle_contextmenu;
+        window.onmousedown = core_input_handle_mousedown;
+        window.onmousemove = core_input_handle_mousemove;
+        window.onmouseup = core_input_handle_mouseup;
+        window.ontouchend = core_input_handle_mouseup;
+        window.ontouchmove = core_input_handle_mousemove;
+        window.ontouchstart = core_input_handle_mousedown;
+
+        if('onmousewheel' in window){
+            window.onmousewheel = core_input_handle_mousewheel;
+
+        }else{
+            document.addEventListener(
+              'DOMMouseScroll',
+              core_input_handle_mousewheel,
+              false
+            );
+        }
+    }
+
+    window.ongamepadconnected = core_input_handle_gamepadconnected;
+    window.ongamepaddisconnected = core_input_handle_gamepaddisconnected;
+}
+
+// Required args: keybinds
+// Optional args: clear
+function core_input_keybinds_update(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'clear': false,
+      },
+    });
+
+    if(args['clear']){
+        core_input_keys = {};
+    }
+
+    for(var key in args['keybinds']){
+        core_input_keys[key] = {};
+        core_input_keys[key]['loop'] = args['keybinds'][key]['loop'] || false;
+        core_input_keys[key]['preventDefault'] = args['keybinds'][key]['preventDefault'] || false;
+        core_input_keys[key]['solo'] = args['keybinds'][key]['solo'] || false;
+        core_input_keys[key]['state'] = false;
+        core_input_keys[key]['todo'] = args['keybinds'][key]['todo'] || function(){};
+    }
+}
+
+function core_input_keyinfo_get(event){
+    var code = event.keyCode || event.which;
+    return {
+      'code': code,
+      'key': String.fromCharCode(code),
+    };
+}
+
+// Required args: mousebinds
+// Optional args: clear
+function core_input_mousebinds_update(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'clear': false,
+      },
+    });
+
+    if(args['clear']){
+        core_input_mouse['todo'] = {};
+    }
+
+    for(var mousebind in args['mousebinds']){
+        core_input_mouse['todo'][mousebind] = {};
+        core_input_mouse['todo'][mousebind]['loop'] = args['mousebinds'][mousebind]['loop'] || false;
+        core_input_mouse['todo'][mousebind]['preventDefault'] = args['mousebinds'][mousebind]['preventDefault'] || false;
+        core_input_mouse['todo'][mousebind]['todo'] = args['mousebinds'][mousebind]['todo'] || function(){};
+    }
+}
+
+// Optional args: keybinds, mousebinds
+function core_input_rebind(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'keybinds': {},
+        'mousebinds': {},
+      },
+    });
+
+    for(var keybind in args['keybinds']){
+        core_input_keys[keybind] = keybinds[keybind];
+        delete core_input_keys[args['keybinds'][keybind]];
+    }
+    for(var mousebind in args['mousebinds']){
+        core_input_mouse['todo'][mousebind] = mousebinds[mousebind];
+        delete core_input_mouse['todo'][args['mousebinds'][mousebind]];
+    }
+}
+
+// Required args: id
+function core_input_requestpointerlock(args){
+    var element = document.getElementById(args['id']);
+    if(!element){
+        return;
+    }
+
+    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
+    element.requestPointerLock();
+
+    core_input_mouse['pointerlock-id'] = args['id'];
+}
+
+function core_input_todos_repeat(){
+    for(var key in core_input_keys){
+        if(core_input_keys[key]['loop']
+          && core_input_keys[key]['state']){
+            core_input_keys[key]['todo']();
+        }
+    }
+    for(var mousebind in core_input_mouse['todo']){
+        if(core_input_mouse['todo'][mousebind]['loop']){
+            core_input_mouse['todo'][mousebind]['todo']();
+        }
+    }
+}
+
 /*
 // Optional args: content
 function core_menu_create(args){
@@ -414,6 +730,9 @@ function core_uid_create(){
 }
 
 var core_images = {};
+var core_input_gamepads = {};
+var core_input_keys = {};
+var core_input_mouse = {};
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
