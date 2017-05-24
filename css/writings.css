@@ -11,7 +11,8 @@ body{
 .center{
     text-align: center;
 }
-.done{
+.done,
+.gold{
     background: #650;
 }
 .external{
