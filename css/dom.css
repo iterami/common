@@ -52,10 +52,6 @@ hr{
 input{
     border-color: #aaa;
 }
-input[disabled],
-input[readonly]{
-    border: 0;
-}
 input[type=button]:not([disabled]),
 input[type=color]:not([disabled]),
 input[type=range]:not([disabled]),
