@@ -11,12 +11,11 @@ body{
 .center{
     text-align: center;
 }
-.done,
-.gold{
-    background: #650;
-}
 .external{
     color: #f70;
+}
+.gold{
+    background: #650;
 }
 .header{
     background: #333;
