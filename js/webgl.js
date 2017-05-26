@@ -594,12 +594,6 @@ function webgl_logicloop(){
               entity_entities[entity]['dy'] + webgl_gravity['acceleration'],
               webgl_gravity['max']
             );
-
-            if(entity_entities[entity]['position']['y'] < webgl_gravity['min-y']){
-                entity_entities[entity]['position']['x'] = 0;
-                entity_entities[entity]['position']['y'] = 0;
-                entity_entities[entity]['position']['z'] = 0;
-            }
         }
 
         if(entity_entities[entity]['collides']){
@@ -1151,7 +1145,6 @@ var webgl_fonts = {
 var webgl_gravity = {
   'acceleration': -.05,
   'max': -1,
-  'min-y': -100,
 };
 var webgl_height = 0;
 var webgl_interval = 0;
