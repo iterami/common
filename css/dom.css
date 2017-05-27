@@ -35,10 +35,10 @@ select{
     border-width: 0;
     color: #000;
     font-size: 200%;
-    height: 75px;
+    height: 60px;
     margin: 1px;
     outline-width: 0;
-    width: 75px !important;
+    width: 60px !important;
 }
 .hidden{
     display: none;
