@@ -77,6 +77,80 @@ function core_image(args){
     return image;
 }
 
+function core_init(){
+    window.onkeydown = core_input_handle_keydown;
+    window.onkeyup = core_input_handle_keyup;
+
+    core_input_mouse = {
+      'button': -1,
+      'down': false,
+      'down-x': 0,
+      'down-y': 0,
+      'movement-x': 0,
+      'movement-y': 0,
+      'pointerlock-id': 'canvas',
+      'pointerlock-state': false,
+      'todo': {},
+      'x': 0,
+      'y': 0,
+    };
+
+    document.onmozpointerlockchange = core_input_handle_onpointerlockchange;
+    document.onpointerlockchange = core_input_handle_onpointerlockchange;
+    window.oncontextmenu = core_input_handle_contextmenu;
+    window.onmousedown = core_input_handle_mousedown;
+    window.onmousemove = core_input_handle_mousemove;
+    window.onmouseup = core_input_handle_mouseup;
+    window.ontouchend = core_input_handle_mouseup;
+    window.ontouchmove = core_input_handle_mousemove;
+    window.ontouchstart = core_input_handle_mousedown;
+
+    if('onmousewheel' in window){
+        window.onmousewheel = core_input_handle_mousewheel;
+
+    }else{
+        document.addEventListener(
+          'DOMMouseScroll',
+          core_input_handle_mousewheel,
+          false
+        );
+    }
+
+    window.ongamepadconnected = core_input_handle_gamepadconnected;
+    window.ongamepaddisconnected = core_input_handle_gamepaddisconnected;
+
+    core_call({
+      'todo': 'repo_init',
+    });
+}
+
+// Optional args: clearkeys, clearmouse, keybinds, mousebinds
+function core_input_binds_add(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'clearkeys': false,
+        'clearmouse': false,
+        'keybinds': false,
+        'mousebinds': false,
+      },
+    });
+
+    if(args['keybinds'] !== false){
+        core_input_keybinds_update({
+          'clear': args['clearkeys'],
+          'keybinds': args['keybinds'],
+        });
+    }
+
+    if(args['mousebinds'] !== false){
+        core_input_mousebinds_update({
+          'clear': args['clearmouse'],
+          'mousebinds': args['mousebinds'],
+        });
+    }
+}
+
 function core_input_handle_contextmenu(event){
     core_input_handle_event({
       'event': event,
@@ -226,71 +300,6 @@ function core_input_handle_onpointerlockchange(event){
     core_input_mouse['pointerlock-state'] = document.pointerLockElement === element
       || document.mozPointerLockElement === element;
 };
-
-// Optional args: keybinds, mousebinds
-function core_input_init(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'keybinds': false,
-        'mousebinds': false,
-      },
-    });
-
-    if(args['keybinds'] !== false){
-        core_input_keybinds_update({
-          'clear': true,
-          'keybinds': args['keybinds'],
-        });
-
-        window.onkeydown = core_input_handle_keydown;
-        window.onkeyup = core_input_handle_keyup;
-    }
-
-    core_input_mouse = {
-      'button': -1,
-      'down': false,
-      'down-x': 0,
-      'down-y': 0,
-      'movement-x': 0,
-      'movement-y': 0,
-      'pointerlock-id': 'canvas',
-      'pointerlock-state': false,
-      'todo': {},
-      'x': 0,
-      'y': 0,
-    };
-    if(args['mousebinds'] !== false){
-        core_input_mousebinds_update({
-          'clear': true,
-          'mousebinds': args['mousebinds'],
-        });
-
-        document.onmozpointerlockchange = core_input_handle_onpointerlockchange;
-        document.onpointerlockchange = core_input_handle_onpointerlockchange;
-        window.oncontextmenu = core_input_handle_contextmenu;
-        window.onmousedown = core_input_handle_mousedown;
-        window.onmousemove = core_input_handle_mousemove;
-        window.onmouseup = core_input_handle_mouseup;
-        window.ontouchend = core_input_handle_mouseup;
-        window.ontouchmove = core_input_handle_mousemove;
-        window.ontouchstart = core_input_handle_mousedown;
-
-        if('onmousewheel' in window){
-            window.onmousewheel = core_input_handle_mousewheel;
-
-        }else{
-            document.addEventListener(
-              'DOMMouseScroll',
-              core_input_handle_mousewheel,
-              false
-            );
-        }
-    }
-
-    window.ongamepadconnected = core_input_handle_gamepadconnected;
-    window.ongamepaddisconnected = core_input_handle_gamepaddisconnected;
-}
 
 // Required args: keybinds
 // Optional args: clear
@@ -744,3 +753,5 @@ var core_storage_data = {};
 var core_storage_info = {};
 var core_storage_prefix = '';
 var core_uids = {};
+
+window.onload = core_init;
