@@ -313,13 +313,26 @@ function core_input_keybinds_update(args){
         core_input_keys = {};
     }
 
-    for(var key in args['keybinds']){
-        core_input_keys[key] = {};
-        core_input_keys[key]['loop'] = args['keybinds'][key]['loop'] || false;
-        core_input_keys[key]['preventDefault'] = args['keybinds'][key]['preventDefault'] || false;
-        core_input_keys[key]['solo'] = args['keybinds'][key]['solo'] || false;
-        core_input_keys[key]['state'] = false;
-        core_input_keys[key]['todo'] = args['keybinds'][key]['todo'] || function(){};
+    for(var keybind in args['keybinds']){
+        var key = keybind;
+
+        if(core_type({
+          'type': 'string',
+          'var': key,
+        })){
+            key = keybind.charCodeAt(0);
+        }
+
+        core_input_keys[key] = core_handle_defaults({
+          'default': {
+            'loop': false,
+            'preventDefault': false,
+            'solo': false,
+            'state': false,
+            'todo': function(){},
+          },
+          'var': args['keybinds'][keybind],
+        });
     }
 }
 
