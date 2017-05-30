@@ -32,6 +32,15 @@ function core_call(args){
     }
 }
 
+function core_handle_contextmenu(event){
+    core_handle_event({
+      'event': event,
+      'key': 'contextmenu',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
 // Optional args: default, var
 function core_handle_defaults(args){
     args = core_args({
@@ -60,6 +69,145 @@ function core_handle_defaults(args){
     return object;
 }
 
+// Required args: event, key, object
+// Optional args: state, todo
+function core_handle_event(args){
+    if(args['object'].hasOwnProperty(args['key'])){
+        if(args['object'][args['key']]['preventDefault']){
+            args['event'].preventDefault();
+        }
+
+        if(args['todo'] !== void 0
+          && !args['object'][args['key']]['loop']){
+            args['object'][args['key']]['todo']();
+        }
+
+        if(args['state'] !== void 0){
+            args['object'][args['key']]['state'] = args['state'];
+        }
+
+        return args['object'][args['key']]['solo'];
+    }
+
+    return false;
+}
+
+function core_handle_gamepadconnected(event){
+    var gamepad = event.gamepad;
+    core_input_gamepads[gamepad.index] = gamepad;
+}
+
+function core_handle_gamepaddisconnected(event){
+    delete core_input_gamepads[event.gamepad.index];
+}
+
+function core_handle_keydown(event){
+    var key = core_input_keyinfo_get(event);
+
+    if(core_handle_event({
+      'event': event,
+      'key': key['code'],
+      'object': core_input_keys,
+      'state': true,
+      'todo': true,
+    })){
+        return;
+    }
+
+    core_handle_event({
+      'event': event,
+      'key': 'all',
+      'object': core_input_keys,
+      'state': true,
+      'todo': true,
+    });
+}
+
+function core_handle_keyup(event){
+    var key = core_input_keyinfo_get(event);
+
+    if(core_handle_event({
+      'event': event,
+      'key': key['code'],
+      'object': core_input_keys,
+      'state': false,
+    })){
+        return;
+    }
+
+    if(core_input_keys.hasOwnProperty('all')){
+        var all = false;
+        for(var key in core_input_keys){
+            if(key !== 'all'
+              && core_input_keys[key]['state']){
+                all = true;
+                break;
+            }
+        }
+        core_input_keys['all']['state'] = all;
+    }
+}
+
+function core_handle_mousedown(event){
+    core_input_mouse['button'] = event.button;
+    core_input_mouse['down'] = true;
+    core_input_mouse['down-x'] = core_input_mouse['x'];
+    core_input_mouse['down-y'] = core_input_mouse['y'];
+    core_handle_event({
+      'event': event,
+      'key': 'mousedown',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_handle_mousemove(event){
+    core_input_mouse['movement-x'] = event.movementX;
+    core_input_mouse['movement-y'] = event.movementY;
+    core_input_mouse['x'] = event.pageX;
+    core_input_mouse['y'] = event.pageY;
+    core_handle_event({
+      'event': event,
+      'key': 'mousemove',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_handle_mouseup(event){
+    core_input_mouse['button'] = -1;
+    core_input_mouse['down'] = false;
+    core_handle_event({
+      'event': event,
+      'key': 'mouseup',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_handle_mousewheel(event){
+    var delta = Number(
+      event.wheelDelta
+        || -event.detail
+    );
+    core_handle_event({
+      'event': event,
+      'key': 'mousewheel',
+      'object': core_input_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_handle_onpointerlockchange(event){
+    var element = document.getElementById(core_input_mouse['pointerlock-id']);
+    if(!element){
+        return;
+    }
+
+    core_input_mouse['pointerlock-state'] = document.pointerLockElement === element
+      || document.mozPointerLockElement === element;
+};
+
 // Required args: id, src
 // Optional args: todo
 function core_image(args){
@@ -78,8 +226,8 @@ function core_image(args){
 }
 
 function core_init(){
-    window.onkeydown = core_input_handle_keydown;
-    window.onkeyup = core_input_handle_keyup;
+    window.onkeydown = core_handle_keydown;
+    window.onkeyup = core_handle_keyup;
 
     core_input_mouse = {
       'button': -1,
@@ -95,29 +243,29 @@ function core_init(){
       'y': 0,
     };
 
-    document.onmozpointerlockchange = core_input_handle_onpointerlockchange;
-    document.onpointerlockchange = core_input_handle_onpointerlockchange;
-    window.oncontextmenu = core_input_handle_contextmenu;
-    window.onmousedown = core_input_handle_mousedown;
-    window.onmousemove = core_input_handle_mousemove;
-    window.onmouseup = core_input_handle_mouseup;
-    window.ontouchend = core_input_handle_mouseup;
-    window.ontouchmove = core_input_handle_mousemove;
-    window.ontouchstart = core_input_handle_mousedown;
+    document.onmozpointerlockchange = core_handle_onpointerlockchange;
+    document.onpointerlockchange = core_handle_onpointerlockchange;
+    window.oncontextmenu = core_handle_contextmenu;
+    window.onmousedown = core_handle_mousedown;
+    window.onmousemove = core_handle_mousemove;
+    window.onmouseup = core_handle_mouseup;
+    window.ontouchend = core_handle_mouseup;
+    window.ontouchmove = core_handle_mousemove;
+    window.ontouchstart = core_handle_mousedown;
 
     if('onmousewheel' in window){
-        window.onmousewheel = core_input_handle_mousewheel;
+        window.onmousewheel = core_handle_mousewheel;
 
     }else{
         document.addEventListener(
           'DOMMouseScroll',
-          core_input_handle_mousewheel,
+          core_handle_mousewheel,
           false
         );
     }
 
-    window.ongamepadconnected = core_input_handle_gamepadconnected;
-    window.ongamepaddisconnected = core_input_handle_gamepaddisconnected;
+    window.ongamepadconnected = core_handle_gamepadconnected;
+    window.ongamepaddisconnected = core_handle_gamepaddisconnected;
 
     core_call({
       'todo': 'repo_init',
@@ -150,156 +298,6 @@ function core_input_binds_add(args){
         });
     }
 }
-
-function core_input_handle_contextmenu(event){
-    core_input_handle_event({
-      'event': event,
-      'key': 'contextmenu',
-      'object': core_input_mouse['todo'],
-      'todo': true,
-    });
-}
-
-// Required args: event, key, object
-// Optional args: state, todo
-function core_input_handle_event(args){
-    if(args['object'].hasOwnProperty(args['key'])){
-        if(args['object'][args['key']]['preventDefault']){
-            args['event'].preventDefault();
-        }
-
-        if(args['todo'] !== void 0
-          && !args['object'][args['key']]['loop']){
-            args['object'][args['key']]['todo']();
-        }
-
-        if(args['state'] !== void 0){
-            args['object'][args['key']]['state'] = args['state'];
-        }
-
-        return args['object'][args['key']]['solo'];
-    }
-
-    return false;
-}
-
-function core_input_handle_gamepadconnected(event){
-    var gamepad = event.gamepad;
-    core_input_gamepads[gamepad.index] = gamepad;
-}
-
-function core_input_handle_gamepaddisconnected(event){
-    delete core_input_gamepads[event.gamepad.index];
-}
-
-function core_input_handle_keydown(event){
-    var key = core_input_keyinfo_get(event);
-
-    var solo = core_input_handle_event({
-      'event': event,
-      'key': key['code'],
-      'object': core_input_keys,
-      'state': true,
-      'todo': true,
-    });
-    if(solo){
-        return;
-    }
-
-    core_input_handle_event({
-      'event': event,
-      'key': 'all',
-      'object': core_input_keys,
-      'state': true,
-      'todo': true,
-    });
-}
-
-function core_input_handle_keyup(event){
-    var key = core_input_keyinfo_get(event);
-
-    var solo = core_input_handle_event({
-      'event': event,
-      'key': key['code'],
-      'object': core_input_keys,
-      'state': false,
-    });
-    if(solo){
-        return;
-    }
-
-    if(core_input_keys.hasOwnProperty('all')){
-        var all = false;
-        for(var key in core_input_keys){
-            if(key !== 'all'
-              && core_input_keys[key]['state']){
-                all = true;
-                break;
-            }
-        }
-        core_input_keys['all']['state'] = all;
-    }
-}
-
-function core_input_handle_mousedown(event){
-    core_input_mouse['button'] = event.button;
-    core_input_mouse['down'] = true;
-    core_input_mouse['down-x'] = core_input_mouse['x'];
-    core_input_mouse['down-y'] = core_input_mouse['y'];
-    core_input_handle_event({
-      'event': event,
-      'key': 'mousedown',
-      'object': core_input_mouse['todo'],
-      'todo': true,
-    });
-}
-
-function core_input_handle_mousemove(event){
-    core_input_mouse['movement-x'] = event.movementX;
-    core_input_mouse['movement-y'] = event.movementY;
-    core_input_mouse['x'] = event.pageX;
-    core_input_mouse['y'] = event.pageY;
-    core_input_handle_event({
-      'event': event,
-      'key': 'mousemove',
-      'object': core_input_mouse['todo'],
-      'todo': true,
-    });
-}
-
-function core_input_handle_mouseup(event){
-    core_input_mouse['button'] = -1;
-    core_input_mouse['down'] = false;
-    core_input_handle_event({
-      'event': event,
-      'key': 'mouseup',
-      'object': core_input_mouse['todo'],
-      'todo': true,
-    });
-}
-
-function core_input_handle_mousewheel(event){
-    var delta = Number(
-      event.wheelDelta
-        || -event.detail
-    );
-    core_input_handle_event({
-      'event': event,
-      'key': 'mousewheel',
-      'object': core_input_mouse['todo'],
-      'todo': true,
-    });
-}
-
-function core_input_handle_onpointerlockchange(event){
-    var element = document.getElementById(core_input_mouse['pointerlock-id']);
-    if(!element){
-        return;
-    }
-
-    core_input_mouse['pointerlock-state'] = document.pointerLockElement === element
-      || document.mozPointerLockElement === element;
-};
 
 // Required args: keybinds
 // Optional args: clear
