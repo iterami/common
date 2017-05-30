@@ -79,7 +79,7 @@ function core_handle_event(args){
 
         if(args['todo'] !== void 0
           && !args['object'][args['key']]['loop']){
-            args['object'][args['key']]['todo']();
+            args['object'][args['key']]['todo'](args['event']);
         }
 
         if(args['state'] !== void 0){
