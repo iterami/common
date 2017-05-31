@@ -226,9 +226,6 @@ function core_image(args){
 }
 
 function core_init(){
-    window.onkeydown = core_handle_keydown;
-    window.onkeyup = core_handle_keyup;
-
     core_input_mouse = {
       'button': -1,
       'down': false,
@@ -246,6 +243,10 @@ function core_init(){
     document.onmozpointerlockchange = core_handle_onpointerlockchange;
     document.onpointerlockchange = core_handle_onpointerlockchange;
     window.oncontextmenu = core_handle_contextmenu;
+    window.ongamepadconnected = core_handle_gamepadconnected;
+    window.ongamepaddisconnected = core_handle_gamepaddisconnected;
+    window.onkeydown = core_handle_keydown;
+    window.onkeyup = core_handle_keyup;
     window.onmousedown = core_handle_mousedown;
     window.onmousemove = core_handle_mousemove;
     window.onmouseup = core_handle_mouseup;
@@ -263,9 +264,6 @@ function core_init(){
           false
         );
     }
-
-    window.ongamepadconnected = core_handle_gamepadconnected;
-    window.ongamepaddisconnected = core_handle_gamepaddisconnected;
 
     core_call({
       'todo': 'repo_init',
