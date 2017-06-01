@@ -79,7 +79,10 @@ function core_handle_event(args){
 
         if(args['todo'] !== void 0
           && !args['object'][args['key']]['loop']){
-            args['object'][args['key']]['todo'](args['event']);
+            args['object'][args['key']]['todo'](
+              args['event'],
+              args['key']
+            );
         }
 
         if(args['state'] !== void 0){
@@ -312,10 +315,14 @@ function core_input_keybinds_update(args){
     }
 
     for(var keybind in args['keybinds']){
-        var key = parseInt(keybind);
+        var key = keybind;
 
-        if(isNaN(key)){
-            key = keybind.charCodeAt(0);
+        if(keybind !== 'all'){
+            key = parseInt(key);
+
+            if(isNaN(key)){
+                key = keybind.charCodeAt(0);
+            }
         }
 
         core_input_keys[key] = core_handle_defaults({
