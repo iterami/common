@@ -32,13 +32,31 @@ function core_call(args){
     }
 }
 
+function core_handle_beforeunload(event){
+    var result = core_handle_event({
+      'event': event,
+      'key': 'beforeunload',
+      'object': core_events,
+      'todo': true,
+    });
+    if(core_type({
+      'type': 'string',
+      'var': result,
+    })){
+        return result;
+    }
+}
+
 function core_handle_contextmenu(event){
-    core_handle_event({
+    var result = core_handle_event({
       'event': event,
       'key': 'contextmenu',
       'object': core_input_mouse['todo'],
       'todo': true,
     });
+    if(result === void 0){
+        return false;
+    }
 }
 
 // Optional args: default, var
@@ -77,13 +95,18 @@ function core_handle_event(args){
             args['event'].preventDefault();
         }
 
+        var returned = void 0;
         if(args['todo'] !== void 0
           && !args['object'][args['key']]['loop']){
-            args['object'][args['key']]['todo'](args['event']);
+            returned = args['object'][args['key']]['todo'](args['event']);
         }
 
         if(args['state'] !== void 0){
             args['object'][args['key']]['state'] = args['state'];
+        }
+
+        if(returned !== void 0){
+            return returned;
         }
 
         return args['object'][args['key']]['solo'];
@@ -193,7 +216,7 @@ function core_handle_mousewheel(event){
     core_handle_event({
       'event': event,
       'key': 'mousewheel',
-      'object': core_input_mouse['todo'],
+      'object': core_events,
       'todo': true,
     });
 }
@@ -242,6 +265,7 @@ function core_init(){
 
     document.onmozpointerlockchange = core_handle_onpointerlockchange;
     document.onpointerlockchange = core_handle_onpointerlockchange;
+    window.onbeforeunload = core_handle_beforeunload;
     window.oncontextmenu = core_handle_contextmenu;
     window.ongamepadconnected = core_handle_gamepadconnected;
     window.ongamepaddisconnected = core_handle_gamepaddisconnected;
@@ -270,17 +294,31 @@ function core_init(){
     });
 }
 
-// Optional args: clearkeys, clearmouse, keybinds, mousebinds
+// Optional args: beforeunload, clearkeys, clearmouse, keybinds, mousebinds
 function core_input_binds_add(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'beforeunload': false,
         'clearkeys': false,
         'clearmouse': false,
         'keybinds': false,
         'mousebinds': false,
       },
     });
+
+    if(args['beforeunload'] !== false){
+        core_events['beforeunload'] = core_handle_defaults({
+          'default': {
+            'loop': false,
+            'preventDefault': false,
+            'solo': false,
+            'state': false,
+            'todo': function(){},
+          },
+          'var': args['beforeunload'],
+        });
+    }
 
     if(args['keybinds'] !== false){
         core_input_keybinds_update({
@@ -749,6 +787,7 @@ function core_uid_create(){
     return uid;
 }
 
+var core_events = {};
 var core_images = {};
 var core_input_gamepads = {};
 var core_input_keys = {};
