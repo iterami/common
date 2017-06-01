@@ -312,12 +312,9 @@ function core_input_keybinds_update(args){
     }
 
     for(var keybind in args['keybinds']){
-        var key = keybind;
+        var key = parseInt(keybind);
 
-        if(core_type({
-          'type': 'string',
-          'var': key,
-        })){
+        if(isNaN(key)){
             key = keybind.charCodeAt(0);
         }
 
@@ -714,7 +711,8 @@ function core_type(args){
 
     if(args['type'] === 'object'){
         return args['var'] instanceof Object
-          && !(args['var'] instanceof Array);
+          && !(args['var'] instanceof Array)
+          && typeof args['var'] !== 'function';
     }
 
     return typeof args['var'] === args['type'];
