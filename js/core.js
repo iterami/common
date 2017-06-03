@@ -32,6 +32,69 @@ function core_call(args){
     }
 }
 
+// Optional args: beforeunload, clearkeys, clearmouse, keybinds, mousebinds
+function core_events_bind(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'beforeunload': false,
+        'clearkeys': false,
+        'clearmouse': false,
+        'keybinds': false,
+        'mousebinds': false,
+      },
+    });
+
+    if(args['beforeunload'] !== false){
+        core_events['beforeunload'] = core_handle_defaults({
+          'default': {
+            'loop': false,
+            'preventDefault': false,
+            'solo': false,
+            'state': false,
+            'todo': function(){},
+          },
+          'var': args['beforeunload'],
+        });
+    }
+
+    if(args['keybinds'] !== false){
+        core_keys_updatebinds({
+          'clear': args['clearkeys'],
+          'keybinds': args['keybinds'],
+        });
+    }
+
+    if(args['mousebinds'] !== false){
+        core_mouse_updatebinds({
+          'clear': args['clearmouse'],
+          'mousebinds': args['mousebinds'],
+        });
+    }
+}
+
+function core_events_keyinfo(event){
+    var code = event.keyCode || event.which;
+    return {
+      'code': code,
+      'key': String.fromCharCode(code),
+    };
+}
+
+function core_events_todoloop(){
+    for(var key in core_keys){
+        if(core_keys[key]['loop']
+          && core_keys[key]['state']){
+            core_keys[key]['todo']();
+        }
+    }
+    for(var mousebind in core_mouse['todo']){
+        if(core_mouse['todo'][mousebind]['loop']){
+            core_mouse['todo'][mousebind]['todo']();
+        }
+    }
+}
+
 function core_handle_beforeunload(event){
     var result = core_handle_event({
       'event': event,
@@ -51,7 +114,7 @@ function core_handle_contextmenu(event){
     var result = core_handle_event({
       'event': event,
       'key': 'contextmenu',
-      'object': core_input_mouse['todo'],
+      'object': core_mouse['todo'],
       'todo': true,
     });
     if(result === void 0){
@@ -117,20 +180,20 @@ function core_handle_event(args){
 
 function core_handle_gamepadconnected(event){
     var gamepad = event.gamepad;
-    core_input_gamepads[gamepad.index] = gamepad;
+    core_gamepads[gamepad.index] = gamepad;
 }
 
 function core_handle_gamepaddisconnected(event){
-    delete core_input_gamepads[event.gamepad.index];
+    delete core_gamepads[event.gamepad.index];
 }
 
 function core_handle_keydown(event){
-    var key = core_input_keyinfo_get(event);
+    var key = core_events_keyinfo(event);
 
     if(core_handle_event({
       'event': event,
       'key': key['code'],
-      'object': core_input_keys,
+      'object': core_keys,
       'state': true,
       'todo': true,
     })){
@@ -140,70 +203,70 @@ function core_handle_keydown(event){
     core_handle_event({
       'event': event,
       'key': 'all',
-      'object': core_input_keys,
+      'object': core_keys,
       'state': true,
       'todo': true,
     });
 }
 
 function core_handle_keyup(event){
-    var key = core_input_keyinfo_get(event);
+    var key = core_events_keyinfo(event);
 
     if(core_handle_event({
       'event': event,
       'key': key['code'],
-      'object': core_input_keys,
+      'object': core_keys,
       'state': false,
     })){
         return;
     }
 
-    if(core_input_keys.hasOwnProperty('all')){
+    if(core_keys.hasOwnProperty('all')){
         var all = false;
-        for(var key in core_input_keys){
+        for(var key in core_keys){
             if(key !== 'all'
-              && core_input_keys[key]['state']){
+              && core_keys[key]['state']){
                 all = true;
                 break;
             }
         }
-        core_input_keys['all']['state'] = all;
+        core_keys['all']['state'] = all;
     }
 }
 
 function core_handle_mousedown(event){
-    core_input_mouse['button'] = event.button;
-    core_input_mouse['down'] = true;
-    core_input_mouse['down-x'] = core_input_mouse['x'];
-    core_input_mouse['down-y'] = core_input_mouse['y'];
+    core_mouse['button'] = event.button;
+    core_mouse['down'] = true;
+    core_mouse['down-x'] = core_mouse['x'];
+    core_mouse['down-y'] = core_mouse['y'];
     core_handle_event({
       'event': event,
       'key': 'mousedown',
-      'object': core_input_mouse['todo'],
+      'object': core_mouse['todo'],
       'todo': true,
     });
 }
 
 function core_handle_mousemove(event){
-    core_input_mouse['movement-x'] = event.movementX;
-    core_input_mouse['movement-y'] = event.movementY;
-    core_input_mouse['x'] = event.pageX;
-    core_input_mouse['y'] = event.pageY;
+    core_mouse['movement-x'] = event.movementX;
+    core_mouse['movement-y'] = event.movementY;
+    core_mouse['x'] = event.pageX;
+    core_mouse['y'] = event.pageY;
     core_handle_event({
       'event': event,
       'key': 'mousemove',
-      'object': core_input_mouse['todo'],
+      'object': core_mouse['todo'],
       'todo': true,
     });
 }
 
 function core_handle_mouseup(event){
-    core_input_mouse['button'] = -1;
-    core_input_mouse['down'] = false;
+    core_mouse['button'] = -1;
+    core_mouse['down'] = false;
     core_handle_event({
       'event': event,
       'key': 'mouseup',
-      'object': core_input_mouse['todo'],
+      'object': core_mouse['todo'],
       'todo': true,
     });
 }
@@ -221,13 +284,13 @@ function core_handle_mousewheel(event){
     });
 }
 
-function core_handle_onpointerlockchange(event){
-    var element = document.getElementById(core_input_mouse['pointerlock-id']);
+function core_handle_pointerlockchange(event){
+    var element = document.getElementById(core_mouse['pointerlock-id']);
     if(!element){
         return;
     }
 
-    core_input_mouse['pointerlock-state'] = document.pointerLockElement === element
+    core_mouse['pointerlock-state'] = document.pointerLockElement === element
       || document.mozPointerLockElement === element;
 };
 
@@ -249,7 +312,7 @@ function core_image(args){
 }
 
 function core_init(){
-    core_input_mouse = {
+    core_mouse = {
       'button': -1,
       'down': false,
       'down-x': 0,
@@ -263,8 +326,8 @@ function core_init(){
       'y': 0,
     };
 
-    document.onmozpointerlockchange = core_handle_onpointerlockchange;
-    document.onpointerlockchange = core_handle_onpointerlockchange;
+    document.onmozpointerlockchange = core_handle_pointerlockchange;
+    document.onpointerlockchange = core_handle_pointerlockchange;
     window.onbeforeunload = core_handle_beforeunload;
     window.oncontextmenu = core_handle_contextmenu;
     window.ongamepadconnected = core_handle_gamepadconnected;
@@ -294,50 +357,31 @@ function core_init(){
     });
 }
 
-// Optional args: beforeunload, clearkeys, clearmouse, keybinds, mousebinds
-function core_input_binds_add(args){
+/*
+// Optional args: keybinds, mousebinds
+function core_input_rebind(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'beforeunload': false,
-        'clearkeys': false,
-        'clearmouse': false,
-        'keybinds': false,
-        'mousebinds': false,
+        'keybinds': {},
+        'mousebinds': {},
       },
     });
 
-    if(args['beforeunload'] !== false){
-        core_events['beforeunload'] = core_handle_defaults({
-          'default': {
-            'loop': false,
-            'preventDefault': false,
-            'solo': false,
-            'state': false,
-            'todo': function(){},
-          },
-          'var': args['beforeunload'],
-        });
+    for(var keybind in args['keybinds']){
+        core_keys[keybind] = keybinds[keybind];
+        delete core_keys[args['keybinds'][keybind]];
     }
-
-    if(args['keybinds'] !== false){
-        core_input_keybinds_update({
-          'clear': args['clearkeys'],
-          'keybinds': args['keybinds'],
-        });
-    }
-
-    if(args['mousebinds'] !== false){
-        core_input_mousebinds_update({
-          'clear': args['clearmouse'],
-          'mousebinds': args['mousebinds'],
-        });
+    for(var mousebind in args['mousebinds']){
+        core_mouse['todo'][mousebind] = mousebinds[mousebind];
+        delete core_mouse['todo'][args['mousebinds'][mousebind]];
     }
 }
+*/
 
 // Required args: keybinds
 // Optional args: clear
-function core_input_keybinds_update(args){
+function core_keys_updatebinds(args){
     args = core_args({
       'args': args,
       'defaults': {
@@ -346,7 +390,7 @@ function core_input_keybinds_update(args){
     });
 
     if(args['clear']){
-        core_input_keys = {};
+        core_keys = {};
     }
 
     for(var keybind in args['keybinds']){
@@ -360,7 +404,7 @@ function core_input_keybinds_update(args){
             }
         }
 
-        core_input_keys[key] = core_handle_defaults({
+        core_keys[key] = core_handle_defaults({
           'default': {
             'loop': false,
             'preventDefault': false,
@@ -373,17 +417,9 @@ function core_input_keybinds_update(args){
     }
 }
 
-function core_input_keyinfo_get(event){
-    var code = event.keyCode || event.which;
-    return {
-      'code': code,
-      'key': String.fromCharCode(code),
-    };
-}
-
 // Required args: mousebinds
 // Optional args: clear
-function core_input_mousebinds_update(args){
+function core_mouse_updatebinds(args){
     args = core_args({
       'args': args,
       'defaults': {
@@ -392,61 +428,14 @@ function core_input_mousebinds_update(args){
     });
 
     if(args['clear']){
-        core_input_mouse['todo'] = {};
+        core_mouse['todo'] = {};
     }
 
     for(var mousebind in args['mousebinds']){
-        core_input_mouse['todo'][mousebind] = {};
-        core_input_mouse['todo'][mousebind]['loop'] = args['mousebinds'][mousebind]['loop'] || false;
-        core_input_mouse['todo'][mousebind]['preventDefault'] = args['mousebinds'][mousebind]['preventDefault'] || false;
-        core_input_mouse['todo'][mousebind]['todo'] = args['mousebinds'][mousebind]['todo'] || function(){};
-    }
-}
-
-// Optional args: keybinds, mousebinds
-function core_input_rebind(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'keybinds': {},
-        'mousebinds': {},
-      },
-    });
-
-    for(var keybind in args['keybinds']){
-        core_input_keys[keybind] = keybinds[keybind];
-        delete core_input_keys[args['keybinds'][keybind]];
-    }
-    for(var mousebind in args['mousebinds']){
-        core_input_mouse['todo'][mousebind] = mousebinds[mousebind];
-        delete core_input_mouse['todo'][args['mousebinds'][mousebind]];
-    }
-}
-
-// Required args: id
-function core_input_requestpointerlock(args){
-    var element = document.getElementById(args['id']);
-    if(!element){
-        return;
-    }
-
-    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
-    element.requestPointerLock();
-
-    core_input_mouse['pointerlock-id'] = args['id'];
-}
-
-function core_input_todos_repeat(){
-    for(var key in core_input_keys){
-        if(core_input_keys[key]['loop']
-          && core_input_keys[key]['state']){
-            core_input_keys[key]['todo']();
-        }
-    }
-    for(var mousebind in core_input_mouse['todo']){
-        if(core_input_mouse['todo'][mousebind]['loop']){
-            core_input_mouse['todo'][mousebind]['todo']();
-        }
+        core_mouse['todo'][mousebind] = {};
+        core_mouse['todo'][mousebind]['loop'] = args['mousebinds'][mousebind]['loop'] || false;
+        core_mouse['todo'][mousebind]['preventDefault'] = args['mousebinds'][mousebind]['preventDefault'] || false;
+        core_mouse['todo'][mousebind]['todo'] = args['mousebinds'][mousebind]['todo'] || function(){};
     }
 }
 
@@ -552,6 +541,19 @@ function core_random_string(args){
         })];
     }
     return string;
+}
+
+// Required args: id
+function core_requestpointerlock(args){
+    var element = document.getElementById(args['id']);
+    if(!element){
+        return;
+    }
+
+    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
+    element.requestPointerLock();
+
+    core_mouse['pointerlock-id'] = args['id'];
 }
 
 // Required args: data, prefix
@@ -788,13 +790,13 @@ function core_uid_create(){
 }
 
 var core_events = {};
+var core_gamepads = {};
 var core_images = {};
-var core_input_gamepads = {};
-var core_input_keys = {};
-var core_input_mouse = {};
+var core_keys = {};
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
+var core_mouse = {};
 var core_random_boolean_chance = .5;
 var core_random_integer_max = 100;
 var core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
