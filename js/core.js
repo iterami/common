@@ -279,7 +279,7 @@ function core_handle_mousewheel(event){
     core_handle_event({
       'event': event,
       'key': 'mousewheel',
-      'object': core_events,
+      'object': core_mouse['todo'],
       'todo': true,
     });
 }
