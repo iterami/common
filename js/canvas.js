@@ -214,7 +214,7 @@ function canvas_setmode(args){
 
     core_call({
       'args': canvas_mode,
-      'todo': 'load_level',
+      'todo': 'load_data',
     });
 
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);

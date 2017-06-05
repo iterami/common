@@ -940,7 +940,7 @@ function webgl_setmode(args){
 
     core_call({
       'args': webgl_mode,
-      'todo': 'load_level',
+      'todo': 'load_data',
     });
 
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
