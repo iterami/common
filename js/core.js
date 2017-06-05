@@ -572,8 +572,15 @@ function core_random_string(args){
     return string;
 }
 
-// Required args: id
+// Optional args: id
 function core_requestpointerlock(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': 'canvas',
+      },
+    });
+
     var element = document.getElementById(args['id']);
     if(!element){
         return;
