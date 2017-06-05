@@ -81,6 +81,57 @@ function core_events_keyinfo(event){
     };
 }
 
+// Optional args: beforeunload, keybinds, mousebinds
+function core_events_rebind(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'beforeunload': false,
+        'keybinds': {},
+        'mousebinds': {},
+      },
+    });
+
+    if(args['beforeunload'] !== false){
+        core_events['beforeunload'] = core_handle_defaults({
+          'default': {
+            'loop': false,
+            'preventDefault': false,
+            'solo': false,
+            'state': false,
+            'todo': function(){},
+          },
+          'var': args['beforeunload'],
+        });
+    }
+
+    var binds = {};
+    var rebind = false;
+    for(var bind in args['keybinds']){
+        binds[bind] = keybinds[bind];
+        rebind = true;
+    }
+    if(rebind){
+        core_keys_updatebinds({
+          'clear': true,
+          'keybinds': binds,
+        });
+    }
+
+    binds = {};
+    rebind = false;
+    for(bind in args['mousebinds']){
+        binds[bind] = mousebinds[bind];
+        rebind = true;
+    }
+    if(rebind){
+        core_mouse_updatebinds({
+          'clear': true,
+          'mousebinds': binds,
+        });
+    }
+}
+
 function core_events_todoloop(){
     for(var key in core_keys){
         if(core_keys[key]['loop']
@@ -356,28 +407,6 @@ function core_init(){
       'todo': 'repo_init',
     });
 }
-
-/*
-// Optional args: keybinds, mousebinds
-function core_input_rebind(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'keybinds': {},
-        'mousebinds': {},
-      },
-    });
-
-    for(var keybind in args['keybinds']){
-        core_keys[keybind] = keybinds[keybind];
-        delete core_keys[args['keybinds'][keybind]];
-    }
-    for(var mousebind in args['mousebinds']){
-        core_mouse['todo'][mousebind] = mousebinds[mousebind];
-        delete core_mouse['todo'][args['mousebinds'][mousebind]];
-    }
-}
-*/
 
 // Required args: keybinds
 // Optional args: clear
