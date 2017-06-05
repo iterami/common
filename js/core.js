@@ -32,6 +32,14 @@ function core_call(args){
     }
 }
 
+function core_escape(){
+    core_menu_open = !core_menu_open;
+
+    core_call({
+      'todo': 'repo_escape',
+    });
+}
+
 // Optional args: beforeunload, clearkeys, clearmouse, keybinds, mousebinds
 function core_events_bind(args){
     args = core_args({
@@ -403,6 +411,16 @@ function core_init(){
         );
     }
 
+    // Global event binds.
+    core_events_bind({
+      'keybinds': {
+        27: {// Escape
+          'solo': true,
+          'todo': core_escape,
+        },
+      },
+    });
+
     core_call({
       'todo': 'repo_init',
     });
@@ -494,16 +512,6 @@ function core_menu_create(args){
 }
 */
 
-function core_menu_toggle(){
-    core_menu_open = !core_menu_open;
-
-    /*
-    document.getElementById('core-menu').style.display = core_menu_open
-      ? 'inline-block'
-      : 'none';
-    */
-}
-
 // Optional args: chance
 function core_random_boolean(args){
     args = core_args({
@@ -574,6 +582,10 @@ function core_random_string(args){
 
 // Optional args: id
 function core_requestpointerlock(args){
+    if(core_menu_open){
+        return;
+    }
+
     args = core_args({
       'args': args,
       'defaults': {
