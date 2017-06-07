@@ -480,6 +480,12 @@ function webgl_drawloop(){
 }
 
 function webgl_init(){
+    document.body.appendChild(core_html({
+      'properties': {
+        'id': 'wrap',
+      },
+    }));
+
     webgl_resize();
 
     webgl_clearcolor = {
@@ -846,7 +852,7 @@ function webgl_setmode(args){
             properties = ' oncontextmenu="return false" ';
         }
 
-        document.body.innerHTML =
+        document.getElementById('wrap').innerHTML =
           '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>';
 
         webgl_buffer = document.getElementById('buffer').getContext(

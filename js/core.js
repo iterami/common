@@ -359,6 +359,23 @@ function core_handle_pointerlockchange(event){
       || document.mozPointerLockElement === element;
 };
 
+// Optional args: properties, type
+function core_html(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+        'type': 'div',
+      },
+    });
+
+    var element = document.createElement(args['type']);
+    for(var property in args['properties']){
+        element[property] = args['properties'][property];
+    }
+    return element;
+}
+
 // Required args: id, src
 // Optional args: todo
 function core_image(args){
@@ -379,15 +396,19 @@ function core_image(args){
 function core_init(){
     // Core menu init.
     /*
-    var menu = document.createElement('div');
-    menu.id = 'core-menu';
-    menu.innerHTML = '<a href=..>iterami</a>/<div id=core-menu-repo></div><hr><div id=core-menu-storage></div>';
-    menu.style.background = '#111';
-    menu.style.display = 'none';
-    menu.style.position = 'absolute';
-    menu.style.textAlign = 'left';
-    menu.style.top = '0';
-    document.body.appendChild(menu);
+    document.body.appendChild(core_html({
+      'properties': {
+        'id': 'core-menu',
+        'innerHTML': '<a href=..>iterami</a>/<div id=core-menu-repo></div><hr><div id=core-menu-storage></div>',
+        'style': {
+          'background': '#111',
+          'display': 'none',
+          'position': 'absolute',
+          'textAlign': 'left',
+          'top': '0',
+        },
+      },
+    }));
     */
 
     // Keyboard/mouse init.

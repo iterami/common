@@ -121,6 +121,12 @@ function canvas_gradient(args){
 }
 
 function canvas_init(){
+    document.body.appendChild(core_html({
+      'properties': {
+        'id': 'wrap',
+      },
+    }));
+
     canvas_resize();
     canvas_setmode();
 }
@@ -203,7 +209,7 @@ function canvas_setmode(args){
             properties = ' oncontextmenu="return false" ';
         }
 
-        document.body.innerHTML =
+        document.getElementById('wrap').innerHTML =
           '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>';
 
         canvas_buffer = document.getElementById('buffer').getContext('2d');
