@@ -35,6 +35,12 @@ function core_call(args){
 function core_escape(){
     core_menu_open = !core_menu_open;
 
+    /*
+    document.getElementById('core-menu').style.display = core_menu_open
+      ? 'block'
+      : 'none';
+    */
+
     core_call({
       'todo': 'repo_escape',
     });
@@ -371,6 +377,20 @@ function core_image(args){
 }
 
 function core_init(){
+    // Core menu init.
+    /*
+    var menu = document.createElement('div');
+    menu.id = 'core-menu';
+    menu.innerHTML = '<div id=core-menu-repo></div><hr><div id=core-menu-storage></div>';
+    menu.style.background = '#111';
+    menu.style.display = 'none';
+    menu.style.position = 'absolute';
+    menu.style.textAlign = 'left';
+    menu.style.top = '0';
+    document.body.appendChild(menu);
+    */
+
+    // Keyboard/mouse init.
     core_mouse = {
       'button': -1,
       'down': false,
@@ -384,7 +404,16 @@ function core_init(){
       'x': 0,
       'y': 0,
     };
+    if('onmousewheel' in window){
+        window.onmousewheel = core_handle_mousewheel;
 
+    }else{
+        document.addEventListener(
+          'DOMMouseScroll',
+          core_handle_mousewheel,
+          false
+        );
+    }
     document.onmozpointerlockchange = core_handle_pointerlockchange;
     document.onpointerlockchange = core_handle_pointerlockchange;
     window.onbeforeunload = core_handle_beforeunload;
@@ -399,17 +428,6 @@ function core_init(){
     window.ontouchend = core_handle_mouseup;
     window.ontouchmove = core_handle_mousemove;
     window.ontouchstart = core_handle_mousedown;
-
-    if('onmousewheel' in window){
-        window.onmousewheel = core_handle_mousewheel;
-
-    }else{
-        document.addEventListener(
-          'DOMMouseScroll',
-          core_handle_mousewheel,
-          false
-        );
-    }
 
     // Global event binds.
     core_events_bind({
@@ -485,32 +503,6 @@ function core_mouse_updatebinds(args){
         core_mouse['todo'][mousebind]['todo'] = args['mousebinds'][mousebind]['todo'] || function(){};
     }
 }
-
-/*
-// Optional args: content
-function core_menu_create(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'content': {},
-      },
-    });
-
-    var menu = document.createElement('div');
-    menu.id = 'core-menu';
-    menu.style.display = 'none';
-    menu.style.margin = 'auto';
-    menu.style.position = 'absolute';
-    menu.style.top = '0';
-
-    var innerHTML = '';
-    for(var contentid in content){
-    }
-    menu.innerHTML = innerHTML;
-
-    document.body.appendChild(menu);
-}
-*/
 
 // Optional args: chance
 function core_random_boolean(args){
