@@ -101,21 +101,21 @@ function audio_node_create(args){
 function audio_onended(args){
     audio_audio[args['id']]['playing'] = false;
 
-    if(audio_audio[args['this'].id]['repeat']){
-        if(audio_audio[args['this'].id]['timeout'] <= 0){
+    if(audio_audio[args['id']]['repeat']){
+        if(audio_audio[args['id']]['timeout'] <= 0){
             audio_start({
-              'id': args['this'].id,
+              'id': args['id'],
             });
 
         }else{
             window.setTimeout(
-              'audio_start({id:"' + args['this'].id + '"});',
-              audio_audio[args['this'].id]['duration'] * audio_audio[args['this'].id]['timeout']
+              'audio_start({id:"' + args['id'] + '"});',
+              audio_audio[args['id']]['duration'] * audio_audio[args['id']]['timeout']
             );
         }
     }
 
-    delete audio_sources[args['this'].id];
+    delete audio_sources[args['id']];
 }
 
 // Required args: id
