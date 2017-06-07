@@ -381,7 +381,7 @@ function core_init(){
     /*
     var menu = document.createElement('div');
     menu.id = 'core-menu';
-    menu.innerHTML = '<div id=core-menu-repo></div><hr><div id=core-menu-storage></div>';
+    menu.innerHTML = '<a href=..>iterami</a>/<div id=core-menu-repo></div><hr><div id=core-menu-storage></div>';
     menu.style.background = '#111';
     menu.style.display = 'none';
     menu.style.position = 'absolute';
@@ -572,39 +572,28 @@ function core_random_string(args){
     return string;
 }
 
-// Optional args: id
-function core_requestpointerlock(args){
-    if(core_menu_open){
-        return;
-    }
-
+// Required args: title
+// Optional args: info, storage
+function core_repo_init(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'id': 'canvas',
+        'info': '',
+        'storage': {},
       },
     });
 
-    var element = document.getElementById(args['id']);
-    if(!element){
-        return;
-    }
+    /*
+    document.getElementById('core-menu-repo').innerHTML = args['title'] + '<br>'
+      + args['info'];
+    */
+    core_storage_prefix = args['title'] + '-';
 
-    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
-    element.requestPointerLock();
-
-    core_mouse['pointerlock-id'] = args['id'];
-}
-
-// Required args: data, prefix
-function core_storage_init(args){
-    core_storage_prefix = args['prefix'];
-
-    for(var key in args['data']){
-        var data = args['data'][key];
+    for(var key in args['storage']){
+        var data = args['storage'][key];
         if(!core_type({
           'type': 'object',
-          'var': args['data'][key],
+          'var': args['storage'][key],
         })){
             data = {
               'default': data,
@@ -631,6 +620,30 @@ function core_storage_init(args){
             core_storage_info[key]['best'] = core_storage_data[key];
         }
     }
+}
+
+// Optional args: id
+function core_requestpointerlock(args){
+    if(core_menu_open){
+        return;
+    }
+
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': 'canvas',
+      },
+    });
+
+    var element = document.getElementById(args['id']);
+    if(!element){
+        return;
+    }
+
+    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
+    element.requestPointerLock();
+
+    core_mouse['pointerlock-id'] = args['id'];
 }
 
 // Optional args: bests
