@@ -1,0 +1,74 @@
+a{
+    color: #4c4;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.big{
+    font-size: 300%;
+}
+body,
+input,
+select{
+    background: #000;
+    color: #aaa;
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+#hidden{
+    display: none;
+}
+hr{
+    border: 4px solid #222;
+    margin: 4px 0;
+}
+.inline{
+    display: inline-block;
+}
+input{
+    border-color: #aaa;
+}
+input[type=checkbox],
+input[type=color],
+input[type=range],
+label,
+select:not([disabled]){
+    cursor: pointer;
+}
+.left{
+    text-align: left;
+}
+.medium{
+    font-size: 200%;
+}
+.nounderline a{
+    text-decoration: none;
+}
+.right{
+    text-align: right;
+}
+table{
+    border-collapse: collapse;
+    margin: auto;
+}
+td{
+    border: 1px solid #444;
+    padding: 5px;
+}
+textarea{
+    background: #000;
+    color: #aaa;
+    font-weight: bold;
+    height: 150px;
+    width: 420px;
+}
+
+a:hover{
+    color: #777;
+}
+.header,
+tr:hover{
+    background: #333;
+}
+
