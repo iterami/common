@@ -406,7 +406,10 @@ function core_init(){
     document.body.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/<div id=core-menu-repo></div><hr><div id=core-menu-storage></div>',
+        'innerHTML': '<a href=..>iterami</a>/'
+          + '<a id=core-menu-title></a><hr>'
+          + '<div id=core-menu-info></div><hr>'
+          + '<div id=core-menu-storage></div>',
       },
     }));
     */
@@ -606,8 +609,12 @@ function core_repo_init(args){
     });
 
     /*
-    document.getElementById('core-menu-repo').innerHTML = args['title'] + '<br>'
-      + args['info'];
+    document.getElementById('core-menu-info').innerHTML = args['info'];
+
+    var repo_href = 'https://github.com/iterami/' + args['title'];
+    var repo_title = document.getElementById('core-menu-title');
+    repo_title.href = repo_href;
+    repo_title.innerHTML = args['title'];
     */
     core_storage_prefix = args['title'] + '-';
 
