@@ -359,7 +359,7 @@ function core_handle_pointerlockchange(event){
       || document.mozPointerLockElement === element;
 };
 
-// Optional args: properties, type
+// Optional args: properties, type, style
 function core_html(args){
     args = core_args({
       'args': args,
@@ -371,7 +371,14 @@ function core_html(args){
 
     var element = document.createElement(args['type']);
     for(var property in args['properties']){
-        element[property] = args['properties'][property];
+        element[property] = core_handle_defaults({
+          'var': args['properties'][property],
+        });
+    }
+    for(property in args['style']){
+        element['style'][property] = core_handle_defaults({
+          'var': args['style'][property],
+        });
     }
     return element;
 }
@@ -400,13 +407,13 @@ function core_init(){
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a href=..>iterami</a>/<div id=core-menu-repo></div><hr><div id=core-menu-storage></div>',
-        'style': {
-          'background': '#111',
-          'display': 'none',
-          'position': 'absolute',
-          'textAlign': 'left',
-          'top': '0',
-        },
+      },
+      'style': {
+        'background': '#111',
+        'display': 'none',
+        'position': 'absolute',
+        'textAlign': 'left',
+        'top': '0',
       },
     }));
     */
