@@ -608,16 +608,51 @@ function core_repo_init(args){
       },
     });
 
-    /*
-    document.getElementById('core-menu-info').innerHTML = args['info'];
+    core_storage_prefix = args['title'] + '-';
+    core_storage_add({
+      'storage': args['storage'],
+    });
 
+    /*
     var repo_href = 'https://github.com/iterami/' + args['title'];
     var repo_title = document.getElementById('core-menu-title');
     repo_title.href = repo_href;
     repo_title.innerHTML = args['title'];
-    */
-    core_storage_prefix = args['title'] + '-';
 
+    document.getElementById('core-menu-info').innerHTML = args['info'];
+    */
+
+    if(args['menu']){
+        core_escape();
+    }
+}
+
+// Optional args: id
+function core_requestpointerlock(args){
+    if(core_menu_open){
+        return;
+    }
+
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': 'canvas',
+      },
+    });
+
+    var element = document.getElementById(args['id']);
+    if(!element){
+        return;
+    }
+
+    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
+    element.requestPointerLock();
+
+    core_mouse['pointerlock-id'] = args['id'];
+}
+
+// Required args: storage
+function core_storage_add(args){
     for(var key in args['storage']){
         var data = args['storage'][key];
         if(!core_type({
@@ -649,34 +684,6 @@ function core_repo_init(args){
             core_storage_info[key]['best'] = core_storage_data[key];
         }
     }
-
-    if(args['menu']){
-        core_escape();
-    }
-}
-
-// Optional args: id
-function core_requestpointerlock(args){
-    if(core_menu_open){
-        return;
-    }
-
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'id': 'canvas',
-      },
-    });
-
-    var element = document.getElementById(args['id']);
-    if(!element){
-        return;
-    }
-
-    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
-    element.requestPointerLock();
-
-    core_mouse['pointerlock-id'] = args['id'];
 }
 
 // Optional args: bests
