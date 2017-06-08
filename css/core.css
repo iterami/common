@@ -16,6 +16,12 @@ select{
     font-weight: bold;
     text-align: center;
 }
+#core-menu{
+    display: none;
+    position: absolute;
+    text-align: left;
+    top: 0;
+}
 .hidden{
     display: none;
 }

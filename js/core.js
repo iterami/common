@@ -408,13 +408,6 @@ function core_init(){
         'id': 'core-menu',
         'innerHTML': '<a href=..>iterami</a>/<div id=core-menu-repo></div><hr><div id=core-menu-storage></div>',
       },
-      'style': {
-        'background': '#111',
-        'display': 'none',
-        'position': 'absolute',
-        'textAlign': 'left',
-        'top': '0',
-      },
     }));
     */
 
