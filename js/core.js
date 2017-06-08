@@ -594,12 +594,13 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: info, storage
+// Optional args: info, menu, storage
 function core_repo_init(args){
     args = core_args({
       'args': args,
       'defaults': {
         'info': '',
+        'menu': false,
         'storage': {},
       },
     });
@@ -640,6 +641,10 @@ function core_repo_init(args){
         if(core_storage_info[key]['type'] !== 'setting'){
             core_storage_info[key]['best'] = core_storage_data[key];
         }
+    }
+
+    if(args['menu']){
+        core_escape();
     }
 }
 
