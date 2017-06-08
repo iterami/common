@@ -16,7 +16,7 @@ select{
     font-weight: bold;
     text-align: center;
 }
-#hidden{
+.hidden{
     display: none;
 }
 hr{
@@ -44,6 +44,11 @@ select:not([disabled]){
 }
 .nounderline a{
     text-decoration: none;
+}
+pre,
+ul{
+    margin: 0;
+    text-align: left;
 }
 .right{
     text-align: right;
