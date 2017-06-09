@@ -25,12 +25,12 @@ function music_init(){
 
         if(music_volume < 1){
             window.localStorage.setItem(
-              music_prefix + '-audio-volume',
+              core_storage_prefix + '-audio-volume',
               music_volume
             );
 
         }else{
-            window.localStorage.removeItem(music_prefix + '-audio-volume');
+            window.localStorage.removeItem(core_storage_prefix + '-audio-volume');
         }
 
         document.getElementById('audio-mute').checked = false;
@@ -41,12 +41,12 @@ function music_init(){
 
         if(!state){
             window.localStorage.setItem(
-              music_prefix + '-autoplay',
+              core_storage_prefix + '-autoplay',
               1
             );
 
         }else{
-            window.localStorage.removeItem(music_prefix + '-autoplay');
+            window.localStorage.removeItem(core_storage_prefix + '-autoplay');
         }
     };
 
@@ -55,12 +55,12 @@ function music_init(){
 
         if(music_playbackrate != 1){
             window.localStorage.setItem(
-              music_prefix + '-playbackrate',
+              core_storage_prefix + '-playbackrate',
               music_playbackrate
             );
 
         }else{
-            window.localStorage.removeItem(music_prefix + '-playbackrate');
+            window.localStorage.removeItem(core_storage_prefix + '-playbackrate');
         }
 
         document.getElementById('audio-player').playbackRate = music_playbackrate;
@@ -244,7 +244,7 @@ function music_setTitle(args){
         args['title'] += ' - ';
     }
 
-    document.title = args['title'] + music_prefix;
+    document.title = args['title'] + core_storage_prefix;
 }
 
 // Optional args: track
@@ -288,6 +288,5 @@ var music_mouse_drag = false;
 var music_percent = 0;
 var music_playbackrate = 1;
 var music_playing = false;
-var music_prefix = '';
 var music_volume = 1;
 var music_width = 0;
