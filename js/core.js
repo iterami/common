@@ -597,13 +597,15 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: info, menu, storage
+// Optional args: info, keybinds, menu, mousebinds, storage
 function core_repo_init(args){
     args = core_args({
       'args': args,
       'defaults': {
         'info': '',
+        'keybinds': false,
         'menu': false,
+        'mousebinds': false,
         'storage': {},
       },
     });
@@ -611,6 +613,11 @@ function core_repo_init(args){
     core_storage_prefix = args['title'] + '-';
     core_storage_add({
       'storage': args['storage'],
+    });
+
+    core_events_bind({
+      'keybinds': args['keybinds'],
+      'mousebinds': args['mousebinds'],
     });
 
     /*
