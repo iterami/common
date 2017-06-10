@@ -101,8 +101,8 @@ function rpg_character_handle(){
 
         // Update target.
         if(character === '0'){
-            rpg_characters[character]['target-x'] = rpg_characters[character]['x'] + mouse_x - canvas_x;
-            rpg_characters[character]['target-y'] = rpg_characters[character]['y'] + mouse_y - canvas_y;
+            rpg_characters[character]['target-x'] = rpg_characters[character]['x'] + core_mouse['x'] - canvas_x;
+            rpg_characters[character]['target-y'] = rpg_characters[character]['y'] + core_mouse['y'] - canvas_y;
 
         }else{
             rpg_characters[character]['target-x'] = rpg_characters[0]['x'];
@@ -128,7 +128,7 @@ function rpg_character_handle(){
             }
 
             if(character === '0'
-              && mouse_lock_x < 0){
+              && !core_mouse['down']){
                 continue;
             }
 
