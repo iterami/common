@@ -478,12 +478,12 @@ function rts_destionation_set(args){
             }
 
             rts_players[0]['units'][unit]['destination-x'] = args['minimap']
-              ? rts_math[0] * (mouse_x - 100)
-              : mouse_x - canvas_x - camera_x;
+              ? rts_math[0] * (core_mouse['x'] - 100)
+              : core_mouse['x'] - canvas_x - camera_x;
 
             rts_players[0]['units'][unit]['destination-y'] = args['minimap']
-              ? rts_math[0] * (mouse_y - canvas_height + 100)
-              : mouse_y - canvas_y - camera_y;
+              ? rts_math[0] * (core_mouse['y'] - canvas_height + 100)
+              : core_mouse['y'] - canvas_y - camera_y;
 
             rts_destionation_validate({
               'id': unit,
@@ -500,12 +500,12 @@ function rts_destionation_set(args){
         }
 
         rts_players[0]['buildings'][building]['destination-x'] = args['minimap']
-          ? rts_math[0] * (mouse_x - 100)
-          : mouse_x - canvas_x - camera_x;
+          ? rts_math[0] * (core_mouse['x'] - 100)
+          : core_mouse['x'] - canvas_x - camera_x;
 
         rts_players[0]['buildings'][building]['destination-y'] = args['minimap']
-          ? rts_math[0] * (mouse_y - canvas_height + 100)
-          : mouse_y - canvas_y - camera_y;
+          ? rts_math[0] * (core_mouse['y'] - canvas_height + 100)
+          : core_mouse['y'] - canvas_y - camera_y;
 
         rts_destionation_validate({
           'id': building,
@@ -568,15 +568,15 @@ function rts_select(){
 
     for(var unit in rts_players[0]['units']){
         rts_players[0]['units'][unit]['selected'] = (
-            (mouse_lock_x < canvas_x + rts_players[0]['units'][unit]['x'] + camera_x + 15
-              && mouse_x > canvas_x + rts_players[0]['units'][unit]['x'] + camera_x - 15)
-            || (mouse_lock_x > canvas_x + rts_players[0]['units'][unit]['x'] + camera_x - 15
-              && mouse_x < canvas_x + rts_players[0]['units'][unit]['x'] + camera_x + 15)
+            (core_mouse['down-x'] < canvas_x + rts_players[0]['units'][unit]['x'] + camera_x + 15
+              && core_mouse['x'] > canvas_x + rts_players[0]['units'][unit]['x'] + camera_x - 15)
+            || (core_mouse['down-x'] > canvas_x + rts_players[0]['units'][unit]['x'] + camera_x - 15
+              && core_mouse['x'] < canvas_x + rts_players[0]['units'][unit]['x'] + camera_x + 15)
           ) && (
-            (mouse_lock_y < canvas_y + rts_players[0]['units'][unit]['y'] + camera_y + 15
-              && mouse_y > canvas_y + rts_players[0]['units'][unit]['y'] + camera_y - 15)
-            || (mouse_lock_y > canvas_y + rts_players[0]['units'][unit]['y'] + camera_y - 15
-              && mouse_y < canvas_y + rts_players[0]['units'][unit]['y'] + camera_y + 15)
+            (core_mouse['down-y'] < canvas_y + rts_players[0]['units'][unit]['y'] + camera_y + 15
+              && core_mouse['y'] > canvas_y + rts_players[0]['units'][unit]['y'] + camera_y - 15)
+            || (core_mouse['down-y'] > canvas_y + rts_players[0]['units'][unit]['y'] + camera_y - 15
+              && core_mouse['y'] < canvas_y + rts_players[0]['units'][unit]['y'] + camera_y + 15)
           );
 
         if(rts_players[0]['units'][unit]['selected']){
@@ -592,15 +592,15 @@ function rts_select(){
         }
 
         rts_players[0]['buildings'][building]['selected'] = (
-            (mouse_lock_x < canvas_x + rts_players[0]['buildings'][building]['x'] + camera_x + rts_players[0]['buildings'][building]['width']
-              && mouse_x > canvas_x + rts_players[0]['buildings'][building]['x'] + camera_x)
-            || (mouse_lock_x > canvas_x + rts_players[0]['buildings'][building]['x'] + camera_x
-              && mouse_x < canvas_x + rts_players[0]['buildings'][building]['x'] + camera_x + rts_players[0]['buildings'][building]['width'])
+            (core_mouse['down-x'] < canvas_x + rts_players[0]['buildings'][building]['x'] + camera_x + rts_players[0]['buildings'][building]['width']
+              && core_mouse['x'] > canvas_x + rts_players[0]['buildings'][building]['x'] + camera_x)
+            || (core_mouse['down-x'] > canvas_x + rts_players[0]['buildings'][building]['x'] + camera_x
+              && core_mouse['x'] < canvas_x + rts_players[0]['buildings'][building]['x'] + camera_x + rts_players[0]['buildings'][building]['width'])
           ) && (
-            (mouse_lock_y < canvas_y + rts_players[0]['buildings'][building]['y'] + camera_y + rts_players[0]['buildings'][building]['height']
-              && mouse_y > canvas_y + rts_players[0]['buildings'][building]['y'] + camera_y)
-            || (mouse_lock_y > canvas_y + rts_players[0]['buildings'][building]['y'] + camera_y
-              && mouse_y < canvas_y + rts_players[0]['buildings'][building]['y'] + camera_y + rts_players[0]['buildings'][building]['height'])
+            (core_mouse['down-y'] < canvas_y + rts_players[0]['buildings'][building]['y'] + camera_y + rts_players[0]['buildings'][building]['height']
+              && core_mouse['y'] > canvas_y + rts_players[0]['buildings'][building]['y'] + camera_y)
+            || (core_mouse['down-y'] > canvas_y + rts_players[0]['buildings'][building]['y'] + camera_y
+              && core_mouse['y'] < canvas_y + rts_players[0]['buildings'][building]['y'] + camera_y + rts_players[0]['buildings'][building]['height'])
           );
 
         if(rts_players[0]['buildings'][building]['selected']){
