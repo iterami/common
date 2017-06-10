@@ -597,11 +597,12 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: info, keybinds, menu, mousebinds, storage
+// Optional args: beforeunload, info, keybinds, menu, mousebinds, storage
 function core_repo_init(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'beforeunload': false,
         'info': '',
         'keybinds': false,
         'menu': false,
@@ -616,6 +617,7 @@ function core_repo_init(args){
     });
 
     core_events_bind({
+      'beforeunload': args['beforeunload'],
       'keybinds': args['keybinds'],
       'mousebinds': args['mousebinds'],
     });
@@ -693,6 +695,18 @@ function core_storage_add(args){
     }
 }
 
+// Required args: element, key
+function core_storage_element_property(args){
+    return core_type({
+      'type': 'boolean',
+      'var': core_storage_info[args['key']]['default'],
+    })
+      ? 'checked'
+      : (args['element'].tagName === 'INPUT'
+        ? 'value'
+        : 'innerHTML');
+}
+
 // Optional args: bests
 function core_storage_reset(args){
     args = core_args({
@@ -764,16 +778,10 @@ function core_storage_save(args){
 
         }else if(core_storage_info[key]['type'] === 'setting'){
             var element = document.getElementById(key);
-            core_storage_data[key] = element[
-              core_type({
-                'type': 'boolean',
-                'var': core_storage_info[key]['default'],
-              })
-                ? 'checked'
-                : (element.tagName === 'INPUT'
-                  ? 'value'
-                  : 'innerHTML')
-            ];
+            core_storage_data[key] = element[core_storage_element_property({
+              'element': element,
+              'key': key,
+            })];
 
             data = core_storage_type_convert({
               'key': key,
@@ -822,18 +830,11 @@ function core_storage_type_convert(args){
 
 function core_storage_update(){
     for(var key in core_storage_data){
-        var type = core_type({
-            'type': 'boolean',
-            'var': core_storage_info[key]['default'],
-          })
-          ? 'checked'
-          : 'value';
-
-        if(core_storage_info[key]['type'] !== 'setting'){
-            type = 'innerHTML';
-        }
-
-        document.getElementById(key)[type] = core_storage_data[key];
+        var element = document.getElementById(key);
+        element[core_storage_element_property({
+          'element': element,
+          'key': key,
+        })] = core_storage_data[key];
     }
 }
 
