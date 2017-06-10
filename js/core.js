@@ -763,13 +763,16 @@ function core_storage_save(args){
             }
 
         }else if(core_storage_info[key]['type'] === 'setting'){
-            core_storage_data[key] = document.getElementById(key)[
+            var element = document.getElementById(key);
+            core_storage_data[key] = element[
               core_type({
                 'type': 'boolean',
                 'var': core_storage_info[key]['default'],
               })
                 ? 'checked'
-                : 'value'
+                : (element.tagName === 'INPUT'
+                  ? 'value'
+                  : 'innerHTML')
             ];
 
             data = core_storage_type_convert({
