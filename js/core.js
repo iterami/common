@@ -179,6 +179,7 @@ function core_handle_beforeunload(event){
 
 function core_handle_contextmenu(event){
     var result = core_handle_event({
+      'block': core_menu_blockevents,
       'event': event,
       'key': 'contextmenu',
       'object': core_mouse['todo'],
@@ -218,8 +219,21 @@ function core_handle_defaults(args){
 }
 
 // Required args: event, key, object
-// Optional args: state, todo
+// Optional args: block, state, todo
 function core_handle_event(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'block': false,
+        'state': void 0,
+        'todo': void 0,
+      },
+    });
+    if(args['block']
+      && core_menu_open){
+        return false;
+    }
+
     if(args['object'].hasOwnProperty(args['key'])){
         if(args['object'][args['key']]['preventDefault']){
             args['event'].preventDefault();
@@ -257,7 +271,12 @@ function core_handle_gamepaddisconnected(event){
 function core_handle_keydown(event){
     var key = core_events_keyinfo(event);
 
+    var block = key['code'] === 27
+      ? false
+      : core_menu_blockevents;
+
     if(core_handle_event({
+      'block': block,
       'event': event,
       'key': key['code'],
       'object': core_keys,
@@ -268,6 +287,7 @@ function core_handle_keydown(event){
     }
 
     core_handle_event({
+      'block': block,
       'event': event,
       'key': 'all',
       'object': core_keys,
@@ -280,6 +300,7 @@ function core_handle_keyup(event){
     var key = core_events_keyinfo(event);
 
     if(core_handle_event({
+      'block': core_menu_blockevents,
       'event': event,
       'key': key['code'],
       'object': core_keys,
@@ -307,6 +328,7 @@ function core_handle_mousedown(event){
     core_mouse['down-x'] = core_mouse['x'];
     core_mouse['down-y'] = core_mouse['y'];
     core_handle_event({
+      'block': core_menu_blockevents,
       'event': event,
       'key': 'mousedown',
       'object': core_mouse['todo'],
@@ -320,6 +342,7 @@ function core_handle_mousemove(event){
     core_mouse['x'] = event.pageX;
     core_mouse['y'] = event.pageY;
     core_handle_event({
+      'block': core_menu_blockevents,
       'event': event,
       'key': 'mousemove',
       'object': core_mouse['todo'],
@@ -331,6 +354,7 @@ function core_handle_mouseup(event){
     core_mouse['button'] = -1;
     core_mouse['down'] = false;
     core_handle_event({
+      'block': core_menu_blockevents,
       'event': event,
       'key': 'mouseup',
       'object': core_mouse['todo'],
@@ -344,6 +368,7 @@ function core_handle_mousewheel(event){
         || -event.detail
     );
     core_handle_event({
+      'block': core_menu_blockevents,
       'event': event,
       'key': 'mousewheel',
       'object': core_mouse['todo'],
@@ -911,6 +936,7 @@ var core_events = {};
 var core_gamepads = {};
 var core_images = {};
 var core_keys = {};
+var core_menu_blockevents = true;
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
