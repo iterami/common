@@ -359,6 +359,11 @@ function core_handle_pointerlockchange(event){
 
     core_mouse['pointerlock-state'] = document.pointerLockElement === element
       || document.mozPointerLockElement === element;
+
+
+    if(!core_mouse['pointerlock-state']){
+        core_escape();
+    }
 };
 
 // Optional args: properties, type, style
