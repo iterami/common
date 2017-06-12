@@ -455,6 +455,9 @@ function core_init(){
 
     // Global event binds.
     core_events_bind({
+      'beforeunload': {
+        'todo': core_storage_save,
+      },
       'keybinds': {
         27: {// Escape
           'solo': true,
