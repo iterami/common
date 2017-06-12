@@ -39,6 +39,12 @@ function core_escape(){
     document.getElementById('core-menu').style.display = core_menu_open
       ? 'block'
       : 'none';
+
+    if(core_menu_open){
+
+    }else{
+        core_storage_save();
+    }
     */
 
     core_call({
@@ -409,7 +415,7 @@ function core_init(){
         'innerHTML': '<a href=..>iterami</a>/'
           + '<a id=core-menu-title></a><hr>'
           + '<div id=core-menu-info></div><hr>'
-          + '<div id=core-menu-storage></div>',
+          + '<div id=core-menu-storage></div><br><a onclick=core_storage_reset()>Reset Settings</a>',
       },
     }));
     */
@@ -614,6 +620,10 @@ function core_repo_init(args){
       },
     });
 
+    if(args['menu']){
+        core_escape();
+    }
+
     core_storage_prefix = args['title'] + '-';
     core_storage_add({
       'storage': args['storage'],
@@ -632,11 +642,8 @@ function core_repo_init(args){
     repo_title.innerHTML = args['title'];
 
     document.getElementById('core-menu-info').innerHTML = args['info'];
+    document.getElementById('core-menu-storage').innerHTML = args['storage-menu'];
     */
-
-    if(args['menu']){
-        core_escape();
-    }
 }
 
 // Optional args: id
