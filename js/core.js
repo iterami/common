@@ -741,9 +741,9 @@ function core_storage_element_property(args){
       'var': core_storage_info[args['key']]['default'],
     })
       ? 'checked'
-      : (args['element'].tagName === 'INPUT'
-        ? 'value'
-        : 'innerHTML');
+      : (args['element'].tagName === 'DIV' || args['element'].tagName === 'SPAN'
+        ? 'innerHTML'
+        : 'value');
 }
 
 // Optional args: bests
