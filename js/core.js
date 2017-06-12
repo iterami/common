@@ -436,11 +436,17 @@ function core_init(){
     // Core menu init.
     document.body.appendChild(core_html({
       'properties': {
+        'id': 'core-menu-button',
+        'onclick': core_escape,
+        'type': 'button',
+        'value': 'ESC',
+      },
+      'type': 'input',
+    }));
+    document.body.appendChild(core_html({
+      'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/'
-          + '<a id=core-menu-title></a><hr>'
-          + '<div id=core-menu-info></div><hr>'
-          + '<div id=core-menu-storage></div><a onclick=core_storage_reset({bests:false})>Reset</a>',
+        'innerHTML': '<a href=..>iterami</a>/<a id=core-menu-title></a><hr><div id=core-menu-info></div><hr><div id=core-menu-storage></div><a onclick=core_storage_reset({bests:false})>Reset</a>',
       },
     }));
 
