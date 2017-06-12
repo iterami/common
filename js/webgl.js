@@ -243,6 +243,10 @@ function webgl_cube(args){
 }
 
 function webgl_draw(){
+    if(core_menu_open){
+        return;
+    }
+
     webgl_buffer.viewport(
       0,
       0,
@@ -435,35 +439,7 @@ function webgl_draw(){
         );
     }
 
-    if(core_menu_open){
-        webgl_canvas.save();
-
-        webgl_canvas.fillStyle = '#111';
-        webgl_canvas.fillRect(
-          webgl_x - 125,
-          webgl_y - 50,
-          250,
-          100
-        );
-
-        webgl_canvas.fillStyle = '#fff';
-        webgl_canvas.font = webgl_fonts['medium'];
-        webgl_canvas.textAlign = 'center';
-        webgl_canvas.textBaseline = 'middle';
-        webgl_canvas.fillText(
-          core_menu_resume,
-          webgl_x,
-          webgl_y - 25
-        );
-        webgl_canvas.fillText(
-          core_menu_quit,
-          webgl_x,
-          webgl_y + 25
-        );
-
-        webgl_canvas.restore();
-
-    }else if(webgl_pointer !== false){
+    if(webgl_pointer !== false){
         webgl_canvas.fillStyle = webgl_pointer;
         webgl_canvas.fillRect(
           webgl_x - 1,
@@ -480,20 +456,113 @@ function webgl_drawloop(){
 }
 
 function webgl_init(){
+    var properties = '';
+    if(!webgl_oncontextmenu){
+        properties = ' oncontextmenu="return false" ';
+    }
+
     document.body.appendChild(core_html({
       'properties': {
         'id': 'wrap',
+        'innerHTML': '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>',
       },
     }));
 
+    webgl_programs = {};
+    webgl_shaders = {};
+
+    math_matrices['camera'] = math_matrix_create();
+    math_matrix_perspective();
+
+    webgl_buffer = document.getElementById('buffer').getContext(
+      'webgl',
+      {
+        'alpha': false,
+        'antialias': true,
+        'depth': true,
+        'premultipliedAlpha': false,
+        'preserveDrawingBuffer': false,
+        'stencil': false,
+      }
+    );
+    webgl_canvas = document.getElementById('canvas').getContext('2d');
+
     webgl_resize();
 
-    webgl_clearcolor = {
-      'alpha': 1,
-      'blue': 0,
-      'green': 0,
-      'red': 0,
-    };
+    webgl_clearcolor_set({
+      'color': {
+        'alpha': 1,
+        'blue': 0,
+        'green': 0,
+        'red': 0,
+      },
+    });
+    webgl_buffer.clearDepth(webgl_cleardepth);
+    webgl_buffer.enable(webgl_buffer.CULL_FACE);
+    webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
+    webgl_buffer.depthFunc(webgl_buffer.LEQUAL);
+
+    webgl_shader_create({
+      'id': 'fragment',
+      'source': 'precision mediump float;'
+      //+ 'varying float float_fogDistance;'
+        + 'uniform sampler2D sampler;'
+        + 'varying vec4 vec_fragmentColor;'
+        + 'varying vec2 vec_textureCoord;'
+        + 'void main(void){'
+      /*+   'gl_FragColor = mix('
+        +     'vec4('
+        +       webgl_clearcolor['red'] + ','
+        +       webgl_clearcolor['green'] + ','
+        +       webgl_clearcolor['blue'] + ','
+        +       webgl_clearcolor['alpha']
+        +     '),'
+        +     'vec_fragmentColor,'
+        +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+        +   ') * vec_fragmentColor;'
+      */+   'gl_FragColor = texture2D('
+        +     'sampler,'
+        +     'vec_textureCoord'
+        +   ') * vec_fragmentColor;'
+        + '}',
+      'type': webgl_buffer.FRAGMENT_SHADER,
+    });
+    webgl_shader_create({
+      'id': 'vertex',
+      'source': 'attribute vec3 vec_vertexPosition;'
+      //+ 'varying float float_fogDistance;'
+        + 'uniform mat4 mat_cameraMatrix;'
+        + 'uniform mat4 mat_perspectiveMatrix;'
+        + 'varying vec4 vec_fragmentColor;'
+        + 'attribute vec4 vec_vertexColor;'
+        + 'varying vec2 vec_textureCoord;'
+        + 'attribute vec2 vec_texturePosition;'
+        + 'void main(void){'
+        +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);'
+        +   'vec_fragmentColor = vec_vertexColor;'
+      //+   'float_fogDistance = length(gl_Position.xyz);'
+        +   'vec_textureCoord = vec_texturePosition;'
+        + '}',
+      'type': webgl_buffer.VERTEX_SHADER,
+    });
+
+    webgl_program_create({
+      'id': 'shaders',
+      'shaderlist': [
+        webgl_shaders['fragment'],
+        webgl_shaders['vertex'],
+      ],
+    });
+
+    webgl_vertexattribarray_set({
+      'attribute': 'vec_vertexColor',
+    });
+    webgl_vertexattribarray_set({
+      'attribute': 'vec_vertexPosition',
+    });
+    webgl_vertexattribarray_set({
+      'attribute': 'vec_texturePosition',
+    });
 
     entity_set({
       'default': true,
@@ -617,13 +686,6 @@ function webgl_logicloop(){
         for(var axis in entity_entities[entity]['position']){
             entity_entities[entity]['position'][axis] += entity_entities[entity]['d' + axis];
         }
-    }
-}
-
-function webgl_menu_quit(){
-    if(core_menu_open){
-        webgl_setmode();
-        core_menu_open = false;
     }
 }
 
@@ -775,10 +837,6 @@ function webgl_program_create(args){
 }
 
 function webgl_resize(){
-    if(webgl_mode <= 0){
-        return;
-    }
-
     webgl_height = window.innerHeight;
     document.getElementById('buffer').height = webgl_height;
     document.getElementById('canvas').height = webgl_height;
@@ -813,6 +871,8 @@ function webgl_setmode(args){
     window.cancelAnimationFrame(webgl_animationFrame);
     window.clearInterval(webgl_interval);
 
+    webgl_resize();
+
     entity_entities['_webgl-camera']['position']['x'] = 0;
     entity_entities['_webgl-camera']['position']['y'] = 0;
     entity_entities['_webgl-camera']['position']['z'] = 0;
@@ -821,138 +881,20 @@ function webgl_setmode(args){
     entity_entities['_webgl-camera']['rotate']['z'] = 0;
 
     webgl_mode = args['mode'];
-    var msperframe = 0;
-    webgl_programs = {};
-    webgl_shaders = {};
-
-    if(core_type({
-      'var': 'setmode_logic',
-      'type': 'function',
-    })){
-        setmode_logic(args['newgame']);
-
-    }else{
-        webgl_mode = 1;
-        args['newgame'] = true;
-        msperframe = 33;
-    }
-
-    // Main menu mode.
-    if(webgl_mode === 0){
-        webgl_buffer = 0;
-        webgl_canvas = 0;
-        return;
-    }
-
-    // Simulation modes.
-    if(args['newgame']){
-        var properties = '';
-
-        if(!webgl_oncontextmenu){
-            properties = ' oncontextmenu="return false" ';
-        }
-
-        document.getElementById('wrap').innerHTML =
-          '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>';
-
-        webgl_buffer = document.getElementById('buffer').getContext(
-          'webgl',
-          {
-            'alpha': false,
-            'antialias': true,
-            'depth': true,
-            'premultipliedAlpha': false,
-            'preserveDrawingBuffer': false,
-            'stencil': false,
-          }
-        );
-        webgl_canvas = document.getElementById('canvas').getContext('2d');
-
-        webgl_resize();
-
-        webgl_clearcolor_set({
-          'color': webgl_clearcolor,
-        });
-        webgl_buffer.clearDepth(webgl_cleardepth);
-        webgl_buffer.enable(webgl_buffer.CULL_FACE);
-        webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
-        webgl_buffer.depthFunc(webgl_buffer.LEQUAL);
-
-        webgl_shader_create({
-          'id': 'fragment',
-          'source': 'precision mediump float;'
-          //+ 'varying float float_fogDistance;'
-            + 'uniform sampler2D sampler;'
-            + 'varying vec4 vec_fragmentColor;'
-            + 'varying vec2 vec_textureCoord;'
-            + 'void main(void){'
-          /*+   'gl_FragColor = mix('
-            +     'vec4('
-            +       webgl_clearcolor['red'] + ','
-            +       webgl_clearcolor['green'] + ','
-            +       webgl_clearcolor['blue'] + ','
-            +       webgl_clearcolor['alpha']
-            +     '),'
-            +     'vec_fragmentColor,'
-            +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
-            +   ') * vec_fragmentColor;'
-          */+   'gl_FragColor = texture2D('
-            +     'sampler,'
-            +     'vec_textureCoord'
-            +   ') * vec_fragmentColor;'
-            + '}',
-          'type': webgl_buffer.FRAGMENT_SHADER,
-        });
-        webgl_shader_create({
-          'id': 'vertex',
-          'source': 'attribute vec3 vec_vertexPosition;'
-          //+ 'varying float float_fogDistance;'
-            + 'uniform mat4 mat_cameraMatrix;'
-            + 'uniform mat4 mat_perspectiveMatrix;'
-            + 'varying vec4 vec_fragmentColor;'
-            + 'attribute vec4 vec_vertexColor;'
-            + 'varying vec2 vec_textureCoord;'
-            + 'attribute vec2 vec_texturePosition;'
-            + 'void main(void){'
-            +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);'
-            +   'vec_fragmentColor = vec_vertexColor;'
-          //+   'float_fogDistance = length(gl_Position.xyz);'
-            +   'vec_textureCoord = vec_texturePosition;'
-            + '}',
-          'type': webgl_buffer.VERTEX_SHADER,
-        });
-
-        webgl_program_create({
-          'id': 'shaders',
-          'shaderlist': [
-            webgl_shaders['fragment'],
-            webgl_shaders['vertex'],
-          ],
-        });
-
-        webgl_vertexattribarray_set({
-          'attribute': 'vec_vertexColor',
-        });
-        webgl_vertexattribarray_set({
-          'attribute': 'vec_vertexPosition',
-        });
-        webgl_vertexattribarray_set({
-          'attribute': 'vec_texturePosition',
-        });
-    }
-
-    math_matrices['camera'] = math_matrix_create();
-    math_matrix_perspective();
 
     core_call({
       'args': webgl_mode,
       'todo': 'load_data',
     });
 
+    if(args['newgame']){
+        core_escape();
+    }
+
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
     webgl_interval = window.setInterval(
       webgl_logicloop,
-      msperframe || core_storage_data['ms-per-frame']
+      webgl_interval_ms
     );
 }
 
@@ -1154,6 +1096,7 @@ var webgl_gravity = {
 };
 var webgl_height = 0;
 var webgl_interval = 0;
+var webgl_interval_ms = 25;
 var webgl_mode = 0;
 var webgl_oncontextmenu = true;
 var webgl_pointer = false;

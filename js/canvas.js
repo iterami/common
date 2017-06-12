@@ -1,6 +1,10 @@
 'use strict';
 
 function canvas_draw(){
+    if(core_menu_open){
+        return;
+    }
+
     canvas_buffer.clearRect(
       0,
       0,
@@ -9,35 +13,6 @@ function canvas_draw(){
     );
 
     draw_logic();
-
-    if(core_menu_open){
-        canvas_buffer.save();
-
-        canvas_buffer.fillStyle = '#111';
-        canvas_buffer.fillRect(
-          canvas_x - 125,
-          canvas_y - 50,
-          250,
-          100
-        );
-
-        canvas_buffer.fillStyle = '#fff';
-        canvas_buffer.font = canvas_fonts['medium'];
-        canvas_buffer.textAlign = 'center';
-        canvas_buffer.textBaseline = 'middle';
-        canvas_buffer.fillText(
-          core_menu_resume,
-          canvas_x,
-          canvas_y - 25
-        );
-        canvas_buffer.fillText(
-          core_menu_quit,
-          canvas_x,
-          canvas_y + 25
-        );
-
-        canvas_buffer.restore();
-    }
 
     canvas_canvas.clearRect(
       0,
@@ -121,11 +96,20 @@ function canvas_gradient(args){
 }
 
 function canvas_init(){
+    var properties = '';
+    if(!canvas_oncontextmenu){
+        properties = ' oncontextmenu="return false" ';
+    }
+
     document.body.appendChild(core_html({
       'properties': {
         'id': 'wrap',
+        'innerHTML': '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>',
       },
     }));
+
+    canvas_buffer = document.getElementById('buffer').getContext('2d');
+    canvas_canvas = document.getElementById('canvas').getContext('2d');
 
     canvas_resize();
     canvas_setmode();
@@ -139,18 +123,7 @@ function canvas_logicloop(){
     logic();
 }
 
-function canvas_menu_quit(){
-    if(core_menu_open){
-        canvas_setmode();
-        core_menu_open = false;
-    }
-}
-
 function canvas_resize(){
-    if(canvas_mode <= 0){
-        return;
-    }
-
     canvas_height = window.innerHeight;
     document.getElementById('buffer').height = canvas_height;
     document.getElementById('canvas').height = canvas_height;
@@ -181,50 +154,20 @@ function canvas_setmode(args){
     window.cancelAnimationFrame(canvas_animationFrame);
     window.clearInterval(canvas_interval);
 
+    canvas_resize();
+
     canvas_mode = args['mode'];
-
-    if(core_type({
-      'var': 'setmode_logic',
-      'type': 'function',
-    })){
-        setmode_logic(args['newgame']);
-
-    }else{
-        canvas_mode = 1;
-        args['newgame'] = true;
-    }
-
-    // Main menu mode.
-    if(canvas_mode === 0){
-        canvas_buffer = 0;
-        canvas_canvas = 0;
-        return;
-    }
-
-    // Simulation modes.
-    if(args['newgame']){
-        var properties = '';
-
-        if(!canvas_oncontextmenu){
-            properties = ' oncontextmenu="return false" ';
-        }
-
-        document.getElementById('wrap').innerHTML =
-          '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>';
-
-        canvas_buffer = document.getElementById('buffer').getContext('2d');
-        canvas_canvas = document.getElementById('canvas').getContext('2d');
-
-        canvas_resize();
-    }
 
     core_call({
       'args': canvas_mode,
       'todo': 'load_data',
     });
 
-    canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
+    if(args['newgame']){
+        core_escape();
+    }
 
+    canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
     if(core_type({
       'var': 'logic',
       'type': 'function',

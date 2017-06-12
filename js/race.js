@@ -37,4 +37,9 @@ function race_racer_create(args){
     });
 }
 
+function race_unload(){
+    race_checkpoints.length = 0;
+    entity_entities.length = 0;
+}
+
 var race_checkpoints = [];

@@ -35,17 +35,13 @@ function core_call(args){
 function core_escape(){
     core_menu_open = !core_menu_open;
 
-    /*
     document.getElementById('core-menu').style.display = core_menu_open
       ? 'block'
       : 'none';
 
-    if(core_menu_open){
-
-    }else{
+    if(!core_menu_open){
         core_storage_save();
     }
-    */
 
     core_call({
       'todo': 'repo_escape',
@@ -408,17 +404,15 @@ function core_image(args){
 
 function core_init(){
     // Core menu init.
-    /*
     document.body.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a href=..>iterami</a>/'
           + '<a id=core-menu-title></a><hr>'
           + '<div id=core-menu-info></div><hr>'
-          + '<div id=core-menu-storage></div><br><a onclick=core_storage_reset()>Reset Settings</a>',
+          + '<div id=core-menu-storage></div><a onclick=core_storage_reset({bests:false})>Reset</a>',
       },
     }));
-    */
 
     // Keyboard/mouse init.
     core_mouse = {
@@ -462,7 +456,12 @@ function core_init(){
     // Global event binds.
     core_events_bind({
       'beforeunload': {
-        'todo': core_storage_save,
+        'todo': function(){
+            core_storage_save();
+            core_storage_save({
+              'bests': true,
+            });
+        },
       },
       'keybinds': {
         27: {// Escape
@@ -635,15 +634,15 @@ function core_repo_init(args){
       'mousebinds': args['mousebinds'],
     });
 
-    /*
     var repo_href = 'https://github.com/iterami/' + args['title'];
     var repo_title = document.getElementById('core-menu-title');
     repo_title.href = repo_href;
     repo_title.innerHTML = args['title'];
 
     document.getElementById('core-menu-info').innerHTML = args['info'];
-    document.getElementById('core-menu-storage').innerHTML = args['storage-menu'];
-    */
+    document.getElementById('core-menu-storage').innerHTML = args['storage-menu'] || '';
+
+    core_storage_update();
 }
 
 // Optional args: id
