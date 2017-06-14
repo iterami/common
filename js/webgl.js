@@ -868,6 +868,8 @@ function webgl_setmode(args){
       },
     });
 
+    core_storage_save();
+
     window.cancelAnimationFrame(webgl_animationFrame);
     window.clearInterval(webgl_interval);
 

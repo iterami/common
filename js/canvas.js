@@ -151,6 +151,8 @@ function canvas_setmode(args){
       },
     });
 
+    core_storage_save();
+
     window.cancelAnimationFrame(canvas_animationFrame);
     window.clearInterval(canvas_interval);
 
