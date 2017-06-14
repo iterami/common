@@ -32,6 +32,9 @@ select{
     font-size: 10px;
     top: 0;
 }
+.external{
+    color: #f70;
+}
 .hidden{
     display: none;
 }
