@@ -434,12 +434,11 @@ function core_image(args){
 
 function core_init(){
     // Core menu init.
-    document.body.appendChild(core_html({
+    var core_ui = core_html({
       'properties': {
         'id': 'core-ui',
       },
-    }));
-    var core_ui = document.getElementById('core-ui');
+    })
     core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-toggle',
@@ -456,6 +455,7 @@ function core_init(){
       },
       'type': 'span',
     }));
+    document.body.appendChild(core_ui);
 
     // Keyboard/mouse init.
     core_mouse = {
