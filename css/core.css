@@ -45,9 +45,10 @@ hr{
 input{
     border-color: #aaa;
 }
-input[type=checkbox],
-input[type=color],
-input[type=range],
+input[type=button]:not([disabled]),
+input[type=checkbox]:not([disabled]),
+input[type=color]:not([disabled]),
+input[type=range]:not([disabled]),
 label,
 select:not([disabled]){
     cursor: pointer;
