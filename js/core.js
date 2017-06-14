@@ -659,7 +659,8 @@ function core_repo_init(args){
         core_escape();
     }
 
-    core_storage_prefix = args['title'] + '-';
+    core_repo_title = args['title'];
+    core_storage_prefix = core_repo_title + '-';
     core_storage_add({
       'storage': args['storage'],
     });
@@ -670,10 +671,9 @@ function core_repo_init(args){
       'mousebinds': args['mousebinds'],
     });
 
-    var repo_href = 'https://github.com/iterami/' + args['title'];
     var repo_title = document.getElementById('core-menu-title');
-    repo_title.href = repo_href;
-    repo_title.innerHTML = args['title'];
+    repo_title.href = 'https://github.com/iterami/' + core_repo_title;
+    repo_title.innerHTML = core_repo_title;
 
     document.getElementById('core-menu-info').innerHTML = args['info'];
     document.getElementById('core-menu-storage').innerHTML = args['storage-menu'] || '';
@@ -761,7 +761,11 @@ function core_storage_reset(args){
       },
     });
 
-    if(!window.confirm('Reset?')){
+    var type = args['bests']
+      ? 'bests'
+      : 'settings';
+
+    if(!window.confirm('Reset ' + core_repo_title + ' ' + type + '?')){
         return false;
     }
 
@@ -947,6 +951,7 @@ var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
 var core_mouse = {};
+var core_repo_title = '';
 var core_random_boolean_chance = .5;
 var core_random_integer_max = 100;
 var core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
