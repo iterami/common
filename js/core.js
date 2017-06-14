@@ -446,7 +446,7 @@ function core_init(){
     document.body.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/<a id=core-menu-title></a><hr><div id=core-menu-info></div><hr><div id=core-menu-storage></div><a onclick=core_storage_reset({bests:false})>Reset</a>',
+        'innerHTML': '<a href=..>iterami</a>/<a id=core-menu-title></a><hr><div id=core-menu-info></div><hr><div id=core-menu-storage></div><input onclick=core_storage_reset({bests:false}) type=button value=Reset>',
       },
     }));
 
