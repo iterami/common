@@ -16,21 +16,21 @@ select{
     font-weight: bold;
     text-align: center;
 }
-#core-menu{
+#core-ui{
     background: #111;
-    display: none;
-    text-align: left;
-    top: 20px;
-}
-#core-menu,
-#core-menu-button{
-    position: absolute;
     left: 0;
+    position: absolute;
+    text-align: left;
+    top: 0;
     z-index: 9999;
 }
-#core-menu-button{
+#core-menu,
+#core-repo{
+    display: none;
+}
+#core-toggle{
+    display: inline-block;
     font-size: 10px;
-    top: 0;
 }
 .external{
     color: #f70;

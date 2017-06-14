@@ -36,7 +36,7 @@ function core_escape(){
     core_menu_open = !core_menu_open;
 
     document.getElementById('core-menu').style.display = core_menu_open
-      ? 'block'
+      ? 'inline'
       : 'none';
 
     if(!core_menu_open){
@@ -436,18 +436,25 @@ function core_init(){
     // Core menu init.
     document.body.appendChild(core_html({
       'properties': {
-        'id': 'core-menu-button',
+        'id': 'core-ui',
+      },
+    }));
+    var core_ui = document.getElementById('core-ui');
+    core_ui.appendChild(core_html({
+      'properties': {
+        'id': 'core-toggle',
         'onclick': core_escape,
         'type': 'button',
         'value': 'ESC',
       },
       'type': 'input',
     }));
-    document.body.appendChild(core_html({
+    core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests"><div id=core-menu-storage></div>',
       },
+      'type': 'span',
     }));
 
     // Keyboard/mouse init.
