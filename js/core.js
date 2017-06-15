@@ -949,7 +949,6 @@ function core_storage_add(args){
           'prefix': args['prefix'],
           'type': data['type'] || 'setting',
         };
-        console.log(args['prefix'] + key);
         core_storage_data[key] = window.localStorage.getItem(args['prefix'] + key);
 
         if(core_storage_data[key] === null){
