@@ -15,6 +15,207 @@ function core_args(args){
     return args['args'];
 }
 
+// Required args: id
+// Optional args: properties
+function core_audio_create(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+      },
+    });
+
+    core_audio[args['id']] = {
+      'playing': false,
+    };
+
+    for(var property in args['properties']){
+        core_audio[args['id']][property] = core_handle_defaults({
+          'default': core_audio[args['id']],
+          'var': args['properties'][property],
+        });
+    }
+
+    core_audio[args['id']]['connections'] = args['properties']['connections'] || [
+      {
+        'frequency': {
+          'value': core_audio[args['id']]['frequency'] || 100,
+        },
+        'label': 'Oscillator',
+        'type': core_audio[args['id']]['type'] || 'sine',
+      },
+      {
+        'gain': {
+          'value': args['properties']['volume'] || core_storage_data['audio-volume'],
+        },
+        'label': 'Gain',
+      },
+    ];
+
+    core_audio[args['id']]['connections'][0]['id'] = args['id'];
+    core_audio[args['id']]['connections'][0]['onended'] = function(){
+        core_audio_onended({
+          'id': this.id,
+        });
+    };
+}
+
+// Optional args: id, properties
+function core_audio_node_create(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': false,
+        'properties': {
+          'label': 'Oscillator',
+        },
+      },
+    });
+
+    var source = core_audio_context['create' + args['properties']['label']](
+      args['properties']['arg0'],
+      args['properties']['arg1'],
+      args['properties']['arg2']
+    );
+
+    for(var property in args['properties']){
+        if(core_type({
+          'type': 'object',
+          'var': args['properties'][property],
+        })){
+            for(var subproperty in args['properties'][property]){
+                source[property][subproperty] = args['properties'][property][subproperty];
+            }
+
+        }else{
+            source[property] = args['properties'][property];
+        }
+    }
+
+    if(args['id'] === false){
+        return source;
+    }
+
+    core_audio_sources[args['id']][args['properties']['label']] = source;
+}
+
+// Required args: id
+function core_audio_onended(args){
+    core_audio[args['id']]['playing'] = false;
+
+    if(core_audio[args['id']]['repeat']){
+        if(core_audio[args['id']]['timeout'] <= 0){
+            core_audio_start({
+              'id': args['id'],
+            });
+
+        }else{
+            window.setTimeout(
+              'core_audio_start({id:"' + args['id'] + '"});',
+              core_audio[args['id']]['duration'] * core_audio[args['id']]['timeout']
+            );
+        }
+    }
+
+    delete core_audio_sources[args['id']];
+}
+
+// Required args: id
+// Optional args: volume-multiplier
+function core_audio_source_create(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'volume-multiplier': core_audio_volume_multiplier,
+      },
+    });
+
+    core_audio_sources[args['id']] = {
+      'duration': core_audio[args['id']]['duration'] || 0,
+      'start': core_audio[args['id']]['start'] || 0,
+      'timeout': core_audio[args['id']]['timeout'] || 1000,
+    };
+
+    // Create audio nodes.
+    var connections_length = core_audio[args['id']]['connections'].length;
+    for(var i = 0; i < connections_length; i++){
+        core_audio_node_create({
+          'id': args['id'],
+          'properties': core_audio[args['id']]['connections'][i],
+        });
+
+        if(core_audio[args['id']]['connections'][i]['label'] === 'Gain'){
+            core_audio_sources[args['id']]['Gain']['gain']['value'] = (core_audio[args['id']]['volume'] || core_storage_data['audio-volume'])
+              * args['volume-multiplier'];
+        }
+    }
+
+    // Connect audio nodes.
+    for(i = 0; i < connections_length - 1; i++){
+        core_audio_sources[args['id']][core_audio[args['id']]['connections'][i]['label']].connect(
+          core_audio_sources[args['id']][core_audio[args['id']]['connections'][i + 1]['label']]
+        );
+    }
+    core_audio_sources[args['id']][core_audio[args['id']]['connections'][connections_length - 1]['label']].connect(
+      core_audio_context.destination
+    );
+}
+
+// Required args: id
+// Optional args: volume-multiplier
+function core_audio_start(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'volume-multiplier': core_audio_volume_multiplier,
+      },
+    });
+
+    if(args['volume-multiplier'] === 0){
+        return;
+    }
+
+    if(core_audio[args['id']]['playing']){
+        core_audio_stop({
+          'id': args['id'],
+        });
+    }
+
+    core_audio_source_create({
+      'id': args['id'],
+      'volume-multiplier': args['volume-multiplier'],
+    });
+
+    var startTime = core_audio_context.currentTime + core_audio_sources[args['id']]['start'];
+    core_audio[args['id']]['playing'] = true;
+    core_audio_sources[args['id']][core_audio[args['id']]['connections'][0]['label']].start(startTime);
+    core_audio_stop({
+      'id': args['id'],
+      'when': startTime + core_audio_sources[args['id']]['duration'],
+    });
+}
+
+// Required args: id
+// Optional args: when
+function core_audio_stop(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'when': void 0,
+      },
+    });
+
+    core_audio_sources[args['id']][core_audio[args['id']]['connections'][0]['label']].stop(args['when']);
+}
+
+function core_core_audio_stop_all(){
+    for(var id in core_audio_sources){
+        core_audio_stop({
+          'id': id,
+        });
+    }
+}
+
 // Required args: todo
 // Optional args: args
 function core_call(args){
@@ -451,7 +652,7 @@ function core_init(){
     core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests"><div id=core-menu-storage></div>',
+        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests"><div id=core-menu-storage></div><hr><input id=audio-volume max=1 min=0 step=0.01 type=range>Audio Volume',
       },
       'type': 'span',
     }));
@@ -495,6 +696,16 @@ function core_init(){
     window.ontouchend = core_handle_mouseup;
     window.ontouchmove = core_handle_mousemove;
     window.ontouchstart = core_handle_mousedown;
+
+    core_audio_context = new window.AudioContext();
+
+    // Global storage.
+    core_storage_add({
+      'prefix': 'core-',
+      'storage': {
+        'audio-volume': 1,
+      },
+    });
 
     // Global event binds.
     core_events_bind({
@@ -667,7 +878,6 @@ function core_repo_init(args){
     }
 
     core_repo_title = args['title'];
-    core_storage_prefix = core_repo_title + '-';
     core_storage_add({
       'storage': args['storage'],
     });
@@ -713,7 +923,15 @@ function core_requestpointerlock(args){
 }
 
 // Required args: storage
+// Optional args: prefix
 function core_storage_add(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'prefix': core_repo_title + '-',
+      },
+    });
+
     for(var key in args['storage']){
         var data = args['storage'][key];
         if(!core_type({
@@ -728,9 +946,11 @@ function core_storage_add(args){
 
         core_storage_info[key] = {
           'default': data['default'],
+          'prefix': args['prefix'],
           'type': data['type'] || 'setting',
         };
-        core_storage_data[key] = window.localStorage.getItem(core_storage_prefix + key);
+        console.log(args['prefix'] + key);
+        core_storage_data[key] = window.localStorage.getItem(args['prefix'] + key);
 
         if(core_storage_data[key] === null){
             core_storage_data[key] = core_storage_info[key]['default'];
@@ -793,7 +1013,7 @@ function core_storage_reset(args){
             continue;
         }
 
-        window.localStorage.removeItem(core_storage_prefix + key);
+        window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
     }
 
     if(args['bests']){
@@ -848,12 +1068,12 @@ function core_storage_save(args){
 
         if(data !== core_storage_info[key]['default']){
             window.localStorage.setItem(
-              core_storage_prefix + key,
+              core_storage_info[key]['prefix'] + key,
               data
             );
 
         }else{
-            window.localStorage.removeItem(core_storage_prefix + key);
+            window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
         }
     }
 }
@@ -949,6 +1169,10 @@ function core_uid_create(){
     return uid;
 }
 
+var core_audio = {};
+var core_audio_context = 0;
+var core_audio_sources = {};
+var core_audio_volume_multiplier = 1;
 var core_events = {};
 var core_gamepads = {};
 var core_images = {};
@@ -958,14 +1182,13 @@ var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
 var core_mouse = {};
-var core_repo_title = '';
 var core_random_boolean_chance = .5;
 var core_random_integer_max = 100;
 var core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var core_random_string_length = 100;
+var core_repo_title = '';
 var core_storage_data = {};
 var core_storage_info = {};
-var core_storage_prefix = '';
 var core_uids = {};
 
 window.onload = core_init;
