@@ -24,6 +24,10 @@ select{
     top: 0;
     z-index: 9999;
 }
+#core-ui table{
+    margin: 0;
+    text-align: center;
+}
 #core-menu,
 #core-repo{
     display: none;
