@@ -176,7 +176,7 @@ function canvas_setmode(args){
     })){
         canvas_interval = window.setInterval(
           canvas_logicloop,
-          canvas_interval_ms
+          core_storage_data['frame-ms']
         );
     }
 }
@@ -191,7 +191,6 @@ var canvas_fonts = {
 };
 var canvas_height = 0;
 var canvas_interval = 0;
-var canvas_interval_ms = 25;
 var canvas_mode = 0;
 var canvas_oncontextmenu = true;
 var canvas_style = 'fill';

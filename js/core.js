@@ -652,7 +652,7 @@ function core_init(){
     core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests"><div id=core-menu-storage></div><hr><input id=audio-volume max=1 min=0 step=0.01 type=range>Audio Volume',
+        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests"><div id=core-menu-storage></div><hr><input id=audio-volume max=1 min=0 step=0.01 type=range>Audio Volume<br><input id=frame-ms>ms/Frame',
       },
       'type': 'span',
     }));
@@ -704,6 +704,7 @@ function core_init(){
       'prefix': 'core-',
       'storage': {
         'audio-volume': 1,
+        'frame-ms': 25,
       },
     });
 

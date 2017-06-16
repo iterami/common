@@ -896,7 +896,7 @@ function webgl_setmode(args){
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
     webgl_interval = window.setInterval(
       webgl_logicloop,
-      webgl_interval_ms
+      core_storage_data['frame-ms']
     );
 }
 
@@ -1098,7 +1098,6 @@ var webgl_gravity = {
 };
 var webgl_height = 0;
 var webgl_interval = 0;
-var webgl_interval_ms = 25;
 var webgl_mode = 0;
 var webgl_oncontextmenu = true;
 var webgl_pointer = false;
