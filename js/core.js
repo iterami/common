@@ -15,49 +15,43 @@ function core_args(args){
     return args['args'];
 }
 
-// Required args: id
-// Optional args: properties
+// Required args: audios
 function core_audio_create(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'properties': {},
-      },
-    });
+    for(var audio in args['audios']){
+        core_audio[audio] = {
+          'playing': false,
+        };
 
-    core_audio[args['id']] = {
-      'playing': false,
-    };
+        for(var property in args['audios'][audio]){
+            core_audio[audio][property] = core_handle_defaults({
+              'default': core_audio[audio],
+              'var': args['audios'][audio][property],
+            });
+        }
 
-    for(var property in args['properties']){
-        core_audio[args['id']][property] = core_handle_defaults({
-          'default': core_audio[args['id']],
-          'var': args['properties'][property],
-        });
+        core_audio[audio]['connections'] = args['audios'][audio]['connections'] || [
+          {
+            'frequency': {
+              'value': core_audio[audio]['frequency'] || 100,
+            },
+            'label': 'Oscillator',
+            'type': core_audio[audio]['type'] || 'sine',
+          },
+          {
+            'gain': {
+              'value': args['audios'][audio]['volume'] || core_storage_data['audio-volume'],
+            },
+            'label': 'Gain',
+          },
+        ];
+
+        core_audio[audio]['connections'][0]['id'] = audio;
+        core_audio[audio]['connections'][0]['onended'] = function(){
+            core_audio_onended({
+              'id': this.id,
+            });
+        };
     }
-
-    core_audio[args['id']]['connections'] = args['properties']['connections'] || [
-      {
-        'frequency': {
-          'value': core_audio[args['id']]['frequency'] || 100,
-        },
-        'label': 'Oscillator',
-        'type': core_audio[args['id']]['type'] || 'sine',
-      },
-      {
-        'gain': {
-          'value': args['properties']['volume'] || core_storage_data['audio-volume'],
-        },
-        'label': 'Gain',
-      },
-    ];
-
-    core_audio[args['id']]['connections'][0]['id'] = args['id'];
-    core_audio[args['id']]['connections'][0]['onended'] = function(){
-        core_audio_onended({
-          'id': this.id,
-        });
-    };
 }
 
 // Optional args: id, properties
@@ -860,11 +854,12 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: beforeunload, info, keybinds, menu, mousebinds, storage
+// Optional args: audios, beforeunload, info, keybinds, menu, mousebinds, storage
 function core_repo_init(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'audios': {},
         'beforeunload': false,
         'info': '',
         'keybinds': false,
@@ -882,6 +877,13 @@ function core_repo_init(args){
     core_storage_add({
       'storage': args['storage'],
     });
+    document.getElementById('core-menu-info').innerHTML = args['info'];
+    document.getElementById('core-menu-storage').innerHTML = args['storage-menu'] || '';
+    var repo_title = document.getElementById('core-menu-title');
+    repo_title.href = 'https://github.com/iterami/' + core_repo_title;
+    repo_title.innerHTML = core_repo_title;
+
+    core_storage_update();
 
     core_events_bind({
       'beforeunload': args['beforeunload'],
@@ -889,14 +891,9 @@ function core_repo_init(args){
       'mousebinds': args['mousebinds'],
     });
 
-    var repo_title = document.getElementById('core-menu-title');
-    repo_title.href = 'https://github.com/iterami/' + core_repo_title;
-    repo_title.innerHTML = core_repo_title;
-
-    document.getElementById('core-menu-info').innerHTML = args['info'];
-    document.getElementById('core-menu-storage').innerHTML = args['storage-menu'] || '';
-
-    core_storage_update();
+    core_audio_create({
+      'audios': args['audios'],
+    });
 }
 
 // Optional args: id
