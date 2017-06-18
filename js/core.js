@@ -1178,6 +1178,7 @@ var core_menu_blockevents = true;
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
+var core_mode = 0;
 var core_mouse = {};
 var core_random_boolean_chance = .5;
 var core_random_integer_max = 100;

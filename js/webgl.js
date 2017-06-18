@@ -882,10 +882,10 @@ function webgl_setmode(args){
     entity_entities['_webgl-camera']['rotate']['y'] = 0;
     entity_entities['_webgl-camera']['rotate']['z'] = 0;
 
-    webgl_mode = args['mode'];
+    core_mode = args['mode'];
 
     core_call({
-      'args': webgl_mode,
+      'args': core_mode,
       'todo': 'load_data',
     });
 
@@ -1098,7 +1098,6 @@ var webgl_gravity = {
 };
 var webgl_height = 0;
 var webgl_interval = 0;
-var webgl_mode = 0;
 var webgl_oncontextmenu = true;
 var webgl_pointer = false;
 var webgl_programs = {};

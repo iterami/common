@@ -158,10 +158,10 @@ function canvas_setmode(args){
 
     canvas_resize();
 
-    canvas_mode = args['mode'];
+    core_mode = args['mode'];
 
     core_call({
-      'args': canvas_mode,
+      'args': core_mode,
       'todo': 'load_data',
     });
 
@@ -191,7 +191,6 @@ var canvas_fonts = {
 };
 var canvas_height = 0;
 var canvas_interval = 0;
-var canvas_mode = 0;
 var canvas_oncontextmenu = true;
 var canvas_style = 'fill';
 var canvas_width = 0;
