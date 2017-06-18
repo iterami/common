@@ -1,7 +1,7 @@
 'use strict';
 
 // Reqruied args: id
-// Optional args: types, properties
+// Optional args: properties, types
 function entity_create(args){
     args = core_args({
       'args': args,
