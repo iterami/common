@@ -854,13 +854,14 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: audios, beforeunload, info, keybinds, menu, mousebinds, storage
+// Optional args: audios, beforeunload, images, info, keybinds, menu, mousebinds, storage
 function core_repo_init(args){
     args = core_args({
       'args': args,
       'defaults': {
         'audios': {},
         'beforeunload': false,
+        'images': {},
         'info': '',
         'keybinds': false,
         'menu': false,
@@ -894,6 +895,13 @@ function core_repo_init(args){
     core_audio_create({
       'audios': args['audios'],
     });
+
+    for(var image in args['images']){
+        core_image({
+          'id': image,
+          'src': args['images'][image],
+        });
+    }
 }
 
 // Optional args: id
