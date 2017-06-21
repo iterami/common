@@ -532,8 +532,8 @@ function core_handle_mousedown(event){
 }
 
 function core_handle_mousemove(event){
-    core_mouse['movement-x'] = event.movementX;
-    core_mouse['movement-y'] = event.movementY;
+    core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-sensitivity'];
+    core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-sensitivity'];
     core_mouse['x'] = event.pageX;
     core_mouse['y'] = event.pageY;
     core_handle_event({
@@ -646,7 +646,7 @@ function core_init(){
     core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests"><div id=core-menu-storage></div><hr><table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=frame-ms><td>ms/Frame</table>',
+        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests"><div id=core-menu-storage></div><hr><table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table>',
       },
       'type': 'span',
     }));
@@ -699,6 +699,7 @@ function core_init(){
       'storage': {
         'audio-volume': 1,
         'frame-ms': 25,
+        'mouse-sensitivity': 1,
       },
     });
 
