@@ -210,7 +210,7 @@ function rpg_item_create(args){
       args['properties']['spell']['color'] = args['properties']['spell']['color'] || '#fff';
       args['properties']['spell']['damage'] = args['properties']['spell']['damage'] || 0;
       args['properties']['spell']['damages'] = args['properties']['spell']['damages'] || 'health';
-      args['properties']['spell']['lifespan'] = args['properties']['spell']['lifespan'] || 50;
+      args['properties']['spell']['lifespan'] = args['properties']['spell']['lifespan'] || 9999;
       args['properties']['spell']['reload'] = args['properties']['spell']['reload'] || 0;
       args['properties']['spell']['reload-current'] = args['properties']['spell']['reload-current'] || args['properties']['spell']['reload'];
       args['properties']['spell']['speed-x'] = args['properties']['spell']['speed-x'] || 5;
