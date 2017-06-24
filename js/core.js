@@ -233,6 +233,9 @@ function core_escape(){
     document.getElementById('core-menu').style.display = core_menu_open
       ? 'inline'
       : 'none';
+    document.getElementById('repo-ui').style.display = core_menu_open
+      ? 'none'
+      : 'block';
 
     if(!core_menu_open){
         core_storage_save();
@@ -650,6 +653,12 @@ function core_init(){
       },
       'type': 'span',
     }));
+    core_ui.appendChild(core_html({
+      'properties': {
+        'id': 'repo-ui',
+      },
+      'type': 'div',
+    }));
     document.body.appendChild(core_ui);
 
     // Keyboard/mouse init.
@@ -855,7 +864,7 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: audios, beforeunload, images, info, keybinds, menu, mousebinds, storage
+// Optional args: audios, beforeunload, images, info, keybinds, menu, mousebinds, storage, ui
 function core_repo_init(args){
     args = core_args({
       'args': args,
@@ -868,6 +877,7 @@ function core_repo_init(args){
         'menu': false,
         'mousebinds': false,
         'storage': {},
+        'ui': '',
       },
     });
 
@@ -903,6 +913,8 @@ function core_repo_init(args){
           'src': args['images'][image],
         });
     }
+
+    document.getElementById('repo-ui').innerHTML = args['ui'];
 }
 
 // Optional args: id
@@ -1173,6 +1185,20 @@ function core_uid_create(){
     }
 
     return uid;
+}
+
+// Optional args: ids
+function core_ui_update(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'ids': {},
+      },
+    });
+
+    for(var id in args['ids']){
+        document.getElementById('ui-' + id).value = args['ids'][id];
+    }
 }
 
 var core_audio = {};
