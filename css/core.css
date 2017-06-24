@@ -29,7 +29,8 @@ select{
     text-align: center;
 }
 #core-menu,
-#core-repo{
+#core-repo,
+.hidden{
     display: none;
 }
 #core-toggle{
@@ -38,9 +39,6 @@ select{
 }
 .external{
     color: #f70;
-}
-.hidden{
-    display: none;
 }
 hr{
     border: 4px solid #222;
