@@ -649,7 +649,7 @@ function core_init(){
     core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests"><div id=core-menu-storage></div><hr><table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table>',
+        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_ui_tab() type=button value="Repo Settings"><input onclick=core_ui_tab({tab:"global"}) type=button value="Global Settings"><div id=core-menu-repo></div><table id=core-menu-global><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests">',
       },
       'type': 'span',
     }));
@@ -660,6 +660,7 @@ function core_init(){
       'type': 'div',
     }));
     document.body.appendChild(core_ui);
+    core_ui_tab();
 
     // Keyboard/mouse init.
     core_mouse = {
@@ -890,7 +891,7 @@ function core_repo_init(args){
       'storage': args['storage'],
     });
     document.getElementById('core-menu-info').innerHTML = args['info'];
-    document.getElementById('core-menu-storage').innerHTML = args['storage-menu'] || '';
+    document.getElementById('core-menu-repo').innerHTML = args['storage-menu'] || '';
     var repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/iterami/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
@@ -1185,6 +1186,26 @@ function core_uid_create(){
     }
 
     return uid;
+}
+
+// Optional args: tab
+function core_ui_tab(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'tab': 'repo',
+      },
+    });
+
+    var tabs = [
+      'global',
+      'repo',
+    ];
+    for(var tab in tabs){
+        document.getElementById('core-menu-' + tabs[tab]).style.display = 'none';
+    }
+
+    document.getElementById('core-menu-' + args['tab']).style.display = 'block';
 }
 
 // Optional args: ids
