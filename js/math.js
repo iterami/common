@@ -6,7 +6,7 @@ function math_clamp(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
         'wrap': false,
       },
     });
@@ -40,7 +40,7 @@ function math_degrees_to_radians(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
       },
     });
 
@@ -56,7 +56,7 @@ function math_distance(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
       },
     });
 
@@ -80,7 +80,7 @@ function math_fixed_length_line(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
       },
     });
 
@@ -221,7 +221,7 @@ function math_matrix_round(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
       },
     });
 
@@ -252,7 +252,7 @@ function math_move_2d(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
         'multiplier': 1,
       },
     });
@@ -293,7 +293,7 @@ function math_move_3d(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
         'multiplier': 1,
         'speed': 1,
         'strafe': false,
@@ -331,7 +331,7 @@ function math_radians_to_degrees(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
       },
     });
 
@@ -359,7 +359,7 @@ function math_round(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': math_decimals,
+        'decimals': core_storage_data['decimals'],
       },
     });
 
@@ -378,7 +378,6 @@ function math_round(args){
     return result;
 }
 
-var math_decimals = 7;
 var math_degree = Math.PI / 180;
 var math_matrices = {};
 var math_radian = 180 / Math.PI;

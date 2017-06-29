@@ -649,7 +649,7 @@ function core_init(){
     core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_ui_tab() type=button value="Repo Settings"><input onclick=core_ui_tab({tab:"global"}) type=button value="Global Settings"><div id=core-menu-repo></div><table id=core-menu-global><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests">',
+        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr><input onclick=core_ui_tab() type=button value="Repo Settings"><input onclick=core_ui_tab({tab:"global"}) type=button value="Global Settings"><div id=core-menu-repo></div><table id=core-menu-global><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=decimals><td>Decimals<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests">',
       },
       'type': 'span',
     }));
@@ -708,6 +708,7 @@ function core_init(){
       'prefix': 'core-',
       'storage': {
         'audio-volume': 1,
+        'decimals': 7,
         'frame-ms': 25,
         'mouse-sensitivity': 1,
       },
