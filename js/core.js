@@ -227,6 +227,64 @@ function core_call(args){
     }
 }
 
+// Reqruied args: id
+// Optional args: properties, types
+function core_entity_create(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+        'types': core_entity_types_default,
+      },
+    });
+
+    var entity = {};
+
+    for(var type in args['types']){
+        for(var property in core_entity_info[args['types'][type]]['default']){
+            entity[property] = core_handle_defaults({
+              'default': entity[property],
+              'var': core_entity_info[args['types'][type]]['default'][property],
+            });
+        }
+    }
+
+    for(var property in args['properties']){
+        entity[property] = core_handle_defaults({
+          'default': entity[property],
+          'var': args['properties'][property],
+        });
+    }
+
+    core_entities[args['id']] = entity;
+
+    for(var type in args['types']){
+        core_entity_info[args['types'][type]]['todo'](args['id']);
+    }
+}
+
+// Required args: type
+// Optional args: default, properties, todo
+function core_entity_set(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'default': false,
+        'properties': {},
+        'todo': function(){},
+      },
+    });
+
+    core_entity_info[args['type']] = {
+      'default': args['properties'],
+      'todo': args['todo'],
+    };
+
+    if(args['default']){
+        core_entity_types_default.push(args['type']);
+    }
+}
+
 function core_escape(){
     core_menu_open = !core_menu_open;
 
@@ -357,6 +415,63 @@ function core_events_todoloop(){
         if(core_mouse['todo'][mousebind]['loop']){
             core_mouse['todo'][mousebind]['todo']();
         }
+    }
+}
+
+// Required args: entities, group
+function core_group_add(args){
+    if(!(args['group'] in core_groups)){
+        core_groups[args['group']] = {};
+    }
+
+    for(var entity in args['entities']){
+        core_groups[args['group']][args['entities'][entity]] = true;
+    }
+}
+
+// Required args: groups, todo
+// Optional args: pretodo
+function core_group_modify(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'pretodo': false,
+      },
+    });
+
+    var pretodo = {};
+    if(args['pretodo'] !== false){
+        pretodo = args['pretodo']();
+    }
+    for(var group in args['groups']){
+        for(var entity in core_groups[args['groups'][group]]){
+            args['todo'](
+              entity,
+              pretodo
+            );
+        }
+    }
+}
+
+// Required args: entities, group
+// Optional args: delete-empty
+function core_group_remove(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'delete-empty': false,
+      },
+    });
+
+    if(args['group'] in core_groups){
+        for(var entity in args['entities']){
+            delete core_groups[args['group']][args['entities'][entity]];
+        }
+    }
+
+    if(args['delete-empty']
+      && core_groups[args['group']].length === 0){
+        delete core_groups[args['group']];
     }
 }
 
@@ -1229,8 +1344,12 @@ var core_audio = {};
 var core_audio_context = 0;
 var core_audio_sources = {};
 var core_audio_volume_multiplier = 1;
+var core_entities = {};
+var core_entity_info = {};
+var core_entity_types_default = [];
 var core_events = {};
 var core_gamepads = {};
+var core_groups = {};
 var core_images = {};
 var core_keys = {};
 var core_menu_blockevents = true;

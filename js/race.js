@@ -1,7 +1,7 @@
 'use strict';
 
 function race_init(){
-    entity_set({
+    core_entity_set({
       'default': true,
       'properties': {
         'acceleration': .01,
@@ -31,7 +31,7 @@ function race_racer_create(args){
       },
     });
 
-    entity_create({
+    core_entity_create({
       'id': args['id'],
       'properties': args['properties'],
     });
@@ -39,7 +39,7 @@ function race_racer_create(args){
 
 function race_unload(){
     race_checkpoints.length = 0;
-    entity_entities.length = 0;
+    core_entities.length = 0;
 }
 
 var race_checkpoints = [];
