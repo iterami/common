@@ -640,8 +640,8 @@ function webgl_normals_collision(args){
           && entity0['dx'] < 0){
             if(entity0['position']['x'] >= entity1['position']['x']
               && entity0['position']['x'] <= entity1['position']['x'] + webgl_collision_range
-              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][3] - webgl_collision_range
-              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][0] + webgl_collision_range
+              && entity0['position']['y'] > entity1['position']['y'] + entity1['vertices'][3] - webgl_collision_range
+              && entity0['position']['y'] < entity1['position']['y'] + entity1['vertices'][0] + webgl_collision_range
               && entity0['position']['z'] >= -entity1['position']['z'] + entity1['vertices'][2] - webgl_collision_range + 1
               && entity0['position']['z'] <= -entity1['position']['z'] + entity1['vertices'][8] + webgl_collision_range - 1){
                 entity0['dx'] = 0;
@@ -652,8 +652,8 @@ function webgl_normals_collision(args){
           && entity0['dx'] > 0){
             if(entity0['position']['x'] >= entity1['position']['x'] - webgl_collision_range
               && entity0['position']['x'] <= entity1['position']['x']
-              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][3] - webgl_collision_range
-              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][0] + webgl_collision_range
+              && entity0['position']['y'] > entity1['position']['y'] + entity1['vertices'][3] - webgl_collision_range
+              && entity0['position']['y'] < entity1['position']['y'] + entity1['vertices'][0] + webgl_collision_range
               && entity0['position']['z'] >= -entity1['position']['z'] + entity1['vertices'][2] - webgl_collision_range + 1
               && entity0['position']['z'] <= -entity1['position']['z'] + entity1['vertices'][8] + webgl_collision_range - 1){
                 entity0['dx'] = 0;
@@ -694,8 +694,8 @@ function webgl_normals_collision(args){
           && entity0['dz'] < 0){
             if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][3] - webgl_collision_range + 1
               && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][0] + webgl_collision_range - 1
-              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][2] - webgl_collision_range
-              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][8] + webgl_collision_range
+              && entity0['position']['y'] > entity1['position']['y'] + entity1['vertices'][2] - webgl_collision_range
+              && entity0['position']['y'] < entity1['position']['y'] + entity1['vertices'][8] + webgl_collision_range
               && entity0['position']['z'] >= -entity1['position']['z']
               && entity0['position']['z'] <= -entity1['position']['z'] + webgl_collision_range){
                 entity0['dz'] = 0;
@@ -706,8 +706,8 @@ function webgl_normals_collision(args){
           && entity0['dz'] > 0){
             if(entity0['position']['x'] >= entity1['position']['x'] + entity1['vertices'][3] - webgl_collision_range + 1
               && entity0['position']['x'] <= entity1['position']['x'] + entity1['vertices'][0] + webgl_collision_range - 1
-              && entity0['position']['y'] >= entity1['position']['y'] + entity1['vertices'][2] - webgl_collision_range
-              && entity0['position']['y'] <= entity1['position']['y'] + entity1['vertices'][8] + webgl_collision_range
+              && entity0['position']['y'] > entity1['position']['y'] + entity1['vertices'][2] - webgl_collision_range
+              && entity0['position']['y'] < entity1['position']['y'] + entity1['vertices'][8] + webgl_collision_range
               && entity0['position']['z'] >= -entity1['position']['z'] - webgl_collision_range
               && entity0['position']['z'] <= -entity1['position']['z']){
                 entity0['dz'] = 0;
