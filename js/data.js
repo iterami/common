@@ -1,6 +1,73 @@
 'use strict';
 
 // Optional args: color-base, color-leaf, half-base, half-leaf, id, x, y
+function data_canvas_fence_2d(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'color': '#777',
+        'frequency': 60,
+        'id': core_uid(),
+        'length-half': 25,
+        'x': 0,
+        'y': 0,
+      },
+    });
+
+    scenery.push({
+      'color': args['color'],
+      'vertices': [
+        {
+          'type': 'moveTo',
+          'x': -args['length-half'],
+          'y': -20,
+        },
+        {
+          'x': args['length-half'],
+          'y': -20,
+        },
+        {
+          'x': args['length-half'],
+          'y': -15,
+        },
+        {
+          'x': -args['length-half'],
+          'y': -15,
+        },
+      ],
+      'x': args['x'],
+      'y': args['y'],
+    });
+
+    for(var i = 0; i < args['length-half'] * 2; i += args['frequency']){
+        scenery.push({
+          'color': args['color'],
+          'vertices': [
+            {
+              'type': 'moveTo',
+              'x': -5,
+              'y': -25,
+            },
+            {
+              'x': 5,
+              'y': -25,
+            },
+            {
+              'x': 5,
+              'y': 0,
+            },
+            {
+              'x': -5,
+              'y': 0,
+            },
+          ],
+          'y': args['y'],
+          'x': args['x'] - args['length-half'] + i,
+        });
+    }
+}
+
+// Optional args: color-base, color-leaf, half-base, half-leaf, id, x, y
 function data_canvas_tree_2d(args){
     args = core_args({
       'args': args,
