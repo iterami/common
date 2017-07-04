@@ -1,5 +1,69 @@
 'use strict';
 
+// Optional args: color-base, color-leaf, half-base, half-leaf, id, x, y, z
+function data_canvas_tree_2d(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'color-base': '#be6400',
+        'color-leaf': '#' + core_random_hex(),
+        'height-base': 25,
+        'height-leaf': 75,
+        'id': core_uid(),
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    var half_leaf = args['height-leaf'] / 2;
+
+    scenery.push({
+      'color': args['color-base'],
+      'vertices': [
+        {
+          'type': 'moveTo',
+          'x': args['x'] - 12,
+          'y': args['y'] - args['height-base'],
+        },
+        {
+          'x': args['x'] + 12,
+          'y': args['y'] - args['height-base'],
+        },
+        {
+          'x': args['x'] + 12,
+          'y': args['y'],
+        },
+        {
+          'x': args['x'] - 12,
+          'y': args['y'],
+        },
+      ],
+    },
+    {
+      'color': args['color-leaf'],
+      'vertices': [
+        {
+          'type': 'moveTo',
+          'x': args['x'] - half_leaf,
+          'y': args['y'] - args['height-base'] - args['height-leaf'],
+        },
+        {
+          'x': args['x'] + half_leaf,
+          'y': args['y'] - args['height-base'] - args['height-leaf'],
+        },
+        {
+          'x': args['x'] + half_leaf,
+          'y': args['y'] - args['height-base'],
+        },
+        {
+          'x': args['x'] - half_leaf,
+          'y': args['y'] - args['height-base'],
+        },
+      ],
+    });
+}
+
 // Optional args: collision, color, dx, dy, dz, exclude, id, side, x, y, z
 function data_webgl_cube_3d(args){
     args = core_args({
