@@ -1,7 +1,7 @@
 'use strict';
 
 // Optional args: collision, color, dx, dy, dz, exclude, id, side, x, y, z
-function data_3d_cube(args){
+function data_webgl_cube_3d(args){
     args = core_args({
       'args': args,
       'defaults': {
@@ -105,7 +105,7 @@ function data_3d_cube(args){
 }
 
 // Optional args: color-base, color-leaf, dx, dy, dz, id, x, y, z
-function data_3d_tree(args){
+function data_webgl_tree_2d(args){
     args = core_args({
       'args': args,
       'defaults': {
