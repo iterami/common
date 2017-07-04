@@ -185,3 +185,61 @@ function data_webgl_tree_2d(args){
       'group': args['id'],
     });
 }
+
+// Optional args: collision, color-base, color-leaf, dx, dy, dz, id, x, y, z
+function data_webgl_tree_3d(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'collision': false,
+        'color-base': [
+          0.4, 0.2, 0, 1,
+          0.4, 0.2, 0, 1,
+          0.4, 0.2, 0, 1,
+          0.4, 0.2, 0, 1,
+        ],
+        'color-leaf': [
+          0.1, 0.3, 0.1, 1,
+          0.1, 0.3, 0.1, 1,
+          0.1, 0.3, 0.1, 1,
+          0.1, 0.3, 0.1, 1,
+        ],
+        'dx': 0,
+        'dy': 0,
+        'dz': 0,
+        'id': core_uid(),
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    data_webgl_cube_3d({
+      'collision': args['collision'],
+      'color': args['color-base'],
+      'dx': args['dx'],
+      'dy': args['dy'],
+      'dz': args['dz'],
+      'exclude': [
+        0,
+        1,
+      ],
+      'id': '_webgl-tree_' + args['id'] + '_base',
+      'side': 1,
+      'x': args['x'],
+      'y': args['y'] + 1,
+      'z': args['z'],
+    });
+    data_webgl_cube_3d({
+      'collision': args['collision'],
+      'color': args['color-leaf'],
+      'dx': args['dx'],
+      'dy': args['dy'],
+      'dz': args['dz'],
+      'id': '_webgl-tree_' + args['id'] + '_leaf',
+      'side': 3,
+      'x': args['x'],
+      'y': args['y'] + 5,
+      'z': args['z'],
+    });
+}
