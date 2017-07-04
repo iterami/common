@@ -40,17 +40,20 @@ function canvas_draw_path(args){
       'defaults': {
         'properties': {},
         'style': canvas_style,
+        'translate': false,
         'type': 'lineTo',
         'x': 0,
         'y': 0,
       },
     });
 
-    canvas_buffer.save();
-    canvas_buffer.translate(
-      args['x'],
-      args['y']
-    );
+    if(args['translate']){
+        canvas_buffer.save();
+        canvas_buffer.translate(
+          args['x'],
+          args['y']
+        );
+    }
 
     canvas_buffer.beginPath();
     for(var vertex in args['vertices']){
@@ -74,7 +77,9 @@ function canvas_draw_path(args){
 
     canvas_buffer[args['style']]();
 
-    canvas_buffer.restore();
+    if(args['translate']){
+        canvas_buffer.restore();
+    }
 }
 
 // Required args: stops
