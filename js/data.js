@@ -1,6 +1,6 @@
 'use strict';
 
-// Optional args: color-base, color-leaf, half-base, half-leaf, id, x, y, z
+// Optional args: color-base, color-leaf, half-base, half-leaf, id, x, y
 function data_canvas_tree_2d(args){
     args = core_args({
       'args': args,
@@ -12,7 +12,6 @@ function data_canvas_tree_2d(args){
         'id': core_uid(),
         'x': 0,
         'y': 0,
-        'z': 0,
       },
     });
 
@@ -23,44 +22,48 @@ function data_canvas_tree_2d(args){
       'vertices': [
         {
           'type': 'moveTo',
-          'x': args['x'] - 12,
-          'y': args['y'] - args['height-base'],
+          'x': -12,
+          'y': -args['height-base'],
         },
         {
-          'x': args['x'] + 12,
-          'y': args['y'] - args['height-base'],
+          'x': 12,
+          'y': -args['height-base'],
         },
         {
-          'x': args['x'] + 12,
-          'y': args['y'],
+          'x': 12,
+          'y': 0,
         },
         {
-          'x': args['x'] - 12,
-          'y': args['y'],
+          'x': -12,
+          'y': 0,
         },
       ],
+      'x': args['x'],
+      'y': args['y'],
     },
     {
       'color': args['color-leaf'],
       'vertices': [
         {
           'type': 'moveTo',
-          'x': args['x'] - half_leaf,
-          'y': args['y'] - args['height-base'] - args['height-leaf'],
+          'x': -half_leaf,
+          'y': -args['height-leaf'],
         },
         {
-          'x': args['x'] + half_leaf,
-          'y': args['y'] - args['height-base'] - args['height-leaf'],
+          'x': half_leaf,
+          'y': -args['height-leaf'],
         },
         {
-          'x': args['x'] + half_leaf,
-          'y': args['y'] - args['height-base'],
+          'x': half_leaf,
+          'y': 0,
         },
         {
-          'x': args['x'] - half_leaf,
-          'y': args['y'] - args['height-base'],
+          'x': -half_leaf,
+          'y': 0,
         },
       ],
+      'x': args['x'],
+      'y': args['y'] - args['height-base'],
     });
 }
 
