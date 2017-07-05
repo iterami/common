@@ -946,7 +946,21 @@ function core_random_integer(args){
       },
     });
 
-    return Math[args['todo']](Math.random() * args['max']);
+    return Math[args['todo']](core_random_number({
+      'multiplier': args['max'],
+    }));
+}
+
+// Optional args: multiplier
+function core_random_number(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'multiplier': 1,
+      },
+    });
+
+    return Math.random() * args['multiplier'];
 }
 
 function core_random_rgb(){
