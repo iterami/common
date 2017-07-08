@@ -202,7 +202,7 @@ function core_audio_stop(args){
     core_audio_sources[args['id']][core_audio[args['id']]['connections'][0]['label']].stop(args['when']);
 }
 
-function core_core_audio_stop_all(){
+function core_audio_stop_all(){
     for(var id in core_audio_sources){
         core_audio_stop({
           'id': id,
