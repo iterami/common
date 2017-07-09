@@ -20,7 +20,6 @@ body{
 }
 table{
     display: inline-block;
-    margin: auto;
     text-align: left;
     vertical-align: top;
 }
