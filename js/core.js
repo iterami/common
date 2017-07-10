@@ -695,9 +695,10 @@ function core_handle_pointerlockchange(event){
         return;
     }
 
-    core_mouse['pointerlock-state'] = document.pointerLockElement === element
-      || document.mozPointerLockElement === element;
-
+    core_mouse['pointerlock-state'] = element === core_vendor_prefix({
+      'property': 'pointerLockElement',
+      'var': document,
+    });
 
     if(!core_mouse['pointerlock-state']){
         core_escape();
@@ -802,6 +803,7 @@ function core_init(){
     }
     document.onmozpointerlockchange = core_handle_pointerlockchange;
     document.onpointerlockchange = core_handle_pointerlockchange;
+    document.onwebkitpointerlockchange = core_handle_pointerlockchange;
     window.onbeforeunload = core_handle_beforeunload;
     window.oncontextmenu = core_handle_contextmenu;
     window.ongamepadconnected = core_handle_gamepadconnected;
@@ -1067,7 +1069,10 @@ function core_requestpointerlock(args){
         return;
     }
 
-    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock;
+    element.requestPointerLock = core_vendor_prefix({
+      'property': 'requestPointerLock',
+      'var': element,
+    });
     element.requestPointerLock();
 
     core_mouse['pointerlock-id'] = args['id'];
@@ -1351,6 +1356,18 @@ function core_ui_update(args){
     for(var id in args['ids']){
         document.getElementById('ui-' + id).value = args['ids'][id];
     }
+}
+
+// Required args: property, var
+// Optional args: capitalize
+function core_vendor_prefix(args){
+    var unprefixed = args['property'].charAt(0).toUpperCase() + args['property'].slice(1);
+
+    return args['var'][args['property']]
+      || args['var']['webkit' + unprefixed]
+      || args['var']['moz' + unprefixed]
+      || args['var']['ms' + unprefixed]
+      || args['var']['o' + unprefixed];
 }
 
 var core_audio = {};
