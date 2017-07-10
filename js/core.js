@@ -772,7 +772,6 @@ function core_init(){
       'properties': {
         'id': 'repo-ui',
       },
-      'type': 'div',
     }));
     document.body.appendChild(core_ui);
     core_ui_tab();
