@@ -1359,7 +1359,6 @@ function core_ui_update(args){
 }
 
 // Required args: property, var
-// Optional args: capitalize
 function core_vendor_prefix(args){
     var unprefixed = args['property'].charAt(0).toUpperCase() + args['property'].slice(1);
 
