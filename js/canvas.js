@@ -58,8 +58,8 @@ function canvas_draw_path(args){
     canvas_buffer.beginPath();
     for(var vertex in args['vertices']){
         canvas_buffer[args['vertices'][vertex]['type'] || args['type']](
-          args['vertices'][vertex]['x'],
-          args['vertices'][vertex]['y'],
+          args['vertices'][vertex]['x'] || 0,
+          args['vertices'][vertex]['y'] || 0,
           args['vertices'][vertex]['radius'],
           args['vertices'][vertex]['startAngle'],
           args['vertices'][vertex]['endAngle'],

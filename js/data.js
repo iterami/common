@@ -54,11 +54,9 @@ function data_canvas_fence_2d(args){
             },
             {
               'x': 5,
-              'y': 0,
             },
             {
               'x': -5,
-              'y': 0,
             },
           ],
           'y': args['y'],
@@ -98,11 +96,9 @@ function data_canvas_tree_2d(args){
         },
         {
           'x': 12,
-          'y': 0,
         },
         {
           'x': -12,
-          'y': 0,
         },
       ],
       'x': args['x'],
@@ -122,11 +118,9 @@ function data_canvas_tree_2d(args){
         },
         {
           'x': half_leaf,
-          'y': 0,
         },
         {
           'x': -half_leaf,
-          'y': 0,
         },
       ],
       'x': args['x'],
