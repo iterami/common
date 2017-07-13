@@ -263,6 +263,26 @@ function core_entity_create(args){
     }
 }
 
+// Reqruied args: entities
+// Optional args: delete-empty
+function core_entity_remove(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'delete-empty': false,
+      },
+    });
+
+    core_group_remove_all({
+      'delete-empty': args['delete-empty'],
+      'entities': args['entities'],
+    });
+
+    for(var entity in args['entities']){
+        delete core_entities[args['entities'][entity]];
+    }
+}
+
 // Required args: type
 // Optional args: default, properties, todo
 function core_entity_set(args){
@@ -472,6 +492,24 @@ function core_group_remove(args){
     if(args['delete-empty']
       && core_groups[args['group']].length === 0){
         delete core_groups[args['group']];
+    }
+}
+
+// Required args: entities
+// Optional args: delete-empty
+function core_group_remove_all(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'delete-empty': false,
+      },
+    });
+
+    for(var group in core_groups){
+        core_group_remove({
+          'delete-empty': args['delete-empty'],
+          'entities': args['entities'],
+        });
     }
 }
 
