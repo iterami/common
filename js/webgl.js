@@ -768,6 +768,7 @@ function webgl_setmode(args){
 
     window.cancelAnimationFrame(webgl_animationFrame);
     window.clearInterval(webgl_interval);
+    core_entity_remove_all();
 
     webgl_resize();
 
