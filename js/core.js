@@ -1259,8 +1259,21 @@ function core_storage_type_convert(args){
     return args['value'];
 }
 
-function core_storage_update(){
+// Optional args: bests
+function core_storage_update(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'bests': false,
+      },
+    });
+
     for(var key in core_storage_data){
+        if(args['bests']
+          && core_storage_info[key]['type'] === 'setting'){
+            continue;
+        }
+
         var element = document.getElementById(key);
         element[core_storage_element_property({
           'element': element,
