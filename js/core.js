@@ -227,12 +227,12 @@ function core_call(args){
     }
 }
 
-// Reqruied args: id
-// Optional args: properties, types
+// Optional args: id, properties, types
 function core_entity_create(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'id': core_uid(),
         'properties': {},
         'types': core_entity_types_default,
       },
@@ -254,6 +254,10 @@ function core_entity_create(args){
           'default': entity[property],
           'var': args['properties'][property],
         });
+    }
+
+    if(core_entities[args['id']] === void 0){
+        core_entity_count++;
     }
 
     core_entities[args['id']] = entity;
@@ -279,7 +283,29 @@ function core_entity_remove(args){
     });
 
     for(var entity in args['entities']){
+        if(core_entities[args['entities'][entity]] !== void 0){
+            core_entity_count--;
+        }
         delete core_entities[args['entities'][entity]];
+    }
+}
+
+// Optional args: delete-empty
+function core_entity_remove_all(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'delete-empty': false,
+      },
+    });
+
+    for(var entity in core_entities){
+        core_entity_remove({
+          'delete-empty': args['delete-empty'],
+          'entities': [
+            entity,
+          ],
+        });
     }
 }
 
@@ -1425,6 +1451,7 @@ var core_audio_context = 0;
 var core_audio_sources = {};
 var core_audio_volume_multiplier = 1;
 var core_entities = {};
+var core_entity_count = 0;
 var core_entity_info = {};
 var core_entity_types_default = [];
 var core_events = {};
