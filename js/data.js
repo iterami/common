@@ -172,38 +172,38 @@ function data_webgl_cube_3d(args){
     properties['position']['y'] = args['y'] + args['side'];
     if(args['exclude'].indexOf(0) === -1){
         core_entity_create({
-          'id': '_webgl-cube_' + args['id'] + '_0',
+          'id': 'webgl-cube_' + args['id'] + '_0',
           'properties': properties,
         });
-        entities.push('_webgl-cube_' + args['id'] + '_0');
+        entities.push('webgl-cube_' + args['id'] + '_0');
     }
     properties['position']['y'] = args['y'] - args['side'];
     properties['rotate']['z'] = 180;
     if(args['exclude'].indexOf(1) === -1){
         core_entity_create({
-          'id': '_webgl-cube_' + args['id'] + '_1',
+          'id': 'webgl-cube_' + args['id'] + '_1',
           'properties': properties,
         });
-        entities.push('_webgl-cube_' + args['id'] + '_1');
+        entities.push('webgl-cube_' + args['id'] + '_1');
     }
     properties['position']['x'] = args['x'] + args['side'];
     properties['position']['y'] = args['y'];
     properties['rotate']['z'] = 270;
     if(args['exclude'].indexOf(2) === -1){
         core_entity_create({
-          'id': '_webgl-cube_' + args['id'] + '_2',
+          'id': 'webgl-cube_' + args['id'] + '_2',
           'properties': properties,
         });
-        entities.push('_webgl-cube_' + args['id'] + '_2');
+        entities.push('webgl-cube_' + args['id'] + '_2');
     }
     properties['position']['x'] = args['x'] - args['side'];
     properties['rotate']['z'] = 90;
     if(args['exclude'].indexOf(3) === -1){
         core_entity_create({
-          'id': '_webgl-cube_' + args['id'] + '_3',
+          'id': 'webgl-cube_' + args['id'] + '_3',
           'properties': properties,
         });
-        entities.push('_webgl-cube_' + args['id'] + '_3');
+        entities.push('webgl-cube_' + args['id'] + '_3');
     }
     properties['position']['x'] = args['x'];
     properties['position']['z'] = args['z'] - args['side'];
@@ -211,19 +211,19 @@ function data_webgl_cube_3d(args){
     properties['rotate']['z'] = 0;
     if(args['exclude'].indexOf(4) === -1){
         core_entity_create({
-          'id': '_webgl-cube_' + args['id'] + '_4',
+          'id': 'webgl-cube_' + args['id'] + '_4',
           'properties': properties,
         });
-        entities.push('_webgl-cube_' + args['id'] + '_4');
+        entities.push('webgl-cube_' + args['id'] + '_4');
     }
     properties['position']['z'] = args['z'] + args['side'];
     properties['rotate']['x'] = 270;
     if(args['exclude'].indexOf(5) === -1){
         core_entity_create({
-          'id': '_webgl-cube_' + args['id'] + '_5',
+          'id': 'webgl-cube_' + args['id'] + '_5',
           'properties': properties,
         });
-        entities.push('_webgl-cube_' + args['id'] + '_5');
+        entities.push('webgl-cube_' + args['id'] + '_5');
     }
 
     core_group_add({
@@ -259,7 +259,7 @@ function data_webgl_tree_2d(args){
     });
 
     core_entity_create({
-      'id': '_webgl-tree_' + args['id'] + '_base',
+      'id': 'webgl-tree_' + args['id'] + '_base',
       'properties': {
         'color': args['color-base'],
         'dx': args['dx'],
@@ -282,7 +282,7 @@ function data_webgl_tree_2d(args){
       },
     });
     core_entity_create({
-      'id': '_webgl-tree_' + args['id'] + '_leaf',
+      'id': 'webgl-tree_' + args['id'] + '_leaf',
       'properties': {
         'color': args['color-leaf'],
         'dx': args['dx'],
@@ -307,8 +307,8 @@ function data_webgl_tree_2d(args){
 
     core_group_add({
       'entities': [
-        '_webgl-tree_' + args['id'] + '_base',
-        '_webgl-tree_' + args['id'] + '_leaf',
+        'webgl-tree_' + args['id'] + '_base',
+        'webgl-tree_' + args['id'] + '_leaf',
       ],
       'group': args['id'],
     });
@@ -352,7 +352,7 @@ function data_webgl_tree_3d(args){
         0,
         1,
       ],
-      'id': '_webgl-tree_' + args['id'] + '_base',
+      'id': 'webgl-tree_' + args['id'] + '_base',
       'side': 1,
       'x': args['x'],
       'y': args['y'] + 1,
@@ -364,7 +364,7 @@ function data_webgl_tree_3d(args){
       'dx': args['dx'],
       'dy': args['dy'],
       'dz': args['dz'],
-      'id': '_webgl-tree_' + args['id'] + '_leaf',
+      'id': 'webgl-tree_' + args['id'] + '_leaf',
       'side': 3,
       'x': args['x'],
       'y': args['y'] + 5,

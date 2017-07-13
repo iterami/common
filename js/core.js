@@ -300,6 +300,10 @@ function core_entity_remove_all(args){
     });
 
     for(var entity in core_entities){
+        if(entity[0] === '_'){
+            continue;
+        }
+
         core_entity_remove({
           'delete-empty': args['delete-empty'],
           'entities': [
