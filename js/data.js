@@ -75,30 +75,33 @@ function data_canvas_tree_2d(args){
         'height-base': 25,
         'height-leaf': 75,
         'id': core_uid(),
+        'width-base': 25,
+        'width-leaf': 75,
         'x': 0,
         'y': 0,
       },
     });
 
-    var half_leaf = args['height-leaf'] / 2;
+    var half_base = args['width-base'] / 2;
+    var half_leaf = args['width-leaf'] / 2;
 
     scenery.push({
       'color': args['color-base'],
       'vertices': [
         {
           'type': 'moveTo',
-          'x': -12,
+          'x': -half_base,
           'y': -args['height-base'],
         },
         {
-          'x': 12,
+          'x': half_base,
           'y': -args['height-base'],
         },
         {
-          'x': 12,
+          'x': half_base,
         },
         {
-          'x': -12,
+          'x': -half_base,
         },
       ],
       'x': args['x'],
