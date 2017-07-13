@@ -1,6 +1,6 @@
 'use strict';
 
-// Optional args: color-base, color-leaf, half-base, half-leaf, id, x, y
+// Optional args: color, frequency, id, length-half, x, y
 function data_canvas_fence_2d(args){
     args = core_args({
       'args': args,
