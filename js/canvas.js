@@ -170,6 +170,7 @@ function canvas_setmode(args){
 
     window.cancelAnimationFrame(canvas_animationFrame);
     window.clearInterval(canvas_interval);
+    core_entity_remove_all();
 
     canvas_resize();
 
