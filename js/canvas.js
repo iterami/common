@@ -127,6 +127,16 @@ function canvas_init(){
     canvas_canvas = document.getElementById('canvas').getContext('2d');
 
     canvas_resize();
+
+    core_entity_set({
+      'default': true,
+      'properties': {
+        'x': 0,
+        'y': 0,
+      },
+      'type': '_canvas',
+    });
+
     canvas_setmode();
 }
 
