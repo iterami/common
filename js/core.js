@@ -1440,10 +1440,16 @@ function core_ui_update(args){
     });
 
     for(var id in args['ids']){
+        if(core_ui_values[id] === args['ids'][id]){
+            continue;
+        }
+
         var element = document.getElementById('ui-' + id);
         element[element.tagName !== 'INPUT'
         ? 'innerHTML'
         : 'value'] = args['ids'][id];
+
+        core_ui_values[id] = args['ids'][id];
     }
 }
 
@@ -1484,6 +1490,7 @@ var core_random_string_length = 100;
 var core_repo_title = '';
 var core_storage_data = {};
 var core_storage_info = {};
+var core_ui_values = {};
 var core_uids = {};
 
 window.onload = core_init;
