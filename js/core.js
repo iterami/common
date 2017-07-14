@@ -1440,7 +1440,10 @@ function core_ui_update(args){
     });
 
     for(var id in args['ids']){
-        document.getElementById('ui-' + id).value = args['ids'][id];
+        var element = document.getElementById('ui-' + id);
+        element[element.tagName !== 'INPUT'
+        ? 'innerHTML'
+        : 'value'] = args['ids'][id];
     }
 }
 
