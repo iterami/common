@@ -247,6 +247,8 @@ function core_entity_create(args){
               'var': core_entity_info[args['types'][type]]['default'][property],
             });
         }
+
+        core_groups['_' + args['types'][type]][entity] = true;
     }
 
     for(var property in args['properties']){
@@ -333,6 +335,8 @@ function core_entity_set(args){
     if(args['default']){
         core_entity_types_default.push(args['type']);
     }
+
+    core_groups['_' + args['type']] = {};
 }
 
 function core_escape(){
