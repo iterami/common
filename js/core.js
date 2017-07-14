@@ -289,6 +289,7 @@ function core_entity_remove(args){
             core_entity_count--;
         }
         delete core_entities[args['entities'][entity]];
+        delete core_uids[args['entities'][entity]];
     }
 }
 
