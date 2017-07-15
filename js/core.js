@@ -248,7 +248,7 @@ function core_entity_create(args){
             });
         }
 
-        core_groups['_' + args['types'][type]][entity] = true;
+        core_groups['_' + args['types'][type]][args['id']] = true;
     }
 
     for(var property in args['properties']){
