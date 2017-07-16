@@ -967,7 +967,10 @@ function core_keys_updatebinds(args){
         var key = keybind;
 
         if(keybind !== 'all'){
-            key = parseInt(key);
+            key = parseInt(
+              key,
+              10
+            );
 
             if(isNaN(key)){
                 key = keybind.charCodeAt(0);
