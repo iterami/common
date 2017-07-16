@@ -1420,12 +1420,9 @@ function core_uid_create(){
     var uid = '';
 
     for(var i = 0; i < 3; i++){
-        uid += parseInt(
-          core_random_integer({
-            'max': 1e17,
-          }),
-          10
-        ).toString(34);
+        uid += core_random_integer({
+          'max': 1e17,
+        }).toString(34);
     }
 
     return uid;
@@ -1467,8 +1464,8 @@ function core_ui_update(args){
 
         var element = document.getElementById('ui-' + id);
         element[element.tagName !== 'INPUT'
-        ? 'innerHTML'
-        : 'value'] = args['ids'][id];
+          ? 'innerHTML'
+          : 'value'] = args['ids'][id];
 
         core_ui_values[id] = args['ids'][id];
     }
