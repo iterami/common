@@ -269,7 +269,10 @@ function core_entity_create(args){
 
     core_entities[args['id']] = entity;
 
-    for(var type in args['types']){
+    for(var type in core_entity_types_default){
+        core_entity_info[core_entity_types_default[type]]['todo'](args['id']);
+    }
+    for(type in args['types']){
         core_entity_info[args['types'][type]]['todo'](args['id']);
     }
 }
