@@ -535,7 +535,7 @@ function core_group_remove(args){
       },
     });
 
-    if(args['group'] in core_groups){
+    if(core_groups[args['group']] !== void 0){
         for(var entity in args['entities']){
             delete core_groups[args['group']][args['entities'][entity]];
         }
@@ -561,6 +561,7 @@ function core_group_remove_all(args){
         core_group_remove({
           'delete-empty': args['delete-empty'],
           'entities': args['entities'],
+          'group': group,
         });
     }
 }
