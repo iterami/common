@@ -283,7 +283,7 @@ function core_entity_handle_defaults(args){
         });
     }
 
-    core_groups['_' + args['type'][args['id']]] = true;
+    core_groups['_' + args['type']][args['id']] = true;
 }
 
 // Reqruied args: entities
