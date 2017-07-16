@@ -234,21 +234,26 @@ function core_entity_create(args){
       'defaults': {
         'id': core_uid(),
         'properties': {},
-        'types': core_entity_types_default,
+        'types': {},
       },
     });
 
     var entity = {};
 
-    for(var type in args['types']){
-        for(var property in core_entity_info[args['types'][type]]['default']){
-            entity[property] = core_handle_defaults({
-              'default': entity[property],
-              'var': core_entity_info[args['types'][type]]['default'][property],
-            });
-        }
+    for(var type in core_entity_types_default){
+        core_entity_handle_defaults({
+          'entity': entity,
+          'id': args['id'],
+          'type': core_entity_types_default[type],
+        });
+    }
 
-        core_groups['_' + args['types'][type]][args['id']] = true;
+    for(type in args['types']){
+        core_entity_handle_defaults({
+          'entity': entity,
+          'id': args['id'],
+          'type': args['types'][type],
+        });
     }
 
     for(var property in args['properties']){
@@ -267,6 +272,18 @@ function core_entity_create(args){
     for(var type in args['types']){
         core_entity_info[args['types'][type]]['todo'](args['id']);
     }
+}
+
+// Required args: id, type, types
+function core_entity_handle_defaults(args){
+    for(var property in core_entity_info[args['type']]['default']){
+        args['entity'][property] = core_handle_defaults({
+          'default': args['entity'][property],
+          'var': core_entity_info[args['type']]['default'][property],
+        });
+    }
+
+    core_groups['_' + args['type'][args['id']]] = true;
 }
 
 // Reqruied args: entities
