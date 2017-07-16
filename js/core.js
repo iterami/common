@@ -799,6 +799,21 @@ function core_handle_pointerlockchange(event){
     }
 };
 
+// Required args: hex
+function core_hex_to_rgb(args){
+    if(args['hex'][0] === '#'){
+        args['hex'] = args['hex'].slice(1);
+    }
+
+    var rgb = {
+      'blue': '0x' + args['hex'][4] + args['hex'][5] | 0,
+      'green': '0x' + args['hex'][2] + args['hex'][3] | 0,
+      'red': '0x' + args['hex'][0] + args['hex'][1] | 0,
+    };
+
+    return 'rgb(' + rgb['red'] + ', ' + rgb['green'] + ', ' + rgb['blue'] + ')';
+}
+
 // Optional args: properties, type, style
 function core_html(args){
     args = core_args({
