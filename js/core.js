@@ -234,7 +234,7 @@ function core_entity_create(args){
       'defaults': {
         'id': core_uid(),
         'properties': {},
-        'types': {},
+        'types': [],
       },
     });
 
