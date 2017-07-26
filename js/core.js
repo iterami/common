@@ -551,7 +551,8 @@ function core_group_remove(args){
 
     if(core_groups[args['group']] !== void 0){
         for(var entity in args['entities']){
-            if(core_groups[args['group']][args['entities'][entity]] !== void 0){
+            if(core_entity_info[args['group']]
+              && core_groups[args['group']][args['entities'][entity]] !== void 0){
                 core_entity_info[args['group']]['count']--;
             }
             delete core_groups[args['group']][args['entities'][entity]];
