@@ -272,10 +272,6 @@ function core_entity_create(args){
         });
     }
 
-    if(core_entities[args['id']] === void 0){
-        core_entity_count++;
-    }
-
     core_entities[args['id']] = entity;
 
     for(var type in core_entity_types_default){
@@ -295,7 +291,11 @@ function core_entity_handle_defaults(args){
         });
     }
 
-    core_groups['_' + args['type']][args['id']] = true;
+    if(core_groups[args['type']][args['id']] === void 0){
+        core_entity_info[args['type']]['count']++;
+    }
+
+    core_groups[args['type']][args['id']] = true;
 }
 
 // Reqruied args: entities
@@ -314,25 +314,26 @@ function core_entity_remove(args){
     });
 
     for(var entity in args['entities']){
-        if(core_entities[args['entities'][entity]] !== void 0){
-            core_entity_count--;
-        }
         delete core_entities[args['entities'][entity]];
         delete core_uids[args['entities'][entity]];
     }
 }
 
-// Optional args: delete-empty
+// Optional args: delete-empty, group
 function core_entity_remove_all(args){
     args = core_args({
       'args': args,
       'defaults': {
         'delete-empty': false,
+        'group': false,
       },
     });
 
     for(var entity in core_entities){
-        if(entity[0] === '_'){
+        if(entity[0] === '_'
+          || (args['group'] !== false
+            && !core_groups[args['group']][entity]
+          )){
             continue;
         }
 
@@ -358,6 +359,7 @@ function core_entity_set(args){
     });
 
     core_entity_info[args['type']] = {
+      'count': 0,
       'default': args['properties'],
       'todo': args['todo'],
     };
@@ -366,7 +368,7 @@ function core_entity_set(args){
         core_entity_types_default.push(args['type']);
     }
 
-    core_groups['_' + args['type']] = {};
+    core_groups[args['type']] = {};
 }
 
 function core_escape(){
@@ -549,6 +551,9 @@ function core_group_remove(args){
 
     if(core_groups[args['group']] !== void 0){
         for(var entity in args['entities']){
+            if(core_groups[args['group']][args['entities'][entity]] !== void 0){
+                core_entity_info[args['group']]['count']--;
+            }
             delete core_groups[args['group']][args['entities'][entity]];
         }
     }
@@ -1514,7 +1519,6 @@ var core_audio_context = 0;
 var core_audio_sources = {};
 var core_audio_volume_multiplier = 1;
 var core_entities = {};
-var core_entity_count = 0;
 var core_entity_info = {};
 var core_entity_types_default = [];
 var core_events = {};

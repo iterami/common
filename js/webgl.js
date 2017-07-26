@@ -528,7 +528,7 @@ function webgl_init(){
             'image': webgl_textures['_default'],
           });
       },
-      'type': '_webgl',
+      'type': 'webgl',
     });
 
     core_entity_create({

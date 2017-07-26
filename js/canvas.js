@@ -134,7 +134,7 @@ function canvas_init(){
         'x': 0,
         'y': 0,
       },
-      'type': '_canvas',
+      'type': 'canvas',
     });
 
     canvas_setmode();
