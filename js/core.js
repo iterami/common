@@ -1079,6 +1079,15 @@ function core_random_integer(args){
     }));
 }
 
+// Required args: object
+function core_random_key(args){
+    var keys = Object.keys(args['object']);
+
+    return keys[core_random_integer({
+      'max': keys.length - 1,
+    })];
+}
+
 // Optional args: multiplier
 function core_random_number(args){
     args = core_args({
