@@ -137,7 +137,9 @@ function canvas_init(){
       'type': 'canvas',
     });
 
-    canvas_setmode();
+    if(!core_menu_open){
+        canvas_setmode();
+    }
 }
 
 function canvas_logicloop(){

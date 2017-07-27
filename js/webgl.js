@@ -539,7 +539,9 @@ function webgl_init(){
       },
     });
 
-    webgl_setmode();
+    if(!core_menu_open){
+        webgl_setmode();
+    }
 }
 
 function webgl_logicloop(){
