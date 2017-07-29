@@ -17,7 +17,7 @@ function race_init(){
         'y': 0,
         'z': 0,
       },
-      'type': '_racer',
+      'type': 'racer',
     });
 }
 
@@ -34,6 +34,9 @@ function race_racer_create(args){
     core_entity_create({
       'id': args['id'],
       'properties': args['properties'],
+      'types': [
+        'racer',
+      ],
     });
 }
 
