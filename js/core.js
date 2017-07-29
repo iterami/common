@@ -1134,13 +1134,14 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: audios, beforeunload, images, info, keybinds, menu, mousebinds, storage, ui
+// Optional args: audios, beforeunload, entities, images, info, keybinds, menu, mousebinds, storage, ui
 function core_repo_init(args){
     args = core_args({
       'args': args,
       'defaults': {
         'audios': {},
         'beforeunload': false,
+        'entities': {},
         'images': {},
         'info': '',
         'keybinds': false,
@@ -1153,6 +1154,15 @@ function core_repo_init(args){
 
     if(args['menu']){
         core_escape();
+    }
+
+    for(var entity in args['entities']){
+        core_entity_set({
+          'default': args['entities'][entity]['default'],
+          'properties': args['entities'][entity]['properties'],
+          'todo': args['entities'][entity]['todo'],
+          'type': entity,
+        });
     }
 
     core_repo_title = args['title'];
