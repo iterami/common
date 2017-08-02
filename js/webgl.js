@@ -477,7 +477,11 @@ function webgl_init(){
         'dy': 0,
         'dz': 0,
         'gravity': false,
-        'index': [],
+        'index': [
+          0, 1,
+          2, 0,
+          2, 3,
+        ],
         'mode': 'TRIANGLE_FAN',
         'normals': [],
         'position': {
@@ -495,7 +499,12 @@ function webgl_init(){
           'y': 1,
           'z': 1,
         },
-        'textureData': [],
+        'textureData': [
+          0, 1,
+          0, 0,
+          1, 0,
+          1, 1,
+        ],
       },
       'todo': function(entity){
           core_entities[entity]['normals'] = webgl_normals({
@@ -507,18 +516,6 @@ function webgl_init(){
           if(core_entities[entity]['draw'] === false){
               return;
           }
-
-          core_entities[entity]['index'] = [
-            0, 1,
-            2, 0,
-            2, 3,
-          ];
-          core_entities[entity]['textureData'] = [
-            0, 1,
-            0, 0,
-            1, 0,
-            1, 1,
-          ];
 
           core_entities[entity]['buffer'] = webgl_buffer_set({
             'colorData': core_entities[entity]['color'],
