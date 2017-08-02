@@ -253,8 +253,8 @@ function data_webgl_terrain_3d(args){
     });
 
     var color = [];
-    var start_x = (-args['length'] / 2) * args['length-step'];
-    var start_z = (-args['width'] / 2) * args['width-step'];
+    var start_x = (-args['length'] / 2) * args['width-step'];
+    var start_z = (-args['width'] / 2) * args['length-step'];
     var textureData = [];
     var vertices = [];
 
@@ -283,7 +283,7 @@ function data_webgl_terrain_3d(args){
               start_z + step,
               start_x + j * args['width-step'],
               args['y'],
-              start_z + step + 1
+              start_z + step + args['length-step']
             );
         }
     }
