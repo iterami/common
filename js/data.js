@@ -235,6 +235,75 @@ function data_webgl_cube_3d(args){
     });
 }
 
+// Optional args: color, id, length, length-step, width, width-step, x, y, z
+function data_webgl_terrain_3d(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'color': 0.5,
+        'id': core_uid(),
+        'length': 10,
+        'length-step': 1,
+        'width': 10,
+        'width-step': 1,
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    var color = [];
+    var start_x = (-args['length'] / 2) * args['length-step'];
+    var start_z = (-args['width'] / 2) * args['width-step'];
+    var textureData = [];
+    var vertices = [];
+
+    for(var i = 0; i < args['length']; i++){
+        var step = i * args['length-step'];
+        for(var j = 0; j < args['width']; j++){
+            color.push(
+              args['color'],
+              args['color'],
+              args['color'],
+              1,
+              args['color'],
+              args['color'],
+              args['color'],
+              1
+            );
+            textureData.push(
+              0,
+              1,
+              0,
+              1
+            );
+            vertices.push(
+              start_x + j * args['width-step'],
+              args['y'],
+              start_z + step,
+              start_x + j * args['width-step'],
+              args['y'],
+              start_z + step + 1
+            );
+        }
+    }
+
+    core_entity_create({
+      'id': args['id'],
+      'properties': {
+        'color': color,
+        'position': {
+          'x': args['x'],
+          'y': args['y'],
+          'z': args['z'],
+        },
+        'mode': 'TRIANGLE_STRIP',
+        'textureData': textureData,
+        'vertices': vertices,
+      },
+    });
+}
+
 // Optional args: color-base, color-leaf, dx, dy, dz, id, x, y, z
 function data_webgl_tree_2d(args){
     args = core_args({

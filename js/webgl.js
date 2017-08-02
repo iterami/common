@@ -24,10 +24,12 @@ function webgl_buffer_set(args){
       'color': webgl_buffer_set_type({
         'data': args['colorData'],
       }),
+      /*
       'index': webgl_buffer_set_type({
         'data': args['indexData'],
         'type': 'Uint16Array',
       }),
+      */
       'normal': webgl_buffer_set_type({
         'data': args['normalData'],
       }),
@@ -278,10 +280,12 @@ function webgl_draw(){
             0
           );
 
+          /*
           webgl_buffer.bindBuffer(
             webgl_buffer.ARRAY_BUFFER,
             core_entities[entity]['buffer']['index']
           );
+          */
 
           webgl_buffer.uniformMatrix4fv(
             webgl_buffer.getUniformLocation(
@@ -477,11 +481,13 @@ function webgl_init(){
         'dy': 0,
         'dz': 0,
         'gravity': false,
+        /*
         'index': [
           0, 1,
           2, 0,
           2, 3,
         ],
+        */
         'mode': 'TRIANGLE_FAN',
         'normals': [],
         'position': {
@@ -519,7 +525,7 @@ function webgl_init(){
 
           core_entities[entity]['buffer'] = webgl_buffer_set({
             'colorData': core_entities[entity]['color'],
-            'indexData': core_entities[entity]['index'],
+            //'indexData': core_entities[entity]['index'],
             'normalData': core_entities[entity]['normals'],
             'textureData': core_entities[entity]['textureData'],
             'vertexData': core_entities[entity]['vertices'],
