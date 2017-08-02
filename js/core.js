@@ -600,8 +600,11 @@ function core_handle_beforeunload(event){
 }
 
 function core_handle_contextmenu(event){
+    if(core_menu_open){
+        return false;
+    }
+
     var result = core_handle_event({
-      'block': core_menu_blockevents,
       'event': event,
       'key': 'contextmenu',
       'object': core_mouse['todo'],
@@ -646,15 +649,10 @@ function core_handle_event(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'block': false,
         'state': void 0,
         'todo': void 0,
       },
     });
-    if(args['block']
-      && core_menu_open){
-        return false;
-    }
 
     if(args['object'].hasOwnProperty(args['key'])){
         if(args['object'][args['key']]['preventDefault']){
@@ -693,12 +691,12 @@ function core_handle_gamepaddisconnected(event){
 function core_handle_keydown(event){
     var key = core_events_keyinfo(event);
 
-    var block = key['code'] === 27
-      ? false
-      : core_menu_blockevents;
+    if(core_menu_open
+      && key['code'] !== 27){
+        return;
+    }
 
     if(core_handle_event({
-      'block': block,
       'event': event,
       'key': key['code'],
       'object': core_keys,
@@ -709,7 +707,6 @@ function core_handle_keydown(event){
     }
 
     core_handle_event({
-      'block': block,
       'event': event,
       'key': 'all',
       'object': core_keys,
@@ -722,7 +719,6 @@ function core_handle_keyup(event){
     var key = core_events_keyinfo(event);
 
     if(core_handle_event({
-      'block': core_menu_blockevents,
       'event': event,
       'key': key['code'],
       'object': core_keys,
@@ -745,12 +741,15 @@ function core_handle_keyup(event){
 }
 
 function core_handle_mousedown(event){
+    if(core_menu_open){
+        return;
+    }
+
     core_mouse['button'] = event.button;
     core_mouse['down'] = true;
     core_mouse['down-x'] = core_mouse['x'];
     core_mouse['down-y'] = core_mouse['y'];
     core_handle_event({
-      'block': core_menu_blockevents,
       'event': event,
       'key': 'mousedown',
       'object': core_mouse['todo'],
@@ -759,12 +758,15 @@ function core_handle_mousedown(event){
 }
 
 function core_handle_mousemove(event){
+    if(core_menu_open){
+        return;
+    }
+
     core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-sensitivity'];
     core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-sensitivity'];
     core_mouse['x'] = event.pageX;
     core_mouse['y'] = event.pageY;
     core_handle_event({
-      'block': core_menu_blockevents,
       'event': event,
       'key': 'mousemove',
       'object': core_mouse['todo'],
@@ -776,7 +778,6 @@ function core_handle_mouseup(event){
     core_mouse['button'] = -1;
     core_mouse['down'] = false;
     core_handle_event({
-      'block': core_menu_blockevents,
       'event': event,
       'key': 'mouseup',
       'object': core_mouse['todo'],
@@ -785,12 +786,15 @@ function core_handle_mouseup(event){
 }
 
 function core_handle_mousewheel(event){
+    if(core_menu_open){
+        return;
+    }
+
     var delta = Number(
       event.wheelDelta
         || -event.detail
     );
     core_handle_event({
-      'block': core_menu_blockevents,
       'event': event,
       'key': 'mousewheel',
       'object': core_mouse['todo'],
@@ -1546,7 +1550,6 @@ var core_gamepads = {};
 var core_groups = {};
 var core_images = {};
 var core_keys = {};
-var core_menu_blockevents = true;
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
