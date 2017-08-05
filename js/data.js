@@ -209,7 +209,7 @@ function data_webgl_cube_3d(args){
         entities.push('webgl-cube_' + args['id'] + '_3');
     }
     properties['position']['x'] = args['x'];
-    properties['position']['z'] = args['z'] - args['side'];
+    properties['position']['z'] = args['z'] + args['side'];
     properties['rotate']['x'] = 90;
     properties['rotate']['z'] = 0;
     if(args['exclude'].indexOf(4) === -1){
@@ -219,7 +219,7 @@ function data_webgl_cube_3d(args){
         });
         entities.push('webgl-cube_' + args['id'] + '_4');
     }
-    properties['position']['z'] = args['z'] + args['side'];
+    properties['position']['z'] = args['z'] - args['side'];
     properties['rotate']['x'] = 270;
     if(args['exclude'].indexOf(5) === -1){
         core_entity_create({
