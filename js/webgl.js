@@ -1,11 +1,12 @@
 'use strict';
 
-// Required args: base, entity
-// Optional args: offset-x, offset-y, offset-z
+// Required args: base
+// Optional args: entity, offset-x, offset-y, offset-z
 function webgl_attach(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'entity': '_webgl-camera',
         'offset-x': 0,
         'offset-y': 0,
         'offset-z': 0,
