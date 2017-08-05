@@ -1,5 +1,26 @@
 'use strict';
 
+// Required args: base, entity
+// Optional args: offset-x, offset-y
+function canvas_attach(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'offset-x': 0,
+        'offset-y': 0,
+        'offset-z': 0,
+      },
+    });
+
+    core_entities[args['entity']]['attach'] = {
+      'id': args['base'],
+      'offset': {
+        'x': args['offset-x'],
+        'y': args['offset-y'],
+      },
+    };
+}
+
 function canvas_draw(){
     if(core_menu_open){
         return;

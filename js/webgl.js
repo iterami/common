@@ -1,5 +1,27 @@
 'use strict';
 
+// Required args: base, entity
+// Optional args: offset-x, offset-y, offset-z
+function webgl_attach(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'offset-x': 0,
+        'offset-y': 0,
+        'offset-z': 0,
+      },
+    });
+
+    core_entities[args['entity']]['attach'] = {
+      'id': args['base'],
+      'offset': {
+        'x': args['offset-x'],
+        'y': args['offset-y'],
+        'z': args['offset-z'],
+      },
+    };
+}
+
 // Required args: entity
 function webgl_billboard(args){
     var axis = 'z';
