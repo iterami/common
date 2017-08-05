@@ -131,6 +131,7 @@ function canvas_init(){
     core_entity_set({
       'default': true,
       'properties': {
+        'attach': false,
         'x': 0,
         'y': 0,
       },
@@ -148,6 +149,20 @@ function canvas_logicloop(){
     }
 
     logic();
+
+    core_group_modify({
+      'groups': [
+        'canvas',
+      ],
+      'todo': function(entity){
+          if(core_entities[entity]['attach'] !== false){
+              var attached = core_entities[core_entities[entity]['attach']['id']];
+              for(var axis in core_entities[entity]['position']){
+                  core_entities[entity]['position'][axis] = attached['position'][axis] + core_entities[entity]['attach']['offset'][axis];
+              }
+          }
+      },
+    });
 }
 
 function canvas_resize(){
