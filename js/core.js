@@ -741,7 +741,8 @@ function core_handle_keyup(event){
 }
 
 function core_handle_mousedown(event){
-    if(core_menu_open){
+    if(core_menu_open
+      || event['target'].id === 'core-toggle'){
         return;
     }
 
