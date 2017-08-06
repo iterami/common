@@ -13,11 +13,11 @@ function canvas_attach(args){
     });
 
     core_entities[args['entity']]['attach'] = {
-      'id': args['base'],
       'offset': {
         'x': args['offset-x'],
         'y': args['offset-y'],
       },
+      'to': args['base'],
     };
 }
 

@@ -14,12 +14,12 @@ function webgl_attach(args){
     });
 
     core_entities[args['entity']]['attach'] = {
-      'id': args['base'],
       'offset': {
         'x': args['offset-x'],
         'y': args['offset-y'],
         'z': args['offset-z'],
       },
+      'to': args['base'],
     };
 }
 
@@ -618,9 +618,9 @@ function webgl_logicloop(){
           }
 
           if(core_entities[entity]['attach'] !== false){
-              var attached = core_entities[core_entities[entity]['attach']['id']];
+              var attachto = core_entities[core_entities[entity]['attach']['to']];
               for(var axis in core_entities[entity]['position']){
-                  core_entities[entity]['position'][axis] = attached['position'][axis] + core_entities[entity]['attach']['offset'][axis];
+                  core_entities[entity]['position'][axis] = attachto['position'][axis] + core_entities[entity]['attach']['offset'][axis];
               }
 
           }else{
