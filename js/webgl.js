@@ -396,9 +396,6 @@ function webgl_init(){
       },
     }));
 
-    webgl_programs = {};
-    webgl_shaders = {};
-
     math_matrices['camera'] = math_matrix_create();
     math_matrix_perspective();
 
