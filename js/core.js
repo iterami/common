@@ -1139,7 +1139,7 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: audios, beforeunload, entities, images, info, keybinds, menu, mousebinds, storage, ui
+// Optional args: audios, beforeunload, entities, images, info, keybinds, menu, mousebinds, storage, storage-menu, ui
 function core_repo_init(args){
     args = core_args({
       'args': args,
@@ -1153,6 +1153,7 @@ function core_repo_init(args){
         'menu': false,
         'mousebinds': false,
         'storage': {},
+        'storage-menu': '',
         'ui': '',
       },
     });
@@ -1175,7 +1176,7 @@ function core_repo_init(args){
       'storage': args['storage'],
     });
     document.getElementById('core-menu-info').innerHTML = args['info'];
-    document.getElementById('core-menu-repo').innerHTML = args['storage-menu'] || '';
+    document.getElementById('core-menu-repo').innerHTML = args['storage-menu'];
     var repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/iterami/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
