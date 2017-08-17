@@ -386,7 +386,7 @@ function webgl_drawloop(){
 function webgl_init(){
     webgl_canvas_properties = {
       'fillStyle': '#fff',
-      'font': canvas_fonts['medium'],
+      'font': webgl_fonts['medium'],
       'lineJoin': 'miter',
       'lineWidth': 1,
       'strokeStyle': '#fff',
