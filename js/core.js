@@ -600,10 +600,6 @@ function core_handle_beforeunload(event){
 }
 
 function core_handle_contextmenu(event){
-    if(core_menu_open){
-        return false;
-    }
-
     var result = core_handle_event({
       'event': event,
       'key': 'contextmenu',
