@@ -89,12 +89,9 @@ function canvas_draw_path(args){
     }
     canvas_buffer.closePath();
 
-    for(var property in args['properties']){
-        canvas_buffer[property] = core_handle_defaults({
-          'default': canvas_buffer,
-          'var': args['properties'][property],
-        });
-    }
+    canvas_setproperties({
+      'properties': args['properties'],
+    });
 
     canvas_buffer[args['style']]();
 
