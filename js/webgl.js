@@ -384,6 +384,16 @@ function webgl_drawloop(){
 }
 
 function webgl_init(){
+    webgl_canvas_properties = {
+      'fillStyle': '#fff',
+      'font': canvas_fonts['medium'],
+      'lineJoin': 'miter',
+      'lineWidth': 1,
+      'strokeStyle': '#fff',
+      'textAlign': 'start',
+      'textBaseline': 'alphabetic',
+    };
+
     var properties = '';
     if(!webgl_oncontextmenu){
         properties = ' oncontextmenu="return false" ';
@@ -791,7 +801,9 @@ function webgl_resize(){
     webgl_buffer.viewportWidth = webgl_width;
     webgl_buffer.viewport(0, 0, webgl_height, webgl_width);
 
-    webgl_buffer.font = webgl_fonts['medium'];
+    for(var property in webgl_canvas_properties){
+        webgl_buffer[property] = webgl_canvas_properties[property];
+    }
 
     core_call({
       'todo': 'resize_logic',
@@ -839,6 +851,14 @@ function webgl_setmode(args){
       webgl_logicloop,
       core_storage_data['frame-ms']
     );
+}
+
+// Required args: properties
+function webgl_setcanvasproperties(args){
+    for(var property in args['properties']){
+        webgl_canvas_properties[property] = args['properties'][property];
+        webgl_buffer[property] = args['properties'][property];
+    }
 }
 
 // Required args: id, source, type
@@ -958,6 +978,7 @@ var webgl_gravity = {
 var webgl_height = 0;
 var webgl_interval = 0;
 var webgl_oncontextmenu = true;
+var webgl_canvas_properties = {};
 var webgl_pointer = false;
 var webgl_programs = {};
 var webgl_shaders = {};

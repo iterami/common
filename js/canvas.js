@@ -132,6 +132,16 @@ function canvas_gradient(args){
 }
 
 function canvas_init(){
+    canvas_properties = {
+      'fillStyle': '#fff',
+      'font': canvas_fonts['medium'],
+      'lineJoin': 'miter',
+      'lineWidth': 1,
+      'strokeStyle': '#fff',
+      'textAlign': 'start',
+      'textBaseline': 'alphabetic',
+    };
+
     var properties = '';
     if(!canvas_oncontextmenu){
         properties = ' oncontextmenu="return false" ';
@@ -197,7 +207,9 @@ function canvas_resize(){
     document.getElementById('canvas').width = canvas_width;
     canvas_x = canvas_width / 2;
 
-    canvas_buffer.font = canvas_fonts['medium'];
+    for(var property in canvas_properties){
+        canvas_buffer[property] = canvas_properties[property];
+    }
 
     core_call({
       'todo': 'resize_logic',
@@ -245,6 +257,14 @@ function canvas_setmode(args){
     }
 }
 
+// Required args: properties
+function canvas_setproperties(args){
+    for(var property in args['properties']){
+        canvas_properties[property] = args['properties'][property];
+        canvas_buffer[property] = args['properties'][property];
+    }
+}
+
 var canvas_animationFrame = 0;
 var canvas_buffer = 0;
 var canvas_canvas = 0;
@@ -256,6 +276,7 @@ var canvas_fonts = {
 var canvas_height = 0;
 var canvas_interval = 0;
 var canvas_oncontextmenu = true;
+var canvas_properties = {};
 var canvas_style = 'fill';
 var canvas_width = 0;
 var canvas_x = 0;
