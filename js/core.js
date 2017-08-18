@@ -1145,6 +1145,7 @@ function core_repo_init(args){
         'entities': {},
         'images': {},
         'info': '',
+        'info-events': {},
         'keybinds': false,
         'menu': false,
         'mousebinds': false,
@@ -1176,6 +1177,9 @@ function core_repo_init(args){
     var repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/iterami/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
+    for(var event in args['info-events']){
+        document.getElementById(event)[args['info-events'][event]['type']] = args['info-events'][event]['todo'];
+    }
 
     core_storage_update();
 
