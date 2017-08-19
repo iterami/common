@@ -390,7 +390,7 @@ function core_escape(){
     });
 }
 
-// Optional args: beforeunload, clearkeys, clearmouse, keybinds, mousebinds
+// Optional args: beforeunload, clearkeys, clearmouse, elements, keybinds, mousebinds
 function core_events_bind(args){
     args = core_args({
       'args': args,
@@ -398,6 +398,7 @@ function core_events_bind(args){
         'beforeunload': false,
         'clearkeys': false,
         'clearmouse': false,
+        'elements': false,
         'keybinds': false,
         'mousebinds': false,
       },
@@ -428,6 +429,12 @@ function core_events_bind(args){
           'clear': args['clearmouse'],
           'mousebinds': args['mousebinds'],
         });
+    }
+
+    if(args['elements'] !== false){
+        for(var element in args['elements']){
+            document.getElementById(element)[args['elements'][element]['type'] || 'onclick'] = args['elements'][element]['todo'];
+        }
     }
 }
 
@@ -890,7 +897,7 @@ function core_init(){
     core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr>Settings:<input onclick="core_ui_tab({tab:\'global\'})" type=button value=Global><input onclick=core_ui_tab() type=button value=Repo><div id=core-menu-repo></div><table id=core-menu-global><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table><input onclick=core_storage_reset({bests:false}) type=button value="Reset Settings"><input onclick=core_storage_reset({bests:true}) type=button value="Reset Bests">',
+        'innerHTML': '<a href=..>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr>Settings:<input id=settings-global type=button value=Global><input id=settings-repo type=button value=Repo><div id=core-menu-repo></div><table id=core-menu-global><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
       },
       'type': 'span',
     }));
@@ -965,6 +972,32 @@ function core_init(){
             core_storage_save({
               'bests': true,
             });
+        },
+      },
+      'elements': {
+        'bests-reset': {
+          'todo': function(){
+              core_storage_reset({
+                'bests': true,
+              });
+          },
+        },
+        'settings-global': {
+          'todo': function(){
+              core_ui_tab({
+                'tab': 'global',
+              });
+          },
+        },
+        'settings-repo': {
+          'todo': core_ui_tab,
+        },
+        'settings-reset': {
+          'todo': function(){
+              core_storage_reset({
+                'bests': false,
+              });
+          },
         },
       },
       'keybinds': {
@@ -1177,14 +1210,12 @@ function core_repo_init(args){
     var repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/iterami/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
-    for(var event in args['info-events']){
-        document.getElementById(event)[args['info-events'][event]['type']] = args['info-events'][event]['todo'];
-    }
 
     core_storage_update();
 
     core_events_bind({
       'beforeunload': args['beforeunload'],
+      'elements': args['info-events'],
       'keybinds': args['keybinds'],
       'mousebinds': args['mousebinds'],
     });
