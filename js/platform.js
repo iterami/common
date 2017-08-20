@@ -13,6 +13,10 @@ function platform_coin_collide(args){
     if(platform_players[args['id']]['coins'] >= platform_score_goal){
         platform_players[args['id']]['done'] = true;
     }
+
+    core_audio_start({
+      'id': 'boop',
+    });
 }
 
 function platform_init(){
