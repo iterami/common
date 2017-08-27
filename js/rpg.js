@@ -187,6 +187,14 @@ function rpg_handle_all(){
     rpg_character_handle();
     rpg_particle_handle();
     rpg_spawner_handle();
+
+    core_ui_update({
+      'ids': {
+        'health': rpg_characters[0]['stats']['health']['current'] + '/' + rpg_characters[0]['stats']['health']['max'],
+        'mana': rpg_characters[0]['stats']['mana']['current'] + '/' + rpg_characters[0]['stats']['mana']['max'],
+        'selected': rpg_characters[0]['inventory'][rpg_characters[0]['selected']]['label'],
+      },
+    });
 }
 
 // Optional args: properties, type
