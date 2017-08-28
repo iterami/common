@@ -897,7 +897,7 @@ function core_init(){
     core_ui.appendChild(core_html({
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=/>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr>Settings:<input id=settings-global type=button value=Global><input id=settings-repo type=button value=Repo><div id=core-menu-repo></div><table id=core-menu-global><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
+        'innerHTML': '<a href=/>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
       },
       'type': 'span',
     }));
@@ -907,7 +907,14 @@ function core_init(){
       },
     }));
     document.body.appendChild(core_ui);
-    core_ui_tab();
+
+    core_tab_create({
+      'content': '<table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table>',
+      'default': true,
+      'group': 'core-menu',
+      'id': 'global',
+      'label': 'Global',
+    });
 
     // Keyboard/mouse init.
     core_mouse = {
@@ -981,16 +988,6 @@ function core_init(){
                 'bests': true,
               });
           },
-        },
-        'settings-global': {
-          'todo': function(){
-              core_ui_tab({
-                'tab': 'global',
-              });
-          },
-        },
-        'settings-repo': {
-          'todo': core_ui_tab,
         },
         'settings-reset': {
           'todo': function(){
@@ -1206,7 +1203,17 @@ function core_repo_init(args){
       'storage': args['storage'],
     });
     document.getElementById('core-menu-info').innerHTML = args['info'];
-    document.getElementById('core-menu-repo').innerHTML = args['storage-menu'];
+    if(args['storage-menu'].length > 0){
+        core_tab_create({
+          'content': args['storage-menu'],
+          'group': 'core-menu',
+          'id': 'repo',
+          'label': 'Repo',
+        });
+        core_tab_switch({
+          'id': 'tab_core-menu_repo',
+        });
+    }
     var repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/iterami/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
@@ -1465,6 +1472,60 @@ function core_storage_update(args){
     }
 }
 
+// Required args: group, id
+// Optional args: content, default, label
+function core_tab_create(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'content': '',
+        'default': false,
+        'label': '',
+      },
+    });
+
+    core_tabs[args['id']] = {
+      'content': args['content'],
+      'group': args['group'],
+    };
+
+    document.getElementById(args['group'] + '-tabs').appendChild(core_html({
+      'properties': {
+        'id': 'tab_' + args['group'] + '_' + args['id'],
+        'onclick': function(){
+            core_tab_switch({
+              'id': this.id,
+            });
+        },
+        'type': 'button',
+        'value': args['label'],
+      },
+      'type': 'input',
+    }));
+    document.getElementById(args['group'] + '-tabcontent').appendChild(core_html({
+      'properties': {
+        'id': 'tabcontent-' + args['id'],
+        'innerHTML': args['content'],
+        'style': args['default']
+          ? ''
+          : 'display:none',
+      },
+    }));
+}
+
+// Required args: id
+function core_tab_switch(args){
+    var info = args['id'].split('_');
+
+    for(var tab in core_tabs){
+        if(core_tabs[tab]['group'] === info[1]){
+            document.getElementById('tabcontent-' + tab).style.display = 'none';
+        }
+    }
+
+    document.getElementById('tabcontent-' + info[2]).style.display = 'block';
+}
+
 // Required args: var
 // Optional args: type
 function core_type(args){
@@ -1515,26 +1576,6 @@ function core_uid_create(){
     }
 
     return uid;
-}
-
-// Optional args: tab
-function core_ui_tab(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'tab': 'repo',
-      },
-    });
-
-    var tabs = [
-      'global',
-      'repo',
-    ];
-    for(var tab in tabs){
-        document.getElementById('core-menu-' + tabs[tab]).style.display = 'none';
-    }
-
-    document.getElementById('core-menu-' + args['tab']).style.display = 'block';
 }
 
 // Optional args: ids
@@ -1595,6 +1636,7 @@ var core_random_string_length = 100;
 var core_repo_title = '';
 var core_storage_data = {};
 var core_storage_info = {};
+var core_tabs = {};
 var core_ui_values = {};
 var core_uids = {};
 
