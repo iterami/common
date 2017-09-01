@@ -422,6 +422,7 @@ function webgl_init(){
     );
     webgl_canvas = document.getElementById('canvas').getContext('2d');
 
+    window.onresize = webgl_resize;
     webgl_resize();
 
     webgl_clearcolor_set({
@@ -990,5 +991,3 @@ var webgl_textures = {
 var webgl_width = 0;
 var webgl_x = 0;
 var webgl_y = 0;
-
-window.onresize = webgl_resize;

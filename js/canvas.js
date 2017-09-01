@@ -8,7 +8,6 @@ function canvas_attach(args){
       'defaults': {
         'offset-x': 0,
         'offset-y': 0,
-        'offset-z': 0,
       },
     });
 
@@ -154,6 +153,7 @@ function canvas_init(){
     canvas_buffer = document.getElementById('buffer').getContext('2d');
     canvas_canvas = document.getElementById('canvas').getContext('2d');
 
+    window.onresize = canvas_resize;
     canvas_resize();
 
     core_entity_set({
@@ -278,5 +278,3 @@ var canvas_style = 'fill';
 var canvas_width = 0;
 var canvas_x = 0;
 var canvas_y = 0;
-
-window.onresize = canvas_resize;
