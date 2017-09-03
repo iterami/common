@@ -383,12 +383,13 @@ function webgl_drawloop(){
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
 }
 
-// Optional args: camera
+// Optional args: camera, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
       'defaults': {
         'camera': 'free',
+        'speed': .1,
       },
     });
 
@@ -416,7 +417,10 @@ function webgl_init(args){
 
     math_matrices['camera'] = math_matrix_create();
     math_matrix_perspective();
-    webgl_camera_type = args['camera'];
+    webgl_camera = {
+      'speed': args['speed'],
+      'type': args['camera'],
+    };
 
     webgl_buffer = document.getElementById('buffer').getContext(
       'webgl',
@@ -604,45 +608,45 @@ function webgl_logicloop(){
         core_entities['_webgl-camera']['dy'] = 0;
     }
 
-    if(webgl_camera_type !== false){
+    if(webgl_camera['type'] !== false){
         if(core_keys[65]['state']){
             webgl_camera_move({
-              'speed': -.1,
+              'speed': -webgl_camera['speed'],
               'strafe': true,
             });
         }
 
         if(core_keys[68]['state']){
             webgl_camera_move({
-              'speed': .1,
+              'speed': webgl_camera['speed'],
               'strafe': true,
             });
         }
 
         if(core_keys[83]['state']){
             webgl_camera_move({
-              'speed': .1,
+              'speed': webgl_camera['speed'],
             });
         }
 
         if(core_keys[87]['state']){
             webgl_camera_move({
-              'speed': -.1,
+              'speed': -webgl_camera['speed'],
             });
         }
 
-        if(webgl_camera_type === 'free'){
+        if(webgl_camera['type'] === 'free'){
             if(core_keys[32]['state']){
                 webgl_camera_move({
                   'speed': 0,
-                  'y': .5,
+                  'y': webgl_camera['speed'],
                 });
             }
 
             if(core_keys[67]['state']){
                 webgl_camera_move({
                   'speed': 0,
-                  'y': -.5,
+                  'y': -webgl_camera['speed'],
                 });
             }
         }
@@ -1016,7 +1020,7 @@ function webgl_vertexcolorarray(args){
 var webgl_animationFrame = 0;
 var webgl_attributes = {};
 var webgl_buffer = 0;
-var webgl_camera_type = false;
+var webgl_camera = {};
 var webgl_canvas = 0;
 var webgl_clearcolor = {};
 var webgl_cleardepth = 1;
