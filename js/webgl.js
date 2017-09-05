@@ -383,12 +383,15 @@ function webgl_drawloop(){
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
 }
 
-// Optional args: camera, speed
+// Optional args: camera, cleardepth, grabity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
       'defaults': {
         'camera': 'free',
+        'cleardepth': 1,
+        'gravity-acceleration': -0.05,
+        'gravity-max': -1,
         'speed': .1,
       },
     });
@@ -401,6 +404,17 @@ function webgl_init(args){
       'strokeStyle': '#fff',
       'textAlign': 'start',
       'textBaseline': 'alphabetic',
+    };
+    webgl_properties = {
+      'camera': {
+        'speed': args['speed'],
+        'type': args['camera'],
+      },
+      'cleardepth': args['cleardepth'],
+      'gravity': {
+        'acceleration': args['gravity-acceleration'],
+        'max': args['gravity-max'],
+      },
     };
 
     var properties = '';
@@ -417,10 +431,6 @@ function webgl_init(args){
 
     math_matrices['camera'] = math_matrix_create();
     math_matrix_perspective();
-    webgl_camera = {
-      'speed': args['speed'],
-      'type': args['camera'],
-    };
 
     webgl_buffer = document.getElementById('buffer').getContext(
       'webgl',
@@ -446,7 +456,7 @@ function webgl_init(args){
         'red': 0,
       },
     });
-    webgl_buffer.clearDepth(webgl_cleardepth);
+    webgl_buffer.clearDepth(webgl_properties['cleardepth']);
     webgl_buffer.enable(webgl_buffer.CULL_FACE);
     webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
     webgl_buffer.depthFunc(webgl_buffer.LEQUAL);
@@ -589,6 +599,7 @@ function webgl_init(args){
       'properties': {
         'collides': true,
         'draw': false,
+        'gravity': webgl_properties['camera']['type'] === 'gravity',
       },
     });
 
@@ -608,45 +619,45 @@ function webgl_logicloop(){
         core_entities['_webgl-camera']['dy'] = 0;
     }
 
-    if(webgl_camera['type'] !== false){
+    if(webgl_properties['camera']['type'] !== false){
         if(core_keys[65]['state']){
             webgl_camera_move({
-              'speed': -webgl_camera['speed'],
+              'speed': -webgl_properties['camera']['speed'],
               'strafe': true,
             });
         }
 
         if(core_keys[68]['state']){
             webgl_camera_move({
-              'speed': webgl_camera['speed'],
+              'speed': webgl_properties['camera']['speed'],
               'strafe': true,
             });
         }
 
         if(core_keys[83]['state']){
             webgl_camera_move({
-              'speed': webgl_camera['speed'],
+              'speed': webgl_properties['camera']['speed'],
             });
         }
 
         if(core_keys[87]['state']){
             webgl_camera_move({
-              'speed': -webgl_camera['speed'],
+              'speed': -webgl_properties['camera']['speed'],
             });
         }
 
-        if(webgl_camera['type'] === 'free'){
+        if(webgl_properties['camera']['type'] === 'free'){
             if(core_keys[32]['state']){
                 webgl_camera_move({
                   'speed': 0,
-                  'y': webgl_camera['speed'],
+                  'y': webgl_properties['camera']['speed'],
                 });
             }
 
             if(core_keys[67]['state']){
                 webgl_camera_move({
                   'speed': 0,
-                  'y': -webgl_camera['speed'],
+                  'y': -webgl_properties['camera']['speed'],
                 });
             }
         }
@@ -665,8 +676,8 @@ function webgl_logicloop(){
 
           if(core_entities[entity]['gravity']){
               core_entities[entity]['dy'] = Math.max(
-                core_entities[entity]['dy'] + webgl_gravity['acceleration'],
-                webgl_gravity['max']
+                core_entities[entity]['dy'] + webgl_properties['gravity']['acceleration'],
+                webgl_properties['gravity']['max']
               );
           }
 
@@ -1020,19 +1031,13 @@ function webgl_vertexcolorarray(args){
 var webgl_animationFrame = 0;
 var webgl_attributes = {};
 var webgl_buffer = 0;
-var webgl_camera = {};
 var webgl_canvas = 0;
 var webgl_clearcolor = {};
-var webgl_cleardepth = 1;
 var webgl_collision_range = 2.5;
 var webgl_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
   'small': '100% monospace',
-};
-var webgl_gravity = {
-  'acceleration': -.05,
-  'max': -1,
 };
 var webgl_height = 0;
 var webgl_interval = 0;
@@ -1040,6 +1045,7 @@ var webgl_oncontextmenu = true;
 var webgl_canvas_properties = {};
 var webgl_pointer = false;
 var webgl_programs = {};
+var webgl_properties = {};
 var webgl_shaders = {};
 var webgl_text = {};
 var webgl_textures = {
