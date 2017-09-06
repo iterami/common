@@ -476,7 +476,7 @@ function webgl_init(args){
     });
     webgl_shader_create({
       'id': 'vertex',
-      'source': 'attribute vec3 vec_vertexPosition;'
+      'source': 'attribute vec4 vec_vertexPosition;'
       //+ 'varying float float_fogDistance;'
         + 'uniform mat4 mat_cameraMatrix;'
         + 'uniform mat4 mat_perspectiveMatrix;'
@@ -485,7 +485,7 @@ function webgl_init(args){
         + 'varying vec2 vec_textureCoord;'
         + 'attribute vec2 vec_texturePosition;'
         + 'void main(void){'
-        +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);'
+        +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
         +   'vec_fragmentColor = vec_vertexColor;'
       //+   'float_fogDistance = length(gl_Position.xyz);'
         +   'vec_textureCoord = vec_texturePosition;'
