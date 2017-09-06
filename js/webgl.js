@@ -488,7 +488,7 @@ function webgl_init(args){
         +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
         +   ') * vec_fragmentColor;'
         */
-        +   'gl_FragColor = texture2D(sampler, vec_textureCoord) * vec_fragmentColor;' // * vec_lighting;'
+        +   'gl_FragColor = texture2D(sampler, vec_textureCoord) * vec_fragmentColor * vec4(vec_lighting, 1.0);'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
@@ -512,7 +512,7 @@ function webgl_init(args){
         +   'vec_fragmentColor = vec_vertexColor;'
         +   'vec_textureCoord = vec_texturePosition;'
         +   'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-        +   'vec_lighting = vec3(0.3, 0.3, 0.3) + vec3(1, 1, 1) * max(dot(transformedNormal.xyz, normalize(vec3(0.85, 0.8, 0.75))), 0.0);'
+        +   'vec_lighting = vec3(1, 1, 1);' // + vec3(0, 1, 0) * max(dot(transformedNormal.xyz, normalize(vec3(0, 1, 0))), 0);'
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
     });
