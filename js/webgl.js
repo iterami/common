@@ -292,10 +292,7 @@ function webgl_draw(){
             core_entities[entity]['texture']
           );
           webgl_buffer.uniform1i(
-            webgl_buffer.getUniformLocation(
-              webgl_programs['shaders'],
-              'sampler'
-            ),
+            webgl_uniformlocations['sampler'],
             0
           );
 
@@ -307,18 +304,12 @@ function webgl_draw(){
           */
 
           webgl_buffer.uniformMatrix4fv(
-            webgl_buffer.getUniformLocation(
-              webgl_programs['shaders'],
-              'mat_perspectiveMatrix'
-            ),
+            webgl_uniformlocations['mat_perspectiveMatrix'],
             0,
             math_matrices['perspective']
           );
           webgl_buffer.uniformMatrix4fv(
-            webgl_buffer.getUniformLocation(
-              webgl_programs['shaders'],
-              'mat_cameraMatrix'
-            ),
+            webgl_uniformlocations['mat_cameraMatrix'],
             0,
             math_matrices['camera']
           );
@@ -519,6 +510,21 @@ function webgl_init(args){
     webgl_vertexattribarray_set({
       'attribute': 'vec_texturePosition',
     });
+
+    webgl_uniformlocations = {
+      'mat_cameraMatrix': webgl_buffer.getUniformLocation(
+        webgl_programs['shaders'],
+        'mat_cameraMatrix'
+      ),
+      'mat_perspectiveMatrix': webgl_buffer.getUniformLocation(
+        webgl_programs['shaders'],
+        'mat_perspectiveMatrix'
+      ),
+      'sampler': webgl_buffer.getUniformLocation(
+        webgl_programs['shaders'],
+        'sampler'
+      ),
+    };
 
     core_entity_set({
       'default': true,
@@ -1048,6 +1054,7 @@ var webgl_textures = {
   '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
   '_default': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
 };
+var webgl_uniformlocations = {};
 var webgl_width = 0;
 var webgl_x = 0;
 var webgl_y = 0;
