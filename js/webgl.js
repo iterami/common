@@ -37,7 +37,7 @@ function webgl_billboard(args){
     core_entities[args['entity']]['rotate'][args['target-axis']] = core_entities['_webgl-camera']['rotate'][args['base-axis']];
 }
 
-// Required args: colorData, indexData, textureData, vertexData
+// Required args: colorData, indexData, normalData, textureData, vertexData
 function webgl_buffer_set(args){
     return {
       'color': webgl_buffer_set_type({
@@ -249,6 +249,19 @@ function webgl_draw(){
 
           webgl_buffer.bindBuffer(
             webgl_buffer.ARRAY_BUFFER,
+            core_entities[entity]['buffer']['normal']
+          );
+          webgl_buffer.vertexAttribPointer(
+            webgl_attributes['vec_vertexNormal'],
+            3,
+            webgl_buffer.FLOAT,
+            false,
+            0,
+            0
+          );
+
+          webgl_buffer.bindBuffer(
+            webgl_buffer.ARRAY_BUFFER,
             core_entities[entity]['buffer']['color']
           );
           webgl_buffer.vertexAttribPointer(
@@ -303,6 +316,11 @@ function webgl_draw(){
           );
           */
 
+          webgl_buffer.uniformMatrix4fv(
+            webgl_uniformlocations['mat_normalMatrix'],
+            0,
+            math_matrices['perspective']
+          );
           webgl_buffer.uniformMatrix4fv(
             webgl_uniformlocations['mat_perspectiveMatrix'],
             0,
@@ -450,13 +468,16 @@ function webgl_init(args){
 
     webgl_shader_create({
       'id': 'fragment',
-      'source': 'precision mediump float;'
-      //+ 'varying float float_fogDistance;'
+      'source':
+          'precision mediump float;'
         + 'uniform sampler2D sampler;'
         + 'varying vec4 vec_fragmentColor;'
+        + 'varying vec3 vec_lighting;'
         + 'varying vec2 vec_textureCoord;'
+      //+ 'varying float float_fogDistance;'
         + 'void main(void){'
-      /*+   'gl_FragColor = mix('
+        /*
+        +   'gl_FragColor = mix('
         +     'vec4('
         +       webgl_clearcolor['red'] + ','
         +       webgl_clearcolor['green'] + ','
@@ -466,28 +487,32 @@ function webgl_init(args){
         +     'vec_fragmentColor,'
         +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
         +   ') * vec_fragmentColor;'
-      */+   'gl_FragColor = texture2D('
-        +     'sampler,'
-        +     'vec_textureCoord'
-        +   ') * vec_fragmentColor;'
+        */
+        +   'gl_FragColor = texture2D(sampler, vec_textureCoord) * vec_fragmentColor;' // * vec_lighting;'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
     webgl_shader_create({
       'id': 'vertex',
-      'source': 'attribute vec4 vec_vertexPosition;'
-      //+ 'varying float float_fogDistance;'
+      'source':
+          'attribute vec2 vec_texturePosition;'
+        + 'attribute vec3 vec_vertexNormal;'
+        + 'attribute vec4 vec_vertexPosition;'
+        + 'attribute vec4 vec_vertexColor;'
         + 'uniform mat4 mat_cameraMatrix;'
+        + 'uniform mat4 mat_normalMatrix;'
         + 'uniform mat4 mat_perspectiveMatrix;'
         + 'varying vec4 vec_fragmentColor;'
-        + 'attribute vec4 vec_vertexColor;'
         + 'varying vec2 vec_textureCoord;'
-        + 'attribute vec2 vec_texturePosition;'
+        + 'varying vec3 vec_lighting;'
+      //+ 'varying float float_fogDistance;'
         + 'void main(void){'
         +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
-        +   'vec_fragmentColor = vec_vertexColor;'
       //+   'float_fogDistance = length(gl_Position.xyz);'
+        +   'vec_fragmentColor = vec_vertexColor;'
         +   'vec_textureCoord = vec_texturePosition;'
+        +   'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
+        +   'vec_lighting = vec3(0.3, 0.3, 0.3) + vec3(1, 1, 1) * max(dot(transformedNormal.xyz, normalize(vec3(0.85, 0.8, 0.75))), 0.0);'
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
     });
@@ -504,6 +529,9 @@ function webgl_init(args){
       'attribute': 'vec_vertexColor',
     });
     webgl_vertexattribarray_set({
+      'attribute': 'vec_vertexNormal',
+    });
+    webgl_vertexattribarray_set({
       'attribute': 'vec_vertexPosition',
     });
     webgl_vertexattribarray_set({
@@ -514,6 +542,10 @@ function webgl_init(args){
       'mat_cameraMatrix': webgl_buffer.getUniformLocation(
         webgl_programs['shaders'],
         'mat_cameraMatrix'
+      ),
+      'mat_normalMatrix': webgl_buffer.getUniformLocation(
+        webgl_programs['shaders'],
+        'mat_normalMatrix'
       ),
       'mat_perspectiveMatrix': webgl_buffer.getUniformLocation(
         webgl_programs['shaders'],
