@@ -388,12 +388,16 @@ function webgl_drawloop(){
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
 }
 
-// Optional args: camera, cleardepth, grabity-acceleration, gravity-max, speed
+// Optional args: camera, clear_alpha, clear_blue, clear_green, clear_red, cleardepth, grabity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
       'defaults': {
         'camera': 'free',
+        'clear-alpha': 1,
+        'clear-blue': 0,
+        'clear-green': 0,
+        'clear-red': 0,
         'cleardepth': 1,
         'gravity-acceleration': -0.05,
         'gravity-max': -1,
@@ -456,10 +460,10 @@ function webgl_init(args){
 
     webgl_clearcolor_set({
       'color': {
-        'alpha': 1,
-        'blue': 0,
-        'green': 0,
-        'red': 0,
+        'alpha': args['clear-alpha'],
+        'blue': args['clear-blue'],
+        'green': args['clear-green'],
+        'red': args['clear-red'],
       },
     });
     webgl_buffer.clearDepth(webgl_properties['cleardepth']);
@@ -474,9 +478,8 @@ function webgl_init(args){
         + 'varying vec4 vec_fragmentColor;'
         + 'varying vec3 vec_lighting;'
         + 'varying vec2 vec_textureCoord;'
-      //+ 'varying float float_fogDistance;'
+        + 'varying float float_fogDistance;'
         + 'void main(void){'
-        /*
         +   'gl_FragColor = mix('
         +     'vec4('
         +       webgl_clearcolor['red'] + ','
@@ -485,10 +488,8 @@ function webgl_init(args){
         +       webgl_clearcolor['alpha']
         +     '),'
         +     'vec_fragmentColor,'
-        +     'clamp(exp(-0.001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
-        +   ') * vec_fragmentColor;'
-        */
-        +   'gl_FragColor = texture2D(sampler, vec_textureCoord) * vec_fragmentColor * vec4(vec_lighting, 1.0);'
+        +     'clamp(exp(-0.0001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+        +   ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0);'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
@@ -505,10 +506,10 @@ function webgl_init(args){
         + 'varying vec4 vec_fragmentColor;'
         + 'varying vec2 vec_textureCoord;'
         + 'varying vec3 vec_lighting;'
-      //+ 'varying float float_fogDistance;'
+        + 'varying float float_fogDistance;'
         + 'void main(void){'
         +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
-      //+   'float_fogDistance = length(gl_Position.xyz);'
+        +   'float_fogDistance = length(gl_Position.xyz);'
         +   'vec_fragmentColor = vec_vertexColor;'
         +   'vec_textureCoord = vec_texturePosition;'
         +   'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
