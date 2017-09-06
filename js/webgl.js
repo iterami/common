@@ -447,7 +447,6 @@ function webgl_init(args){
     webgl_buffer.clearDepth(webgl_properties['cleardepth']);
     webgl_buffer.enable(webgl_buffer.CULL_FACE);
     webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
-    webgl_buffer.depthFunc(webgl_buffer.LEQUAL);
 
     webgl_shader_create({
       'id': 'fragment',
