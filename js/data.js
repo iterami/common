@@ -304,11 +304,12 @@ function data_webgl_terrain_3d(args){
     });
 }
 
-// Optional args: color-base, color-leaf, dx, dy, dz, id, x, y, z
+// Optional args: billboard, color-base, color-leaf, dx, dy, dz, id, x, y, z
 function data_webgl_tree_2d(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'billboard': false,
         'color-base': [
           0.4, 0.2, 0, 1,
           0.4, 0.2, 0, 1,
@@ -333,6 +334,7 @@ function data_webgl_tree_2d(args){
     core_entity_create({
       'id': 'webgl-tree_' + args['id'] + '_base',
       'properties': {
+        'billboard': args['billboard'],
         'color': args['color-base'],
         'dx': args['dx'],
         'dy': args['dy'],
@@ -356,6 +358,7 @@ function data_webgl_tree_2d(args){
     core_entity_create({
       'id': 'webgl-tree_' + args['id'] + '_leaf',
       'properties': {
+        'billboard': args['billboard'],
         'color': args['color-leaf'],
         'dx': args['dx'],
         'dy': args['dy'],
