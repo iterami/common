@@ -977,6 +977,122 @@ function webgl_shader_create(args){
     webgl_shaders[args['id']] = shader;
 }
 
+// Optional args: color
+function webgl_skybox(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'color': webgl_vertexcolorarray(),
+      },
+    });
+
+    core_entity_create({
+      'id': 'skybox-back',
+      'properties': {
+        'color': args['color'],
+        'depth-ignore': true,
+        'rotate': {
+          'x': 270,
+        },
+        'vertices': [
+          5, 0, -5,
+          -5, 0, -5,
+          -5, 0, 5,
+          5, 0, 5,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_webgl-camera',
+      'entity': 'skybox-back',
+      'offset-z': 5,
+    });
+    core_entity_create({
+      'id': 'skybox-front',
+      'properties': {
+        'color': args['color'],
+        'depth-ignore': true,
+        'rotate': {
+          'x': 90,
+        },
+        'vertices': [
+          5, 0, -5,
+          -5, 0, -5,
+          -5, 0, 5,
+          5, 0, 5,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_webgl-camera',
+      'entity': 'skybox-front',
+      'offset-z': -5,
+    });
+    core_entity_create({
+      'id': 'skybox-left',
+      'properties': {
+        'color': args['color'],
+        'depth-ignore': true,
+        'rotate': {
+          'z': 270,
+        },
+        'vertices': [
+          5, 0, -5,
+          -5, 0, -5,
+          -5, 0, 5,
+          5, 0, 5,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_webgl-camera',
+      'entity': 'skybox-left',
+      'offset-x': -5,
+    });
+    core_entity_create({
+      'id': 'skybox-right',
+      'properties': {
+        'color': args['color'],
+        'depth-ignore': true,
+        'rotate': {
+          'z': 90,
+        },
+        'vertices': [
+          5, 0, -5,
+          -5, 0, -5,
+          -5, 0, 5,
+          5, 0, 5,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_webgl-camera',
+      'entity': 'skybox-right',
+      'offset-x': 5,
+    });
+    core_entity_create({
+      'id': 'skybox-top',
+      'properties': {
+        'color': args['color'],
+        'depth-ignore': true,
+        'rotate': {
+          'x': 180,
+        },
+        'vertices': [
+          5, 0, -5,
+          -5, 0, -5,
+          -5, 0, 5,
+          5, 0, 5,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_webgl-camera',
+      'entity': 'skybox-top',
+      'offset-y': 5,
+    });
+}
+
 // Required args: entityid
 // Optional args: image
 function webgl_texture_set(args){
