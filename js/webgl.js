@@ -202,150 +202,20 @@ function webgl_draw(){
 
     core_group_modify({
       'groups': [
-        'webgl',
+        'depthfalse',
       ],
       'todo': function(entity){
-          if(core_entities[entity]['draw'] === false){
-              return;
-          }
-
-          if(core_entities[entity]['billboard'] === true){
-              webgl_billboard({
-                'entity': entity,
-              });
-          }
-
-          math_matrix_clone({
-            'id': 'camera',
-            'newid': 'cache',
-          });
-
-          if(core_entities[entity]['depth-ignore']){
-              webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
-          }
-
-          math_matrix_translate({
-            'dimensions': [
-              -core_entities[entity]['position']['x'],
-              -core_entities[entity]['position']['y'],
-              -core_entities[entity]['position']['z'],
-            ],
-            'id': 'camera',
-          });
-          math_matrix_rotate({
-            'dimensions': [
-              math_degrees_to_radians({
-                'degrees': core_entities[entity]['rotate']['x'],
-              }),
-              math_degrees_to_radians({
-                'degrees': core_entities[entity]['rotate']['y'],
-              }),
-              math_degrees_to_radians({
-                'degrees': core_entities[entity]['rotate']['z'],
-              }),
-            ],
-            'id': 'camera',
-          });
-
-          webgl_buffer.bindBuffer(
-            webgl_buffer.ARRAY_BUFFER,
-            core_entities[entity]['buffer']['normal']
-          );
-          webgl_buffer.vertexAttribPointer(
-            webgl_attributes['vec_vertexNormal'],
-            3,
-            webgl_buffer.FLOAT,
-            false,
-            0,
-            0
-          );
-
-          webgl_buffer.bindBuffer(
-            webgl_buffer.ARRAY_BUFFER,
-            core_entities[entity]['buffer']['color']
-          );
-          webgl_buffer.vertexAttribPointer(
-            webgl_attributes['vec_vertexColor'],
-            4,
-            webgl_buffer.FLOAT,
-            false,
-            0,
-            0
-          );
-
-          webgl_buffer.bindBuffer(
-            webgl_buffer.ARRAY_BUFFER,
-            core_entities[entity]['buffer']['vertex']
-          );
-          webgl_buffer.vertexAttribPointer(
-            webgl_attributes['vec_vertexPosition'],
-            3,
-            webgl_buffer.FLOAT,
-            false,
-            0,
-            0
-          );
-
-          webgl_buffer.bindBuffer(
-            webgl_buffer.ARRAY_BUFFER,
-            core_entities[entity]['buffer']['texture']
-          );
-          webgl_buffer.vertexAttribPointer(
-            webgl_attributes['vec_texturePosition'],
-            2,
-            webgl_buffer.FLOAT,
-            false,
-            0,
-            0
-          );
-
-          webgl_buffer.activeTexture(webgl_buffer.TEXTURE0);
-          webgl_buffer.bindTexture(
-            webgl_buffer.TEXTURE_2D,
-            core_entities[entity]['texture']
-          );
-          webgl_buffer.uniform1i(
-            webgl_uniformlocations['sampler'],
-            0
-          );
-
-          /*
-          webgl_buffer.bindBuffer(
-            webgl_buffer.ARRAY_BUFFER,
-            core_entities[entity]['buffer']['index']
-          );
-          */
-
-          webgl_buffer.uniformMatrix4fv(
-            webgl_uniformlocations['mat_normalMatrix'],
-            0,
-            math_matrices['perspective']
-          );
-          webgl_buffer.uniformMatrix4fv(
-            webgl_uniformlocations['mat_perspectiveMatrix'],
-            0,
-            math_matrices['perspective']
-          );
-          webgl_buffer.uniformMatrix4fv(
-            webgl_uniformlocations['mat_cameraMatrix'],
-            0,
-            math_matrices['camera']
-          );
-
-          webgl_buffer.drawArrays(
-            webgl_buffer[core_entities[entity]['mode']],
-            0,
-            core_entities[entity]['vertices'].length / 3
-          );
-
-          if(core_entities[entity]['depth-ignore']){
-              webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
-          }
-
-          math_matrix_copy({
-            'id': 'cache',
-            'newid': 'camera',
-          });
+          webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
+          webgl_draw_entity(entity);
+          webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
+      },
+    });
+    core_group_modify({
+      'groups': [
+        'depthtrue',
+      ],
+      'todo': function(entity){
+          webgl_draw_entity(entity);
       },
     });
 
@@ -386,6 +256,142 @@ function webgl_draw(){
 function webgl_drawloop(){
     webgl_draw();
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
+}
+
+function webgl_draw_entity(entity){
+    if(core_entities[entity]['draw'] === false){
+        return;
+    }
+
+    if(core_entities[entity]['billboard'] === true){
+        webgl_billboard({
+          'entity': entity,
+        });
+    }
+
+    math_matrix_clone({
+      'id': 'camera',
+      'newid': 'cache',
+    });
+
+    math_matrix_translate({
+      'dimensions': [
+        -core_entities[entity]['position']['x'],
+        -core_entities[entity]['position']['y'],
+        -core_entities[entity]['position']['z'],
+      ],
+      'id': 'camera',
+    });
+    math_matrix_rotate({
+      'dimensions': [
+        math_degrees_to_radians({
+          'degrees': core_entities[entity]['rotate']['x'],
+        }),
+        math_degrees_to_radians({
+          'degrees': core_entities[entity]['rotate']['y'],
+        }),
+        math_degrees_to_radians({
+          'degrees': core_entities[entity]['rotate']['z'],
+        }),
+      ],
+      'id': 'camera',
+    });
+
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
+      core_entities[entity]['buffer']['normal']
+    );
+    webgl_buffer.vertexAttribPointer(
+      webgl_attributes['vec_vertexNormal'],
+      3,
+      webgl_buffer.FLOAT,
+      false,
+      0,
+      0
+    );
+
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
+      core_entities[entity]['buffer']['color']
+    );
+    webgl_buffer.vertexAttribPointer(
+      webgl_attributes['vec_vertexColor'],
+      4,
+      webgl_buffer.FLOAT,
+      false,
+      0,
+      0
+    );
+
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
+      core_entities[entity]['buffer']['vertex']
+    );
+    webgl_buffer.vertexAttribPointer(
+      webgl_attributes['vec_vertexPosition'],
+      3,
+      webgl_buffer.FLOAT,
+      false,
+      0,
+      0
+    );
+
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
+      core_entities[entity]['buffer']['texture']
+    );
+    webgl_buffer.vertexAttribPointer(
+      webgl_attributes['vec_texturePosition'],
+      2,
+      webgl_buffer.FLOAT,
+      false,
+      0,
+      0
+    );
+
+    webgl_buffer.activeTexture(webgl_buffer.TEXTURE0);
+    webgl_buffer.bindTexture(
+      webgl_buffer.TEXTURE_2D,
+      core_entities[entity]['texture']
+    );
+    webgl_buffer.uniform1i(
+      webgl_uniformlocations['sampler'],
+      0
+    );
+
+    /*
+    webgl_buffer.bindBuffer(
+      webgl_buffer.ARRAY_BUFFER,
+      core_entities[entity]['buffer']['index']
+    );
+    */
+
+    webgl_buffer.uniformMatrix4fv(
+      webgl_uniformlocations['mat_normalMatrix'],
+      0,
+      math_matrices['perspective']
+    );
+    webgl_buffer.uniformMatrix4fv(
+      webgl_uniformlocations['mat_perspectiveMatrix'],
+      0,
+      math_matrices['perspective']
+    );
+    webgl_buffer.uniformMatrix4fv(
+      webgl_uniformlocations['mat_cameraMatrix'],
+      0,
+      math_matrices['camera']
+    );
+
+    webgl_buffer.drawArrays(
+      webgl_buffer[core_entities[entity]['mode']],
+      0,
+      core_entities[entity]['vertices'].length / 3
+    );
+
+    math_matrix_copy({
+      'id': 'cache',
+      'newid': 'camera',
+    });
 }
 
 // Optional args: camera, clear_alpha, clear_blue, clear_green, clear_red, cleardepth, grabity-acceleration, gravity-max, speed
@@ -560,12 +566,14 @@ function webgl_init(args){
 
     core_entity_set({
       'default': true,
+      'groups': [
+        'depthtrue',
+      ],
       'properties': {
         'attach': false,
         'collides': false,
         'collision': false,
         'color': [],
-        'depth-ignore': false,
         'draw': true,
         'dx': 0,
         'dy': 0,
@@ -990,7 +998,6 @@ function webgl_skybox(args){
       'id': 'skybox-back',
       'properties': {
         'color': args['color'],
-        'depth-ignore': true,
         'rotate': {
           'x': 270,
         },
@@ -1011,7 +1018,6 @@ function webgl_skybox(args){
       'id': 'skybox-front',
       'properties': {
         'color': args['color'],
-        'depth-ignore': true,
         'rotate': {
           'x': 90,
         },
@@ -1032,7 +1038,6 @@ function webgl_skybox(args){
       'id': 'skybox-left',
       'properties': {
         'color': args['color'],
-        'depth-ignore': true,
         'rotate': {
           'z': 270,
         },
@@ -1053,7 +1058,6 @@ function webgl_skybox(args){
       'id': 'skybox-right',
       'properties': {
         'color': args['color'],
-        'depth-ignore': true,
         'rotate': {
           'z': 90,
         },
@@ -1074,7 +1078,6 @@ function webgl_skybox(args){
       'id': 'skybox-top',
       'properties': {
         'color': args['color'],
-        'depth-ignore': true,
         'rotate': {
           'x': 180,
         },
@@ -1090,6 +1093,18 @@ function webgl_skybox(args){
       'base': '_webgl-camera',
       'entity': 'skybox-top',
       'offset-y': 5,
+    });
+
+    core_group_move({
+      'entities': [
+        'skybox-back',
+        'skybox-front',
+        'skybox-left',
+        'skybox-right',
+        'skybox-top',
+      ],
+      'group': 'depthtrue',
+      'target': 'depthfalse',
     });
 }
 

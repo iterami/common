@@ -296,6 +296,15 @@ function core_entity_handle_defaults(args){
     }
 
     core_groups[args['type']][args['id']] = true;
+
+    for(var group in core_entity_info[args['type']]['groups']){
+        core_group_add({
+          'entities': [
+            args['id'],
+          ],
+          'group': core_entity_info[args['type']]['groups'][group],
+        });
+    }
 }
 
 // Reqruied args: entities
@@ -347,12 +356,13 @@ function core_entity_remove_all(args){
 }
 
 // Required args: type
-// Optional args: default, properties, todo
+// Optional args: default, groups, properties, todo
 function core_entity_set(args){
     args = core_args({
       'args': args,
       'defaults': {
         'default': false,
+        'groups': [],
         'properties': {},
         'todo': function(){},
       },
@@ -361,6 +371,7 @@ function core_entity_set(args){
     core_entity_info[args['type']] = {
       'count': 0,
       'default': args['properties'],
+      'groups': args['groups'],
       'todo': args['todo'],
     };
 
@@ -544,6 +555,18 @@ function core_group_modify(args){
             );
         }
     }
+}
+
+// Required args: entities, group, target
+function core_group_move(args){
+    core_group_remove({
+      'entities': args['entities'],
+      'group': args['group'],
+    });
+    core_group_add({
+      'entities': args['entities'],
+      'group': args['target'],
+    });
 }
 
 // Required args: entities, group
