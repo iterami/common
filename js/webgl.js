@@ -476,93 +476,7 @@ function webgl_init(args){
     webgl_buffer.enable(webgl_buffer.CULL_FACE);
     webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
 
-    webgl_shader_create({
-      'id': 'fragment',
-      'source':
-          'precision mediump float;'
-        + 'uniform sampler2D sampler;'
-        + 'varying vec4 vec_fragmentColor;'
-        + 'varying vec3 vec_lighting;'
-        + 'varying vec2 vec_textureCoord;'
-        + 'varying float float_fogDistance;'
-        + 'void main(void){'
-        +   'gl_FragColor = mix('
-        +     'vec4('
-        +       webgl_clearcolor['red'] + ','
-        +       webgl_clearcolor['green'] + ','
-        +       webgl_clearcolor['blue'] + ','
-        +       webgl_clearcolor['alpha']
-        +     '),'
-        +     'vec_fragmentColor,'
-        +     'clamp(exp(-0.0001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
-        +   ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0);'
-        + '}',
-      'type': webgl_buffer.FRAGMENT_SHADER,
-    });
-    webgl_shader_create({
-      'id': 'vertex',
-      'source':
-          'attribute vec2 vec_texturePosition;'
-        + 'attribute vec3 vec_vertexNormal;'
-        + 'attribute vec4 vec_vertexPosition;'
-        + 'attribute vec4 vec_vertexColor;'
-        + 'uniform mat4 mat_cameraMatrix;'
-        + 'uniform mat4 mat_normalMatrix;'
-        + 'uniform mat4 mat_perspectiveMatrix;'
-        + 'varying vec4 vec_fragmentColor;'
-        + 'varying vec2 vec_textureCoord;'
-        + 'varying vec3 vec_lighting;'
-        + 'varying float float_fogDistance;'
-        + 'void main(void){'
-        +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
-        +   'float_fogDistance = length(gl_Position.xyz);'
-        +   'vec_fragmentColor = vec_vertexColor;'
-        +   'vec_textureCoord = vec_texturePosition;'
-        +   'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-        +   'vec_lighting = vec3(1, 1, 1);' // + vec3(0, 1, 0) * max(dot(transformedNormal.xyz, normalize(vec3(0, 1, 0))), 0);'
-        + '}',
-      'type': webgl_buffer.VERTEX_SHADER,
-    });
-
-    webgl_program_create({
-      'id': 'shaders',
-      'shaderlist': [
-        webgl_shaders['fragment'],
-        webgl_shaders['vertex'],
-      ],
-    });
-
-    webgl_vertexattribarray_set({
-      'attribute': 'vec_vertexColor',
-    });
-    webgl_vertexattribarray_set({
-      'attribute': 'vec_vertexNormal',
-    });
-    webgl_vertexattribarray_set({
-      'attribute': 'vec_vertexPosition',
-    });
-    webgl_vertexattribarray_set({
-      'attribute': 'vec_texturePosition',
-    });
-
-    webgl_uniformlocations = {
-      'mat_cameraMatrix': webgl_buffer.getUniformLocation(
-        webgl_programs['shaders'],
-        'mat_cameraMatrix'
-      ),
-      'mat_normalMatrix': webgl_buffer.getUniformLocation(
-        webgl_programs['shaders'],
-        'mat_normalMatrix'
-      ),
-      'mat_perspectiveMatrix': webgl_buffer.getUniformLocation(
-        webgl_programs['shaders'],
-        'mat_perspectiveMatrix'
-      ),
-      'sampler': webgl_buffer.getUniformLocation(
-        webgl_programs['shaders'],
-        'sampler'
-      ),
-    };
+    webgl_shader_update();
 
     core_entity_set({
       'default': true,
@@ -990,7 +904,97 @@ function webgl_shader_create(args){
     );
     webgl_buffer.compileShader(shader);
 
-    webgl_shaders[args['id']] = shader;
+    return shader;
+}
+
+function webgl_shader_update(){
+    var fragment_shader = webgl_shader_create({
+      'id': 'fragment',
+      'source':
+          'precision mediump float;'
+        + 'uniform sampler2D sampler;'
+        + 'varying vec4 vec_fragmentColor;'
+        + 'varying vec3 vec_lighting;'
+        + 'varying vec2 vec_textureCoord;'
+        + 'varying float float_fogDistance;'
+        + 'void main(void){'
+        +   'gl_FragColor = mix('
+        +     'vec4('
+        +       webgl_clearcolor['red'] + ','
+        +       webgl_clearcolor['green'] + ','
+        +       webgl_clearcolor['blue'] + ','
+        +       webgl_clearcolor['alpha']
+        +     '),'
+        +     'vec_fragmentColor,'
+        +     'clamp(exp(-0.0001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+        +   ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0);'
+        + '}',
+      'type': webgl_buffer.FRAGMENT_SHADER,
+    });
+    var vertex_shader = webgl_shader_create({
+      'id': 'vertex',
+      'source':
+          'attribute vec2 vec_texturePosition;'
+        + 'attribute vec3 vec_vertexNormal;'
+        + 'attribute vec4 vec_vertexPosition;'
+        + 'attribute vec4 vec_vertexColor;'
+        + 'uniform mat4 mat_cameraMatrix;'
+        + 'uniform mat4 mat_normalMatrix;'
+        + 'uniform mat4 mat_perspectiveMatrix;'
+        + 'varying vec4 vec_fragmentColor;'
+        + 'varying vec2 vec_textureCoord;'
+        + 'varying vec3 vec_lighting;'
+        + 'varying float float_fogDistance;'
+        + 'void main(void){'
+        +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
+        +   'float_fogDistance = length(gl_Position.xyz);'
+        +   'vec_fragmentColor = vec_vertexColor;'
+        +   'vec_textureCoord = vec_texturePosition;'
+        +   'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
+        +   'vec_lighting = vec3(1, 1, 1);' // + vec3(0, 1, 0) * max(dot(transformedNormal.xyz, normalize(vec3(0, 1, 0))), 0);'
+        + '}',
+      'type': webgl_buffer.VERTEX_SHADER,
+    });
+
+    webgl_program_create({
+      'id': 'shaders',
+      'shaderlist': [
+        fragment_shader,
+        vertex_shader,
+      ],
+    });
+
+    webgl_vertexattribarray_set({
+      'attribute': 'vec_vertexColor',
+    });
+    webgl_vertexattribarray_set({
+      'attribute': 'vec_vertexNormal',
+    });
+    webgl_vertexattribarray_set({
+      'attribute': 'vec_vertexPosition',
+    });
+    webgl_vertexattribarray_set({
+      'attribute': 'vec_texturePosition',
+    });
+
+    webgl_uniformlocations = {
+      'mat_cameraMatrix': webgl_buffer.getUniformLocation(
+        webgl_programs['shaders'],
+        'mat_cameraMatrix'
+      ),
+      'mat_normalMatrix': webgl_buffer.getUniformLocation(
+        webgl_programs['shaders'],
+        'mat_normalMatrix'
+      ),
+      'mat_perspectiveMatrix': webgl_buffer.getUniformLocation(
+        webgl_programs['shaders'],
+        'mat_perspectiveMatrix'
+      ),
+      'sampler': webgl_buffer.getUniformLocation(
+        webgl_programs['shaders'],
+        'sampler'
+      ),
+    };
 }
 
 // Optional args: color
@@ -1219,7 +1223,6 @@ var webgl_canvas_properties = {};
 var webgl_pointer = false;
 var webgl_programs = {};
 var webgl_properties = {};
-var webgl_shaders = {};
 var webgl_text = {};
 var webgl_textures = {
   '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
