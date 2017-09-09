@@ -809,15 +809,7 @@ function webgl_program_create(args){
     webgl_buffer.linkProgram(program);
     webgl_buffer.useProgram(program);
 
-    for(shader in args['shaderlist']){
-        webgl_buffer.detachShader(
-          program,
-          args['shaderlist'][shader]
-        );
-        webgl_buffer.deleteShader(args['shaderlist'][shader]);
-    }
-
-    webgl_programs[args['id']] = program;
+    return program;
 }
 
 function webgl_resize(){
@@ -956,7 +948,7 @@ function webgl_shader_update(){
       'type': webgl_buffer.VERTEX_SHADER,
     });
 
-    webgl_program_create({
+    var program = webgl_program_create({
       'id': 'shaders',
       'shaderlist': [
         fragment_shader,
@@ -966,35 +958,41 @@ function webgl_shader_update(){
 
     webgl_vertexattribarray_set({
       'attribute': 'vec_vertexColor',
+      'program': program,
     });
     webgl_vertexattribarray_set({
       'attribute': 'vec_vertexNormal',
+      'program': program,
     });
     webgl_vertexattribarray_set({
       'attribute': 'vec_vertexPosition',
+      'program': program,
     });
     webgl_vertexattribarray_set({
       'attribute': 'vec_texturePosition',
+      'program': program,
     });
 
     webgl_uniformlocations = {
       'mat_cameraMatrix': webgl_buffer.getUniformLocation(
-        webgl_programs['shaders'],
+        program,
         'mat_cameraMatrix'
       ),
       'mat_normalMatrix': webgl_buffer.getUniformLocation(
-        webgl_programs['shaders'],
+        program,
         'mat_normalMatrix'
       ),
       'mat_perspectiveMatrix': webgl_buffer.getUniformLocation(
-        webgl_programs['shaders'],
+        program,
         'mat_perspectiveMatrix'
       ),
       'sampler': webgl_buffer.getUniformLocation(
-        webgl_programs['shaders'],
+        program,
         'sampler'
       ),
     };
+
+    webgl_buffer.deleteProgram(program);
 }
 
 // Optional args: color
@@ -1165,10 +1163,10 @@ function webgl_texture_set(args){
     });
 }
 
-// Required args: attribute
+// Required args: attribute, program
 function webgl_vertexattribarray_set(args){
     webgl_attributes[args['attribute']] = webgl_buffer.getAttribLocation(
-      webgl_programs['shaders'],
+      args['program'],
       args['attribute']
     );
     webgl_buffer.enableVertexAttribArray(webgl_attributes[args['attribute']]);
@@ -1221,7 +1219,6 @@ var webgl_interval = 0;
 var webgl_oncontextmenu = true;
 var webgl_canvas_properties = {};
 var webgl_pointer = false;
-var webgl_programs = {};
 var webgl_properties = {};
 var webgl_text = {};
 var webgl_textures = {
