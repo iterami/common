@@ -914,7 +914,7 @@ function webgl_shader_update(){
           'precision mediump float;'
         + 'uniform sampler2D sampler;'
         + 'varying vec4 vec_fragmentColor;'
-        + 'varying vec3 vec_lighting;'
+        + 'varying vec3 vec_lightingambient;'
         + 'varying vec2 vec_textureCoord;'
         + 'varying float float_fogDistance;'
         + 'void main(void){'
@@ -927,7 +927,7 @@ function webgl_shader_update(){
         +     '),'
         +     'vec_fragmentColor,'
         +     'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
-        +   ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0);'
+        +   ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lightingambient, 1.0);'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
@@ -942,8 +942,8 @@ function webgl_shader_update(){
         + 'uniform mat4 mat_normalMatrix;'
         + 'uniform mat4 mat_perspectiveMatrix;'
         + 'varying vec4 vec_fragmentColor;'
+        + 'varying vec3 vec_lightingambient;'
         + 'varying vec2 vec_textureCoord;'
-        + 'varying vec3 vec_lighting;'
         + 'varying float float_fogDistance;'
         + 'void main(void){'
         +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
@@ -951,7 +951,7 @@ function webgl_shader_update(){
         +   'vec_fragmentColor = vec_vertexColor;'
         +   'vec_textureCoord = vec_texturePosition;'
         +   'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-        +   'vec_lighting = vec3(1, 1, 1);' // + vec3(0, 1, 0) * max(dot(transformedNormal.xyz, normalize(vec3(0, 1, 0))), 0);'
+        +   'vec_lightingambient = vec3(1, 1, 1);' // + vec3(0, 1, 0) * max(dot(transformedNormal.xyz, normalize(vec3(0, 1, 0))), 0);'
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
     });
