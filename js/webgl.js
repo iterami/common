@@ -150,12 +150,12 @@ function webgl_camera_rotate(args){
 
 // Required args: color
 function webgl_clearcolor_set(args){
-    webgl_clearcolor = args['color'];
+    webgl_properties['clearcolor'] = args['color'];
     webgl_buffer.clearColor(
-      webgl_clearcolor['red'],
-      webgl_clearcolor['green'],
-      webgl_clearcolor['blue'],
-      webgl_clearcolor['alpha']
+      webgl_properties['clearcolor']['red'],
+      webgl_properties['clearcolor']['green'],
+      webgl_properties['clearcolor']['blue'],
+      webgl_properties['clearcolor']['alpha']
     );
 }
 
@@ -394,7 +394,7 @@ function webgl_draw_entity(entity){
     });
 }
 
-// Optional args: camera, clear_alpha, clear_blue, clear_green, clear_red, cleardepth, grabity-acceleration, gravity-max, speed
+// Optional args: camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, grabity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -424,6 +424,12 @@ function webgl_init(args){
       'camera': {
         'speed': args['speed'],
         'type': args['camera'],
+      },
+      'clearcolor': {
+        'alpha': args['clear-alpha'],
+        'blue': args['clear-blue'],
+        'green': args['clear-green'],
+        'red': args['clear-red'],
       },
       'cleardepth': args['cleardepth'],
       'collision-range': 2.5,
@@ -466,10 +472,10 @@ function webgl_init(args){
 
     webgl_clearcolor_set({
       'color': {
-        'alpha': args['clear-alpha'],
-        'blue': args['clear-blue'],
-        'green': args['clear-green'],
-        'red': args['clear-red'],
+        'alpha': webgl_properties['clearcolor']['alpha'],
+        'blue': webgl_properties['clearcolor']['blue'],
+        'green': webgl_properties['clearcolor']['green'],
+        'red': webgl_properties['clearcolor']['red'],
       },
     });
     webgl_buffer.clearDepth(webgl_properties['cleardepth']);
@@ -912,10 +918,10 @@ function webgl_shader_update(){
         + 'void main(void){'
         +   'gl_FragColor = mix('
         +     'vec4('
-        +       webgl_clearcolor['red'] + ','
-        +       webgl_clearcolor['green'] + ','
-        +       webgl_clearcolor['blue'] + ','
-        +       webgl_clearcolor['alpha']
+        +       webgl_properties['clearcolor']['red'] + ','
+        +       webgl_properties['clearcolor']['green'] + ','
+        +       webgl_properties['clearcolor']['blue'] + ','
+        +       webgl_properties['clearcolor']['alpha']
         +     '),'
         +     'vec_fragmentColor,'
         +     'clamp(exp(-0.0001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
@@ -1208,7 +1214,6 @@ var webgl_animationFrame = 0;
 var webgl_attributes = {};
 var webgl_buffer = 0;
 var webgl_canvas = 0;
-var webgl_clearcolor = {};
 var webgl_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
