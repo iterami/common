@@ -394,7 +394,7 @@ function webgl_draw_entity(entity){
     });
 }
 
-// Optional args: camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, grabity-acceleration, gravity-max, speed
+// Optional args: camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, fog, grabity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -405,6 +405,7 @@ function webgl_init(args){
         'clear-green': 0,
         'clear-red': 0,
         'cleardepth': 1,
+        'fog': -0.0001,
         'gravity-acceleration': -0.05,
         'gravity-max': -1,
         'speed': .1,
@@ -433,6 +434,7 @@ function webgl_init(args){
       },
       'cleardepth': args['cleardepth'],
       'collision-range': 2.5,
+      'fog': args['fog'],
       'gravity': {
         'acceleration': args['gravity-acceleration'],
         'max': args['gravity-max'],
@@ -924,7 +926,7 @@ function webgl_shader_update(){
         +       webgl_properties['clearcolor']['alpha']
         +     '),'
         +     'vec_fragmentColor,'
-        +     'clamp(exp(-0.0001 * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+        +     'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
         +   ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0);'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
