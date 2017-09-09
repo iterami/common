@@ -394,11 +394,14 @@ function webgl_draw_entity(entity){
     });
 }
 
-// Optional args: camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, fog, grabity-acceleration, gravity-max, speed
+// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, fog, grabity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'ambient-blue': 1,
+        'ambient-green': 1,
+        'ambient-red': 1,
         'camera': 'free',
         'clear-alpha': 1,
         'clear-blue': 0,
@@ -422,6 +425,11 @@ function webgl_init(args){
       'textBaseline': 'alphabetic',
     };
     webgl_properties = {
+      'ambientlighting': {
+        'blue': args['ambient-blue'],
+        'green': args['ambient-green'],
+        'red': args['ambient-red'],
+      },
       'camera': {
         'speed': args['speed'],
         'type': args['camera'],
@@ -951,7 +959,11 @@ function webgl_shader_update(){
         +   'vec_fragmentColor = vec_vertexColor;'
         +   'vec_textureCoord = vec_texturePosition;'
         +   'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-        +   'vec_lightingambient = vec3(1, 1, 1);' // + vec3(0, 1, 0) * max(dot(transformedNormal.xyz, normalize(vec3(0, 1, 0))), 0);'
+        +   'vec_lightingambient = vec3('
+        +     webgl_properties['ambientlighting']['red'] + ','
+        +     webgl_properties['ambientlighting']['green'] + ','
+        +     webgl_properties['ambientlighting']['blue']
+        +   ');'
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
     });
