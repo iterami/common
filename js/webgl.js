@@ -895,6 +895,14 @@ function webgl_program_create(args){
     webgl_buffer.linkProgram(program);
     webgl_buffer.useProgram(program);
 
+    for(shader in args['shaderlist']){
+        webgl_buffer.detachShader(
+          program,
+          args['shaderlist'][shader]
+        );
+        webgl_buffer.deleteShader(args['shaderlist'][shader]);
+    }
+
     webgl_programs[args['id']] = program;
 }
 
