@@ -916,6 +916,18 @@ function webgl_shader_create(args){
 }
 
 function webgl_shader_update(){
+    var fogstring = webgl_properties['fog'] !== false
+      ? ('mix('
+        + 'vec4('
+        +   webgl_properties['clearcolor']['red'] + ','
+        +   webgl_properties['clearcolor']['green'] + ','
+        +   webgl_properties['clearcolor']['blue'] + ','
+        +   webgl_properties['clearcolor']['alpha']
+        + '),'
+        + 'vec_fragmentColor,'
+        + 'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+        + ')')
+      : 'vec_fragmentColor';
     var fragment_shader = webgl_shader_create({
       'id': 'fragment',
       'source':
@@ -926,16 +938,7 @@ function webgl_shader_update(){
         + 'varying vec2 vec_textureCoord;'
         + 'varying float float_fogDistance;'
         + 'void main(void){'
-        +   'gl_FragColor = mix('
-        +     'vec4('
-        +       webgl_properties['clearcolor']['red'] + ','
-        +       webgl_properties['clearcolor']['green'] + ','
-        +       webgl_properties['clearcolor']['blue'] + ','
-        +       webgl_properties['clearcolor']['alpha']
-        +     '),'
-        +     'vec_fragmentColor,'
-        +     'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
-        +   ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lightingambient, 1.0);'
+        +   'gl_FragColor = ' + fogstring + ' * texture2D(sampler, vec_textureCoord) * vec4(vec_lightingambient, 1.0);'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
