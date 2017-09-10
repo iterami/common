@@ -1133,8 +1133,8 @@ function webgl_skybox(args){
         'skybox-right',
         'skybox-top',
       ],
-      'group': 'depthtrue',
-      'target': 'depthfalse',
+      'from': 'depthtrue',
+      'to': 'depthfalse',
     });
 }
 

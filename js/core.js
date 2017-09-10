@@ -557,15 +557,15 @@ function core_group_modify(args){
     }
 }
 
-// Required args: entities, group, target
+// Required args: entities, from, to
 function core_group_move(args){
     core_group_remove({
       'entities': args['entities'],
-      'group': args['group'],
+      'group': args['from'],
     });
     core_group_add({
       'entities': args['entities'],
-      'group': args['target'],
+      'group': args['to'],
     });
 }
 
