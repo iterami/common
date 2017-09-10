@@ -463,11 +463,6 @@ function webgl_init(args){
 
     math_matrices['camera'] = math_matrix_create();
     math_matrices['perspective'] = math_matrix_create();
-    math_matrices['perspective'][0] = .5;
-    math_matrices['perspective'][5] = 1;
-    math_matrices['perspective'][10] = -1;
-    math_matrices['perspective'][11] = -1;
-    math_matrices['perspective'][14] = -2;
 
     webgl_buffer = document.getElementById('buffer').getContext(
       'webgl',
@@ -818,6 +813,14 @@ function webgl_normals_collision(args){
     }
 }
 
+function webgl_perspective(){
+    math_matrices['perspective'][0] = webgl_height / webgl_width;
+    math_matrices['perspective'][5] = 1;
+    math_matrices['perspective'][10] = -1;
+    math_matrices['perspective'][11] = -1;
+    math_matrices['perspective'][14] = -2;
+}
+
 // Required args: id, shaderlist
 function webgl_program_create(args){
     var program = webgl_buffer.createProgram();
@@ -851,6 +854,8 @@ function webgl_resize(){
     for(var property in webgl_canvas_properties){
         webgl_buffer[property] = webgl_canvas_properties[property];
     }
+
+    webgl_perspective();
 
     core_call({
       'todo': 'resize_logic',
