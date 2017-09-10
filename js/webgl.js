@@ -462,7 +462,12 @@ function webgl_init(args){
     }));
 
     math_matrices['camera'] = math_matrix_create();
-    math_matrix_perspective();
+    math_matrices['perspective'] = math_matrix_create();
+    math_matrices['perspective'][0] = .5;
+    math_matrices['perspective'][5] = 1;
+    math_matrices['perspective'][10] = -1;
+    math_matrices['perspective'][11] = -1;
+    math_matrices['perspective'][14] = -2;
 
     webgl_buffer = document.getElementById('buffer').getContext(
       'webgl',

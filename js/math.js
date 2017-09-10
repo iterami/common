@@ -145,16 +145,6 @@ function math_matrix_identity(args){
     }
 }
 
-function math_matrix_perspective(){
-    math_matrices['perspective'] = math_matrix_create();
-
-    math_matrices['perspective'][0] = .5;
-    math_matrices['perspective'][5] = 1;
-    math_matrices['perspective'][10] = -1;
-    math_matrices['perspective'][11] = -1;
-    math_matrices['perspective'][14] = -2;
-}
-
 // Required args: dimensions, id
 function math_matrix_rotate(args){
     var cache_id = 'rotate-cache-' + args['id'];
