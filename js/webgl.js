@@ -215,7 +215,19 @@ function webgl_draw(){
         'depthtrue',
       ],
       'todo': function(entity){
-          webgl_draw_entity(entity);
+          if(core_entities[entity]['alpha'] === 1){
+              webgl_draw_entity(entity);
+          }
+      },
+    });
+    core_group_modify({
+      'groups': [
+        'depthtrue',
+      ],
+      'todo': function(entity){
+          if(core_entities[entity]['alpha'] < 1){
+              webgl_draw_entity(entity);
+          }
       },
     });
 
