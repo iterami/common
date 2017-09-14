@@ -366,6 +366,10 @@ function webgl_draw_entity(entity){
     );
     */
 
+    webgl_buffer.uniform1f(
+      webgl_uniformlocations['alpha'],
+      core_entities[entity]['alpha']
+    );
     webgl_buffer.uniformMatrix4fv(
       webgl_uniformlocations['mat_normalMatrix'],
       0,
@@ -494,12 +498,19 @@ function webgl_init(args){
 
     webgl_shader_update();
 
+    webgl_buffer.blendFunc(
+      webgl_buffer.SRC_ALPHA,
+      webgl_buffer.ONE_MINUS_SRC_ALPHA
+    );
+    webgl_buffer.enable(webgl_buffer.BLEND);
+
     core_entity_set({
       'default': true,
       'groups': [
         'depthtrue',
       ],
       'properties': {
+        'alpha': 1,
         'attach': false,
         'collides': false,
         'collision': false,
@@ -942,13 +953,14 @@ function webgl_shader_update(){
       'id': 'fragment',
       'source':
           'precision mediump float;'
+        + 'uniform float alpha;'
         + 'uniform sampler2D sampler;'
         + 'varying vec4 vec_fragmentColor;'
         + 'varying vec3 vec_lightingambient;'
         + 'varying vec2 vec_textureCoord;'
         + 'varying float float_fogDistance;'
         + 'void main(void){'
-        +   'gl_FragColor = ' + fogstring + ' * texture2D(sampler, vec_textureCoord) * vec4(vec_lightingambient, 1.0);'
+        +   'gl_FragColor = ' + fogstring + ' * texture2D(sampler, vec_textureCoord) * vec4(vec_lightingambient, 1.0) * alpha;'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
@@ -1007,6 +1019,10 @@ function webgl_shader_update(){
     });
 
     webgl_uniformlocations = {
+      'alpha': webgl_buffer.getUniformLocation(
+        program,
+        'alpha'
+      ),
       'mat_cameraMatrix': webgl_buffer.getUniformLocation(
         program,
         'mat_cameraMatrix'
