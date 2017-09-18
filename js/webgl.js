@@ -200,16 +200,16 @@ function webgl_draw(){
 
     draw_logic();
 
+    webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
     core_group_modify({
       'groups': [
         'depthfalse',
       ],
       'todo': function(entity){
-          webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
           webgl_draw_entity(entity);
-          webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
       },
     });
+    webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
     core_group_modify({
       'groups': [
         'depthtrue',
