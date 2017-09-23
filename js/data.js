@@ -344,12 +344,9 @@ function data_webgl_tree_2d(args){
           'y': args['y'],
           'z': args['z'],
         },
-        'rotate': {
-          'x': 90,
-        },
         'vertices': [
-          1, 0, -1,
-          -1, 0, -1,
+          1, 1, 0,
+          -1, 1, 0,
           -1, 0, 0,
           1, 0, 0,
         ],
@@ -369,13 +366,10 @@ function data_webgl_tree_2d(args){
           'y': args['y'],
           'z': args['z'],
         },
-        'rotate': {
-          'x': 90,
-        },
         'vertices': [
-          3, 0, -1,
-          0, 0, -5,
-          -3, 0, -1,
+          3, 1, 0,
+          0, 5, 0,
+          -3, 1, 0,
         ],
       },
     });

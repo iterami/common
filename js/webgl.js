@@ -30,11 +30,11 @@ function webgl_billboard(args){
       'args': args,
       'defaults': {
         'base-axis': 'y',
-        'target-axis': 'z',
+        'target-axis': 'y',
       },
     });
 
-    core_entities[args['entity']]['rotate'][args['target-axis']] = core_entities['_webgl-camera']['rotate'][args['base-axis']];
+    core_entities[args['entity']]['rotate'][args['target-axis']] = 360 - core_entities['_webgl-camera']['rotate'][args['base-axis']];
 }
 
 // Required args: colorData, indexData, normalData, textureData, vertexData
