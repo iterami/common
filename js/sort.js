@@ -19,13 +19,6 @@ function sort_custom(args){
 // Required args: array
 // Optional args: reverse
 function sort_numbers(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'reverse': false,
-      },
-    });
-
     sort_custom({
       'array': args['array'],
       'reverse': args['reverse'],
@@ -48,13 +41,6 @@ function sort_random(args){
 // Required args: array, property
 // Optional args: reverse
 function sort_property(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'reverse': false,
-      },
-    });
-
     sort_custom({
       'array': args['array'],
       'reverse': args['reverse'],
@@ -74,13 +60,6 @@ function sort_property(args){
 // Required args, array
 // Optional args: reverse
 function sort_strings(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'reverse': false,
-      },
-    });
-
     sort_custom({
       'array': args['array'],
       'reverse': args['reverse'],
