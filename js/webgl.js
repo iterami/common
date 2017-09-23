@@ -470,12 +470,13 @@ function webgl_init(args){
         properties = ' oncontextmenu="return false" ';
     }
 
-    document.body.appendChild(core_html({
+    core_html({
+      'parent': document.body,
       'properties': {
         'id': 'wrap',
         'innerHTML': '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>',
       },
-    }));
+    });
 
     math_matrices['camera'] = math_matrix_create();
     math_matrices['perspective'] = math_matrix_create();

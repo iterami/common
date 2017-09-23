@@ -860,11 +860,12 @@ function core_hex_to_rgb(args){
     return 'rgb(' + rgb['red'] + ', ' + rgb['green'] + ', ' + rgb['blue'] + ')';
 }
 
-// Optional args: properties, type, style
+// Optional args: parent, properties, type
 function core_html(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'parent': false,
         'properties': {},
         'type': 'div',
       },
@@ -876,11 +877,11 @@ function core_html(args){
           'var': args['properties'][property],
         });
     }
-    for(property in args['style']){
-        element['style'][property] = core_handle_defaults({
-          'var': args['style'][property],
-        });
+
+    if(args['parent'] !== false){
+        args['parent'].appendChild(element);
     }
+
     return element;
 }
 
@@ -908,7 +909,8 @@ function core_init(){
         'id': 'core-ui',
       },
     })
-    core_ui.appendChild(core_html({
+    core_html({
+      'parent': core_ui,
       'properties': {
         'id': 'core-toggle',
         'onclick': core_escape,
@@ -916,19 +918,21 @@ function core_init(){
         'value': 'ESC',
       },
       'type': 'input',
-    }));
-    core_ui.appendChild(core_html({
+    });
+    core_html({
+      'parent': core_ui,
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a href=/>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
       },
       'type': 'span',
-    }));
-    core_ui.appendChild(core_html({
+    });
+    core_html({
+      'parent': core_ui,
       'properties': {
         'id': 'repo-ui',
       },
-    }));
+    });
     document.body.appendChild(core_ui);
 
     core_tab_create({
@@ -1512,7 +1516,8 @@ function core_tab_create(args){
       'group': args['group'],
     };
 
-    document.getElementById(args['group'] + '-tabs').appendChild(core_html({
+    core_html({
+      'parent': document.getElementById(args['group'] + '-tabs'),
       'properties': {
         'id': 'tab_' + args['group'] + '_' + args['id'],
         'onclick': function(){
@@ -1524,8 +1529,9 @@ function core_tab_create(args){
         'value': args['label'],
       },
       'type': 'input',
-    }));
-    document.getElementById(args['group'] + '-tabcontent').appendChild(core_html({
+    });
+    core_html({
+      'parent': document.getElementById(args['group'] + '-tabcontent'),
       'properties': {
         'id': 'tabcontent-' + args['id'],
         'innerHTML': args['content'],
@@ -1533,7 +1539,7 @@ function core_tab_create(args){
           ? ''
           : 'display:none',
       },
-    }));
+    });
 }
 
 // Required args: id

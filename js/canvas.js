@@ -143,12 +143,13 @@ function canvas_init(){
         properties = ' oncontextmenu="return false" ';
     }
 
-    document.body.appendChild(core_html({
+    core_html({
+      'parent': document.body,
       'properties': {
         'id': 'wrap',
         'innerHTML': '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>',
       },
-    }));
+    });
 
     canvas_buffer = document.getElementById('buffer').getContext('2d');
     canvas_canvas = document.getElementById('canvas').getContext('2d');
