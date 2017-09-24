@@ -904,12 +904,16 @@ function webgl_setmode(args){
 
     webgl_resize();
 
-    core_entities['_webgl-camera']['position']['x'] = 0;
-    core_entities['_webgl-camera']['position']['y'] = 0;
-    core_entities['_webgl-camera']['position']['z'] = 0;
-    core_entities['_webgl-camera']['rotate']['x'] = 0;
-    core_entities['_webgl-camera']['rotate']['y'] = 0;
-    core_entities['_webgl-camera']['rotate']['z'] = 0;
+    core_entities['_webgl-camera']['position'] = {
+      'x': 0,
+      'y': 0,
+      'z': 0,
+    };
+    core_entities['_webgl-camera']['rotate'] = {
+      'x': 0,
+      'y': 0,
+      'z': 0,
+    };
 
     core_mode = args['mode'];
 
