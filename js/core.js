@@ -282,7 +282,7 @@ function core_entity_create(args){
     }
 }
 
-// Required args: id, type, types
+// Required args: id, type
 function core_entity_handle_defaults(args){
     for(var property in core_entity_info[args['type']]['default']){
         args['entity'][property] = core_handle_defaults({
