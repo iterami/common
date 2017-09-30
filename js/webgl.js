@@ -283,7 +283,7 @@ function webgl_draw_entity(entity){
 
     math_matrix_clone({
       'id': 'camera',
-      'newid': 'cache',
+      'to': 'cache',
     });
 
     math_matrix_translate({
@@ -406,7 +406,7 @@ function webgl_draw_entity(entity){
 
     math_matrix_copy({
       'id': 'cache',
-      'newid': 'camera',
+      'to': 'camera',
     });
 }
 

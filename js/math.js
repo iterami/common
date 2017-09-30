@@ -108,19 +108,19 @@ function math_fixed_length_line(args){
     };
 }
 
-// Required args: id, newid
+// Required args: id, to
 function math_matrix_clone(args){
-    math_matrices[args['newid']] = math_matrix_create();
+    math_matrices[args['to']] = math_matrix_create();
     math_matrix_copy({
       'id': args['id'],
-      'newid': args['newid'],
+      'to': args['to'],
     });
 }
 
-// Required args: id, newid
+// Required args: id, to
 function math_matrix_copy(args){
     for(var key in math_matrices[args['id']]){
-        math_matrices[args['newid']][key] = math_matrices[args['id']][key];
+        math_matrices[args['to']][key] = math_matrices[args['id']][key];
     }
 }
 
@@ -152,7 +152,7 @@ function math_matrix_rotate(args){
     // Rotate X.
     math_matrix_clone({
       'id': args['id'],
-      'newid': cache_id,
+      'to': cache_id,
     });
     var cosine = Math.cos(args['dimensions'][0]);
     var sine = Math.sin(args['dimensions'][0]);
@@ -169,7 +169,7 @@ function math_matrix_rotate(args){
     // Rotate Y.
     math_matrix_copy({
       'id': args['id'],
-      'newid': cache_id,
+      'to': cache_id,
     });
     cosine = Math.cos(args['dimensions'][1]);
     sine = Math.sin(args['dimensions'][1]);
@@ -186,7 +186,7 @@ function math_matrix_rotate(args){
     // Rotate Z.
     math_matrix_copy({
       'id': args['id'],
-      'newid': cache_id,
+      'to': cache_id,
     });
     cosine = Math.cos(args['dimensions'][2]);
     sine = Math.sin(args['dimensions'][2]);
