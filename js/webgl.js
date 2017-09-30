@@ -410,7 +410,7 @@ function webgl_draw_entity(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, fog, grabity-acceleration, gravity-max, speed
+// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, contextmenu, fog, grabity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -424,6 +424,7 @@ function webgl_init(args){
         'clear-green': 0,
         'clear-red': 0,
         'cleardepth': 1,
+        'contextmenu': true,
         'fog': -0.0001,
         'gravity-acceleration': -0.05,
         'gravity-max': -1,
@@ -466,7 +467,7 @@ function webgl_init(args){
     };
 
     var properties = '';
-    if(!webgl_oncontextmenu){
+    if(!args['contextmenu']){
         properties = ' oncontextmenu="return false" ';
     }
 
@@ -1281,7 +1282,6 @@ var webgl_fonts = {
 };
 var webgl_height = 0;
 var webgl_interval = 0;
-var webgl_oncontextmenu = true;
 var webgl_canvas_properties = {};
 var webgl_pointer = false;
 var webgl_properties = {};

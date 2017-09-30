@@ -127,7 +127,15 @@ function canvas_gradient(args){
     return gradient;
 }
 
-function canvas_init(){
+// Optional args: contextmenu
+function canvas_init(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'contextmenu': true,
+      },
+    });
+
     canvas_properties = {
       'fillStyle': '#fff',
       'font': canvas_fonts['medium'],
@@ -139,7 +147,7 @@ function canvas_init(){
     };
 
     var properties = '';
-    if(!canvas_oncontextmenu){
+    if(!args['contextmenu']){
         properties = ' oncontextmenu="return false" ';
     }
 
@@ -273,7 +281,6 @@ var canvas_fonts = {
 };
 var canvas_height = 0;
 var canvas_interval = 0;
-var canvas_oncontextmenu = true;
 var canvas_properties = {};
 var canvas_style = 'fill';
 var canvas_width = 0;
