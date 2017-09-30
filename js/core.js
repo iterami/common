@@ -802,6 +802,10 @@ function core_handle_mousemove(event){
 }
 
 function core_handle_mouseup(event){
+    if(!core_mouse['down']){
+        return;
+    }
+
     core_mouse['button'] = -1;
     core_mouse['down'] = false;
     core_handle_event({
