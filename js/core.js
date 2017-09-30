@@ -1097,10 +1097,11 @@ function core_mouse_updatebinds(args){
     }
 
     for(var mousebind in args['mousebinds']){
-        core_mouse['todo'][mousebind] = {};
-        core_mouse['todo'][mousebind]['loop'] = args['mousebinds'][mousebind]['loop'] || false;
-        core_mouse['todo'][mousebind]['preventDefault'] = args['mousebinds'][mousebind]['preventDefault'] || false;
-        core_mouse['todo'][mousebind]['todo'] = args['mousebinds'][mousebind]['todo'] || function(){};
+        core_mouse['todo'][mousebind] = {
+          'loop': args['mousebinds'][mousebind]['loop'] || false,
+          'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
+          'todo': args['mousebinds'][mousebind]['todo'] || function(){},
+        };
     }
 }
 
