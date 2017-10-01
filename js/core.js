@@ -927,7 +927,7 @@ function core_init(){
       'parent': core_ui,
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=/>iterami</a>/<a class=external id=core-menu-title></a><hr><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
+        'innerHTML': '<a href=/>iterami</a>/<a class=external id=core-menu-title></a><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
       },
       'type': 'span',
     });
@@ -1234,7 +1234,9 @@ function core_repo_init(args){
     core_storage_add({
       'storage': args['storage'],
     });
-    document.getElementById('core-menu-info').innerHTML = args['info'];
+    if(args['info'].length > 0){
+        document.getElementById('core-menu-info').innerHTML = '<hr>' + args['info'];
+    }
     if(args['storage-menu'].length > 0){
         core_tab_create({
           'content': args['storage-menu'],
