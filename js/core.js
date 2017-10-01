@@ -1242,7 +1242,7 @@ function core_repo_init(args){
           'content': args['storage-menu'],
           'group': 'core-menu',
           'id': 'repo',
-          'label': 'Repo',
+          'label': core_repo_title,
         });
         core_tab_switch({
           'id': 'tab_core-menu_repo',
