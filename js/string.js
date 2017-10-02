@@ -13,7 +13,7 @@ function string_format_html(args){
     return string_replace_multiple({
       'flags': args['flags'],
       'patterns': {
-        '"': '&quot;',
+        //'"': '&quot;',
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
