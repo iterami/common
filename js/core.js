@@ -1001,6 +1001,7 @@ function core_init(){
         'mouse-sensitivity': 1,
       },
     });
+    core_storage_update();
 
     // Global event binds.
     core_events_bind({
