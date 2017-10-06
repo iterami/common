@@ -862,14 +862,17 @@ function webgl_program_create(args){
 }
 
 function webgl_resize(){
+    var buffer = document.getElementById('buffer');
+    var canvas = document.getElementById('canvas');
+
     webgl_height = window.innerHeight;
-    document.getElementById('buffer').height = webgl_height;
-    document.getElementById('canvas').height = webgl_height;
+    buffer.height = webgl_height;
+    canvas.height = webgl_height;
     webgl_y = webgl_height / 2;
 
     webgl_width = window.innerWidth;
-    document.getElementById('buffer').width = webgl_width;
-    document.getElementById('canvas').width = webgl_width;
+    buffer.width = webgl_width;
+    canvas.width = webgl_width;
     webgl_x = webgl_width / 2;
 
     webgl_buffer.viewportHeight = webgl_height;

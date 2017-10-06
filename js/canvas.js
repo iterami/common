@@ -203,14 +203,17 @@ function canvas_logicloop(){
 }
 
 function canvas_resize(){
+    var buffer = document.getElementById('buffer');
+    var canvas = document.getElementById('canvas');
+
     canvas_height = window.innerHeight;
-    document.getElementById('buffer').height = canvas_height;
-    document.getElementById('canvas').height = canvas_height;
+    buffer.height = canvas_height;
+    canvas.height = canvas_height;
     canvas_y = canvas_height / 2;
 
     canvas_width = window.innerWidth;
-    document.getElementById('buffer').width = canvas_width;
-    document.getElementById('canvas').width = canvas_width;
+    buffer.width = canvas_width;
+    canvas.width = canvas_width;
     canvas_x = canvas_width / 2;
 
     for(var property in canvas_properties){
