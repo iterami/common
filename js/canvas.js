@@ -28,8 +28,8 @@ function canvas_draw(){
     canvas_buffer.clearRect(
       0,
       0,
-      canvas_width,
-      canvas_height
+      canvas_properties['width'],
+      canvas_properties['height']
     );
 
     draw_logic();
@@ -37,8 +37,8 @@ function canvas_draw(){
     canvas_canvas.clearRect(
       0,
       0,
-      canvas_width,
-      canvas_height
+      canvas_properties['width'],
+      canvas_properties['height']
     );
     canvas_canvas.drawImage(
       document.getElementById('buffer'),
@@ -139,11 +139,13 @@ function canvas_init(args){
     canvas_properties = {
       'fillStyle': '#fff',
       'font': canvas_fonts['medium'],
+      'height': 0,
       'lineJoin': 'miter',
       'lineWidth': 1,
       'strokeStyle': '#fff',
       'textAlign': 'start',
       'textBaseline': 'alphabetic',
+      'width': 0,
     };
 
     var properties = '';
@@ -206,15 +208,15 @@ function canvas_resize(){
     var buffer = document.getElementById('buffer');
     var canvas = document.getElementById('canvas');
 
-    canvas_height = window.innerHeight;
-    buffer.height = canvas_height;
-    canvas.height = canvas_height;
-    canvas_y = canvas_height / 2;
+    canvas_properties['height'] = window.innerHeight;
+    buffer.height = canvas_properties['height'];
+    canvas.height = canvas_properties['height'];
+    canvas_y = canvas_properties['height'] / 2;
 
-    canvas_width = window.innerWidth;
-    buffer.width = canvas_width;
-    canvas.width = canvas_width;
-    canvas_x = canvas_width / 2;
+    canvas_properties['width'] = window.innerWidth;
+    buffer.width = canvas_properties['width'];
+    canvas.width = canvas_properties['width'];
+    canvas_x = canvas_properties['width'] / 2;
 
     for(var property in canvas_properties){
         canvas_buffer[property] = canvas_properties[property];
@@ -282,10 +284,8 @@ var canvas_fonts = {
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var canvas_height = 0;
 var canvas_interval = 0;
 var canvas_properties = {};
 var canvas_style = 'fill';
-var canvas_width = 0;
 var canvas_x = 0;
 var canvas_y = 0;
