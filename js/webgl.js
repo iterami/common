@@ -234,8 +234,8 @@ function webgl_draw(){
     webgl_canvas.clearRect(
       0,
       0,
-      webgl_width,
-      webgl_height
+      webgl_canvas_properties['width'],
+      webgl_canvas_properties['height']
     );
     webgl_canvas.drawImage(
       document.getElementById('buffer'),
@@ -435,11 +435,13 @@ function webgl_init(args){
     webgl_canvas_properties = {
       'fillStyle': '#fff',
       'font': webgl_fonts['medium'],
+      'height': 0,
       'lineJoin': 'miter',
       'lineWidth': 1,
       'strokeStyle': '#fff',
       'textAlign': 'start',
       'textBaseline': 'alphabetic',
+      'width': 0,
     };
     webgl_properties = {
       'ambientlighting': {
@@ -839,7 +841,7 @@ function webgl_normals_collision(args){
 }
 
 function webgl_perspective(){
-    math_matrices['perspective'][0] = webgl_height / webgl_width;
+    math_matrices['perspective'][0] = webgl_canvas_properties['height'] / webgl_canvas_properties['width'];
     math_matrices['perspective'][5] = 1;
     math_matrices['perspective'][10] = -1;
     math_matrices['perspective'][11] = -1;
@@ -865,19 +867,19 @@ function webgl_resize(){
     var buffer = document.getElementById('buffer');
     var canvas = document.getElementById('canvas');
 
-    webgl_height = window.innerHeight;
-    buffer.height = webgl_height;
-    canvas.height = webgl_height;
-    webgl_y = webgl_height / 2;
+    webgl_canvas_properties['height'] = window.innerHeight;
+    buffer.height = webgl_canvas_properties['height'];
+    canvas.height = webgl_canvas_properties['height'];
+    webgl_y = webgl_canvas_properties['height'] / 2;
 
-    webgl_width = window.innerWidth;
-    buffer.width = webgl_width;
-    canvas.width = webgl_width;
-    webgl_x = webgl_width / 2;
+    webgl_canvas_properties['width'] = window.innerWidth;
+    buffer.width = webgl_canvas_properties['width'];
+    canvas.width = webgl_canvas_properties['width'];
+    webgl_x = webgl_canvas_properties['width'] / 2;
 
-    webgl_buffer.viewportHeight = webgl_height;
-    webgl_buffer.viewportWidth = webgl_width;
-    webgl_buffer.viewport(0, 0, webgl_height, webgl_width);
+    webgl_buffer.viewportHeight = webgl_canvas_properties['height'];
+    webgl_buffer.viewportWidth = webgl_canvas_properties['width'];
+    webgl_buffer.viewport(0, 0, webgl_canvas_properties['height'], webgl_canvas_properties['width']);
 
     for(var property in webgl_canvas_properties){
         webgl_buffer[property] = webgl_canvas_properties[property];
@@ -1283,7 +1285,6 @@ var webgl_fonts = {
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var webgl_height = 0;
 var webgl_interval = 0;
 var webgl_canvas_properties = {};
 var webgl_pointer = false;
@@ -1294,6 +1295,5 @@ var webgl_textures = {
   '_default': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
 };
 var webgl_uniformlocations = {};
-var webgl_width = 0;
 var webgl_x = 0;
 var webgl_y = 0;
