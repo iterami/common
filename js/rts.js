@@ -454,7 +454,7 @@ function rts_camera_validatemove(args){
         camera_x = -core_storage_data['level-size'];
     }
 
-    camera_y = -rts_math[0] * (args['y'] - canvas_height + 100);
+    camera_y = -rts_math[0] * (args['y'] - canvas_properties['height'] + 100);
     if(camera_y > core_storage_data['level-size']){
         camera_y = core_storage_data['level-size'];
     }else if(camera_y < -core_storage_data['level-size']){
@@ -482,7 +482,7 @@ function rts_destionation_set(args){
               : core_mouse['x'] - canvas_x - camera_x;
 
             rts_players[0]['units'][unit]['destination-y'] = args['minimap']
-              ? rts_math[0] * (core_mouse['y'] - canvas_height + 100)
+              ? rts_math[0] * (core_mouse['y'] - canvas_properties['height'] + 100)
               : core_mouse['y'] - canvas_y - camera_y;
 
             rts_destionation_validate({
@@ -504,7 +504,7 @@ function rts_destionation_set(args){
           : core_mouse['x'] - canvas_x - camera_x;
 
         rts_players[0]['buildings'][building]['destination-y'] = args['minimap']
-          ? rts_math[0] * (core_mouse['y'] - canvas_height + 100)
+          ? rts_math[0] * (core_mouse['y'] - canvas_properties['height'] + 100)
           : core_mouse['y'] - canvas_y - camera_y;
 
         rts_destionation_validate({
