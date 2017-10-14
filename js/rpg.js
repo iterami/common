@@ -101,8 +101,8 @@ function rpg_character_handle(){
 
         // Update target.
         if(character === '0'){
-            rpg_characters[character]['target-x'] = rpg_characters[character]['x'] + core_mouse['x'] - canvas_x;
-            rpg_characters[character]['target-y'] = rpg_characters[character]['y'] + core_mouse['y'] - canvas_y;
+            rpg_characters[character]['target-x'] = rpg_characters[character]['x'] + core_mouse['x'] - canvas_properties['width-half'];
+            rpg_characters[character]['target-y'] = rpg_characters[character]['y'] + core_mouse['y'] - canvas_properties['height-half'];
 
         }else{
             rpg_characters[character]['target-x'] = rpg_characters[0]['x'];

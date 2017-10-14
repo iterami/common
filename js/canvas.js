@@ -209,14 +209,14 @@ function canvas_resize(){
     var canvas = document.getElementById('canvas');
 
     canvas_properties['height'] = window.innerHeight;
+    canvas_properties['height-half'] = canvas_properties['height'] / 2;
     buffer.height = canvas_properties['height'];
     canvas.height = canvas_properties['height'];
-    canvas_y = canvas_properties['height'] / 2;
 
     canvas_properties['width'] = window.innerWidth;
+    canvas_properties['width-half'] = canvas_properties['width'] / 2;
     buffer.width = canvas_properties['width'];
     canvas.width = canvas_properties['width'];
-    canvas_x = canvas_properties['width'] / 2;
 
     for(var property in canvas_properties){
         canvas_buffer[property] = canvas_properties[property];
@@ -304,5 +304,3 @@ var canvas_fonts = {
 var canvas_interval = 0;
 var canvas_properties = {};
 var canvas_style = 'fill';
-var canvas_x = 0;
-var canvas_y = 0;
