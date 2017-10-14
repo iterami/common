@@ -59,7 +59,7 @@ function canvas_draw_path(args){
       'args': args,
       'defaults': {
         'properties': {},
-        'style': canvas_style,
+        'style': canvas_properties['style'],
         'translate': false,
         'type': 'lineTo',
         'x': 0,
@@ -143,6 +143,7 @@ function canvas_init(args){
       'lineJoin': 'miter',
       'lineWidth': 1,
       'strokeStyle': '#fff',
+      'style': 'fill',
       'textAlign': 'start',
       'textBaseline': 'alphabetic',
       'width': 0,
@@ -303,4 +304,3 @@ var canvas_fonts = {
 };
 var canvas_interval = 0;
 var canvas_properties = {};
-var canvas_style = 'fill';
