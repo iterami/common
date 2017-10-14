@@ -276,6 +276,23 @@ function canvas_setproperties(args){
     }
 }
 
+// Optional args: id, quality, type
+function canvas_uri(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': 'buffer',
+        'quality': 1,
+        'type': 'image/png',
+      },
+    });
+
+    return document.getElementById(args['id']).toDataURL(
+      args['type'],
+      args['quality']
+    );
+}
+
 var canvas_animationFrame = 0;
 var canvas_buffer = 0;
 var canvas_canvas = 0;

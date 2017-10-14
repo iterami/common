@@ -1235,6 +1235,23 @@ function webgl_texture_set(args){
     });
 }
 
+// Optional args: id, quality, type
+function webgl_uri(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': 'buffer',
+        'quality': 1,
+        'type': 'image/png',
+      },
+    });
+
+    return document.getElementById(args['id']).toDataURL(
+      args['type'],
+      args['quality']
+    );
+}
+
 // Required args: attribute, program
 function webgl_vertexattribarray_set(args){
     webgl_attributes[args['attribute']] = webgl_buffer.getAttribLocation(
