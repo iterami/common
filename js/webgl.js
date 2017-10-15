@@ -254,8 +254,8 @@ function webgl_draw(){
         );
     }
 
-    if(webgl_pointer !== false){
-        webgl_canvas.fillStyle = webgl_pointer;
+    if(webgl_properties['pointer'] !== false){
+        webgl_canvas.fillStyle = webgl_properties['pointer'];
         webgl_canvas.fillRect(
           webgl_canvas_properties['width-half'] - 1,
           webgl_canvas_properties['height-half'] - 1,
@@ -468,6 +468,7 @@ function webgl_init(args){
         'acceleration': args['gravity-acceleration'],
         'max': args['gravity-max'],
       },
+      'pointer': false,
     };
 
     var properties = '';
@@ -1306,7 +1307,6 @@ var webgl_fonts = {
 };
 var webgl_interval = 0;
 var webgl_canvas_properties = {};
-var webgl_pointer = false;
 var webgl_properties = {};
 var webgl_text = {};
 var webgl_textures = {
