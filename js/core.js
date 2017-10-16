@@ -961,16 +961,16 @@ function core_init(){
       'x': 0,
       'y': 0,
     };
-    if('onmousewheel' in window){
-        window.onmousewheel = core_handle_mousewheel;
 
-    }else{
-        document.addEventListener(
-          'DOMMouseScroll',
-          core_handle_mousewheel,
-          false
-        );
-    }
+    document.addEventListener(
+      'onmousewheel' in window
+        ? 'mousewheel'
+        : 'DOMMouseScroll',
+      core_handle_mousewheel,
+      {
+        'passive': true,
+      }
+    );
     document.onmozpointerlockchange = core_handle_pointerlockchange;
     document.onpointerlockchange = core_handle_pointerlockchange;
     document.onwebkitpointerlockchange = core_handle_pointerlockchange;
