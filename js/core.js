@@ -889,6 +889,26 @@ function core_html(args){
     return element;
 }
 
+// Required args: id
+// Optional args: properties
+function core_html_modify(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'properties': {},
+      },
+    });
+
+    var element = document.getElementById(args['id']);
+    if(!element){
+        return;
+    }
+
+    for(var property in args['properties']){
+        element[property] = args['properties'][property];
+    }
+}
+
 // Required args: id, src
 // Optional args: todo
 function core_image(args){
