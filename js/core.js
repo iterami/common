@@ -1218,7 +1218,7 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: audios, beforeunload, entities, images, info, keybinds, menu, mousebinds, storage, storage-menu, ui
+// Optional args: audios, beforeunload, entities, globals, images, info, keybinds, menu, mousebinds, storage, storage-menu, ui
 function core_repo_init(args){
     args = core_args({
       'args': args,
@@ -1226,6 +1226,7 @@ function core_repo_init(args){
         'audios': {},
         'beforeunload': false,
         'entities': {},
+        'globals': {},
         'images': {},
         'info': '',
         'info-events': {},
@@ -1237,6 +1238,10 @@ function core_repo_init(args){
         'ui': '',
       },
     });
+
+    for(var variable in args['globals']){
+        window[variable] = args['globals'][variable];
+    }
 
     if(args['menu']){
         core_escape();
