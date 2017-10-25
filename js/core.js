@@ -1038,14 +1038,14 @@ function core_init(){
       },
       'elements': {
         'bests-reset': {
-          'todo': function(){
+          'onclick': function(){
               core_storage_reset({
                 'bests': true,
               });
           },
         },
         'settings-reset': {
-          'todo': function(){
+          'onclick': function(){
               core_storage_reset({
                 'bests': false,
               });
