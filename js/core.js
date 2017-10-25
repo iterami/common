@@ -444,7 +444,10 @@ function core_events_bind(args){
 
     if(args['elements'] !== false){
         for(var element in args['elements']){
-            document.getElementById(element)[args['elements'][element]['type'] || 'onclick'] = args['elements'][element]['todo'];
+            var domelement = document.getElementById(element);
+            for(var event in args['elements'][element]){
+                domelement[event] = args['elements'][element][event];
+            }
         }
     }
 }
@@ -1226,10 +1229,10 @@ function core_repo_init(args){
         'audios': {},
         'beforeunload': false,
         'entities': {},
+        'events': {},
         'globals': {},
         'images': {},
         'info': '',
-        'info-events': {},
         'keybinds': false,
         'menu': false,
         'mousebinds': false,
@@ -1282,7 +1285,7 @@ function core_repo_init(args){
 
     core_events_bind({
       'beforeunload': args['beforeunload'],
-      'elements': args['info-events'],
+      'elements': args['events'],
       'keybinds': args['keybinds'],
       'mousebinds': args['mousebinds'],
     });
