@@ -24,17 +24,20 @@ function webgl_attach(args){
 }
 
 // Required args: entity
-// Optional args: base-axis, target-axis
+// Optional args: axes
 function webgl_billboard(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'base-axis': 'y',
-        'target-axis': 'y',
+        'axes': {
+          'y': 'y',
+        },
       },
     });
 
-    core_entities[args['entity']]['rotate'][args['target-axis']] = 360 - core_entities['_webgl-camera']['rotate'][args['base-axis']];
+    for(var axis in args['axes']){
+        core_entities[args['entity']]['rotate'][axis] = 360 - core_entities['_webgl-camera']['rotate'][args['axes'][axis]];
+    }
 }
 
 // Required args: colorData, indexData, normalData, textureData, vertexData
@@ -533,6 +536,7 @@ function webgl_init(args){
       'properties': {
         'alpha': 1,
         'attach': false,
+        'billboard': false,
         'collides': false,
         'collision': false,
         'color': [],
