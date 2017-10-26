@@ -396,7 +396,7 @@ function webgl_draw_entity(entity){
     webgl_buffer.drawArrays(
       webgl_buffer[core_entities[entity]['mode']],
       0,
-      core_entities[entity]['vertices'].length / 3
+      core_entities[entity]['vertices-length']
     );
 
     math_matrix_copy({
@@ -580,6 +580,7 @@ function webgl_init(args){
           1, 0,
           1, 1,
         ],
+        'vertices-length': 0,
       },
       'todo': function(entity){
           core_entities[entity]['normals'] = webgl_normals({
@@ -599,6 +600,8 @@ function webgl_init(args){
             'textureData': core_entities[entity]['textureData'],
             'vertexData': core_entities[entity]['vertices'],
           });
+
+          core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 3;
 
           webgl_texture_set({
             'entityid': entity,
