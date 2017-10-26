@@ -294,15 +294,9 @@ function webgl_draw_entity(entity){
     });
     math_matrix_rotate({
       'dimensions': [
-        math_degrees_to_radians({
-          'degrees': core_entities[entity]['rotate']['x'],
-        }),
-        math_degrees_to_radians({
-          'degrees': core_entities[entity]['rotate']['y'],
-        }),
-        math_degrees_to_radians({
-          'degrees': core_entities[entity]['rotate']['z'],
-        }),
+        core_entities[entity]['rotate-radians']['x'],
+        core_entities[entity]['rotate-radians']['y'],
+        core_entities[entity]['rotate-radians']['z'],
       ],
       'id': 'camera',
     });
@@ -566,6 +560,11 @@ function webgl_init(args){
           'y': 0,
           'z': 0,
         },
+        'rotate-radians': {
+          'x': 0,
+          'y': 0,
+          'z': 0,
+        },
         'scale': {
           'x': 1,
           'y': 1,
@@ -611,11 +610,6 @@ function webgl_init(args){
         'collides': true,
         'draw': false,
         'gravity': webgl_properties['camera']['type'] === 'gravity',
-        'rotate-radians': {
-          'x': 0,
-          'y': 0,
-          'z': 0,
-        },
       },
     });
 
@@ -689,6 +683,18 @@ function webgl_logicloop(){
           if(core_entities[entity]['logic']){
               core_entities[entity]['logic']();
           }
+
+          core_entities[entity]['rotate-radians'] = {
+            'x': math_degrees_to_radians({
+              'degrees': core_entities[entity]['rotate']['x'],
+            }),
+            'y': math_degrees_to_radians({
+              'degrees': core_entities[entity]['rotate']['y'],
+            }),
+            'z': math_degrees_to_radians({
+              'degrees': core_entities[entity]['rotate']['z'],
+            }),
+          };
 
           if(core_entities[entity]['gravity']){
               core_entities[entity]['dy'] = Math.max(
