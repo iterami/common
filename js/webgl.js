@@ -593,6 +593,8 @@ function webgl_init(args){
               return;
           }
 
+          core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 3;
+
           core_entities[entity]['buffer'] = webgl_buffer_set({
             'colorData': core_entities[entity]['color'],
             //'indexData': core_entities[entity]['index'],
@@ -600,8 +602,6 @@ function webgl_init(args){
             'textureData': core_entities[entity]['textureData'],
             'vertexData': core_entities[entity]['vertices'],
           });
-
-          core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 3;
 
           webgl_texture_set({
             'entityid': entity,
