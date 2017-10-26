@@ -198,8 +198,6 @@ function webgl_draw(){
       'id': 'camera',
     });
 
-    draw_logic();
-
     webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
     core_group_modify({
       'groups': [
