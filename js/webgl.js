@@ -146,6 +146,12 @@ function webgl_camera_rotate(args){
           'value': core_entities['_webgl-camera']['rotate']['x'],
         });
     }
+
+    for(axis in axes){
+        core_entities['_webgl-camera']['rotate-radians'][axis] = math_degrees_to_radians({
+          'degrees': core_entities['_webgl-camera']['rotate'][axis],
+        });
+    }
 }
 
 // Required args: color
@@ -177,15 +183,9 @@ function webgl_draw(){
     });
     math_matrix_rotate({
       'dimensions': [
-        math_degrees_to_radians({
-          'degrees': core_entities['_webgl-camera']['rotate']['x'],
-        }),
-        math_degrees_to_radians({
-          'degrees': core_entities['_webgl-camera']['rotate']['y'],
-        }),
-        math_degrees_to_radians({
-          'degrees': core_entities['_webgl-camera']['rotate']['z'],
-        }),
+        core_entities['_webgl-camera']['rotate-radians']['x'],
+        core_entities['_webgl-camera']['rotate-radians']['y'],
+        core_entities['_webgl-camera']['rotate-radians']['z'],
       ],
       'id': 'camera',
     });
@@ -611,6 +611,11 @@ function webgl_init(args){
         'collides': true,
         'draw': false,
         'gravity': webgl_properties['camera']['type'] === 'gravity',
+        'rotate-radians': {
+          'x': 0,
+          'y': 0,
+          'z': 0,
+        },
       },
     });
 
@@ -989,10 +994,10 @@ function webgl_shader_update(){
           'precision mediump float;'
         + 'uniform float alpha;'
         + 'uniform sampler2D sampler;'
-        + 'varying vec4 vec_fragmentColor;'
-        + 'varying vec3 vec_lighting;'
-        + 'varying vec2 vec_textureCoord;'
         + 'varying float float_fogDistance;'
+        + 'varying vec2 vec_textureCoord;'
+        + 'varying vec3 vec_lighting;'
+        + 'varying vec4 vec_fragmentColor;'
         + 'void main(void){'
         +   'gl_FragColor = ' + fogstring + ' * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
         + '}',
@@ -1010,15 +1015,15 @@ function webgl_shader_update(){
       'source':
           'attribute vec2 vec_texturePosition;'
         + 'attribute vec3 vec_vertexNormal;'
-        + 'attribute vec4 vec_vertexPosition;'
         + 'attribute vec4 vec_vertexColor;'
+        + 'attribute vec4 vec_vertexPosition;'
         + 'uniform mat4 mat_cameraMatrix;'
         + 'uniform mat4 mat_normalMatrix;'
         + 'uniform mat4 mat_perspectiveMatrix;'
-        + 'varying vec4 vec_fragmentColor;'
-        + 'varying vec3 vec_lighting;'
-        + 'varying vec2 vec_textureCoord;'
         + 'varying float float_fogDistance;'
+        + 'varying vec2 vec_textureCoord;'
+        + 'varying vec3 vec_lighting;'
+        + 'varying vec4 vec_fragmentColor;'
         + 'void main(void){'
         +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
         +   'float_fogDistance = length(gl_Position.xyz);'
