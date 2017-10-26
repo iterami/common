@@ -88,6 +88,15 @@ function webgl_buffer_set_type(args){
     return buffer;
 }
 
+function webgl_camera_first(){
+    if(core_mouse['pointerlock-state']){
+        webgl_camera_rotate({
+          'x': core_mouse['movement-y'] / 10,
+          'y': core_mouse['movement-x'] / 10,
+        });
+    }
+}
+
 // Optional args: speed, strafe, y
 function webgl_camera_move(args){
     args = core_args({
