@@ -1106,6 +1106,10 @@ function core_interval_modify(args){
 
 // Required args: id
 function core_interval_pause(args){
+    if(!(args['id'] in core_intervals)){
+        return;
+    }
+
     window[core_intervals[args['id']]['clear']](core_intervals[args['id']]['var']);
     core_intervals[args['id']]['paused'] = true;
 }
@@ -1119,7 +1123,32 @@ function core_interval_pause_all(){
 }
 
 // Required args: id
+function core_interval_remove(args){
+    if(!(args['id'] in core_intervals)){
+        return;
+    }
+
+    core_interval_pause({
+      'id': args['id'],
+    });
+
+    delete core_intervals[args['id']];
+}
+
+function core_interval_remove_all(){
+    for(var interval in core_intervals){
+        core_interval_remove({
+          'id': interval,
+        });
+    }
+}
+
+// Required args: id
 function core_interval_resume(args){
+    if(!(args['id'] in core_intervals)){
+        return;
+    }
+
     core_interval_pause({
       'id': args['id'],
     });
