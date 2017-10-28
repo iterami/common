@@ -394,6 +394,10 @@ function core_escape(){
 
     if(!core_menu_open){
         core_storage_save();
+        core_interval_resume_all();
+
+    }else{
+        core_interval_pause_all();
     }
 
     core_call({
@@ -1065,6 +1069,75 @@ function core_init(){
     });
 }
 
+// Required args: todo
+// Optional args: clear, id, interval, set
+function core_interval_modify(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'clear': 'clearInterval',
+        'id': core_uid(),
+        'interval': core_storage_data['frame-ms'],
+        'paused': false,
+        'set': 'setInterval',
+      },
+    });
+
+    if(args['id'] in core_intervals){
+        core_interval_pause({
+          'id': args['id'],
+        });
+    }
+
+    core_intervals[args['id']] = {
+      'clear': args['clear'],
+      'interval': args['interval'],
+      'paused': args['paused'],
+      'set': args['set'],
+      'todo': args['todo'],
+    };
+
+    if(!args['paused']){
+        core_interval_resume({
+          'id': args['id'],
+        });
+    }
+}
+
+// Required args: id
+function core_interval_pause(args){
+    window[core_intervals[args['id']]['clear']](core_intervals[args['id']]['var']);
+    core_intervals[args['id']]['paused'] = true;
+}
+
+function core_interval_pause_all(){
+    for(var interval in core_intervals){
+        core_interval_pause({
+          'id': interval,
+        });
+    }
+}
+
+// Required args: id
+function core_interval_resume(args){
+    core_interval_pause({
+      'id': args['id'],
+    });
+    core_intervals[args['id']]['var'] = window[core_intervals[args['id']]['set']](
+      core_intervals[args['id']]['todo'],
+      core_intervals[args['id']]['interval']
+    );
+    core_intervals[args['id']]['paused'] = false;
+}
+
+function core_interval_resume_all(){
+    for(var interval in core_intervals){
+        core_interval_resume({
+          'id': interval,
+        });
+    }
+}
+
 // Required args: keybinds
 // Optional args: clear
 function core_keys_updatebinds(args){
@@ -1688,6 +1761,7 @@ var core_events = {};
 var core_gamepads = {};
 var core_groups = {};
 var core_images = {};
+var core_intervals = {};
 var core_keys = {};
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';

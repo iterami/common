@@ -629,16 +629,19 @@ function webgl_init(args){
       },
     });
 
+    core_interval_modify({
+      'id': 'webgl-interval',
+      'interval': core_storage_data['frame-ms'],
+      'paused': true,
+      'todo': webgl_logicloop,
+    });
+
     if(!core_menu_open){
         webgl_setmode();
     }
 }
 
 function webgl_logicloop(){
-    if(core_menu_open){
-        return;
-    }
-
     core_entities['_webgl-camera']['dx'] = 0;
     core_entities['_webgl-camera']['dz'] = 0;
     if(!core_entities['_webgl-camera']['gravity']){
@@ -940,12 +943,10 @@ function webgl_setmode(args){
       },
     });
 
-    core_storage_save();
-
     window.cancelAnimationFrame(webgl_animationFrame);
-    window.clearInterval(webgl_interval);
-    core_entity_remove_all();
 
+    core_storage_save();
+    core_entity_remove_all();
     webgl_resize();
 
     core_entities['_webgl-camera']['position'] = {
@@ -971,10 +972,7 @@ function webgl_setmode(args){
     }
 
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
-    webgl_interval = window.setInterval(
-      webgl_logicloop,
-      core_storage_data['frame-ms']
-    );
+    core_interval_resume_all();
 }
 
 // Required args: properties
@@ -1347,7 +1345,6 @@ var webgl_fonts = {
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var webgl_interval = 0;
 var webgl_canvas_properties = {};
 var webgl_properties = {};
 var webgl_text = {};

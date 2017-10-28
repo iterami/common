@@ -178,16 +178,24 @@ function canvas_init(args){
       'type': 'canvas',
     });
 
+    if(core_type({
+      'var': 'logic',
+      'type': 'function',
+    })){
+        core_interval_modify({
+          'id': 'canvas-interval',
+          'interval': core_storage_data['frame-ms'],
+          'paused': true,
+          'todo': canvas_logicloop,
+        });
+    }
+
     if(!core_menu_open){
         canvas_setmode();
     }
 }
 
 function canvas_logicloop(){
-    if(core_menu_open){
-        return;
-    }
-
     logic();
 
     core_group_modify({
@@ -238,12 +246,10 @@ function canvas_setmode(args){
       },
     });
 
-    core_storage_save();
-
     window.cancelAnimationFrame(canvas_animationFrame);
-    window.clearInterval(canvas_interval);
-    core_entity_remove_all();
 
+    core_storage_save();
+    core_entity_remove_all();
     canvas_resize();
 
     core_mode = args['mode'];
@@ -258,15 +264,7 @@ function canvas_setmode(args){
     }
 
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
-    if(core_type({
-      'var': 'logic',
-      'type': 'function',
-    })){
-        canvas_interval = window.setInterval(
-          canvas_logicloop,
-          core_storage_data['frame-ms']
-        );
-    }
+    core_interval_resume_all();
 }
 
 // Required args: properties
@@ -302,5 +300,4 @@ var canvas_fonts = {
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var canvas_interval = 0;
 var canvas_properties = {};
