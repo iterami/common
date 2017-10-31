@@ -178,10 +178,6 @@ function webgl_clearcolor_set(args){
 }
 
 function webgl_draw(){
-    if(core_menu_open){
-        return;
-    }
-
     webgl_buffer.viewport(
       0,
       0,
@@ -276,7 +272,9 @@ function webgl_draw(){
 }
 
 function webgl_drawloop(){
-    webgl_draw();
+    if(!core_menu_open){
+        webgl_draw();
+    }
     webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
 }
 

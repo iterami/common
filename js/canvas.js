@@ -21,10 +21,6 @@ function canvas_attach(args){
 }
 
 function canvas_draw(){
-    if(core_menu_open){
-        return;
-    }
-
     canvas_buffer.clearRect(
       0,
       0,
@@ -48,7 +44,9 @@ function canvas_draw(){
 }
 
 function canvas_drawloop(){
-    canvas_draw();
+    if(!core_menu_open){
+        canvas_draw();
+    }
     canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
 }
 
