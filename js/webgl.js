@@ -709,54 +709,58 @@ function webgl_logicloop(){
         'webgl',
       ],
       'todo': function(entity){
-          if(core_entities[entity]['logic']){
-              core_entities[entity]['logic']();
-          }
-
-          core_entities[entity]['rotate-radians'] = {
-            'x': math_degrees_to_radians({
-              'degrees': core_entities[entity]['rotate']['x'],
-            }),
-            'y': math_degrees_to_radians({
-              'degrees': core_entities[entity]['rotate']['y'],
-            }),
-            'z': math_degrees_to_radians({
-              'degrees': core_entities[entity]['rotate']['z'],
-            }),
-          };
-
-          if(core_entities[entity]['gravity']){
-              core_entities[entity]['dy'] = Math.max(
-                core_entities[entity]['dy'] + webgl_properties['gravity']['acceleration'],
-                webgl_properties['gravity']['max']
-              );
-          }
-
-          if(core_entities[entity]['collides']){
-              for(var other_entity in core_entities){
-                  if(entity !== other_entity
-                    && core_entities[other_entity]['collision']){
-                      webgl_normals_collision({
-                        'entity0id': entity,
-                        'entity1id': other_entity,
-                      });
-                  }
-              }
-          }
-
-          if(core_entities[entity]['attach'] !== false){
-              var attachto = core_entities[core_entities[entity]['attach']['to']];
-              for(var axis in core_entities[entity]['position']){
-                  core_entities[entity]['position'][axis] = attachto['position'][axis] + core_entities[entity]['attach']['offset'][axis];
-              }
-
-          }else{
-              for(var axis in core_entities[entity]['position']){
-                  core_entities[entity]['position'][axis] += core_entities[entity]['d' + axis];
-              }
-          }
+          webgl_logicloop_handle_entity(entity);
       },
     });
+}
+
+function webgl_logicloop_handle_entity(entity){
+    if(core_entities[entity]['logic']){
+        core_entities[entity]['logic']();
+    }
+
+    core_entities[entity]['rotate-radians'] = {
+      'x': math_degrees_to_radians({
+        'degrees': core_entities[entity]['rotate']['x'],
+      }),
+      'y': math_degrees_to_radians({
+        'degrees': core_entities[entity]['rotate']['y'],
+      }),
+      'z': math_degrees_to_radians({
+        'degrees': core_entities[entity]['rotate']['z'],
+      }),
+    };
+
+    if(core_entities[entity]['gravity']){
+        core_entities[entity]['dy'] = Math.max(
+          core_entities[entity]['dy'] + webgl_properties['gravity']['acceleration'],
+          webgl_properties['gravity']['max']
+        );
+    }
+
+    if(core_entities[entity]['collides']){
+        for(var other_entity in core_entities){
+            if(entity !== other_entity
+              && core_entities[other_entity]['collision']){
+                webgl_normals_collision({
+                  'entity0id': entity,
+                  'entity1id': other_entity,
+                });
+            }
+        }
+    }
+
+    if(core_entities[entity]['attach'] !== false){
+        var attachto = core_entities[core_entities[entity]['attach']['to']];
+        for(var axis in core_entities[entity]['position']){
+            core_entities[entity]['position'][axis] = attachto['position'][axis] + core_entities[entity]['attach']['offset'][axis];
+        }
+
+    }else{
+        for(var axis in core_entities[entity]['position']){
+            core_entities[entity]['position'][axis] += core_entities[entity]['d' + axis];
+        }
+    }
 }
 
 // Optional args: x-rotation, y-rotation, z-rotation
