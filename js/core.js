@@ -145,7 +145,7 @@ function core_audio_source_create(args){
     }
 
     // Connect audio nodes.
-    for(i = 0; i < connections_length - 1; i++){
+    for(var i = 0; i < connections_length - 1; i++){
         core_audio_sources[args['id']][core_audio[args['id']]['connections'][i]['label']].connect(
           core_audio_sources[args['id']][core_audio[args['id']]['connections'][i + 1]['label']]
         );
@@ -257,7 +257,7 @@ function core_entity_create(args){
         });
     }
 
-    for(type in args['types']){
+    for(var type in args['types']){
         core_entity_handle_defaults({
           'entity': entity,
           'id': args['id'],
@@ -277,7 +277,7 @@ function core_entity_create(args){
     for(var type in core_entity_types_default){
         core_entity_info[core_entity_types_default[type]]['todo'](args['id']);
     }
-    for(type in args['types']){
+    for(var type in args['types']){
         core_entity_info[args['types'][type]]['todo'](args['id']);
     }
 }
@@ -503,7 +503,7 @@ function core_events_rebind(args){
 
     binds = {};
     rebind = false;
-    for(bind in args['mousebinds']){
+    for(var bind in args['mousebinds']){
         binds[bind] = mousebinds[bind];
         rebind = true;
     }

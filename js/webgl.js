@@ -159,7 +159,7 @@ function webgl_camera_rotate(args){
         });
     }
 
-    for(axis in axes){
+    for(var axis in axes){
         core_entities['_webgl-camera']['rotate-radians'][axis] = math_degrees_to_radians({
           'degrees': core_entities['_webgl-camera']['rotate'][axis],
         });
