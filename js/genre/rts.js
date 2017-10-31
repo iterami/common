@@ -112,9 +112,10 @@ function rts_building_build(args){
       'x': args['x'],
       'y': args['y'],
     };
-    for(var property in rts_buildings[args['type']]){
-        building[property] = rts_buildings[args['type']][property];
-    }
+    Object.assign(
+      building,
+      rts_buildings[args['type']]
+    );
 
     rts_players[args['player']]['buildings'].push(building);
 
@@ -660,9 +661,10 @@ function rts_unit_build(args){
       'y': rts_players[args['player']]['buildings'][temp_selected_id]['y']
         + rts_buildings[rts_players[args['player']]['buildings'][temp_selected_id]['type']]['height'] / 2,
     };
-    for(var property in rts_units[args['type']]){
-        unit[property] = rts_units[args['type']][property];
-    }
+    Object.assign(
+      unit,
+      rts_units[args['type']]
+    );
 
     rts_players[args['player']]['units'].push(unit);
 }

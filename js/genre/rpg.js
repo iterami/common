@@ -148,10 +148,10 @@ function rpg_character_handle(){
 
             // Handle particle-creating spells.
             if(selected['type'] === 'particle'){
-                var particle = {};
-                for(var property in selected){
-                    particle[property] = selected[property];
-                }
+                var particle = Object.assign(
+                  {},
+                  selected
+                );
                 particle['dx'] = speeds['x'];
                 particle['dy'] = speeds['y'];
                 particle['owner'] = character;
