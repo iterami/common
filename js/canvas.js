@@ -225,9 +225,10 @@ function canvas_resize(){
     buffer.width = canvas_properties['width'];
     canvas.width = canvas_properties['width'];
 
-    for(var property in canvas_properties){
-        canvas_buffer[property] = canvas_properties[property];
-    }
+    Object.assign(
+      canvas_buffer,
+      canvas_properties
+    );
 
     core_call({
       'todo': 'resize_logic',
@@ -267,10 +268,14 @@ function canvas_setmode(args){
 
 // Required args: properties
 function canvas_setproperties(args){
-    for(var property in args['properties']){
-        canvas_properties[property] = args['properties'][property];
-        canvas_buffer[property] = args['properties'][property];
-    }
+    Object.assign(
+      canvas_properties,
+      args['properties']
+    );
+    Object.assign(
+      canvas_buffer,
+      args['properties']
+    );
 }
 
 // Optional args: id, quality, type

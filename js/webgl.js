@@ -250,9 +250,10 @@ function webgl_draw(){
     );
 
     for(var text in webgl_text){
-        for(var property in webgl_text[text]['properties']){
-            webgl_canvas[property] = webgl_text[text]['properties'][property];
-        }
+        Object.assign(
+          webgl_canvas,
+          webgl_text[text]['properties']
+        );
         webgl_canvas.fillText(
           webgl_text[text]['text'],
           webgl_text[text]['x'],
@@ -920,9 +921,10 @@ function webgl_resize(){
     webgl_buffer.viewportWidth = webgl_canvas_properties['width'];
     webgl_buffer.viewport(0, 0, webgl_canvas_properties['height'], webgl_canvas_properties['width']);
 
-    for(var property in webgl_canvas_properties){
-        webgl_buffer[property] = webgl_canvas_properties[property];
-    }
+    Object.assign(
+      webgl_buffer,
+      webgl_canvas_properties
+    );
 
     webgl_perspective();
 
@@ -975,10 +977,14 @@ function webgl_setmode(args){
 
 // Required args: properties
 function webgl_setcanvasproperties(args){
-    for(var property in args['properties']){
-        webgl_canvas_properties[property] = args['properties'][property];
-        webgl_buffer[property] = args['properties'][property];
-    }
+    Object.assign(
+      webgl_canvas_properties,
+      args['properties']
+    );
+    Object.assign(
+      webgl_buffer,
+      args['properties']
+    );
 }
 
 // Required args: id, source, type

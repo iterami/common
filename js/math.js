@@ -119,9 +119,10 @@ function math_matrix_clone(args){
 
 // Required args: id, to
 function math_matrix_copy(args){
-    for(var key in math_matrices[args['id']]){
-        math_matrices[args['to']][key] = math_matrices[args['id']][key];
-    }
+    Object.assign(
+      math_matrices[args['to']],
+      math_matrices[args['id']]
+    );
 }
 
 function math_matrix_create(){

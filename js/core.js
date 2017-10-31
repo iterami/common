@@ -911,9 +911,10 @@ function core_html_modify(args){
         return;
     }
 
-    for(var property in args['properties']){
-        element[property] = args['properties'][property];
-    }
+    Object.assign(
+      element,
+      args['properties']
+    );
 }
 
 // Required args: id, src
@@ -1344,9 +1345,10 @@ function core_repo_init(args){
       },
     });
 
-    for(var variable in args['globals']){
-        window[variable] = args['globals'][variable];
-    }
+    Object.assign(
+      window,
+      args['globals']
+    );
 
     if(args['menu']){
         core_escape();
