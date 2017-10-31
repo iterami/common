@@ -601,6 +601,17 @@ function webgl_init(args){
               return;
           }
 
+          core_entities[entity]['rotate-radians'] = {
+            'x': math_degrees_to_radians({
+              'degrees': core_entities[entity]['rotate']['x'],
+            }),
+            'y': math_degrees_to_radians({
+              'degrees': core_entities[entity]['rotate']['y'],
+            }),
+            'z': math_degrees_to_radians({
+              'degrees': core_entities[entity]['rotate']['z'],
+            }),
+          };
           core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 3;
 
           core_entities[entity]['buffer'] = webgl_buffer_set({
