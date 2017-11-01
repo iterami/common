@@ -1324,7 +1324,7 @@ function core_random_string(args){
 }
 
 // Required args: title
-// Optional args: audios, beforeunload, entities, globals, images, info, keybinds, menu, mousebinds, storage, storage-menu, ui
+// Optional args: audios, beforeunload, entities, github, globals, images, info, keybinds, menu, mousebinds, storage, storage-menu, ui
 function core_repo_init(args){
     args = core_args({
       'args': args,
