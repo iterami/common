@@ -201,14 +201,18 @@ function canvas_logicloop(){
         'canvas',
       ],
       'todo': function(entity){
-          if(core_entities[entity]['attach'] !== false){
-              var attached = core_entities[core_entities[entity]['attach']['id']];
-              for(var axis in core_entities[entity]['position']){
-                  core_entities[entity]['position'][axis] = attached['position'][axis] + core_entities[entity]['attach']['offset'][axis];
-              }
-          }
+          canvas_logicloop_handle_entity(entity);
       },
     });
+}
+
+function canvas_logicloop_handle_entity(entity){
+    if(core_entities[entity]['attach'] !== false){
+        var attached = core_entities[core_entities[entity]['attach']['id']];
+        for(var axis in core_entities[entity]['position']){
+            core_entities[entity]['position'][axis] = attached['position'][axis] + core_entities[entity]['attach']['offset'][axis];
+        }
+    }
 }
 
 function canvas_resize(){

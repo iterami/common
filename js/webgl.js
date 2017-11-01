@@ -413,6 +413,44 @@ function webgl_draw_entity(entity){
     });
 }
 
+function webgl_entity_todo(entity){
+    core_entities[entity]['normals'] = webgl_normals({
+      'x-rotation': core_entities[entity]['rotate']['x'],
+      'y-rotation': core_entities[entity]['rotate']['y'],
+      'z-rotation': core_entities[entity]['rotate']['z'],
+    });
+
+    if(core_entities[entity]['draw'] === false){
+        return;
+    }
+
+    core_entities[entity]['rotate-radians'] = {
+      'x': math_degrees_to_radians({
+        'degrees': core_entities[entity]['rotate']['x'],
+      }),
+      'y': math_degrees_to_radians({
+        'degrees': core_entities[entity]['rotate']['y'],
+      }),
+      'z': math_degrees_to_radians({
+        'degrees': core_entities[entity]['rotate']['z'],
+      }),
+    };
+    core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 3;
+
+    core_entities[entity]['buffer'] = webgl_buffer_set({
+      'colorData': core_entities[entity]['color'],
+      //'indexData': core_entities[entity]['index'],
+      'normalData': core_entities[entity]['normals'],
+      'textureData': core_entities[entity]['textureData'],
+      'vertexData': core_entities[entity]['vertices'],
+    });
+
+    webgl_texture_set({
+      'entityid': entity,
+      'image': webgl_textures['_default'],
+    });
+}
+
 // Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, contextmenu, fog, grabity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
@@ -591,41 +629,7 @@ function webgl_init(args){
         'vertices-length': 0,
       },
       'todo': function(entity){
-          core_entities[entity]['normals'] = webgl_normals({
-            'x-rotation': core_entities[entity]['rotate']['x'],
-            'y-rotation': core_entities[entity]['rotate']['y'],
-            'z-rotation': core_entities[entity]['rotate']['z'],
-          });
-
-          if(core_entities[entity]['draw'] === false){
-              return;
-          }
-
-          core_entities[entity]['rotate-radians'] = {
-            'x': math_degrees_to_radians({
-              'degrees': core_entities[entity]['rotate']['x'],
-            }),
-            'y': math_degrees_to_radians({
-              'degrees': core_entities[entity]['rotate']['y'],
-            }),
-            'z': math_degrees_to_radians({
-              'degrees': core_entities[entity]['rotate']['z'],
-            }),
-          };
-          core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 3;
-
-          core_entities[entity]['buffer'] = webgl_buffer_set({
-            'colorData': core_entities[entity]['color'],
-            //'indexData': core_entities[entity]['index'],
-            'normalData': core_entities[entity]['normals'],
-            'textureData': core_entities[entity]['textureData'],
-            'vertexData': core_entities[entity]['vertices'],
-          });
-
-          webgl_texture_set({
-            'entityid': entity,
-            'image': webgl_textures['_default'],
-          });
+          webgl_entity_todo(entity);
       },
       'type': 'webgl',
     });
@@ -1266,35 +1270,37 @@ function webgl_texture_set(args){
     core_entities[args['entityid']]['image'] = core_image({
       'id': args['entityid'] + '-texture',
       'src': args['image'],
-      'todo': function(){
-          webgl_buffer.bindTexture(
-            webgl_buffer.TEXTURE_2D,
-            core_entities[args['entityid']]['texture']
-          );
-          webgl_buffer.texImage2D(
-            webgl_buffer.TEXTURE_2D,
-            0,
-            webgl_buffer.RGBA,
-            webgl_buffer.RGBA,
-            webgl_buffer.UNSIGNED_BYTE,
-            core_entities[args['entityid']]['image']
-          );
-          webgl_buffer.texParameteri(
-            webgl_buffer.TEXTURE_2D,
-            webgl_buffer.TEXTURE_MAG_FILTER,
-            webgl_buffer.NEAREST
-          );
-          webgl_buffer.texParameteri(
-            webgl_buffer.TEXTURE_2D,
-            webgl_buffer.TEXTURE_MIN_FILTER,
-            webgl_buffer.NEAREST
-          );
-          webgl_buffer.bindTexture(
-            webgl_buffer.TEXTURE_2D,
-            void 0
-          );
-      },
+      'todo': webgl_entity_set_todo,
     });
+}
+
+function webgl_texture_set_todo(entity){
+    webgl_buffer.bindTexture(
+      webgl_buffer.TEXTURE_2D,
+      core_entities[args['entityid']]['texture']
+    );
+    webgl_buffer.texImage2D(
+      webgl_buffer.TEXTURE_2D,
+      0,
+      webgl_buffer.RGBA,
+      webgl_buffer.RGBA,
+      webgl_buffer.UNSIGNED_BYTE,
+      core_entities[args['entityid']]['image']
+    );
+    webgl_buffer.texParameteri(
+      webgl_buffer.TEXTURE_2D,
+      webgl_buffer.TEXTURE_MAG_FILTER,
+      webgl_buffer.NEAREST
+    );
+    webgl_buffer.texParameteri(
+      webgl_buffer.TEXTURE_2D,
+      webgl_buffer.TEXTURE_MIN_FILTER,
+      webgl_buffer.NEAREST
+    );
+    webgl_buffer.bindTexture(
+      webgl_buffer.TEXTURE_2D,
+      void 0
+    );
 }
 
 // Optional args: id, quality, type
