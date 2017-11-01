@@ -1333,6 +1333,7 @@ function core_repo_init(args){
         'beforeunload': false,
         'entities': {},
         'events': {},
+        'github': 'iterami',
         'globals': {},
         'images': {},
         'info': '',
@@ -1382,7 +1383,7 @@ function core_repo_init(args){
         });
     }
     var repo_title = document.getElementById('core-menu-title');
-    repo_title.href = 'https://github.com/iterami/' + core_repo_title;
+    repo_title.href = 'https://github.com/' + args['github'] + '/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
 
     core_storage_update();
