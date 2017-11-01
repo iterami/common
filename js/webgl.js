@@ -1270,11 +1270,13 @@ function webgl_texture_set(args){
     core_entities[args['entityid']]['image'] = core_image({
       'id': args['entityid'] + '-texture',
       'src': args['image'],
-      'todo': webgl_entity_set_todo,
+      'todo': function(){
+          webgl_texture_set_todo(args);
+      },
     });
 }
 
-function webgl_texture_set_todo(entity){
+function webgl_texture_set_todo(args){
     webgl_buffer.bindTexture(
       webgl_buffer.TEXTURE_2D,
       core_entities[args['entityid']]['texture']
