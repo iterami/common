@@ -147,17 +147,25 @@ function canvas_init(args){
       'width': 0,
     };
 
-    var properties = '';
+    var properties = {
+      'id': 'canvas',
+    };
     if(!args['contextmenu']){
-        properties = ' oncontextmenu="return false" ';
+        properties['oncontextmenu'] = function(){
+            return false;
+        };
     }
-
+    core_html({
+      'parent': document.body,
+      'properties': properties,
+      'type': 'canvas',
+    });
     core_html({
       'parent': document.body,
       'properties': {
-        'id': 'wrap',
-        'innerHTML': '<canvas id=canvas' + properties + '></canvas><canvas id=buffer></canvas>',
+        'id': 'buffer',
       },
+      'type': 'canvas',
     });
 
     canvas_buffer = document.getElementById('buffer').getContext('2d');
