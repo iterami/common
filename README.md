@@ -1,4 +1,4 @@
 iterami/common
 --------------
 
-* Documentation: https://github.com/iterami/Documentation.htm/blob/gh-pages/repositories/common.md
+* Documentation: https://github.com/iterami/Documentation.htm/blob/gh-pages/common/README.md
