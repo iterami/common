@@ -955,7 +955,7 @@ function core_init(){
       'parent': core_ui,
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=/>iterami</a>/<a class=external id=core-menu-title></a><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
+        'innerHTML': '<a href=/ id=core-menu-root></a>/<a class=external id=core-menu-title></a><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
       },
       'type': 'span',
     });
@@ -1382,6 +1382,7 @@ function core_repo_init(args){
           'id': 'tab_core-menu_repo',
         });
     }
+    document.getElementById('core-menu-root').innerHTML = args['github'];
     var repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/' + args['github'] + '/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
