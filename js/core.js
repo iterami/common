@@ -1070,12 +1070,18 @@ function core_init(){
     });
 }
 
+// Required args: id
+function core_interval_animationFrame(args){
+    core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
+}
+
 // Required args: todo
-// Optional args: clear, id, interval, set
+// Optional args: animationFrame, clear, id, interval, set
 function core_interval_modify(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'animationFrame': false,
         'clear': 'clearInterval',
         'id': core_uid(),
         'interval': core_storage_data['frame-ms'],
@@ -1091,6 +1097,7 @@ function core_interval_modify(args){
     }
 
     core_intervals[args['id']] = {
+      'animationFrame': args['animationFrame'],
       'clear': args['clear'],
       'interval': args['interval'],
       'paused': args['paused'],
@@ -1111,7 +1118,10 @@ function core_interval_pause(args){
         return;
     }
 
-    window[core_intervals[args['id']]['clear']](core_intervals[args['id']]['var']);
+    window[core_intervals[args['id']]['animationFrame']
+      ? 'cancelAnimationFrame'
+      : core_intervals[args['id']]['clear']](core_intervals[args['id']]['var']);
+
     core_intervals[args['id']]['paused'] = true;
 }
 
@@ -1153,10 +1163,15 @@ function core_interval_resume(args){
     core_interval_pause({
       'id': args['id'],
     });
-    core_intervals[args['id']]['var'] = window[core_intervals[args['id']]['set']](
-      core_intervals[args['id']]['todo'],
-      core_intervals[args['id']]['interval']
-    );
+    if(core_intervals[args['id']]['animationFrame']){
+        core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
+
+    }else{
+        core_intervals[args['id']]['var'] = window[core_intervals[args['id']]['set']](
+          core_intervals[args['id']]['todo'],
+          core_intervals[args['id']]['interval']
+        );
+    }
     core_intervals[args['id']]['paused'] = false;
 }
 

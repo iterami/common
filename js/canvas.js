@@ -47,7 +47,9 @@ function canvas_drawloop(){
     if(!core_menu_open){
         canvas_draw();
     }
-    canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
+    core_interval_animationFrame({
+      'id': 'canvas-animationFrame',
+    });
 }
 
 // Required args: vertices
@@ -195,6 +197,12 @@ function canvas_init(args){
           'todo': canvas_logicloop,
         });
     }
+    core_interval_modify({
+      'animationFrame': true,
+      'id': 'canvas-animationFrame',
+      'paused': true,
+      'todo': canvas_drawloop,
+    });
 
     if(!core_menu_open){
         canvas_setmode();
@@ -257,8 +265,6 @@ function canvas_setmode(args){
       },
     });
 
-    window.cancelAnimationFrame(canvas_animationFrame);
-
     core_storage_save();
     core_entity_remove_all();
     canvas_resize();
@@ -274,7 +280,6 @@ function canvas_setmode(args){
         core_escape();
     }
 
-    canvas_animationFrame = window.requestAnimationFrame(canvas_drawloop);
     core_interval_resume_all();
 }
 
@@ -307,7 +312,6 @@ function canvas_uri(args){
     );
 }
 
-var canvas_animationFrame = 0;
 var canvas_buffer = 0;
 var canvas_canvas = 0;
 var canvas_fonts = {

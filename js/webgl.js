@@ -276,7 +276,9 @@ function webgl_drawloop(){
     if(!core_menu_open){
         webgl_draw();
     }
-    webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
+    core_interval_animationFrame({
+      'id': 'webgl-animationFrame',
+    });
 }
 
 function webgl_draw_entity(entity){
@@ -657,6 +659,12 @@ function webgl_init(args){
       'paused': true,
       'todo': webgl_logicloop,
     });
+    core_interval_modify({
+      'animationFrame': true,
+      'id': 'webgl-animationFrame',
+      'paused': true,
+      'todo': webgl_drawloop,
+    });
 
     if(!core_menu_open){
         webgl_setmode();
@@ -970,8 +978,6 @@ function webgl_setmode(args){
       },
     });
 
-    window.cancelAnimationFrame(webgl_animationFrame);
-
     core_storage_save();
     core_entity_remove_all();
     webgl_resize();
@@ -998,7 +1004,6 @@ function webgl_setmode(args){
         core_escape();
     }
 
-    webgl_animationFrame = window.requestAnimationFrame(webgl_drawloop);
     core_interval_resume_all();
 }
 
@@ -1371,7 +1376,6 @@ function webgl_vertexcolorarray(args){
     return color;
 }
 
-var webgl_animationFrame = 0;
 var webgl_attributes = {};
 var webgl_buffer = 0;
 var webgl_canvas = 0;
