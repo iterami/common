@@ -419,18 +419,7 @@ function core_events_bind(args){
       },
     });
 
-    if(args['beforeunload'] !== false){
-        core_events['beforeunload'] = core_handle_defaults({
-          'default': {
-            'loop': false,
-            'preventDefault': false,
-            'solo': false,
-            'state': false,
-            'todo': function(){},
-          },
-          'var': args['beforeunload'],
-        });
-    }
+    core_events_bind_beforeunload(args['beforeunload']);
 
     if(args['keybinds'] !== false){
         core_keys_updatebinds({
@@ -456,6 +445,23 @@ function core_events_bind(args){
     }
 }
 
+function core_events_bind_beforeunload(beforeunload){
+    if(beforeunload === false){
+        return;
+    }
+
+    core_events['beforeunload'] = core_handle_defaults({
+      'default': {
+        'loop': false,
+        'preventDefault': false,
+        'solo': false,
+        'state': false,
+        'todo': function(){},
+      },
+      'var': beforeunload,
+    });
+}
+
 function core_events_keyinfo(event){
     var code = event.keyCode || event.which;
     return {
@@ -475,18 +481,7 @@ function core_events_rebind(args){
       },
     });
 
-    if(args['beforeunload'] !== false){
-        core_events['beforeunload'] = core_handle_defaults({
-          'default': {
-            'loop': false,
-            'preventDefault': false,
-            'solo': false,
-            'state': false,
-            'todo': function(){},
-          },
-          'var': args['beforeunload'],
-        });
-    }
+    core_events_bind_beforeunload(args['beforeunload']);
 
     var binds = {};
     var rebind = false;
