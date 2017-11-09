@@ -1449,21 +1449,9 @@ function core_storage_add(args){
     });
 
     for(var key in args['storage']){
-        var data = args['storage'][key];
-        if(!core_type({
-          'type': 'object',
-          'var': args['storage'][key],
-        })){
-            data = {
-              'default': data,
-              'type': 'setting',
-            };
-        }
-
         core_storage_info[key] = {
-          'default': data['default'],
+          'default': args['storage'][key],
           'prefix': args['prefix'],
-          'type': data['type'] || 'setting',
         };
         core_storage_data[key] = window.localStorage.getItem(args['prefix'] + key);
 
