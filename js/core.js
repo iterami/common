@@ -955,7 +955,7 @@ function core_init(){
       'parent': core_ui,
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=/ id=core-menu-root></a>/<a class=external id=core-menu-title></a><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings"><input id=bests-reset type=button value="Reset Bests">',
+        'innerHTML': '<a href=/ id=core-menu-root></a>/<a class=external id=core-menu-title></a><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings">',
       },
       'type': 'span',
     });
@@ -1036,25 +1036,11 @@ function core_init(){
       'beforeunload': {
         'todo': function(){
             core_storage_save();
-            core_storage_save({
-              'bests': true,
-            });
         },
       },
       'elements': {
-        'bests-reset': {
-          'onclick': function(){
-              core_storage_reset({
-                'bests': true,
-              });
-          },
-        },
         'settings-reset': {
-          'onclick': function(){
-              core_storage_reset({
-                'bests': false,
-              });
-          },
+          'onclick': core_storage_reset,
         },
       },
       'keybinds': {
@@ -1489,10 +1475,6 @@ function core_storage_add(args){
           'key': key,
           'value': core_storage_data[key],
         });
-
-        if(core_storage_info[key]['type'] !== 'setting'){
-            core_storage_info[key]['best'] = core_storage_data[key];
-        }
     }
 }
 
@@ -1508,92 +1490,33 @@ function core_storage_element_property(args){
         : 'value');
 }
 
-// Optional args: bests
-function core_storage_reset(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'bests': false,
-      },
-    });
-
-    var type = args['bests']
-      ? 'bests'
-      : 'settings';
-
-    if(!window.confirm('Reset ' + core_repo_title + ' ' + type + '?')){
+function core_storage_reset(){
+    if(!window.confirm('Reset ' + core_repo_title + ' settings?')){
         return false;
     }
 
     for(var key in core_storage_data){
-        if(args['bests']){
-            if(core_storage_info[key]['type'] !== 'setting'){
-                core_storage_data[key] = core_storage_info[key]['default'];
-                core_storage_info[key]['best'] = core_storage_info[key]['default'];
-
-            }else{
-                continue;
-            }
-
-        }else if(core_storage_info[key]['type'] === 'setting'){
-            core_storage_data[key] = core_storage_info[key]['default'];
-
-        }else{
-            continue;
-        }
-
+        core_storage_data[key] = core_storage_info[key]['default'];
         window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
     }
 
-    if(args['bests']){
-        core_storage_save({
-          'bests': true,
-        });
-    }
     core_storage_update();
     return true;
 }
 
-// Optional args: bests
-function core_storage_save(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'bests': false,
-      },
-    });
-
+function core_storage_save(){
     for(var key in core_storage_data){
-        var data = '';
+        var element = document.getElementById(key);
+        core_storage_data[key] = element[core_storage_element_property({
+          'element': element,
+          'key': key,
+        })];
 
-        if(args['bests']){
-            data = core_storage_type_convert({
-              'key': key,
-              'value': core_storage_data[key],
-            });
-
-            if(core_storage_info[key]['type'] < 0){
-                if(data < core_storage_info[key]['best']){
-                    core_storage_info[key]['best'] = data;
-                }
-
-            }else if(core_storage_data[key] > core_storage_info[key]['best']){
-                core_storage_info[key]['best'] = data;
-            }
-
-        }else if(core_storage_info[key]['type'] === 'setting'){
-            var element = document.getElementById(key);
-            core_storage_data[key] = element[core_storage_element_property({
-              'element': element,
-              'key': key,
-            })];
-
-            data = core_storage_type_convert({
-              'key': key,
-              'value': core_storage_data[key],
-            });
-            core_storage_data[key] = data;
-        }
+        var data = core_storage_type_convert({
+          'key': key,
+          'value': core_storage_data[key],
+        });
+        core_storage_data[key] = data;
 
         if(data !== core_storage_info[key]['default']){
             window.localStorage.setItem(
@@ -1633,21 +1556,8 @@ function core_storage_type_convert(args){
     return args['value'];
 }
 
-// Optional args: bests
-function core_storage_update(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'bests': false,
-      },
-    });
-
+function core_storage_update(){
     for(var key in core_storage_data){
-        if(args['bests']
-          && core_storage_info[key]['type'] === 'setting'){
-            continue;
-        }
-
         var element = document.getElementById(key);
         element[core_storage_element_property({
           'element': element,
