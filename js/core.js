@@ -917,7 +917,7 @@ function core_init(){
     document.body.appendChild(core_ui);
 
     core_tab_create({
-      'content': '<table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=move-↑><td>Move ↑<tr><td><input id=move-←><td>Move ←<tr><td><input id=move-↓><td>Move ↓<tr><td><input id=move-→><td>Move →</table>',
+      'content': '<table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=jump><td>Jump<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=move-↑><td>Move ↑<tr><td><input id=move-←><td>Move ←<tr><td><input id=move-↓><td>Move ↓<tr><td><input id=move-→><td>Move →</table>',
       'default': true,
       'group': 'core-menu',
       'id': 'global',
@@ -974,6 +974,7 @@ function core_init(){
         'color-negative': '#663366',
         'color-positive': '#206620',
         'decimals': 7,
+        'jump': 32,
         'mouse-sensitivity': 1,
         'move-←': 65,
         'move-↑': 87,
@@ -1124,6 +1125,7 @@ function core_keys_rebind(){
       'solo': true,
       'todo': core_escape,
     };
+    keybinds[core_storage_data['jump']] = {};
     keybinds[core_storage_data['move-←']] = {};
     keybinds[core_storage_data['move-↑']] = {};
     keybinds[core_storage_data['move-→']] = {};
