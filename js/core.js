@@ -975,15 +975,25 @@ function core_init(){
         'color-positive': '#206620',
         'decimals': 7,
         'mouse-sensitivity': 1,
-        'move-←': 'A',
-        'move-↑': 'W',
-        'move-→': 'D',
-        'move-↓': 'S',
+        'move-←': 65,
+        'move-↑': 87,
+        'move-→': 68,
+        'move-↓': 83,
       },
     });
     core_storage_update();
 
     // Global event binds.
+    var keybinds = {
+      27: {// Escape
+        'solo': true,
+        'todo': core_escape,
+      },
+    };
+    keybinds[core_storage_data['move-←']] = {};
+    keybinds[core_storage_data['move-↑']] = {};
+    keybinds[core_storage_data['move-→']] = {};
+    keybinds[core_storage_data['move-↓']] = {};
     core_events_bind({
       'beforeunload': {
         'todo': core_storage_save,
@@ -993,12 +1003,7 @@ function core_init(){
           'onclick': core_storage_reset,
         },
       },
-      'keybinds': {
-        27: {// Escape
-          'solo': true,
-          'todo': core_escape,
-        },
-      },
+      'keybinds': keybinds,
     });
 
     core_call({

@@ -678,27 +678,27 @@ function webgl_logicloop(){
     }
 
     if(webgl_properties['camera']['type'] !== false){
-        if(core_keys[65]['state']){
+        if(core_keys[core_storage_data['move-←']]['state']){
             webgl_camera_move({
               'speed': -webgl_properties['camera']['speed'],
               'strafe': true,
             });
         }
 
-        if(core_keys[68]['state']){
+        if(core_keys[core_storage_data['move-→']]['state']){
             webgl_camera_move({
               'speed': webgl_properties['camera']['speed'],
               'strafe': true,
             });
         }
 
-        if(core_keys[83]['state']){
+        if(core_keys[core_storage_data['move-↓']]['state']){
             webgl_camera_move({
               'speed': webgl_properties['camera']['speed'],
             });
         }
 
-        if(core_keys[87]['state']){
+        if(core_keys[core_storage_data['move-↑']]['state']){
             webgl_camera_move({
               'speed': -webgl_properties['camera']['speed'],
             });
