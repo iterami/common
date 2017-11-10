@@ -419,7 +419,18 @@ function core_events_bind(args){
       },
     });
 
-    core_events_bind_beforeunload(args['beforeunload']);
+    if(args['beforeunload'] !== false){
+        core_events['beforeunload'] = core_handle_defaults({
+          'default': {
+            'loop': false,
+            'preventDefault': false,
+            'solo': false,
+            'state': false,
+            'todo': function(){},
+          },
+          'var': args['beforeunload'],
+        });
+    }
 
     if(args['keybinds'] !== false){
         core_keys_updatebinds({
@@ -445,69 +456,12 @@ function core_events_bind(args){
     }
 }
 
-function core_events_bind_beforeunload(beforeunload){
-    if(beforeunload === false){
-        return;
-    }
-
-    core_events['beforeunload'] = core_handle_defaults({
-      'default': {
-        'loop': false,
-        'preventDefault': false,
-        'solo': false,
-        'state': false,
-        'todo': function(){},
-      },
-      'var': beforeunload,
-    });
-}
-
 function core_events_keyinfo(event){
     var code = event.keyCode || event.which;
     return {
       'code': code,
       'key': String.fromCharCode(code),
     };
-}
-
-// Optional args: beforeunload, keybinds, mousebinds
-function core_events_rebind(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'beforeunload': false,
-        'keybinds': {},
-        'mousebinds': {},
-      },
-    });
-
-    core_events_bind_beforeunload(args['beforeunload']);
-
-    var binds = {};
-    var rebind = false;
-    for(var bind in args['keybinds']){
-        binds[bind] = keybinds[bind];
-        rebind = true;
-    }
-    if(rebind){
-        core_keys_updatebinds({
-          'clear': true,
-          'keybinds': binds,
-        });
-    }
-
-    binds = {};
-    rebind = false;
-    for(var bind in args['mousebinds']){
-        binds[bind] = mousebinds[bind];
-        rebind = true;
-    }
-    if(rebind){
-        core_mouse_updatebinds({
-          'clear': true,
-          'mousebinds': binds,
-        });
-    }
 }
 
 function core_events_todoloop(){
