@@ -984,16 +984,7 @@ function core_init(){
     core_storage_update();
 
     // Global event binds.
-    var keybinds = {
-      27: {// Escape
-        'solo': true,
-        'todo': core_escape,
-      },
-    };
-    keybinds[core_storage_data['move-←']] = {};
-    keybinds[core_storage_data['move-↑']] = {};
-    keybinds[core_storage_data['move-→']] = {};
-    keybinds[core_storage_data['move-↓']] = {};
+    core_keys_rebind();
     core_events_bind({
       'beforeunload': {
         'todo': core_storage_save,
@@ -1003,7 +994,6 @@ function core_init(){
           'onclick': core_storage_reset,
         },
       },
-      'keybinds': keybinds,
     });
 
     core_call({
@@ -1122,6 +1112,21 @@ function core_interval_resume_all(){
           'id': interval,
         });
     }
+}
+
+function core_keys_rebind(){
+    var keybinds = core_key_rebinds;
+    keybinds[27] = {// Escape
+      'solo': true,
+      'todo': core_escape,
+    };
+    keybinds[core_storage_data['move-←']] = {};
+    keybinds[core_storage_data['move-↑']] = {};
+    keybinds[core_storage_data['move-→']] = {};
+    keybinds[core_storage_data['move-↓']] = {};
+    core_events_bind({
+      'keybinds': keybinds,
+    });
 }
 
 // Required args: keybinds
@@ -1345,6 +1350,9 @@ function core_repo_init(args){
 
     core_storage_update();
 
+    if(args['keybinds'] !== false){
+        core_key_rebinds = args['keybinds'];
+    }
     core_events_bind({
       'beforeunload': args['beforeunload'],
       'elements': args['events'],
@@ -1471,6 +1479,8 @@ function core_storage_save(){
             window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
         }
     }
+
+    core_keys_rebind();
 }
 
 // Required args: key, value
@@ -1664,6 +1674,7 @@ var core_groups = {};
 var core_images = {};
 var core_intervals = {};
 var core_keys = {};
+var core_key_rebinds = {};
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
