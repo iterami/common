@@ -963,7 +963,7 @@ function core_init(){
     document.body.appendChild(core_ui);
 
     core_tab_create({
-      'content': '<table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=frame-ms><td>ms/Frame</table>',
+      'content': '<table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity</table>',
       'default': true,
       'group': 'core-menu',
       'id': 'global',
@@ -1020,7 +1020,6 @@ function core_init(){
         'color-negative': '#663366',
         'color-positive': '#206620',
         'decimals': 7,
-        'frame-ms': 25,
         'mouse-sensitivity': 1,
       },
     });
@@ -1065,7 +1064,7 @@ function core_interval_modify(args){
         'animationFrame': false,
         'clear': 'clearInterval',
         'id': core_uid(),
-        'interval': core_storage_data['frame-ms'],
+        'interval': 25,
         'paused': false,
         'set': 'setInterval',
       },

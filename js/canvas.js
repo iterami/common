@@ -192,7 +192,6 @@ function canvas_init(args){
     })){
         core_interval_modify({
           'id': 'canvas-interval',
-          'interval': core_storage_data['frame-ms'],
           'paused': true,
           'todo': canvas_logicloop,
         });
