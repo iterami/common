@@ -982,9 +982,7 @@ function core_init(){
     // Global event binds.
     core_events_bind({
       'beforeunload': {
-        'todo': function(){
-            core_storage_save();
-        },
+        'todo': core_storage_save,
       },
       'elements': {
         'settings-reset': {
