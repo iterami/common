@@ -1115,7 +1115,11 @@ function core_interval_resume_all(){
 }
 
 function core_keys_rebind(){
-    var keybinds = core_key_rebinds;
+    var keybinds = {};
+    Object.assign(
+      keybinds,
+      core_key_rebinds
+    );
     keybinds[27] = {// Escape
       'solo': true,
       'todo': core_escape,
@@ -1125,6 +1129,7 @@ function core_keys_rebind(){
     keybinds[core_storage_data['move-→']] = {};
     keybinds[core_storage_data['move-↓']] = {};
     core_events_bind({
+      'clearkeys': true,
       'keybinds': keybinds,
     });
 }
