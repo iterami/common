@@ -1059,9 +1059,11 @@ function core_interval_pause(args){
 
 function core_interval_pause_all(){
     for(var interval in core_intervals){
-        core_interval_pause({
-          'id': interval,
-        });
+        if(!core_intervals[interval]['paused']){
+            core_interval_pause({
+              'id': interval,
+            });
+        }
     }
 }
 
@@ -1092,9 +1094,12 @@ function core_interval_resume(args){
         return;
     }
 
-    core_interval_pause({
-      'id': args['id'],
-    });
+    if(!core_intervals[args['id']]['paused']){
+        core_interval_pause({
+          'id': args['id'],
+        });
+    }
+    core_intervals[args['id']]['paused'] = false;
     if(core_intervals[args['id']]['animationFrame']){
         core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
 
@@ -1104,7 +1109,6 @@ function core_interval_resume(args){
           core_intervals[args['id']]['interval']
         );
     }
-    core_intervals[args['id']]['paused'] = false;
 }
 
 function core_interval_resume_all(){
