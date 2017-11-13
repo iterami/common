@@ -1008,7 +1008,7 @@ function core_interval_animationFrame(args){
 }
 
 // Required args: todo
-// Optional args: animationFrame, clear, id, interval, set
+// Optional args: animationFrame, clear, id, interval, paused, set
 function core_interval_modify(args){
     args = core_args({
       'args': args,
