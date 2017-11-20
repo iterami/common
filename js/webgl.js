@@ -237,12 +237,6 @@ function webgl_draw(){
       },
     });
 
-    webgl_canvas.clearRect(
-      0,
-      0,
-      webgl_canvas_properties['width'],
-      webgl_canvas_properties['height']
-    );
     webgl_canvas.drawImage(
       document.getElementById('buffer'),
       0,
@@ -559,7 +553,12 @@ function webgl_init(args){
         'stencil': false,
       }
     );
-    webgl_canvas = document.getElementById('canvas').getContext('2d');
+    webgl_canvas = document.getElementById('canvas').getContext(
+      '2d',
+      {
+        'alpha': false,
+      }
+    );
 
     window.onresize = webgl_resize;
     webgl_resize();
