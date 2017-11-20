@@ -453,7 +453,7 @@ function webgl_entity_todo(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, contextmenu, fog, grabity-acceleration, gravity-max, speed
+// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, contextmenu, fog, gravity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
