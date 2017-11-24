@@ -21,7 +21,12 @@ function canvas_attach(args){
 }
 
 function canvas_draw(){
-    canvas_buffer.clearRect(
+    canvas_setproperties({
+      'properties': {
+        'fillStyle': canvas_properties['clearColor'],
+      },
+    });
+    canvas_buffer.fillRect(
       0,
       0,
       canvas_properties['width'],
@@ -131,6 +136,7 @@ function canvas_init(args){
     });
 
     canvas_properties = {
+      'clearColor': '#000',
       'fillStyle': '#fff',
       'font': canvas_fonts['medium'],
       'height': 0,
