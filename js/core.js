@@ -845,6 +845,21 @@ function core_html(args){
     return element;
 }
 
+// Required args: string
+function core_html_format(args){
+    return core_replace_multiple({
+      'patterns': {
+        //'"': '&quot;',
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '\'': '&apos;',
+        '\n\r': '<br>',
+      },
+      'string': args['string'],
+    });
+}
+
 // Required args: id
 // Optional args: properties
 function core_html_modify(args){
@@ -1295,6 +1310,21 @@ function core_random_string(args){
     return string;
 }
 
+// Required args: patterns, string
+function core_replace_multiple(args){
+    for(var pattern in args['patterns']){
+        args['string'] = args['string'].replace(
+          new RegExp(
+            pattern,
+            'g'
+          ),
+          args['patterns'][pattern]
+        );
+    }
+
+    return args['string'];
+}
+
 // Required args: title
 // Optional args: audios, beforeunload, entities, github, globals, images, info, keybinds, menu, mousebinds, storage, storage-menu, ui
 function core_repo_init(args){
@@ -1684,8 +1714,8 @@ var core_gamepads = {};
 var core_groups = {};
 var core_images = {};
 var core_intervals = {};
-var core_keys = {};
 var core_key_rebinds = {};
+var core_keys = {};
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
