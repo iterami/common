@@ -278,6 +278,17 @@ function math_move_2d(args){
     };
 }
 
+// Required args: dx, dy, speed
+function math_move_2d_diagonal(args){
+    var sqrt = Math.sqrt(args['speed']);
+    return {
+      'x': (args['dx'] / args['speed']) * sqrt,
+      'y': args['dy'] > 0
+        ? sqrt
+        : -sqrt,
+    };
+}
+
 // Required args; angle
 // Optional args: decimals, multiplier, speed, strafe
 function math_move_3d(args){
