@@ -21,17 +21,27 @@ function canvas_attach(args){
 }
 
 function canvas_draw(){
-    canvas_setproperties({
-      'properties': {
-        'fillStyle': canvas_properties['clearColor'],
-      },
-    });
-    canvas_buffer.fillRect(
-      0,
-      0,
-      canvas_properties['width'],
-      canvas_properties['height']
-    );
+    if(canvas_properties['clearColor'] === '#000'){
+        canvas_buffer.clearRect(
+          0,
+          0,
+          canvas_properties['width'],
+          canvas_properties['height']
+        );
+
+    }else{
+        canvas_setproperties({
+          'properties': {
+            'fillStyle': canvas_properties['clearColor'],
+          },
+        });
+        canvas_buffer.fillRect(
+          0,
+          0,
+          canvas_properties['width'],
+          canvas_properties['height']
+        );
+    }
 
     draw_logic();
 
