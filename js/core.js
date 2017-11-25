@@ -1,5 +1,31 @@
 'use strict';
 
+// Required args: todo, url
+// Optional args: data, type
+function core_ajax(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'data': core_ajax_properties['data'],
+        'type': core_ajax_properties['type'],
+      },
+    });
+
+    var ajax = new XMLHttpRequest();
+    ajax.onreadystatechange = function(){
+        if(this.readyState === core_ajax_properties['readyState']
+          && this.status === core_ajax_properties['status']){
+            args['todo'](this.responseText);
+        }
+    };
+
+    ajax.open(
+      args['type'],
+      args['url']
+    );
+    ajax.send(args['data']);
+}
+
 // Required args: args, defaults
 function core_args(args){
     if(args['args'] === void 0){
@@ -1771,6 +1797,12 @@ function core_vendor_prefix(args){
       || args['var']['o' + unprefixed];
 }
 
+var core_ajax_properties = {
+  'data': null,
+  'readyState': 4,
+  'status': 200,
+  'type': 'GET',
+};
 var core_audio = {};
 var core_audio_context = 0;
 var core_audio_sources = {};
