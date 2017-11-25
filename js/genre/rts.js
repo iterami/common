@@ -33,7 +33,7 @@ function rts_building_build(args){
                     continue;
                 }
 
-                if(math_distance({
+                if(core_distance({
                   'x0': args['x'],
                   'x1': rts_fog[loop_counter]['x'] - core_storage_data['level-size'] + rts_buildings[args['type']]['width'] / 2,
                   'y0': args['y'],
@@ -49,7 +49,7 @@ function rts_building_build(args){
     if(rts_players[args['player']]['buildings'].length > 0){
         var build = false;
         for(var building in rts_players[args['player']]['buildings']){
-            if(math_distance({
+            if(core_distance({
               'x0': args['x'],
               'x1': rts_players[args['player']]['buildings'][building]['x'],
               'y0': args['y'],
@@ -66,7 +66,7 @@ function rts_building_build(args){
 
     // Don't allow building on other buildings.
     for(var building in rts_players[args['player']]['buildings']){
-        if(math_rectangle_overlap({
+        if(core_rectangle_overlap({
           'h0': rts_buildings[args['type']]['height'],
           'h1': rts_players[args['player']]['buildings'][building]['height'],
           'w0': rts_buildings[args['type']]['width'],
@@ -82,7 +82,7 @@ function rts_building_build(args){
 
     // Don't allow building on dynamic world elements.
     for(var element in rts_world_dynamic){
-        if(math_rectangle_overlap({
+        if(core_rectangle_overlap({
           'h0': rts_buildings[args['type']]['height'],
           'h1': rts_world_dynamic[element]['height'],
           'w0': rts_buildings[args['type']]['width'],
@@ -153,7 +153,7 @@ function rts_building_fog(){
         // Check if fog is within fog disance of a building.
         var loop_counter = rts_fog.length - 1;
         do{
-            if(math_distance({
+            if(core_distance({
               'x0': rts_players[0]['buildings'][building]['x'],
               'x1': rts_fog[loop_counter]['x'] - core_storage_data['level-size'],
               'y0': rts_players[0]['buildings'][building]['y'],
@@ -189,7 +189,7 @@ function rts_building_handle(){
         }else{
             var check_for_buildings = true;
             for(var p0_unit in rts_players[0]['units']){
-                if(math_distance({
+                if(core_distance({
                   'x0': rts_players[1]['buildings'][building]['x'],
                   'x1': rts_players[0]['units'][p0_unit]['x'],
                   'y0': rts_players[1]['buildings'][building]['y'],
@@ -218,7 +218,7 @@ function rts_building_handle(){
             // If no units in range, look for buildings to fire at.
             if(check_for_buildings){
                 for(var p0_building in rts_players[0]['buildings']){
-                    if(math_distance({
+                    if(core_distance({
                       'x0': rts_players[1]['buildings'][building]['x'],
                       'x1': rts_players[0]['buildings'][p0_building]['x']
                         + rts_buildings[rts_players[0]['buildings'][p0_building]['type']]['width'] / 2,
@@ -263,7 +263,7 @@ function rts_building_handle(){
         }else{
             var check_for_buildings = true;
             for(var p1_unit in rts_players[1]['units']){
-                if(math_distance({
+                if(core_distance({
                   'x0': rts_players[0]['buildings'][building]['x'],
                   'x1': rts_players[1]['units'][p1_unit]['x'],
                   'y0': rts_players[0]['buildings'][building]['y'],
@@ -292,7 +292,7 @@ function rts_building_handle(){
             // If no units in range, look for buildings to fire at.
             if(check_for_buildings){
                 for(var p1_building in rts_players[1]['buildings']){
-                    if(math_distance({
+                    if(core_distance({
                       'x0': rts_players[0]['buildings'][building]['x'],
                       'x1': rts_players[1]['buildings'][p1_building]['x']
                         + rts_buildings[rts_players[1]['buildings'][p1_building]['type']]['width'] / 2,
@@ -328,7 +328,7 @@ function rts_building_handle(){
 function rts_bullet_handle(){
     for(var bullet in rts_bullets){
         // Calculate bullet movement.
-        var speeds = math_move_2d({
+        var speeds = core_move_2d({
           'multiplier': rts_bullets[bullet]['speed'],
           'x0': rts_bullets[bullet]['x'],
           'x1': rts_bullets[bullet]['destination-x'],
@@ -347,7 +347,7 @@ function rts_bullet_handle(){
         }
 
         // If bullet reaches destination, check for collisions.
-        if(math_distance({
+        if(core_distance({
           'x0': rts_bullets[bullet]['x'],
           'x1': rts_bullets[bullet]['destination-x'],
           'y0': rts_bullets[bullet]['y'],
@@ -358,7 +358,7 @@ function rts_bullet_handle(){
 
         if(rts_bullets[bullet]['player'] === 1){
             for(var unit in rts_players[0]['units']){
-                if(math_distance({
+                if(core_distance({
                   'x0': rts_bullets[bullet]['x'],
                   'x1': rts_players[0]['units'][unit]['x'],
                   'y0': rts_bullets[bullet]['y'],
@@ -399,7 +399,7 @@ function rts_bullet_handle(){
 
         }else{
             for(var unit in rts_players[1]['units']){
-                if(math_distance({
+                if(core_distance({
                   'x0': rts_bullets[bullet]['x'],
                   'x1': rts_players[1]['units'][unit]['x'],
                   'y0': rts_bullets[bullet]['y'],
@@ -693,7 +693,7 @@ function rts_unit_handle(){
         }else{
             var check_for_buildings = true;
             for(var p0_unit in rts_players[0]['units']){
-                if(math_distance({
+                if(core_distance({
                   'x0': rts_players[1]['units'][unit]['x'],
                   'x1': rts_players[0]['units'][p0_unit]['x'],
                   'y0': rts_players[1]['units'][unit]['y'],
@@ -720,7 +720,7 @@ function rts_unit_handle(){
             // If no units in range, look for buildings to fire at.
             if(check_for_buildings){
                 for(var building in rts_players[0]['buildings']){
-                    if(math_distance({
+                    if(core_distance({
                       'x0': rts_players[1]['units'][unit]['x'],
                       'x1': rts_players[0]['buildings'][building]['x']
                         + rts_buildings[rts_players[0]['buildings'][building]['type']]['width'] / 2,
@@ -752,7 +752,7 @@ function rts_unit_handle(){
         // Movement "AI", pick new destination once destination is reached.
         if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']
           || rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
-            var speeds = math_move_2d({
+            var speeds = core_move_2d({
               'multiplier': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[1]['units'][unit]['x'],
               'x1': rts_players[1]['units'][unit]['destination-x'],
@@ -768,7 +768,7 @@ function rts_unit_handle(){
                 rts_players[1]['units'][unit]['y'] += speeds['y'];
             }
 
-            if(math_distance({
+            if(core_distance({
               'x0': rts_players[1]['units'][unit]['x'],
               'x1': rts_players[1]['units'][unit]['destination-x'],
               'y0': rts_players[1]['units'][unit]['y'],
@@ -792,7 +792,7 @@ function rts_unit_handle(){
         // If not yet reached destination, move unit.
         if(Math.abs(rts_players[0]['units'][unit]['x'] - rts_players[0]['units'][unit]['destination-x']) > 1
           && Math.abs(rts_players[0]['units'][unit]['y'] - rts_players[0]['units'][unit]['destination-y']) > 1){
-            var speeds = math_move_2d({
+            var speeds = core_move_2d({
               'multiplier': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[0]['units'][unit]['destination-x'],
@@ -820,7 +820,7 @@ function rts_unit_handle(){
                     continue;
                 }
 
-                if(math_distance({
+                if(core_distance({
                   'x0': rts_players[0]['units'][unit]['x'],
                   'x1': rts_players[0]['units'][other_unit]['x'],
                   'y0': rts_players[0]['units'][unit]['y'],
@@ -851,7 +851,7 @@ function rts_unit_handle(){
             var loop_counter = rts_fog.length - 1;
             if(loop_counter >= 0){
                 do{
-                    if(math_distance({
+                    if(core_distance({
                       'x0': rts_players[0]['units'][unit]['x'],
                       'x1': rts_fog[loop_counter]['x'] - core_storage_data['level-size'] + 50,
                       'y0': rts_players[0]['units'][unit]['y'],
@@ -879,7 +879,7 @@ function rts_unit_handle(){
 
         var check_for_buildings = true;
         for(var p1_unit in rts_players[1]['units']){
-            if(math_distance({
+            if(core_distance({
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[1]['units'][p1_unit]['x'],
               'y0': rts_players[0]['units'][unit]['y'],
@@ -909,7 +909,7 @@ function rts_unit_handle(){
         }
 
         for(var building in rts_players[1]['buildings']){
-            if(math_distance({
+            if(core_distance({
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[1]['buildings'][building]['x']
                 + rts_buildings[rts_players[1]['buildings'][building]['type']]['width'] / 2,

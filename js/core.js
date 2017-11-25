@@ -262,6 +262,40 @@ function core_call(args){
     }
 }
 
+// Required args: max, min, value
+// Optional args: decimals, wrap
+function core_clamp(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+        'wrap': false,
+      },
+    });
+
+    if(args['wrap']){
+        var diff = args['max'] - args['min'];
+        while(args['value'] < args['min']){
+            args['value'] += diff;
+        }
+        while(args['value'] >= args['max']){
+            args['value'] -= diff;
+        }
+
+    }else{
+        args['value'] = Math.max(
+          args['value'],
+          args['min']
+        );
+        args['value'] = Math.min(
+          args['value'],
+          args['max']
+        );
+    }
+
+    return args['value'];
+}
+
 // Optional args: date
 function core_date_to_timestamp(args){
     args = core_args({
@@ -282,6 +316,46 @@ function core_date_to_timestamp(args){
         args['date']['millisecond']
       )
     ).getTime();
+}
+
+// Required args: degrees
+// Optional args: decimals
+function core_degrees_to_radians(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
+    return core_round({
+      'decimals': args['decimals'],
+      'number': args['degrees'] * core_degree,
+    });
+}
+
+// Required args: x0, x1, y0, y1
+// Optional args: decimals
+function core_distance(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
+    return core_round({
+      'decimals': args['decimals'],
+      'number': Math.sqrt(
+        Math.pow(
+          args['x0'] - args['x1'],
+          2
+        ) + Math.pow(
+          args['y0'] - args['y1'],
+          2
+        )
+      ),
+    });
 }
 
 // Optional args: id, properties, types
@@ -524,6 +598,40 @@ function core_events_todoloop(){
             core_mouse['todo'][mousebind]['todo']();
         }
     }
+}
+
+// Required args: length, x0, x1, y0, y1
+// Optional args: decimals
+function core_fixed_length_line(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
+    var line_distance = core_distance({
+      'x0': args['x0'],
+      'x1': args['x1'],
+      'y0': args['y0'],
+      'y1': args['y1'],
+    });
+
+    args['x1'] /= line_distance;
+    args['x1'] *= args['length'];
+    args['y1'] /= line_distance;
+    args['y1'] *= args['length'];
+
+    return {
+      'x': core_round({
+        'decimals': args['decimals'],
+        'number': args['x1'],
+      }),
+      'y': core_round({
+        'decimals': args['decimals'],
+        'number': args['y1'],
+      }),
+    };
 }
 
 // Required args: entities, group
@@ -1244,6 +1352,135 @@ function core_keys_updatebinds(args){
     }
 }
 
+// Required args: id, to
+function core_matrix_clone(args){
+    core_matrices[args['to']] = core_matrix_create();
+    core_matrix_copy({
+      'id': args['id'],
+      'to': args['to'],
+    });
+}
+
+// Required args: id, to
+function core_matrix_copy(args){
+    Object.assign(
+      core_matrices[args['to']],
+      core_matrices[args['id']]
+    );
+}
+
+function core_matrix_create(){
+    return new Float32Array(16);
+}
+
+// Required args: ids
+function core_matrix_delete(args){
+    for(var id in args['ids']){
+        delete core_matrices[args['ids'][id]];
+    }
+}
+
+// Required args: id
+function core_matrix_identity(args){
+    for(var key in core_matrices[args['id']]){
+        core_matrices[args['id']][key] =
+          key % 5 === 0
+            ? 1
+            : 0;
+    }
+}
+
+// Required args: dimensions, id
+function core_matrix_rotate(args){
+    var cache_id = 'rotate-cache-' + args['id'];
+
+    // Rotate X.
+    core_matrix_clone({
+      'id': args['id'],
+      'to': cache_id,
+    });
+    var cosine = Math.cos(args['dimensions'][0]);
+    var sine = Math.sin(args['dimensions'][0]);
+
+    core_matrices[args['id']][4] = core_matrices[cache_id][4] * cosine + core_matrices[cache_id][8] * sine;
+    core_matrices[args['id']][5] = core_matrices[cache_id][5] * cosine + core_matrices[cache_id][9] * sine;
+    core_matrices[args['id']][6] = core_matrices[cache_id][6] * cosine + core_matrices[cache_id][10] * sine;
+    core_matrices[args['id']][7] = core_matrices[cache_id][7] * cosine + core_matrices[cache_id][11] * sine;
+    core_matrices[args['id']][8] = core_matrices[cache_id][8] * cosine - core_matrices[cache_id][4] * sine;
+    core_matrices[args['id']][9] = core_matrices[cache_id][9] * cosine - core_matrices[cache_id][5] * sine;
+    core_matrices[args['id']][10] = core_matrices[cache_id][10] * cosine - core_matrices[cache_id][6] * sine;
+    core_matrices[args['id']][11] = core_matrices[cache_id][11] * cosine - core_matrices[cache_id][7] * sine;
+
+    // Rotate Y.
+    core_matrix_copy({
+      'id': args['id'],
+      'to': cache_id,
+    });
+    cosine = Math.cos(args['dimensions'][1]);
+    sine = Math.sin(args['dimensions'][1]);
+
+    core_matrices[args['id']][0] = core_matrices[cache_id][0] * cosine - core_matrices[cache_id][8] * sine;
+    core_matrices[args['id']][1] = core_matrices[cache_id][1] * cosine - core_matrices[cache_id][9] * sine;
+    core_matrices[args['id']][2] = core_matrices[cache_id][2] * cosine - core_matrices[cache_id][10] * sine;
+    core_matrices[args['id']][3] = core_matrices[cache_id][3] * cosine - core_matrices[cache_id][11] * sine;
+    core_matrices[args['id']][8] = core_matrices[cache_id][8] * cosine + core_matrices[cache_id][0] * sine;
+    core_matrices[args['id']][9] = core_matrices[cache_id][9] * cosine + core_matrices[cache_id][1] * sine;
+    core_matrices[args['id']][10] = core_matrices[cache_id][10] * cosine + core_matrices[cache_id][2] * sine;
+    core_matrices[args['id']][11] = core_matrices[cache_id][11] * cosine + core_matrices[cache_id][3] * sine;
+
+    // Rotate Z.
+    core_matrix_copy({
+      'id': args['id'],
+      'to': cache_id,
+    });
+    cosine = Math.cos(args['dimensions'][2]);
+    sine = Math.sin(args['dimensions'][2]);
+
+    core_matrices[args['id']][0] = core_matrices[cache_id][0] * cosine + core_matrices[cache_id][4] * sine;
+    core_matrices[args['id']][1] = core_matrices[cache_id][1] * cosine + core_matrices[cache_id][5] * sine;
+    core_matrices[args['id']][2] = core_matrices[cache_id][2] * cosine + core_matrices[cache_id][6] * sine;
+    core_matrices[args['id']][3] = core_matrices[cache_id][3] * cosine + core_matrices[cache_id][7] * sine;
+    core_matrices[args['id']][4] = core_matrices[cache_id][4] * cosine - core_matrices[cache_id][0] * sine;
+    core_matrices[args['id']][5] = core_matrices[cache_id][5] * cosine - core_matrices[cache_id][1] * sine;
+    core_matrices[args['id']][6] = core_matrices[cache_id][6] * cosine - core_matrices[cache_id][2] * sine;
+    core_matrices[args['id']][7] = core_matrices[cache_id][7] * cosine - core_matrices[cache_id][3] * sine;
+
+    core_matrix_delete({
+      'ids': [cache_id],
+    });
+}
+
+// Required args: id
+// Optional args: decimals
+function core_matrix_round(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
+    for(var key in core_matrices[args['id']]){
+        core_matrices[args['id']][key] = core_round({
+          'decimals': args['decimals'],
+          'number': core_matrices[args['id']][key],
+        });
+    }
+}
+
+// Required args: dimensions, id
+function core_matrix_translate(args){
+    for(var i = 0; i < 4; i++){
+        core_matrices[args['id']][i + 12] -= core_matrices[args['id']][i] * args['dimensions'][0]
+          + core_matrices[args['id']][i + 4] * args['dimensions'][1]
+          + core_matrices[args['id']][i + 8] * args['dimensions'][2];
+    }
+
+    core_matrix_round({
+      'id': args['id'],
+    });
+}
+
 // Required args: mousebinds
 // Optional args: clear
 function core_mouse_updatebinds(args){
@@ -1265,6 +1502,112 @@ function core_mouse_updatebinds(args){
           'todo': args['mousebinds'][mousebind]['todo'] || function(){},
         };
     }
+}
+
+// Required args: x0, x1, y0, y1
+// Optional args: decimals, multiplier
+function core_move_2d(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+        'multiplier': 1,
+      },
+    });
+
+    var angle = core_point_angle({
+      'x0': args['x0'],
+      'x1': args['x1'],
+      'y0': args['y0'],
+      'y1': args['y1'],
+    });
+
+    var dx = core_round({
+      'decimals': args['decimals'],
+      'number': Math.cos(angle) * args['multiplier'],
+    });
+    var dy = core_round({
+      'decimals': args['decimals'],
+      'number': Math.sin(angle) * args['multiplier'],
+    });
+
+    if(args['x0'] > args['x1']){
+        dx = -dx;
+    }
+    if(args['y0'] > args['y1']){
+        dy = -dy;
+    }
+
+    return {
+      'angle': angle,
+      'x': dx,
+      'y': dy,
+    };
+}
+
+// Required args: dx, dy, speed
+function core_move_2d_diagonal(args){
+    var sqrt = Math.sqrt(args['speed']);
+    return {
+      'x': (args['dx'] / args['speed']) * sqrt,
+      'y': args['dy'] > 0
+        ? sqrt
+        : -sqrt,
+    };
+}
+
+// Required args; angle
+// Optional args: decimals, multiplier, speed, strafe
+function core_move_3d(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+        'multiplier': 1,
+        'speed': 1,
+        'strafe': false,
+      },
+    });
+    args['speed'] *= args['multiplier'];
+
+    var radians = -core_degrees_to_radians({
+      'decimals': args['decimals'],
+      'degrees': args['angle'] - (args['strafe']
+          ? 90
+          : 0
+        ),
+    });
+    return {
+      'x': core_round({
+        'decimals': args['decimals'],
+        'number': Math.sin(radians) * args['speed'],
+      }),
+      'z': core_round({
+        'decimals': args['decimals'],
+        'number': Math.cos(radians) * args['speed'],
+      }),
+    };
+}
+
+// Required args: x0, x1, y0, y1
+function core_point_angle(args){
+    return Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
+}
+
+// Required args: radians
+// Optional args: decimals
+function core_radians_to_degrees(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
+    return core_round({
+      'decimals': args['decimals'],
+      'number': args['radians'] * core_radian,
+    });
 }
 
 // Optional args: chance
@@ -1356,6 +1699,18 @@ function core_random_string(args){
         })];
     }
     return string;
+}
+
+// Required args: h0, h1, w0, w1, x0, x1, y0, y1
+function core_rectangle_overlap(args){
+    var boolean = false;
+    if(args['x0'] < args['x1'] + args['w1']
+      && args['x0'] + args['w0'] > args['x1']
+      && args['y0'] < args['y1'] + args['h1']
+      && args['y0'] + args['h0'] > args['y1']){
+        boolean = true;
+    }
+    return boolean;
 }
 
 // Required args: patterns, string
@@ -1488,6 +1843,31 @@ function core_requestpointerlock(args){
     element.requestPointerLock();
 
     core_mouse['pointerlock-id'] = args['id'];
+}
+
+// Required args: number
+// Optional args: decimals
+function core_round(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
+    if(String(args['number']).indexOf('e') >= 0){
+        args['number'] = Number(args['number'].toFixed(args['decimals']));
+    }
+
+    var result = Number(
+      Math.round(args['number'] + 'e+' + args['decimals'])
+        + 'e-' + args['decimals']
+    );
+    if(isNaN(result)){
+        result = 0;
+    }
+
+    return result;
 }
 
 // Required args: array, todo
@@ -1956,6 +2336,7 @@ var core_audio = {};
 var core_audio_context = 0;
 var core_audio_sources = {};
 var core_audio_volume_multiplier = 1;
+var core_degree = Math.PI / 180;
 var core_entities = {};
 var core_entity_info = {};
 var core_entity_types_default = [];
@@ -1966,11 +2347,13 @@ var core_images = {};
 var core_intervals = {};
 var core_key_rebinds = {};
 var core_keys = {};
+var core_matrices = {};
 var core_menu_open = false;
 var core_menu_quit = 'Q = Main Menu';
 var core_menu_resume = 'ESC = Resume';
 var core_mode = 0;
 var core_mouse = {};
+var core_radian = 180 / Math.PI;
 var core_random_boolean_chance = .5;
 var core_random_integer_max = 100;
 var core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -1979,6 +2362,7 @@ var core_repo_title = '';
 var core_storage_data = {};
 var core_storage_info = {};
 var core_tabs = {};
+var core_tau = Math.PI * 2;
 var core_ui_values = {};
 var core_uids = {};
 
