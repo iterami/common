@@ -1,11 +1,11 @@
 'use strict';
 
 // Optional args: date
-function time_date_to_timestamp(args){
+function core_date_to_timestamp(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'date': time_timestamp_to_date(),
+        'date': core_timestamp_to_date(),
       },
     });
 
@@ -24,11 +24,11 @@ function time_date_to_timestamp(args){
 
 // Required args: target
 // Optional args: now
-function time_diff(args){
+function core_time_diff(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'now': time_date_to_timestamp(),
+        'now': core_date_to_timestamp(),
       },
     });
 
@@ -39,8 +39,8 @@ function time_diff(args){
         prefix = '- ';
     }
 
-    return prefix + time_format_date({
-      'date': time_timestamp_to_date({
+    return prefix + core_time_format({
+      'date': core_timestamp_to_date({
         'timestamp': diff,
       }),
       'diff': true,
@@ -48,11 +48,11 @@ function time_diff(args){
 }
 
 // Optional args: date, diff
-function time_format_date(args){
+function core_time_format(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'date': time_timestamp_to_date(),
+        'date': core_timestamp_to_date(),
         'diff': false,
       },
     });
@@ -63,27 +63,27 @@ function time_format_date(args){
         args['date']['year'] -= 1970;
     }
 
-    return time_two_digits({
+    return core_two_digits({
         'number': args['date']['year'],
       }) + '-'
-      + time_two_digits({
+      + core_two_digits({
         'number': args['date']['month'],
       }) + '-'
-      + time_two_digits({
+      + core_two_digits({
         'number': args['date']['date'],
       }) + ' '
-      + time_two_digits({
+      + core_two_digits({
         'number': args['date']['hour'],
       }) + ':'
-      + time_two_digits({
+      + core_two_digits({
         'number': args['date']['minute'],
       }) + ':'
-      + time_two_digits({
+      + core_two_digits({
         'number': args['date']['second'],
       });
 }
 
-function time_from_inputs(){
+function core_time_from_inputs(){
     var date = {
       'date': 0,
       'hour': 0,
@@ -109,13 +109,13 @@ function time_from_inputs(){
         }
     }
 
-    return time_date_to_timestamp({
+    return core_date_to_timestamp({
       'date': date,
     });
 }
 
 // Optional args: timestamp
-function time_timestamp_to_date(args){
+function core_timestamp_to_date(args){
     args = core_args({
       'args': args,
     });
@@ -138,7 +138,7 @@ function time_timestamp_to_date(args){
 }
 
 // Required args: number
-function time_two_digits(args){
+function core_two_digits(args){
     var prefix = args['number'] < 0
       ? '-'
       : '';
