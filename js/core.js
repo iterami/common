@@ -141,15 +141,7 @@ function core_audio_onended(args){
 }
 
 // Required args: id
-// Optional args: volume-multiplier
 function core_audio_source_create(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'volume-multiplier': core_audio_volume_multiplier,
-      },
-    });
-
     core_audio_sources[args['id']] = {
       'duration': core_audio[args['id']]['duration'] || 0,
       'start': core_audio[args['id']]['start'] || 0,
@@ -165,8 +157,7 @@ function core_audio_source_create(args){
         });
 
         if(core_audio[args['id']]['connections'][i]['label'] === 'Gain'){
-            core_audio_sources[args['id']]['Gain']['gain']['value'] = (core_audio[args['id']]['volume'] || core_storage_data['audio-volume'])
-              * args['volume-multiplier'];
+            core_audio_sources[args['id']]['Gain']['gain']['value'] = core_audio[args['id']]['volume'] || core_storage_data['audio-volume'];
         }
     }
 
@@ -182,19 +173,7 @@ function core_audio_source_create(args){
 }
 
 // Required args: id
-// Optional args: volume-multiplier
 function core_audio_start(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'volume-multiplier': core_audio_volume_multiplier,
-      },
-    });
-
-    if(args['volume-multiplier'] === 0){
-        return;
-    }
-
     if(core_audio[args['id']]['playing']){
         core_audio_stop({
           'id': args['id'],
@@ -203,7 +182,6 @@ function core_audio_start(args){
 
     core_audio_source_create({
       'id': args['id'],
-      'volume-multiplier': args['volume-multiplier'],
     });
 
     var startTime = core_audio_context.currentTime + core_audio_sources[args['id']]['start'];
@@ -1088,7 +1066,7 @@ function core_init(){
     document.body.appendChild(core_ui);
 
     core_tab_create({
-      'content': '<table><tr><td><input id=audio-volume max=1 min=0 step=0.01 type=range><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=jump><td>Jump<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=move-↑><td>Move ↑<tr><td><input id=move-←><td>Move ←<tr><td><input id=move-↓><td>Move ↓<tr><td><input id=move-→><td>Move →</table>',
+      'content': '<table><tr><td><input id=audio-volume><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=jump><td>Jump<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=move-↑><td>Move ↑<tr><td><input id=move-←><td>Move ←<tr><td><input id=move-↓><td>Move ↓<tr><td><input id=move-→><td>Move →</table>',
       'default': true,
       'group': 'core-menu',
       'id': 'global',
@@ -2335,7 +2313,6 @@ var core_ajax_properties = {
 var core_audio = {};
 var core_audio_context = 0;
 var core_audio_sources = {};
-var core_audio_volume_multiplier = 1;
 var core_degree = Math.PI / 180;
 var core_entities = {};
 var core_entity_info = {};
