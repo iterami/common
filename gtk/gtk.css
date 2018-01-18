@@ -1,0 +1,22 @@
+GtkNotebook,
+GtkWindow{
+    background-color: #3c3b37;
+    color: #aaa;
+    font-family: monospace;
+}
+GtkListBox,
+GtkTextView{
+    background-color: #000;
+    color: #aaa;
+    font-family: monospace;
+}
+GtkPlacesSidebar{
+    border: 0;
+}
+GtkTextView:selected{
+    background-color: #3c3b37;
+}
+.overshoot.bottom,
+.overshoot.top{
+    background: none;
+}
