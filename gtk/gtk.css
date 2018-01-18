@@ -4,6 +4,7 @@ GtkWindow{
     color: #aaa;
     font-family: monospace;
 }
+#grid,
 GtkListBox,
 GtkTextView{
     background-color: #000;
