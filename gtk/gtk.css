@@ -1,24 +1,22 @@
-GtkNotebook,
-GtkWindow{
-    background-color: #3c3b37;
-    color: #aaa;
-    font-family: monospace;
-}
 #grid,
 GtkListBox,
-GtkTextView{
+GtkNotebook,
+GtkTextView,
+GtkWindow{
     background-color: #000;
     color: #aaa;
     font-family: monospace;
 }
+GtkNotebook,
+GtkTextView:selected,
+GtkWindow{
+    background-color: #3c3b37;
+}
 GtkPlacesSidebar{
     border: 0;
 }
-GtkTextView:selected{
-    background-color: #3c3b37;
-}
 #map{
-    font-size: 6px;
+    font-size: 2px;
 }
 .overshoot.bottom,
 .overshoot.top{
