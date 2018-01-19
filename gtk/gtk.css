@@ -1,4 +1,5 @@
 #grid,
+GtkFileChooserWidget .view,
 GtkListBox,
 GtkNotebook,
 GtkTextView,
@@ -6,6 +7,9 @@ GtkWindow{
     background-color: #000;
     color: #aaa;
     font-family: monospace;
+}
+GtkFileChooserWidget .view:selected{
+    color: #fff;
 }
 GtkNotebook,
 GtkTextView:selected,
