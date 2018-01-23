@@ -45,7 +45,7 @@ gchar* construct_common_path(gchar *file){
     return path;
 }
 
-void init_gtk(){
+void init_gtk(void){
     GtkCssProvider *provider;
 
     name = g_get_user_name();
