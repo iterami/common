@@ -1,4 +1,4 @@
 const gchar *name;
 
-gchar* construct_common_path(gchar *file);
-void init_gtk(void);
+gchar* common_iterami_path(gchar *file);
+void common_init_gtk(void);

@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include "gtk.h"
 
-gchar* construct_common_path(gchar *file){
+gchar* common_iterami_path(gchar *file){
     gint length_file = 0;
     gint length_name = 0;
 
@@ -45,7 +45,7 @@ gchar* construct_common_path(gchar *file){
     return path;
 }
 
-void init_gtk(void){
+void common_init_gtk(void){
     GtkCssProvider *provider;
 
     name = g_get_user_name();
@@ -61,7 +61,7 @@ void init_gtk(void){
     while(name[length_name] != '\0'){
         length_name++;
     }
-    gchar *path = construct_common_path("css/gtk.css");
+    gchar *path = common_iterami_path("css/gtk.css");
     gtk_css_provider_load_from_file(
       provider,
       g_file_new_for_path(path),
