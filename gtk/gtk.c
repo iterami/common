@@ -1,7 +1,29 @@
 #include <gtk/gtk.h>
 #include "gtk.h"
 
-static int common_get_int_length(gint integer){
+GtkWidget * common_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier){
+    GtkWidget *menuitem;
+
+    menuitem = gtk_menu_item_new_with_mnemonic(label);
+
+    gtk_widget_add_accelerator(
+      menuitem,
+      "activate",
+      accelgroup,
+      key,
+      modifier,
+      GTK_ACCEL_VISIBLE
+    );
+
+    gtk_menu_shell_append(
+      GTK_MENU_SHELL(menu),
+      menuitem
+    );
+
+    return menuitem;
+}
+
+int common_get_int_length(gint integer){
     if(integer > 999999999){
         return 10;
 
