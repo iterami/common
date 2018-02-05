@@ -1,6 +1,38 @@
 #include <gtk/gtk.h>
 #include "gtk.h"
 
+static int common_get_int_length(gint integer){
+    if(integer > 999999999){
+        return 10;
+
+    }else if(integer > 99999999){
+        return 9;
+
+    }else if(integer > 9999999){
+        return 8;
+
+    }else if(integer > 999999){
+        return 7;
+
+    }else if(integer > 99999){
+        return 6;
+
+    }else if(integer > 9999){
+        return 5;
+
+    }else if(integer > 999){
+        return 4;
+
+    }else if(integer > 99){
+        return 3;
+
+    }else if(integer > 9){
+        return 2;
+    }
+
+    return 1;
+}
+
 gchar* common_iterami_path(gchar *file){
     gint length_file = 0;
     gint length_name = 0;
