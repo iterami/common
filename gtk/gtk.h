@@ -1,3 +1,5 @@
+#define KEY_QUIT GDK_KEY_q
+
 const gchar *name;
 
 GtkWidget * common_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier);
