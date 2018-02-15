@@ -45,6 +45,12 @@ function canvas_draw(){
 
     draw_logic();
 
+    canvas_canvas.clearRect(
+      0,
+      0,
+      canvas_properties['width'],
+      canvas_properties['height']
+    );
     canvas_canvas.drawImage(
       document.getElementById('buffer'),
       0,
@@ -180,18 +186,8 @@ function canvas_init(args){
       'type': 'canvas',
     });
 
-    canvas_buffer = document.getElementById('buffer').getContext(
-      '2d',
-      {
-        'alpha': false,
-      }
-    );
-    canvas_canvas = document.getElementById('canvas').getContext(
-      '2d',
-      {
-        'alpha': false,
-      }
-    );
+    canvas_buffer = document.getElementById('buffer').getContext('2d');
+    canvas_canvas = document.getElementById('canvas').getContext('2d');
 
     window.onresize = canvas_resize;
     canvas_resize();
