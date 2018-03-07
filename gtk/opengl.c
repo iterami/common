@@ -1,6 +1,6 @@
 #include "opengl.h"
 
-static void camera_move(float speed, gboolean strafe){
+void camera_move(float speed, gboolean strafe){
     float y_rotation = camera.rotate_y;
     if(strafe){
         y_rotation -= 90;
@@ -14,7 +14,7 @@ static void camera_move(float speed, gboolean strafe){
     );
 }
 
-static void camera_origin(void){
+void camera_origin(void){
     camera_set_rotation(
       0,
       0,
@@ -27,7 +27,7 @@ static void camera_origin(void){
     );
 }
 
-static void camera_rotate(float x, float y, float z){
+void camera_rotate(float x, float y, float z){
     camera.rotate_x += x;
     camera.rotate_y += y;
     camera.rotate_z += z;
@@ -40,29 +40,54 @@ static void camera_rotate(float x, float y, float z){
     }
 }
 
-static void camera_set_rotation(float x, float y, float z){
+void camera_set_rotation(float x, float y, float z){
     camera.rotate_x = x;
     camera.rotate_y = y;
     camera.rotate_z = z;
 }
 
-static void camera_set_translation(float x, float y, float z){
+void camera_set_translation(float x, float y, float z){
     camera.translate_x = x;
     camera.translate_y = y;
     camera.translate_z = z;
 }
 
-static void camera_translate(float x, float y, float z){
+void camera_translate(float x, float y, float z){
     camera.translate_x += x;
     camera.translate_y += y;
     camera.translate_z += z;
 }
 
-static float degrees_to_radians(float degrees){
+void common_init_opengl(void){
+    g_signal_connect_swapped(
+      glarea,
+      "realize",
+      G_CALLBACK(realize),
+      glarea
+    );
+    g_signal_connect_swapped(
+      glarea,
+      "render",
+      G_CALLBACK(render),
+      NULL
+    );
+
+    // Setup update loop.
+    GdkFrameClock *frameclock = gdk_window_get_frame_clock(gdk_gl_context_get_window(gtk_gl_area_get_context(GTK_GL_AREA(glarea))));
+    g_signal_connect_swapped(
+      frameclock,
+      "update",
+      G_CALLBACK(gtk_gl_area_queue_render),
+      glarea
+    );
+    gdk_frame_clock_begin_updating(frameclock);
+}
+
+float degrees_to_radians(float degrees){
     return degrees * (M_PI / 180);
 }
 
-static void entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
+void entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
     int loopi;
     for(loopi = 0; loopi < vertex_count; loopi++){
         vertices[loopi * 4] += translate_x;
@@ -113,7 +138,7 @@ static void entity_create(GLfloat colors[], int id, float rotate_x, float rotate
     );
 }
 
-static void entity_draw(int id){
+void entity_draw(int id){
     glBindVertexArray(vertex_arrays[id]);
     glBindBuffer(
       GL_ARRAY_BUFFER,
@@ -135,7 +160,7 @@ static void entity_draw(int id){
     );
 }
 
-static void generate_all(void){
+void generate_all(void){
     g_free(vertex_arrays);
     g_free(vertex_buffers);
 
@@ -156,7 +181,7 @@ static void generate_all(void){
     );
 }
 
-static struct nextvalue get_next_value(GtkTextBuffer *buffer, int line, int offset){
+struct nextvalue get_next_value(GtkTextBuffer *buffer, int line, int offset){
     GtkTextIter end;
     gchar *slice;
     GtkTextIter start;
@@ -201,7 +226,7 @@ static struct nextvalue get_next_value(GtkTextBuffer *buffer, int line, int offs
     return result;
 }
 
-static void load_level(char *filename){
+void load_level(char *filename){
     camera_origin();
 
     gchar *content;
@@ -361,7 +386,7 @@ static void load_level(char *filename){
     g_free(content);
 }
 
-static void matrix_copy(float *from, float *to){
+void matrix_copy(float *from, float *to){
     int loop;
 
     for(loop = 0; loop < 16; loop++){
@@ -369,7 +394,7 @@ static void matrix_copy(float *from, float *to){
     }
 }
 
-static void matrix_identity(float *matrix){
+void matrix_identity(float *matrix){
     int loop;
 
     for(loop = 0; loop < 16; loop++){
@@ -382,7 +407,7 @@ static void matrix_identity(float *matrix){
     }
 }
 
-static void matrix_perspective(float *matrix, gint width, gint height){
+void matrix_perspective(float *matrix, gint width, gint height){
     matrix[0] = height / width;
     matrix[5] = 1;
     matrix[10] = -1;
@@ -390,7 +415,7 @@ static void matrix_perspective(float *matrix, gint width, gint height){
     matrix[14] = -2;
 }
 
-static void matrix_rotate(float *matrix, float x, float y, float z){
+void matrix_rotate(float *matrix, float x, float y, float z){
     float cache[16];
     float cosine;
     float sine;
@@ -445,7 +470,7 @@ static void matrix_rotate(float *matrix, float x, float y, float z){
     matrix[7] = cache[7] * cosine - cache[3] * sine;
 }
 
-static void matrix_translate(float *matrix, float x, float y, float z){
+void matrix_translate(float *matrix, float x, float y, float z){
     int loop;
 
     for(loop = 0; loop < 4; loop++){
@@ -455,7 +480,7 @@ static void matrix_translate(float *matrix, float x, float y, float z){
     }
 }
 
-static void realize(GtkGLArea *area){
+void realize(GtkGLArea *area){
     gtk_gl_area_make_current(area);
 
     glewExperimental = GL_TRUE;
@@ -538,11 +563,10 @@ static void realize(GtkGLArea *area){
       "vertex_position"
     );
 
-    // Ask for level selection.
     menu_open();
 }
 
-static gboolean render(GtkGLArea *area, GdkGLContext *context){
+gboolean render(GtkGLArea *area, GdkGLContext *context){
     if(mouse_down){
         camera_rotate(
           mouse_movement_y / 20,
