@@ -58,20 +58,7 @@ void camera_translate(float x, float y, float z){
     camera.translate_z += z;
 }
 
-void common_init_opengl(void){
-    g_signal_connect_swapped(
-      glarea,
-      "realize",
-      G_CALLBACK(realize),
-      glarea
-    );
-    g_signal_connect_swapped(
-      glarea,
-      "render",
-      G_CALLBACK(render),
-      NULL
-    );
-
+void common_begin_frameclock(void){
     // Setup update loop.
     GdkFrameClock *frameclock = gdk_window_get_frame_clock(gdk_gl_context_get_window(gtk_gl_area_get_context(GTK_GL_AREA(glarea))));
     g_signal_connect_swapped(

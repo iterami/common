@@ -42,7 +42,7 @@ void camera_rotate(float x, float y, float z);
 void camera_set_rotation(float x, float y, float z);
 void camera_set_translation(float x, float y, float z);
 void camera_translate(float x, float y, float z);
-void common_init_opengl(void);
+void common_begin_frameclock(void);
 float degrees_to_radians(float degrees);
 void entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]);
 void entity_draw(int id);
