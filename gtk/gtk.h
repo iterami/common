@@ -4,6 +4,7 @@
 #define KEY_QUIT GDK_KEY_q
 
 const gchar *name;
+GtkWidget *window;
 
 GtkWidget * common_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier);
 int common_get_int_length(gint integer);

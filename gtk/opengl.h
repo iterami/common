@@ -35,7 +35,6 @@ GLint shader_vertex_position;
 GLuint *vertex_arrays;
 GLuint *vertex_buffers;
 GLuint *vertex_colors;
-GtkWidget *window;
 
 void camera_move(float speed, gboolean strafe);
 void camera_origin(void);
