@@ -1,33 +1,33 @@
 #include "opengl.h"
 
-void camera_move(float speed, gboolean strafe){
+void common_camera_move(float speed, gboolean strafe){
     float y_rotation = camera.rotate_y;
     if(strafe){
         y_rotation -= 90;
     }
-    float angle = -degrees_to_radians(y_rotation);
+    float angle = -common_degrees_to_radians(y_rotation);
 
-    camera_translate(
+    common_camera_translate(
       sin(angle) * speed,
       0,
       cos(angle) * speed
     );
 }
 
-void camera_origin(void){
-    camera_set_rotation(
+void common_camera_origin(void){
+    common_camera_set_rotation(
       0,
       0,
       0
     );
-    camera_set_translation(
+    common_camera_set_translation(
       0,
       0,
       0
     );
 }
 
-void camera_rotate(float x, float y, float z){
+void common_camera_rotate(float x, float y, float z){
     camera.rotate_x += x;
     camera.rotate_y += y;
     camera.rotate_z += z;
@@ -40,19 +40,19 @@ void camera_rotate(float x, float y, float z){
     }
 }
 
-void camera_set_rotation(float x, float y, float z){
+void common_camera_set_rotation(float x, float y, float z){
     camera.rotate_x = x;
     camera.rotate_y = y;
     camera.rotate_z = z;
 }
 
-void camera_set_translation(float x, float y, float z){
+void common_camera_set_translation(float x, float y, float z){
     camera.translate_x = x;
     camera.translate_y = y;
     camera.translate_z = z;
 }
 
-void camera_translate(float x, float y, float z){
+void common_camera_translate(float x, float y, float z){
     camera.translate_x += x;
     camera.translate_y += y;
     camera.translate_z += z;
@@ -70,11 +70,11 @@ void common_begin_frameclock(void){
     gdk_frame_clock_begin_updating(frameclock);
 }
 
-float degrees_to_radians(float degrees){
+float common_degrees_to_radians(float degrees){
     return degrees * (M_PI / 180);
 }
 
-void entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
+void common_entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
     int loopi;
     for(loopi = 0; loopi < vertex_count; loopi++){
         vertices[loopi * 4] += translate_x;
@@ -125,7 +125,7 @@ void entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, flo
     );
 }
 
-void entity_draw(int id){
+void common_entity_draw(int id){
     glBindVertexArray(vertex_arrays[id]);
     glBindBuffer(
       GL_ARRAY_BUFFER,
@@ -147,7 +147,7 @@ void entity_draw(int id){
     );
 }
 
-void generate_all(void){
+void common_generate_all(void){
     g_free(vertex_arrays);
     g_free(vertex_buffers);
 
@@ -168,7 +168,7 @@ void generate_all(void){
     );
 }
 
-struct nextvalue get_next_value(GtkTextBuffer *buffer, int line, int offset){
+struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offset){
     GtkTextIter end;
     gchar *slice;
     GtkTextIter start;
@@ -213,8 +213,8 @@ struct nextvalue get_next_value(GtkTextBuffer *buffer, int line, int offset){
     return result;
 }
 
-void load_level(char *filename){
-    camera_origin();
+void common_load_level(char *filename){
+    common_camera_origin();
 
     gchar *content;
     gssize length;
@@ -271,7 +271,7 @@ void load_level(char *filename){
           &end,
           FALSE
         ));
-        generate_all();
+        common_generate_all();
 
         // Parse entities.
         for(loopi = 0; loopi < entity_count; loopi++){
@@ -291,19 +291,19 @@ void load_level(char *filename){
             )) * 4;
 
             // Parse coordinates.
-            nextresult = get_next_value(
+            nextresult = common_get_next_value(
               buffer,
               loopi + 2,
               2
             );
             x_translation = atof(nextresult.value);
-            nextresult = get_next_value(
+            nextresult = common_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
             );
             y_translation = atof(nextresult.value);
-            nextresult = get_next_value(
+            nextresult = common_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
@@ -311,19 +311,19 @@ void load_level(char *filename){
             z_translation = atof(nextresult.value);
 
             // Parse rotation.
-            nextresult = get_next_value(
+            nextresult = common_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
             );
             x_rotation = atof(nextresult.value);
-            nextresult = get_next_value(
+            nextresult = common_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
             );
             y_rotation = atof(nextresult.value);
-            nextresult = get_next_value(
+            nextresult = common_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
@@ -333,7 +333,7 @@ void load_level(char *filename){
             // Parse vertices.
             GLfloat vertices_array[vertexarray_size];
             for(loopisub = 0; loopisub < vertexarray_size; loopisub++){
-                nextresult = get_next_value(
+                nextresult = common_get_next_value(
                   buffer,
                   loopi + 2,
                   nextresult.offset
@@ -344,7 +344,7 @@ void load_level(char *filename){
             // Parse colors.
             GLfloat colors_array[vertexarray_size];
             for(loopisub = 0; loopisub < vertexarray_size; loopisub++){
-                nextresult = get_next_value(
+                nextresult = common_get_next_value(
                   buffer,
                   loopi + 2,
                   nextresult.offset
@@ -352,7 +352,7 @@ void load_level(char *filename){
                 colors_array[loopisub] = atof(nextresult.value);
             }
 
-            entity_create(
+            common_entity_create(
               colors_array,
               loopi,
               x_rotation,
@@ -373,7 +373,7 @@ void load_level(char *filename){
     g_free(content);
 }
 
-void matrix_copy(float *from, float *to){
+void common_matrix_copy(float *from, float *to){
     int loop;
 
     for(loop = 0; loop < 16; loop++){
@@ -381,7 +381,7 @@ void matrix_copy(float *from, float *to){
     }
 }
 
-void matrix_identity(float *matrix){
+void common_matrix_identity(float *matrix){
     int loop;
 
     for(loop = 0; loop < 16; loop++){
@@ -394,7 +394,7 @@ void matrix_identity(float *matrix){
     }
 }
 
-void matrix_perspective(float *matrix, gint width, gint height){
+void common_matrix_perspective(float *matrix, gint width, gint height){
     matrix[0] = height / width;
     matrix[5] = 1;
     matrix[10] = -1;
@@ -402,12 +402,12 @@ void matrix_perspective(float *matrix, gint width, gint height){
     matrix[14] = -2;
 }
 
-void matrix_rotate(float *matrix, float x, float y, float z){
+void common_matrix_rotate(float *matrix, float x, float y, float z){
     float cache[16];
     float cosine;
     float sine;
 
-    matrix_copy(
+    common_matrix_copy(
       matrix,
       cache
     );
@@ -424,7 +424,7 @@ void matrix_rotate(float *matrix, float x, float y, float z){
     matrix[10] = cache[10] * cosine - cache[6] * sine;
     matrix[11] = cache[11] * cosine - cache[7] * sine;
 
-    matrix_copy(
+    common_matrix_copy(
       matrix,
       cache
     );
@@ -440,7 +440,7 @@ void matrix_rotate(float *matrix, float x, float y, float z){
     matrix[10] = cache[10] * cosine + cache[2] * sine;
     matrix[11] = cache[11] * cosine + cache[3] * sine;
 
-    matrix_copy(
+    common_matrix_copy(
       matrix,
       cache
     );
@@ -457,7 +457,7 @@ void matrix_rotate(float *matrix, float x, float y, float z){
     matrix[7] = cache[7] * cosine - cache[3] * sine;
 }
 
-void matrix_translate(float *matrix, float x, float y, float z){
+void common_matrix_translate(float *matrix, float x, float y, float z){
     int loop;
 
     for(loop = 0; loop < 4; loop++){
@@ -555,7 +555,7 @@ void realize(GtkGLArea *area){
 
 gboolean render(GtkGLArea *area, GdkGLContext *context){
     if(mouse_down){
-        camera_rotate(
+        common_camera_rotate(
           mouse_movement_y / 20,
           mouse_movement_x / 20,
           0
@@ -566,57 +566,57 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     }
 
     if(key_back){
-        camera_move(
+        common_camera_move(
           .1,
           FALSE
         );
     }
     if(key_down){
-        camera_translate(
+        common_camera_translate(
           0,
           -.1,
           0
         );
     }
     if(key_forward){
-        camera_move(
+        common_camera_move(
           -.1,
           FALSE
         );
     }
     if(key_left){
-        camera_move(
+        common_camera_move(
           -.1,
           TRUE
         );
     }
     if(key_right){
-        camera_move(
+        common_camera_move(
           .1,
           TRUE
         );
     }
     if(key_up){
-        camera_translate(
+        common_camera_translate(
           0,
           .1,
           0
         );
     }
 
-    matrix_identity(camera_matrix);
-    matrix_perspective(
+    common_matrix_identity(camera_matrix);
+    common_matrix_perspective(
       camera_matrix,
       1,
       1
     );
-    matrix_rotate(
+    common_matrix_rotate(
       camera_matrix,
-      degrees_to_radians(camera.rotate_x),
-      degrees_to_radians(camera.rotate_y),
-      degrees_to_radians(camera.rotate_z)
+      common_degrees_to_radians(camera.rotate_x),
+      common_degrees_to_radians(camera.rotate_y),
+      common_degrees_to_radians(camera.rotate_z)
     );
-    matrix_translate(
+    common_matrix_translate(
       camera_matrix,
       camera.translate_x,
       camera.translate_y,
@@ -626,7 +626,7 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     int loopi;
     for(loopi = 0; loopi < entity_count; loopi++){
-        entity_draw(loopi);
+        common_entity_draw(loopi);
     }
 
     return TRUE;
