@@ -9,10 +9,6 @@ typedef struct entitystruct{
   float translate_y;
   float translate_z;
 } entitystruct;
-typedef struct nextvalue{
-  gchar *value;
-  int offset;
-} nextvalue;
 
 entitystruct camera = {
   0,
@@ -42,12 +38,10 @@ void common_camera_rotate(float x, float y, float z);
 void common_camera_set_rotation(float x, float y, float z);
 void common_camera_set_translation(float x, float y, float z);
 void common_camera_translate(float x, float y, float z);
-void common_begin_frameclock(void);
 float common_degrees_to_radians(float degrees);
 void common_entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]);
 void common_entity_draw(int id);
 void common_generate_all(void);
-struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offset);
 void common_load_level(char *filename);
 void common_matrix_copy(float *from, float *to);
 void common_matrix_identity(float *matrix);

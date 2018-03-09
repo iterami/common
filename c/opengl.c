@@ -58,18 +58,6 @@ void common_camera_translate(float x, float y, float z){
     camera.translate_z += z;
 }
 
-void common_begin_frameclock(void){
-    // Setup update loop.
-    GdkFrameClock *frameclock = gdk_window_get_frame_clock(gdk_gl_context_get_window(gtk_gl_area_get_context(GTK_GL_AREA(glarea))));
-    g_signal_connect_swapped(
-      frameclock,
-      "update",
-      G_CALLBACK(gtk_gl_area_queue_render),
-      glarea
-    );
-    gdk_frame_clock_begin_updating(frameclock);
-}
-
 float common_degrees_to_radians(float degrees){
     return degrees * (M_PI / 180);
 }
@@ -166,51 +154,6 @@ void common_generate_all(void){
       entity_count,
       vertex_colors
     );
-}
-
-struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offset){
-    GtkTextIter end;
-    gchar *slice;
-    GtkTextIter start;
-    GtkTextIter substart;
-
-    gtk_text_buffer_get_iter_at_line(
-      buffer,
-      &start,
-      line
-    );
-    gtk_text_iter_set_line_offset(
-      &start,
-      offset
-    );
-    end = start;
-    substart = start;
-    gtk_text_iter_forward_char(&end);
-    slice = gtk_text_iter_get_text(
-      &substart,
-      &end
-    );
-    while(*slice != ','
-      && *slice != '|'){
-        gtk_text_iter_forward_char(&substart);
-        gtk_text_iter_forward_char(&end);
-        slice = gtk_text_iter_get_text(
-          &substart,
-          &end
-        );
-    }
-    g_free(slice);
-
-    nextvalue result = {
-      gtk_text_buffer_get_text(
-        buffer,
-        &start,
-        &end,
-        FALSE
-      ),
-      gtk_text_iter_get_line_offset(&end)
-    };
-    return result;
 }
 
 void common_load_level(char *filename){

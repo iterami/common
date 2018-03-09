@@ -23,6 +23,18 @@ GtkWidget * common_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *ac
     return menuitem;
 }
 
+void common_begin_frameclock(GtkWidget *_glarea){
+    // Setup update loop.
+    GdkFrameClock *frameclock = gdk_window_get_frame_clock(gdk_gl_context_get_window(gtk_gl_area_get_context(GTK_GL_AREA(_glarea))));
+    g_signal_connect_swapped(
+      frameclock,
+      "update",
+      G_CALLBACK(gtk_gl_area_queue_render),
+      _glarea
+    );
+    gdk_frame_clock_begin_updating(frameclock);
+}
+
 int common_get_int_length(gint integer){
     if(integer > 999999999){
         return 10;
@@ -53,6 +65,51 @@ int common_get_int_length(gint integer){
     }
 
     return 1;
+}
+
+struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offset){
+    GtkTextIter end;
+    gchar *slice;
+    GtkTextIter start;
+    GtkTextIter substart;
+
+    gtk_text_buffer_get_iter_at_line(
+      buffer,
+      &start,
+      line
+    );
+    gtk_text_iter_set_line_offset(
+      &start,
+      offset
+    );
+    end = start;
+    substart = start;
+    gtk_text_iter_forward_char(&end);
+    slice = gtk_text_iter_get_text(
+      &substart,
+      &end
+    );
+    while(*slice != ','
+      && *slice != '|'){
+        gtk_text_iter_forward_char(&substart);
+        gtk_text_iter_forward_char(&end);
+        slice = gtk_text_iter_get_text(
+          &substart,
+          &end
+        );
+    }
+    g_free(slice);
+
+    nextvalue result = {
+      gtk_text_buffer_get_text(
+        buffer,
+        &start,
+        &end,
+        FALSE
+      ),
+      gtk_text_iter_get_line_offset(&end)
+    };
+    return result;
 }
 
 gchar* common_iterami_path(gchar *filename){
