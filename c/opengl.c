@@ -550,7 +550,7 @@ void realize(GtkGLArea *area){
       "vertex_position"
     );
 
-    menu_open();
+    repo_init();
 }
 
 gboolean render(GtkGLArea *area, GdkGLContext *context){

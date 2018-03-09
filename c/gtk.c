@@ -55,11 +55,11 @@ int common_get_int_length(gint integer){
     return 1;
 }
 
-gchar* common_iterami_path(gchar *file){
+gchar* common_iterami_path(gchar *filename){
     gint length_file = 0;
     gint length_name = 0;
 
-    while(file[length_file] != '\0'){
+    while(filename[length_file] != '\0'){
         length_file++;
     }
     while(name[length_name] != '\0'){
@@ -91,7 +91,7 @@ gchar* common_iterami_path(gchar *file){
     path[length_name + 15] = '/';
     loopi = 0;
     while(loopi < length_file){
-        path[loopi + length_name + 16] = file[loopi];
+        path[loopi + length_name + 16] = filename[loopi];
         loopi++;
     }
     path[length_name + length_file + 16] = '\0';
