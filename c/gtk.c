@@ -147,7 +147,7 @@ void common_init_gtk(GtkApplication* app, gchar *title){
     gtk_window_maximize(GTK_WINDOW(window));
     gtk_window_set_title(
       GTK_WINDOW(window),
-      "TextEditor.gtk"
+      title
     );
 }
 
