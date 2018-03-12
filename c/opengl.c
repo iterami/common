@@ -1,5 +1,106 @@
 #include "opengl.h"
 
+gboolean common_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data){
+    if(event->keyval == KEY_BACK){
+        key_back = TRUE;
+
+    }else if(event->keyval == KEY_DOWN){
+        key_down = TRUE;
+
+    }else if(event->keyval == KEY_FORWARD){
+        key_forward = TRUE;
+
+    }else if(event->keyval == KEY_LEFT){
+        key_left = TRUE;
+
+    }else if(event->keyval == KEY_RIGHT){
+        key_right = TRUE;
+
+    }else if(event->keyval == KEY_UP){
+        key_up = TRUE;
+    }
+
+    return FALSE;
+}
+
+gboolean common_camera_free_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data){
+    if(event->keyval == KEY_BACK){
+        key_back = FALSE;
+
+    }else if(event->keyval == KEY_DOWN){
+        key_down = FALSE;
+
+    }else if(event->keyval == KEY_FORWARD){
+        key_forward = FALSE;
+
+    }else if(event->keyval == KEY_LEFT){
+        key_left = FALSE;
+
+    }else if(event->keyval == KEY_RIGHT){
+        key_right = FALSE;
+
+    }else if(event->keyval == KEY_UP){
+        key_up = FALSE;
+    }
+
+    return FALSE;
+}
+
+gboolean common_camera_free_mousemove(GtkWidget *widget, GdkEventMotion *event, gpointer data){
+    mouse_movement_x = event->x - mouse_x;
+    mouse_movement_y = event->y - mouse_y;
+
+    mouse_x = event->x;
+    mouse_y = event->y;
+
+    return FALSE;
+}
+
+gboolean common_camera_free_mousepress(GtkWidget *widget, GdkEventButton *event, gpointer data){
+    mouse_down = TRUE;
+
+    return FALSE;
+}
+
+gboolean common_camera_free_mouserelease(GtkWidget *widget, GdkEventButton *event, gpointer data){
+    mouse_down = FALSE;
+
+    return FALSE;
+}
+
+void common_camera_init_free(void){
+    g_signal_connect_swapped(
+      window,
+      "key-press-event",
+      G_CALLBACK(common_camera_free_keypress),
+      NULL
+    );
+    g_signal_connect_swapped(
+      window,
+      "key-release-event",
+      G_CALLBACK(common_camera_free_keyrelease),
+      NULL
+    );
+    g_signal_connect_swapped(
+      glarea,
+      "button-press-event",
+      G_CALLBACK(common_camera_free_mousepress),
+      NULL
+    );
+    g_signal_connect_swapped(
+      glarea,
+      "button-release-event",
+      G_CALLBACK(common_camera_free_mouserelease),
+      NULL
+    );
+    g_signal_connect_swapped(
+      glarea,
+      "motion-notify-event",
+      G_CALLBACK(common_camera_free_mousemove),
+      NULL
+    );
+}
+
 void common_camera_move(float speed, gboolean strafe){
     float y_rotation = camera.rotate_y;
     if(strafe){
