@@ -139,12 +139,37 @@ void common_camera_rotate(float x, float y, float z){
     }else if(camera.rotate_x < -89){
         camera.rotate_x = -89;
     }
+
+    common_camera_rotation_clamp();
+}
+
+void common_camera_rotation_clamp(void){
+    if(camera.rotate_x < -360){
+        camera.rotate_x += 360;
+
+    }else if(camera.rotate_x > 360){
+        camera.rotate_x -= 360;
+    }
+    if(camera.rotate_y < -360){
+        camera.rotate_y += 360;
+
+    }else if(camera.rotate_y > 360){
+        camera.rotate_y -= 360;
+    }
+    if(camera.rotate_z < -360){
+        camera.rotate_z += 360;
+
+    }else if(camera.rotate_z > 360){
+        camera.rotate_z -= 360;
+    }
 }
 
 void common_camera_set_rotation(float x, float y, float z){
     camera.rotate_x = x;
     camera.rotate_y = y;
     camera.rotate_z = z;
+
+    common_camera_rotation_clamp();
 }
 
 void common_camera_set_translation(float x, float y, float z){

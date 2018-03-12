@@ -60,6 +60,7 @@ void common_camera_init_free(void);
 void common_camera_move(float speed, gboolean strafe);
 void common_camera_origin(void);
 void common_camera_rotate(float x, float y, float z);
+void common_camera_rotation_clamp(void);
 void common_camera_set_rotation(float x, float y, float z);
 void common_camera_set_translation(float x, float y, float z);
 void common_camera_translate(float x, float y, float z);
