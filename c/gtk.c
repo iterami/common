@@ -112,6 +112,45 @@ struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offs
     return result;
 }
 
+void common_init_gtk(GtkApplication* app, gchar *title){
+    GtkCssProvider *provider;
+
+    name = g_get_user_name();
+
+    // Setup CSS.
+    provider = gtk_css_provider_new();
+    gtk_style_context_add_provider_for_screen(
+      gdk_display_get_default_screen(gdk_display_get_default()),
+      GTK_STYLE_PROVIDER(provider),
+      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+    );
+    gint length_name = 0;
+    while(name[length_name] != '\0'){
+        length_name++;
+    }
+    gchar *path = common_iterami_path("css/gtk.css");
+    gtk_css_provider_load_from_file(
+      provider,
+      g_file_new_for_path(path),
+      0
+    );
+    g_free(path);
+    g_object_unref(provider);
+
+    // Setup window.
+    window = gtk_application_window_new(app);
+    gtk_window_set_default_size(
+      GTK_WINDOW(window),
+      800,
+      600
+    );
+    gtk_window_maximize(GTK_WINDOW(window));
+    gtk_window_set_title(
+      GTK_WINDOW(window),
+      "TextEditor.gtk"
+    );
+}
+
 gchar* common_iterami_path(gchar *filename){
     gint length_file = 0;
     gint length_name = 0;
@@ -154,30 +193,4 @@ gchar* common_iterami_path(gchar *filename){
     path[length_name + length_file + 16] = '\0';
 
     return path;
-}
-
-void common_init_gtk(void){
-    GtkCssProvider *provider;
-
-    name = g_get_user_name();
-
-    // Setup CSS.
-    provider = gtk_css_provider_new();
-    gtk_style_context_add_provider_for_screen(
-      gdk_display_get_default_screen(gdk_display_get_default()),
-      GTK_STYLE_PROVIDER(provider),
-      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
-    );
-    gint length_name = 0;
-    while(name[length_name] != '\0'){
-        length_name++;
-    }
-    gchar *path = common_iterami_path("css/gtk.css");
-    gtk_css_provider_load_from_file(
-      provider,
-      g_file_new_for_path(path),
-      0
-    );
-    g_free(path);
-    g_object_unref(provider);
 }

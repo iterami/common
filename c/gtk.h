@@ -15,5 +15,5 @@ GtkWidget * common_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *ac
 void common_begin_frameclock(GtkWidget *_glarea);
 int common_get_int_length(gint integer);
 struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offset);
+void common_init_gtk(GtkApplication* app, gchar *title);
 gchar* common_iterami_path(gchar *file);
-void common_init_gtk(void);
