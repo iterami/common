@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include "gtk.h"
 
-GtkWidget * common_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier){
+GtkWidget * gtk_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier){
     GtkWidget *menuitem;
 
     menuitem = gtk_menu_item_new_with_mnemonic(label);
@@ -23,7 +23,7 @@ GtkWidget * common_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *ac
     return menuitem;
 }
 
-void common_begin_frameclock(GtkWidget *_glarea){
+void gtk_begin_frameclock(GtkWidget *_glarea){
     // Setup update loop.
     GdkFrameClock *frameclock = gdk_window_get_frame_clock(gdk_gl_context_get_window(gtk_gl_area_get_context(GTK_GL_AREA(_glarea))));
     g_signal_connect_swapped(
@@ -35,7 +35,7 @@ void common_begin_frameclock(GtkWidget *_glarea){
     gdk_frame_clock_begin_updating(frameclock);
 }
 
-int common_get_int_length(gint integer){
+int gtk_get_int_length(gint integer){
     if(integer > 999999999){
         return 10;
 
@@ -67,7 +67,7 @@ int common_get_int_length(gint integer){
     return 1;
 }
 
-struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offset){
+struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, int line, int offset){
     GtkTextIter end;
     gchar *slice;
     GtkTextIter start;
@@ -112,7 +112,7 @@ struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offs
     return result;
 }
 
-void common_init_gtk(GtkApplication* app, gchar *title){
+void gtk_init_gtk(GtkApplication* app, gchar *title){
     GtkCssProvider *provider;
 
     name = g_get_user_name();
@@ -128,7 +128,7 @@ void common_init_gtk(GtkApplication* app, gchar *title){
     while(name[length_name] != '\0'){
         length_name++;
     }
-    gchar *path = common_iterami_path("css/gtk.css");
+    gchar *path = gtk_iterami_path("css/gtk.css");
     gtk_css_provider_load_from_file(
       provider,
       g_file_new_for_path(path),
@@ -151,7 +151,7 @@ void common_init_gtk(GtkApplication* app, gchar *title){
     );
 }
 
-gchar* common_iterami_path(gchar *filename){
+gchar* gtk_iterami_path(gchar *filename){
     gint length_file = 0;
     gint length_name = 0;
 

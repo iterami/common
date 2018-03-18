@@ -1,6 +1,6 @@
 #include "opengl.h"
 
-gboolean common_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data){
+gboolean opengl_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data){
     if(event->keyval == KEY_BACK){
         key_back = TRUE;
 
@@ -23,7 +23,7 @@ gboolean common_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpoi
     return FALSE;
 }
 
-gboolean common_camera_free_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data){
+gboolean opengl_camera_free_keyrelease(GtkWidget *widget, GdkEventKey *event, gpointer data){
     if(event->keyval == KEY_BACK){
         key_back = FALSE;
 
@@ -46,7 +46,7 @@ gboolean common_camera_free_keyrelease(GtkWidget *widget, GdkEventKey *event, gp
     return FALSE;
 }
 
-gboolean common_camera_free_mousemove(GtkWidget *widget, GdkEventMotion *event, gpointer data){
+gboolean opengl_camera_free_mousemove(GtkWidget *widget, GdkEventMotion *event, gpointer data){
     mouse_movement_x = event->x - mouse_x;
     mouse_movement_y = event->y - mouse_y;
 
@@ -56,79 +56,79 @@ gboolean common_camera_free_mousemove(GtkWidget *widget, GdkEventMotion *event, 
     return FALSE;
 }
 
-gboolean common_camera_free_mousepress(GtkWidget *widget, GdkEventButton *event, gpointer data){
+gboolean opengl_camera_free_mousepress(GtkWidget *widget, GdkEventButton *event, gpointer data){
     mouse_down = TRUE;
 
     return FALSE;
 }
 
-gboolean common_camera_free_mouserelease(GtkWidget *widget, GdkEventButton *event, gpointer data){
+gboolean opengl_camera_free_mouserelease(GtkWidget *widget, GdkEventButton *event, gpointer data){
     mouse_down = FALSE;
 
     return FALSE;
 }
 
-void common_camera_init_free(void){
+void opengl_camera_init_free(void){
     g_signal_connect_swapped(
       window,
       "key-press-event",
-      G_CALLBACK(common_camera_free_keypress),
+      G_CALLBACK(opengl_camera_free_keypress),
       NULL
     );
     g_signal_connect_swapped(
       window,
       "key-release-event",
-      G_CALLBACK(common_camera_free_keyrelease),
+      G_CALLBACK(opengl_camera_free_keyrelease),
       NULL
     );
     g_signal_connect_swapped(
       glarea,
       "button-press-event",
-      G_CALLBACK(common_camera_free_mousepress),
+      G_CALLBACK(opengl_camera_free_mousepress),
       NULL
     );
     g_signal_connect_swapped(
       glarea,
       "button-release-event",
-      G_CALLBACK(common_camera_free_mouserelease),
+      G_CALLBACK(opengl_camera_free_mouserelease),
       NULL
     );
     g_signal_connect_swapped(
       glarea,
       "motion-notify-event",
-      G_CALLBACK(common_camera_free_mousemove),
+      G_CALLBACK(opengl_camera_free_mousemove),
       NULL
     );
 }
 
-void common_camera_move(float speed, gboolean strafe){
+void opengl_camera_move(float speed, gboolean strafe){
     float y_rotation = camera.rotate_y;
     if(strafe){
         y_rotation -= 90;
     }
-    float angle = -common_degrees_to_radians(y_rotation);
+    float angle = -opengl_degrees_to_radians(y_rotation);
 
-    common_camera_translate(
+    opengl_camera_translate(
       sin(angle) * speed,
       0,
       cos(angle) * speed
     );
 }
 
-void common_camera_origin(void){
-    common_camera_set_rotation(
+void opengl_camera_origin(void){
+    opengl_camera_set_rotation(
       0,
       0,
       0
     );
-    common_camera_set_translation(
+    opengl_camera_set_translation(
       0,
       0,
       0
     );
 }
 
-void common_camera_rotate(float x, float y, float z){
+void opengl_camera_rotate(float x, float y, float z){
     camera.rotate_x += x;
     camera.rotate_y += y;
     camera.rotate_z += z;
@@ -140,10 +140,10 @@ void common_camera_rotate(float x, float y, float z){
         camera.rotate_x = -89;
     }
 
-    common_camera_rotation_clamp();
+    opengl_camera_rotation_clamp();
 }
 
-void common_camera_rotation_clamp(void){
+void opengl_camera_rotation_clamp(void){
     if(camera.rotate_x < -360){
         camera.rotate_x += 360;
 
@@ -164,31 +164,31 @@ void common_camera_rotation_clamp(void){
     }
 }
 
-void common_camera_set_rotation(float x, float y, float z){
+void opengl_camera_set_rotation(float x, float y, float z){
     camera.rotate_x = x;
     camera.rotate_y = y;
     camera.rotate_z = z;
 
-    common_camera_rotation_clamp();
+    opengl_camera_rotation_clamp();
 }
 
-void common_camera_set_translation(float x, float y, float z){
+void opengl_camera_set_translation(float x, float y, float z){
     camera.translate_x = x;
     camera.translate_y = y;
     camera.translate_z = z;
 }
 
-void common_camera_translate(float x, float y, float z){
+void opengl_camera_translate(float x, float y, float z){
     camera.translate_x += x;
     camera.translate_y += y;
     camera.translate_z += z;
 }
 
-float common_degrees_to_radians(float degrees){
+float opengl_degrees_to_radians(float degrees){
     return degrees * (M_PI / 180);
 }
 
-void common_entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
+void opengl_entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
     int loopi;
     for(loopi = 0; loopi < vertex_count; loopi++){
         vertices[loopi * 4] += translate_x;
@@ -239,7 +239,7 @@ void common_entity_create(GLfloat colors[], int id, float rotate_x, float rotate
     );
 }
 
-void common_entity_draw(int id){
+void opengl_entity_draw(int id){
     glBindVertexArray(vertex_arrays[id]);
     glBindBuffer(
       GL_ARRAY_BUFFER,
@@ -261,7 +261,7 @@ void common_entity_draw(int id){
     );
 }
 
-void common_generate_all(void){
+void opengl_generate_all(void){
     g_free(vertex_arrays);
     g_free(vertex_buffers);
 
@@ -282,8 +282,8 @@ void common_generate_all(void){
     );
 }
 
-void common_load_level(char *filename){
-    common_camera_origin();
+void opengl_load_level(char *filename){
+    opengl_camera_origin();
 
     gchar *content;
     gssize length;
@@ -340,7 +340,7 @@ void common_load_level(char *filename){
           &end,
           FALSE
         ));
-        common_generate_all();
+        opengl_generate_all();
 
         // Parse entities.
         for(loopi = 0; loopi < entity_count; loopi++){
@@ -360,19 +360,19 @@ void common_load_level(char *filename){
             )) * 4;
 
             // Parse coordinates.
-            nextresult = common_get_next_value(
+            nextresult = gtk_get_next_value(
               buffer,
               loopi + 2,
               2
             );
             x_translation = atof(nextresult.value);
-            nextresult = common_get_next_value(
+            nextresult = gtk_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
             );
             y_translation = atof(nextresult.value);
-            nextresult = common_get_next_value(
+            nextresult = gtk_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
@@ -380,19 +380,19 @@ void common_load_level(char *filename){
             z_translation = atof(nextresult.value);
 
             // Parse rotation.
-            nextresult = common_get_next_value(
+            nextresult = gtk_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
             );
             x_rotation = atof(nextresult.value);
-            nextresult = common_get_next_value(
+            nextresult = gtk_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
             );
             y_rotation = atof(nextresult.value);
-            nextresult = common_get_next_value(
+            nextresult = gtk_get_next_value(
               buffer,
               loopi + 2,
               nextresult.offset
@@ -402,7 +402,7 @@ void common_load_level(char *filename){
             // Parse vertices.
             GLfloat vertices_array[vertexarray_size];
             for(loopisub = 0; loopisub < vertexarray_size; loopisub++){
-                nextresult = common_get_next_value(
+                nextresult = gtk_get_next_value(
                   buffer,
                   loopi + 2,
                   nextresult.offset
@@ -413,7 +413,7 @@ void common_load_level(char *filename){
             // Parse colors.
             GLfloat colors_array[vertexarray_size];
             for(loopisub = 0; loopisub < vertexarray_size; loopisub++){
-                nextresult = common_get_next_value(
+                nextresult = gtk_get_next_value(
                   buffer,
                   loopi + 2,
                   nextresult.offset
@@ -421,7 +421,7 @@ void common_load_level(char *filename){
                 colors_array[loopisub] = atof(nextresult.value);
             }
 
-            common_entity_create(
+            opengl_entity_create(
               colors_array,
               loopi,
               x_rotation,
@@ -442,7 +442,7 @@ void common_load_level(char *filename){
     g_free(content);
 }
 
-void common_matrix_copy(float *from, float *to){
+void opengl_matrix_copy(float *from, float *to){
     int loop;
 
     for(loop = 0; loop < 16; loop++){
@@ -450,7 +450,7 @@ void common_matrix_copy(float *from, float *to){
     }
 }
 
-void common_matrix_identity(float *matrix){
+void opengl_matrix_identity(float *matrix){
     int loop;
 
     for(loop = 0; loop < 16; loop++){
@@ -463,7 +463,7 @@ void common_matrix_identity(float *matrix){
     }
 }
 
-void common_matrix_perspective(float *matrix, gint width, gint height){
+void opengl_matrix_perspective(float *matrix, gint width, gint height){
     matrix[0] = height / width;
     matrix[5] = 1;
     matrix[10] = -1;
@@ -471,12 +471,12 @@ void common_matrix_perspective(float *matrix, gint width, gint height){
     matrix[14] = -2;
 }
 
-void common_matrix_rotate(float *matrix, float x, float y, float z){
+void opengl_matrix_rotate(float *matrix, float x, float y, float z){
     float cache[16];
     float cosine;
     float sine;
 
-    common_matrix_copy(
+    opengl_matrix_copy(
       matrix,
       cache
     );
@@ -493,7 +493,7 @@ void common_matrix_rotate(float *matrix, float x, float y, float z){
     matrix[10] = cache[10] * cosine - cache[6] * sine;
     matrix[11] = cache[11] * cosine - cache[7] * sine;
 
-    common_matrix_copy(
+    opengl_matrix_copy(
       matrix,
       cache
     );
@@ -509,7 +509,7 @@ void common_matrix_rotate(float *matrix, float x, float y, float z){
     matrix[10] = cache[10] * cosine + cache[2] * sine;
     matrix[11] = cache[11] * cosine + cache[3] * sine;
 
-    common_matrix_copy(
+    opengl_matrix_copy(
       matrix,
       cache
     );
@@ -526,7 +526,7 @@ void common_matrix_rotate(float *matrix, float x, float y, float z){
     matrix[7] = cache[7] * cosine - cache[3] * sine;
 }
 
-void common_matrix_translate(float *matrix, float x, float y, float z){
+void opengl_matrix_translate(float *matrix, float x, float y, float z){
     int loop;
 
     for(loop = 0; loop < 4; loop++){
@@ -624,7 +624,7 @@ void realize(GtkGLArea *area){
 
 gboolean render(GtkGLArea *area, GdkGLContext *context){
     if(mouse_down){
-        common_camera_rotate(
+        opengl_camera_rotate(
           mouse_movement_y / 20,
           mouse_movement_x / 20,
           0
@@ -635,57 +635,57 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     }
 
     if(key_back){
-        common_camera_move(
+        opengl_camera_move(
           .1,
           FALSE
         );
     }
     if(key_down){
-        common_camera_translate(
+        opengl_camera_translate(
           0,
           -.1,
           0
         );
     }
     if(key_forward){
-        common_camera_move(
+        opengl_camera_move(
           -.1,
           FALSE
         );
     }
     if(key_left){
-        common_camera_move(
+        opengl_camera_move(
           -.1,
           TRUE
         );
     }
     if(key_right){
-        common_camera_move(
+        opengl_camera_move(
           .1,
           TRUE
         );
     }
     if(key_up){
-        common_camera_translate(
+        opengl_camera_translate(
           0,
           .1,
           0
         );
     }
 
-    common_matrix_identity(camera_matrix);
-    common_matrix_perspective(
+    opengl_matrix_identity(camera_matrix);
+    opengl_matrix_perspective(
       camera_matrix,
       1,
       1
     );
-    common_matrix_rotate(
+    opengl_matrix_rotate(
       camera_matrix,
-      common_degrees_to_radians(camera.rotate_x),
-      common_degrees_to_radians(camera.rotate_y),
-      common_degrees_to_radians(camera.rotate_z)
+      opengl_degrees_to_radians(camera.rotate_x),
+      opengl_degrees_to_radians(camera.rotate_y),
+      opengl_degrees_to_radians(camera.rotate_z)
     );
-    common_matrix_translate(
+    opengl_matrix_translate(
       camera_matrix,
       camera.translate_x,
       camera.translate_y,
@@ -695,7 +695,7 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     int loopi;
     for(loopi = 0; loopi < entity_count; loopi++){
-        common_entity_draw(loopi);
+        opengl_entity_draw(loopi);
     }
 
     return TRUE;

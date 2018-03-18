@@ -11,9 +11,9 @@ typedef struct nextvalue{
 const gchar *name;
 GtkWidget *window;
 
-GtkWidget * common_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier);
-void common_begin_frameclock(GtkWidget *_glarea);
-int common_get_int_length(gint integer);
-struct nextvalue common_get_next_value(GtkTextBuffer *buffer, int line, int offset);
-void common_init_gtk(GtkApplication* app, gchar *title);
-gchar* common_iterami_path(gchar *file);
+GtkWidget * gtk_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier);
+void gtk_begin_frameclock(GtkWidget *_glarea);
+int gtk_get_int_length(gint integer);
+struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, int line, int offset);
+void gtk_init_gtk(GtkApplication* app, gchar *title);
+gchar* gtk_iterami_path(gchar *file);
