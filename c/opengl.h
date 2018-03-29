@@ -74,5 +74,6 @@ void opengl_matrix_identity(float *matrix);
 void opengl_matrix_perspective(float *matrix, gint width, gint height);
 void opengl_matrix_rotate(float *matrix, float x, float y, float z);
 void opengl_matrix_translate(float *matrix, float x, float y, float z);
+float opengl_radians_to_degrees(float radians);
 void realize(GtkGLArea *area);
 gboolean render(GtkGLArea *area, GdkGLContext *context);

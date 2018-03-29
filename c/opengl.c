@@ -528,6 +528,10 @@ void opengl_matrix_translate(float *matrix, float x, float y, float z){
     }
 }
 
+float opengl_radians_to_degrees(float radians){
+    return radians * (180 / M_PI);
+}
+
 void realize(GtkGLArea *area){
     gtk_gl_area_make_current(area);
 
