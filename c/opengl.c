@@ -246,14 +246,6 @@ void opengl_entity_draw(int id){
       vertex_buffers[id]
     );
 
-    glUseProgram(program);
-    glUniformMatrix4fv(
-      camera_matrix_location,
-      1,
-      GL_FALSE,
-      camera_matrix
-    );
-
     glDrawArrays(
       GL_TRIANGLES,
       0,
@@ -692,8 +684,16 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
       camera.translate_z
     );
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glUseProgram(program);
+    glUniformMatrix4fv(
+      camera_matrix_location,
+      1,
+      GL_FALSE,
+      camera_matrix
+    );
+
     int loopi;
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(loopi = 0; loopi < entity_count; loopi++){
         opengl_entity_draw(loopi);
     }
