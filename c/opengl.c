@@ -1,4 +1,5 @@
 #include "opengl.h"
+#include "math.c"
 
 gboolean opengl_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data){
     if(event->keyval == KEY_BACK){
@@ -106,7 +107,7 @@ void opengl_camera_move(float speed, gboolean strafe){
     if(strafe){
         y_rotation -= 90;
     }
-    float angle = -opengl_degrees_to_radians(y_rotation);
+    float angle = -math_degrees_to_radians(y_rotation);
 
     opengl_camera_translate(
       sin(angle) * speed,
@@ -182,10 +183,6 @@ void opengl_camera_translate(float x, float y, float z){
     camera.translate_x += x;
     camera.translate_y += y;
     camera.translate_z += z;
-}
-
-float opengl_degrees_to_radians(float degrees){
-    return degrees * (M_PI / 180);
 }
 
 void opengl_entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
@@ -528,10 +525,6 @@ void opengl_matrix_translate(float *matrix, float x, float y, float z){
     }
 }
 
-float opengl_radians_to_degrees(float radians){
-    return radians * (180 / M_PI);
-}
-
 void realize(GtkGLArea *area){
     gtk_gl_area_make_current(area);
 
@@ -677,9 +670,9 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     );
     opengl_matrix_rotate(
       camera_matrix,
-      opengl_degrees_to_radians(camera.rotate_x),
-      opengl_degrees_to_radians(camera.rotate_y),
-      opengl_degrees_to_radians(camera.rotate_z)
+      math_degrees_to_radians(camera.rotate_x),
+      math_degrees_to_radians(camera.rotate_y),
+      math_degrees_to_radians(camera.rotate_z)
     );
     opengl_matrix_translate(
       camera_matrix,
