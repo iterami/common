@@ -68,10 +68,5 @@ void opengl_entity_create(GLfloat colors[], int id, float rotate_x, float rotate
 void opengl_entity_draw(int id);
 void opengl_generate_all(void);
 void opengl_load_level(char *filename);
-void opengl_matrix_copy(float *from, float *to);
-void opengl_matrix_identity(float *matrix);
-void opengl_matrix_perspective(float *matrix, gint width, gint height);
-void opengl_matrix_rotate(float *matrix, float x, float y, float z);
-void opengl_matrix_translate(float *matrix, float x, float y, float z);
 void realize(GtkGLArea *area);
 gboolean render(GtkGLArea *area, GdkGLContext *context);
