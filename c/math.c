@@ -5,6 +5,17 @@ float math_degrees_to_radians(const float degrees){
     return degrees * (M_PI / 180);
 }
 
+float math_distance_2d(const float x0, const float y0, const float x1, const float y1){
+    return sqrt(
+      pow(
+        x0 - x1,
+        2
+      ) + pow(
+        y0 - y1,
+        2
+      ));
+}
+
 void math_matrix_copy(float *from, float *to){
     int loop;
 
