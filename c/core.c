@@ -6,7 +6,7 @@ int core_is_hexadecimal(const char character){
       && ('A' <= character && character <= 'F'));
 }
 
-int core_get_int_length(int integer){
+int core_get_int_length(const int integer){
     if(integer > 999999999){
         return 10;
 
@@ -38,7 +38,7 @@ int core_get_int_length(int integer){
     return 1;
 }
 
-gchar* core_iterami_path(gchar *filename){
+gchar* core_iterami_path(const gchar *filename){
     const gchar *name;
     name = g_get_user_name();
 

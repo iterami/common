@@ -102,7 +102,7 @@ void opengl_camera_init_free(void){
     );
 }
 
-void opengl_camera_move(float speed, gboolean strafe){
+void opengl_camera_move(const float speed, const gboolean strafe){
     float y_rotation = camera.rotate_y;
     if(strafe){
         y_rotation -= 90;
@@ -129,7 +129,7 @@ void opengl_camera_origin(void){
     );
 }
 
-void opengl_camera_rotate(float x, float y, float z){
+void opengl_camera_rotate(const float x, const float y, const float z){
     camera.rotate_x += x;
     camera.rotate_y += y;
     camera.rotate_z += z;
@@ -165,7 +165,7 @@ void opengl_camera_rotation_clamp(void){
     }
 }
 
-void opengl_camera_set_rotation(float x, float y, float z){
+void opengl_camera_set_rotation(const float x, const float y, const float z){
     camera.rotate_x = x;
     camera.rotate_y = y;
     camera.rotate_z = z;
@@ -173,13 +173,13 @@ void opengl_camera_set_rotation(float x, float y, float z){
     opengl_camera_rotation_clamp();
 }
 
-void opengl_camera_set_translation(float x, float y, float z){
+void opengl_camera_set_translation(const float x, const float y, const float z){
     camera.translate_x = x;
     camera.translate_y = y;
     camera.translate_z = z;
 }
 
-void opengl_camera_translate(float x, float y, float z){
+void opengl_camera_translate(const float x, const float y, const float z){
     camera.translate_x += x;
     camera.translate_y += y;
     camera.translate_z += z;
@@ -236,7 +236,7 @@ void opengl_entity_create(GLfloat colors[], int id, float rotate_x, float rotate
     );
 }
 
-void opengl_entity_draw(int id){
+void opengl_entity_draw(const int id){
     glBindVertexArray(vertex_arrays[id]);
     glBindBuffer(
       GL_ARRAY_BUFFER,
@@ -271,7 +271,7 @@ void opengl_generate_all(void){
     );
 }
 
-void opengl_load_level(char *filename){
+void opengl_load_level(const char *filename){
     opengl_camera_origin();
 
     gchar *content;

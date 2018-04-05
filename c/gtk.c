@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include "gtk.h"
 
-GtkWidget * gtk_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier){
+GtkWidget * gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelgroup, const guint key, GdkModifierType modifier){
     GtkWidget *menuitem;
 
     menuitem = gtk_menu_item_new_with_mnemonic(label);
@@ -35,7 +35,7 @@ void gtk_begin_frameclock(GtkWidget *_glarea){
     gdk_frame_clock_begin_updating(frameclock);
 }
 
-struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, int line, int offset){
+struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, const int line, const int offset){
     GtkTextIter end;
     gchar *slice;
     GtkTextIter start;
@@ -80,7 +80,7 @@ struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, int line, int offset)
     return result;
 }
 
-void gtk_init_gtk(GtkApplication* app, gchar *title){
+void gtk_init_gtk(GtkApplication* app, const gchar *title){
     GtkCssProvider *provider;
 
     // Setup CSS.

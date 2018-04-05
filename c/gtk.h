@@ -10,7 +10,7 @@ typedef struct nextvalue{
 
 GtkWidget *window;
 
-GtkWidget * gtk_add_menuitem(GtkWidget *menu, gchar *label, GtkAccelGroup *accelgroup, guint key, GdkModifierType modifier);
+GtkWidget * gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelgroup, const guint key, GdkModifierType modifier);
 void gtk_begin_frameclock(GtkWidget *_glarea);
-struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, int line, int offset);
-void gtk_init_gtk(GtkApplication* app, gchar *title);
+struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, const int line, const int offset);
+void gtk_init_gtk(GtkApplication* app, const gchar *title);

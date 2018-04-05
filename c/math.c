@@ -1,7 +1,7 @@
 #include <math.h>
 #include "math.h"
 
-float math_degrees_to_radians(float degrees){
+float math_degrees_to_radians(const float degrees){
     return degrees * (M_PI / 180);
 }
 
@@ -26,7 +26,7 @@ void math_matrix_identity(float *matrix){
     }
 }
 
-void math_matrix_perspective(float *matrix, gint width, gint height){
+void math_matrix_perspective(float *matrix, const int width, const int height){
     matrix[0] = height / width;
     matrix[5] = 1;
     matrix[10] = -1;
@@ -34,7 +34,7 @@ void math_matrix_perspective(float *matrix, gint width, gint height){
     matrix[14] = -2;
 }
 
-void math_matrix_rotate(float *matrix, float x, float y, float z){
+void math_matrix_rotate(float *matrix, const float x, const float y, const float z){
     float cache[16];
     float cosine;
     float sine;
@@ -89,7 +89,7 @@ void math_matrix_rotate(float *matrix, float x, float y, float z){
     matrix[7] = cache[7] * cosine - cache[3] * sine;
 }
 
-void math_matrix_translate(float *matrix, float x, float y, float z){
+void math_matrix_translate(float *matrix, const float x, const float y, const float z){
     int loop;
 
     for(loop = 0; loop < 4; loop++){
@@ -99,6 +99,6 @@ void math_matrix_translate(float *matrix, float x, float y, float z){
     }
 }
 
-float math_radians_to_degrees(float radians){
+float math_radians_to_degrees(const float radians){
     return radians * (180 / M_PI);
 }
