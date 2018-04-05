@@ -90,7 +90,7 @@ void gtk_init_gtk(GtkApplication* app, const gchar *title){
       GTK_STYLE_PROVIDER(provider),
       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
     );
-    gchar *path = core_iterami_path("css/gtk.css");
+    gchar *path = core_iterami_path(CSS_PATH);
     gtk_css_provider_load_from_file(
       provider,
       g_file_new_for_path(path),
