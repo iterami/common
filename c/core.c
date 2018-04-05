@@ -1,6 +1,6 @@
 #include "core.h"
 
-int core_get_int_length(gint integer){
+int core_get_int_length(int integer){
     if(integer > 999999999){
         return 10;
 
@@ -36,8 +36,8 @@ gchar* core_iterami_path(gchar *filename){
     const gchar *name;
     name = g_get_user_name();
 
-    gint length_file = 0;
-    gint length_name = 0;
+    int length_file = 0;
+    int length_name = 0;
 
     while(filename[length_file] != '\0'){
         length_file++;
@@ -54,7 +54,7 @@ gchar* core_iterami_path(gchar *filename){
     path[3] = 'm';
     path[4] = 'e';
     path[5] = '/';
-    gint loopi = 0;
+    int loopi = 0;
     while(loopi < length_name){
         path[loopi + 6] = name[loopi];
         loopi++;
