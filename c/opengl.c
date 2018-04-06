@@ -134,35 +134,35 @@ void opengl_camera_rotate(const float x, const float y, const float z){
     camera.rotate_y += y;
     camera.rotate_z += z;
 
-    if(camera.rotate_x > 89){
-        camera.rotate_x = 89;
-
-    }else if(camera.rotate_x < -89){
-        camera.rotate_x = -89;
-    }
+    core_clamp_float(
+        camera.rotate_x,
+        -89,
+        89,
+        0
+    );
 
     opengl_camera_rotation_clamp();
 }
 
 void opengl_camera_rotation_clamp(void){
-    if(camera.rotate_x < -360){
-        camera.rotate_x += 360;
-
-    }else if(camera.rotate_x > 360){
-        camera.rotate_x -= 360;
-    }
-    if(camera.rotate_y < -360){
-        camera.rotate_y += 360;
-
-    }else if(camera.rotate_y > 360){
-        camera.rotate_y -= 360;
-    }
-    if(camera.rotate_z < -360){
-        camera.rotate_z += 360;
-
-    }else if(camera.rotate_z > 360){
-        camera.rotate_z -= 360;
-    }
+    core_clamp_float(
+        camera.rotate_x,
+        0,
+        360,
+        1
+    );
+    core_clamp_float(
+        camera.rotate_y,
+        0,
+        360,
+        1
+    );
+    core_clamp_float(
+        camera.rotate_z,
+        0,
+        360,
+        1
+    );
 }
 
 void opengl_camera_set_rotation(const float x, const float y, const float z){
