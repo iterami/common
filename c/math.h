@@ -1,3 +1,5 @@
+#pragma once
+
 float math_degrees_to_radians(const float degrees);
 float math_distance_2d(const float x0, const float y0, const float x1, const float y1);
 void math_matrix_copy(float *from, float *to);

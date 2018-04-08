@@ -1,3 +1,5 @@
+#pragma once
+
 #define KEY_BACK GDK_KEY_s
 #define KEY_DOWN GDK_KEY_c
 #define KEY_FORWARD GDK_KEY_w

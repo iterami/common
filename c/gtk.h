@@ -1,3 +1,5 @@
+#pragma once
+
 #define CSS_PATH "css/gtk.css"
 #define KEY_COPY GDK_KEY_c
 #define KEY_CUT GDK_KEY_x
