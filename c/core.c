@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "core.h"
 
 float core_clamp_float(const float value, const float min, const float max, const int wrap){
@@ -63,9 +64,8 @@ int core_get_int_length(const int integer){
     return 1;
 }
 
-gchar* core_iterami_path(const gchar *filename){
-    const gchar *name;
-    name = g_get_user_name();
+char* core_iterami_path(const char *filename){
+    const char *name = getenv("USER");
 
     int length_file = 0;
     int length_name = 0;
@@ -77,7 +77,7 @@ gchar* core_iterami_path(const gchar *filename){
         length_name++;
     }
 
-    gchar *path = g_malloc(length_name + length_file + 17);
+    char *path = malloc(length_name + length_file + 17);
 
     path[0] = '/';
     path[1] = 'h';
