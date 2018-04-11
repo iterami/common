@@ -1,7 +1,9 @@
 #include "sort.h"
 
+int sort_compare_ints(const void* a, const void* b){
+    return *(int*)a - *(int*)b;
+}
+
 int sort_compare_strings(const void* a, const void* b){
-    const char **a2 = (const char **)a;
-    const char **b2 = (const char **)b;
-    return strcmp(*a2, *b2);
+    return strcmp(*(const char **)a, *(const char **)b);
 }
