@@ -1,4 +1,5 @@
 #include "opengl.h"
+#include "json.c"
 #include "math.c"
 
 gboolean opengl_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data){
@@ -282,132 +283,119 @@ void opengl_load_level(const char *filename){
       &content,
       &length,
       NULL
-    ) && g_utf8_validate(
-      content,
-      length,
-      NULL
     )){
-        GtkTextBuffer *buffer;
-        GtkTextIter end;
-        int loopi;
-        int loopisub;
-        nextvalue nextresult;
-        GtkTextIter start;
-        GtkWidget *temp_text_view;
-        int vertexarray_size;
-        float x_rotation;
-        float y_rotation;
-        float z_rotation;
-        float x_translation;
-        float y_translation;
-        float z_translation;
-
-        buffer = gtk_text_buffer_new(NULL);
-        temp_text_view = gtk_text_view_new_with_buffer(buffer);
-
-        gtk_text_buffer_set_text(
-          buffer,
+        struct json_value_s* json_raw = json_parse(
           content,
           length
         );
 
-        // Parse # of entities.
-        gtk_text_buffer_get_iter_at_line(
-          buffer,
-          &start,
-          1
-        );
-        gtk_text_buffer_get_iter_at_line(
-          buffer,
-          &end,
-          2
-        );
-        gtk_text_iter_backward_char(&end);
-        entity_count = atoi(gtk_text_buffer_get_text(
-          buffer,
-          &start,
-          &end,
-          FALSE
-        ));
+        struct json_object_s* json_level = (struct json_object_s*)json_raw->payload;
+        struct json_array_s* json_level_entities = json_level->start->value->payload;
+        entity_count = (int)json_level_entities->length;
+
         opengl_generate_all();
 
-        // Parse entities.
+        int loopi = 0;
+        struct json_array_element_s* json_level_entities_element = json_level_entities->start;
         for(loopi = 0; loopi < entity_count; loopi++){
-            // Parse # of vertices.
-            gtk_text_buffer_get_iter_at_line(
-              buffer,
-              &start,
-              loopi + 2
-            );
-            end = start;
-            gtk_text_iter_forward_char(&end);
-            vertexarray_size = atoi(gtk_text_buffer_get_text(
-              buffer,
-              &start,
-              &end,
-              FALSE
-            )) * 4;
-
-            // Parse coordinates.
-            nextresult = gtk_get_next_value(
-              buffer,
-              loopi + 2,
-              2
-            );
-            x_translation = atof(nextresult.value);
-            nextresult = gtk_get_next_value(
-              buffer,
-              loopi + 2,
-              nextresult.offset
-            );
-            y_translation = atof(nextresult.value);
-            nextresult = gtk_get_next_value(
-              buffer,
-              loopi + 2,
-              nextresult.offset
-            );
-            z_translation = atof(nextresult.value);
-
-            // Parse rotation.
-            nextresult = gtk_get_next_value(
-              buffer,
-              loopi + 2,
-              nextresult.offset
-            );
-            x_rotation = atof(nextresult.value);
-            nextresult = gtk_get_next_value(
-              buffer,
-              loopi + 2,
-              nextresult.offset
-            );
-            y_rotation = atof(nextresult.value);
-            nextresult = gtk_get_next_value(
-              buffer,
-              loopi + 2,
-              nextresult.offset
-            );
-            z_rotation = atof(nextresult.value);
-
-            // Parse vertices.
-            GLfloat vertices_array[vertexarray_size];
-            for(loopisub = 0; loopisub < vertexarray_size; loopisub++){
-                nextresult = gtk_get_next_value(
-                  buffer,
-                  loopi + 2,
-                  nextresult.offset
-                );
-                vertices_array[loopisub] = atof(nextresult.value);
+            if(loopi != 0){
+                json_level_entities_element = json_level_entities_element->next;
             }
 
-            // Parse colors.
-            GLfloat colors_array[vertexarray_size];
-            for(loopisub = 0; loopisub < vertexarray_size; loopisub++){
-                nextresult = gtk_get_next_value(
-                  buffer,
-                  loopi + 2,
-                  nextresult.offset
-                );
-                colors_array[loopisub] = atof(nextresult.value);
+            struct json_object_s* json_level_entities_element_property_object = (struct json_object_s*)json_level_entities_element->value->payload;
+            struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
+
+            struct json_value_s* value = json_level_entities_element_property->value;
+            struct json_number_s* number = (struct json_number_s*)value->payload;
+            float x_rotation = atof(number->number);
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
+            number = (struct json_number_s*)value->payload;
+            float y_rotation = atof(number->number);
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
+            number = (struct json_number_s*)value->payload;
+            float z_rotation = atof(number->number);
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
+            number = (struct json_number_s*)value->payload;
+            float x_translation = atof(number->number);
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
+            number = (struct json_number_s*)value->payload;
+            float y_translation = atof(number->number);
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
+            number = (struct json_number_s*)value->payload;
+            float z_translation = atof(number->number);
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
+            struct json_array_s* array_payload = (struct json_array_s*)value->payload;
+            int array_length = (int)array_payload->length;
+            int subloopi = 0;
+
+            GLfloat colors_array[array_length];
+            struct json_array_element_s* sub_array_element = array_payload->start;
+            for(subloopi = 0; subloopi < array_length / 4; subloopi++){
+                if(subloopi != 0){
+                    sub_array_element = sub_array_element->next;
+                }
+
+                value = sub_array_element->value;
+                number = (struct json_number_s*)value->payload;
+                colors_array[subloopi * 4] = atof(number->number);
+
+                sub_array_element = sub_array_element->next;
+                value = sub_array_element->value;
+                number = (struct json_number_s*)value->payload;
+                colors_array[subloopi * 4 + 1] = atof(number->number);
+
+                sub_array_element = sub_array_element->next;
+                value = sub_array_element->value;
+                number = (struct json_number_s*)value->payload;
+                colors_array[subloopi * 4 + 2] = atof(number->number);
+
+                sub_array_element = sub_array_element->next;
+                value = sub_array_element->value;
+                number = (struct json_number_s*)value->payload;
+                colors_array[subloopi * 4 + 3] = atof(number->number);
+            }
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
+            array_payload = (struct json_array_s*)value->payload;
+
+            GLfloat vertices_array[array_length];
+            sub_array_element = array_payload->start;
+            for(subloopi = 0; subloopi < array_length / 4; subloopi++){
+                if(subloopi != 0){
+                    sub_array_element = sub_array_element->next;
+                }
+
+                value = sub_array_element->value;
+                number = (struct json_number_s*)value->payload;
+                vertices_array[subloopi * 4] = atof(number->number);
+
+                sub_array_element = sub_array_element->next;
+                value = sub_array_element->value;
+                number = (struct json_number_s*)value->payload;
+                vertices_array[subloopi * 4 + 1] = atof(number->number);
+
+                sub_array_element = sub_array_element->next;
+                value = sub_array_element->value;
+                number = (struct json_number_s*)value->payload;
+                vertices_array[subloopi * 4 + 2] = atof(number->number);
+
+                sub_array_element = sub_array_element->next;
+                value = sub_array_element->value;
+                number = (struct json_number_s*)value->payload;
+                vertices_array[subloopi * 4 + 3] = atof(number->number);
             }
 
             opengl_entity_create(
@@ -419,13 +407,13 @@ void opengl_load_level(const char *filename){
               x_translation,
               y_translation,
               z_translation,
-              vertexarray_size / 4,
+              array_length,
               sizeof(vertices_array),
               vertices_array
             );
         }
 
-        gtk_widget_destroy(temp_text_view);
+        g_free(json_raw);
     }
 
     g_free(content);
