@@ -407,7 +407,7 @@ void opengl_load_level(const char *filename){
               x_translation,
               y_translation,
               z_translation,
-              array_length,
+              array_length / 4,
               sizeof(vertices_array),
               vertices_array
             );
