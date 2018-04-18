@@ -9,8 +9,6 @@
 #define KEY_UP GDK_KEY_space
 
 typedef struct entitystruct{
-  GLuint array;
-  GLuint buffer;
   gboolean draw;
   float rotate_x;
   float rotate_y;
@@ -21,8 +19,6 @@ typedef struct entitystruct{
 } entitystruct;
 
 entitystruct camera = {
-  0,
-  0,
   FALSE,
   0,
   0,
@@ -33,6 +29,7 @@ entitystruct camera = {
 };
 float camera_matrix[16] = { 0 };
 GLuint camera_matrix_location;
+entitystruct *entities = NULL;
 int entity_count = 0;
 GtkWidget *glarea;
 gboolean key_back = FALSE;

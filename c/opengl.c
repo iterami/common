@@ -187,6 +187,17 @@ void opengl_camera_translate(const float x, const float y, const float z){
 }
 
 void opengl_entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
+    entitystruct entity = {
+      TRUE,
+      rotate_x,
+      rotate_y,
+      rotate_z,
+      translate_x,
+      translate_y,
+      translate_z,
+    };
+    entities[id] = entity;
+
     int loopi;
     for(loopi = 0; loopi < vertex_count; loopi++){
         vertices[loopi * 4] += translate_x;
@@ -252,8 +263,11 @@ void opengl_entity_draw(const int id){
 }
 
 void opengl_generate_all(void){
+    g_free(entities);
     g_free(vertex_arrays);
     g_free(vertex_buffers);
+
+    entities = g_malloc(sizeof(entitystruct) * entity_count);
 
     vertex_arrays = g_malloc(sizeof(GLuint) * entity_count);
     glGenVertexArrays(
@@ -586,7 +600,9 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     int loopi;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(loopi = 0; loopi < entity_count; loopi++){
-        opengl_entity_draw(loopi);
+        if(entities[loopi].draw){
+            opengl_entity_draw(loopi);
+        }
     }
 
     return TRUE;
