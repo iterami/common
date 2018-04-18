@@ -68,7 +68,7 @@ struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, const int line, const
     }
     g_free(slice);
 
-    nextvalue result = {
+    const nextvalue result = {
       gtk_text_buffer_get_text(
         buffer,
         &start,

@@ -108,7 +108,7 @@ void opengl_camera_move(const float speed, const gboolean strafe){
     if(strafe){
         y_rotation -= 90;
     }
-    float angle = -math_degrees_to_radians(y_rotation);
+    const float angle = -math_degrees_to_radians(y_rotation);
 
     opengl_camera_translate(
       sin(angle) * speed,

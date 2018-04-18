@@ -5,7 +5,7 @@ float core_clamp_float(const float value, const float min, const float max, cons
     float wrapped_value = value;
 
     if(wrap == 1){
-        float diff = max - min;
+        const float diff = max - min;
 
         while(wrapped_value < min){
             wrapped_value += diff;
