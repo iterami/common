@@ -1,4 +1,5 @@
 #include "opengl.h"
+#include "gtk.c"
 #include "json.c"
 #include "math.c"
 
@@ -186,7 +187,7 @@ void opengl_camera_translate(const float x, const float y, const float z){
     camera.translate_z += z;
 }
 
-void opengl_entity_create(GLfloat colors[], gboolean draw, char *draw_type, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
+void opengl_entity_create(GLfloat colors[], gboolean draw, gchar *draw_type, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
     entitystruct entity = {
       draw,
       opengl_string_to_primitive(draw_type),
@@ -288,7 +289,7 @@ void opengl_generate_all(void){
     );
 }
 
-void opengl_load_level(const char *filename){
+void opengl_load_level(const gchar *filename){
     opengl_camera_origin();
 
     gchar *content;
@@ -327,7 +328,7 @@ void opengl_load_level(const char *filename){
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             struct json_string_s* string = (struct json_string_s*)value->payload;
-            char *draw_type = (char*)string->string;
+            gchar *draw_type = (gchar*)string->string;
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
@@ -446,7 +447,7 @@ void opengl_load_level(const char *filename){
     g_free(content);
 }
 
-int opengl_string_to_primitive(char *string){
+int opengl_string_to_primitive(const gchar *string){
     if(strcmp(string, "GL_TRIANGLES") == 0){
         return GL_TRIANGLES;
 
