@@ -186,9 +186,9 @@ void opengl_camera_translate(const float x, const float y, const float z){
     camera.translate_z += z;
 }
 
-void opengl_entity_create(GLfloat colors[], int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
+void opengl_entity_create(GLfloat colors[], gboolean draw, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
     entitystruct entity = {
-      TRUE,
+      draw,
       rotate_x,
       rotate_y,
       rotate_z,
@@ -320,6 +320,10 @@ void opengl_load_level(const char *filename){
             struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
 
             struct json_value_s* value = json_level_entities_element_property->value;
+            gboolean draw = value->type == json_type_true ? TRUE : FALSE;
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
             struct json_number_s* number = (struct json_number_s*)value->payload;
             float x_rotation = atof(number->number);
 
@@ -414,6 +418,7 @@ void opengl_load_level(const char *filename){
 
             opengl_entity_create(
               colors_array,
+              draw,
               loopi,
               x_rotation,
               y_rotation,
