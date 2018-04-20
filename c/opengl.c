@@ -3,6 +3,20 @@
 #include "json.c"
 #include "math.c"
 
+void opengl_billboard(const int id, gboolean x, gboolean y, gboolean z){
+    if(x){
+        entities[id].rotate_x = 360 - camera.rotate_x;
+    }
+
+    if(y){
+        entities[id].rotate_y = 360 - camera.rotate_y;
+    }
+
+    if(z){
+        entities[id].rotate_z = 360 - camera.rotate_z;
+    }
+}
+
 gboolean opengl_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data){
     if(event->keyval == KEY_BACK){
         key_back = TRUE;
@@ -187,8 +201,9 @@ void opengl_camera_translate(const float x, const float y, const float z){
     camera.translate_z += z;
 }
 
-void opengl_entity_create(GLfloat colors[], gboolean draw, gchar *draw_type, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
+void opengl_entity_create(gboolean billboard, GLfloat colors[], gboolean draw, gchar *draw_type, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
     entitystruct entity = {
+      billboard,
       draw,
       opengl_string_to_primitive(draw_type),
       rotate_x,
@@ -323,6 +338,10 @@ void opengl_load_level(const gchar *filename){
             struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
 
             struct json_value_s* value = json_level_entities_element_property->value;
+            gboolean billboard = value->type == json_type_true ? TRUE : FALSE;
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
             gboolean draw = value->type == json_type_true ? TRUE : FALSE;
 
             json_level_entities_element_property = json_level_entities_element_property->next;
@@ -425,6 +444,7 @@ void opengl_load_level(const gchar *filename){
             }
 
             opengl_entity_create(
+              billboard,
               colors_array,
               draw,
               draw_type,
@@ -638,6 +658,15 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     int loopi;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(loopi = 0; loopi < entity_count; loopi++){
+        if(entities[loopi].billboard){
+            opengl_billboard(
+              loopi,
+              FALSE,
+              TRUE,
+              FALSE
+            );
+        }
+
         if(entities[loopi].draw){
             opengl_entity_draw(loopi);
         }
