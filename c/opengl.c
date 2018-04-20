@@ -196,6 +196,7 @@ void opengl_entity_create(GLfloat colors[], gboolean draw, char *draw_type, int 
       translate_x,
       translate_y,
       translate_z,
+      vertex_count
     };
     entities[id] = entity;
 
@@ -259,7 +260,7 @@ void opengl_entity_draw(const int id){
     glDrawArrays(
       entities[id].draw_type,
       0,
-      3
+      entities[id].vertex_count
     );
 }
 

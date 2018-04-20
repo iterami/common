@@ -17,10 +17,12 @@ typedef struct entitystruct{
   float translate_x;
   float translate_y;
   float translate_z;
+  int vertex_count;
 } entitystruct;
 
 entitystruct camera = {
   FALSE,
+  0,
   0,
   0,
   0,
