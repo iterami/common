@@ -10,6 +10,7 @@
 
 typedef struct entitystruct{
   gboolean draw;
+  int draw_type;
   float rotate_x;
   float rotate_y;
   float rotate_z;
@@ -20,6 +21,7 @@ typedef struct entitystruct{
 
 entitystruct camera = {
   FALSE,
+  0,
   0,
   0,
   0,
@@ -63,9 +65,10 @@ void opengl_camera_rotation_clamp(void);
 void opengl_camera_set_rotation(const float x, const float y, const float z);
 void opengl_camera_set_translation(const float x, const float y, const float z);
 void opengl_camera_translate(const float x, const float y, const float z);
-void opengl_entity_create(GLfloat colors[], gboolean draw, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]);
+void opengl_entity_create(GLfloat colors[], gboolean draw, char *draw_type, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]);
 void opengl_entity_draw(const int id);
 void opengl_generate_all(void);
 void opengl_load_level(const char *filename);
+int opengl_string_to_primitive(char *string);
 void realize(GtkGLArea *area);
 gboolean render(GtkGLArea *area, GdkGLContext *context);

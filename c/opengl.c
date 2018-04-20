@@ -186,9 +186,10 @@ void opengl_camera_translate(const float x, const float y, const float z){
     camera.translate_z += z;
 }
 
-void opengl_entity_create(GLfloat colors[], gboolean draw, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
+void opengl_entity_create(GLfloat colors[], gboolean draw, char *draw_type, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
     entitystruct entity = {
       draw,
+      opengl_string_to_primitive(draw_type),
       rotate_x,
       rotate_y,
       rotate_z,
@@ -256,7 +257,7 @@ void opengl_entity_draw(const int id){
     );
 
     glDrawArrays(
-      GL_TRIANGLES,
+      entities[id].draw_type,
       0,
       3
     );
@@ -321,6 +322,11 @@ void opengl_load_level(const char *filename){
 
             struct json_value_s* value = json_level_entities_element_property->value;
             gboolean draw = value->type == json_type_true ? TRUE : FALSE;
+
+            json_level_entities_element_property = json_level_entities_element_property->next;
+            value = json_level_entities_element_property->value;
+            struct json_string_s* string = (struct json_string_s*)value->payload;
+            char *draw_type = (char*)string->string;
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
@@ -419,6 +425,7 @@ void opengl_load_level(const char *filename){
             opengl_entity_create(
               colors_array,
               draw,
+              draw_type,
               loopi,
               x_rotation,
               y_rotation,
@@ -436,6 +443,30 @@ void opengl_load_level(const char *filename){
     }
 
     g_free(content);
+}
+
+int opengl_string_to_primitive(char *string){
+    if(strcmp(string, "GL_TRIANGLES") == 0){
+        return GL_TRIANGLES;
+
+    }else if(strcmp(string, "GL_TRIANGLE_STRIP") == 0){
+        return GL_TRIANGLE_STRIP;
+
+    }else if(strcmp(string, "GL_TRIANGLE_FAN") == 0){
+        return GL_TRIANGLE_FAN;
+
+    }else if(strcmp(string, "GL_LINE_LOOP") == 0){
+        return GL_LINE_LOOP;
+
+    }else if(strcmp(string, "GL_LINE_STRIP") == 0){
+        return GL_LINE_STRIP;
+
+    }else if(strcmp(string, "GL_LINES") == 0){
+        return GL_LINES;
+
+    }else if(strcmp(string, "GL_POINTS") == 0){
+        return GL_POINTS;
+    }
 }
 
 void realize(GtkGLArea *area){
