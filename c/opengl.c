@@ -207,6 +207,15 @@ void opengl_entity_bind(const int id){
       GL_ARRAY_BUFFER,
       vertex_buffers[id]
     );
+    glEnableVertexAttribArray(shader_vertex_position);
+    glVertexAttribPointer(
+      shader_vertex_color,
+      4,
+      GL_FLOAT,
+      GL_FALSE,
+      0,
+      0
+    );
     glBufferData(
       GL_ARRAY_BUFFER,
       entities[id].vertices_size,
@@ -217,6 +226,15 @@ void opengl_entity_bind(const int id){
     glBindBuffer(
       GL_ARRAY_BUFFER,
       vertex_colors[id]
+    );
+    glEnableVertexAttribArray(shader_vertex_color);
+    glVertexAttribPointer(
+      shader_vertex_color,
+      4,
+      GL_FLOAT,
+      GL_FALSE,
+      0,
+      0
     );
     glBufferData(
       GL_ARRAY_BUFFER,
@@ -241,33 +259,9 @@ void opengl_entity_draw(const int id){
     }
 
     glBindVertexArray(vertex_arrays[id]);
-
-    glEnableVertexAttribArray(shader_vertex_color);
-    glBindBuffer(
-      GL_ARRAY_BUFFER,
-      vertex_colors[id]
-    );
-    glVertexAttribPointer(
-      shader_vertex_color,
-      4,
-      GL_FLOAT,
-      GL_FALSE,
-      0,
-      0
-    );
-
-    glEnableVertexAttribArray(shader_vertex_position);
     glBindBuffer(
       GL_ARRAY_BUFFER,
       vertex_buffers[id]
-    );
-    glVertexAttribPointer(
-      shader_vertex_position,
-      4,
-      GL_FLOAT,
-      GL_FALSE,
-      0,
-      0
     );
 
     glDrawArrays(
@@ -436,17 +430,17 @@ void opengl_load_level(const gchar *filename){
 
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4] = atof(number->number) - x_translation;
+                entity.vertices_array[subloopi * 4] = atof(number->number) + x_translation;
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4 + 1] = atof(number->number) - y_translation;
+                entity.vertices_array[subloopi * 4 + 1] = atof(number->number) + y_translation;
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4 + 2] = atof(number->number) - z_translation;
+                entity.vertices_array[subloopi * 4 + 2] = atof(number->number) + z_translation;
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
