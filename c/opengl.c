@@ -201,49 +201,8 @@ void opengl_camera_translate(const float x, const float y, const float z){
     camera.translate_z += z;
 }
 
-void opengl_entity_create(gboolean billboard, GLfloat colors[], gboolean draw, gchar *draw_type, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]){
-    entitystruct entity = {
-      billboard,
-      draw,
-      opengl_string_to_primitive(draw_type),
-      rotate_x,
-      rotate_y,
-      rotate_z,
-      translate_x,
-      translate_y,
-      translate_z,
-      vertex_count
-    };
-    entities[id] = entity;
-
-    int loopi;
-    for(loopi = 0; loopi < vertex_count; loopi++){
-        vertices[loopi * 4] += translate_x;
-        vertices[loopi * 4 + 1] += translate_y;
-        vertices[loopi * 4 + 2] += translate_z;
-    }
-
+void opengl_entity_draw(const int id){
     glBindVertexArray(vertex_arrays[id]);
-    glBindBuffer(
-      GL_ARRAY_BUFFER,
-      vertex_buffers[id]
-    );
-
-    glEnableVertexAttribArray(shader_vertex_position);
-    glVertexAttribPointer(
-      shader_vertex_position,
-      4,
-      GL_FLOAT,
-      GL_FALSE,
-      0,
-      0
-    );
-    glBufferData(
-      GL_ARRAY_BUFFER,
-      vertices_size,
-      vertices,
-      GL_STATIC_DRAW
-    );
 
     glEnableVertexAttribArray(shader_vertex_color);
     glBindBuffer(
@@ -258,19 +217,19 @@ void opengl_entity_create(gboolean billboard, GLfloat colors[], gboolean draw, g
       0,
       0
     );
-    glBufferData(
-      GL_ARRAY_BUFFER,
-      vertices_size,
-      colors,
-      GL_STATIC_DRAW
-    );
-}
 
-void opengl_entity_draw(const int id){
-    glBindVertexArray(vertex_arrays[id]);
+    glEnableVertexAttribArray(shader_vertex_position);
     glBindBuffer(
       GL_ARRAY_BUFFER,
       vertex_buffers[id]
+    );
+    glVertexAttribPointer(
+      shader_vertex_position,
+      4,
+      GL_FLOAT,
+      GL_FALSE,
+      0,
+      0
     );
 
     glDrawArrays(
@@ -385,7 +344,22 @@ void opengl_load_level(const gchar *filename){
             int array_length = (int)array_payload->length;
             int subloopi = 0;
 
-            GLfloat colors_array[array_length];
+            entitystruct entity = {
+              billboard,
+              malloc(sizeof(GLfloat) * array_length),
+              draw,
+              opengl_string_to_primitive(draw_type),
+              x_rotation,
+              y_rotation,
+              z_rotation,
+              x_translation,
+              y_translation,
+              z_translation,
+              array_length / 4,
+              malloc(sizeof(GLfloat) * array_length),
+              0
+            };
+
             struct json_array_element_s* sub_array_element = array_payload->start;
             for(subloopi = 0; subloopi < array_length / 4; subloopi++){
                 if(subloopi != 0){
@@ -394,29 +368,28 @@ void opengl_load_level(const gchar *filename){
 
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                colors_array[subloopi * 4] = atof(number->number);
+                entity.colors_array[subloopi * 4] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                colors_array[subloopi * 4 + 1] = atof(number->number);
+                entity.colors_array[subloopi * 4 + 1] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                colors_array[subloopi * 4 + 2] = atof(number->number);
+                entity.colors_array[subloopi * 4 + 2] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                colors_array[subloopi * 4 + 3] = atof(number->number);
+                entity.colors_array[subloopi * 4 + 3] = atof(number->number);
             }
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             array_payload = (struct json_array_s*)value->payload;
 
-            GLfloat vertices_array[array_length];
             sub_array_element = array_payload->start;
             for(subloopi = 0; subloopi < array_length / 4; subloopi++){
                 if(subloopi != 0){
@@ -425,39 +398,49 @@ void opengl_load_level(const gchar *filename){
 
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                vertices_array[subloopi * 4] = atof(number->number);
+                entity.vertices_array[subloopi * 4] = atof(number->number) - x_translation;
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                vertices_array[subloopi * 4 + 1] = atof(number->number);
+                entity.vertices_array[subloopi * 4 + 1] = atof(number->number) - y_translation;
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                vertices_array[subloopi * 4 + 2] = atof(number->number);
+                entity.vertices_array[subloopi * 4 + 2] = atof(number->number) - z_translation;
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                vertices_array[subloopi * 4 + 3] = atof(number->number);
+                entity.vertices_array[subloopi * 4 + 3] = atof(number->number);
             }
 
-            opengl_entity_create(
-              billboard,
-              colors_array,
-              draw,
-              draw_type,
-              loopi,
-              x_rotation,
-              y_rotation,
-              z_rotation,
-              x_translation,
-              y_translation,
-              z_translation,
-              array_length / 4,
-              sizeof(vertices_array),
-              vertices_array
+            entity.vertices_size = sizeof(entity.vertices_array);
+
+            entities[loopi] = entity;
+
+            glBindVertexArray(vertex_arrays[loopi]);
+            glBindBuffer(
+              GL_ARRAY_BUFFER,
+              vertex_buffers[loopi]
+            );
+            glBufferData(
+              GL_ARRAY_BUFFER,
+              entities[loopi].vertex_count,
+              entities[loopi].vertices_array,
+              GL_STATIC_DRAW
+            );
+
+            glBindBuffer(
+              GL_ARRAY_BUFFER,
+              vertex_colors[loopi]
+            );
+            glBufferData(
+              GL_ARRAY_BUFFER,
+              entities[loopi].vertex_count,
+              entities[loopi].colors_array,
+              GL_STATIC_DRAW
             );
         }
 

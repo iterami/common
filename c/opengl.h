@@ -10,6 +10,7 @@
 
 typedef struct entitystruct{
   gboolean billboard;
+  GLfloat *colors_array;
   gboolean draw;
   int draw_type;
   float rotate_x;
@@ -19,11 +20,14 @@ typedef struct entitystruct{
   float translate_y;
   float translate_z;
   int vertex_count;
+  GLfloat *vertices_array;
+  int vertices_size;
 } entitystruct;
 
 entitystruct camera = {
   FALSE,
   FALSE,
+  0,
   0,
   0,
   0,
