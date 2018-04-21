@@ -373,12 +373,12 @@ void opengl_load_level(const gchar *filename){
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             struct json_array_s* array_payload = (struct json_array_s*)value->payload;
-            int array_length = (int)array_payload->length;
+            int vertices_count = (int)array_payload->length / 4;
             int subloopi = 0;
 
             entitystruct entity = {
               billboard,
-              g_malloc(sizeof(GLfloat) * array_length),
+              g_malloc(sizeof(GLfloat) * (vertices_count * 4)),
               draw,
               opengl_string_to_primitive(draw_type),
               x_rotation,
@@ -387,13 +387,13 @@ void opengl_load_level(const gchar *filename){
               x_translation,
               y_translation,
               z_translation,
-              array_length / 4,
-              g_malloc(sizeof(GLfloat) * array_length),
+              vertices_count,
+              g_malloc(sizeof(GLfloat) * (vertices_count * 4)),
               0
             };
 
             struct json_array_element_s* sub_array_element = array_payload->start;
-            for(subloopi = 0; subloopi < array_length / 4; subloopi++){
+            for(subloopi = 0; subloopi < vertices_count; subloopi++){
                 if(subloopi != 0){
                     sub_array_element = sub_array_element->next;
                 }
@@ -423,7 +423,7 @@ void opengl_load_level(const gchar *filename){
             array_payload = (struct json_array_s*)value->payload;
 
             sub_array_element = array_payload->start;
-            for(subloopi = 0; subloopi < array_length / 4; subloopi++){
+            for(subloopi = 0; subloopi < vertices_count; subloopi++){
                 if(subloopi != 0){
                     sub_array_element = sub_array_element->next;
                 }
