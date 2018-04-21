@@ -209,7 +209,7 @@ void opengl_entity_bind(const int id){
     );
     glEnableVertexAttribArray(shader_vertex_position);
     glVertexAttribPointer(
-      shader_vertex_color,
+      shader_vertex_position,
       4,
       GL_FLOAT,
       GL_FALSE,
