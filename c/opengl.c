@@ -202,6 +202,19 @@ void opengl_camera_translate(const float x, const float y, const float z){
 }
 
 void opengl_entity_draw(const int id){
+    if(!entities[id].draw){
+        return;
+    }
+
+    if(entities[id].billboard){
+        opengl_billboard(
+          id,
+          FALSE,
+          TRUE,
+          FALSE
+        );
+    }
+
     glBindVertexArray(vertex_arrays[id]);
 
     glEnableVertexAttribArray(shader_vertex_color);
@@ -641,18 +654,7 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     int loopi;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(loopi = 0; loopi < entity_count; loopi++){
-        if(entities[loopi].billboard){
-            opengl_billboard(
-              loopi,
-              FALSE,
-              TRUE,
-              FALSE
-            );
-        }
-
-        if(entities[loopi].draw){
-            opengl_entity_draw(loopi);
-        }
+        opengl_entity_draw(loopi);
     }
 
     return TRUE;
