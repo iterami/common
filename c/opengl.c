@@ -378,7 +378,7 @@ void opengl_load_level(const gchar *filename){
 
             entitystruct entity = {
               billboard,
-              malloc(sizeof(GLfloat) * array_length),
+              g_malloc(sizeof(GLfloat) * array_length),
               draw,
               opengl_string_to_primitive(draw_type),
               x_rotation,
@@ -388,7 +388,7 @@ void opengl_load_level(const gchar *filename){
               y_translation,
               z_translation,
               array_length / 4,
-              malloc(sizeof(GLfloat) * array_length),
+              g_malloc(sizeof(GLfloat) * array_length),
               0
             };
 
