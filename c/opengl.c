@@ -201,6 +201,31 @@ void opengl_camera_translate(const float x, const float y, const float z){
     camera.translate_z += z;
 }
 
+void opengl_entity_bind(const int id){
+    glBindVertexArray(vertex_arrays[id]);
+    glBindBuffer(
+      GL_ARRAY_BUFFER,
+      vertex_buffers[id]
+    );
+    glBufferData(
+      GL_ARRAY_BUFFER,
+      entities[id].vertices_size,
+      entities[id].vertices_array,
+      GL_STATIC_DRAW
+    );
+
+    glBindBuffer(
+      GL_ARRAY_BUFFER,
+      vertex_colors[id]
+    );
+    glBufferData(
+      GL_ARRAY_BUFFER,
+      entities[id].vertices_size,
+      entities[id].colors_array,
+      GL_STATIC_DRAW
+    );
+}
+
 void opengl_entity_draw(const int id){
     if(!entities[id].draw){
         return;
@@ -433,28 +458,7 @@ void opengl_load_level(const gchar *filename){
 
             entities[loopi] = entity;
 
-            glBindVertexArray(vertex_arrays[loopi]);
-            glBindBuffer(
-              GL_ARRAY_BUFFER,
-              vertex_buffers[loopi]
-            );
-            glBufferData(
-              GL_ARRAY_BUFFER,
-              entities[loopi].vertices_size,
-              entities[loopi].vertices_array,
-              GL_STATIC_DRAW
-            );
-
-            glBindBuffer(
-              GL_ARRAY_BUFFER,
-              vertex_colors[loopi]
-            );
-            glBufferData(
-              GL_ARRAY_BUFFER,
-              entities[loopi].vertices_size,
-              entities[loopi].colors_array,
-              GL_STATIC_DRAW
-            );
+            opengl_entity_bind(loopi);
         }
 
         g_free(json_raw);

@@ -74,7 +74,7 @@ void opengl_camera_rotation_clamp(void);
 void opengl_camera_set_rotation(const float x, const float y, const float z);
 void opengl_camera_set_translation(const float x, const float y, const float z);
 void opengl_camera_translate(const float x, const float y, const float z);
-void opengl_entity_create(gboolean billboard, GLfloat colors[], gboolean draw, gchar *draw_type, int id, float rotate_x, float rotate_y, float rotate_z, float translate_x, float translate_y, float translate_z, int vertex_count, int vertices_size, GLfloat vertices[]);
+void opengl_entity_bind(const int id);
 void opengl_entity_draw(const int id);
 void opengl_generate_all(void);
 void opengl_load_level(const gchar *filename);
