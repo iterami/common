@@ -440,7 +440,7 @@ void opengl_load_level(const gchar *filename){
             );
             glBufferData(
               GL_ARRAY_BUFFER,
-              entities[loopi].vertex_count,
+              entities[loopi].vertices_size,
               entities[loopi].vertices_array,
               GL_STATIC_DRAW
             );
@@ -451,7 +451,7 @@ void opengl_load_level(const gchar *filename){
             );
             glBufferData(
               GL_ARRAY_BUFFER,
-              entities[loopi].vertex_count,
+              entities[loopi].vertices_size,
               entities[loopi].colors_array,
               GL_STATIC_DRAW
             );
