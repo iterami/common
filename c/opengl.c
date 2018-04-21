@@ -448,7 +448,7 @@ void opengl_load_level(const gchar *filename){
                 entity.vertices_array[subloopi * 4 + 3] = atof(number->number);
             }
 
-            entity.vertices_size = sizeof(entity.vertices_array);
+            entity.vertices_size = sizeof(GLfloat) * (vertices_count * 4);
 
             entities[loopi] = entity;
 
