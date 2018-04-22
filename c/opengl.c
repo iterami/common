@@ -150,11 +150,11 @@ void opengl_camera_rotate(const float x, const float y, const float z){
     camera.rotate_y += y;
     camera.rotate_z += z;
 
-    core_clamp_float(
-        camera.rotate_x,
-        -89,
-        89,
-        0
+    camera.rotate_x = core_clamp_float(
+      camera.rotate_x,
+      -89,
+      89,
+      0
     );
 
     opengl_camera_rotation_clamp();
