@@ -366,12 +366,14 @@ void opengl_load_level(const gchar *filename){
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             struct json_array_s* array_payload = (struct json_array_s*)value->payload;
+
             int vertices_count = (int)array_payload->length / 4;
             int subloopi = 0;
+            int vertices_size = sizeof(GLfloat) * (vertices_count * 4);
 
             entitystruct entity = {
               billboard,
-              g_malloc(sizeof(GLfloat) * (vertices_count * 4)),
+              g_malloc(vertices_size),
               draw,
               opengl_string_to_primitive(draw_type),
               x_rotation,
@@ -381,8 +383,8 @@ void opengl_load_level(const gchar *filename){
               y_translation,
               z_translation,
               vertices_count,
-              g_malloc(sizeof(GLfloat) * (vertices_count * 4)),
-              0
+              g_malloc(vertices_size),
+              vertices_size
             };
 
             struct json_array_element_s* sub_array_element = array_payload->start;
@@ -441,10 +443,7 @@ void opengl_load_level(const gchar *filename){
                 entity.vertices_array[subloopi * 4 + 3] = atof(number->number);
             }
 
-            entity.vertices_size = sizeof(GLfloat) * (vertices_count * 4);
-
             entities[loopi] = entity;
-
             opengl_entity_bind(loopi);
         }
 
