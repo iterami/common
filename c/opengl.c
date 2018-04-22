@@ -251,25 +251,23 @@ void opengl_entity_draw(const int id){
         );
     }
 
-    /*
     float temp_matrix[16] = { 0 };
     math_matrix_copy(
       camera_matrix,
       temp_matrix
     );
     math_matrix_translate(
-      temp_matrix,
+      camera_matrix,
       -entities[id].translate_x,
       -entities[id].translate_y,
       -entities[id].translate_z
     );
     math_matrix_rotate(
-      temp_matrix,
+      camera_matrix,
       math_degrees_to_radians(entities[id].rotate_x),
       math_degrees_to_radians(entities[id].rotate_y),
       math_degrees_to_radians(entities[id].rotate_z)
     );
-    /**/
 
     glBindVertexArray(vertex_arrays[id]);
     glBindBuffer(
@@ -290,12 +288,10 @@ void opengl_entity_draw(const int id){
       entities[id].vertex_count
     );
 
-    /*
     math_matrix_copy(
       temp_matrix,
       camera_matrix
     );
-    /**/
 }
 
 void opengl_generate_all(void){
@@ -459,17 +455,17 @@ void opengl_load_level(const gchar *filename){
 
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4] = atof(number->number) + x_translation;
+                entity.vertices_array[subloopi * 4] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4 + 1] = atof(number->number) + y_translation;
+                entity.vertices_array[subloopi * 4 + 1] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4 + 2] = atof(number->number) + z_translation;
+                entity.vertices_array[subloopi * 4 + 2] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
