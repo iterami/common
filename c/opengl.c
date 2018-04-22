@@ -534,6 +534,7 @@ void realize(GtkGLArea *area){
     );
 
     glLinkProgram(program);
+    glUseProgram(program);
 
     glDetachShader(
       program,
@@ -633,7 +634,6 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
       camera.translate_z
     );
 
-    glUseProgram(program);
     glUniformMatrix4fv(
       camera_matrix_location,
       1,
