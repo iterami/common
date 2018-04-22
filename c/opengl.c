@@ -251,10 +251,37 @@ void opengl_entity_draw(const int id){
         );
     }
 
+    /*
+    float temp_matrix[16] = { 0 };
+    math_matrix_copy(
+      camera_matrix,
+      temp_matrix
+    );
+    math_matrix_translate(
+      temp_matrix,
+      -entities[id].translate_x,
+      -entities[id].translate_y,
+      -entities[id].translate_z
+    );
+    math_matrix_rotate(
+      temp_matrix,
+      math_degrees_to_radians(entities[id].rotate_x),
+      math_degrees_to_radians(entities[id].rotate_y),
+      math_degrees_to_radians(entities[id].rotate_z)
+    );
+    /**/
+
     glBindVertexArray(vertex_arrays[id]);
     glBindBuffer(
       GL_ARRAY_BUFFER,
       vertex_buffers[id]
+    );
+
+    glUniformMatrix4fv(
+      camera_matrix_location,
+      1,
+      GL_FALSE,
+      camera_matrix
     );
 
     glDrawArrays(
@@ -262,6 +289,13 @@ void opengl_entity_draw(const int id){
       0,
       entities[id].vertex_count
     );
+
+    /*
+    math_matrix_copy(
+      temp_matrix,
+      camera_matrix
+    );
+    /**/
 }
 
 void opengl_generate_all(void){
@@ -632,13 +666,6 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
       camera.translate_x,
       camera.translate_y,
       camera.translate_z
-    );
-
-    glUniformMatrix4fv(
-      camera_matrix_location,
-      1,
-      GL_FALSE,
-      camera_matrix
     );
 
     int loopi;
