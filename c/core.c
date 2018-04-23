@@ -85,10 +85,10 @@ char* core_iterami_path(const char *filename){
     path[3] = 'm';
     path[4] = 'e';
     path[5] = '/';
-    int loopi = 0;
-    while(loopi < length_name){
-        path[loopi + 6] = name[loopi];
-        loopi++;
+    int i = 0;
+    while(i < length_name){
+        path[i + 6] = name[i];
+        i++;
     }
     path[length_name + 6] = '/';
     path[length_name + 7] = '.';
@@ -100,10 +100,10 @@ char* core_iterami_path(const char *filename){
     path[length_name + 13] = 'm';
     path[length_name + 14] = 'i';
     path[length_name + 15] = '/';
-    loopi = 0;
-    while(loopi < length_file){
-        path[loopi + length_name + 16] = filename[loopi];
-        loopi++;
+    i = 0;
+    while(i < length_file){
+        path[i + length_name + 16] = filename[i];
+        i++;
     }
     path[length_name + length_file + 16] = '\0';
 

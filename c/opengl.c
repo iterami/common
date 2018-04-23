@@ -341,10 +341,10 @@ void opengl_load_level(const gchar *filename){
 
         opengl_generate_all();
 
-        int loopi = 0;
+        int id = 0;
         struct json_array_element_s* json_level_entities_element = json_level_entities->start;
-        for(loopi = 0; loopi < entity_count; loopi++){
-            if(loopi != 0){
+        for(id = 0; id < entity_count; id++){
+            if(id != 0){
                 json_level_entities_element = json_level_entities_element->next;
             }
 
@@ -398,7 +398,7 @@ void opengl_load_level(const gchar *filename){
             struct json_array_s* array_payload = (struct json_array_s*)value->payload;
 
             int vertices_count = (int)array_payload->length / 4;
-            int subloopi = 0;
+            int i = 0;
             int vertices_size = sizeof(GLfloat) * (vertices_count * 4);
 
             entitystruct entity = {
@@ -418,29 +418,29 @@ void opengl_load_level(const gchar *filename){
             };
 
             struct json_array_element_s* sub_array_element = array_payload->start;
-            for(subloopi = 0; subloopi < vertices_count; subloopi++){
-                if(subloopi != 0){
+            for(i = 0; i < vertices_count; i++){
+                if(i != 0){
                     sub_array_element = sub_array_element->next;
                 }
 
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.colors_array[subloopi * 4] = atof(number->number);
+                entity.colors_array[i * 4] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.colors_array[subloopi * 4 + 1] = atof(number->number);
+                entity.colors_array[i * 4 + 1] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.colors_array[subloopi * 4 + 2] = atof(number->number);
+                entity.colors_array[i * 4 + 2] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.colors_array[subloopi * 4 + 3] = atof(number->number);
+                entity.colors_array[i * 4 + 3] = atof(number->number);
             }
 
             json_level_entities_element_property = json_level_entities_element_property->next;
@@ -448,33 +448,33 @@ void opengl_load_level(const gchar *filename){
             array_payload = (struct json_array_s*)value->payload;
 
             sub_array_element = array_payload->start;
-            for(subloopi = 0; subloopi < vertices_count; subloopi++){
-                if(subloopi != 0){
+            for(i = 0; i < vertices_count; i++){
+                if(i != 0){
                     sub_array_element = sub_array_element->next;
                 }
 
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4] = atof(number->number);
+                entity.vertices_array[i * 4] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4 + 1] = atof(number->number);
+                entity.vertices_array[i * 4 + 1] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4 + 2] = atof(number->number);
+                entity.vertices_array[i * 4 + 2] = atof(number->number);
 
                 sub_array_element = sub_array_element->next;
                 value = sub_array_element->value;
                 number = (struct json_number_s*)value->payload;
-                entity.vertices_array[subloopi * 4 + 3] = atof(number->number);
+                entity.vertices_array[i * 4 + 3] = atof(number->number);
             }
 
-            entities[loopi] = entity;
-            opengl_entity_bind(loopi);
+            entities[id] = entity;
+            opengl_entity_bind(id);
         }
 
         g_free(json_raw);
@@ -664,10 +664,10 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
       camera.translate_z
     );
 
-    int loopi;
+    int id;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    for(loopi = 0; loopi < entity_count; loopi++){
-        opengl_entity_draw(loopi);
+    for(id = 0; id < entity_count; id++){
+        opengl_entity_draw(id);
     }
 
     return TRUE;
