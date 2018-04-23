@@ -343,24 +343,57 @@ void opengl_load_level(const gchar *filename){
           content,
           length
         );
-
         struct json_object_s* json_level = (struct json_object_s*)json_raw->payload;
-        struct json_array_s* json_level_entities = json_level->start->value->payload;
-        entity_count = (int)json_level_entities->length;
+
+        // Parse clear color.
+        struct json_object_element_s* json_object = json_level->start;
+        struct json_array_s* json_array = json_object->value->payload;
+
+        struct json_array_element_s* json_array_element = json_array->start;
+        struct json_value_s* value = json_array_element->value;
+        struct json_number_s* number = (struct json_number_s*)value->payload;
+        float red = atof(number->number);
+
+        json_array_element = json_array_element->next;
+        value = json_array_element->value;
+        number = (struct json_number_s*)value->payload;
+        float green = atof(number->number);
+
+        json_array_element = json_array_element->next;
+        value = json_array_element->value;
+        number = (struct json_number_s*)value->payload;
+        float blue = atof(number->number);
+
+        json_array_element = json_array_element->next;
+        value = json_array_element->value;
+        number = (struct json_number_s*)value->payload;
+        float alpha = atof(number->number);
+
+        opengl_clearcolor_set(
+          red,
+          green,
+          blue,
+          alpha
+        );
+
+        // Parse entities.
+        json_object = json_object->next;
+        json_array = json_object->value->payload;
+        entity_count = (int)json_array->length;
 
         opengl_generate_all();
 
         int id;
-        struct json_array_element_s* json_level_entities_element = json_level_entities->start;
+        json_array_element = json_array->start;
         for(id = 0; id < entity_count; id++){
             if(id != 0){
-                json_level_entities_element = json_level_entities_element->next;
+                json_array_element = json_array_element->next;
             }
 
-            struct json_object_s* json_level_entities_element_property_object = (struct json_object_s*)json_level_entities_element->value->payload;
+            struct json_object_s* json_level_entities_element_property_object = (struct json_object_s*)json_array_element->value->payload;
             struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
 
-            struct json_value_s* value = json_level_entities_element_property->value;
+            value = json_level_entities_element_property->value;
             gboolean billboard = value->type == json_type_true ? TRUE : FALSE;
 
             json_level_entities_element_property = json_level_entities_element_property->next;
@@ -374,7 +407,7 @@ void opengl_load_level(const gchar *filename){
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
-            struct json_number_s* number = (struct json_number_s*)value->payload;
+            number = (struct json_number_s*)value->payload;
             float rotate_x = atof(number->number);
 
             json_level_entities_element_property = json_level_entities_element_property->next;
