@@ -194,6 +194,15 @@ void opengl_camera_translate(const float x, const float y, const float z){
     camera.translate_z += z;
 }
 
+void opengl_clearcolor_set(const float red, const float green, const float blue, const float alpha){
+    glClearColor(
+      red,
+      green,
+      blue,
+      alpha
+    );
+}
+
 void opengl_entity_bind(const int id){
     glBindVertexArray(vertex_arrays[id]);
     glBindBuffer(
@@ -514,7 +523,7 @@ void realize(GtkGLArea *area){
     glewInit();
 
     // Setup GL properties.
-    glClearColor(
+    opengl_clearcolor_set(
       0,
       0,
       0,

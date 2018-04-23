@@ -74,6 +74,7 @@ void opengl_camera_rotation_clamp(void);
 void opengl_camera_set_rotation(const float x, const float y, const float z);
 void opengl_camera_set_translation(const float x, const float y, const float z);
 void opengl_camera_translate(const float x, const float y, const float z);
+void opengl_clearcolor_set(const float red, const float green, const float blue, const float alpha);
 void opengl_entity_bind(const int id);
 void opengl_entity_draw(const int id);
 void opengl_generate_all(void);
