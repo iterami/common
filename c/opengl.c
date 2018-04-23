@@ -526,25 +526,25 @@ void opengl_load_level(const gchar *filename){
 }
 
 int opengl_string_to_primitive(const gchar *string){
-    if(strcmp(string, "GL_TRIANGLES") == 0){
+    if(strcmp(string, "TRIANGLES") == 0){
         return GL_TRIANGLES;
 
-    }else if(strcmp(string, "GL_TRIANGLE_STRIP") == 0){
+    }else if(strcmp(string, "TRIANGLE_STRIP") == 0){
         return GL_TRIANGLE_STRIP;
 
-    }else if(strcmp(string, "GL_TRIANGLE_FAN") == 0){
+    }else if(strcmp(string, "TRIANGLE_FAN") == 0){
         return GL_TRIANGLE_FAN;
 
-    }else if(strcmp(string, "GL_LINE_LOOP") == 0){
+    }else if(strcmp(string, "LINE_LOOP") == 0){
         return GL_LINE_LOOP;
 
-    }else if(strcmp(string, "GL_LINE_STRIP") == 0){
+    }else if(strcmp(string, "LINE_STRIP") == 0){
         return GL_LINE_STRIP;
 
-    }else if(strcmp(string, "GL_LINES") == 0){
+    }else if(strcmp(string, "LINES") == 0){
         return GL_LINES;
 
-    }else if(strcmp(string, "GL_POINTS") == 0){
+    }else if(strcmp(string, "POINTS") == 0){
         return GL_POINTS;
     }
 }
