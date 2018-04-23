@@ -17,22 +17,22 @@ float math_distance_2d(const float x0, const float y0, const float x1, const flo
 }
 
 void math_matrix_copy(float *from, float *to){
-    int loop;
+    int i;
 
-    for(loop = 0; loop < 16; loop++){
-        to[loop] = from[loop];
+    for(i = 0; i < 16; i++){
+        to[i] = from[i];
     }
 }
 
 void math_matrix_identity(float *matrix){
-    int loop;
+    int i;
 
-    for(loop = 0; loop < 16; loop++){
-        if(loop % 5 == 0){
-            matrix[loop] = 1;
+    for(i = 0; i < 16; i++){
+        if(i % 5 == 0){
+            matrix[i] = 1;
 
         }else{
-            matrix[loop] = 0;
+            matrix[i] = 0;
         }
     }
 }
@@ -101,12 +101,12 @@ void math_matrix_rotate(float *matrix, const float x, const float y, const float
 }
 
 void math_matrix_translate(float *matrix, const float x, const float y, const float z){
-    int loop;
+    int i;
 
-    for(loop = 0; loop < 4; loop++){
-        matrix[loop + 12] -= matrix[loop] * x
-          + matrix[loop + 4] * y
-          + matrix[loop + 8] * z;
+    for(i = 0; i < 4; i++){
+        matrix[i + 12] -= matrix[i] * x
+          + matrix[i + 4] * y
+          + matrix[i + 8] * z;
     }
 }
 

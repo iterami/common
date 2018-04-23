@@ -341,7 +341,7 @@ void opengl_load_level(const gchar *filename){
 
         opengl_generate_all();
 
-        int id = 0;
+        int id;
         struct json_array_element_s* json_level_entities_element = json_level_entities->start;
         for(id = 0; id < entity_count; id++){
             if(id != 0){
@@ -398,7 +398,6 @@ void opengl_load_level(const gchar *filename){
             struct json_array_s* array_payload = (struct json_array_s*)value->payload;
 
             int vertices_count = (int)array_payload->length / 4;
-            int i = 0;
             int vertices_size = sizeof(GLfloat) * (vertices_count * 4);
 
             entitystruct entity = {
@@ -417,6 +416,7 @@ void opengl_load_level(const gchar *filename){
               vertices_size
             };
 
+            int i;
             struct json_array_element_s* sub_array_element = array_payload->start;
             for(i = 0; i < vertices_count; i++){
                 if(i != 0){
