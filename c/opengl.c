@@ -366,32 +366,32 @@ void opengl_load_level(const gchar *filename){
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             struct json_number_s* number = (struct json_number_s*)value->payload;
-            float x_rotation = atof(number->number);
+            float rotate_x = atof(number->number);
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
-            float y_rotation = atof(number->number);
+            float rotate_y = atof(number->number);
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
-            float z_rotation = atof(number->number);
+            float rotate_z = atof(number->number);
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
-            float x_translation = atof(number->number);
+            float translate_x = atof(number->number);
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
-            float y_translation = atof(number->number);
+            float translate_y = atof(number->number);
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
-            float z_translation = atof(number->number);
+            float translate_z = atof(number->number);
 
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
@@ -406,12 +406,12 @@ void opengl_load_level(const gchar *filename){
               g_malloc(vertices_size),
               draw,
               opengl_string_to_primitive(draw_type),
-              x_rotation,
-              y_rotation,
-              z_rotation,
-              x_translation,
-              y_translation,
-              z_translation,
+              rotate_x,
+              rotate_y,
+              rotate_z,
+              translate_x,
+              translate_y,
+              translate_z,
               vertices_count,
               g_malloc(vertices_size),
               vertices_size
