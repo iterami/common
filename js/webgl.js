@@ -447,7 +447,7 @@ function webgl_entity_todo(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, cleardepth, contextmenu, fog, gravity-acceleration, gravity-max, speed
+// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, contextmenu, fog, gravity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -460,7 +460,6 @@ function webgl_init(args){
         'clear-blue': 0,
         'clear-green': 0,
         'clear-red': 0,
-        'cleardepth': 1,
         'contextmenu': true,
         'direction-blue': 1,
         'direction-green': 1,
@@ -502,7 +501,6 @@ function webgl_init(args){
         'green': args['clear-green'],
         'red': args['clear-red'],
       },
-      'cleardepth': args['cleardepth'],
       'collision-range': 2.5,
       'directionlighting': {
         'blue': args['direction-blue'],
@@ -571,7 +569,6 @@ function webgl_init(args){
         'red': webgl_properties['clearcolor']['red'],
       },
     });
-    webgl_buffer.clearDepth(webgl_properties['cleardepth']);
     webgl_buffer.enable(webgl_buffer.CULL_FACE);
     webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
 
