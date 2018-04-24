@@ -566,7 +566,13 @@ void realize(GtkGLArea *area){
       area,
       TRUE
     );
+    glEnable(GL_BLEND);
     glEnable(GL_CULL_FACE);
+
+    glBlendFunc(
+      GL_SRC_ALPHA,
+      GL_ONE_MINUS_SRC_ALPHA
+    );
     glCullFace(GL_BACK);
 
     // Setup shaders.
