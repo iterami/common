@@ -67,6 +67,7 @@ void opengl_entity_bind(const int id);
 void opengl_entity_draw(const int id);
 void opengl_generate_all(void);
 void opengl_load_level(const gchar *filename);
+void opengl_logicloop(void);
 int opengl_string_to_primitive(const gchar *string);
 void realize(GtkGLArea *area);
 gboolean render(GtkGLArea *area, GdkGLContext *context);

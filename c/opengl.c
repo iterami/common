@@ -525,6 +525,77 @@ void opengl_load_level(const gchar *filename){
     g_free(content);
 }
 
+void opengl_logicloop(void){
+    if(mouse_down){
+        opengl_camera_rotate(
+          mouse_movement_y / 20,
+          mouse_movement_x / 20,
+          0
+        );
+
+        mouse_movement_x = 0;
+        mouse_movement_y = 0;
+    }
+
+    if(key_back){
+        opengl_camera_move(
+          .1,
+          FALSE
+        );
+    }
+    if(key_down){
+        opengl_camera_translate(
+          0,
+          -.1,
+          0
+        );
+    }
+    if(key_forward){
+        opengl_camera_move(
+          -.1,
+          FALSE
+        );
+    }
+    if(key_left){
+        opengl_camera_move(
+          -.1,
+          TRUE
+        );
+    }
+    if(key_right){
+        opengl_camera_move(
+          .1,
+          TRUE
+        );
+    }
+    if(key_up){
+        opengl_camera_translate(
+          0,
+          .1,
+          0
+        );
+    }
+
+    math_matrix_identity(camera_matrix);
+    math_matrix_perspective(
+      camera_matrix,
+      1,
+      1
+    );
+    math_matrix_rotate(
+      camera_matrix,
+      math_degrees_to_radians(camera.rotate_x),
+      math_degrees_to_radians(camera.rotate_y),
+      math_degrees_to_radians(camera.rotate_z)
+    );
+    math_matrix_translate(
+      camera_matrix,
+      camera.translate_x,
+      camera.translate_y,
+      camera.translate_z
+    );
+}
+
 int opengl_string_to_primitive(const gchar *string){
     if(strcmp(string, "TRIANGLES") == 0){
         return GL_TRIANGLES;
@@ -654,78 +725,15 @@ void realize(GtkGLArea *area){
     };
 
     repo_init();
+
+    g_timeout_add(
+      16,
+      (GSourceFunc)opengl_logicloop,
+      NULL
+    );
 }
 
 gboolean render(GtkGLArea *area, GdkGLContext *context){
-    if(mouse_down){
-        opengl_camera_rotate(
-          mouse_movement_y / 20,
-          mouse_movement_x / 20,
-          0
-        );
-
-        mouse_movement_x = 0;
-        mouse_movement_y = 0;
-    }
-
-    if(key_back){
-        opengl_camera_move(
-          .1,
-          FALSE
-        );
-    }
-    if(key_down){
-        opengl_camera_translate(
-          0,
-          -.1,
-          0
-        );
-    }
-    if(key_forward){
-        opengl_camera_move(
-          -.1,
-          FALSE
-        );
-    }
-    if(key_left){
-        opengl_camera_move(
-          -.1,
-          TRUE
-        );
-    }
-    if(key_right){
-        opengl_camera_move(
-          .1,
-          TRUE
-        );
-    }
-    if(key_up){
-        opengl_camera_translate(
-          0,
-          .1,
-          0
-        );
-    }
-
-    math_matrix_identity(camera_matrix);
-    math_matrix_perspective(
-      camera_matrix,
-      1,
-      1
-    );
-    math_matrix_rotate(
-      camera_matrix,
-      math_degrees_to_radians(camera.rotate_x),
-      math_degrees_to_radians(camera.rotate_y),
-      math_degrees_to_radians(camera.rotate_z)
-    );
-    math_matrix_translate(
-      camera_matrix,
-      camera.translate_x,
-      camera.translate_y,
-      camera.translate_z
-    );
-
     int id;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(id = 0; id < entity_count; id++){
