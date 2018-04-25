@@ -712,7 +712,9 @@ void realize(GtkGLArea *area){
 
     entitystruct camera = {
       FALSE,
+      0,
       FALSE,
+      0,
       0,
       0,
       0,
