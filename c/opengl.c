@@ -626,6 +626,19 @@ void realize(GtkGLArea *area){
     glDeleteShader(shader_fragment);
     glDeleteShader(shader_vertex);
 
+    camera_matrix_location = glGetUniformLocation(
+      program,
+      "camera_matrix"
+    );
+    shader_vertex_color = glGetAttribLocation(
+      program,
+      "vertex_color"
+    );
+    shader_vertex_position = glGetAttribLocation(
+      program,
+      "vertex_position"
+    );
+
     entitystruct camera = {
       FALSE,
       FALSE,
@@ -639,19 +652,6 @@ void realize(GtkGLArea *area){
       0,
       0,
     };
-
-    camera_matrix_location = glGetUniformLocation(
-      program,
-      "camera_matrix"
-    );
-    shader_vertex_color = glGetAttribLocation(
-      program,
-      "vertex_color"
-    );
-    shader_vertex_position = glGetAttribLocation(
-      program,
-      "vertex_position"
-    );
 
     repo_init();
 }

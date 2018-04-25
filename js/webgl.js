@@ -569,16 +569,16 @@ function webgl_init(args){
         'red': webgl_properties['clearcolor']['red'],
       },
     });
+    webgl_buffer.enable(webgl_buffer.BLEND);
     webgl_buffer.enable(webgl_buffer.CULL_FACE);
     webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
-
-    webgl_shader_update();
 
     webgl_buffer.blendFunc(
       webgl_buffer.SRC_ALPHA,
       webgl_buffer.ONE_MINUS_SRC_ALPHA
     );
-    webgl_buffer.enable(webgl_buffer.BLEND);
+
+    webgl_shader_update();
 
     core_entity_set({
       'default': true,
