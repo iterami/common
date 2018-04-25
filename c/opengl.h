@@ -24,19 +24,7 @@ typedef struct entitystruct{
   int vertices_size;
 } entitystruct;
 
-entitystruct camera = {
-  FALSE,
-  FALSE,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-};
+entitystruct camera;
 float camera_matrix[16] = { 0 };
 GLuint camera_matrix_location;
 entitystruct *entities = NULL;

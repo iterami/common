@@ -626,6 +626,20 @@ void realize(GtkGLArea *area){
     glDeleteShader(shader_fragment);
     glDeleteShader(shader_vertex);
 
+    entitystruct camera = {
+      FALSE,
+      FALSE,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+    };
+
     camera_matrix_location = glGetUniformLocation(
       program,
       "camera_matrix"
