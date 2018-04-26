@@ -382,40 +382,47 @@ void opengl_load_level(const gchar *filename){
           length
         );
         struct json_object_s* json_level = (struct json_object_s*)json_raw->payload;
+        struct json_object_element_s* json_object = json_level->start;
+        struct json_array_element_s* json_array_element;
+        struct json_array_s* json_array;
+        struct json_number_s* number;
+        struct json_value_s* value;
 
         // Parse clearcolor.
-        struct json_object_element_s* json_object = json_level->start;
-        struct json_array_s* json_array = json_object->value->payload;
+        if(strcmp(json_object->name->string, "clearcolor") == 0){
+            json_array = json_object->value->payload;
 
-        struct json_array_element_s* json_array_element = json_array->start;
-        struct json_value_s* value = json_array_element->value;
-        struct json_number_s* number = (struct json_number_s*)value->payload;
-        float red = atof(number->number);
+            json_array_element = json_array->start;
+            value = json_array_element->value;
+            number = (struct json_number_s*)value->payload;
+            float red = atof(number->number);
 
-        json_array_element = json_array_element->next;
-        value = json_array_element->value;
-        number = (struct json_number_s*)value->payload;
-        float green = atof(number->number);
+            json_array_element = json_array_element->next;
+            value = json_array_element->value;
+            number = (struct json_number_s*)value->payload;
+            float green = atof(number->number);
 
-        json_array_element = json_array_element->next;
-        value = json_array_element->value;
-        number = (struct json_number_s*)value->payload;
-        float blue = atof(number->number);
+            json_array_element = json_array_element->next;
+            value = json_array_element->value;
+            number = (struct json_number_s*)value->payload;
+            float blue = atof(number->number);
 
-        json_array_element = json_array_element->next;
-        value = json_array_element->value;
-        number = (struct json_number_s*)value->payload;
-        float alpha = atof(number->number);
+            json_array_element = json_array_element->next;
+            value = json_array_element->value;
+            number = (struct json_number_s*)value->payload;
+            float alpha = atof(number->number);
 
-        opengl_clearcolor_set(
-          red,
-          green,
-          blue,
-          alpha
-        );
+            opengl_clearcolor_set(
+              red,
+              green,
+              blue,
+              alpha
+            );
+
+            json_object = json_object->next;
+        }
 
         // Parse entities.
-        json_object = json_object->next;
         json_array = json_object->value->payload;
         entity_count = (int)json_array->length;
 
@@ -431,65 +438,107 @@ void opengl_load_level(const gchar *filename){
             struct json_object_s* json_level_entities_element_property_object = (struct json_object_s*)json_array_element->value->payload;
             struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
 
-            // Parse rotate_x.
-            value = json_level_entities_element_property->value;
-            number = (struct json_number_s*)value->payload;
-            float alpha = atof(number->number);
+            // Default values.
+            float alpha = 1;
+            gboolean billboard = FALSE;
+            gboolean draw = TRUE;
+            gchar *draw_type = "TRIANGLE_STRIP";
+            float rotate_x = 0;
+            float rotate_y = 0;
+            float rotate_z = 0;
+            float translate_x = 0;
+            float translate_y = 0;
+            float translate_z = 0;
+
+            // Parse alpha.
+            if(strcmp(json_level_entities_element_property->name->string, "alpha") == 0){
+                value = json_level_entities_element_property->value;
+                number = (struct json_number_s*)value->payload;
+                alpha = atof(number->number);
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
 
             // Parse billboard.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            gboolean billboard = value->type == json_type_true ? TRUE : FALSE;
+            if(strcmp(json_level_entities_element_property->name->string, "billboard") == 0){
+                value = json_level_entities_element_property->value;
+                billboard = value->type == json_type_true ? TRUE : FALSE;
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
 
             // Parse draw.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            gboolean draw = value->type == json_type_true ? TRUE : FALSE;
+            if(strcmp(json_level_entities_element_property->name->string, "draw") == 0){
+                value = json_level_entities_element_property->value;
+                draw = value->type == json_type_true ? TRUE : FALSE;
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
 
             // Parse draw_type.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            struct json_string_s* string = (struct json_string_s*)value->payload;
-            gchar *draw_type = (gchar*)string->string;
+            if(strcmp(json_level_entities_element_property->name->string, "draw_type") == 0){
+                value = json_level_entities_element_property->value;
+                struct json_string_s* string = (struct json_string_s*)value->payload;
+                draw_type = (gchar*)string->string;
 
-            // Parse rotate_x.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            number = (struct json_number_s*)value->payload;
-            float rotate_x = atof(number->number);
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
 
-            // Parse rotate_y.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            number = (struct json_number_s*)value->payload;
-            float rotate_y = atof(number->number);
+            // Parse rotate-x.
+            if(strcmp(json_level_entities_element_property->name->string, "rotate-x") == 0){
+                value = json_level_entities_element_property->value;
+                number = (struct json_number_s*)value->payload;
+                rotate_x = atof(number->number);
 
-            // Parse rotate_z.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            number = (struct json_number_s*)value->payload;
-            float rotate_z = atof(number->number);
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
 
-            // Parse translate_x.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            number = (struct json_number_s*)value->payload;
-            float translate_x = atof(number->number);
+            // Parse rotate-y.
+            if(strcmp(json_level_entities_element_property->name->string, "rotate-y") == 0){
+                value = json_level_entities_element_property->value;
+                number = (struct json_number_s*)value->payload;
+                rotate_y = atof(number->number);
 
-            // Parse translate_y.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            number = (struct json_number_s*)value->payload;
-            float translate_y = atof(number->number);
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
 
-            // Parse translate_z.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            number = (struct json_number_s*)value->payload;
-            float translate_z = atof(number->number);
+            // Parse rotate-z.
+            if(strcmp(json_level_entities_element_property->name->string, "rotate-z") == 0){
+                value = json_level_entities_element_property->value;
+                number = (struct json_number_s*)value->payload;
+                rotate_z = atof(number->number);
 
-            // Parse vertex_colors.
-            json_level_entities_element_property = json_level_entities_element_property->next;
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse translate-x.
+            if(strcmp(json_level_entities_element_property->name->string, "translate-x") == 0){
+                value = json_level_entities_element_property->value;
+                number = (struct json_number_s*)value->payload;
+                translate_x = atof(number->number);
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse translate-y.
+            if(strcmp(json_level_entities_element_property->name->string, "translate-y") == 0){
+                value = json_level_entities_element_property->value;
+                number = (struct json_number_s*)value->payload;
+                translate_y = atof(number->number);
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse translate-z.
+            if(strcmp(json_level_entities_element_property->name->string, "translate-z") == 0){
+                value = json_level_entities_element_property->value;
+                number = (struct json_number_s*)value->payload;
+                translate_z = atof(number->number);
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse vertex_colors. Required.
             value = json_level_entities_element_property->value;
             struct json_array_s* array_payload = (struct json_array_s*)value->payload;
 
@@ -540,7 +589,7 @@ void opengl_load_level(const gchar *filename){
                 entity.colors_array[i * 4 + 3] = atof(number->number);
             }
 
-            // Parse vertices.
+            // Parse vertices. Required.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             array_payload = (struct json_array_s*)value->payload;
