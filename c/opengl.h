@@ -65,6 +65,7 @@ void opengl_camera_translate(const float x, const float y, const float z);
 void opengl_clearcolor_set(const float red, const float green, const float blue, const float alpha);
 void opengl_entity_bind(const int id);
 void opengl_entity_draw(const int id);
+void opengl_events_init(GtkWidget *_glarea);
 void opengl_generate_all(void);
 void opengl_load_level(const gchar *filename);
 void opengl_logicloop(void);

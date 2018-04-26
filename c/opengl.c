@@ -303,6 +303,33 @@ void opengl_entity_draw(const int id){
     );
 }
 
+void opengl_events_init(GtkWidget *_glarea){
+    g_signal_connect_swapped(
+      glarea,
+      "realize",
+      G_CALLBACK(realize),
+      glarea
+    );
+    g_signal_connect_swapped(
+      glarea,
+      "render",
+      G_CALLBACK(render),
+      NULL
+    );
+    gtk_widget_add_events(
+      glarea,
+      GDK_POINTER_MOTION_MASK
+    );
+    gtk_widget_add_events(
+      glarea,
+      GDK_BUTTON_PRESS_MASK
+    );
+    gtk_widget_add_events(
+      glarea,
+      GDK_BUTTON_RELEASE_MASK
+    );
+}
+
 void opengl_generate_all(void){
     g_free(entities);
     g_free(vertex_arrays);
