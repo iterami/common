@@ -178,12 +178,6 @@ function webgl_clearcolor_set(args){
 }
 
 function webgl_draw(){
-    webgl_buffer.viewport(
-      0,
-      0,
-      webgl_buffer.viewportWidth,
-      webgl_buffer.viewportHeight
-    );
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
     webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
@@ -949,7 +943,12 @@ function webgl_resize(){
 
     webgl_buffer.viewportHeight = webgl_canvas_properties['height'];
     webgl_buffer.viewportWidth = webgl_canvas_properties['width'];
-    webgl_buffer.viewport(0, 0, webgl_canvas_properties['height'], webgl_canvas_properties['width']);
+    webgl_buffer.viewport(
+      0,
+      0,
+      webgl_canvas_properties['width'],
+      webgl_canvas_properties['height']
+    );
 
     Object.assign(
       webgl_buffer,

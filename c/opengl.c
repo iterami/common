@@ -758,6 +758,13 @@ gboolean opengl_render(GtkGLArea *area, GdkGLContext *context){
 void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer data){
     window_height = height;
     window_width = width;
+
+    glViewport(
+      0,
+      0,
+      window_width,
+      window_height
+    );
 }
 
 int opengl_string_to_primitive(const gchar *string){
