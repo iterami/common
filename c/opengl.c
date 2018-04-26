@@ -284,6 +284,10 @@ void opengl_entity_draw(const int id){
       vertex_buffers[id]
     );
 
+    glUniform1f(
+      alpha_location,
+      entities[id].alpha
+    );
     glUniformMatrix4fv(
       camera_matrix_location,
       1,
@@ -379,7 +383,7 @@ void opengl_load_level(const gchar *filename){
         );
         struct json_object_s* json_level = (struct json_object_s*)json_raw->payload;
 
-        // Parse clear color.
+        // Parse clearcolor.
         struct json_object_element_s* json_object = json_level->start;
         struct json_array_s* json_array = json_object->value->payload;
 
@@ -427,48 +431,64 @@ void opengl_load_level(const gchar *filename){
             struct json_object_s* json_level_entities_element_property_object = (struct json_object_s*)json_array_element->value->payload;
             struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
 
+            // Parse rotate_x.
+            value = json_level_entities_element_property->value;
+            number = (struct json_number_s*)value->payload;
+            float alpha = atof(number->number);
+
+            // Parse billboard.
+            json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             gboolean billboard = value->type == json_type_true ? TRUE : FALSE;
 
+            // Parse draw.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             gboolean draw = value->type == json_type_true ? TRUE : FALSE;
 
+            // Parse draw_type.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             struct json_string_s* string = (struct json_string_s*)value->payload;
             gchar *draw_type = (gchar*)string->string;
 
+            // Parse rotate_x.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
             float rotate_x = atof(number->number);
 
+            // Parse rotate_y.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
             float rotate_y = atof(number->number);
 
+            // Parse rotate_z.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
             float rotate_z = atof(number->number);
 
+            // Parse translate_x.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
             float translate_x = atof(number->number);
 
+            // Parse translate_y.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
             float translate_y = atof(number->number);
 
+            // Parse translate_z.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             number = (struct json_number_s*)value->payload;
             float translate_z = atof(number->number);
 
+            // Parse vertex_colors.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             struct json_array_s* array_payload = (struct json_array_s*)value->payload;
@@ -477,6 +497,7 @@ void opengl_load_level(const gchar *filename){
             int vertices_size = sizeof(GLfloat) * (vertices_count * 4);
 
             entitystruct entity = {
+              alpha,
               billboard,
               g_malloc(vertices_size),
               draw,
@@ -519,6 +540,7 @@ void opengl_load_level(const gchar *filename){
                 entity.colors_array[i * 4 + 3] = atof(number->number);
             }
 
+            // Parse vertices.
             json_level_entities_element_property = json_level_entities_element_property->next;
             value = json_level_entities_element_property->value;
             array_payload = (struct json_array_s*)value->payload;
@@ -661,7 +683,7 @@ void opengl_realize(GtkGLArea *area){
     GLuint shader_vertex;
 
     shader_fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    const GLchar *source_fragment = "varying vec4 fragment_color;void main(void){gl_FragColor=fragment_color;}";
+    const GLchar *source_fragment = "uniform float alpha;varying vec4 fragment_color;void main(void){gl_FragColor=fragment_color*alpha;}";
     glShaderSource(
       shader_fragment,
       1,
@@ -707,6 +729,10 @@ void opengl_realize(GtkGLArea *area){
     glDeleteShader(shader_fragment);
     glDeleteShader(shader_vertex);
 
+    alpha_location = glGetUniformLocation(
+      program,
+      "alpha"
+    );
     camera_matrix_location = glGetUniformLocation(
       program,
       "camera_matrix"
@@ -721,6 +747,7 @@ void opengl_realize(GtkGLArea *area){
     );
 
     entitystruct camera = {
+      1,
       FALSE,
       0,
       FALSE,
@@ -749,7 +776,14 @@ gboolean opengl_render(GtkGLArea *area, GdkGLContext *context){
     int id;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(id = 0; id < entity_count; id++){
-        opengl_entity_draw(id);
+        if(entities[id].alpha == 1){
+            opengl_entity_draw(id);
+        }
+    }
+    for(id = 0; id < entity_count; id++){
+        if(entities[id].alpha < 1){
+            opengl_entity_draw(id);
+        }
     }
 
     return TRUE;

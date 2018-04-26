@@ -9,6 +9,7 @@
 #define KEY_UP GDK_KEY_space
 
 typedef struct entitystruct{
+  float alpha;
   gboolean billboard;
   GLfloat *colors_array;
   gboolean draw;
@@ -24,6 +25,7 @@ typedef struct entitystruct{
   int vertices_size;
 } entitystruct;
 
+GLuint alpha_location;
 entitystruct camera;
 float camera_matrix[16] = { 0 };
 GLuint camera_matrix_location;
