@@ -681,6 +681,15 @@ void opengl_logicloop(void){
         );
     }
 
+    /*
+    // Level logic.
+
+    int i;
+    for(id = 0; id < entity_count; id++){
+        // Entity logic.
+    }
+    */
+
     math_matrix_identity(camera_matrix);
     math_matrix_perspective(
       camera_matrix,
