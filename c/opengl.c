@@ -765,6 +765,12 @@ void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer data){
       window_width,
       window_height
     );
+
+    math_matrix_perspective(
+      camera_matrix,
+      window_width,
+      window_height
+    );
 }
 
 int opengl_string_to_primitive(const gchar *string){

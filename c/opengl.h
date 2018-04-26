@@ -47,8 +47,8 @@ GLint shader_vertex_position;
 GLuint *vertex_arrays;
 GLuint *vertex_buffers;
 GLuint *vertex_colors;
-int window_height = 0;
-int window_width = 0;
+int window_height = 1;
+int window_width = 1;
 
 void opengl_billboard(const int id, gboolean x, gboolean y, gboolean z);
 gboolean opengl_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
