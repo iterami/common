@@ -73,5 +73,5 @@ void opengl_load_level(const gchar *filename);
 void opengl_logicloop(void);
 void opengl_realize(GtkGLArea *area);
 gboolean opengl_render(GtkGLArea *area, GdkGLContext *context);
-void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer user_data);
+void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer data);
 int opengl_string_to_primitive(const gchar *string);

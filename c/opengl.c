@@ -755,7 +755,7 @@ gboolean opengl_render(GtkGLArea *area, GdkGLContext *context){
     return TRUE;
 }
 
-void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer user_data){
+void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer data){
     window_height = height;
     window_width = width;
 }
