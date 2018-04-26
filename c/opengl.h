@@ -47,6 +47,8 @@ GLint shader_vertex_position;
 GLuint *vertex_arrays;
 GLuint *vertex_buffers;
 GLuint *vertex_colors;
+int window_height = 0;
+int window_width = 0;
 
 void opengl_billboard(const int id, gboolean x, gboolean y, gboolean z);
 gboolean opengl_camera_free_keypress(GtkWidget *widget, GdkEventKey *event, gpointer data);
@@ -69,6 +71,7 @@ void opengl_events_init(GtkWidget *_glarea);
 void opengl_generate_all(void);
 void opengl_load_level(const gchar *filename);
 void opengl_logicloop(void);
+void opengl_realize(GtkGLArea *area);
+gboolean opengl_render(GtkGLArea *area, GdkGLContext *context);
+void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer user_data);
 int opengl_string_to_primitive(const gchar *string);
-void realize(GtkGLArea *area);
-gboolean render(GtkGLArea *area, GdkGLContext *context);

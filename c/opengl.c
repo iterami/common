@@ -307,15 +307,22 @@ void opengl_events_init(GtkWidget *_glarea){
     g_signal_connect_swapped(
       glarea,
       "realize",
-      G_CALLBACK(realize),
+      G_CALLBACK(opengl_realize),
       glarea
     );
     g_signal_connect_swapped(
       glarea,
       "render",
-      G_CALLBACK(render),
+      G_CALLBACK(opengl_render),
       NULL
     );
+    g_signal_connect_swapped(
+      glarea,
+      "resize",
+      G_CALLBACK(opengl_resize),
+      NULL
+    );
+
     gtk_widget_add_events(
       glarea,
       GDK_POINTER_MOTION_MASK
@@ -623,31 +630,7 @@ void opengl_logicloop(void){
     );
 }
 
-int opengl_string_to_primitive(const gchar *string){
-    if(strcmp(string, "TRIANGLES") == 0){
-        return GL_TRIANGLES;
-
-    }else if(strcmp(string, "TRIANGLE_STRIP") == 0){
-        return GL_TRIANGLE_STRIP;
-
-    }else if(strcmp(string, "TRIANGLE_FAN") == 0){
-        return GL_TRIANGLE_FAN;
-
-    }else if(strcmp(string, "LINE_LOOP") == 0){
-        return GL_LINE_LOOP;
-
-    }else if(strcmp(string, "LINE_STRIP") == 0){
-        return GL_LINE_STRIP;
-
-    }else if(strcmp(string, "LINES") == 0){
-        return GL_LINES;
-
-    }else if(strcmp(string, "POINTS") == 0){
-        return GL_POINTS;
-    }
-}
-
-void realize(GtkGLArea *area){
+void opengl_realize(GtkGLArea *area){
     gtk_gl_area_make_current(area);
 
     glewExperimental = GL_TRUE;
@@ -762,7 +745,7 @@ void realize(GtkGLArea *area){
     );
 }
 
-gboolean render(GtkGLArea *area, GdkGLContext *context){
+gboolean opengl_render(GtkGLArea *area, GdkGLContext *context){
     int id;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     for(id = 0; id < entity_count; id++){
@@ -770,4 +753,33 @@ gboolean render(GtkGLArea *area, GdkGLContext *context){
     }
 
     return TRUE;
+}
+
+void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer user_data){
+    window_height = height;
+    window_width = width;
+}
+
+int opengl_string_to_primitive(const gchar *string){
+    if(strcmp(string, "TRIANGLES") == 0){
+        return GL_TRIANGLES;
+
+    }else if(strcmp(string, "TRIANGLE_STRIP") == 0){
+        return GL_TRIANGLE_STRIP;
+
+    }else if(strcmp(string, "TRIANGLE_FAN") == 0){
+        return GL_TRIANGLE_FAN;
+
+    }else if(strcmp(string, "LINE_LOOP") == 0){
+        return GL_LINE_LOOP;
+
+    }else if(strcmp(string, "LINE_STRIP") == 0){
+        return GL_LINE_STRIP;
+
+    }else if(strcmp(string, "LINES") == 0){
+        return GL_LINES;
+
+    }else if(strcmp(string, "POINTS") == 0){
+        return GL_POINTS;
+    }
 }
