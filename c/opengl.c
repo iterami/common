@@ -365,6 +365,24 @@ void opengl_generate_all(void){
     );
 }
 
+void opengl_group_add(groupstruct *group, entitystruct *entity){
+}
+
+void opengl_group_create(void){
+}
+
+void opengl_group_modify(groupstruct *group){
+}
+
+void opengl_group_move(groupstruct *oldgroup, entitystruct *entity, groupstruct *newgroup){
+}
+
+void opengl_group_remove(groupstruct *group, entitystruct *entity, gboolean delete){
+}
+
+void opengl_group_remove_all(groupstruct *group, gboolean delete){
+}
+
 void opengl_load_level(const gchar *filename){
     opengl_camera_origin();
 

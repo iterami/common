@@ -24,6 +24,10 @@ typedef struct entitystruct{
   GLfloat *vertices_array;
   size_t vertices_size;
 } entitystruct;
+typedef struct groupstruct{
+  int count;
+  void *entities;
+} groupstruct;
 
 GLuint alpha_location;
 entitystruct camera;
@@ -71,6 +75,12 @@ void opengl_entity_bind(const int id);
 void opengl_entity_draw(const int id);
 void opengl_events_init(GtkWidget *_glarea);
 void opengl_generate_all(void);
+void opengl_group_add(groupstruct *group, entitystruct *entity);
+void opengl_group_create(void);
+void opengl_group_modify(groupstruct *group);
+void opengl_group_move(groupstruct *oldgroup, entitystruct *entity, groupstruct *newgroup);
+void opengl_group_remove(groupstruct *group, entitystruct *entity, gboolean delete);
+void opengl_group_remove_all(groupstruct *group, gboolean delete);
 void opengl_load_level(const gchar *filename);
 void opengl_logicloop(void);
 void opengl_realize(GtkGLArea *area);
