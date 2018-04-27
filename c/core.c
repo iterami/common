@@ -32,7 +32,7 @@ int core_is_hexadecimal(const char character){
       && ('A' <= character && character <= 'F'));
 }
 
-int core_get_int_length(const int integer){
+size_t core_get_int_length(const int integer){
     if(integer > 999999999){
         return 10;
 
@@ -67,8 +67,8 @@ int core_get_int_length(const int integer){
 char* core_iterami_path(const char *filename){
     const char *name = getenv("USER");
 
-    int length_file = 0;
-    int length_name = 0;
+    size_t length_file = 0;
+    size_t length_name = 0;
 
     while(filename[length_file] != '\0'){
         length_file++;

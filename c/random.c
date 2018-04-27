@@ -5,6 +5,6 @@ int random_integer(const int max){
     return rand() % max;
 }
 
-int random_seed(void){
+void random_seed(void){
     srand(time(NULL));
 }

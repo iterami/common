@@ -20,9 +20,9 @@ typedef struct entitystruct{
   float translate_x;
   float translate_y;
   float translate_z;
-  int vertex_count;
+  size_t vertex_count;
   GLfloat *vertices_array;
-  int vertices_size;
+  size_t vertices_size;
 } entitystruct;
 
 GLuint alpha_location;
@@ -30,7 +30,7 @@ entitystruct camera;
 float camera_matrix[16] = { 0 };
 GLuint camera_matrix_location;
 entitystruct *entities = NULL;
-int entity_count = 0;
+size_t entity_count = 0;
 GtkWidget *glarea;
 gboolean key_back = FALSE;
 gboolean key_down = FALSE;
@@ -75,5 +75,5 @@ void opengl_load_level(const gchar *filename);
 void opengl_logicloop(void);
 void opengl_realize(GtkGLArea *area);
 gboolean opengl_render(GtkGLArea *area, GdkGLContext *context);
-void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer data);
+void opengl_resize(GtkGLArea *_glarea, int width, int height, gpointer data);
 int opengl_string_to_primitive(const gchar *string);

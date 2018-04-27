@@ -424,7 +424,7 @@ void opengl_load_level(const gchar *filename){
 
         // Parse entities.
         json_array = json_object->value->payload;
-        entity_count = (int)json_array->length;
+        entity_count = json_array->length;
 
         opengl_generate_all();
 
@@ -542,8 +542,8 @@ void opengl_load_level(const gchar *filename){
             value = json_level_entities_element_property->value;
             struct json_array_s* array_payload = (struct json_array_s*)value->payload;
 
-            int vertices_count = (int)array_payload->length / 4;
-            int vertices_size = sizeof(GLfloat) * (vertices_count * 4);
+            size_t vertices_count = array_payload->length / 4;
+            size_t vertices_size = sizeof(GLfloat) * (vertices_count * 4);
 
             entitystruct entity = {
               alpha,
@@ -847,7 +847,7 @@ gboolean opengl_render(GtkGLArea *area, GdkGLContext *context){
     return TRUE;
 }
 
-void opengl_resize(GtkGLArea *_glarea, gint width, gint height, gpointer data){
+void opengl_resize(GtkGLArea *_glarea, int width, int height, gpointer data){
     window_height = height;
     window_width = width;
 
