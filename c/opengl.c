@@ -824,7 +824,7 @@ void opengl_realize(GtkGLArea *area){
     repo_init();
 
     g_timeout_add(
-      16,
+      25,
       (GSourceFunc)opengl_logicloop,
       NULL
     );
