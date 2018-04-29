@@ -1041,13 +1041,12 @@ function webgl_shader_update(){
     var fragment_shader = webgl_shader_create({
       'id': 'fragment',
       'source':
-          'precision mediump float;'
-        + 'uniform float alpha;'
+          'uniform lowp float alpha;'
         + 'uniform sampler2D sampler;'
-        + 'varying float float_fogDistance;'
-        + 'varying vec2 vec_textureCoord;'
-        + 'varying vec3 vec_lighting;'
-        + 'varying vec4 vec_fragmentColor;'
+        + 'varying mediump float float_fogDistance;'
+        + 'varying mediump vec2 vec_textureCoord;'
+        + 'varying mediump vec3 vec_lighting;'
+        + 'varying lowp vec4 vec_fragmentColor;'
         + 'void main(void){'
         +     'gl_FragColor = ' + fogstring + ' * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
         + '}',
