@@ -833,10 +833,10 @@ void opengl_realize(GtkGLArea *area){
     const GLchar *source_fragment =
       //"precision mediump float;"
       "uniform float alpha;"
-      //"uniform sampler2D sampler;"
-      //"varying float float_fogDistance;"
-      //"varying vec2 vec_textureCoord;"
-      //"varying vec3 vec_lighting;"
+      "uniform sampler2D sampler;"
+      "varying float float_fogDistance;"
+      "varying vec2 vec_textureCoord;"
+      "varying vec3 vec_lighting;"
       "varying vec4 vec_fragmentColor;"
       "void main(void){"
           "gl_FragColor = vec_fragmentColor * alpha;"
@@ -851,20 +851,24 @@ void opengl_realize(GtkGLArea *area){
 
     shader_vertex = glCreateShader(GL_VERTEX_SHADER);
     const GLchar *source_vertex =
-      //"attribute vec2 vec_texturePosition;"
-      //"attribute vec3 vec_vertexNormal;"
+      "attribute vec2 vec_texturePosition;"
+      "attribute vec3 vec_vertexNormal;"
       "attribute vec4 vec_vertexColor;"
       "attribute vec4 vec_vertexPosition;"
       "uniform mat4 mat_cameraMatrix;"
-      //"uniform mat4 mat_normalMatrix;"
-      //"uniform mat4 mat_perspectiveMatrix;"
-      //"varying float float_fogDistance;"
-      //"varying vec2 vec_textureCoord;"
-      //"varying vec3 vec_lighting;"
+      "uniform mat4 mat_normalMatrix;"
+      "uniform mat4 mat_perspectiveMatrix;"
+      "varying float float_fogDistance;"
+      "varying vec2 vec_textureCoord;"
+      "varying vec3 vec_lighting;"
       "varying vec4 vec_fragmentColor;"
       "void main(void){"
           "gl_Position = mat_cameraMatrix * vec_vertexPosition;"
+          "float_fogDistance = length(gl_Position.xyz);"
           "vec_fragmentColor = vec_vertexColor;"
+          "vec_textureCoord = vec_texturePosition;"
+          "vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);"
+          "vec_lighting = vec3(1, 1, 1);"
       "}";
     glShaderSource(
       shader_vertex,
