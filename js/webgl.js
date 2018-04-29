@@ -1049,17 +1049,17 @@ function webgl_shader_update(){
         + 'varying vec3 vec_lighting;'
         + 'varying vec4 vec_fragmentColor;'
         + 'void main(void){'
-        +   'gl_FragColor = ' + fogstring + ' * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
+        +     'gl_FragColor = ' + fogstring + ' * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
     var directionstring = webgl_properties['directionlighting']['vector'] !== false
       ? (' + (vec3('
-        +     webgl_properties['directionlighting']['red'] + ','
-        +     webgl_properties['directionlighting']['green'] + ','
-        +     webgl_properties['directionlighting']['blue']
+        +   webgl_properties['directionlighting']['red'] + ','
+        +   webgl_properties['directionlighting']['green'] + ','
+        +   webgl_properties['directionlighting']['blue']
         + ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting']['vector'] + '))),0.0));')
-      : '';
+      : ';';
     var vertex_shader = webgl_shader_create({
       'id': 'vertex',
       'source':
@@ -1075,16 +1075,16 @@ function webgl_shader_update(){
         + 'varying vec3 vec_lighting;'
         + 'varying vec4 vec_fragmentColor;'
         + 'void main(void){'
-        +   'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
-        +   'float_fogDistance = length(gl_Position.xyz);'
-        +   'vec_fragmentColor = vec_vertexColor;'
-        +   'vec_textureCoord = vec_texturePosition;'
-        +   'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-        +   'vec_lighting = vec3('
-        +     webgl_properties['ambientlighting']['red'] + ','
-        +     webgl_properties['ambientlighting']['green'] + ','
-        +     webgl_properties['ambientlighting']['blue']
-        +   ')' + directionstring + ';'
+        +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
+        +     'float_fogDistance = length(gl_Position.xyz);'
+        +     'vec_fragmentColor = vec_vertexColor;'
+        +     'vec_textureCoord = vec_texturePosition;'
+        +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
+        +     'vec_lighting = vec3('
+        +       webgl_properties['ambientlighting']['red'] + ','
+        +       webgl_properties['ambientlighting']['green'] + ','
+        +       webgl_properties['ambientlighting']['blue']
+        +     ')' + directionstring
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
     });
