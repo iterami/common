@@ -831,10 +831,15 @@ void opengl_realize(GtkGLArea *area){
 
     shader_fragment = glCreateShader(GL_FRAGMENT_SHADER);
     const GLchar *source_fragment =
+      //"precision mediump float;"
       "uniform float alpha;"
-      "varying vec4 fragment_color;"
+      //"uniform sampler2D sampler;"
+      //"varying float float_fogDistance;"
+      //"varying vec2 vec_textureCoord;"
+      //"varying vec3 vec_lighting;"
+      "varying vec4 vec_fragmentColor;"
       "void main(void){"
-          "gl_FragColor = fragment_color * alpha;"
+          "gl_FragColor = vec_fragmentColor * alpha;"
       "}";
     glShaderSource(
       shader_fragment,
@@ -846,13 +851,20 @@ void opengl_realize(GtkGLArea *area){
 
     shader_vertex = glCreateShader(GL_VERTEX_SHADER);
     const GLchar *source_vertex =
-      "uniform mat4 camera_matrix;"
-      "varying vec4 fragment_color;"
-      "attribute vec4 vertex_color;"
-      "attribute vec4 vertex_position;"
+      //"attribute vec2 vec_texturePosition;"
+      //"attribute vec3 vec_vertexNormal;"
+      "attribute vec4 vec_vertexColor;"
+      "attribute vec4 vec_vertexPosition;"
+      "uniform mat4 mat_cameraMatrix;"
+      //"uniform mat4 mat_normalMatrix;"
+      //"uniform mat4 mat_perspectiveMatrix;"
+      //"varying float float_fogDistance;"
+      //"varying vec2 vec_textureCoord;"
+      //"varying vec3 vec_lighting;"
+      "varying vec4 vec_fragmentColor;"
       "void main(void){"
-          "gl_Position = camera_matrix * vertex_position;"
-          "fragment_color = vertex_color;"
+          "gl_Position = mat_cameraMatrix * vec_vertexPosition;"
+          "vec_fragmentColor = vec_vertexColor;"
       "}";
     glShaderSource(
       shader_vertex,
@@ -895,15 +907,15 @@ void opengl_realize(GtkGLArea *area){
     );
     camera_matrix_location = glGetUniformLocation(
       program,
-      "camera_matrix"
+      "mat_cameraMatrix"
     );
     shader_vertex_color = glGetAttribLocation(
       program,
-      "vertex_color"
+      "vec_vertexColor"
     );
     shader_vertex_position = glGetAttribLocation(
       program,
-      "vertex_position"
+      "vec_vertexPosition"
     );
 
     entitystruct camera = {
