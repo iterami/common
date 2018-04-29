@@ -830,7 +830,12 @@ void opengl_realize(GtkGLArea *area){
     GLuint shader_vertex;
 
     shader_fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    const GLchar *source_fragment = "uniform float alpha;varying vec4 fragment_color;void main(void){gl_FragColor=fragment_color*alpha;}";
+    const GLchar *source_fragment =
+      "uniform float alpha;"
+      "varying vec4 fragment_color;"
+      "void main(void){"
+          "gl_FragColor = fragment_color * alpha;"
+      "}";
     glShaderSource(
       shader_fragment,
       1,
@@ -840,7 +845,15 @@ void opengl_realize(GtkGLArea *area){
     glCompileShader(shader_fragment);
 
     shader_vertex = glCreateShader(GL_VERTEX_SHADER);
-    const GLchar *source_vertex = "uniform mat4 camera_matrix;varying vec4 fragment_color;attribute vec4 vertex_color;attribute vec4 vertex_position;void main(void){gl_Position=camera_matrix*vertex_position;fragment_color=vertex_color;}";
+    const GLchar *source_vertex =
+      "uniform mat4 camera_matrix;"
+      "varying vec4 fragment_color;"
+      "attribute vec4 vertex_color;"
+      "attribute vec4 vertex_position;"
+      "void main(void){"
+          "gl_Position = camera_matrix * vertex_position;"
+          "fragment_color = vertex_color;"
+      "}";
     glShaderSource(
       shader_vertex,
       1,
