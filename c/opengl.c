@@ -564,11 +564,18 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse draw_type.
-            if(strcmp(json_level_entities_element_property->name->string, "draw_type") == 0){
+            // Parse draw-type.
+            if(strcmp(json_level_entities_element_property->name->string, "draw-type") == 0){
                 value = json_level_entities_element_property->value;
                 struct json_string_s* string = (struct json_string_s*)value->payload;
                 draw_type = (gchar*)string->string;
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse groups.
+            if(strcmp(json_level_entities_element_property->name->string, "groups") == 0){
+
 
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
@@ -627,7 +634,7 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse vertex_colors. Required.
+            // Parse vertex-colors. Required.
             value = json_level_entities_element_property->value;
             struct json_array_s* array_payload = (struct json_array_s*)value->payload;
 
