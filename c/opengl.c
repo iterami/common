@@ -454,6 +454,23 @@ void opengl_group_remove_all(groupstruct *group){
     g_free(group->entities);
 }
 
+void opengl_groups_create(gchar new_groups[], int count){
+    g_free(groups);
+
+    groups = g_malloc(sizeof(groupstruct) * count);
+
+    int i;
+    for(i = 0; i < count; i++){
+        groupstruct new_group = {
+          0,
+          NULL,
+          &new_groups[i]
+        };
+
+        groups[i] = new_group;
+    }
+}
+
 void opengl_load_level(const gchar *filename){
     opengl_camera_origin();
 
