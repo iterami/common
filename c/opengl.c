@@ -366,13 +366,6 @@ void opengl_generate_all(void){
 }
 
 void opengl_group_add(groupstruct *group, entitystruct *entity){
-    group->entities = opengl_group_add_realloc(
-      group,
-      entity
-    );
-}
-
-entitystruct * opengl_group_add_realloc(groupstruct *group, entitystruct *entity){
     group->count++;
 
     entitystruct *entities[group->count];
@@ -393,8 +386,6 @@ entitystruct * opengl_group_add_realloc(groupstruct *group, entitystruct *entity
     }
 
     g_free(entities);
-
-    return group->entities;
 }
 
 void opengl_group_modify(groupstruct *group){
@@ -412,13 +403,6 @@ void opengl_group_move(groupstruct *oldgroup, entitystruct *entity, groupstruct 
 }
 
 void opengl_group_remove(groupstruct *group, entitystruct *entity){
-    group->entities = opengl_group_remove_realloc(
-      group,
-      entity
-    );
-}
-
-entitystruct * opengl_group_remove_realloc(groupstruct *group, entitystruct *entity){
     group->count--;
 
     entitystruct *entities[group->count];
@@ -444,8 +428,6 @@ entitystruct * opengl_group_remove_realloc(groupstruct *group, entitystruct *ent
     }
 
     g_free(entities);
-
-    return group->entities;
 }
 
 void opengl_group_remove_all(groupstruct *group){
