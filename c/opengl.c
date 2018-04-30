@@ -575,7 +575,12 @@ void opengl_load_level(const gchar *filename){
 
             // Parse groups.
             if(strcmp(json_level_entities_element_property->name->string, "groups") == 0){
+                struct json_array_s* groups_array = json_level_entities_element_property->value->payload;
+                struct json_array_element_s* groups_array_element = groups_array->start;
 
+                while(groups_array_element != NULL){
+                    groups_array_element = groups_array_element->next;
+                }
 
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
