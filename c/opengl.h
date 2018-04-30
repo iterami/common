@@ -27,6 +27,7 @@ typedef struct entitystruct{
 typedef struct groupstruct{
   int count;
   entitystruct *entities;
+  char *id;
 } groupstruct;
 
 GLuint alpha_location;
@@ -36,6 +37,7 @@ GLuint camera_matrix_location;
 entitystruct *entities = NULL;
 size_t entity_count = 0;
 GtkWidget *glarea;
+groupstruct *groups;
 gboolean key_back = FALSE;
 gboolean key_down = FALSE;
 gboolean key_forward = FALSE;
