@@ -484,39 +484,52 @@ void opengl_load_level(const gchar *filename){
         struct json_number_s* number;
         struct json_value_s* value;
 
-        // Parse clearcolor.
-        if(strcmp(json_object->name->string, "clearcolor") == 0){
-            json_array = json_object->value->payload;
-
-            json_array_element = json_array->start;
-            value = json_array_element->value;
+        // Parse clearcolor-alpha.
+        float clearcolor_alpha = 1;
+        if(strcmp(json_object->name->string, "clearcolor-alpha") == 0){
+            value = json_object->value;
             number = (struct json_number_s*)value->payload;
-            float red = atof(number->number);
-
-            json_array_element = json_array_element->next;
-            value = json_array_element->value;
-            number = (struct json_number_s*)value->payload;
-            float green = atof(number->number);
-
-            json_array_element = json_array_element->next;
-            value = json_array_element->value;
-            number = (struct json_number_s*)value->payload;
-            float blue = atof(number->number);
-
-            json_array_element = json_array_element->next;
-            value = json_array_element->value;
-            number = (struct json_number_s*)value->payload;
-            float alpha = atof(number->number);
-
-            opengl_clearcolor_set(
-              red,
-              green,
-              blue,
-              alpha
-            );
+            clearcolor_alpha = atof(number->number);
 
             json_object = json_object->next;
         }
+
+        // Parse clearcolor-blue.
+        float clearcolor_blue = 0;
+        if(strcmp(json_object->name->string, "clearcolor-blue") == 0){
+            value = json_object->value;
+            number = (struct json_number_s*)value->payload;
+            clearcolor_blue = atof(number->number);
+
+            json_object = json_object->next;
+        }
+
+        // Parse clearcolor-green.
+        float clearcolor_green = 0;
+        if(strcmp(json_object->name->string, "clearcolor-green") == 0){
+            value = json_object->value;
+            number = (struct json_number_s*)value->payload;
+            clearcolor_green = atof(number->number);
+
+            json_object = json_object->next;
+        }
+
+        // Parse clearcolor-red.
+        float clearcolor_red = 0;
+        if(strcmp(json_object->name->string, "clearcolor-red") == 0){
+            value = json_object->value;
+            number = (struct json_number_s*)value->payload;
+            clearcolor_red = atof(number->number);
+
+            json_object = json_object->next;
+        }
+
+        opengl_clearcolor_set(
+          clearcolor_red,
+          clearcolor_green,
+          clearcolor_blue,
+          clearcolor_alpha
+        );
 
         // Parse entities.
         json_array = json_object->value->payload;
