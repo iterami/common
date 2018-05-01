@@ -439,11 +439,18 @@ void opengl_group_remove_all(groupstruct *group){
 void opengl_groups_create(gchar new_groups[], int count){
     g_free(groups);
 
-    group_count = count;
+    group_count = count + 1;
     groups = g_malloc(sizeof(groupstruct) * group_count);
 
+    groupstruct group_depthfalse = {
+      0,
+      NULL,
+      "_depthfalse"
+    };
+    groups[0] = group_depthfalse;
+
     int i;
-    for(i = 0; i < group_count; i++){
+    for(i = 1; i < group_count; i++){
         groupstruct new_group = {
           0,
           NULL,
