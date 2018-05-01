@@ -83,7 +83,7 @@ void opengl_group_modify(groupstruct *group);
 void opengl_group_move(groupstruct *oldgroup, entitystruct *entity, groupstruct *newgroup);
 void opengl_group_remove(groupstruct *group, entitystruct *entity);
 void opengl_group_remove_all(groupstruct *group);
-void opengl_groups_create(const gchar *new_groups[], int count);
+void opengl_groups_create(const gchar *new_groups[], const int count);
 void opengl_load_level(const gchar *filename);
 void opengl_logicloop(void);
 void opengl_realize(GtkGLArea *area);

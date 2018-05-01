@@ -436,7 +436,7 @@ void opengl_group_remove_all(groupstruct *group){
     g_free(group->entities);
 }
 
-void opengl_groups_create(const gchar *new_groups[], int count){
+void opengl_groups_create(const gchar *new_groups[], const int count){
     g_free(groups);
 
     group_count = count + 1;
