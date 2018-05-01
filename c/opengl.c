@@ -439,10 +439,11 @@ void opengl_group_remove_all(groupstruct *group){
 void opengl_groups_create(gchar new_groups[], int count){
     g_free(groups);
 
-    groups = g_malloc(sizeof(groupstruct) * count);
+    group_count = count;
+    groups = g_malloc(sizeof(groupstruct) * group_count);
 
     int i;
-    for(i = 0; i < count; i++){
+    for(i = 0; i < group_count; i++){
         groupstruct new_group = {
           0,
           NULL,
@@ -568,18 +569,6 @@ void opengl_load_level(const gchar *filename){
                 value = json_level_entities_element_property->value;
                 struct json_string_s* string = (struct json_string_s*)value->payload;
                 draw_type = (gchar*)string->string;
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse groups.
-            if(strcmp(json_level_entities_element_property->name->string, "groups") == 0){
-                struct json_array_s* groups_array = json_level_entities_element_property->value->payload;
-                struct json_array_element_s* groups_array_element = groups_array->start;
-
-                while(groups_array_element != NULL){
-                    groups_array_element = groups_array_element->next;
-                }
 
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
@@ -721,6 +710,34 @@ void opengl_load_level(const gchar *filename){
             }
 
             entities[id] = entity;
+
+            // Parse groups.
+            if(strcmp(json_level_entities_element_property->name->string, "groups") == 0){
+                struct json_array_s* groups_array = json_level_entities_element_property->value->payload;
+                struct json_array_element_s* groups_array_element = groups_array->start;
+
+                while(groups_array_element != NULL){
+                    groups_array_element = groups_array_element->next;
+
+                    int i;
+                    for(i = 0; i < group_count; i++){
+                        value = groups_array_element->value;
+                        struct json_string_s* group_name = (struct json_string_s*)value->payload;
+
+                        if(strcmp(group_name->string, groups[i].id) == 0){
+                            opengl_group_add(
+                              &groups[i],
+                              &entities[id]
+                            );
+
+                            break;
+                        }
+                    }
+                }
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
             opengl_entity_bind(id);
         }
 

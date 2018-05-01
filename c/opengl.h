@@ -37,6 +37,7 @@ GLuint camera_matrix_location;
 entitystruct *entities = NULL;
 size_t entity_count = 0;
 GtkWidget *glarea;
+int group_count;
 groupstruct *groups;
 gboolean key_back = FALSE;
 gboolean key_down = FALSE;
