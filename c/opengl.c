@@ -484,8 +484,13 @@ void opengl_load_level(const gchar *filename){
         struct json_number_s* number;
         struct json_value_s* value;
 
-        // Parse clearcolor-alpha.
+        // Default level values.
         float clearcolor_alpha = 1;
+        float clearcolor_blue = 0;
+        float clearcolor_green = 0;
+        float clearcolor_red = 0;
+
+        // Parse clearcolor-alpha.
         if(strcmp(json_object->name->string, "clearcolor-alpha") == 0){
             value = json_object->value;
             number = (struct json_number_s*)value->payload;
@@ -495,7 +500,6 @@ void opengl_load_level(const gchar *filename){
         }
 
         // Parse clearcolor-blue.
-        float clearcolor_blue = 0;
         if(strcmp(json_object->name->string, "clearcolor-blue") == 0){
             value = json_object->value;
             number = (struct json_number_s*)value->payload;
@@ -505,7 +509,6 @@ void opengl_load_level(const gchar *filename){
         }
 
         // Parse clearcolor-green.
-        float clearcolor_green = 0;
         if(strcmp(json_object->name->string, "clearcolor-green") == 0){
             value = json_object->value;
             number = (struct json_number_s*)value->payload;
@@ -515,7 +518,6 @@ void opengl_load_level(const gchar *filename){
         }
 
         // Parse clearcolor-red.
-        float clearcolor_red = 0;
         if(strcmp(json_object->name->string, "clearcolor-red") == 0){
             value = json_object->value;
             number = (struct json_number_s*)value->payload;
@@ -547,7 +549,7 @@ void opengl_load_level(const gchar *filename){
             struct json_object_s* json_level_entities_element_property_object = (struct json_object_s*)json_array_element->value->payload;
             struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
 
-            // Default values.
+            // Default entity values.
             float alpha = 1;
             gboolean billboard = FALSE;
             gboolean draw = TRUE;
