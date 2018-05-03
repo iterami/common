@@ -533,6 +533,22 @@ void opengl_load_level(const gchar *filename){
           clearcolor_alpha
         );
 
+        // Parse groups.
+        if(strcmp(json_object->name->string, "groups") == 0){
+            json_array = json_object->value->payload;
+            int group_count = json_array->length;
+
+            int i;
+            json_array_element = json_array->start;
+            for(i = 0; i < group_count; i++){
+                if(i != 0){
+                    json_array_element = json_array_element->next;
+                }
+            }
+
+            json_object = json_object->next;
+        }
+
         // Parse entities.
         json_array = json_object->value->payload;
         entity_count = json_array->length;
