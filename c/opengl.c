@@ -542,11 +542,23 @@ void opengl_load_level(const gchar *filename){
 
             int i;
             json_array_element = json_array->start;
+            const gchar *groups_array[group_count];
             for(i = 0; i < group_count; i++){
                 if(i != 0){
                     json_array_element = json_array_element->next;
                 }
+
+                struct json_value_s* group_value = json_object->value;
+                struct json_string_s* string = (struct json_string_s*)group_value->payload;
+
+                groups_array[i] = (gchar*)string->string;
             }
+
+            opengl_groups_create(
+              groups_array,
+              group_count
+            );
+            g_free(groups_array);
 
             json_object = json_object->next;
 
