@@ -449,15 +449,17 @@ void opengl_groups_create(const gchar *new_groups[], const int count){
     };
     groups[0] = group_depthfalse;
 
-    int i;
-    for(i = 1; i < group_count; i++){
-        groupstruct new_group = {
-          0,
-          NULL,
-          (gchar *)new_groups[i]
-        };
+    if(new_groups != NULL){
+        int i;
+        for(i = 1; i < group_count; i++){
+            groupstruct new_group = {
+              0,
+              NULL,
+              (gchar *)new_groups[i]
+            };
 
-        groups[i] = new_group;
+            groups[i] = new_group;
+        }
     }
 }
 
@@ -547,6 +549,12 @@ void opengl_load_level(const gchar *filename){
             }
 
             json_object = json_object->next;
+
+        }else{
+            opengl_groups_create(
+              NULL,
+              0
+            );
         }
 
         // Parse entities.
