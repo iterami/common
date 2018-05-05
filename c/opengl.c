@@ -905,6 +905,7 @@ void opengl_realize(GtkGLArea *area){
     );
     glEnable(GL_BLEND);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
 
     glBlendFunc(
       GL_SRC_ALPHA,
@@ -1043,9 +1044,13 @@ gboolean opengl_render(GtkGLArea *area, GdkGLContext *context){
 
     // Draw _depthfalse entities.
     if(groups[0].count > 0){
+        glDisable(GL_DEPTH_TEST);
+
         for(id = 0; id < groups[0].count; id++){
             opengl_entity_draw(groups[0].entities[id].id);
         }
+
+        glEnable(GL_DEPTH_TEST);
     }
 
     // Draw opaque entities.
