@@ -14,6 +14,7 @@ typedef struct entitystruct{
   GLfloat *colors_array;
   gboolean draw;
   int draw_type;
+  int id;
   float rotate_x;
   float rotate_y;
   float rotate_z;

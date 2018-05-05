@@ -698,6 +698,7 @@ void opengl_load_level(const gchar *filename){
               g_malloc(vertices_size),
               draw,
               opengl_string_to_primitive(draw_type),
+              id,
               rotate_x,
               rotate_y,
               rotate_z,
@@ -1014,6 +1015,7 @@ void opengl_realize(GtkGLArea *area){
       0,
       FALSE,
       0,
+      -1,
       0,
       0,
       0,
@@ -1035,13 +1037,25 @@ void opengl_realize(GtkGLArea *area){
 }
 
 gboolean opengl_render(GtkGLArea *area, GdkGLContext *context){
-    int id;
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    int id;
+
+    // Draw _depthfalse entities.
+    if(groups[0].count > 0){
+        for(id = 0; id < groups[0].count; id++){
+            opengl_entity_draw(groups[0].entities[id].id);
+        }
+    }
+
+    // Draw opaque entities.
     for(id = 0; id < entity_count; id++){
         if(entities[id].alpha == 1){
             opengl_entity_draw(id);
         }
     }
+
+    // Draw transparent entities.
     for(id = 0; id < entity_count; id++){
         if(entities[id].alpha < 1){
             opengl_entity_draw(id);
