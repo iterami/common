@@ -4,9 +4,7 @@ a{
 body{
     background: #000;
     color: #aaa;
-    font-family: monospace;
-    font-size: 14px;
-    font-weight: bold;
+    font: bold 14px monospace;
 }
 .center{
     text-align: center;
