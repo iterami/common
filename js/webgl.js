@@ -40,18 +40,12 @@ function webgl_billboard(args){
     }
 }
 
-// Required args: colorData, indexData, normalData, textureData, vertexData
+// Required args: colorData, normalData, textureData, vertexData
 function webgl_buffer_set(args){
     return {
       'color': webgl_buffer_set_type({
         'data': args['colorData'],
       }),
-      /*
-      'index': webgl_buffer_set_type({
-        'data': args['indexData'],
-        'type': 'Uint16Array',
-      }),
-      */
       'normal': webgl_buffer_set_type({
         'data': args['normalData'],
       }),
@@ -344,13 +338,6 @@ function webgl_draw_entity(entity){
       0
     );
 
-    /*
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      core_entities[entity]['buffer']['index']
-    );
-    */
-
     webgl_buffer.uniform1f(
       webgl_uniformlocations['alpha'],
       core_entities[entity]['alpha']
@@ -409,7 +396,6 @@ function webgl_entity_todo(entity){
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
       'colorData': core_entities[entity]['color'],
-      //'indexData': core_entities[entity]['index'],
       'normalData': core_entities[entity]['normals'],
       'textureData': core_entities[entity]['textureData'],
       'vertexData': core_entities[entity]['vertices'],
@@ -571,13 +557,6 @@ function webgl_init(args){
         'dy': 0,
         'dz': 0,
         'gravity': false,
-        /*
-        'index': [
-          0, 1,
-          2, 0,
-          2, 3,
-        ],
-        */
         'mode': 'TRIANGLE_FAN',
         'normals': [],
         'position': {
