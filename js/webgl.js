@@ -953,7 +953,6 @@ function webgl_setmode(args){
 
     core_storage_save();
     core_entity_remove_all();
-    webgl_resize();
 
     core_entities['_webgl-camera']['position'] = {
       'x': 0,

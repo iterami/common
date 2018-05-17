@@ -282,7 +282,6 @@ function canvas_setmode(args){
 
     core_storage_save();
     core_entity_remove_all();
-    canvas_resize();
 
     core_mode = args['mode'];
 
