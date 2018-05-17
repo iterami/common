@@ -2296,6 +2296,23 @@ function core_ui_update(args){
     }
 }
 
+// Optional args: id, quality, type
+function core_uri(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': 'buffer',
+        'quality': 1,
+        'type': 'image/png',
+      },
+    });
+
+    return document.getElementById(args['id']).toDataURL(
+      args['type'],
+      args['quality']
+    );
+}
+
 // Required args: property, var
 function core_vendor_prefix(args){
     var unprefixed = args['property'].charAt(0).toUpperCase() + args['property'].slice(1);
