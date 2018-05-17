@@ -972,7 +972,10 @@ function core_html(args){
         });
     }
 
-    if(args['parent'] !== false){
+    if(typeof args['parent'] === 'string'){
+        document.getElementById(args['parent']).appendChild(element);
+
+    }else if(typeof args['parent'] === 'object'){
         args['parent'].appendChild(element);
     }
 
@@ -1039,8 +1042,9 @@ function core_init(){
         'id': 'core-ui',
       },
     })
+    document.body.appendChild(core_ui);
     core_html({
-      'parent': core_ui,
+      'parent': 'core-ui',
       'properties': {
         'id': 'core-toggle',
         'onclick': core_escape,
@@ -1050,7 +1054,7 @@ function core_init(){
       'type': 'input',
     });
     core_html({
-      'parent': core_ui,
+      'parent': 'core-ui',
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a href=/ id=core-menu-root></a>/<a class=external id=core-menu-title></a><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings">',
@@ -1058,12 +1062,11 @@ function core_init(){
       'type': 'span',
     });
     core_html({
-      'parent': core_ui,
+      'parent': 'core-ui',
       'properties': {
         'id': 'repo-ui',
       },
     });
-    document.body.appendChild(core_ui);
 
     core_tab_create({
       'content': '<table><tr><td><input id=audio-volume><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=jump><td>Jump<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=move-↑><td>Move ↑<tr><td><input id=move-←><td>Move ←<tr><td><input id=move-↓><td>Move ↓<tr><td><input id=move-→><td>Move →</table>',
@@ -2053,7 +2056,7 @@ function core_tab_create(args){
     };
 
     core_html({
-      'parent': document.getElementById(args['group'] + '-tabs'),
+      'parent': args['group'] + '-tabs',
       'properties': {
         'id': 'tab_' + args['group'] + '_' + args['id'],
         'onclick': function(){
@@ -2067,7 +2070,7 @@ function core_tab_create(args){
       'type': 'input',
     });
     core_html({
-      'parent': document.getElementById(args['group'] + '-tabcontent'),
+      'parent': args['group'] + '-tabcontent',
       'properties': {
         'id': 'tabcontent-' + args['id'],
         'innerHTML': args['content'],
