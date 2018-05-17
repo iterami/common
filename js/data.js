@@ -156,12 +156,12 @@ function data_webgl_cube_3d(args){
       'dx': args['dx'],
       'dy': args['dy'],
       'dz': args['dz'],
-      'position': {
-        'x': args['x'],
-        'y': args['y'],
-        'z': args['z'],
-      },
-      'rotate': {},
+      'rotate-x': 0,
+      'rotate-y': 0,
+      'rotate-z': 0,
+      'translate-x': args['x'],
+      'translate-y': args['y'],
+      'translate-z': args['z'],
       'vertices': [
         args['side'], 0, -args['side'],
         -args['side'], 0, -args['side'],
@@ -172,7 +172,7 @@ function data_webgl_cube_3d(args){
 
     var entities = [];
 
-    properties['position']['y'] = args['y'] + args['side'];
+    properties['translate-y'] = args['y'] + args['side'];
     if(args['exclude'].indexOf(0) === -1){
         core_entity_create({
           'id': 'webgl-cube_' + args['id'] + '_0',
@@ -180,8 +180,8 @@ function data_webgl_cube_3d(args){
         });
         entities.push('webgl-cube_' + args['id'] + '_0');
     }
-    properties['position']['y'] = args['y'] - args['side'];
-    properties['rotate']['z'] = 180;
+    properties['translate-y'] = args['y'] - args['side'];
+    properties['rotate-z'] = 180;
     if(args['exclude'].indexOf(1) === -1){
         core_entity_create({
           'id': 'webgl-cube_' + args['id'] + '_1',
@@ -189,9 +189,9 @@ function data_webgl_cube_3d(args){
         });
         entities.push('webgl-cube_' + args['id'] + '_1');
     }
-    properties['position']['x'] = args['x'] + args['side'];
-    properties['position']['y'] = args['y'];
-    properties['rotate']['z'] = 270;
+    properties['translate-x'] = args['x'] + args['side'];
+    properties['translate-y'] = args['y'];
+    properties['rotate-z'] = 270;
     if(args['exclude'].indexOf(2) === -1){
         core_entity_create({
           'id': 'webgl-cube_' + args['id'] + '_2',
@@ -199,8 +199,8 @@ function data_webgl_cube_3d(args){
         });
         entities.push('webgl-cube_' + args['id'] + '_2');
     }
-    properties['position']['x'] = args['x'] - args['side'];
-    properties['rotate']['z'] = 90;
+    properties['translate-x'] = args['x'] - args['side'];
+    properties['rotate-z'] = 90;
     if(args['exclude'].indexOf(3) === -1){
         core_entity_create({
           'id': 'webgl-cube_' + args['id'] + '_3',
@@ -208,10 +208,10 @@ function data_webgl_cube_3d(args){
         });
         entities.push('webgl-cube_' + args['id'] + '_3');
     }
-    properties['position']['x'] = args['x'];
-    properties['position']['z'] = args['z'] + args['side'];
-    properties['rotate']['x'] = 90;
-    properties['rotate']['z'] = 0;
+    properties['translate-x'] = args['x'];
+    properties['translate-z'] = args['z'] + args['side'];
+    properties['rotate-x'] = 90;
+    properties['rotate-z'] = 0;
     if(args['exclude'].indexOf(4) === -1){
         core_entity_create({
           'id': 'webgl-cube_' + args['id'] + '_4',
@@ -219,8 +219,8 @@ function data_webgl_cube_3d(args){
         });
         entities.push('webgl-cube_' + args['id'] + '_4');
     }
-    properties['position']['z'] = args['z'] - args['side'];
-    properties['rotate']['x'] = 270;
+    properties['translate-z'] = args['z'] - args['side'];
+    properties['rotate-x'] = 270;
     if(args['exclude'].indexOf(5) === -1){
         core_entity_create({
           'id': 'webgl-cube_' + args['id'] + '_5',
@@ -292,13 +292,11 @@ function data_webgl_terrain_3d(args){
       'id': args['id'],
       'properties': {
         'color': color,
-        'position': {
-          'x': args['x'],
-          'y': args['y'],
-          'z': args['z'],
-        },
         'mode': 'TRIANGLE_STRIP',
         'textureData': textureData,
+        'translate-x': args['x'],
+        'translate-y': args['y'],
+        'translate-z': args['z'],
         'vertices': vertices,
       },
     });
@@ -338,11 +336,9 @@ function data_webgl_tree_2d(args){
         'dx': args['dx'],
         'dy': args['dy'],
         'dz': args['dz'],
-        'position': {
-          'x': args['x'],
-          'y': args['y'],
-          'z': args['z'],
-        },
+        'translate-x': args['x'],
+        'translate-y': args['y'],
+        'translate-z': args['z'],
         'vertices': [
           1, 0, -.01,
           0, 4, -.01,
@@ -359,11 +355,9 @@ function data_webgl_tree_2d(args){
         'dy': args['dy'],
         'dz': args['dz'],
         'mode': 'TRIANGLES',
-        'position': {
-          'x': args['x'],
-          'y': args['y'],
-          'z': args['z'],
-        },
+        'translate-x': args['x'],
+        'translate-y': args['y'],
+        'translate-z': args['z'],
         'vertices': [
           3, 1, 0,
           0, 5, 0,

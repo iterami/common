@@ -32,7 +32,7 @@ function platform_jump(args){
       },
     });
 
-    platform_players['player']['y-velocity'] = args['velocity'];;
+    platform_players['player']['y-velocity'] = args['velocity'];
 }
 
 // Optional args: all, id

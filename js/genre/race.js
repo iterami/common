@@ -2,7 +2,6 @@
 
 function race_init(){
     core_entity_set({
-      'default': true,
       'properties': {
         'acceleration': .01,
         'ai': true,
