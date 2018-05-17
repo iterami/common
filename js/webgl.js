@@ -407,7 +407,9 @@ function webgl_entity_todo(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue, clear-green, clear_red, contextmenu, direction-blue, direction-green, direction-red, direction-vector, fog, gravity-acceleration, gravity-max, speed
+// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue,
+//   clear-green, clear_red, contextmenu, direction-blue, direction-green, direction-red,
+//   direction-vector, fog, gravity-acceleration, gravity-max, speed
 function webgl_init(args){
     args = core_args({
       'args': args,
