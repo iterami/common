@@ -85,8 +85,8 @@ function webgl_buffer_set_type(args){
 function webgl_camera_first(){
     if(core_mouse['pointerlock-state']){
         webgl_camera_rotate({
-          'x': core_mouse['movement-y'] / 10,
-          'y': core_mouse['movement-x'] / 10,
+          'x': (core_mouse['movement-y'] / 10) * core_storage_data['mouse-sensitivity'],
+          'y': (core_mouse['movement-x'] / 10) * core_storage_data['mouse-sensitivity'],
         });
     }
 }
