@@ -614,35 +614,39 @@ function webgl_load_level(args){
     core_storage_save();
     core_entity_remove_all();
 
-    var level = JSON.parse(args['json']);
+    var filereader = new FileReader();
+    filereader.onload = function(event){
+        var level = JSON.parse(event.target.result);
 
-    webgl_init({
-      'ambient-blue': level['ambient-blue'],
-      'ambient-green': level['ambient-green'],
-      'ambient-red': level['ambient-red'],
-      'camera': level['camera'],
-      'clear-alpha': level['clear-alpha'],
-      'clear-blue': level['clear-blue'],
-      'clear-green': level['clear-green'],
-      'clear-red': level['clear-red'],
-      'contextmenu': level['contextmenu'],
-      'direction-blue': level['direction-blue'],
-      'direction-green': level['direction-green'],
-      'direction-red': level['direction-red'],
-      'direction-vector': level['direction-vector'],
-      'fog': level['fog'],
-      'gravity-acceleration': level['gravity-acceleration'],
-      'gravity-max': level['gravity-max'],
-      'speed': level['speed'],
-    });
+        webgl_init({
+          'ambient-blue': level['ambient-blue'],
+          'ambient-green': level['ambient-green'],
+          'ambient-red': level['ambient-red'],
+          'camera': level['camera'],
+          'clear-alpha': level['clear-alpha'],
+          'clear-blue': level['clear-blue'],
+          'clear-green': level['clear-green'],
+          'clear-red': level['clear-red'],
+          'contextmenu': level['contextmenu'],
+          'direction-blue': level['direction-blue'],
+          'direction-green': level['direction-green'],
+          'direction-red': level['direction-red'],
+          'direction-vector': level['direction-vector'],
+          'fog': level['fog'],
+          'gravity-acceleration': level['gravity-acceleration'],
+          'gravity-max': level['gravity-max'],
+          'speed': level['speed'],
+        });
 
-    for(var entity in level['entities']){
-        core_entity_create({
-          'id': level['entities'][entity]['id'],
-          'properties': level['entities'][entity],
-          'types': level['entities'][entity]['types'],
-       });
-    }
+        for(var entity in level['entities']){
+            core_entity_create({
+              'id': level['entities'][entity]['id'],
+              'properties': level['entities'][entity],
+              'types': level['entities'][entity]['types'],
+           });
+        }
+    };
+    filereader.readAsText(args['json']);
 }
 
 function webgl_logicloop(){
