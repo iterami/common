@@ -620,6 +620,10 @@ function webgl_init(args){
 
 // Required args: json
 function webgl_load_level(args){
+    if(args['json'] === false){
+        return;
+    }
+
     var filereader = new FileReader();
     filereader.onload = function(event){
         core_storage_save();
