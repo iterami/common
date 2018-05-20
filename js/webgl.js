@@ -111,6 +111,15 @@ function webgl_camera_move(args){
     core_entities['_webgl-camera']['dz'] += movement['z'];
 }
 
+function webgl_camera_reset(){
+    core_entities['_webgl-camera']['rotate-x'] = 0;
+    core_entities['_webgl-camera']['rotate-y'] = 0;
+    core_entities['_webgl-camera']['rotate-z'] = 0;
+    core_entities['_webgl-camera']['translate-x'] = 0;
+    core_entities['_webgl-camera']['translate-y'] = 0;
+    core_entities['_webgl-camera']['translate-z'] = 0;
+}
+
 // Optional args: x, xlock, y, z
 function webgl_camera_rotate(args){
     args = core_args({
@@ -613,6 +622,7 @@ function webgl_init(args){
 function webgl_load_level(args){
     core_storage_save();
     core_entity_remove_all();
+    webgl_camera_reset();
 
     var filereader = new FileReader();
     filereader.onload = function(event){
@@ -981,13 +991,7 @@ function webgl_setmode(args){
 
     core_storage_save();
     core_entity_remove_all();
-
-    core_entities['_webgl-camera']['rotate-x'] = 0;
-    core_entities['_webgl-camera']['rotate-y'] = 0;
-    core_entities['_webgl-camera']['rotate-z'] = 0;
-    core_entities['_webgl-camera']['translate-x'] = 0;
-    core_entities['_webgl-camera']['translate-y'] = 0;
-    core_entities['_webgl-camera']['translate-z'] = 0;
+    webgl_camera_reset();
 
     core_mode = args['mode'];
 
