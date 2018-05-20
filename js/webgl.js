@@ -620,12 +620,11 @@ function webgl_init(args){
 
 // Required args: json
 function webgl_load_level(args){
-    core_storage_save();
-    core_entity_remove_all();
-    webgl_camera_reset();
-
     var filereader = new FileReader();
     filereader.onload = function(event){
+        core_storage_save();
+        core_entity_remove_all();
+
         var level = JSON.parse(event.target.result);
 
         webgl_init({
@@ -655,6 +654,8 @@ function webgl_load_level(args){
               'types': level['entities'][entity]['types'],
            });
         }
+
+        webgl_camera_reset();
     };
     filereader.readAsText(args['json']);
 }
