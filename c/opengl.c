@@ -487,10 +487,42 @@ void opengl_load_level(const gchar *filename){
         struct json_value_s* value;
 
         // Default level values.
+        float ambient_alpha = 1;
+        float ambient_blue = 1;
+        float ambient_green = 1;
+        float ambient_red = 1;
         float clearcolor_alpha = 1;
         float clearcolor_blue = 0;
         float clearcolor_green = 0;
         float clearcolor_red = 0;
+        float directional_alpha = 1;
+        float directional_blue = 1;
+        float directional_green = 1;
+        float directional_red = 1;
+        float fog = -.0001;
+        float gravity_acceleration = -.05;
+        float gravity_max = -1;
+        float speed = .1;
+
+        // Parse ambient-alpha.
+        if(strcmp(json_object->name->string, "ambient-alpha") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse ambient-blue.
+        if(strcmp(json_object->name->string, "ambient-blue") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse ambient-green.
+        if(strcmp(json_object->name->string, "ambient-green") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse ambient-red.
+        if(strcmp(json_object->name->string, "ambient-red") == 0){
+            json_object = json_object->next;
+        }
 
         // Parse clearcolor-alpha.
         if(strcmp(json_object->name->string, "clearcolor-alpha") == 0){
@@ -534,6 +566,46 @@ void opengl_load_level(const gchar *filename){
           clearcolor_blue,
           clearcolor_alpha
         );
+
+        // Parse directional-alpha.
+        if(strcmp(json_object->name->string, "directional-alpha") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse directional-blue.
+        if(strcmp(json_object->name->string, "directional-blue") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse directional-green.
+        if(strcmp(json_object->name->string, "directional-green") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse directional-red.
+        if(strcmp(json_object->name->string, "directional-red") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse fog.
+        if(strcmp(json_object->name->string, "fog") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse gravity-acceleration.
+        if(strcmp(json_object->name->string, "gravity-acceleration") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse gravity-max.
+        if(strcmp(json_object->name->string, "gravity-max") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse speed.
+        if(strcmp(json_object->name->string, "speed") == 0){
+            json_object = json_object->next;
+        }
 
         // Parse groups.
         if(strcmp(json_object->name->string, "groups") == 0){
