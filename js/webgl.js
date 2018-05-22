@@ -619,45 +619,52 @@ function webgl_load_level(args){
         return;
     }
 
-    var filereader = new FileReader();
-    filereader.onload = function(event){
-        core_storage_save();
-        core_entity_remove_all();
+    if(typeof args['json'] === 'object'){
+        var filereader = new FileReader();
+        filereader.onload = function(event){
+            webgl_load_level_init(JSON.parse(event.target.result));
+        };
+        filereader.readAsText(args['json']);
 
-        var level = JSON.parse(event.target.result);
+    }else{
+        webgl_load_level_init(JSON.parse(args['json']));
+    }
+}
 
-        webgl_init({
-          'ambient-blue': level['ambient-blue'],
-          'ambient-green': level['ambient-green'],
-          'ambient-red': level['ambient-red'],
-          'camera-speed': level['camera-speed'],
-          'camera-type': level['camera-type'],
-          'clear-alpha': level['clear-alpha'],
-          'clear-blue': level['clear-blue'],
-          'clear-green': level['clear-green'],
-          'clear-red': level['clear-red'],
-          'contextmenu': level['contextmenu'],
-          'direction-blue': level['direction-blue'],
-          'direction-green': level['direction-green'],
-          'direction-red': level['direction-red'],
-          'direction-vector': level['direction-vector'],
-          'fog': level['fog'],
-          'gravity-acceleration': level['gravity-acceleration'],
-          'gravity-max': level['gravity-max'],
-        });
+function webgl_load_level_init(json){
+    core_storage_save();
+    core_entity_remove_all();
 
-        for(var entity in level['entities']){
-            core_entity_create({
-              'id': level['entities'][entity]['id'],
-              'properties': level['entities'][entity],
-              'types': level['entities'][entity]['types'],
-           });
-        }
+    webgl_init({
+      'ambient-blue': json['ambient-blue'],
+      'ambient-green': json['ambient-green'],
+      'ambient-red': json['ambient-red'],
+      'camera-speed': json['camera-speed'],
+      'camera-type': json['camera-type'],
+      'clear-alpha': json['clear-alpha'],
+      'clear-blue': json['clear-blue'],
+      'clear-green': json['clear-green'],
+      'clear-red': json['clear-red'],
+      'contextmenu': json['contextmenu'],
+      'direction-blue': json['direction-blue'],
+      'direction-green': json['direction-green'],
+      'direction-red': json['direction-red'],
+      'direction-vector': json['direction-vector'],
+      'fog': json['fog'],
+      'gravity-acceleration': json['gravity-acceleration'],
+      'gravity-max': json['gravity-max'],
+    });
 
-        webgl_camera_reset();
-        core_escape();
-    };
-    filereader.readAsText(args['json']);
+    for(var entity in json['entities']){
+        core_entity_create({
+          'id': json['entities'][entity]['id'],
+          'properties': json['entities'][entity],
+          'types': json['entities'][entity]['types'],
+       });
+    }
+
+    webgl_camera_reset();
+    core_escape();
 }
 
 function webgl_logicloop(){
