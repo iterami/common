@@ -491,7 +491,8 @@ void opengl_load_level(const gchar *filename){
         float ambient_blue = 1;
         float ambient_green = 1;
         float ambient_red = 1;
-        gchar *camera = "free";
+        float camera_speed = .1;
+        gchar *camera_type = "free";
         float clearcolor_alpha = 1;
         float clearcolor_blue = 0;
         float clearcolor_green = 0;
@@ -503,7 +504,6 @@ void opengl_load_level(const gchar *filename){
         float fog = -.0001;
         float gravity_acceleration = -.05;
         float gravity_max = -1;
-        float speed = .1;
 
         // Parse ambient-alpha.
         if(strcmp(json_object->name->string, "ambient-alpha") == 0){
@@ -541,11 +541,20 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
-        // Parse camera.
-        if(strcmp(json_object->name->string, "camera") == 0){
+        // Parse camera-speed.
+        if(strcmp(json_object->name->string, "camera-speed") == 0){
+            value = json_object->value;
+            number = (struct json_number_s*)value->payload;
+            camera_speed = atof(number->number);
+
+            json_object = json_object->next;
+        }
+
+        // Parse camera-type.
+        if(strcmp(json_object->name->string, "camera-type") == 0){
             value = json_object->value;
             struct json_string_s* string = (struct json_string_s*)value->payload;
-            camera = (gchar*)string->string;
+            camera_type = (gchar*)string->string;
 
             json_object = json_object->next;
         }
@@ -652,15 +661,6 @@ void opengl_load_level(const gchar *filename){
             value = json_object->value;
             number = (struct json_number_s*)value->payload;
             gravity_max = atof(number->number);
-
-            json_object = json_object->next;
-        }
-
-        // Parse speed.
-        if(strcmp(json_object->name->string, "speed") == 0){
-            value = json_object->value;
-            number = (struct json_number_s*)value->payload;
-            speed = atof(number->number);
 
             json_object = json_object->next;
         }

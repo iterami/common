@@ -152,7 +152,6 @@ function data_webgl_cube_3d(args){
 
     var properties = {
       'collision': args['collision'],
-      'color': args['color'],
       'dx': args['dx'],
       'dy': args['dy'],
       'dz': args['dz'],
@@ -162,11 +161,12 @@ function data_webgl_cube_3d(args){
       'translate-x': args['x'],
       'translate-y': args['y'],
       'translate-z': args['z'],
+      'vertex-colors': args['color'],
       'vertices': [
-        args['side'], 0, -args['side'],
-        -args['side'], 0, -args['side'],
-        -args['side'], 0, args['side'],
-        args['side'], 0, args['side'],
+        args['side'], 0, -args['side'], 1,
+        -args['side'], 0, -args['side'], 1,
+        -args['side'], 0, args['side'], 1,
+        args['side'], 0, args['side'], 1,
       ],
     };
 
@@ -281,9 +281,11 @@ function data_webgl_terrain_3d(args){
               start_x + j * args['width-step'],
               args['y'],
               start_z + step,
+              1,
               start_x + j * args['width-step'],
               args['y'],
-              start_z + step + args['length-step']
+              start_z + step + args['length-step'],
+              1
             );
         }
     }
@@ -291,12 +293,12 @@ function data_webgl_terrain_3d(args){
     core_entity_create({
       'id': args['id'],
       'properties': {
-        'color': color,
         'mode': 'TRIANGLE_STRIP',
         'textureData': textureData,
         'translate-x': args['x'],
         'translate-y': args['y'],
         'translate-z': args['z'],
+        'vertex-colors': color,
         'vertices': vertices,
       },
     });
@@ -332,17 +334,17 @@ function data_webgl_tree_2d(args){
       'id': 'webgl-tree_' + args['id'] + '_base',
       'properties': {
         'billboard': args['billboard'],
-        'color': args['color-base'],
         'dx': args['dx'],
         'dy': args['dy'],
         'dz': args['dz'],
         'translate-x': args['x'],
         'translate-y': args['y'],
         'translate-z': args['z'],
+        'vertex-colors': args['color-base'],
         'vertices': [
-          1, 0, -.01,
-          0, 4, -.01,
-          -1, 0, -.01,
+          1, 0, -.01, 1,
+          0, 4, -.01, 1,
+          -1, 0, -.01, 1,
         ],
       },
     });
@@ -350,7 +352,6 @@ function data_webgl_tree_2d(args){
       'id': 'webgl-tree_' + args['id'] + '_leaf',
       'properties': {
         'billboard': args['billboard'],
-        'color': args['color-leaf'],
         'dx': args['dx'],
         'dy': args['dy'],
         'dz': args['dz'],
@@ -358,10 +359,11 @@ function data_webgl_tree_2d(args){
         'translate-x': args['x'],
         'translate-y': args['y'],
         'translate-z': args['z'],
+        'vertex-colors': args['color-leaf'],
         'vertices': [
-          3, 1, 0,
-          0, 5, 0,
-          -3, 1, 0,
+          3, 1, 0, 1,
+          0, 5, 0, 1,
+          -3, 1, 0, 1,
         ],
       },
     });

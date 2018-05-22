@@ -315,7 +315,7 @@ function webgl_draw_entity(entity){
     );
     webgl_buffer.vertexAttribPointer(
       webgl_attributes['vec_vertexPosition'],
-      3,
+      4,
       webgl_buffer.FLOAT,
       false,
       0,
@@ -397,10 +397,10 @@ function webgl_entity_todo(entity){
     if(!core_entities[entity]['draw']){
         return;
     }
-    core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 3;
+    core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 4;
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
-      'colorData': core_entities[entity]['color'],
+      'colorData': core_entities[entity]['vertex-colors'],
       'normalData': core_entities[entity]['normals'],
       'textureData': core_entities[entity]['textureData'],
       'vertexData': core_entities[entity]['vertices'],
@@ -412,9 +412,9 @@ function webgl_entity_todo(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red, camera, clear-alpha, clear-blue,
-//   clear-green, clear_red, contextmenu, direction-blue, direction-green, direction-red,
-//   direction-vector, fog, gravity-acceleration, gravity-max, speed
+// Optional args: ambient-blue, ambient-green, ambient-red, camera-speed, camera-type,
+//   clear-alpha, clear-blue, clear-green, clear_red, contextmenu, direction-blue,
+//   direction-green, direction-red, direction-vector, fog, gravity-acceleration, gravity-max
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -422,7 +422,8 @@ function webgl_init(args){
         'ambient-blue': 1,
         'ambient-green': 1,
         'ambient-red': 1,
-        'camera': 'free',
+        'camera-speed': .1,
+        'camera-type': 'free',
         'clear-alpha': 1,
         'clear-blue': 0,
         'clear-green': 0,
@@ -435,7 +436,6 @@ function webgl_init(args){
         'fog': -0.0001,
         'gravity-acceleration': -0.05,
         'gravity-max': -1,
-        'speed': .1,
       },
     });
 
@@ -459,8 +459,8 @@ function webgl_init(args){
         'red': args['ambient-red'],
       },
       'camera': {
-        'speed': args['speed'],
-        'type': args['camera'],
+        'speed': args['camera-speed'],
+        'type': args['camera-type'],
       },
       'clearcolor': {
         'alpha': args['clear-alpha'],
@@ -558,7 +558,6 @@ function webgl_init(args){
         'billboard': false,
         'collides': false,
         'collision': false,
-        'color': [],
         'draw': true,
         'dx': 0,
         'dy': 0,
@@ -612,10 +611,6 @@ function webgl_init(args){
       'paused': true,
       'todo': webgl_drawloop,
     });
-
-    if(!core_menu_open){
-        webgl_setmode();
-    }
 }
 
 // Required args: json
@@ -635,7 +630,8 @@ function webgl_load_level(args){
           'ambient-blue': level['ambient-blue'],
           'ambient-green': level['ambient-green'],
           'ambient-red': level['ambient-red'],
-          'camera': level['camera'],
+          'camera-speed': level['camera-speed'],
+          'camera-type': level['camera-type'],
           'clear-alpha': level['clear-alpha'],
           'clear-blue': level['clear-blue'],
           'clear-green': level['clear-green'],
@@ -648,7 +644,6 @@ function webgl_load_level(args){
           'fog': level['fog'],
           'gravity-acceleration': level['gravity-acceleration'],
           'gravity-max': level['gravity-max'],
-          'speed': level['speed'],
         });
 
         for(var entity in level['entities']){
@@ -660,6 +655,7 @@ function webgl_load_level(args){
         }
 
         webgl_camera_reset();
+        core_escape();
     };
     filereader.readAsText(args['json']);
 }
@@ -849,10 +845,10 @@ function webgl_normals_collision(args){
           && entity0['dx'] < 0){
             if(entity0['translate-x'] >= entity1['translate-x']
               && entity0['translate-x'] <= entity1['translate-x'] + webgl_properties['collision-range']
-              && entity0['translate-y'] > entity1['translate-y'] + entity1['vertices'][3] - webgl_properties['collision-range']
+              && entity0['translate-y'] > entity1['translate-y'] + entity1['vertices'][4] - webgl_properties['collision-range']
               && entity0['translate-y'] < entity1['translate-y'] + entity1['vertices'][0] + webgl_properties['collision-range']
               && entity0['translate-z'] >= entity1['translate-z'] + entity1['vertices'][2] - webgl_properties['collision-range'] + 1
-              && entity0['translate-z'] <= entity1['translate-z'] + entity1['vertices'][8] + webgl_properties['collision-range'] - 1){
+              && entity0['translate-z'] <= entity1['translate-z'] + entity1['vertices'][10] + webgl_properties['collision-range'] - 1){
                 entity0['dx'] = 0;
                 entity0['translate-x'] = entity1['translate-x'] + webgl_properties['collision-range'];
             }
@@ -861,10 +857,10 @@ function webgl_normals_collision(args){
           && entity0['dx'] > 0){
             if(entity0['translate-x'] >= entity1['translate-x'] - webgl_properties['collision-range']
               && entity0['translate-x'] <= entity1['translate-x']
-              && entity0['translate-y'] > entity1['translate-y'] + entity1['vertices'][3] - webgl_properties['collision-range']
+              && entity0['translate-y'] > entity1['translate-y'] + entity1['vertices'][4] - webgl_properties['collision-range']
               && entity0['translate-y'] < entity1['translate-y'] + entity1['vertices'][0] + webgl_properties['collision-range']
               && entity0['translate-z'] >= entity1['translate-z'] + entity1['vertices'][2] - webgl_properties['collision-range'] + 1
-              && entity0['translate-z'] <= entity1['translate-z'] + entity1['vertices'][8] + webgl_properties['collision-range'] - 1){
+              && entity0['translate-z'] <= entity1['translate-z'] + entity1['vertices'][10] + webgl_properties['collision-range'] - 1){
                 entity0['dx'] = 0;
                 entity0['translate-x'] = entity1['translate-x'] - webgl_properties['collision-range'];
             }
@@ -879,19 +875,19 @@ function webgl_normals_collision(args){
               && entity0['translate-y'] >= entity1['translate-y']
               && entity0['translate-y'] <= entity1['translate-y'] + webgl_properties['collision-range']
               && entity0['translate-z'] >= entity1['translate-z'] + entity1['vertices'][2] - webgl_properties['collision-range']
-              && entity0['translate-z'] <= entity1['translate-z'] + entity1['vertices'][8] + webgl_properties['collision-range']){
+              && entity0['translate-z'] <= entity1['translate-z'] + entity1['vertices'][10] + webgl_properties['collision-range']){
                 entity0['dy'] = 0;
                 entity0['translate-y'] = entity1['translate-y'] + webgl_properties['collision-range'];
             }
 
         }else if(entity1['normals'][1] === -1
           && entity0['dy'] > 0){
-            if(entity0['translate-x'] >= entity1['translate-x'] + entity1['vertices'][3] - webgl_properties['collision-range']
+            if(entity0['translate-x'] >= entity1['translate-x'] + entity1['vertices'][4] - webgl_properties['collision-range']
               && entity0['translate-x'] <= entity1['translate-x'] + entity1['vertices'][0] + webgl_properties['collision-range']
               && entity0['translate-y'] >= entity1['translate-y'] - webgl_properties['collision-range']
               && entity0['translate-y'] <= entity1['translate-y']
               && entity0['translate-z'] >= entity1['translate-z'] + entity1['vertices'][2] - webgl_properties['collision-range']
-              && entity0['translate-z'] <= entity1['translate-z'] + entity1['vertices'][8] + webgl_properties['collision-range']){
+              && entity0['translate-z'] <= entity1['translate-z'] + entity1['vertices'][10] + webgl_properties['collision-range']){
                 entity0['dy'] = 0;
                 entity0['translate-y'] = entity1['translate-y'] - webgl_properties['collision-range'];
             }
@@ -901,10 +897,10 @@ function webgl_normals_collision(args){
     if(entity1['normals'][2] !== 0){
         if(entity1['normals'][2] === 1
           && entity0['dz'] < 0){
-            if(entity0['translate-x'] >= entity1['translate-x'] + entity1['vertices'][3] - webgl_properties['collision-range'] + 1
+            if(entity0['translate-x'] >= entity1['translate-x'] + entity1['vertices'][4] - webgl_properties['collision-range'] + 1
               && entity0['translate-x'] <= entity1['translate-x'] + entity1['vertices'][0] + webgl_properties['collision-range'] - 1
               && entity0['translate-y'] > entity1['translate-y'] + entity1['vertices'][2] - webgl_properties['collision-range']
-              && entity0['translate-y'] < entity1['translate-y'] + entity1['vertices'][8] + webgl_properties['collision-range']
+              && entity0['translate-y'] < entity1['translate-y'] + entity1['vertices'][10] + webgl_properties['collision-range']
               && entity0['translate-z'] >= entity1['translate-z']
               && entity0['translate-z'] <= entity1['translate-z'] + webgl_properties['collision-range']){
                 entity0['dz'] = 0;
@@ -913,10 +909,10 @@ function webgl_normals_collision(args){
 
         }else if(entity1['normals'][2] === -1
           && entity0['dz'] > 0){
-            if(entity0['translate-x'] >= entity1['translate-x'] + entity1['vertices'][3] - webgl_properties['collision-range'] + 1
+            if(entity0['translate-x'] >= entity1['translate-x'] + entity1['vertices'][4] - webgl_properties['collision-range'] + 1
               && entity0['translate-x'] <= entity1['translate-x'] + entity1['vertices'][0] + webgl_properties['collision-range'] - 1
               && entity0['translate-y'] > entity1['translate-y'] + entity1['vertices'][2] - webgl_properties['collision-range']
-              && entity0['translate-y'] < entity1['translate-y'] + entity1['vertices'][8] + webgl_properties['collision-range']
+              && entity0['translate-y'] < entity1['translate-y'] + entity1['vertices'][10] + webgl_properties['collision-range']
               && entity0['translate-z'] >= entity1['translate-z'] - webgl_properties['collision-range']
               && entity0['translate-z'] <= entity1['translate-z']){
                 entity0['dz'] = 0;
@@ -982,34 +978,6 @@ function webgl_resize(){
     core_call({
       'todo': 'resize_logic',
     });
-}
-
-// Optional args: mode, newgame
-function webgl_setmode(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'mode': 0,
-        'newgame': false,
-      },
-    });
-
-    core_storage_save();
-    core_entity_remove_all();
-    webgl_camera_reset();
-
-    core_mode = args['mode'];
-
-    core_call({
-      'args': core_mode,
-      'todo': 'load_data',
-    });
-
-    if(args['newgame']){
-        core_escape();
-    }
-
-    core_interval_resume_all();
 }
 
 // Required args: properties
@@ -1162,13 +1130,13 @@ function webgl_skybox(args){
     core_entity_create({
       'id': 'skybox-back',
       'properties': {
-        'color': args['color'],
         'rotate-x': 270,
+        'vertex-colors': args['color'],
         'vertices': [
-          5, 0, -5,
-          -5, 0, -5,
-          -5, 0, 5,
-          5, 0, 5,
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
         ],
       },
     });
@@ -1180,13 +1148,13 @@ function webgl_skybox(args){
     core_entity_create({
       'id': 'skybox-front',
       'properties': {
-        'color': args['color'],
         'rotate-x': 90,
+        'vertex-colors': args['color'],
         'vertices': [
-          5, 0, -5,
-          -5, 0, -5,
-          -5, 0, 5,
-          5, 0, 5,
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
         ],
       },
     });
@@ -1198,13 +1166,13 @@ function webgl_skybox(args){
     core_entity_create({
       'id': 'skybox-left',
       'properties': {
-        'color': args['color'],
         'rotate-z': 270,
+        'vertex-colors': args['color'],
         'vertices': [
-          5, 0, -5,
-          -5, 0, -5,
-          -5, 0, 5,
-          5, 0, 5,
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
         ],
       },
     });
@@ -1216,13 +1184,13 @@ function webgl_skybox(args){
     core_entity_create({
       'id': 'skybox-right',
       'properties': {
-        'color': args['color'],
         'rotate-z': 90,
+        'vertex-colors': args['color'],
         'vertices': [
-          5, 0, -5,
-          -5, 0, -5,
-          -5, 0, 5,
-          5, 0, 5,
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
         ],
       },
     });
@@ -1234,13 +1202,13 @@ function webgl_skybox(args){
     core_entity_create({
       'id': 'skybox-top',
       'properties': {
-        'color': args['color'],
         'rotate-x': 180,
+        'vertex-colors': args['color'],
         'vertices': [
-          5, 0, -5,
-          -5, 0, -5,
-          -5, 0, 5,
-          5, 0, 5,
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
         ],
       },
     });
