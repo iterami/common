@@ -413,7 +413,7 @@ function webgl_entity_todo(entity){
 }
 
 // Optional args: ambient-blue, ambient-green, ambient-red, camera-speed, camera-type,
-//   clear-alpha, clear-blue, clear-green, clear_red, contextmenu, direction-blue,
+//   clearcolor-alpha, clearcolor-blue, clearcolor-green, clearcolor-red, contextmenu, direction-blue,
 //   direction-green, direction-red, direction-vector, fog, gravity-acceleration, gravity-max
 function webgl_init(args){
     args = core_args({
@@ -424,10 +424,10 @@ function webgl_init(args){
         'ambient-red': 1,
         'camera-speed': .1,
         'camera-type': 'free',
-        'clear-alpha': 1,
-        'clear-blue': 0,
-        'clear-green': 0,
-        'clear-red': 0,
+        'clearcolor-alpha': 1,
+        'clearcolor-blue': 0,
+        'clearcolor-green': 0,
+        'clearcolor-red': 0,
         'contextmenu': true,
         'direction-blue': 1,
         'direction-green': 1,
@@ -463,10 +463,10 @@ function webgl_init(args){
         'type': args['camera-type'],
       },
       'clearcolor': {
-        'alpha': args['clear-alpha'],
-        'blue': args['clear-blue'],
-        'green': args['clear-green'],
-        'red': args['clear-red'],
+        'alpha': args['clearcolor-alpha'],
+        'blue': args['clearcolor-blue'],
+        'green': args['clearcolor-green'],
+        'red': args['clearcolor-red'],
       },
       'collision-range': 2.5,
       'directionlighting': {
@@ -641,10 +641,10 @@ function webgl_load_level_init(json){
       'ambient-red': json['ambient-red'],
       'camera-speed': json['camera-speed'],
       'camera-type': json['camera-type'],
-      'clear-alpha': json['clear-alpha'],
-      'clear-blue': json['clear-blue'],
-      'clear-green': json['clear-green'],
-      'clear-red': json['clear-red'],
+      'clearcolor-alpha': json['clearcolor-alpha'],
+      'clearcolor-blue': json['clearcolor-blue'],
+      'clearcolor-green': json['clearcolor-green'],
+      'clearcolor-red': json['clearcolor-red'],
       'contextmenu': json['contextmenu'],
       'direction-blue': json['direction-blue'],
       'direction-green': json['direction-green'],
