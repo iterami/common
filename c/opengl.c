@@ -640,9 +640,11 @@ void opengl_load_level(const gchar *filename){
 
         // Parse fog.
         if(strcmp(json_object->name->string, "fog") == 0){
+            /*
             value = json_object->value;
             number = (struct json_number_s*)value->payload;
             fog = atof(number->number);
+            */
 
             json_object = json_object->next;
         }
