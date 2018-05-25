@@ -633,39 +633,58 @@ function webgl_init_character(args){
 }
 
 // Required args: json
+// Optional args: character
 function webgl_load_level(args){
     if(args['json'] === false){
         return;
     }
 
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': true,
+      },
+    });
+
     if(typeof args['json'] === 'object'){
         var filereader = new FileReader();
         filereader.onload = function(event){
-            webgl_load_level_init(JSON.parse(event.target.result));
+            webgl_load_level_init({
+              'character': args['character'],
+              'json': JSON.parse(event.target.result),
+            });
         };
         filereader.readAsText(args['json']);
 
     }else{
-        webgl_load_level_init(JSON.parse(args['json']));
+        webgl_load_level_init({
+          'character': args['character'],
+          'json': JSON.parse(args['json']),
+        });
     }
 }
 
-function webgl_load_level_init(json){
+// Required args: character, json
+function webgl_load_level_init(args){
     core_storage_save();
     core_entity_remove_all();
 
+    if(!args['character']){
+        args['json']['character'] = false;
+    }
+
     if(!('camera-type' in webgl_character)){
-        if(json['character']
-          && json['character'] !== false){
+        if(args['json']['character']
+          && args['json']['character'] !== false){
             webgl_init_character({
-              'camera-rotate-x': json['character']['camera-rotate-x'],
-              'camera-rotate-y': json['character']['camera-rotate-y'],
-              'camera-rotate-z': json['character']['camera-rotate-z'],
-              'camera-speed': json['character']['camera-speed'],
-              'camera-translate-x': json['character']['camera-translate-x'],
-              'camera-translate-y': json['character']['camera-translate-x'],
-              'camera-translate-z': json['character']['camera-translate-x'],
-              'camera-type': json['character']['camera-type'],
+              'camera-rotate-x': args['json']['character']['camera-rotate-x'],
+              'camera-rotate-y': args['json']['character']['camera-rotate-y'],
+              'camera-rotate-z': args['json']['character']['camera-rotate-z'],
+              'camera-speed': args['json']['character']['camera-speed'],
+              'camera-translate-x': args['json']['character']['camera-translate-x'],
+              'camera-translate-y': args['json']['character']['camera-translate-x'],
+              'camera-translate-z': args['json']['character']['camera-translate-x'],
+              'camera-type': args['json']['character']['camera-type'],
             });
 
         }else{
@@ -674,28 +693,28 @@ function webgl_load_level_init(json){
     }
 
     webgl_init({
-      'ambient-blue': json['ambient-blue'],
-      'ambient-green': json['ambient-green'],
-      'ambient-red': json['ambient-red'],
-      'clearcolor-alpha': json['clearcolor-alpha'],
-      'clearcolor-blue': json['clearcolor-blue'],
-      'clearcolor-green': json['clearcolor-green'],
-      'clearcolor-red': json['clearcolor-red'],
-      'contextmenu': json['contextmenu'],
-      'direction-blue': json['direction-blue'],
-      'direction-green': json['direction-green'],
-      'direction-red': json['direction-red'],
-      'direction-vector': json['direction-vector'],
-      'fog': json['fog'],
-      'gravity-acceleration': json['gravity-acceleration'],
-      'gravity-max': json['gravity-max'],
+      'ambient-blue': args['json']['ambient-blue'],
+      'ambient-green': args['json']['ambient-green'],
+      'ambient-red': args['json']['ambient-red'],
+      'clearcolor-alpha': args['json']['clearcolor-alpha'],
+      'clearcolor-blue': args['json']['clearcolor-blue'],
+      'clearcolor-green': args['json']['clearcolor-green'],
+      'clearcolor-red': args['json']['clearcolor-red'],
+      'contextmenu': args['json']['contextmenu'],
+      'direction-blue': args['json']['direction-blue'],
+      'direction-green': args['json']['direction-green'],
+      'direction-red': args['json']['direction-red'],
+      'direction-vector': args['json']['direction-vector'],
+      'fog': args['json']['fog'],
+      'gravity-acceleration': args['json']['gravity-acceleration'],
+      'gravity-max': args['json']['gravity-max'],
     });
 
-    for(var entity in json['entities']){
+    for(var entity in args['json']['entities']){
         core_entity_create({
-          'id': json['entities'][entity]['id'],
-          'properties': json['entities'][entity],
-          'types': json['entities'][entity]['types'],
+          'id': args['json']['entities'][entity]['id'],
+          'properties': args['json']['entities'][entity],
+          'types': args['json']['entities'][entity]['types'],
        });
     }
 
