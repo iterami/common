@@ -381,9 +381,9 @@ function webgl_draw_entity(entity){
 
 function webgl_entity_todo(entity){
     core_entities[entity]['normals'] = webgl_normals({
-      'x-rotation': core_entities[entity]['rotate-x'],
-      'y-rotation': core_entities[entity]['rotate-y'],
-      'z-rotation': core_entities[entity]['rotate-z'],
+      'rotate-x': core_entities[entity]['rotate-x'],
+      'rotate-y': core_entities[entity]['rotate-y'],
+      'rotate-z': core_entities[entity]['rotate-z'],
     });
 
     core_entities[entity]['rotate-radians-x'] = core_degrees_to_radians({
@@ -846,14 +846,14 @@ function webgl_logicloop_handle_entity(entity){
     }
 }
 
-// Optional args: x-rotation, y-rotation, z-rotation
+// Optional args: rotate-x, rotate-y, rotate-z
 function webgl_normals(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'x-rotation': 0,
-        'y-rotation': 0,
-        'z-rotation': 0,
+        'rotate-x': 0,
+        'rotate-y': 0,
+        'rotate-z': 0,
       },
     });
 
@@ -861,24 +861,24 @@ function webgl_normals(args){
     var normal_y = 0;
     var normal_z = 0;
 
-    if(args['x-rotation'] !== 0){
+    if(args['rotate-x'] !== 0){
         normal_z = core_round({
           'number': Math.sin(core_degrees_to_radians({
-            'degrees': args['x-rotation'],
+            'degrees': args['rotate-x'],
           })),
         });
 
-    }else if(args['z-rotation'] !== 0){
+    }else if(args['rotate-z'] !== 0){
         normal_x = -core_round({
           'number': Math.sin(core_degrees_to_radians({
-            'degrees': args['z-rotation'],
+            'degrees': args['rotate-z'],
           })),
         });
 
     }else{
         normal_y = core_round({
           'number': Math.cos(core_degrees_to_radians({
-            'degrees': args['y-rotation'],
+            'degrees': args['rotate-y'],
           })),
         });
     }
