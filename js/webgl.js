@@ -411,8 +411,8 @@ function webgl_entity_todo(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red, camera-speed, camera-type,
-//   clearcolor-alpha, clearcolor-blue, clearcolor-green, clearcolor-red, contextmenu, direction-blue,
+// Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-alpha,
+//   clearcolor-blue, clearcolor-green, clearcolor-red, contextmenu, direction-blue,
 //   direction-green, direction-red, direction-vector, fog, gravity-acceleration, gravity-max
 function webgl_init(args){
     args = core_args({
@@ -421,8 +421,6 @@ function webgl_init(args){
         'ambient-blue': 1,
         'ambient-green': 1,
         'ambient-red': 1,
-        'camera-speed': .1,
-        'camera-type': 'free',
         'clearcolor-alpha': 1,
         'clearcolor-blue': 0,
         'clearcolor-green': 0,
@@ -477,19 +475,9 @@ function webgl_init(args){
       },
       'pointer': false,
     };
-    webgl_character = {
-      'camera-rotate-radians-x': 0,
-      'camera-rotate-radians-y': 0,
-      'camera-rotate-radians-z': 0,
-      'camera-rotate-x': 0,
-      'camera-rotate-y': 0,
-      'camera-rotate-z': 0,
-      'camera-speed': args['camera-speed'],
-      'camera-translate-x': 0,
-      'camera-translate-y': 0,
-      'camera-translate-z': 0,
-      'camera-type': args['camera-type'],
-    };
+    if(!('camera-type' in webgl_character)){
+        webgl_init_character();
+    }
 
     var properties = {
       'id': 'canvas',
@@ -612,6 +600,38 @@ function webgl_init(args){
     });
 }
 
+// Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-speed,
+//   camera-translate-x, camera-translate-y, camera-translate-z, camera-type
+function webgl_init_character(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'camera-rotate-x': 0,
+        'camera-rotate-y': 0,
+        'camera-rotate-z': 0,
+        'camera-speed': .1,
+        'camera-translate-x': 0,
+        'camera-translate-y': 0,
+        'camera-translate-z': 0,
+        'camera-type': 'free',
+      },
+    });
+
+    webgl_character = {
+      'camera-rotate-radians-x': 0,
+      'camera-rotate-radians-y': 0,
+      'camera-rotate-radians-z': 0,
+      'camera-rotate-x': args['camera-rotate-x'],
+      'camera-rotate-y': args['camera-rotate-y'],
+      'camera-rotate-z': args['camera-rotate-z'],
+      'camera-speed': args['camera-speed'],
+      'camera-translate-x': args['camera-translate-x'],
+      'camera-translate-y': args['camera-translate-x'],
+      'camera-translate-z': args['camera-translate-x'],
+      'camera-type': args['camera-type'],
+    };
+}
+
 // Required args: json
 function webgl_load_level(args){
     if(args['json'] === false){
@@ -638,8 +658,6 @@ function webgl_load_level_init(json){
       'ambient-blue': json['ambient-blue'],
       'ambient-green': json['ambient-green'],
       'ambient-red': json['ambient-red'],
-      'camera-speed': json['camera-speed'],
-      'camera-type': json['camera-type'],
       'clearcolor-alpha': json['clearcolor-alpha'],
       'clearcolor-blue': json['clearcolor-blue'],
       'clearcolor-green': json['clearcolor-green'],
