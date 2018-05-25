@@ -111,6 +111,9 @@ function webgl_camera_move(args){
 }
 
 function webgl_camera_reset(){
+    webgl_character['camera-rotate-radians-x'] = 0;
+    webgl_character['camera-rotate-radians-y'] = 0;
+    webgl_character['camera-rotate-radians-z'] = 0;
     webgl_character['camera-rotate-x'] = 0;
     webgl_character['camera-rotate-y'] = 0;
     webgl_character['camera-rotate-z'] = 0;
