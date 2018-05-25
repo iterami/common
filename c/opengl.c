@@ -541,21 +541,8 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
-        // Parse camera-speed.
-        if(strcmp(json_object->name->string, "camera-speed") == 0){
-            value = json_object->value;
-            number = (struct json_number_s*)value->payload;
-            camera_speed = atof(number->number);
-
-            json_object = json_object->next;
-        }
-
-        // Parse camera-type.
-        if(strcmp(json_object->name->string, "camera-type") == 0){
-            value = json_object->value;
-            struct json_string_s* string = (struct json_string_s*)value->payload;
-            camera_type = (gchar*)string->string;
-
+        // Parse character.
+        if(strcmp(json_object->name->string, "character") == 0){
             json_object = json_object->next;
         }
 
