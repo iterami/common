@@ -478,9 +478,6 @@ function webgl_init(args){
       },
       'pointer': false,
     };
-    if(!('camera-type' in webgl_character)){
-        webgl_init_character();
-    }
 
     var properties = {
       'id': 'canvas',
@@ -656,6 +653,25 @@ function webgl_load_level(args){
 function webgl_load_level_init(json){
     core_storage_save();
     core_entity_remove_all();
+
+    if(!('camera-type' in webgl_character)){
+        if(json['character']
+          && json['character'] !== false){
+            webgl_init_character({
+              'camera-rotate-x': json['character']['camera-rotate-x'],
+              'camera-rotate-y': json['character']['camera-rotate-y'],
+              'camera-rotate-z': json['character']['camera-rotate-z'],
+              'camera-speed': json['character']['camera-speed'],
+              'camera-translate-x': json['character']['camera-translate-x'],
+              'camera-translate-y': json['character']['camera-translate-x'],
+              'camera-translate-z': json['character']['camera-translate-x'],
+              'camera-type': json['character']['camera-type'],
+            });
+
+        }else{
+            webgl_init_character();
+        }
+    }
 
     webgl_init({
       'ambient-blue': json['ambient-blue'],
