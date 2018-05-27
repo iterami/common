@@ -169,6 +169,15 @@ function webgl_camera_rotate(args){
     }
 }
 
+function webgl_character_type(){
+    if('level' in webgl_character){
+        return webgl_character['level'];
+
+    }else{
+        return false;
+    }
+}
+
 // Required args: color
 function webgl_clearcolor_set(args){
     webgl_properties['clearcolor'] = args['color'];
