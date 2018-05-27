@@ -691,8 +691,8 @@ function webgl_load_level_init(args){
               'camera-rotate-z': args['json']['character']['camera-rotate-z'],
               'camera-speed': args['json']['character']['camera-speed'],
               'camera-translate-x': args['json']['character']['camera-translate-x'],
-              'camera-translate-y': args['json']['character']['camera-translate-x'],
-              'camera-translate-z': args['json']['character']['camera-translate-x'],
+              'camera-translate-y': args['json']['character']['camera-translate-y'],
+              'camera-translate-z': args['json']['character']['camera-translate-z'],
               'camera-type': args['json']['character']['camera-type'],
             });
 
