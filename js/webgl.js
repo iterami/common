@@ -610,7 +610,8 @@ function webgl_init(args){
 }
 
 // Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-speed,
-//   camera-translate-x, camera-translate-y, camera-translate-z, camera-type
+//   camera-translate-x, camera-translate-y, camera-translate-z, camera-type,
+//   experience, level
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -623,6 +624,8 @@ function webgl_init_character(args){
         'camera-translate-y': 0,
         'camera-translate-z': 0,
         'camera-type': 'free',
+        'experience': 0,
+        'level': -1,
       },
     });
 
@@ -638,6 +641,8 @@ function webgl_init_character(args){
       'camera-translate-y': args['camera-translate-y'],
       'camera-translate-z': args['camera-translate-z'],
       'camera-type': args['camera-type'],
+      'experience': args['experience'],
+      'level': args['level'],
     };
 }
 
@@ -682,23 +687,24 @@ function webgl_load_level_init(args){
         args['json']['character'] = false;
     }
 
-    if(webgl_character_type() > -2){
-        if(args['json']['character']
-          && args['json']['character'] !== false){
-            webgl_init_character({
-              'camera-rotate-x': args['json']['character']['camera-rotate-x'],
-              'camera-rotate-y': args['json']['character']['camera-rotate-y'],
-              'camera-rotate-z': args['json']['character']['camera-rotate-z'],
-              'camera-speed': args['json']['character']['camera-speed'],
-              'camera-translate-x': args['json']['character']['camera-translate-x'],
-              'camera-translate-y': args['json']['character']['camera-translate-y'],
-              'camera-translate-z': args['json']['character']['camera-translate-z'],
-              'camera-type': args['json']['character']['camera-type'],
-            });
+    if(webgl_character_type() > -2
+      && args['json']['character']
+      && args['json']['character'] !== false){
+        webgl_init_character({
+          'camera-rotate-x': args['json']['character']['camera-rotate-x'],
+          'camera-rotate-y': args['json']['character']['camera-rotate-y'],
+          'camera-rotate-z': args['json']['character']['camera-rotate-z'],
+          'camera-speed': args['json']['character']['camera-speed'],
+          'camera-translate-x': args['json']['character']['camera-translate-x'],
+          'camera-translate-y': args['json']['character']['camera-translate-y'],
+          'camera-translate-z': args['json']['character']['camera-translate-z'],
+          'camera-type': args['json']['character']['camera-type'],
+          'experience': args['json']['character']['experience'],
+          'level': args['json']['character']['level'],
+        });
 
-        }else{
-            webgl_init_character();
-        }
+    }else{
+        webgl_init_character();
     }
 
     webgl_init({
