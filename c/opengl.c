@@ -722,6 +722,11 @@ void opengl_load_level(const gchar *filename){
             float translate_y = 0;
             float translate_z = 0;
 
+            // Parse id.
+            if(strcmp(json_level_entities_element_property->name->string, "id") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
             // Parse alpha.
             if(strcmp(json_level_entities_element_property->name->string, "alpha") == 0){
                 value = json_level_entities_element_property->value;
