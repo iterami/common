@@ -174,7 +174,7 @@ function webgl_character_type(){
         return webgl_character['level'];
 
     }else{
-        return false;
+        return -2;
     }
 }
 
@@ -682,7 +682,7 @@ function webgl_load_level_init(args){
         args['json']['character'] = false;
     }
 
-    if(!('camera-type' in webgl_character)){
+    if(webgl_character_type() > -2){
         if(args['json']['character']
           && args['json']['character'] !== false){
             webgl_init_character({
