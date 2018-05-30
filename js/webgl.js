@@ -656,7 +656,7 @@ function webgl_load_level(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': true,
+        'character': 0,
       },
     });
 
@@ -680,15 +680,20 @@ function webgl_load_level(args){
 
 // Required args: character, json
 function webgl_load_level_init(args){
-    core_storage_save();
-    core_entity_remove_all();
+    if(args['character'] === 1){
+        if(!args['json']['character']
+          || args['json']['character'] === false){
+            return;
+        }
 
-    if(!args['character']){
+    }else if(args['character'] === -1){
         args['json']['character'] = false;
     }
 
-    if(webgl_character_type() > -2
-      && args['json']['character']
+    core_storage_save();
+    core_entity_remove_all();
+
+    if(args['json']['character']
       && args['json']['character'] !== false){
         webgl_init_character({
           'camera-rotate-x': args['json']['character']['camera-rotate-x'],
