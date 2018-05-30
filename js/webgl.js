@@ -685,31 +685,34 @@ function webgl_load_level_init(args){
           || args['json']['character'] === false){
             return;
         }
-
-    }else if(args['character'] === -1){
-        args['json']['character'] = false;
     }
 
     core_storage_save();
     core_entity_remove_all();
 
-    if(args['json']['character']
-      && args['json']['character'] !== false){
-        webgl_init_character({
-          'camera-rotate-x': args['json']['character']['camera-rotate-x'],
-          'camera-rotate-y': args['json']['character']['camera-rotate-y'],
-          'camera-rotate-z': args['json']['character']['camera-rotate-z'],
-          'camera-speed': args['json']['character']['camera-speed'],
-          'camera-translate-x': args['json']['character']['camera-translate-x'],
-          'camera-translate-y': args['json']['character']['camera-translate-y'],
-          'camera-translate-z': args['json']['character']['camera-translate-z'],
-          'camera-type': args['json']['character']['camera-type'],
-          'experience': args['json']['character']['experience'],
-          'level': args['json']['character']['level'],
-        });
-
-    }else{
+    if(args['character'] === -1){
+        args['json']['character'] = false;
         webgl_init_character();
+
+    }else if(webgl_character_type() < 0){
+        if(args['json']['character']
+          && args['json']['character'] !== false){
+            webgl_init_character({
+              'camera-rotate-x': args['json']['character']['camera-rotate-x'],
+              'camera-rotate-y': args['json']['character']['camera-rotate-y'],
+              'camera-rotate-z': args['json']['character']['camera-rotate-z'],
+              'camera-speed': args['json']['character']['camera-speed'],
+              'camera-translate-x': args['json']['character']['camera-translate-x'],
+              'camera-translate-y': args['json']['character']['camera-translate-y'],
+              'camera-translate-z': args['json']['character']['camera-translate-z'],
+              'camera-type': args['json']['character']['camera-type'],
+              'experience': args['json']['character']['experience'],
+              'level': args['json']['character']['level'],
+            });
+
+        }else{
+            webgl_init_character();
+        }
     }
 
     webgl_init({
