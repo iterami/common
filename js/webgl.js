@@ -711,7 +711,9 @@ function webgl_load_level_init(args){
             });
 
         }else{
-            webgl_init_character();
+            webgl_init_character({
+              'level': args['character'],
+            });
         }
     }
 
