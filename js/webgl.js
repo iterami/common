@@ -169,7 +169,7 @@ function webgl_camera_rotate(args){
     }
 }
 
-function webgl_character_type(){
+function webgl_character_level(){
     if('level' in webgl_character){
         return webgl_character['level'];
 
@@ -694,7 +694,7 @@ function webgl_load_level_init(args){
         args['json']['character'] = false;
         webgl_init_character();
 
-    }else if(webgl_character_type() < 0){
+    }else if(webgl_character_level() < 0){
         if(args['json']['character']
           && args['json']['character'] !== false){
             webgl_init_character({
