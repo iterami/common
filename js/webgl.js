@@ -623,7 +623,7 @@ function webgl_init_character(args){
         'camera-translate-x': 0,
         'camera-translate-y': 0,
         'camera-translate-z': 0,
-        'camera-type': 'free',
+        'camera-type': 'gravity',
         'experience': 0,
         'level': -1,
       },
@@ -692,7 +692,9 @@ function webgl_load_level_init(args){
 
     if(args['character'] === -1){
         args['json']['character'] = false;
-        webgl_init_character();
+        webgl_init_character({
+          'camera-type': 'free',
+        });
 
     }else if(webgl_character_level() < 0){
         if(args['json']['character']
