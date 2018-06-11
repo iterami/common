@@ -1013,6 +1013,23 @@ function webgl_perspective(){
     core_matrices['perspective'][14] = -2;
 }
 
+// Required args: x, y
+function webgl_pick_color(args){
+    var pixelarray = new Uint8Array(4);
+
+    webgl_buffer.readPixels(
+      args['x'],
+      window.innerHeight - args['y'],
+      1,
+      1,
+      webgl_buffer.RGBA,
+      webgl_buffer.UNSIGNED_BYTE,
+      pixelarray
+    );
+
+    return pixelarray;
+}
+
 // Required args: id, shaderlist
 function webgl_program_create(args){
     var program = webgl_buffer.createProgram();
