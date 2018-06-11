@@ -611,7 +611,7 @@ function webgl_init(args){
 
 // Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-speed,
 //   camera-translate-x, camera-translate-y, camera-translate-z, camera-type,
-//   experience, level
+//   camera-zoom-current, camera-zoom-max, experience, level
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -624,6 +624,8 @@ function webgl_init_character(args){
         'camera-translate-y': 0,
         'camera-translate-z': 0,
         'camera-type': 'gravity',
+        'camera-zoom-current': 0,
+        'camera-zoom-max': 0,
         'experience': 0,
         'level': -1,
       },
@@ -641,6 +643,8 @@ function webgl_init_character(args){
       'camera-translate-y': args['camera-translate-y'],
       'camera-translate-z': args['camera-translate-z'],
       'camera-type': args['camera-type'],
+      'camera-zoom-current': args['camera-zoom-current'],
+      'camera-zoom-max': args['camera-zoom-max'],
       'experience': args['experience'],
       'level': args['level'],
     };
