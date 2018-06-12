@@ -80,18 +80,16 @@ function webgl_buffer_set_type(args){
 }
 
 function webgl_camera_handle(){
-    // First person.
-    if(webgl_character['camera-zoom-current'] === 0){
-        if(core_mouse['pointerlock-state']
-          || core_mouse['down']){
-            webgl_camera_rotate({
-              'x': core_mouse['movement-y'] / 10,
-              'y': core_mouse['movement-x'] / 10,
-            });
-        }
+    if(core_mouse['pointerlock-state']
+      || core_mouse['down']){
+        var multiplier = webgl_character['camera-zoom-current'] > 0
+          ? -1
+          : 1;
 
-    // Third person.
-    }else{
+        webgl_camera_rotate({
+          'x': core_mouse['movement-y'] / 10 * multiplier,
+          'y': core_mouse['movement-x'] / 10 * multiplier,
+        });
     }
 }
 
@@ -817,6 +815,14 @@ function webgl_logicloop(){
     });
 
     core_matrix_identity({
+      'id': 'camera',
+    });
+    core_matrix_translate({
+      'dimensions': [
+        0,
+        0,
+        webgl_character['camera-zoom-current'],
+      ],
       'id': 'camera',
     });
     core_matrix_rotate({
