@@ -79,12 +79,19 @@ function webgl_buffer_set_type(args){
     return buffer;
 }
 
-function webgl_camera_first(){
-    if(core_mouse['pointerlock-state']){
-        webgl_camera_rotate({
-          'x': core_mouse['movement-y'] / 10,
-          'y': core_mouse['movement-x'] / 10,
-        });
+function webgl_camera_handle(){
+    // First person.
+    if(webgl_character['camera-zoom-current'] === 0){
+        if(core_mouse['pointerlock-state']
+          || core_mouse['down']){
+            webgl_camera_rotate({
+              'x': core_mouse['movement-y'] / 10,
+              'y': core_mouse['movement-x'] / 10,
+            });
+        }
+
+    // Third person.
+    }else{
     }
 }
 
