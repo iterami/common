@@ -640,8 +640,8 @@ function webgl_init_character(args){
         'camera-translate-y': 0,
         'camera-translate-z': 0,
         'camera-type': 'gravity',
-        'camera-zoom-current': 0,
-        'camera-zoom-max': 0,
+        'camera-zoom-current': 20,
+        'camera-zoom-max': 20,
         'experience': 0,
         'level': -1,
       },
@@ -714,6 +714,8 @@ function webgl_load_level_init(args){
         args['json']['character'] = false;
         webgl_init_character({
           'camera-type': 'free',
+          'camera-zoom-current': 0,
+          'camera-zoom-max': 0,
         });
 
     }else if(webgl_character_level() < 0){
@@ -728,6 +730,8 @@ function webgl_load_level_init(args){
               'camera-translate-y': args['json']['character']['camera-translate-y'],
               'camera-translate-z': args['json']['character']['camera-translate-z'],
               'camera-type': args['json']['character']['camera-type'],
+              'camera-zoom-current': args['json']['character']['camera-zoom-current'],
+              'camera-zoom-max': args['json']['character']['camera-zoom-max'],
               'experience': args['json']['character']['experience'],
               'level': args['json']['character']['level'],
             });
