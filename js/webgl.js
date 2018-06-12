@@ -82,13 +82,9 @@ function webgl_buffer_set_type(args){
 function webgl_camera_handle(){
     if(core_mouse['pointerlock-state']
       || core_mouse['down']){
-        var multiplier = webgl_character['camera-zoom-current'] > 0
-          ? -1
-          : 1;
-
         webgl_camera_rotate({
-          'x': core_mouse['movement-y'] / 10 * multiplier,
-          'y': core_mouse['movement-x'] / 10 * multiplier,
+          'x': core_mouse['movement-y'] / 10,
+          'y': core_mouse['movement-x'] / 10,
         });
     }
 }
@@ -171,6 +167,21 @@ function webgl_camera_rotate(args){
         webgl_character['camera-rotate-radians-' + axis] = core_degrees_to_radians({
           'degrees': webgl_character['camera-rotate-' + axis],
         });
+    }
+}
+
+function webgl_camera_zoom(event){
+    if(event.deltaY > 0){
+        webgl_character['camera-zoom-current'] = Math.min(
+          webgl_character['camera-zoom-current'] + 1,
+          webgl_character['camera-zoom-max']
+        );
+
+    }else{
+        webgl_character['camera-zoom-current'] = Math.max(
+          webgl_character['camera-zoom-current'] - 1,
+          0
+        );
     }
 }
 
