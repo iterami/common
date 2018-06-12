@@ -627,7 +627,7 @@ function webgl_init(args){
 
 // Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-speed,
 //   camera-translate-x, camera-translate-y, camera-translate-z, camera-type,
-//   camera-zoom-current, camera-zoom-max, experience, level
+//   camera-zoom-current, camera-zoom-max, entities, experience, level
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -642,6 +642,7 @@ function webgl_init_character(args){
         'camera-type': 'gravity',
         'camera-zoom-current': 20,
         'camera-zoom-max': 20,
+        'entities': [],
         'experience': 0,
         'level': -1,
       },
@@ -661,6 +662,7 @@ function webgl_init_character(args){
       'camera-type': args['camera-type'],
       'camera-zoom-current': args['camera-zoom-current'],
       'camera-zoom-max': args['camera-zoom-max'],
+      'entities': args['entities'],
       'experience': args['experience'],
       'level': args['level'],
     };
@@ -716,6 +718,7 @@ function webgl_load_level_init(args){
           'camera-type': 'free',
           'camera-zoom-current': 0,
           'camera-zoom-max': 0,
+          'entities': [],
         });
 
     }else if(webgl_character_level() < 0){
@@ -732,6 +735,7 @@ function webgl_load_level_init(args){
               'camera-type': args['json']['character']['camera-type'],
               'camera-zoom-current': args['json']['character']['camera-zoom-current'],
               'camera-zoom-max': args['json']['character']['camera-zoom-max'],
+              'entities': args['json']['character']['entities'],
               'experience': args['json']['character']['experience'],
               'level': args['json']['character']['level'],
             });
@@ -766,7 +770,14 @@ function webgl_load_level_init(args){
           'id': args['json']['entities'][entity]['id'],
           'properties': args['json']['entities'][entity],
           'types': args['json']['entities'][entity]['types'],
-       });
+        });
+    }
+    for(var entity in webgl_character['entities']){
+        core_entity_create({
+          'id': webgl_character['entities'][entity]['id'],
+          'properties': webgl_character['entities'][entity],
+          'types': webgl_character['entities'][entity]['types'],
+        });
     }
 
     webgl_camera_reset();
