@@ -778,6 +778,10 @@ function webgl_load_level_init(args){
           'properties': webgl_character['entities'][entity],
           'types': webgl_character['entities'][entity]['types'],
         });
+        webgl_attach({
+          'base': '_character-camera',
+          'entity': webgl_character['entities'][entity]['id'],
+        });
     }
 
     webgl_camera_reset();
