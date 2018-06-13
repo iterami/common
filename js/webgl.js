@@ -635,7 +635,7 @@ function webgl_init_character(args){
         'camera-rotate-x': 0,
         'camera-rotate-y': 0,
         'camera-rotate-z': 0,
-        'camera-speed': .1,
+        'camera-speed': .2,
         'camera-translate-x': 0,
         'camera-translate-y': 0,
         'camera-translate-z': 0,
