@@ -393,7 +393,7 @@ function webgl_draw_entity(entity){
     );
 
     webgl_buffer.drawArrays(
-      webgl_buffer[core_entities[entity]['mode']],
+      webgl_buffer[core_entities[entity]['draw-type']],
       0,
       core_entities[entity]['vertices-length']
     );
@@ -580,11 +580,11 @@ function webgl_init(args){
         'collides': false,
         'collision': false,
         'draw': true,
+        'draw-type': 'TRIANGLE_FAN',
         'dx': 0,
         'dy': 0,
         'dz': 0,
         'gravity': false,
-        'mode': 'TRIANGLE_FAN',
         'normals': [],
         'rotate-radians-x': 0,
         'rotate-radians-y': 0,

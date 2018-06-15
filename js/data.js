@@ -293,7 +293,7 @@ function data_webgl_terrain_3d(args){
     core_entity_create({
       'id': args['id'],
       'properties': {
-        'mode': 'TRIANGLE_STRIP',
+        'draw-type': 'TRIANGLE_STRIP',
         'textureData': textureData,
         'translate-x': args['x'],
         'translate-y': args['y'],
@@ -352,10 +352,10 @@ function data_webgl_tree_2d(args){
       'id': 'webgl-tree_' + args['id'] + '_leaf',
       'properties': {
         'billboard': args['billboard'],
+        'draw-type': 'TRIANGLES',
         'dx': args['dx'],
         'dy': args['dy'],
         'dz': args['dz'],
-        'mode': 'TRIANGLES',
         'translate-x': args['x'],
         'translate-y': args['y'],
         'translate-z': args['z'],
