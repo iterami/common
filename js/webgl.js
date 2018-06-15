@@ -282,8 +282,12 @@ function webgl_draw_entity(entity){
         return;
     }
 
-    if(core_entities[entity]['billboard']){
+    if(core_entities[entity]['billboard'] !== false){
+        var axes = {};
+        axes[core_entities[entity]['billboard']] = core_entities[entity]['billboard'];
+
         webgl_billboard({
+          'axes': axes,
           'entity': entity,
         });
     }
