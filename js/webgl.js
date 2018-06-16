@@ -439,7 +439,7 @@ function webgl_entity_todo(entity){
 
     webgl_texture_set({
       'entityid': entity,
-      'image': webgl_textures['_default'],
+      'image': webgl_textures[core_entities[entity]['texture']],
     });
 }
 
@@ -599,6 +599,7 @@ function webgl_init(args){
         'scale-x': 1,
         'scale-y': 1,
         'scale-z': 1,
+        'texture': '_default',
         'textureData': [
           0, 1,
           0, 0,
