@@ -369,7 +369,7 @@ function webgl_draw_entity(entity){
     webgl_buffer.activeTexture(webgl_buffer.TEXTURE0);
     webgl_buffer.bindTexture(
       webgl_buffer.TEXTURE_2D,
-      core_entities[entity]['texture']
+      core_entities[entity]['texture-gl']
     );
     webgl_buffer.uniform1i(
       webgl_uniformlocations['sampler'],
@@ -1402,7 +1402,7 @@ function webgl_texture_set(args){
       },
     });
 
-    core_entities[args['entityid']]['texture'] = webgl_buffer.createTexture();
+    core_entities[args['entityid']]['texture-gl'] = webgl_buffer.createTexture();
     core_entities[args['entityid']]['image'] = core_image({
       'id': args['entityid'] + '-texture',
       'src': args['image'],
@@ -1415,7 +1415,7 @@ function webgl_texture_set(args){
 function webgl_texture_set_todo(args){
     webgl_buffer.bindTexture(
       webgl_buffer.TEXTURE_2D,
-      core_entities[args['entityid']]['texture']
+      core_entities[args['entityid']]['texture-gl']
     );
     webgl_buffer.texImage2D(
       webgl_buffer.TEXTURE_2D,
