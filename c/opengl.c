@@ -739,7 +739,7 @@ void opengl_load_level(const gchar *filename){
             // Parse billboard.
             if(strcmp(json_level_entities_element_property->name->string, "billboard") == 0){
                 value = json_level_entities_element_property->value;
-                billboard = value->type == json_type_true ? TRUE : FALSE;
+                billboard = value->type == json_type_false ? FALSE : TRUE;
 
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
@@ -835,6 +835,13 @@ void opengl_load_level(const gchar *filename){
                 value = json_level_entities_element_property->value;
                 number = (struct json_number_s*)value->payload;
                 scale_z = atof(number->number);
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse texture.
+            if(strcmp(json_level_entities_element_property->name->string, "texture") == 0){
+
 
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
