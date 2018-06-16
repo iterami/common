@@ -211,7 +211,7 @@ function webgl_draw(){
     webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
     core_group_modify({
       'groups': [
-        'depthfalse',
+        'skybox',
       ],
       'todo': function(entity){
           webgl_draw_entity(entity);
@@ -220,7 +220,7 @@ function webgl_draw(){
     webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
     core_group_modify({
       'groups': [
-        'depthtrue',
+        'foreground',
       ],
       'todo': function(entity){
           if(core_entities[entity]['alpha'] === 1){
@@ -230,7 +230,7 @@ function webgl_draw(){
     });
     core_group_modify({
       'groups': [
-        'depthtrue',
+        'foreground',
       ],
       'todo': function(entity){
           if(core_entities[entity]['alpha'] < 1){
@@ -575,7 +575,7 @@ function webgl_init(args){
     core_entity_set({
       'default': true,
       'groups': [
-        'depthtrue',
+        'foreground',
       ],
       'properties': {
         'alpha': 1,
@@ -1305,6 +1305,23 @@ function webgl_skybox(args){
       'offset-z': 5,
     });
     core_entity_create({
+      'id': 'skybox-bottom',
+      'properties': {
+        'vertex-colors': args['color'],
+        'vertices': [
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_character-camera',
+      'entity': 'skybox-bottom',
+      'offset-y': -5,
+    });
+    core_entity_create({
       'id': 'skybox-front',
       'properties': {
         'rotate-x': 90,
@@ -1380,13 +1397,14 @@ function webgl_skybox(args){
     core_group_move({
       'entities': [
         'skybox-back',
+        'skybox-bottom',
         'skybox-front',
         'skybox-left',
         'skybox-right',
         'skybox-top',
       ],
-      'from': 'depthtrue',
-      'to': 'depthfalse',
+      'from': 'foreground',
+      'to': 'skybox',
     });
 }
 
