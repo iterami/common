@@ -235,6 +235,138 @@ function data_webgl_cube_3d(args){
     });
 }
 
+// Optional args: color
+function data_webgl_skybox(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'color': webgl_vertexcolorarray(),
+      },
+    });
+
+    core_entity_create({
+      'id': 'skybox-back',
+      'properties': {
+        'rotate-x': 270,
+        'vertex-colors': args['color'],
+        'vertices': [
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_character-camera',
+      'entity': 'skybox-back',
+      'offset-z': 5,
+    });
+    core_entity_create({
+      'id': 'skybox-bottom',
+      'properties': {
+        'vertex-colors': args['color'],
+        'vertices': [
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_character-camera',
+      'entity': 'skybox-bottom',
+      'offset-y': -5,
+    });
+    core_entity_create({
+      'id': 'skybox-front',
+      'properties': {
+        'rotate-x': 90,
+        'vertex-colors': args['color'],
+        'vertices': [
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_character-camera',
+      'entity': 'skybox-front',
+      'offset-z': -5,
+    });
+    core_entity_create({
+      'id': 'skybox-left',
+      'properties': {
+        'rotate-z': 270,
+        'vertex-colors': args['color'],
+        'vertices': [
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_character-camera',
+      'entity': 'skybox-left',
+      'offset-x': -5,
+    });
+    core_entity_create({
+      'id': 'skybox-right',
+      'properties': {
+        'rotate-z': 90,
+        'vertex-colors': args['color'],
+        'vertices': [
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_character-camera',
+      'entity': 'skybox-right',
+      'offset-x': 5,
+    });
+    core_entity_create({
+      'id': 'skybox-top',
+      'properties': {
+        'rotate-x': 180,
+        'vertex-colors': args['color'],
+        'vertices': [
+          5, 0, -5, 1,
+          -5, 0, -5, 1,
+          -5, 0, 5, 1,
+          5, 0, 5, 1,
+        ],
+      },
+    });
+    webgl_attach({
+      'base': '_character-camera',
+      'entity': 'skybox-top',
+      'offset-y': 5,
+    });
+
+    core_group_move({
+      'entities': [
+        'skybox-back',
+        'skybox-bottom',
+        'skybox-front',
+        'skybox-left',
+        'skybox-right',
+        'skybox-top',
+      ],
+      'from': 'foreground',
+      'to': 'skybox',
+    });
+}
+
+
 // Optional args: color, id, length, length-step, width, width-step, x, y, z
 function data_webgl_terrain_3d(args){
     args = core_args({
