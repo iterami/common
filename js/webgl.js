@@ -26,14 +26,14 @@ function webgl_billboard(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'axes': {
-          'y': 'y',
-        },
+        'axes': [
+          'y',
+        ],
       },
     });
 
     for(var axis in args['axes']){
-        core_entities[args['entity']]['rotate-' + axis] = 360 - webgl_character['camera-rotate-' + args['axes'][axis]];
+        core_entities[args['entity']]['rotate-' + args['axes'][axis]] = 360 - webgl_character['camera-rotate-' + args['axes'][axis]];
     }
 }
 
@@ -283,11 +283,8 @@ function webgl_draw_entity(entity){
     }
 
     if(core_entities[entity]['billboard'] !== false){
-        var axes = {};
-        axes[core_entities[entity]['billboard']] = core_entities[entity]['billboard'];
-
         webgl_billboard({
-          'axes': axes,
+          'axes': core_entities[entity]['billboard'],
           'entity': entity,
         });
     }
