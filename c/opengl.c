@@ -839,10 +839,13 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
+            // Parse skybox.
+            if(strcmp(json_level_entities_element_property->name->string, "skybox") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
             // Parse texture.
             if(strcmp(json_level_entities_element_property->name->string, "texture") == 0){
-
-
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
