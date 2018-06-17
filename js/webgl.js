@@ -776,6 +776,23 @@ function webgl_load_level_init(args){
           'properties': args['json']['entities'][entity],
           'types': args['json']['entities'][entity]['types'],
         });
+
+        if(args['json']['entities'][entity]['skybox'] === true){
+            core_group_move({
+              'entities': [
+                args['json']['entities'][entity]['id'],
+              ],
+              'from': 'foreground',
+              'to': 'skybox',
+            });
+            webgl_attach({
+              'base': '_character-camera',
+              'entity': args['json']['entities'][entity]['id'],
+              'offset-x': args['json']['entities'][entity]['translate-x'],
+              'offset-y': args['json']['entities'][entity]['translate-y'],
+              'offset-z': args['json']['entities'][entity]['translate-z'],
+            });
+        }
     }
     for(var entity in webgl_character['entities']){
         core_entity_create({
