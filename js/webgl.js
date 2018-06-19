@@ -510,6 +510,9 @@ function webgl_entity_move(args){
       },
     });
 
+    var dx = 0;
+    var dz = 0;
+
     if(args['entity'] === false){
         var movement = core_move_3d({
           'angle': webgl_character['camera-rotate-y'],
@@ -528,9 +531,9 @@ function webgl_entity_move(args){
           'strafe': args['strafe'],
         });
 
-        core_entities[args['entity']]['translate-x'] += movement['x'];
-        core_entities[args['entity']]['translate-y'] += args['y'];
-        core_entities[args['entity']]['translate-z'] += movement['z'];
+        core_entities[args['entity']]['dx'] = dx;
+        core_entities[args['entity']]['dy'] = args['y'];
+        core_entities[args['entity']]['dz'] = dy;
     }
 }
 
