@@ -916,8 +916,8 @@ function webgl_logicloop_handle_entity(entity){
 
     if(core_entities[entity]['collides']){
         for(var other_entity in core_entities){
-            if(entity !== other_entity
-              && core_entities[other_entity]['collision']){
+            if(core_entities[other_entity]['collision']
+              && entity !== other_entity){
                 webgl_normals_collision({
                   'entity0id': entity,
                   'entity1id': other_entity,
