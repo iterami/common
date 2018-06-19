@@ -99,6 +99,9 @@ function webgl_camera_reset(){
     webgl_character['camera-translate-x'] = 0;
     webgl_character['camera-translate-y'] = 0;
     webgl_character['camera-translate-z'] = 0;
+    webgl_character['dx'] = 0;
+    webgl_character['dy'] = 0;
+    webgl_character['dz'] = 0;
 }
 
 // Optional args: x, xlock, y, z
@@ -204,11 +207,9 @@ function webgl_collision(args){
     var entity_z = 0;
 
     if(args['character']){
-        /*
         entity_dx = webgl_character['dx'];
         entity_dy = webgl_character['dy'];
         entity_dz = webgl_character['dz'];
-        */
         entity_x = webgl_character['camera-translate-x'];
         entity_y = webgl_character['camera-translate-y'];
         entity_z = webgl_character['camera-translate-z'];
@@ -510,9 +511,6 @@ function webgl_entity_move(args){
       },
     });
 
-    var dx = 0;
-    var dz = 0;
-
     if(args['entity'] === false){
         var movement = core_move_3d({
           'angle': webgl_character['camera-rotate-y'],
@@ -520,9 +518,9 @@ function webgl_entity_move(args){
           'strafe': args['strafe'],
         });
 
-        webgl_character['camera-translate-x'] += movement['x'];
-        webgl_character['camera-translate-y'] += args['y'];
-        webgl_character['camera-translate-z'] += movement['z'];
+        webgl_character['dx'] += movement['x'];
+        webgl_character['dy'] += args['y'];
+        webgl_character['dz'] += movement['z'];
 
     }else{
         var movement = core_move_3d({
@@ -531,9 +529,9 @@ function webgl_entity_move(args){
           'strafe': args['strafe'],
         });
 
-        core_entities[args['entity']]['dx'] = dx;
+        core_entities[args['entity']]['dx'] = movement['x'];
         core_entities[args['entity']]['dy'] = args['y'];
-        core_entities[args['entity']]['dz'] = dy;
+        core_entities[args['entity']]['dz'] = movement['z'];
     }
 }
 
@@ -761,7 +759,7 @@ function webgl_init(args){
 
 // Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-speed,
 //   camera-translate-x, camera-translate-y, camera-translate-z, camera-type,
-//   camera-zoom-current, camera-zoom-max, entities, experience, level
+//   camera-zoom-current, camera-zoom-max, dx, dy, dz, entities, experience, level
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -776,6 +774,9 @@ function webgl_init_character(args){
         'camera-type': 'gravity',
         'camera-zoom-current': 20,
         'camera-zoom-max': 20,
+        'dx': 0,
+        'dy': 0,
+        'dz': 0,
         'entities': [],
         'experience': 0,
         'level': -1,
@@ -796,6 +797,9 @@ function webgl_init_character(args){
       'camera-type': args['camera-type'],
       'camera-zoom-current': args['camera-zoom-current'],
       'camera-zoom-max': args['camera-zoom-max'],
+      'dx': args['dx'],
+      'dy': args['dy'],
+      'dz': args['dz'],
       'entities': args['entities'],
       'experience': args['experience'],
       'level': args['level'],
@@ -869,6 +873,9 @@ function webgl_load_level_init(args){
               'camera-type': args['json']['character']['camera-type'],
               'camera-zoom-current': args['json']['character']['camera-zoom-current'],
               'camera-zoom-max': args['json']['character']['camera-zoom-max'],
+              'dx': args['json']['character']['dx'],
+              'dy': args['json']['character']['dy'],
+              'dz': args['json']['character']['dz'],
               'entities': args['json']['character']['entities'],
               'experience': args['json']['character']['experience'],
               'level': args['json']['character']['level'],
@@ -986,14 +993,12 @@ function webgl_logicloop(){
 
     logic();
 
-    core_group_modify({
-      'groups': [
-        'webgl',
-      ],
-      'todo': function(entity){
-          webgl_logicloop_handle_entity(entity);
-      },
-    });
+    webgl_character['camera-translate-x'] += webgl_character['dx'];
+    webgl_character['camera-translate-y'] += webgl_character['dy'];
+    webgl_character['camera-translate-z'] += webgl_character['dz'];
+    webgl_character['dx'] = 0;
+    webgl_character['dy'] = 0;
+    webgl_character['dz'] = 0;
 
     if(webgl_character['level'] > -1){
         for(var other_entity in core_entities){
@@ -1005,6 +1010,15 @@ function webgl_logicloop(){
             }
         }
     }
+
+    core_group_modify({
+      'groups': [
+        'webgl',
+      ],
+      'todo': function(entity){
+          webgl_logicloop_handle_entity(entity);
+      },
+    });
 
     core_matrix_identity({
       'id': 'camera',
