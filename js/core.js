@@ -1072,8 +1072,8 @@ function core_init(){
       'content': '<table><tr><td><input id=audio-volume><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=jump><td>Jump<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=move-↑><td>Move ↑<tr><td><input id=move-←><td>Move ←<tr><td><input id=move-↓><td>Move ↓<tr><td><input id=move-→><td>Move →</table>',
       'default': true,
       'group': 'core-menu',
-      'id': 'global',
-      'label': 'Global',
+      'id': 'iterami',
+      'label': 'iterami',
     });
 
     // Keyboard/mouse init.
