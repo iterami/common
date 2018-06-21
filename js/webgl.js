@@ -596,8 +596,8 @@ function webgl_entity_todo(entity){
 }
 
 // Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-alpha,
-//   clearcolor-blue, clearcolor-green, clearcolor-red, contextmenu, direction-blue,
-//   direction-green, direction-red, direction-vector, fog, gravity-acceleration, gravity-max
+//   clearcolor-blue, clearcolor-green, clearcolor-red, direction-blue, direction-green,
+//   direction-red, direction-vector, fog, gravity-acceleration, gravity-max
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -609,7 +609,6 @@ function webgl_init(args){
         'clearcolor-blue': 0,
         'clearcolor-green': 0,
         'clearcolor-red': 0,
-        'contextmenu': true,
         'direction-blue': 1,
         'direction-green': 1,
         'direction-red': 1,
@@ -660,17 +659,11 @@ function webgl_init(args){
       'pointer': false,
     };
 
-    var properties = {
-      'id': 'canvas',
-    };
-    if(!args['contextmenu']){
-        properties['oncontextmenu'] = function(){
-            return false;
-        };
-    }
     core_html({
       'parent': document.body,
-      'properties': properties,
+      'properties': {
+        'id': 'canvas',
+      },
       'type': 'canvas',
     });
     core_html({
@@ -921,7 +914,6 @@ function webgl_load_level_init(args){
       'clearcolor-blue': args['json']['clearcolor-blue'],
       'clearcolor-green': args['json']['clearcolor-green'],
       'clearcolor-red': args['json']['clearcolor-red'],
-      'contextmenu': args['json']['contextmenu'],
       'direction-blue': args['json']['direction-blue'],
       'direction-green': args['json']['direction-green'],
       'direction-red': args['json']['direction-red'],

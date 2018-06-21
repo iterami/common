@@ -726,7 +726,8 @@ function core_handle_contextmenu(event){
       'object': core_mouse['todo'],
       'todo': true,
     });
-    if(result === void 0){
+    if(result === void 0
+      && !core_menu_open){
         return false;
     }
 }
@@ -760,7 +761,7 @@ function core_handle_defaults(args){
 }
 
 // Required args: event, key, object
-// Optional args: block, state, todo
+// Optional args: state, todo
 function core_handle_event(args){
     args = core_args({
       'args': args,
@@ -771,7 +772,8 @@ function core_handle_event(args){
     });
 
     if(args['object'].hasOwnProperty(args['key'])){
-        if(args['object'][args['key']]['preventDefault']){
+        if(args['object'][args['key']]['preventDefault']
+          && !core_menu_open){
             args['event'].preventDefault();
         }
 
