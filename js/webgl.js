@@ -964,6 +964,9 @@ function webgl_load_level_init(args){
         webgl_attach({
           'base': '_character-camera',
           'entity': webgl_character['entities'][entity]['id'],
+          'offset-x': webgl_character['entities'][entity]['translate-x'],
+          'offset-y': webgl_character['entities'][entity]['translate-y'],
+          'offset-z': webgl_character['entities'][entity]['translate-z'],
         });
     }
 
