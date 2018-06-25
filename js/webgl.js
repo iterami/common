@@ -1,6 +1,6 @@
 'use strict';
 
-// Required args: base, entity
+// Required args: entity, to
 // Optional args: offset-x, offset-y, offset-z
 function webgl_attach(args){
     args = core_args({
@@ -16,7 +16,7 @@ function webgl_attach(args){
       'offset-x': args['offset-x'],
       'offset-y': args['offset-y'],
       'offset-z': args['offset-z'],
-      'to': args['base'],
+      'to': args['to'],
     };
 }
 
@@ -939,11 +939,11 @@ function webgl_load_level_init(args){
               'to': 'skybox',
             });
             webgl_attach({
-              'base': '_character-camera',
               'entity': args['json']['entities'][entity]['id'],
               'offset-x': args['json']['entities'][entity]['translate-x'],
               'offset-y': args['json']['entities'][entity]['translate-y'],
               'offset-z': args['json']['entities'][entity]['translate-z'],
+              'to': '_character-camera',
             });
         }
     }
@@ -954,11 +954,11 @@ function webgl_load_level_init(args){
           'types': webgl_character['entities'][entity]['types'],
         });
         webgl_attach({
-          'base': '_character-camera',
           'entity': webgl_character['entities'][entity]['id'],
           'offset-x': webgl_character['entities'][entity]['translate-x'],
           'offset-y': webgl_character['entities'][entity]['translate-y'],
           'offset-z': webgl_character['entities'][entity]['translate-z'],
+          'to': '_character-camera',
         });
     }
 
