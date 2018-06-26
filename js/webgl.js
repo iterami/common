@@ -255,7 +255,7 @@ function webgl_collision(args){
     if(target['normals'][1] !== 0){
         if(target['normals'][1] === 1
           && entity_dy < 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][3] - webgl_properties['collision-range']
+            if(entity_x >= target['translate-x'] + target['vertices'][4] - webgl_properties['collision-range']
               && entity_x <= target['translate-x'] + target['vertices'][0] + webgl_properties['collision-range']
               && entity_y >= target['translate-y']
               && entity_y <= target['translate-y'] + webgl_properties['collision-range']
