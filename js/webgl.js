@@ -930,6 +930,8 @@ function webgl_load_level_init(args){
           'types': args['json']['entities'][entity]['types'],
         });
 
+        var attach = false;
+
         if(args['json']['entities'][entity]['skybox'] === true){
             core_group_move({
               'entities': [
@@ -938,12 +940,19 @@ function webgl_load_level_init(args){
               'from': 'foreground',
               'to': 'skybox',
             });
+            attach = '_character-camera';
+
+        }else if(args['json']['entities'][entity]['attach'] !== void 0){
+            attach = args['json']['entities'][entity]['attach'];
+        }
+
+        if(attach !== false){
             webgl_attach({
               'entity': args['json']['entities'][entity]['id'],
               'offset-x': args['json']['entities'][entity]['translate-x'],
               'offset-y': args['json']['entities'][entity]['translate-y'],
               'offset-z': args['json']['entities'][entity]['translate-z'],
-              'to': '_character-camera',
+              'to': attach,
             });
         }
     }

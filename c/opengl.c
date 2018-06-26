@@ -706,6 +706,7 @@ void opengl_load_level(const gchar *filename){
 
             // Default entity values.
             float alpha = 1;
+            gboolean attach = FALSE;
             gboolean billboard = FALSE;
             gboolean collides = FALSE;
             gboolean collision = FALSE;
@@ -732,6 +733,14 @@ void opengl_load_level(const gchar *filename){
                 value = json_level_entities_element_property->value;
                 number = (struct json_number_s*)value->payload;
                 alpha = atof(number->number);
+
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse attach.
+            if(strcmp(json_level_entities_element_property->name->string, "id") == 0){
+                value = json_level_entities_element_property->value;
+                attach = value->type == json_type_false ? FALSE : TRUE;
 
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
