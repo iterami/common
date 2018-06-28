@@ -193,14 +193,17 @@ function webgl_character_level(){
     }
 }
 
-// Required args: color
+// Required args: alpha, blue, green, red
 function webgl_clearcolor_set(args){
-    webgl_properties['clearcolor'] = args['color'];
+    webgl_properties['clearcolor-alpha'] = args['alpha'];
+    webgl_properties['clearcolor-blue'] = args['blue'];
+    webgl_properties['clearcolor-green'] = args['green'];
+    webgl_properties['clearcolor-red'] = args['red'];
     webgl_buffer.clearColor(
-      webgl_properties['clearcolor']['red'],
-      webgl_properties['clearcolor']['green'],
-      webgl_properties['clearcolor']['blue'],
-      webgl_properties['clearcolor']['alpha']
+      webgl_properties['clearcolor-red'],
+      webgl_properties['clearcolor-green'],
+      webgl_properties['clearcolor-blue'],
+      webgl_properties['clearcolor-alpha']
     );
 }
 
@@ -651,29 +654,21 @@ function webgl_init(args){
       'width-half': 0,
     };
     webgl_properties = {
-      'ambientlighting': {
-        'blue': args['ambient-blue'],
-        'green': args['ambient-green'],
-        'red': args['ambient-red'],
-      },
-      'clearcolor': {
-        'alpha': args['clearcolor-alpha'],
-        'blue': args['clearcolor-blue'],
-        'green': args['clearcolor-green'],
-        'red': args['clearcolor-red'],
-      },
+      'ambientlighting-blue': args['ambient-blue'],
+      'ambientlighting-green': args['ambient-green'],
+      'ambientlighting-red': args['ambient-red'],
+      'clearcolor-alpha': args['clearcolor-alpha'],
+      'clearcolor-blue': args['clearcolor-blue'],
+      'clearcolor-green': args['clearcolor-green'],
+      'clearcolor-red': args['clearcolor-red'],
       'collision-range': 2.5,
-      'directionlighting': {
-        'blue': args['direction-blue'],
-        'green': args['direction-green'],
-        'red': args['direction-red'],
-        'vector': args['direction-vector'],
-      },
+      'directionlighting-blue': args['direction-blue'],
+      'directionlighting-green': args['direction-green'],
+      'directionlighting-red': args['direction-red'],
+      'directionlighting-vector': args['direction-vector'],
       'fog': args['fog'],
-      'gravity': {
-        'acceleration': args['gravity-acceleration'],
-        'max': args['gravity-max'],
-      },
+      'gravity-acceleration': args['gravity-acceleration'],
+      'gravity-max': args['gravity-max'],
       'pointer': false,
     };
 
@@ -717,12 +712,10 @@ function webgl_init(args){
     webgl_resize();
 
     webgl_clearcolor_set({
-      'color': {
-        'alpha': webgl_properties['clearcolor']['alpha'],
-        'blue': webgl_properties['clearcolor']['blue'],
-        'green': webgl_properties['clearcolor']['green'],
-        'red': webgl_properties['clearcolor']['red'],
-      },
+      'alpha': webgl_properties['clearcolor-alpha'],
+      'blue': webgl_properties['clearcolor-blue'],
+      'green': webgl_properties['clearcolor-green'],
+      'red': webgl_properties['clearcolor-red'],
     });
     webgl_buffer.enable(webgl_buffer.BLEND);
     webgl_buffer.enable(webgl_buffer.CULL_FACE);
@@ -1161,8 +1154,8 @@ function webgl_logicloop_handle_entity(entity){
 
     if(core_entities[entity]['gravity']){
         core_entities[entity]['dy'] = Math.max(
-          core_entities[entity]['dy'] + webgl_properties['gravity']['acceleration'],
-          webgl_properties['gravity']['max']
+          core_entities[entity]['dy'] + webgl_properties['gravity-acceleration'],
+          webgl_properties['gravity-max']
         );
     }
 
@@ -1359,10 +1352,10 @@ function webgl_shader_update(){
     var fogstring = webgl_properties['fog'] !== false
       ? ('mix('
         + 'vec4('
-        +   webgl_properties['clearcolor']['red'] + ','
-        +   webgl_properties['clearcolor']['green'] + ','
-        +   webgl_properties['clearcolor']['blue'] + ','
-        +   webgl_properties['clearcolor']['alpha']
+        +   webgl_properties['clearcolor-red'] + ','
+        +   webgl_properties['clearcolor-green'] + ','
+        +   webgl_properties['clearcolor-blue'] + ','
+        +   webgl_properties['clearcolor-alpha']
         + '),'
         + 'vec_fragmentColor,'
         + 'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
@@ -1382,12 +1375,12 @@ function webgl_shader_update(){
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
-    var directionstring = webgl_properties['directionlighting']['vector'] !== false
+    var directionstring = webgl_properties['directionlighting-vector'] !== false
       ? (' + (vec3('
-        +   webgl_properties['directionlighting']['red'] + ','
-        +   webgl_properties['directionlighting']['green'] + ','
-        +   webgl_properties['directionlighting']['blue']
-        + ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting']['vector'] + '))),0.0));')
+        +   webgl_properties['directionlighting-red'] + ','
+        +   webgl_properties['directionlighting-green'] + ','
+        +   webgl_properties['directionlighting-blue']
+        + ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))),0.0));')
       : ';';
     var vertex_shader = webgl_shader_create({
       'id': 'vertex',
@@ -1410,9 +1403,9 @@ function webgl_shader_update(){
         +     'vec_textureCoord = vec_texturePosition;'
         +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
         +     'vec_lighting = vec3('
-        +       webgl_properties['ambientlighting']['red'] + ','
-        +       webgl_properties['ambientlighting']['green'] + ','
-        +       webgl_properties['ambientlighting']['blue']
+        +       webgl_properties['ambientlighting-red'] + ','
+        +       webgl_properties['ambientlighting-green'] + ','
+        +       webgl_properties['ambientlighting-blue']
         +     ')' + directionstring
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
