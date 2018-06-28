@@ -83,7 +83,7 @@ function webgl_camera_handle(){
     if(core_mouse['pointerlock-state']
       || core_mouse['down']){
         webgl_camera_rotate({
-          'character': core_mouse['button'] === 2,
+          'character': core_mouse['button'] === 2 || webgl_character['camera-zoom-max'] === 0,
           'x': core_mouse['movement-y'] / 10,
           'y': core_mouse['movement-x'] / 10,
         });
@@ -1011,8 +1011,9 @@ function webgl_load_level_init(args){
 function webgl_logicloop(){
     if(webgl_character['camera-type'] !== false){
         if(core_keys[core_storage_data['move-←']]['state']){
-            if(core_mouse['down']
-              && core_mouse['button'] === 2){
+            if(webgl_character['camera-zoom-max'] === 0
+              || (core_mouse['down']
+              && core_mouse['button'] === 2)){
                 webgl_entity_move({
                   'speed': -webgl_character['camera-speed'],
                   'strafe': true,
@@ -1027,8 +1028,9 @@ function webgl_logicloop(){
         }
 
         if(core_keys[core_storage_data['move-→']]['state']){
-            if(core_mouse['down']
-              && core_mouse['button'] === 2){
+            if(webgl_character['camera-zoom-max'] === 0
+              || (core_mouse['down']
+              && core_mouse['button'] === 2)){
                 webgl_entity_move({
                   'speed': webgl_character['camera-speed'],
                   'strafe': true,
