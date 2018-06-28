@@ -111,11 +111,12 @@ function webgl_camera_reset(){
     webgl_character['translate-z'] = 0;
 }
 
-// Optional args: character, x, xlock, y, z
+// Optional args: camera, character, x, xlock, y, z
 function webgl_camera_rotate(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'camera': true,
         'character': true,
         'x': 0,
         'xlock': true,
@@ -129,12 +130,15 @@ function webgl_camera_rotate(args){
       'y': args['y'],
       'z': args['z'],
     };
+    var prefix = args['camera']
+      ? 'camera-'
+      : '';
     for(var axis in axes){
-        webgl_character['camera-rotate-' + axis] = core_clamp({
+        webgl_character[prefix + 'rotate-' + axis] = core_clamp({
           'max': 360,
           'min': 0,
           'value': core_round({
-            'number': webgl_character['camera-rotate-' + axis] + axes[axis],
+            'number': webgl_character[prefix + 'rotate-' + axis] + axes[axis],
           }),
           'wrap': true,
         });
@@ -142,23 +146,24 @@ function webgl_camera_rotate(args){
 
     if(args['xlock']){
         var max = 89;
-        if(webgl_character['camera-rotate-x'] > 180){
+        if(webgl_character[prefix + 'rotate-x'] > 180){
             max += 271;
         }
-        webgl_character['camera-rotate-x'] = core_clamp({
+        webgl_character[prefix + 'rotate-x'] = core_clamp({
           'max': max,
           'min': max - 89,
-          'value': webgl_character['camera-rotate-x'],
+          'value': webgl_character[prefix + 'rotate-x'],
         });
     }
 
     for(var axis in axes){
-        webgl_character['camera-rotate-radians-' + axis] = core_degrees_to_radians({
-          'degrees': webgl_character['camera-rotate-' + axis],
+        webgl_character[prefix + 'rotate-radians-' + axis] = core_degrees_to_radians({
+          'degrees': webgl_character[prefix + 'rotate-' + axis],
         });
     }
 
-    if(args['character']){
+    if(args['camera']
+      && args['character']){
         webgl_character['rotate-y'] = webgl_character['camera-rotate-y'];
         webgl_character['rotate-radians-y'] = webgl_character['camera-rotate-radians-y'];
     }
@@ -851,6 +856,12 @@ function webgl_init_character(args){
       'y': args['camera-rotate-y'],
       'z': args['camera-rotate-z'],
     });
+    webgl_camera_rotate({
+      'camera': false,
+      'x': args['rotate-x'],
+      'y': args['rotate-y'],
+      'z': args['rotate-z'],
+    });
 }
 
 // Required args: json
@@ -1021,7 +1032,8 @@ function webgl_logicloop(){
 
             }else{
                 webgl_camera_rotate({
-                  'character': true,
+                  'camera': !(core_mouse['down']
+                    && core_mouse['button'] === 0),
                   'y': -5,
                 });
             }
@@ -1038,7 +1050,8 @@ function webgl_logicloop(){
 
             }else{
                 webgl_camera_rotate({
-                  'character': true,
+                  'camera': !(core_mouse['down']
+                    && core_mouse['button'] === 0),
                   'y': 5,
                 });
             }
