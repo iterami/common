@@ -218,6 +218,7 @@ function webgl_collision(args){
       },
     });
 
+    var collide_range = 0;
     var collision = false;
     var entity_dx = 0;
     var entity_dy = 0;
@@ -228,6 +229,7 @@ function webgl_collision(args){
     var target = core_entities[args['target']];
 
     if(args['character']){
+        collide_range = webgl_character['collide-range'];
         entity_dx = webgl_character['dx'];
         entity_dy = webgl_character['dy'];
         entity_dz = webgl_character['dz'];
@@ -236,6 +238,7 @@ function webgl_collision(args){
         entity_z = webgl_character['translate-z'];
 
     }else{
+        collide_range = core_entities[args['entity']]['collide-range'];
         entity_dx = core_entities[args['entity']]['dx'];
         entity_dy = core_entities[args['entity']]['dy'];
         entity_dz = core_entities[args['entity']]['dz'];
@@ -248,27 +251,27 @@ function webgl_collision(args){
         if(target['normals'][0] === 1
           && entity_dx < 0){
             if(entity_x >= target['translate-x']
-              && entity_x <= target['translate-x'] + webgl_properties['collision-range']
-              && entity_y > target['translate-y'] + target['vertices'][4] - webgl_properties['collision-range']
-              && entity_y < target['translate-y'] + target['vertices'][0] + webgl_properties['collision-range']
-              && entity_z >= target['translate-z'] + target['vertices'][2] - webgl_properties['collision-range'] + 1
-              && entity_z <= target['translate-z'] + target['vertices'][10] + webgl_properties['collision-range'] - 1){
+              && entity_x <= target['translate-x'] + collide_range
+              && entity_y > target['translate-y'] + target['vertices'][4] - collide_range
+              && entity_y < target['translate-y'] + target['vertices'][0] + collide_range
+              && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range + 1
+              && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range - 1){
                 collision = true;
                 entity_dx = 0;
-                entity_x = target['translate-x'] + webgl_properties['collision-range'];
+                entity_x = target['translate-x'] + collide_range;
             }
 
         }else if(target['normals'][0] === -1
           && entity_dx > 0){
-            if(entity_x >= target['translate-x'] - webgl_properties['collision-range']
+            if(entity_x >= target['translate-x'] - collide_range
               && entity_x <= target['translate-x']
-              && entity_y > target['translate-y'] + target['vertices'][4] - webgl_properties['collision-range']
-              && entity_y < target['translate-y'] + target['vertices'][0] + webgl_properties['collision-range']
-              && entity_z >= target['translate-z'] + target['vertices'][2] - webgl_properties['collision-range'] + 1
-              && entity_z <= target['translate-z'] + target['vertices'][10] + webgl_properties['collision-range'] - 1){
+              && entity_y > target['translate-y'] + target['vertices'][4] - collide_range
+              && entity_y < target['translate-y'] + target['vertices'][0] + collide_range
+              && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range + 1
+              && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range - 1){
                 collision = true;
                 entity_dx = 0;
-                entity_x = target['translate-x'] - webgl_properties['collision-range'];
+                entity_x = target['translate-x'] - collide_range;
             }
         }
     }
@@ -276,28 +279,28 @@ function webgl_collision(args){
     if(target['normals'][1] !== 0){
         if(target['normals'][1] === 1
           && entity_dy < 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][4] - webgl_properties['collision-range']
-              && entity_x <= target['translate-x'] + target['vertices'][0] + webgl_properties['collision-range']
+            if(entity_x >= target['translate-x'] + target['vertices'][4] - collide_range
+              && entity_x <= target['translate-x'] + target['vertices'][0] + collide_range
               && entity_y >= target['translate-y']
-              && entity_y <= target['translate-y'] + webgl_properties['collision-range']
-              && entity_z >= target['translate-z'] + target['vertices'][2] - webgl_properties['collision-range']
-              && entity_z <= target['translate-z'] + target['vertices'][10] + webgl_properties['collision-range']){
+              && entity_y <= target['translate-y'] + collide_range
+              && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
+              && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
                 collision = true;
                 entity_dy = 0;
-                entity_y = target['translate-y'] + webgl_properties['collision-range'];
+                entity_y = target['translate-y'] + collide_range;
             }
 
         }else if(target['normals'][1] === -1
           && entity_dy > 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][4] - webgl_properties['collision-range']
-              && entity_x <= target['translate-x'] + target['vertices'][0] + webgl_properties['collision-range']
-              && entity_y >= target['translate-y'] - webgl_properties['collision-range']
+            if(entity_x >= target['translate-x'] + target['vertices'][4] - collide_range
+              && entity_x <= target['translate-x'] + target['vertices'][0] + collide_range
+              && entity_y >= target['translate-y'] - collide_range
               && entity_y <= target['translate-y']
-              && entity_z >= target['translate-z'] + target['vertices'][2] - webgl_properties['collision-range']
-              && entity_z <= target['translate-z'] + target['vertices'][10] + webgl_properties['collision-range']){
+              && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
+              && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
                 collision = true;
                 entity_dy = 0;
-                entity_y = target['translate-y'] - webgl_properties['collision-range'];
+                entity_y = target['translate-y'] - collide_range;
             }
         }
     }
@@ -305,28 +308,28 @@ function webgl_collision(args){
     if(target['normals'][2] !== 0){
         if(target['normals'][2] === 1
           && entity_dz < 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][4] - webgl_properties['collision-range'] + 1
-              && entity_x <= target['translate-x'] + target['vertices'][0] + webgl_properties['collision-range'] - 1
-              && entity_y > target['translate-y'] + target['vertices'][2] - webgl_properties['collision-range']
-              && entity_y < target['translate-y'] + target['vertices'][10] + webgl_properties['collision-range']
+            if(entity_x >= target['translate-x'] + target['vertices'][4] - collide_range + 1
+              && entity_x <= target['translate-x'] + target['vertices'][0] + collide_range - 1
+              && entity_y > target['translate-y'] + target['vertices'][2] - collide_range
+              && entity_y < target['translate-y'] + target['vertices'][10] + collide_range
               && entity_z >= target['translate-z']
-              && entity_z <= target['translate-z'] + webgl_properties['collision-range']){
+              && entity_z <= target['translate-z'] + collide_range){
                 collision = true;
                 entity_dz = 0;
-                entity_z = target['translate-z'] + webgl_properties['collision-range'];
+                entity_z = target['translate-z'] + collide_range;
             }
 
         }else if(target['normals'][2] === -1
           && entity_dz > 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][4] - webgl_properties['collision-range'] + 1
-              && entity_x <= target['translate-x'] + target['vertices'][0] + webgl_properties['collision-range'] - 1
-              && entity_y > target['translate-y'] + target['vertices'][2] - webgl_properties['collision-range']
-              && entity_y < target['translate-y'] + target['vertices'][10] + webgl_properties['collision-range']
-              && entity_z >= target['translate-z'] - webgl_properties['collision-range']
+            if(entity_x >= target['translate-x'] + target['vertices'][4] - collide_range + 1
+              && entity_x <= target['translate-x'] + target['vertices'][0] + collide_range - 1
+              && entity_y > target['translate-y'] + target['vertices'][2] - collide_range
+              && entity_y < target['translate-y'] + target['vertices'][10] + collide_range
+              && entity_z >= target['translate-z'] - collide_range
               && entity_z <= target['translate-z']){
                 collision = true;
                 entity_dz = 0;
-                entity_z = target['translate-z'] - webgl_properties['collision-range'];
+                entity_z = target['translate-z'] - collide_range;
             }
         }
     }
@@ -661,7 +664,6 @@ function webgl_init(args){
       'clearcolor-blue': args['clearcolor-blue'],
       'clearcolor-green': args['clearcolor-green'],
       'clearcolor-red': args['clearcolor-red'],
-      'collision-range': 2.5,
       'directionlighting-blue': args['direction-blue'],
       'directionlighting-green': args['direction-green'],
       'directionlighting-red': args['direction-red'],
@@ -737,6 +739,7 @@ function webgl_init(args){
         'alpha': 1,
         'attach': false,
         'billboard': false,
+        'collide-range': 2.5,
         'collides': false,
         'collision': false,
         'draw': true,
@@ -786,8 +789,8 @@ function webgl_init(args){
     });
 }
 
-// Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-speed,
-//   camera-type, camera-zoom-current, camera-zoom-max, collides, dx, dy, dz, entities,
+// Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-speed, camera-type,
+//   camera-zoom-current, camera-zoom-max, collide-range, collides, dx, dy, dz, entities,
 //   experience, level, rotate-x, rotate-y, rotate-z, translate-x, translate-y, translate-z
 function webgl_init_character(args){
     args = core_args({
@@ -800,6 +803,7 @@ function webgl_init_character(args){
         'camera-type': 'gravity',
         'camera-zoom-current': 20,
         'camera-zoom-max': 20,
+        'collide-range': 2.5,
         'collides': true,
         'dx': 0,
         'dy': 0,
@@ -827,6 +831,7 @@ function webgl_init_character(args){
       'camera-type': args['camera-type'],
       'camera-zoom-current': args['camera-zoom-current'],
       'camera-zoom-max': args['camera-zoom-max'],
+      'collide-range': args['collide-range'],
       'collides': args['collides'],
       'dx': args['dx'],
       'dy': args['dy'],
@@ -921,6 +926,7 @@ function webgl_load_level_init(args){
               'camera-type': args['json']['character']['camera-type'],
               'camera-zoom-current': args['json']['character']['camera-zoom-current'],
               'camera-zoom-max': args['json']['character']['camera-zoom-max'],
+              'collide-range': args['json']['character']['collide-range'],
               'collides': args['json']['character']['collides'],
               'dx': args['json']['character']['dx'],
               'dy': args['json']['character']['dy'],

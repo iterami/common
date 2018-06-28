@@ -749,6 +749,11 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
+            // Parse collide-range.
+            if(strcmp(json_level_entities_element_property->name->string, "collide-range") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
             // Parse collides.
             if(strcmp(json_level_entities_element_property->name->string, "collides") == 0){
                 value = json_level_entities_element_property->value;
