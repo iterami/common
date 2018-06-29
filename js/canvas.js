@@ -280,8 +280,8 @@ function canvas_setmode(args){
       },
     });
 
-    core_storage_save();
     core_entity_remove_all();
+    core_storage_save();
 
     core_mode = args['mode'];
 

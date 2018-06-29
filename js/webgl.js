@@ -904,8 +904,8 @@ function webgl_load_level_init(args){
         }
     }
 
-    core_storage_save();
     core_entity_remove_all();
+    core_storage_save();
 
     if(args['character'] === -1){
         args['json']['character'] = false;
