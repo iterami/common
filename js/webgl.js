@@ -637,8 +637,8 @@ function webgl_init(args){
         'direction-green': 1,
         'direction-red': 1,
         'direction-vector': false,
-        'fog': -0.0001,
-        'gravity-acceleration': -0.05,
+        'fog': -.0001,
+        'gravity-acceleration': -.05,
         'gravity-max': -1,
       },
     });
@@ -1384,7 +1384,7 @@ function webgl_shader_update(){
         +   webgl_properties['directionlighting-red'] + ','
         +   webgl_properties['directionlighting-green'] + ','
         +   webgl_properties['directionlighting-blue']
-        + ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))),0.0));')
+        + ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))), 0.0));')
       : ';';
     var vertex_shader = webgl_shader_create({
       'id': 'vertex',

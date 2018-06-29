@@ -1886,7 +1886,7 @@ function core_sort_random(args){
     core_sort_custom({
       'array': args['array'],
       'todo': function(a, b){
-          return Math.random() - 0.5;
+          return Math.random() - .5;
       },
     });
 }

@@ -372,7 +372,7 @@ function data_webgl_terrain_3d(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'color': 0.5,
+        'color': .5,
         'id': core_uid(),
         'length': 10,
         'length-step': 1,
@@ -443,14 +443,14 @@ function data_webgl_tree_2d(args){
       'defaults': {
         'billboard': false,
         'color-base': [
-          0.4, 0.2, 0, 1,
-          0.4, 0.2, 0, 1,
-          0.4, 0.2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
         ],
         'color-leaf': [
-          0.1, 0.3, 0.1, 1,
-          0.1, 0.3, 0.1, 1,
-          0.1, 0.3, 0.1, 1,
+          .1, .3, .1, 1,
+          .1, .3, .1, 1,
+          .1, .3, .1, 1,
         ],
         'dx': 0,
         'dy': 0,
@@ -516,16 +516,16 @@ function data_webgl_tree_3d(args){
       'defaults': {
         'collision': false,
         'color-base': [
-          0.4, 0.2, 0, 1,
-          0.4, 0.2, 0, 1,
-          0.4, 0.2, 0, 1,
-          0.4, 0.2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
         ],
         'color-leaf': [
-          0.1, 0.3, 0.1, 1,
-          0.1, 0.3, 0.1, 1,
-          0.1, 0.3, 0.1, 1,
-          0.1, 0.3, 0.1, 1,
+          .1, .3, .1, 1,
+          .1, .3, .1, 1,
+          .1, .3, .1, 1,
+          .1, .3, .1, 1,
         ],
         'dx': 0,
         'dy': 0,
