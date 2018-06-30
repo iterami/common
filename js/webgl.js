@@ -162,8 +162,16 @@ function webgl_camera_rotate(args){
 
     if(args['camera']
       && args['character']){
-        webgl_character['rotate-y'] = webgl_character['camera-rotate-y'];
-        webgl_character['rotate-radians-y'] = webgl_character['camera-rotate-radians-y'];
+        if(core_mouse['down']){
+            webgl_character['rotate-y'] = webgl_character['camera-rotate-y'];
+            webgl_character['rotate-radians-y'] = webgl_character['camera-rotate-radians-y'];
+
+        }else{
+            webgl_character['rotate-y'] += args['y'];
+            webgl_character['rotate-radians-y'] = core_degrees_to_radians({
+              'degrees': webgl_character['rotate-y'],
+            });
+        }
     }
 }
 
@@ -438,6 +446,28 @@ function webgl_draw_entity(entity){
       ],
       'id': 'camera',
     });
+    if(core_entities[entity]['attach'] !== false){
+        if(core_entities[entity]['attach']['to'] === '_character-camera'){
+            core_matrix_rotate({
+              'dimensions': [
+                0,
+                -webgl_character['rotate-radians-y'],
+                0,
+              ],
+              'id': 'camera',
+            });
+
+        }else{
+            core_matrix_rotate({
+              'dimensions': [
+                core_entities[entity]['rotate-radians-x'],
+                core_entities[entity]['rotate-radians-y'],
+                core_entities[entity]['rotate-radians-z'],
+              ],
+              'id': 'camera',
+            });
+        }
+    }
     core_matrix_rotate({
       'dimensions': [
         core_entities[entity]['rotate-radians-x'],
@@ -615,16 +645,6 @@ function webgl_entity_todo(entity){
       'rotate-x': core_entities[entity]['rotate-x'],
       'rotate-y': core_entities[entity]['rotate-y'],
       'rotate-z': core_entities[entity]['rotate-z'],
-    });
-
-    core_entities[entity]['rotate-radians-x'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-x'],
-    });
-    core_entities[entity]['rotate-radians-y'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-y'],
-    });
-    core_entities[entity]['rotate-radians-z'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-z'],
     });
 
     if(!core_entities[entity]['draw']){
@@ -1190,16 +1210,6 @@ function webgl_logicloop_handle_entity(entity){
         core_entities[entity]['logic']();
     }
 
-    core_entities[entity]['rotate-radians-x'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-x'],
-    });
-    core_entities[entity]['rotate-radians-y'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-y'],
-    });
-    core_entities[entity]['rotate-radians-z'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-z'],
-    });
-
     if(core_entities[entity]['attach'] !== false){
         if(core_entities[entity]['attach']['to'] === '_character-camera'){
             core_entities[entity]['translate-x'] = webgl_character['translate-x']
@@ -1250,6 +1260,16 @@ function webgl_logicloop_handle_entity(entity){
         core_entities[entity]['translate-y'] += core_entities[entity]['dy'];
         core_entities[entity]['translate-z'] += core_entities[entity]['dz'];
     }
+
+    core_entities[entity]['rotate-radians-x'] = core_degrees_to_radians({
+      'degrees': core_entities[entity]['rotate-x'],
+    });
+    core_entities[entity]['rotate-radians-y'] = core_degrees_to_radians({
+      'degrees': core_entities[entity]['rotate-y'],
+    });
+    core_entities[entity]['rotate-radians-z'] = core_degrees_to_radians({
+      'degrees': core_entities[entity]['rotate-z'],
+    });
 }
 
 // Optional args: rotate-x, rotate-y, rotate-z
