@@ -1107,6 +1107,13 @@ function webgl_logicloop(){
 
     logic();
 
+    if(webgl_character['camera-type'] === 'gravity'){
+        webgl_character['dy'] = Math.max(
+          webgl_character['dy'] + webgl_properties['gravity-acceleration'],
+          webgl_properties['gravity-max']
+        );
+    }
+
     if(webgl_character['collides']){
         for(var other_entity in core_entities){
             if(core_entities[other_entity]['collision']){
@@ -1131,7 +1138,6 @@ function webgl_logicloop(){
     webgl_character['translate-y'] += webgl_character['dy'];
     webgl_character['translate-z'] += webgl_character['dz'];
     webgl_character['dx'] = 0;
-    webgl_character['dy'] = 0;
     webgl_character['dz'] = 0;
 
     core_matrix_identity({
