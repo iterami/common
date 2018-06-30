@@ -338,6 +338,10 @@ function webgl_collision(args){
             webgl_character['dy'] = entity_dy;
             webgl_character['dz'] = entity_dz;
 
+            if(webgl_character['camera-type'] === 'gravity'){
+                webgl_character['jump-allow'] = webgl_character['dy'] === 0;
+            }
+
         }else{
             core_entities[args['entity']]['dx'] = entity_dx;
             core_entities[args['entity']]['dy'] = entity_dy;
@@ -1118,6 +1122,7 @@ function webgl_logicloop(){
 
         if(webgl_character['jump-allow']
           && core_keys[32]['state']){
+            webgl_character['jump-allow'] = false;
             webgl_character['dy'] = webgl_character['jump-height'];
         }
     }
@@ -1131,10 +1136,6 @@ function webgl_logicloop(){
                 });
             }
         }
-    }
-
-    if(webgl_character['camera-type'] === 'gravity'){
-        webgl_character['jump-allow'] = webgl_character['dy'] === 0;
     }
 
     core_group_modify({
