@@ -1371,18 +1371,6 @@ function webgl_resize(){
     });
 }
 
-// Required args: properties
-function webgl_setcanvasproperties(args){
-    Object.assign(
-      webgl_canvas_properties,
-      args['properties']
-    );
-    Object.assign(
-      webgl_buffer,
-      args['properties']
-    );
-}
-
 // Required args: id, source, type
 function webgl_shader_create(args){
     var shader = webgl_buffer.createShader(args['type']);
