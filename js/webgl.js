@@ -663,6 +663,16 @@ function webgl_entity_todo(entity){
       'entityid': entity,
       'image': webgl_textures[core_entities[entity]['texture']],
     });
+
+    core_entities[entity]['rotate-radians-x'] = core_degrees_to_radians({
+      'degrees': core_entities[entity]['rotate-x'],
+    });
+    core_entities[entity]['rotate-radians-y'] = core_degrees_to_radians({
+      'degrees': core_entities[entity]['rotate-y'],
+    });
+    core_entities[entity]['rotate-radians-z'] = core_degrees_to_radians({
+      'degrees': core_entities[entity]['rotate-z'],
+    });
 }
 
 // Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-alpha,
@@ -1260,16 +1270,6 @@ function webgl_logicloop_handle_entity(entity){
         core_entities[entity]['translate-y'] += core_entities[entity]['dy'];
         core_entities[entity]['translate-z'] += core_entities[entity]['dz'];
     }
-
-    core_entities[entity]['rotate-radians-x'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-x'],
-    });
-    core_entities[entity]['rotate-radians-y'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-y'],
-    });
-    core_entities[entity]['rotate-radians-z'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-z'],
-    });
 }
 
 // Optional args: rotate-x, rotate-y, rotate-z
