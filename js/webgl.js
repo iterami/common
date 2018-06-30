@@ -91,6 +91,7 @@ function webgl_camera_handle(){
 }
 
 function webgl_camera_reset(){
+    webgl_entity_move_to();
     webgl_character['camera-rotate-radians-x'] = 0;
     webgl_character['camera-rotate-radians-y'] = 0;
     webgl_character['camera-rotate-radians-z'] = 0;
@@ -106,9 +107,6 @@ function webgl_camera_reset(){
     webgl_character['rotate-x'] = 0;
     webgl_character['rotate-y'] = 0;
     webgl_character['rotate-z'] = 0;
-    webgl_character['translate-x'] = 0;
-    webgl_character['translate-y'] = 0;
-    webgl_character['translate-z'] = 0;
 }
 
 // Optional args: camera, character, x, xlock, y, z
@@ -581,6 +579,30 @@ function webgl_entity_move(args){
         core_entities[args['entity']]['dx'] = movement['x'];
         core_entities[args['entity']]['dy'] = args['y'];
         core_entities[args['entity']]['dz'] = movement['z'];
+    }
+}
+
+// Optional args: entity, x, y, z
+function webgl_entity_move_to(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'entity': false,
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    if(args['entity'] === false){
+        webgl_character['translate-x'] = args['x'];
+        webgl_character['translate-y'] = args['y'];
+        webgl_character['translate-z'] = args['z'];
+
+    }else{
+        core_entities[args['entity']]['translate-x'] = args['x'];
+        core_entities[args['entity']]['translate-y'] = args['y'];
+        core_entities[args['entity']]['translate-z'] = args['z'];
     }
 }
 
