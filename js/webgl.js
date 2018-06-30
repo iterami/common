@@ -813,7 +813,7 @@ function webgl_init(args){
 }
 
 // Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-type, camera-zoom-current,
-//   camera-zoom-max, collide-range, collides, dx, dy, dz, entities, experience, level,
+//   camera-zoom-max, collide-range, collides, dx, dy, dz, entities, experience, jump-height, level,
 //   rotate-x, rotate-y, rotate-z, speed, translate-x, translate-y, translate-z
 function webgl_init_character(args){
     args = core_args({
@@ -832,6 +832,7 @@ function webgl_init_character(args){
         'dz': 0,
         'entities': [],
         'experience': 0,
+        'jump-height': .6,
         'level': -1,
         'rotate-x': 0,
         'rotate-y': 0,
@@ -860,6 +861,8 @@ function webgl_init_character(args){
       'dz': args['dz'],
       'entities': args['entities'],
       'experience': args['experience'],
+      'jump-allow': false,
+      'jump-height': args['jump-height'],
       'level': args['level'],
       'rotate-radians-x': 0,
       'rotate-radians-y': 0,
@@ -1112,6 +1115,11 @@ function webgl_logicloop(){
           webgl_character['dy'] + webgl_properties['gravity-acceleration'],
           webgl_properties['gravity-max']
         );
+
+        if(webgl_character['jump-allow']
+          && core_keys[32]['state']){
+            webgl_character['dy'] = webgl_character['jump-height'];
+        }
     }
 
     if(webgl_character['collides']){
@@ -1123,6 +1131,10 @@ function webgl_logicloop(){
                 });
             }
         }
+    }
+
+    if(webgl_character['camera-type'] === 'gravity'){
+        webgl_character['jump-allow'] = webgl_character['dy'] === 0;
     }
 
     core_group_modify({
@@ -1138,6 +1150,9 @@ function webgl_logicloop(){
     webgl_character['translate-y'] += webgl_character['dy'];
     webgl_character['translate-z'] += webgl_character['dz'];
     webgl_character['dx'] = 0;
+    if(webgl_character['camera-type'] === 'free'){
+        webgl_character['dy'] = 0;
+    }
     webgl_character['dz'] = 0;
 
     core_matrix_identity({
