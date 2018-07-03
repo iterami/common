@@ -35,6 +35,10 @@ function webgl_billboard(args){
     for(var axis in args['axes']){
         core_entities[args['entity']]['rotate-' + args['axes'][axis]] = 360 - webgl_character['camera-rotate-' + args['axes'][axis]];
     }
+
+    webgl_entity_radians({
+      'entity': args['entity'],
+    });
 }
 
 // Required args: colorData, normalData, textureData, vertexData
@@ -640,6 +644,20 @@ function webgl_entity_move_to(args){
     }
 }
 
+// Required args: entity
+function webgl_entity_radians(args){
+    core_entities[args['entity']]['rotate-radians-x'] = core_degrees_to_radians({
+      'degrees': core_entities[args['entity']]['rotate-x'],
+    });
+    core_entities[args['entity']]['rotate-radians-y'] = core_degrees_to_radians({
+      'degrees': core_entities[args['entity']]['rotate-y'],
+    });
+    core_entities[args['entity']]['rotate-radians-z'] = core_degrees_to_radians({
+      'degrees': core_entities[args['entity']]['rotate-z'],
+    });
+
+}
+
 function webgl_entity_todo(entity){
     core_entities[entity]['normals'] = webgl_normals({
       'rotate-x': core_entities[entity]['rotate-x'],
@@ -664,14 +682,8 @@ function webgl_entity_todo(entity){
       'image': webgl_textures[core_entities[entity]['texture']],
     });
 
-    core_entities[entity]['rotate-radians-x'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-x'],
-    });
-    core_entities[entity]['rotate-radians-y'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-y'],
-    });
-    core_entities[entity]['rotate-radians-z'] = core_degrees_to_radians({
-      'degrees': core_entities[entity]['rotate-z'],
+    webgl_entity_radians({
+      'entity': entity,
     });
 }
 
