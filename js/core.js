@@ -564,8 +564,8 @@ function core_events_keyinfo(event){
 
 function core_events_todoloop(){
     for(var key in core_keys){
-        if(core_keys[key]['loop']
-          && core_keys[key]['state']){
+        if(core_keys[key]['state']
+          && core_keys[key]['loop']){
             core_keys[key]['todo']();
         }
     }
