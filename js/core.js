@@ -2348,8 +2348,6 @@ var core_key_rebinds = {};
 var core_keys = {};
 var core_matrices = {};
 var core_menu_open = false;
-var core_menu_quit = 'Q = Main Menu';
-var core_menu_resume = 'ESC = Resume';
 var core_mode = 0;
 var core_mouse = {};
 var core_radian = 180 / Math.PI;
