@@ -2234,13 +2234,11 @@ function core_type(args){
     if(args['type'] === 'function'){
         return typeof args['var'] === 'function'
           || typeof window[args['var']] === 'function';
-    }
 
-    if(args['type'] === 'array'){
+    }else if(args['type'] === 'array'){
         return args['var'] instanceof Array;
-    }
 
-    if(args['type'] === 'object'){
+    }else if(args['type'] === 'object'){
         return args['var'] instanceof Object
           && !(args['var'] instanceof Array)
           && typeof args['var'] !== 'function';
