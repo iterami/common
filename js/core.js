@@ -439,10 +439,8 @@ function core_entity_remove_all(args){
     });
 
     for(var entity in core_entities){
-        if(entity[0] === '_'
-          || (args['group'] !== false
-            && !core_groups[args['group']][entity]
-          )){
+        if(args['group'] !== false
+          && !core_groups[args['group']][entity]){
             continue;
         }
 
