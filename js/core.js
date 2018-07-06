@@ -1057,7 +1057,7 @@ function core_init(){
       'parent': 'core-ui',
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=/ id=core-menu-root></a>/<a class=external id=core-menu-title rel=noopener></a><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings">',
+        'innerHTML': '<a href=../index.htm id=core-menu-root></a>/<a class=external id=core-menu-title rel=noopener></a><div id=core-menu-info></div><hr>Settings:<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings">',
       },
       'type': 'span',
     });
