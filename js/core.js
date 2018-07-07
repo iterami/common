@@ -1310,7 +1310,7 @@ function core_keys_updatebinds(args){
         var key = keybind;
 
         if(keybind !== 'all'){
-            key = parseInt(
+            key = Number.parseInt(
               key,
               10
             );
@@ -2171,7 +2171,7 @@ function core_time_from_inputs(){
             continue;
         }
 
-        date[value] = parseInt(
+        date[value] = Number.parseInt(
           element.value,
           10
         );
