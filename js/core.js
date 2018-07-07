@@ -1315,7 +1315,7 @@ function core_keys_updatebinds(args){
               10
             );
 
-            if(isNaN(key)){
+            if(Number.isNaN(key)){
                 key = keybind.charCodeAt(0);
             }
         }
@@ -1844,7 +1844,7 @@ function core_round(args){
       Math.round(args['number'] + 'e+' + args['decimals'])
         + 'e-' + args['decimals']
     );
-    if(isNaN(result)){
+    if(Number.isNaN(result)){
         result = 0;
     }
 
@@ -2012,7 +2012,7 @@ function core_storage_type_convert(args){
     })){
         return args['value'];
 
-    }else if(!isNaN(parseFloat(core_storage_default))){
+    }else if(!Number.isNaN(parseFloat(core_storage_default))){
         return parseFloat(args['value']);
 
     }else if(core_type({
@@ -2176,7 +2176,7 @@ function core_time_from_inputs(){
           10
         );
 
-        if(isNaN(date[value])){
+        if(Number.isNaN(date[value])){
             date[value] = 0;
         }
     }
