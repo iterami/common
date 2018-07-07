@@ -2012,8 +2012,8 @@ function core_storage_type_convert(args){
     })){
         return args['value'];
 
-    }else if(!Number.isNaN(parseFloat(core_storage_default))){
-        return parseFloat(args['value']);
+    }else if(!Number.isNaN(Number.parseFloat(core_storage_default))){
+        return Number.parseFloat(args['value']);
 
     }else if(core_type({
       'type': 'boolean',
