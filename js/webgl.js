@@ -32,7 +32,7 @@ function webgl_billboard(args){
       },
     });
 
-    for(var axis in args['axes']){
+    for(let axis in args['axes']){
         core_entities[args['entity']]['rotate-' + args['axes'][axis]] = 360 - webgl_character['camera-rotate-' + args['axes'][axis]];
     }
 
@@ -69,7 +69,7 @@ function webgl_buffer_set_type(args){
       },
     });
 
-    var buffer = webgl_buffer.createBuffer();
+    let buffer = webgl_buffer.createBuffer();
     webgl_buffer.bindBuffer(
       webgl_buffer.ARRAY_BUFFER,
       buffer
@@ -127,15 +127,15 @@ function webgl_camera_rotate(args){
       },
     });
 
-    var axes = {
+    let axes = {
       'x': args['x'],
       'y': args['y'],
       'z': args['z'],
     };
-    var prefix = args['camera']
+    let prefix = args['camera']
       ? 'camera-'
       : '';
-    for(var axis in axes){
+    for(let axis in axes){
         webgl_character[prefix + 'rotate-' + axis] = core_clamp({
           'max': 360,
           'min': 0,
@@ -147,7 +147,7 @@ function webgl_camera_rotate(args){
     }
 
     if(args['xlock']){
-        var max = 89;
+        let max = 89;
         if(webgl_character[prefix + 'rotate-x'] > 180){
             max += 271;
         }
@@ -158,7 +158,7 @@ function webgl_camera_rotate(args){
         });
     }
 
-    for(var axis in axes){
+    for(let axis in axes){
         webgl_character[prefix + 'rotate-radians-' + axis] = core_degrees_to_radians({
           'degrees': webgl_character[prefix + 'rotate-' + axis],
         });
@@ -228,15 +228,15 @@ function webgl_collision(args){
       },
     });
 
-    var collide_range = 0;
-    var collision = false;
-    var entity_dx = 0;
-    var entity_dy = 0;
-    var entity_dz = 0;
-    var entity_x = 0;
-    var entity_y = 0;
-    var entity_z = 0;
-    var target = core_entities[args['target']];
+    let collide_range = 0;
+    let collision = false;
+    let entity_dx = 0;
+    let entity_dy = 0;
+    let entity_dz = 0;
+    let entity_x = 0;
+    let entity_y = 0;
+    let entity_z = 0;
+    let target = core_entities[args['target']];
 
     if(args['character']){
         collide_range = webgl_character['collide-range'];
@@ -402,7 +402,7 @@ function webgl_draw(){
       0
     );
 
-    for(var text in webgl_text){
+    for(let text in webgl_text){
         Object.assign(
           webgl_canvas,
           webgl_text[text]['properties']
@@ -597,7 +597,7 @@ function webgl_entity_move(args){
     });
 
     if(args['entity'] === false){
-        var movement = core_move_3d({
+        let movement = core_move_3d({
           'angle': webgl_character['rotate-y'],
           'speed': webgl_character['speed'] * args['multiplier'],
           'strafe': args['strafe'],
@@ -608,7 +608,7 @@ function webgl_entity_move(args){
         webgl_character['dz'] += movement['z'];
 
     }else{
-        var movement = core_move_3d({
+        let movement = core_move_3d({
           'angle': core_entities[args['entity']]['rotate-y'],
           'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
@@ -949,7 +949,7 @@ function webgl_load_level(args){
     });
 
     if(typeof args['json'] === 'object'){
-        var filereader = new FileReader();
+        let filereader = new FileReader();
         filereader.onload = function(event){
             webgl_load_level_init({
               'character': args['character'],
@@ -1038,14 +1038,14 @@ function webgl_load_level_init(args){
       'gravity-max': args['json']['gravity-max'],
     });
 
-    for(var entity in args['json']['entities']){
+    for(let entity in args['json']['entities']){
         core_entity_create({
           'id': args['json']['entities'][entity]['id'],
           'properties': args['json']['entities'][entity],
           'types': args['json']['entities'][entity]['types'],
         });
 
-        var attach = false;
+        let attach = false;
 
         if(args['json']['entities'][entity]['skybox'] === true){
             core_group_move({
@@ -1071,7 +1071,7 @@ function webgl_load_level_init(args){
             });
         }
     }
-    for(var entity in webgl_character['entities']){
+    for(let entity in webgl_character['entities']){
         core_entity_create({
           'id': webgl_character['entities'][entity]['id'],
           'properties': webgl_character['entities'][entity],
@@ -1170,7 +1170,7 @@ function webgl_logicloop(){
     }
 
     if(webgl_character['collides']){
-        for(var other_entity in core_entities){
+        for(let other_entity in core_entities){
             if(core_entities[other_entity]['collision']){
                 webgl_collision({
                   'character': true,
@@ -1245,7 +1245,7 @@ function webgl_logicloop_handle_entity(entity){
               + core_entities[entity]['attach']['offset-z'];
 
         }else{
-            var attachto = core_entities[core_entities[entity]['attach']['to']];
+            let attachto = core_entities[core_entities[entity]['attach']['to']];
             core_entities[entity]['translate-x'] = attachto['translate-x']
               + attachto['dx']
               + core_entities[entity]['attach']['offset-x'];
@@ -1266,7 +1266,7 @@ function webgl_logicloop_handle_entity(entity){
         }
 
         if(core_entities[entity]['collides']){
-            for(var other_entity in core_entities){
+            for(let other_entity in core_entities){
                 if(core_entities[other_entity]['collision']
                   && entity !== other_entity){
                     webgl_collision({
@@ -1295,9 +1295,9 @@ function webgl_normals(args){
       },
     });
 
-    var normal_x = 0;
-    var normal_y = 0;
-    var normal_z = 0;
+    let normal_x = 0;
+    let normal_y = 0;
+    let normal_z = 0;
 
     if(args['rotate-x'] !== 0){
         normal_z = core_round({
@@ -1339,7 +1339,7 @@ function webgl_perspective(){
 
 // Required args: x, y
 function webgl_pick_color(args){
-    var pixelarray = new Uint8Array(4);
+    let pixelarray = new Uint8Array(4);
 
     webgl_buffer.readPixels(
       args['x'],
@@ -1356,8 +1356,8 @@ function webgl_pick_color(args){
 
 // Required args: id, shaderlist
 function webgl_program_create(args){
-    var program = webgl_buffer.createProgram();
-    for(var shader in args['shaderlist']){
+    let program = webgl_buffer.createProgram();
+    for(let shader in args['shaderlist']){
         webgl_buffer.attachShader(
           program,
           args['shaderlist'][shader]
@@ -1370,8 +1370,8 @@ function webgl_program_create(args){
 }
 
 function webgl_resize(){
-    var buffer = document.getElementById('buffer');
-    var canvas = document.getElementById('canvas');
+    let buffer = document.getElementById('buffer');
+    let canvas = document.getElementById('canvas');
 
     webgl_canvas_properties['height'] = window.innerHeight;
     webgl_canvas_properties['height-half'] = webgl_canvas_properties['height'] / 2;
@@ -1406,7 +1406,7 @@ function webgl_resize(){
 
 // Required args: id, source, type
 function webgl_shader_create(args){
-    var shader = webgl_buffer.createShader(args['type']);
+    let shader = webgl_buffer.createShader(args['type']);
     webgl_buffer.shaderSource(
       shader,
       args['source']
@@ -1417,7 +1417,7 @@ function webgl_shader_create(args){
 }
 
 function webgl_shader_update(){
-    var fogstring = webgl_properties['fog'] !== false
+    let fogstring = webgl_properties['fog'] !== false
       ? ('mix('
         + 'vec4('
         +   webgl_properties['clearcolor-red'] + ','
@@ -1429,7 +1429,7 @@ function webgl_shader_update(){
         + 'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
         + ')')
       : 'vec_fragmentColor';
-    var fragment_shader = webgl_shader_create({
+    let fragment_shader = webgl_shader_create({
       'id': 'fragment',
       'source':
           'uniform lowp float alpha;'
@@ -1443,14 +1443,14 @@ function webgl_shader_update(){
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
-    var directionstring = webgl_properties['directionlighting-vector'] !== false
+    let directionstring = webgl_properties['directionlighting-vector'] !== false
       ? (' + (vec3('
         +   webgl_properties['directionlighting-red'] + ','
         +   webgl_properties['directionlighting-green'] + ','
         +   webgl_properties['directionlighting-blue']
         + ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))), 0.0));')
       : ';';
-    var vertex_shader = webgl_shader_create({
+    let vertex_shader = webgl_shader_create({
       'id': 'vertex',
       'source':
           'attribute vec2 vec_texturePosition;'
@@ -1479,7 +1479,7 @@ function webgl_shader_update(){
       'type': webgl_buffer.VERTEX_SHADER,
     });
 
-    var program = webgl_program_create({
+    let program = webgl_program_create({
       'id': 'shaders',
       'shaderlist': [
         fragment_shader,
@@ -1607,8 +1607,8 @@ function webgl_vertexcolorarray(args){
         args['rgbarray'].push(args['rgbarray'][0]);
     }
 
-    var color = [];
-    for(var i = 0; i < args['vertexcount']; i++){
+    let color = [];
+    for(let i = 0; i < args['vertexcount']; i++){
         color.push(
           args['rgbarray'][i]['red'] / 256,
           args['rgbarray'][i]['green'] / 256,
@@ -1620,20 +1620,20 @@ function webgl_vertexcolorarray(args){
     return color;
 }
 
-var webgl_attributes = {};
-var webgl_buffer = 0;
-var webgl_canvas = 0;
-var webgl_fonts = {
+let webgl_attributes = {};
+let webgl_buffer = 0;
+let webgl_canvas = 0;
+let webgl_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var webgl_canvas_properties = {};
-var webgl_character = {};
-var webgl_properties = {};
-var webgl_text = {};
-var webgl_textures = {
+let webgl_canvas_properties = {};
+let webgl_character = {};
+let webgl_properties = {};
+let webgl_text = {};
+let webgl_textures = {
   '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
   '_default': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
 };
-var webgl_uniformlocations = {};
+let webgl_uniformlocations = {};

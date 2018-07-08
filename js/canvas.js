@@ -91,7 +91,7 @@ function canvas_draw_path(args){
     }
 
     canvas_buffer.beginPath();
-    for(var vertex in args['vertices']){
+    for(let vertex in args['vertices']){
         canvas_buffer[args['vertices'][vertex]['type'] || args['type']](
           args['vertices'][vertex]['x'] || 0,
           args['vertices'][vertex]['y'] || 0,
@@ -127,13 +127,13 @@ function canvas_gradient(args){
       },
     });
 
-    var gradient = canvas_buffer.createLinearGradient(
+    let gradient = canvas_buffer.createLinearGradient(
       args['x'],
       args['y'],
       args['width'],
       args['height']
     );
-    for(var step in args['stops']){
+    for(let step in args['stops']){
         gradient.addColorStop(
           args['stops'][step]['offset'] || 0,
           args['stops'][step]['color'] || '#000'
@@ -165,7 +165,7 @@ function canvas_init(args){
       'width': 0,
     };
 
-    var properties = {
+    let properties = {
       'id': 'canvas',
     };
     if(!args['contextmenu']){
@@ -239,16 +239,16 @@ function canvas_logicloop(){
 
 function canvas_logicloop_handle_entity(entity){
     if(core_entities[entity]['attach'] !== false){
-        var attached = core_entities[core_entities[entity]['attach']['id']];
-        for(var axis in core_entities[entity]['position']){
+        let attached = core_entities[core_entities[entity]['attach']['id']];
+        for(let axis in core_entities[entity]['position']){
             core_entities[entity]['position'][axis] = attached['position'][axis] + core_entities[entity]['attach']['offset'][axis];
         }
     }
 }
 
 function canvas_resize(){
-    var buffer = document.getElementById('buffer');
-    var canvas = document.getElementById('canvas');
+    let buffer = document.getElementById('buffer');
+    let canvas = document.getElementById('canvas');
 
     canvas_properties['height'] = window.innerHeight;
     canvas_properties['height-half'] = canvas_properties['height'] / 2;
@@ -309,11 +309,11 @@ function canvas_setproperties(args){
     );
 }
 
-var canvas_buffer = 0;
-var canvas_canvas = 0;
-var canvas_fonts = {
+let canvas_buffer = 0;
+let canvas_canvas = 0;
+let canvas_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-var canvas_properties = {};
+let canvas_properties = {};

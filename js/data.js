@@ -39,7 +39,7 @@ function data_canvas_fence_2d(args){
       'y': args['y'],
     });
 
-    for(var i = 0; i < args['length-half'] * 2; i += args['frequency']){
+    for(let i = 0; i < args['length-half'] * 2; i += args['frequency']){
         scenery.push({
           'color': args['color'],
           'vertices': [
@@ -82,8 +82,8 @@ function data_canvas_tree_2d(args){
       },
     });
 
-    var half_base = args['width-base'] / 2;
-    var half_leaf = args['width-leaf'] / 2;
+    let half_base = args['width-base'] / 2;
+    let half_leaf = args['width-leaf'] / 2;
 
     scenery.push({
       'color': args['color-base'],
@@ -150,7 +150,7 @@ function data_webgl_cube_3d(args){
       },
     });
 
-    var properties = {
+    let properties = {
       'collision': args['collision'],
       'dx': args['dx'],
       'dy': args['dy'],
@@ -170,7 +170,7 @@ function data_webgl_cube_3d(args){
       ],
     };
 
-    var entities = [];
+    let entities = [];
 
     properties['translate-y'] = args['y'] + args['side'];
     if(args['exclude'].indexOf(0) === -1){
@@ -384,15 +384,15 @@ function data_webgl_terrain_3d(args){
       },
     });
 
-    var color = [];
-    var start_x = (-args['length'] / 2) * args['width-step'];
-    var start_z = (-args['width'] / 2) * args['length-step'];
-    var textureData = [];
-    var vertices = [];
+    let color = [];
+    let start_x = (-args['length'] / 2) * args['width-step'];
+    let start_z = (-args['width'] / 2) * args['length-step'];
+    let textureData = [];
+    let vertices = [];
 
-    for(var i = 0; i < args['length']; i++){
-        var step = i * args['length-step'];
-        for(var j = 0; j < args['width']; j++){
+    for(let i = 0; i < args['length']; i++){
+        let step = i * args['length-step'];
+        for(let j = 0; j < args['width']; j++){
             color.push(
               args['color'],
               args['color'],

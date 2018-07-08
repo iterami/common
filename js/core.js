@@ -11,7 +11,7 @@ function core_ajax(args){
       },
     });
 
-    var ajax = new XMLHttpRequest();
+    let ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function(){
         if(this.readyState === core_ajax_properties['readyState']
           && this.status === core_ajax_properties['status']){
@@ -32,7 +32,7 @@ function core_args(args){
         args['args'] = {};
     }
 
-    for(var arg in args['defaults']){
+    for(let arg in args['defaults']){
         if(args['args'][arg] === void 0){
             args['args'][arg] = args['defaults'][arg];
         }
@@ -43,12 +43,12 @@ function core_args(args){
 
 // Required args: audios
 function core_audio_create(args){
-    for(var audio in args['audios']){
+    for(let audio in args['audios']){
         core_audio[audio] = {
           'playing': false,
         };
 
-        for(var property in args['audios'][audio]){
+        for(let property in args['audios'][audio]){
             core_audio[audio][property] = core_handle_defaults({
               'default': core_audio[audio],
               'var': args['audios'][audio][property],
@@ -92,18 +92,18 @@ function core_audio_node_create(args){
       },
     });
 
-    var source = core_audio_context['create' + args['properties']['label']](
+    let source = core_audio_context['create' + args['properties']['label']](
       args['properties']['arg0'],
       args['properties']['arg1'],
       args['properties']['arg2']
     );
 
-    for(var property in args['properties']){
+    for(let property in args['properties']){
         if(core_type({
           'type': 'object',
           'var': args['properties'][property],
         })){
-            for(var subproperty in args['properties'][property]){
+            for(let subproperty in args['properties'][property]){
                 source[property][subproperty] = args['properties'][property][subproperty];
             }
 
@@ -149,8 +149,8 @@ function core_audio_source_create(args){
     };
 
     // Create audio nodes.
-    var connections_length = core_audio[args['id']]['connections'].length;
-    for(var i = 0; i < connections_length; i++){
+    let connections_length = core_audio[args['id']]['connections'].length;
+    for(let i = 0; i < connections_length; i++){
         core_audio_node_create({
           'id': args['id'],
           'properties': core_audio[args['id']]['connections'][i],
@@ -162,7 +162,7 @@ function core_audio_source_create(args){
     }
 
     // Connect audio nodes.
-    for(var i = 0; i < connections_length - 1; i++){
+    for(let i = 0; i < connections_length - 1; i++){
         core_audio_sources[args['id']][core_audio[args['id']]['connections'][i]['label']].connect(
           core_audio_sources[args['id']][core_audio[args['id']]['connections'][i + 1]['label']]
         );
@@ -184,7 +184,7 @@ function core_audio_start(args){
       'id': args['id'],
     });
 
-    var startTime = core_audio_context.currentTime + core_audio_sources[args['id']]['start'];
+    let startTime = core_audio_context.currentTime + core_audio_sources[args['id']]['start'];
     core_audio[args['id']]['playing'] = true;
     core_audio_sources[args['id']][core_audio[args['id']]['connections'][0]['label']].start(startTime);
     core_audio_stop({
@@ -215,7 +215,7 @@ function core_audio_stop_all(args){
       },
     });
 
-    for(var id in core_audio_sources){
+    for(let id in core_audio_sources){
         core_audio_stop({
           'id': id,
           'when': args['when'],
@@ -252,7 +252,7 @@ function core_clamp(args){
     });
 
     if(args['wrap']){
-        var diff = args['max'] - args['min'];
+        let diff = args['max'] - args['min'];
         while(args['value'] < args['min']){
             args['value'] += diff;
         }
@@ -347,9 +347,9 @@ function core_entity_create(args){
       },
     });
 
-    var entity = {};
+    let entity = {};
 
-    for(var type in core_entity_types_default){
+    for(let type in core_entity_types_default){
         core_entity_handle_defaults({
           'entity': entity,
           'id': args['id'],
@@ -357,7 +357,7 @@ function core_entity_create(args){
         });
     }
 
-    for(var type in args['types']){
+    for(let type in args['types']){
         core_entity_handle_defaults({
           'entity': entity,
           'id': args['id'],
@@ -365,7 +365,7 @@ function core_entity_create(args){
         });
     }
 
-    for(var property in args['properties']){
+    for(let property in args['properties']){
         entity[property] = core_handle_defaults({
           'default': entity[property],
           'var': args['properties'][property],
@@ -374,17 +374,17 @@ function core_entity_create(args){
 
     core_entities[args['id']] = entity;
 
-    for(var type in core_entity_types_default){
+    for(let type in core_entity_types_default){
         core_entity_info[core_entity_types_default[type]]['todo'](args['id']);
     }
-    for(var type in args['types']){
+    for(let type in args['types']){
         core_entity_info[args['types'][type]]['todo'](args['id']);
     }
 }
 
 // Required args: id, type
 function core_entity_handle_defaults(args){
-    for(var property in core_entity_info[args['type']]['default']){
+    for(let property in core_entity_info[args['type']]['default']){
         args['entity'][property] = core_handle_defaults({
           'default': args['entity'][property],
           'var': core_entity_info[args['type']]['default'][property],
@@ -397,7 +397,7 @@ function core_entity_handle_defaults(args){
 
     core_groups[args['type']][args['id']] = true;
 
-    for(var group in core_entity_info[args['type']]['groups']){
+    for(let group in core_entity_info[args['type']]['groups']){
         core_group_add({
           'entities': [
             args['id'],
@@ -422,7 +422,7 @@ function core_entity_remove(args){
       'entities': args['entities'],
     });
 
-    for(var entity in args['entities']){
+    for(let entity in args['entities']){
         delete core_entities[args['entities'][entity]];
         delete core_uids[args['entities'][entity]];
     }
@@ -438,7 +438,7 @@ function core_entity_remove_all(args){
       },
     });
 
-    for(var entity in core_entities){
+    for(let entity in core_entities){
         if(args['group'] !== false
           && !core_groups[args['group']][entity]){
             continue;
@@ -545,9 +545,9 @@ function core_events_bind(args){
     }
 
     if(args['elements'] !== false){
-        for(var element in args['elements']){
-            var domelement = document.getElementById(element);
-            for(var event in args['elements'][element]){
+        for(let element in args['elements']){
+            let domelement = document.getElementById(element);
+            for(let event in args['elements'][element]){
                 domelement[event] = args['elements'][element][event];
             }
         }
@@ -555,7 +555,7 @@ function core_events_bind(args){
 }
 
 function core_events_keyinfo(event){
-    var code = event.keyCode || event.which;
+    let code = event.keyCode || event.which;
     return {
       'code': code,
       'key': String.fromCharCode(code),
@@ -563,13 +563,13 @@ function core_events_keyinfo(event){
 }
 
 function core_events_todoloop(){
-    for(var key in core_keys){
+    for(let key in core_keys){
         if(core_keys[key]['state']
           && core_keys[key]['loop']){
             core_keys[key]['todo']();
         }
     }
-    for(var mousebind in core_mouse['todo']){
+    for(let mousebind in core_mouse['todo']){
         if(core_mouse['todo'][mousebind]['loop']){
             core_mouse['todo'][mousebind]['todo']();
         }
@@ -586,7 +586,7 @@ function core_fixed_length_line(args){
       },
     });
 
-    var line_distance = core_distance({
+    let line_distance = core_distance({
       'x0': args['x0'],
       'x1': args['x1'],
       'y0': args['y0'],
@@ -616,7 +616,7 @@ function core_group_add(args){
         core_groups[args['group']] = {};
     }
 
-    for(var entity in args['entities']){
+    for(let entity in args['entities']){
         core_groups[args['group']][args['entities'][entity]] = true;
     }
 }
@@ -631,12 +631,12 @@ function core_group_modify(args){
       },
     });
 
-    var pretodo = {};
+    let pretodo = {};
     if(args['pretodo'] !== false){
         pretodo = args['pretodo']();
     }
-    for(var group in args['groups']){
-        for(var entity in core_groups[args['groups'][group]]){
+    for(let group in args['groups']){
+        for(let entity in core_groups[args['groups'][group]]){
             args['todo'](
               entity,
               pretodo
@@ -668,7 +668,7 @@ function core_group_remove(args){
     });
 
     if(core_groups[args['group']] !== void 0){
-        for(var entity in args['entities']){
+        for(let entity in args['entities']){
             if(core_entity_info[args['group']]
               && core_groups[args['group']][args['entities'][entity]] !== void 0){
                 core_entity_info[args['group']]['count']--;
@@ -693,7 +693,7 @@ function core_group_remove_all(args){
       },
     });
 
-    for(var group in core_groups){
+    for(let group in core_groups){
         core_group_remove({
           'delete-empty': args['delete-empty'],
           'entities': args['entities'],
@@ -703,7 +703,7 @@ function core_group_remove_all(args){
 }
 
 function core_handle_beforeunload(event){
-    var result = core_handle_event({
+    let result = core_handle_event({
       'event': event,
       'key': 'beforeunload',
       'object': core_events,
@@ -718,7 +718,7 @@ function core_handle_beforeunload(event){
 }
 
 function core_handle_contextmenu(event){
-    var result = core_handle_event({
+    let result = core_handle_event({
       'event': event,
       'key': 'contextmenu',
       'object': core_mouse['todo'],
@@ -747,9 +747,9 @@ function core_handle_defaults(args){
         return args['var'];
     }
 
-    var object = args['default'];
+    let object = args['default'];
 
-    for(var property in args['var']){
+    for(let property in args['var']){
         object[property] = core_handle_defaults({
           'var': args['var'][property],
         });
@@ -775,7 +775,7 @@ function core_handle_event(args){
             args['event'].preventDefault();
         }
 
-        var returned = void 0;
+        let returned = void 0;
         if(args['todo'] !== void 0
           && !args['object'][args['key']]['loop']){
             returned = args['object'][args['key']]['todo'](args['event']);
@@ -796,7 +796,7 @@ function core_handle_event(args){
 }
 
 function core_handle_gamepadconnected(event){
-    var gamepad = event.gamepad;
+    let gamepad = event.gamepad;
     core_gamepads[gamepad.index] = gamepad;
 }
 
@@ -805,7 +805,7 @@ function core_handle_gamepaddisconnected(event){
 }
 
 function core_handle_keydown(event){
-    var key = core_events_keyinfo(event);
+    let key = core_events_keyinfo(event);
 
     if(core_menu_open
       && key['code'] !== 27){
@@ -832,7 +832,7 @@ function core_handle_keydown(event){
 }
 
 function core_handle_keyup(event){
-    var key = core_events_keyinfo(event);
+    let key = core_events_keyinfo(event);
 
     if(core_handle_event({
       'event': event,
@@ -844,8 +844,8 @@ function core_handle_keyup(event){
     }
 
     if(core_keys.hasOwnProperty('all')){
-        var all = false;
-        for(var key in core_keys){
+        let all = false;
+        for(let key in core_keys){
             if(key !== 'all'
               && core_keys[key]['state']){
                 all = true;
@@ -911,7 +911,7 @@ function core_handle_mousewheel(event){
         return;
     }
 
-    var delta = Number(
+    let delta = Number(
       event.wheelDelta
         || -event.detail
     );
@@ -924,7 +924,7 @@ function core_handle_mousewheel(event){
 }
 
 function core_handle_pointerlockchange(event){
-    var element = document.getElementById(core_mouse['pointerlock-id']);
+    let element = document.getElementById(core_mouse['pointerlock-id']);
     if(!element){
         return;
     }
@@ -945,7 +945,7 @@ function core_hex_to_rgb(args){
         args['hex'] = args['hex'].slice(1);
     }
 
-    var rgb = {
+    let rgb = {
       'blue': '0x' + args['hex'][4] + args['hex'][5] | 0,
       'green': '0x' + args['hex'][2] + args['hex'][3] | 0,
       'red': '0x' + args['hex'][0] + args['hex'][1] | 0,
@@ -965,8 +965,8 @@ function core_html(args){
       },
     });
 
-    var element = document.createElement(args['type']);
-    for(var property in args['properties']){
+    let element = document.createElement(args['type']);
+    for(let property in args['properties']){
         element[property] = core_handle_defaults({
           'var': args['properties'][property],
         });
@@ -1007,7 +1007,7 @@ function core_html_modify(args){
       },
     });
 
-    var element = document.getElementById(args['id']);
+    let element = document.getElementById(args['id']);
     if(!element){
         return;
     }
@@ -1028,7 +1028,7 @@ function core_image(args){
       },
     });
 
-    var image = new Image();
+    let image = new Image();
     image.onload = args['todo'];
     image.src = args['src'];
     core_images[args['id']] = image;
@@ -1037,7 +1037,7 @@ function core_image(args){
 
 function core_init(){
     // Core menu init.
-    var core_ui = core_html({
+    let core_ui = core_html({
       'properties': {
         'id': 'core-ui',
       },
@@ -1210,7 +1210,7 @@ function core_interval_pause(args){
 }
 
 function core_interval_pause_all(){
-    for(var interval in core_intervals){
+    for(let interval in core_intervals){
         if(!core_intervals[interval]['paused']){
             core_interval_pause({
               'id': interval,
@@ -1233,7 +1233,7 @@ function core_interval_remove(args){
 }
 
 function core_interval_remove_all(){
-    for(var interval in core_intervals){
+    for(let interval in core_intervals){
         core_interval_remove({
           'id': interval,
         });
@@ -1264,7 +1264,7 @@ function core_interval_resume(args){
 }
 
 function core_interval_resume_all(){
-    for(var interval in core_intervals){
+    for(let interval in core_intervals){
         core_interval_resume({
           'id': interval,
         });
@@ -1272,7 +1272,7 @@ function core_interval_resume_all(){
 }
 
 function core_keys_rebind(){
-    var keybinds = {};
+    let keybinds = {};
     Object.assign(
       keybinds,
       core_key_rebinds
@@ -1306,8 +1306,8 @@ function core_keys_updatebinds(args){
         core_keys = {};
     }
 
-    for(var keybind in args['keybinds']){
-        var key = keybind;
+    for(let keybind in args['keybinds']){
+        let key = keybind;
 
         if(keybind !== 'all'){
             key = Number.parseInt(
@@ -1356,14 +1356,14 @@ function core_matrix_create(){
 
 // Required args: ids
 function core_matrix_delete(args){
-    for(var id in args['ids']){
+    for(let id in args['ids']){
         delete core_matrices[args['ids'][id]];
     }
 }
 
 // Required args: id
 function core_matrix_identity(args){
-    for(var key in core_matrices[args['id']]){
+    for(let key in core_matrices[args['id']]){
         core_matrices[args['id']][key] =
           key % 5 === 0
             ? 1
@@ -1373,15 +1373,15 @@ function core_matrix_identity(args){
 
 // Required args: dimensions, id
 function core_matrix_rotate(args){
-    var cache_id = 'rotate-cache-' + args['id'];
+    let cache_id = 'rotate-cache-' + args['id'];
 
     // Rotate X.
     core_matrix_clone({
       'id': args['id'],
       'to': cache_id,
     });
-    var cosine = Math.cos(args['dimensions'][0]);
-    var sine = Math.sin(args['dimensions'][0]);
+    let cosine = Math.cos(args['dimensions'][0]);
+    let sine = Math.sin(args['dimensions'][0]);
 
     core_matrices[args['id']][4] = core_matrices[cache_id][4] * cosine + core_matrices[cache_id][8] * sine;
     core_matrices[args['id']][5] = core_matrices[cache_id][5] * cosine + core_matrices[cache_id][9] * sine;
@@ -1441,7 +1441,7 @@ function core_matrix_round(args){
       },
     });
 
-    for(var key in core_matrices[args['id']]){
+    for(let key in core_matrices[args['id']]){
         core_matrices[args['id']][key] = core_round({
           'decimals': args['decimals'],
           'number': core_matrices[args['id']][key],
@@ -1451,7 +1451,7 @@ function core_matrix_round(args){
 
 // Required args: dimensions, id
 function core_matrix_translate(args){
-    for(var i = 0; i < 4; i++){
+    for(let i = 0; i < 4; i++){
         core_matrices[args['id']][i + 12] -= core_matrices[args['id']][i] * args['dimensions'][0]
           + core_matrices[args['id']][i + 4] * args['dimensions'][1]
           + core_matrices[args['id']][i + 8] * args['dimensions'][2];
@@ -1476,7 +1476,7 @@ function core_mouse_updatebinds(args){
         core_mouse['todo'] = {};
     }
 
-    for(var mousebind in args['mousebinds']){
+    for(let mousebind in args['mousebinds']){
         core_mouse['todo'][mousebind] = {
           'loop': args['mousebinds'][mousebind]['loop'] || false,
           'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
@@ -1496,18 +1496,18 @@ function core_move_2d(args){
       },
     });
 
-    var angle = core_point_angle({
+    let angle = core_point_angle({
       'x0': args['x0'],
       'x1': args['x1'],
       'y0': args['y0'],
       'y1': args['y1'],
     });
 
-    var dx = core_round({
+    let dx = core_round({
       'decimals': args['decimals'],
       'number': Math.cos(angle) * args['multiplier'],
     });
-    var dy = core_round({
+    let dy = core_round({
       'decimals': args['decimals'],
       'number': Math.sin(angle) * args['multiplier'],
     });
@@ -1528,7 +1528,7 @@ function core_move_2d(args){
 
 // Required args: dx, dy, speed
 function core_move_2d_diagonal(args){
-    var sqrt = Math.sqrt(args['speed']);
+    let sqrt = Math.sqrt(args['speed']);
     return {
       'x': (args['dx'] / args['speed']) * sqrt,
       'y': args['dy'] > 0
@@ -1551,7 +1551,7 @@ function core_move_3d(args){
     });
     args['speed'] *= args['multiplier'];
 
-    var radians = -core_degrees_to_radians({
+    let radians = -core_degrees_to_radians({
       'decimals': args['decimals'],
       'degrees': args['angle'] - (args['strafe']
           ? 90
@@ -1604,11 +1604,11 @@ function core_random_boolean(args){
 }
 
 function core_random_hex(){
-    var color = core_random_rgb();
+    let color = core_random_rgb();
 
-    var blue = '0' + color['blue'].toString(16);
-    var green = '0' + color['green'].toString(16);
-    var red = '0' + color['red'].toString(16);
+    let blue = '0' + color['blue'].toString(16);
+    let green = '0' + color['green'].toString(16);
+    let red = '0' + color['red'].toString(16);
 
     return red.slice(-2) + green.slice(-2) + blue.slice(-2);
 }
@@ -1630,7 +1630,7 @@ function core_random_integer(args){
 
 // Required args: object
 function core_random_key(args){
-    var keys = Object.keys(args['object']);
+    let keys = Object.keys(args['object']);
 
     return keys[core_random_integer({
       'max': keys.length - 1,
@@ -1673,8 +1673,8 @@ function core_random_string(args){
       },
     });
 
-    var string = '';
-    for(var loopCounter = 0; loopCounter < args['length']; loopCounter++){
+    let string = '';
+    for(let loopCounter = 0; loopCounter < args['length']; loopCounter++){
         string += args['characters'][core_random_integer({
           'max': args['characters'].length,
         })];
@@ -1684,7 +1684,7 @@ function core_random_string(args){
 
 // Required args: h0, h1, w0, w1, x0, x1, y0, y1
 function core_rectangle_overlap(args){
-    var boolean = false;
+    let boolean = false;
     if(args['x0'] < args['x1'] + args['w1']
       && args['x0'] + args['w0'] > args['x1']
       && args['y0'] < args['y1'] + args['h1']
@@ -1696,7 +1696,7 @@ function core_rectangle_overlap(args){
 
 // Required args: patterns, string
 function core_replace_multiple(args){
-    for(var pattern in args['patterns']){
+    for(let pattern in args['patterns']){
         args['string'] = args['string'].replace(
           new RegExp(
             pattern,
@@ -1741,7 +1741,7 @@ function core_repo_init(args){
         core_escape();
     }
 
-    for(var entity in args['entities']){
+    for(let entity in args['entities']){
         core_entity_set({
           'default': args['entities'][entity]['default'],
           'properties': args['entities'][entity]['properties'],
@@ -1769,7 +1769,7 @@ function core_repo_init(args){
         });
     }
     document.getElementById('core-menu-root').innerHTML = args['github'];
-    var repo_title = document.getElementById('core-menu-title');
+    let repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/' + args['github'] + '/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
 
@@ -1789,7 +1789,7 @@ function core_repo_init(args){
       'audios': args['audios'],
     });
 
-    for(var image in args['images']){
+    for(let image in args['images']){
         core_image({
           'id': image,
           'src': args['images'][image],
@@ -1812,7 +1812,7 @@ function core_requestpointerlock(args){
       },
     });
 
-    var element = document.getElementById(args['id']);
+    let element = document.getElementById(args['id']);
     if(!element){
         return;
     }
@@ -1840,7 +1840,7 @@ function core_round(args){
         args['number'] = Number(args['number'].toFixed(args['decimals']));
     }
 
-    var result = Number(
+    let result = Number(
       Math.round(args['number'] + 'e+' + args['decimals'])
         + 'e-' + args['decimals']
     );
@@ -1930,7 +1930,7 @@ function core_storage_add(args){
       },
     });
 
-    for(var key in args['storage']){
+    for(let key in args['storage']){
         core_storage_info[key] = {
           'default': args['storage'][key],
           'prefix': args['prefix'],
@@ -1965,7 +1965,7 @@ function core_storage_reset(){
         return false;
     }
 
-    for(var key in core_storage_data){
+    for(let key in core_storage_data){
         core_storage_data[key] = core_storage_info[key]['default'];
         window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
     }
@@ -1975,14 +1975,14 @@ function core_storage_reset(){
 }
 
 function core_storage_save(){
-    for(var key in core_storage_data){
-        var element = document.getElementById(key);
+    for(let key in core_storage_data){
+        let element = document.getElementById(key);
         core_storage_data[key] = element[core_storage_element_property({
           'element': element,
           'key': key,
         })];
 
-        var data = core_storage_type_convert({
+        let data = core_storage_type_convert({
           'key': key,
           'value': core_storage_data[key],
         });
@@ -2004,7 +2004,7 @@ function core_storage_save(){
 
 // Required args: key, value
 function core_storage_type_convert(args){
-    var core_storage_default = core_storage_info[args['key']]['default'];
+    let core_storage_default = core_storage_info[args['key']]['default'];
 
     if(core_type({
       'type': 'string',
@@ -2029,8 +2029,8 @@ function core_storage_type_convert(args){
 }
 
 function core_storage_update(){
-    for(var key in core_storage_data){
-        var element = document.getElementById(key);
+    for(let key in core_storage_data){
+        let element = document.getElementById(key);
         element[core_storage_element_property({
           'element': element,
           'key': key,
@@ -2083,9 +2083,9 @@ function core_tab_create(args){
 
 // Required args: id
 function core_tab_switch(args){
-    var info = args['id'].split('_');
+    let info = args['id'].split('_');
 
-    for(var tab in core_tabs){
+    for(let tab in core_tabs){
         if(core_tabs[tab]['group'] === info[1]){
             document.getElementById('tabcontent-' + tab).style.display = 'none';
         }
@@ -2104,8 +2104,8 @@ function core_time_diff(args){
       },
     });
 
-    var diff = args['target'] - args['now'];
-    var prefix = '';
+    let diff = args['target'] - args['now'];
+    let prefix = '';
     if(diff < 0){
         diff = -diff;
         prefix = '- ';
@@ -2156,7 +2156,7 @@ function core_time_format(args){
 }
 
 function core_time_from_inputs(){
-    var date = {
+    let date = {
       'date': 0,
       'hour': 0,
       'millisecond': 0,
@@ -2165,8 +2165,8 @@ function core_time_from_inputs(){
       'second': 0,
       'year': 0,
     };
-    for(var value in date){
-        var element = document.getElementById(value);
+    for(let value in date){
+        let element = document.getElementById(value);
         if(!element){
             continue;
         }
@@ -2195,7 +2195,7 @@ function core_timestamp_to_date(args){
       ? new Date(args['timestamp']).getTime()
       : new Date().getTime();
 
-    var date = new Date(args['timestamp']);
+    let date = new Date(args['timestamp']);
     return {
       'date': date.getUTCDate(),
       'day': date.getUTCDay(),
@@ -2211,7 +2211,7 @@ function core_timestamp_to_date(args){
 
 // Required args: number
 function core_two_digits(args){
-    var prefix = args['number'] < 0
+    let prefix = args['number'] < 0
       ? '-'
       : '';
     args['number'] = Math.abs(args['number']);
@@ -2248,7 +2248,7 @@ function core_type(args){
 }
 
 function core_uid(){
-    var uid = core_uid_create();
+    let uid = core_uid_create();
 
     while(core_uids[uid] !== void 0){
         uid = core_uid_create();
@@ -2260,9 +2260,9 @@ function core_uid(){
 }
 
 function core_uid_create(){
-    var uid = '';
+    let uid = '';
 
-    for(var i = 0; i < 3; i++){
+    for(let i = 0; i < 3; i++){
         uid += core_random_integer({
           'max': 1e17,
         }).toString(34);
@@ -2280,12 +2280,12 @@ function core_ui_update(args){
       },
     });
 
-    for(var id in args['ids']){
+    for(let id in args['ids']){
         if(core_ui_values[id] === args['ids'][id]){
             continue;
         }
 
-        var element = document.getElementById('ui-' + id);
+        let element = document.getElementById('ui-' + id);
         element[element.tagName !== 'INPUT'
           ? 'innerHTML'
           : 'value'] = args['ids'][id];
@@ -2313,7 +2313,7 @@ function core_uri(args){
 
 // Required args: property, var
 function core_vendor_prefix(args){
-    var unprefixed = args['property'].charAt(0).toUpperCase() + args['property'].slice(1);
+    let unprefixed = args['property'].charAt(0).toUpperCase() + args['property'].slice(1);
 
     return args['var'][args['property']]
       || args['var']['webkit' + unprefixed]
@@ -2322,41 +2322,41 @@ function core_vendor_prefix(args){
       || args['var']['o' + unprefixed];
 }
 
-var core_ajax_properties = {
+let core_ajax_properties = {
   'data': null,
   'readyState': 4,
   'status': 200,
   'type': 'GET',
 };
-var core_audio = {};
-var core_audio_context = 0;
-var core_audio_sources = {};
-var core_degree = Math.PI / 180;
-var core_entities = {};
-var core_entity_info = {};
-var core_entity_types_default = [];
-var core_events = {};
-var core_gamepads = {};
-var core_groups = {};
-var core_images = {};
-var core_intervals = {};
-var core_key_rebinds = {};
-var core_keys = {};
-var core_matrices = {};
-var core_menu_open = false;
-var core_mode = 0;
-var core_mouse = {};
-var core_radian = 180 / Math.PI;
-var core_random_boolean_chance = .5;
-var core_random_integer_max = 100;
-var core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-var core_random_string_length = 100;
-var core_repo_title = '';
-var core_storage_data = {};
-var core_storage_info = {};
-var core_tabs = {};
-var core_tau = Math.PI * 2;
-var core_ui_values = {};
-var core_uids = {};
+let core_audio = {};
+let core_audio_context = 0;
+let core_audio_sources = {};
+let core_degree = Math.PI / 180;
+let core_entities = {};
+let core_entity_info = {};
+let core_entity_types_default = [];
+let core_events = {};
+let core_gamepads = {};
+let core_groups = {};
+let core_images = {};
+let core_intervals = {};
+let core_key_rebinds = {};
+let core_keys = {};
+let core_matrices = {};
+let core_menu_open = false;
+let core_mode = 0;
+let core_mouse = {};
+let core_radian = 180 / Math.PI;
+let core_random_boolean_chance = .5;
+let core_random_integer_max = 100;
+let core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+let core_random_string_length = 100;
+let core_repo_title = '';
+let core_storage_data = {};
+let core_storage_info = {};
+let core_tabs = {};
+let core_tau = Math.PI * 2;
+let core_ui_values = {};
+let core_uids = {};
 
 window.onload = core_init;

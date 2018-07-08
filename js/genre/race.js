@@ -44,4 +44,4 @@ function race_unload(){
     core_entities.length = 0;
 }
 
-var race_checkpoints = [];
+let race_checkpoints = [];

@@ -80,13 +80,13 @@ function rpg_character_create(args){
 }
 
 function rpg_character_handle(){
-    for(var character in rpg_characters){
+    for(let character in rpg_characters){
         if(rpg_characters[character]['dead']){
             continue;
         }
 
         // Regenerate character stats.
-        for(var stat in rpg_characters[character]['stats']){
+        for(let stat in rpg_characters[character]['stats']){
             if(rpg_characters[character]['stats'][stat]['regeneration'] === void 0
               || rpg_characters[character]['stats'][stat]['current'] >= rpg_characters[character]['stats'][stat]['max']){
                 continue;
@@ -110,8 +110,8 @@ function rpg_character_handle(){
         }
 
         // Handle character inventory item spells.
-        for(var item in rpg_characters[character]['inventory']){
-            var selected = rpg_characters[character]['inventory'][item]['spell'];
+        for(let item in rpg_characters[character]['inventory']){
+            let selected = rpg_characters[character]['inventory'][item]['spell'];
 
             if(selected['reload-current'] < selected['reload']){
                 selected['reload-current'] += 1;
@@ -132,7 +132,7 @@ function rpg_character_handle(){
                 continue;
             }
 
-            var speeds = core_move_2d({
+            let speeds = core_move_2d({
               'x0': rpg_characters[character]['x'],
               'x1': rpg_characters[character]['target-x'],
               'y0': rpg_characters[character]['y'],
@@ -148,7 +148,7 @@ function rpg_character_handle(){
 
             // Handle particle-creating spells.
             if(selected['type'] === 'particle'){
-                var particle = Object.assign(
+                let particle = Object.assign(
                   {},
                   selected
                 );
@@ -238,7 +238,7 @@ function rpg_item_select(args){
       },
     });
 
-    var length = rpg_characters[args['character']]['inventory'].length - 1;
+    let length = rpg_characters[args['character']]['inventory'].length - 1;
     if(args['id'] < 0){
         args['id'] = length;
 
@@ -307,7 +307,7 @@ function rpg_particle_create(args){
 
 function rpg_particle_handle(){
     particleloop:
-    for(var particle in rpg_particles){
+    for(let particle in rpg_particles){
         rpg_particles[particle]['x'] += rpg_particles[particle]['dx'] * rpg_particles[particle]['speed-x'];
         rpg_particles[particle]['y'] += rpg_particles[particle]['dy'] * rpg_particles[particle]['speed-y'];
 
@@ -320,7 +320,7 @@ function rpg_particle_handle(){
         }
         rpg_particles[particle]['lifespan'] -= 1;
 
-        for(var object in rpg_world_dynamic){
+        for(let object in rpg_world_dynamic){
             if(!rpg_world_dynamic[object]['collision']
               || rpg_particles[particle]['x'] <= rpg_world_dynamic[object]['x']
               || rpg_particles[particle]['x'] >= rpg_world_dynamic[object]['x'] + rpg_world_dynamic[object]['width']
@@ -337,7 +337,7 @@ function rpg_particle_handle(){
         }
 
         // Handle collisions with characters.
-        for(var character in rpg_characters){
+        for(let character in rpg_characters){
             if(rpg_particles[particle]['owner'] == character
               || rpg_particles[particle]['x'] <= rpg_characters[character]['x'] - rpg_characters[character]['width'] / 2
               || rpg_particles[particle]['x'] >= rpg_characters[character]['x'] + rpg_characters[character]['width'] / 2
@@ -385,7 +385,7 @@ function rpg_spawner_create(args){
 }
 
 function rpg_spawner_handle(){
-    for(var spawner in rpg_spawners){
+    for(let spawner in rpg_spawners){
         if(rpg_spawners[spawner]['characters'] < rpg_spawners[spawner]['max']){
             rpg_character_create({
               'properties': rpg_spawners[spawner]['character'],
@@ -431,8 +431,8 @@ function rpg_world_dynamic_create(args){
     rpg_world_dynamic.push(args['properties']);
 }
 
-var rpg_characters = [];
-var rpg_particles = [];
-var rpg_spawners = [];
-var rpg_world_dynamic = [];
-var rpg_world_static = [];
+let rpg_characters = [];
+let rpg_particles = [];
+let rpg_spawners = [];
+let rpg_world_dynamic = [];
+let rpg_world_static = [];
