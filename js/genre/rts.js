@@ -938,15 +938,15 @@ function rts_unit_handle(){
     }
 }
 
-let rts_buildings = {};
-let rts_build_mode = '';
-let rts_bullets = [];
-let rts_fog = [];
-let rts_math = [];
-let rts_money_timer = 0;
-let rts_players = {};
-let rts_selected_id = -1;
-let rts_selected_type = '';
-let rts_units = {};
-let rts_world_dynamic = [];
-let rts_world_static = [];
+window.rts_buildings = {};
+window.rts_build_mode = '';
+window.rts_bullets = [];
+window.rts_fog = [];
+window.rts_math = [];
+window.rts_money_timer = 0;
+window.rts_players = {};
+window.rts_selected_id = -1;
+window.rts_selected_type = '';
+window.rts_units = {};
+window.rts_world_dynamic = [];
+window.rts_world_static = [];

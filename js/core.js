@@ -2322,41 +2322,41 @@ function core_vendor_prefix(args){
       || args['var']['o' + unprefixed];
 }
 
-let core_ajax_properties = {
+window.core_ajax_properties = {
   'data': null,
   'readyState': 4,
   'status': 200,
   'type': 'GET',
 };
-let core_audio = {};
-let core_audio_context = 0;
-let core_audio_sources = {};
-let core_degree = Math.PI / 180;
-let core_entities = {};
-let core_entity_info = {};
-let core_entity_types_default = [];
-let core_events = {};
-let core_gamepads = {};
-let core_groups = {};
-let core_images = {};
-let core_intervals = {};
-let core_key_rebinds = {};
-let core_keys = {};
-let core_matrices = {};
-let core_menu_open = false;
-let core_mode = 0;
-let core_mouse = {};
-let core_radian = 180 / Math.PI;
-let core_random_boolean_chance = .5;
-let core_random_integer_max = 100;
-let core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-let core_random_string_length = 100;
-let core_repo_title = '';
-let core_storage_data = {};
-let core_storage_info = {};
-let core_tabs = {};
-let core_tau = Math.PI * 2;
-let core_ui_values = {};
-let core_uids = {};
+window.core_audio = {};
+window.core_audio_context = 0;
+window.core_audio_sources = {};
+window.core_degree = Math.PI / 180;
+window.core_entities = {};
+window.core_entity_info = {};
+window.core_entity_types_default = [];
+window.core_events = {};
+window.core_gamepads = {};
+window.core_groups = {};
+window.core_images = {};
+window.core_intervals = {};
+window.core_key_rebinds = {};
+window.core_keys = {};
+window.core_matrices = {};
+window.core_menu_open = false;
+window.core_mode = 0;
+window.core_mouse = {};
+window.core_radian = 180 / Math.PI;
+window.core_random_boolean_chance = .5;
+window.core_random_integer_max = 100;
+window.core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+window.core_random_string_length = 100;
+window.core_repo_title = '';
+window.core_storage_data = {};
+window.core_storage_info = {};
+window.core_tabs = {};
+window.core_tau = Math.PI * 2;
+window.core_ui_values = {};
+window.core_uids = {};
 
 window.onload = core_init;

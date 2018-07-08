@@ -309,11 +309,11 @@ function canvas_setproperties(args){
     );
 }
 
-let canvas_buffer = 0;
-let canvas_canvas = 0;
-let canvas_fonts = {
+window.canvas_buffer = 0;
+window.canvas_canvas = 0;
+window.canvas_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-let canvas_properties = {};
+window.canvas_properties = {};

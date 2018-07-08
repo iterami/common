@@ -63,5 +63,5 @@ function platform_player_reset(args){
     });
 }
 
-let platform_players = {};
-let platform_score_goal = 1;
+window.platform_players = {};
+window.platform_score_goal = 1;

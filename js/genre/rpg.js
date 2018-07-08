@@ -431,8 +431,8 @@ function rpg_world_dynamic_create(args){
     rpg_world_dynamic.push(args['properties']);
 }
 
-let rpg_characters = [];
-let rpg_particles = [];
-let rpg_spawners = [];
-let rpg_world_dynamic = [];
-let rpg_world_static = [];
+window.rpg_characters = [];
+window.rpg_particles = [];
+window.rpg_spawners = [];
+window.rpg_world_dynamic = [];
+window.rpg_world_static = [];

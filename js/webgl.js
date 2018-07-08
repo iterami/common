@@ -1627,20 +1627,20 @@ function webgl_vertexcolorarray(args){
     return color;
 }
 
-let webgl_attributes = {};
-let webgl_buffer = 0;
-let webgl_canvas = 0;
-let webgl_fonts = {
+window.webgl_attributes = {};
+window.webgl_buffer = 0;
+window.webgl_canvas = 0;
+window.webgl_fonts = {
   'big': '300% monospace',
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-let webgl_canvas_properties = {};
-let webgl_character = {};
-let webgl_properties = {};
-let webgl_text = {};
-let webgl_textures = {
+window.webgl_canvas_properties = {};
+window.webgl_character = {};
+window.webgl_properties = {};
+window.webgl_text = {};
+window.webgl_textures = {
   '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
   '_default': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
 };
-let webgl_uniformlocations = {};
+window.webgl_uniformlocations = {};
