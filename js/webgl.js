@@ -870,7 +870,7 @@ function webgl_init_character(args){
         'camera-rotate-z': 0,
         'camera-type': 'gravity',
         'camera-zoom-current': 20,
-        'camera-zoom-max': 20,
+        'camera-zoom-max': 30,
         'collide-range': 2.5,
         'collides': true,
         'dx': 0,
