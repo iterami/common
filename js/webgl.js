@@ -816,6 +816,7 @@ function webgl_init(args){
         'dy': 0,
         'dz': 0,
         'gravity': false,
+        'item': false,
         'normals': [],
         'rotate-radians-x': 0,
         'rotate-radians-y': 0,
@@ -860,7 +861,7 @@ function webgl_init(args){
 
 // Optional args: camera-rotate-x, camera-rotate-y, camera-rotate-z, camera-type, camera-zoom-current,
 //   camera-zoom-max, collide-range, collides, dx, dy, dz, entities, experience, health-current, health-max,
-//   jump-height, level, rotate-x, rotate-y, rotate-z, speed, translate-x, translate-y, translate-z
+//   inventory, jump-height, level, rotate-x, rotate-y, rotate-z, speed, translate-x, translate-y, translate-z
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -880,6 +881,7 @@ function webgl_init_character(args){
         'experience': 0,
         'health-current': 100,
         'health-max': 100,
+        'inventory': false,
         'jump-height': .6,
         'level': -1,
         'rotate-x': 0,
@@ -911,6 +913,7 @@ function webgl_init_character(args){
       'experience': args['experience'],
       'health-current': args['health-current'],
       'health-max': args['health-max'],
+      'inventory': {},
       'jump-allow': false,
       'jump-height': args['jump-height'],
       'level': args['level'],
@@ -925,6 +928,12 @@ function webgl_init_character(args){
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
     };
+    if(args['inventory'] !== false){
+        Object.assign(
+          webgl_character['inventory'],
+          args['inventory']
+        );
+    }
     webgl_camera_rotate({
       'x': args['camera-rotate-x'],
       'y': args['camera-rotate-y'],
@@ -1010,6 +1019,7 @@ function webgl_load_level_init(args){
               'experience': args['json']['character']['experience'],
               'health-current': args['json']['character']['health-current'],
               'health-max': args['json']['character']['health-max'],
+              'inventory': args['json']['character']['inventory'],
               'jump-height': args['json']['character']['jump-height'],
               'level': args['json']['character']['level'],
               'rotate-x': args['json']['character']['rotate-x'],

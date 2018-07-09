@@ -795,6 +795,11 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
+            // Parse item.
+            if(strcmp(json_level_entities_element_property->name->string, "item") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
             // Parse rotate-x.
             if(strcmp(json_level_entities_element_property->name->string, "rotate-x") == 0){
                 value = json_level_entities_element_property->value;
