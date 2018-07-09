@@ -454,9 +454,9 @@ function webgl_draw_entity(entity){
         if(core_entities[entity]['attach']['to'] === '_character-camera'){
             core_matrix_rotate({
               'dimensions': [
-                0,
+                webgl_character['rotate-radians-x'],
                 -webgl_character['rotate-radians-y'],
-                0,
+                webgl_character['rotate-radians-z'],
               ],
               'id': 'camera',
             });
