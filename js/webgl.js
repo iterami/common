@@ -354,6 +354,20 @@ function webgl_collision(args){
                 webgl_character['jump-allow'] = webgl_character['dy'] === 0;
             }
 
+            if(target['item'] !== false){
+                if(!(target['item'] in webgl_character['inventory'])){
+                    webgl_character['inventory'][target['item']] = 0;
+                }
+
+                webgl_character['inventory'][target['item']]++;
+
+                core_entity_remove({
+                  'entities': [
+                    args['target'],
+                  ],
+                });
+            }
+
         }else{
             core_entities[args['entity']]['dx'] = entity_dx;
             core_entities[args['entity']]['dy'] = entity_dy;
