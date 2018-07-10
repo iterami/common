@@ -1014,7 +1014,8 @@ function webgl_load_level_init(args){
           'entities': [],
         });
 
-    }else if(webgl_character_level() < 0){
+    }else if(webgl_character_level() < 0
+      || args['character'] === 1){
         if(args['json']['character']
           && args['json']['character'] !== false){
             webgl_init_character({
