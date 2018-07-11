@@ -961,6 +961,38 @@ function webgl_init_character(args){
     });
 }
 
+// Optional args: character, target
+function webgl_json_export(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': true,
+        'target': 'exported',
+      },
+    });
+
+    let json = {};
+
+    Object.assign(
+      json,
+      webgl_properties
+    );
+    if(args['character']
+      && webgl_character_level() > 0){
+        json['character'] = {};
+        Object.assign(
+          json,
+          webgl_character
+        );
+    }
+    json['entities'] = [];
+    for(let entity in core_entities){
+        json['entities'].push(core_entities[entity]);
+    }
+
+    document.getElementById(args['target']).value = JSON.stringify(json);
+}
+
 // Required args: json
 // Optional args: character
 function webgl_load_level(args){
