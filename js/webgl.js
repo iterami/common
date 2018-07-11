@@ -981,7 +981,7 @@ function webgl_json_export(args){
       && webgl_character_level() > -1){
         json['character'] = {};
         Object.assign(
-          json,
+          json['character'],
           webgl_character
         );
     }
