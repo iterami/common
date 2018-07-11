@@ -987,7 +987,20 @@ function webgl_json_export(args){
     }
     json['entities'] = [];
     for(let entity in core_entities){
-        json['entities'].push(core_entities[entity]);
+        let entity_json = {};
+        Object.assign(
+          entity_json,
+          core_entities[entity]
+        );
+
+        delete entity_json['buffer'];
+        delete entity_json['image'];
+        delete entity_json['normals'];
+        delete entity_json['texture-gl'];
+        delete entity_json['textureData'];
+        delete entity_json['vertices-length'];
+
+        json['entities'].push(entity_json);
     }
 
     document.getElementById(args['target']).value = JSON.stringify(json);
