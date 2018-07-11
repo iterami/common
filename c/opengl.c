@@ -736,8 +736,23 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse attach.
-            if(strcmp(json_level_entities_element_property->name->string, "id") == 0){
+            // Parse attach-to.
+            if(strcmp(json_level_entities_element_property->name->string, "attach-to") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse attach-offset-x.
+            if(strcmp(json_level_entities_element_property->name->string, "attach-offset-x") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse attach-offset-y.
+            if(strcmp(json_level_entities_element_property->name->string, "attach-offset-y") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse attach-offset-z.
+            if(strcmp(json_level_entities_element_property->name->string, "attach-offset-z") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
