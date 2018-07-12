@@ -688,6 +688,36 @@ void opengl_load_level(const gchar *filename){
             );
         }
 
+        // Parse spawn-rotate-x.
+        if(strcmp(json_object->name->string, "spawn-rotate-x") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse spawn-rotate-y.
+        if(strcmp(json_object->name->string, "spawn-rotate-y") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse spawn-rotate-z.
+        if(strcmp(json_object->name->string, "spawn-rotate-z") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse spawn-translate-x.
+        if(strcmp(json_object->name->string, "spawn-translate-x") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse spawn-translate-y.
+        if(strcmp(json_object->name->string, "spawn-translate-y") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse spawn-translate-z.
+        if(strcmp(json_object->name->string, "spawn-translate-z") == 0){
+            json_object = json_object->next;
+        }
+
         // Parse entities.
         json_array = json_object->value->payload;
         entity_count = json_array->length;
