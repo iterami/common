@@ -995,23 +995,43 @@ function webgl_json_export(args){
         delete json['character']['translate-x'];
         delete json['character']['translate-y'];
         delete json['character']['translate-z'];
-    }
-    json['entities'] = [];
-    for(let entity in core_entities){
-        let entity_json = {};
-        Object.assign(
-          entity_json,
-          core_entities[entity]
-        );
 
-        delete entity_json['buffer'];
-        delete entity_json['image'];
-        delete entity_json['normals'];
-        delete entity_json['texture-gl'];
-        delete entity_json['textureData'];
-        delete entity_json['vertices-length'];
+        json['entities'] = [];
+        for(let entity in webgl_character_homebase){
+            let entity_json = {};
+            Object.assign(
+              entity_json,
+              webgl_character_homebase[entity]
+            );
 
-        json['entities'].push(entity_json);
+            delete entity_json['buffer'];
+            delete entity_json['image'];
+            delete entity_json['normals'];
+            delete entity_json['texture-gl'];
+            delete entity_json['textureData'];
+            delete entity_json['vertices-length'];
+
+            json['entities'].push(entity_json);
+        }
+
+    }else{
+        json['entities'] = [];
+        for(let entity in core_entities){
+            let entity_json = {};
+            Object.assign(
+              entity_json,
+              core_entities[entity]
+            );
+
+            delete entity_json['buffer'];
+            delete entity_json['image'];
+            delete entity_json['normals'];
+            delete entity_json['texture-gl'];
+            delete entity_json['textureData'];
+            delete entity_json['vertices-length'];
+
+            json['entities'].push(entity_json);
+        }
     }
 
     document.getElementById(args['target']).value = JSON.stringify(json);
@@ -1070,6 +1090,8 @@ function webgl_load_level_init(args){
           'entities': [],
         });
 
+        webgl_character_homebase = [];
+
     }else if(webgl_character_level() < 0
       || args['character'] === 1){
         if(args['json']['character']
@@ -1092,6 +1114,8 @@ function webgl_load_level_init(args){
               'level': args['json']['character']['level'],
               'speed': args['json']['character']['speed'],
             });
+
+            webgl_character_homebase = args['json']['entities'];
 
         }else{
             webgl_init_character({
@@ -1725,6 +1749,7 @@ window.webgl_fonts = {
 };
 window.webgl_canvas_properties = {};
 window.webgl_character = {};
+window.webgl_character_homebase = [];
 window.webgl_properties = {};
 window.webgl_text = {};
 window.webgl_textures = {
