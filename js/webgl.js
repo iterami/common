@@ -476,9 +476,9 @@ function webgl_draw_entity(entity){
         }else{
             core_matrix_rotate({
               'dimensions': [
-                core_entities[entity]['rotate-radians-x'],
-                core_entities[entity]['rotate-radians-y'],
-                core_entities[entity]['rotate-radians-z'],
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-x'],
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-y'],
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-z'],
               ],
               'id': 'camera',
             });
