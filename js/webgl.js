@@ -978,6 +978,23 @@ function webgl_json_export(args){
           json['character'],
           webgl_character
         );
+
+        delete json['character']['camera-rotate-radians-x'];
+        delete json['character']['camera-rotate-radians-y'];
+        delete json['character']['camera-rotate-radians-z'];
+        delete json['character']['camera-rotate-x'];
+        delete json['character']['camera-rotate-y'];
+        delete json['character']['camera-rotate-z'];
+        delete json['character']['jump-allow'];
+        delete json['character']['rotate-radians-x'];
+        delete json['character']['rotate-radians-y'];
+        delete json['character']['rotate-radians-z'];
+        delete json['character']['rotate-x'];
+        delete json['character']['rotate-y'];
+        delete json['character']['rotate-z'];
+        delete json['character']['translate-x'];
+        delete json['character']['translate-y'];
+        delete json['character']['translate-z'];
     }
     json['entities'] = [];
     for(let entity in core_entities){
