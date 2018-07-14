@@ -1598,7 +1598,10 @@ function webgl_shader_update(){
       'type': webgl_buffer.VERTEX_SHADER,
     });
 
-    let program = webgl_program_create({
+    if(webgl_shader_program !== 0){
+        webgl_buffer.deleteProgram(webgl_shader_program);
+    }
+    webgl_shader_program = webgl_program_create({
       'id': 'shaders',
       'shaderlist': [
         fragment_shader,
@@ -1608,45 +1611,44 @@ function webgl_shader_update(){
 
     webgl_vertexattribarray_set({
       'attribute': 'vec_vertexColor',
-      'program': program,
+      'program': webgl_shader_program,
     });
     webgl_vertexattribarray_set({
       'attribute': 'vec_vertexNormal',
-      'program': program,
+      'program': webgl_shader_program,
     });
     webgl_vertexattribarray_set({
       'attribute': 'vec_vertexPosition',
-      'program': program,
+      'program': webgl_shader_program,
     });
     webgl_vertexattribarray_set({
       'attribute': 'vec_texturePosition',
-      'program': program,
+      'program': webgl_shader_program,
     });
 
     webgl_uniformlocations = {
       'alpha': webgl_buffer.getUniformLocation(
-        program,
+        webgl_shader_program,
         'alpha'
       ),
       'mat_cameraMatrix': webgl_buffer.getUniformLocation(
-        program,
+        webgl_shader_program,
         'mat_cameraMatrix'
       ),
       'mat_normalMatrix': webgl_buffer.getUniformLocation(
-        program,
+        webgl_shader_program,
         'mat_normalMatrix'
       ),
       'mat_perspectiveMatrix': webgl_buffer.getUniformLocation(
-        program,
+        webgl_shader_program,
         'mat_perspectiveMatrix'
       ),
       'sampler': webgl_buffer.getUniformLocation(
-        program,
+        webgl_shader_program,
         'sampler'
       ),
     };
 
-    webgl_buffer.deleteProgram(program);
 }
 
 // Required args: entityid
@@ -1751,6 +1753,7 @@ window.webgl_canvas_properties = {};
 window.webgl_character = {};
 window.webgl_character_homebase = [];
 window.webgl_properties = {};
+window.webgl_shader_program = 0;
 window.webgl_text = {};
 window.webgl_textures = {
   '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
