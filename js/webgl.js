@@ -977,6 +977,14 @@ function webgl_json_export(args){
       json,
       webgl_properties
     );
+
+    delete json['shader-alpha'];
+    delete json['shader-mat_cameraMatrix'];
+    delete json['shader-mat_normalMatrix'];
+    delete json['shader-mat_perspectiveMatrix'];
+    delete json['shader-program'];
+    delete json['shader-sampler'];
+
     if(args['character']
       && webgl_character_level() > -1){
         json['character'] = {};
