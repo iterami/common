@@ -551,26 +551,26 @@ function webgl_draw_entity(entity){
       core_entities[entity]['texture-gl']
     );
     webgl_buffer.uniform1i(
-      webgl_uniformlocations['sampler'],
+      webgl_properties['shader-sampler'],
       0
     );
 
     webgl_buffer.uniform1f(
-      webgl_uniformlocations['alpha'],
+      webgl_properties['shader-alpha'],
       core_entities[entity]['alpha']
     );
     webgl_buffer.uniformMatrix4fv(
-      webgl_uniformlocations['mat_normalMatrix'],
+      webgl_properties['shader-mat_normalMatrix'],
       0,
       core_matrices['perspective']
     );
     webgl_buffer.uniformMatrix4fv(
-      webgl_uniformlocations['mat_perspectiveMatrix'],
+      webgl_properties['shader-mat_perspectiveMatrix'],
       0,
       core_matrices['perspective']
     );
     webgl_buffer.uniformMatrix4fv(
-      webgl_uniformlocations['mat_cameraMatrix'],
+      webgl_properties['shader-mat_cameraMatrix'],
       0,
       core_matrices['camera']
     );
@@ -760,6 +760,12 @@ function webgl_init(args){
       'gravity-acceleration': args['gravity-acceleration'],
       'gravity-max': args['gravity-max'],
       'pointer': false,
+      'shader-alpha': 0,
+      'shader-mat_cameraMatrix': 0,
+      'shader-mat_normalMatrix': 0,
+      'shader-mat_perspectiveMatrix': 0,
+      'shader-program': 0,
+      'shader-sampler': 0,
       'spawn-rotate-x': args['spawn-rotate-x'],
       'spawn-rotate-y': args['spawn-rotate-y'],
       'spawn-rotate-z': args['spawn-rotate-z'],
@@ -1598,10 +1604,10 @@ function webgl_shader_update(){
       'type': webgl_buffer.VERTEX_SHADER,
     });
 
-    if(webgl_shader_program !== 0){
-        webgl_buffer.deleteProgram(webgl_shader_program);
+    if(webgl_properties['shader-program'] !== 0){
+        webgl_buffer.deleteProgram(webgl_properties['shader-program']);
     }
-    webgl_shader_program = webgl_program_create({
+    webgl_properties['shader-program'] = webgl_program_create({
       'id': 'shaders',
       'shaderlist': [
         fragment_shader,
@@ -1616,32 +1622,29 @@ function webgl_shader_update(){
         'vec_vertexPosition',
         'vec_texturePosition',
       ],
-      'program': webgl_shader_program,
+      'program': webgl_properties['shader-program'],
     });
 
-    webgl_uniformlocations = {
-      'alpha': webgl_buffer.getUniformLocation(
-        webgl_shader_program,
-        'alpha'
-      ),
-      'mat_cameraMatrix': webgl_buffer.getUniformLocation(
-        webgl_shader_program,
-        'mat_cameraMatrix'
-      ),
-      'mat_normalMatrix': webgl_buffer.getUniformLocation(
-        webgl_shader_program,
-        'mat_normalMatrix'
-      ),
-      'mat_perspectiveMatrix': webgl_buffer.getUniformLocation(
-        webgl_shader_program,
-        'mat_perspectiveMatrix'
-      ),
-      'sampler': webgl_buffer.getUniformLocation(
-        webgl_shader_program,
-        'sampler'
-      ),
-    };
-
+    webgl_properties['shader-alpha'] = webgl_buffer.getUniformLocation(
+      webgl_properties['shader-program'],
+      'alpha'
+    );
+    webgl_properties['shader-mat_cameraMatrix'] = webgl_buffer.getUniformLocation(
+      webgl_properties['shader-program'],
+      'mat_cameraMatrix'
+    );
+    webgl_properties['shader-mat_normalMatrix'] = webgl_buffer.getUniformLocation(
+      webgl_properties['shader-program'],
+      'mat_normalMatrix'
+    );
+    webgl_properties['shader-mat_perspectiveMatrix'] = webgl_buffer.getUniformLocation(
+      webgl_properties['shader-program'],
+      'mat_perspectiveMatrix'
+    );
+    webgl_properties['shader-sampler'] = webgl_buffer.getUniformLocation(
+      webgl_properties['shader-program'],
+      'sampler'
+    );
 }
 
 // Required args: entityid
@@ -1748,10 +1751,8 @@ window.webgl_canvas_properties = {};
 window.webgl_character = {};
 window.webgl_character_homebase = [];
 window.webgl_properties = {};
-window.webgl_shader_program = 0;
 window.webgl_text = {};
 window.webgl_textures = {
   '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
   '_default': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
 };
-window.webgl_uniformlocations = {};
