@@ -1610,19 +1610,12 @@ function webgl_shader_update(){
     });
 
     webgl_vertexattribarray_set({
-      'attribute': 'vec_vertexColor',
-      'program': webgl_shader_program,
-    });
-    webgl_vertexattribarray_set({
-      'attribute': 'vec_vertexNormal',
-      'program': webgl_shader_program,
-    });
-    webgl_vertexattribarray_set({
-      'attribute': 'vec_vertexPosition',
-      'program': webgl_shader_program,
-    });
-    webgl_vertexattribarray_set({
-      'attribute': 'vec_texturePosition',
+      'attributes': [
+        'vec_vertexColor',
+        'vec_vertexNormal',
+        'vec_vertexPosition',
+        'vec_texturePosition',
+      ],
       'program': webgl_shader_program,
     });
 
@@ -1700,13 +1693,15 @@ function webgl_texture_set_todo(args){
     );
 }
 
-// Required args: attribute, program
+// Required args: attributes, program
 function webgl_vertexattribarray_set(args){
-    webgl_attributes[args['attribute']] = webgl_buffer.getAttribLocation(
-      args['program'],
-      args['attribute']
-    );
-    webgl_buffer.enableVertexAttribArray(webgl_attributes[args['attribute']]);
+    for(let attribute in args['attributes']){
+        webgl_attributes[args['attributes'][attribute]] = webgl_buffer.getAttribLocation(
+          args['program'],
+          args['attributes'][attribute]
+        );
+        webgl_buffer.enableVertexAttribArray(webgl_attributes[args['attributes'][attribute]]);
+    }
 }
 
 // Optional args: rgbarray, vertexcount
