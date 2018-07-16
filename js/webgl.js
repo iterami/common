@@ -762,6 +762,8 @@ function webgl_init(args){
       'gravity-max': args['gravity-max'],
       'pointer': false,
       'shader-alpha': 0,
+      'shader-directionlighting': 0,
+      'shader-fog': 0,
       'shader-mat_cameraMatrix': 0,
       'shader-mat_normalMatrix': 0,
       'shader-mat_perspectiveMatrix': 0,
@@ -980,6 +982,8 @@ function webgl_json_export(args){
     );
 
     delete json['shader-alpha'];
+    delete json['shader-directionlighting'];
+    delete json['shader-fog'];
     delete json['shader-mat_cameraMatrix'];
     delete json['shader-mat_normalMatrix'];
     delete json['shader-mat_perspectiveMatrix'];
@@ -1551,39 +1555,36 @@ function webgl_shader_create(args){
 }
 
 function webgl_shader_update(){
-    let fogstring = webgl_properties['fog'] !== false
-      ? ('mix('
-        + 'vec4('
-        +   webgl_properties['clearcolor-red'] + ','
-        +   webgl_properties['clearcolor-green'] + ','
-        +   webgl_properties['clearcolor-blue'] + ','
-        +   webgl_properties['clearcolor-alpha']
-        + '),'
-        + 'vec_fragmentColor,'
-        + 'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
-        + ')')
-      : 'vec_fragmentColor';
     let fragment_shader = webgl_shader_create({
       'id': 'fragment',
       'source':
-          'uniform lowp float alpha;'
+          'uniform lowp int fog;'
+        + 'uniform lowp float alpha;'
         + 'uniform sampler2D sampler;'
         + 'varying mediump float float_fogDistance;'
         + 'varying mediump vec2 vec_textureCoord;'
         + 'varying mediump vec3 vec_lighting;'
         + 'varying lowp vec4 vec_fragmentColor;'
         + 'void main(void){'
-        +     'gl_FragColor = ' + fogstring + ' * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
+/*
+        +     'if(fog == 1){'
+        +         'gl_FragColor = mix('
+        +           'vec4('
+        +             webgl_properties['clearcolor-red'] + ','
+        +             webgl_properties['clearcolor-green'] + ','
+        +             webgl_properties['clearcolor-blue'] + ','
+        +             webgl_properties['clearcolor-alpha']
+        +           '),'
+        +           'vec_fragmentColor,'
+        +           'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+        +         ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
+        +     '}else{'
+*/
+        +         'gl_FragColor = vec_fragmentColor * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
+//      +     '}'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
-    let directionstring = webgl_properties['directionlighting-vector'] !== false
-      ? (' + (vec3('
-        +   webgl_properties['directionlighting-red'] + ','
-        +   webgl_properties['directionlighting-green'] + ','
-        +   webgl_properties['directionlighting-blue']
-        + ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))), 0.0));')
-      : ';';
     let vertex_shader = webgl_shader_create({
       'id': 'vertex',
       'source':
@@ -1591,6 +1592,7 @@ function webgl_shader_update(){
         + 'attribute vec3 vec_vertexNormal;'
         + 'attribute vec4 vec_vertexColor;'
         + 'attribute vec4 vec_vertexPosition;'
+        + 'uniform lowp int directionlighting;'
         + 'uniform mat4 mat_cameraMatrix;'
         + 'uniform mat4 mat_normalMatrix;'
         + 'uniform mat4 mat_perspectiveMatrix;'
@@ -1604,11 +1606,25 @@ function webgl_shader_update(){
         +     'vec_fragmentColor = vec_vertexColor;'
         +     'vec_textureCoord = vec_texturePosition;'
         +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-        +     'vec_lighting = vec3('
-        +       webgl_properties['ambientlighting-red'] + ','
-        +       webgl_properties['ambientlighting-green'] + ','
-        +       webgl_properties['ambientlighting-blue']
-        +     ')' + directionstring
+/*
+        +     'if(directionlighting == 1){'
+        +         'vec_lighting = vec3('
+        +           webgl_properties['ambientlighting-red'] + ','
+        +           webgl_properties['ambientlighting-green'] + ','
+        +           webgl_properties['ambientlighting-blue']
+        +         ') + (vec3('
+        +           webgl_properties['directionlighting-red'] + ','
+        +           webgl_properties['directionlighting-green'] + ','
+        +           webgl_properties['directionlighting-blue']
+        +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))), 0.0));'
+        +     '}else{'
+*/
+        +         'vec_lighting = vec3('
+        +           webgl_properties['ambientlighting-red'] + ','
+        +           webgl_properties['ambientlighting-green'] + ','
+        +           webgl_properties['ambientlighting-blue']
+        +         ');'
+//      +     '}'
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
     });
@@ -1638,6 +1654,14 @@ function webgl_shader_update(){
       webgl_properties['shader-program'],
       'alpha'
     );
+    webgl_properties['shader-directionlighting'] = webgl_buffer.getUniformLocation(
+      webgl_properties['shader-program'],
+      'directionlighting'
+    );
+    webgl_properties['shader-fog'] = webgl_buffer.getUniformLocation(
+      webgl_properties['shader-program'],
+      'fog'
+    );
     webgl_properties['shader-mat_cameraMatrix'] = webgl_buffer.getUniformLocation(
       webgl_properties['shader-program'],
       'mat_cameraMatrix'
@@ -1653,6 +1677,19 @@ function webgl_shader_update(){
     webgl_properties['shader-sampler'] = webgl_buffer.getUniformLocation(
       webgl_properties['shader-program'],
       'sampler'
+    );
+
+    webgl_buffer.uniform1i(
+      webgl_properties['shader-directionlighting'],
+      webgl_properties['direction-vector'] !== false
+        ? 1
+        : 0
+    );
+    webgl_buffer.uniform1i(
+      webgl_properties['shader-fog'],
+      webgl_properties['fog'] !== false
+        ? 1
+        : 0
     );
 }
 
