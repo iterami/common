@@ -377,6 +377,17 @@ function webgl_collision(args){
 function webgl_draw(){
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
+    webgl_buffer.uniformMatrix4fv(
+      webgl_properties['shader-mat_normalMatrix'],
+      0,
+      core_matrices['perspective']
+    );
+    webgl_buffer.uniformMatrix4fv(
+      webgl_properties['shader-mat_perspectiveMatrix'],
+      0,
+      core_matrices['perspective']
+    );
+
     webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
     core_group_modify({
       'groups': [
@@ -558,16 +569,6 @@ function webgl_draw_entity(entity){
     webgl_buffer.uniform1f(
       webgl_properties['shader-alpha'],
       core_entities[entity]['alpha']
-    );
-    webgl_buffer.uniformMatrix4fv(
-      webgl_properties['shader-mat_normalMatrix'],
-      0,
-      core_matrices['perspective']
-    );
-    webgl_buffer.uniformMatrix4fv(
-      webgl_properties['shader-mat_perspectiveMatrix'],
-      0,
-      core_matrices['perspective']
     );
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader-mat_cameraMatrix'],
