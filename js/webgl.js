@@ -489,14 +489,16 @@ function webgl_draw_entity(entity){
     });
     if(core_entities[entity]['attach-to'] !== false){
         if(core_entities[entity]['attach-to'] === '_character-camera'){
-            core_matrix_rotate({
-              'dimensions': [
-                webgl_character['rotate-radians-x'],
-                -webgl_character['rotate-radians-y'],
-                webgl_character['rotate-radians-z'],
-              ],
-              'id': 'camera',
-            });
+            if(!core_groups['skybox'][entity]){
+                core_matrix_rotate({
+                  'dimensions': [
+                    webgl_character['rotate-radians-x'],
+                    -webgl_character['rotate-radians-y'],
+                    webgl_character['rotate-radians-z'],
+                  ],
+                  'id': 'camera',
+                });
+            }
 
         }else{
             core_matrix_rotate({
@@ -850,6 +852,7 @@ function webgl_init(args){
 
     webgl_shader_update();
 
+    core_groups['skybox'] = {};
     core_entity_set({
       'default': true,
       'groups': [
