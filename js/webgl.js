@@ -92,7 +92,7 @@ function webgl_camera_handle(){
     }
 }
 
-function webgl_camera_reset(){
+function webgl_camera_origin(){
     webgl_entity_move_to();
     webgl_character['camera-rotate-radians-x'] = 0;
     webgl_character['camera-rotate-radians-y'] = 0;
@@ -175,6 +175,20 @@ function webgl_camera_rotate(args){
             });
         }
     }
+}
+
+function webgl_camera_spawn(){
+    webgl_camera_origin();
+    webgl_entity_move_to({
+      'x': webgl_properties['spawn-translate-x'],
+      'y': webgl_properties['spawn-translate-y'],
+      'z': webgl_properties['spawn-translate-z'],
+    });
+    webgl_camera_rotate({
+      'x': webgl_properties['spawn-rotate-x'],
+      'y': webgl_properties['spawn-rotate-y'],
+      'z': webgl_properties['spawn-rotate-z'],
+    });
 }
 
 function webgl_camera_zoom(event){
@@ -1219,17 +1233,7 @@ function webgl_load_level_init(args){
         });
     }
 
-    webgl_camera_reset();
-    webgl_entity_move_to({
-      'x': webgl_properties['spawn-translate-x'],
-      'y': webgl_properties['spawn-translate-y'],
-      'z': webgl_properties['spawn-translate-z'],
-    });
-    webgl_camera_rotate({
-      'x': webgl_properties['spawn-rotate-x'],
-      'y': webgl_properties['spawn-rotate-y'],
-      'z': webgl_properties['spawn-rotate-z'],
-    });
+    webgl_camera_spawn();
     core_escape();
 }
 
