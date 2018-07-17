@@ -501,7 +501,8 @@ void opengl_load_level(const gchar *filename){
         float directional_blue = 1;
         float directional_green = 1;
         float directional_red = 1;
-        float fog = -.0001;
+        float fog_density = .0001;
+        float fog_state = FALSE;
         float gravity_acceleration = -.05;
         float gravity_max = -1;
 
@@ -625,14 +626,13 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
-        // Parse fog.
-        if(strcmp(json_object->name->string, "fog") == 0){
-            /*
-            value = json_object->value;
-            number = (struct json_number_s*)value->payload;
-            fog = atof(number->number);
-            */
+        // Parse fog-density.
+        if(strcmp(json_object->name->string, "fog-density") == 0){
+            json_object = json_object->next;
+        }
 
+        // Parse fog-state.
+        if(strcmp(json_object->name->string, "fog-state") == 0){
             json_object = json_object->next;
         }
 
