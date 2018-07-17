@@ -1558,7 +1558,7 @@ function webgl_shader_update(){
     let fragment_shader = webgl_shader_create({
       'id': 'fragment',
       'source':
-          'uniform lowp int fog;'
+          'uniform int fog;'
         + 'uniform lowp float alpha;'
         + 'uniform sampler2D sampler;'
         + 'varying mediump float float_fogDistance;'
@@ -1566,8 +1566,8 @@ function webgl_shader_update(){
         + 'varying mediump vec3 vec_lighting;'
         + 'varying lowp vec4 vec_fragmentColor;'
         + 'void main(void){'
-/*
         +     'if(fog == 1){'
+/*
         +         'gl_FragColor = mix('
         +           'vec4('
         +             webgl_properties['clearcolor-red'] + ','
@@ -1578,8 +1578,8 @@ function webgl_shader_update(){
         +           'vec_fragmentColor,'
         +           'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
         +         ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
-        +     '}else{'
 */
+        +     '}else{}'
         +         'gl_FragColor = vec_fragmentColor * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
 //      +     '}'
         + '}',
@@ -1592,7 +1592,7 @@ function webgl_shader_update(){
         + 'attribute vec3 vec_vertexNormal;'
         + 'attribute vec4 vec_vertexColor;'
         + 'attribute vec4 vec_vertexPosition;'
-        + 'uniform lowp int directionlighting;'
+        + 'uniform int directionlighting;'
         + 'uniform mat4 mat_cameraMatrix;'
         + 'uniform mat4 mat_normalMatrix;'
         + 'uniform mat4 mat_perspectiveMatrix;'
@@ -1606,7 +1606,6 @@ function webgl_shader_update(){
         +     'vec_fragmentColor = vec_vertexColor;'
         +     'vec_textureCoord = vec_texturePosition;'
         +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-/*
         +     'if(directionlighting == 1){'
         +         'vec_lighting = vec3('
         +           webgl_properties['ambientlighting-red'] + ','
@@ -1618,13 +1617,12 @@ function webgl_shader_update(){
         +           webgl_properties['directionlighting-blue']
         +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))), 0.0));'
         +     '}else{'
-*/
         +         'vec_lighting = vec3('
         +           webgl_properties['ambientlighting-red'] + ','
         +           webgl_properties['ambientlighting-green'] + ','
         +           webgl_properties['ambientlighting-blue']
         +         ');'
-//      +     '}'
+      +     '}'
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
     });
