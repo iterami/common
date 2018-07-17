@@ -1630,7 +1630,7 @@ function webgl_shader_update(){
         +           webgl_properties['ambientlighting-green'] + ','
         +           webgl_properties['ambientlighting-blue']
         +         ');'
-      +     '}'
+        +     '}'
         + '}',
       'type': webgl_buffer.VERTEX_SHADER,
     });
