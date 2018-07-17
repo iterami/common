@@ -702,7 +702,7 @@ function webgl_entity_todo(entity){
 
 // Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-alpha,
 //   clearcolor-blue, clearcolor-green, clearcolor-red, direction-blue, direction-green,
-//   direction-red, direction-vector, fog, gravity-acceleration, gravity-max,
+//   direction-red, direction-vector, fog-density, fog-state, gravity-acceleration, gravity-max,
 //   spawn-rotate-x, spawn-rotate-y, spawn-rotate-z, spawn-translate-x, spawn-translate-y,
 //   spawn-translate-z
 function webgl_init(args){
@@ -720,7 +720,8 @@ function webgl_init(args){
         'direction-green': 1,
         'direction-red': 1,
         'direction-vector': false,
-        'fog': -.0001,
+        'fog-density': .0001,
+        'fog-state': false,
         'gravity-acceleration': -.05,
         'gravity-max': -1,
         'spawn-rotate-x': 0,
@@ -757,13 +758,15 @@ function webgl_init(args){
       'directionlighting-green': args['direction-green'],
       'directionlighting-red': args['direction-red'],
       'directionlighting-vector': args['direction-vector'],
-      'fog': args['fog'],
+      'fog-density': args['fog-density'],
+      'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
       'gravity-max': args['gravity-max'],
       'pointer': false,
       'shader-alpha': 0,
       'shader-directionlighting': 0,
-      'shader-fog': 0,
+      'shader-fog-density': 0,
+      'shader-fog-state': 0,
       'shader-mat_cameraMatrix': 0,
       'shader-mat_normalMatrix': 0,
       'shader-mat_perspectiveMatrix': 0,
@@ -983,7 +986,8 @@ function webgl_json_export(args){
 
     delete json['shader-alpha'];
     delete json['shader-directionlighting'];
-    delete json['shader-fog'];
+    delete json['shader-fog-density'];
+    delete json['shader-fog-state'];
     delete json['shader-mat_cameraMatrix'];
     delete json['shader-mat_normalMatrix'];
     delete json['shader-mat_perspectiveMatrix'];
@@ -1155,7 +1159,8 @@ function webgl_load_level_init(args){
       'direction-green': args['json']['direction-green'],
       'direction-red': args['json']['direction-red'],
       'direction-vector': args['json']['direction-vector'],
-      'fog': args['json']['fog'],
+      'fog-density': args['json']['fog-density'],
+      'fog-state': args['json']['fog-state'],
       'gravity-acceleration': args['json']['gravity-acceleration'],
       'gravity-max': args['json']['gravity-max'],
       'spawn-rotate-x': args['json']['spawn-rotate-x'],
@@ -1558,8 +1563,9 @@ function webgl_shader_update(){
     let fragment_shader = webgl_shader_create({
       'id': 'fragment',
       'source':
-          'uniform int fog;'
-        + 'uniform lowp float alpha;'
+          'uniform lowp float alpha;'
+        + 'uniform lowp float float_fog;'
+        + 'uniform int fog;'
         + 'uniform sampler2D sampler;'
         + 'varying mediump float float_fogDistance;'
         + 'varying mediump vec2 vec_textureCoord;'
@@ -1567,7 +1573,6 @@ function webgl_shader_update(){
         + 'varying lowp vec4 vec_fragmentColor;'
         + 'void main(void){'
         +     'if(fog == 1){'
-/*
         +         'gl_FragColor = mix('
         +           'vec4('
         +             webgl_properties['clearcolor-red'] + ','
@@ -1576,12 +1581,11 @@ function webgl_shader_update(){
         +             webgl_properties['clearcolor-alpha']
         +           '),'
         +           'vec_fragmentColor,'
-        +           'clamp(exp(' + webgl_properties['fog'] + ' * float_fogDistance * float_fogDistance), 0.0, 1.0)'
+        +           'clamp(exp(' + webgl_properties['fog-density'] + ' * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
         +         ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
-*/
-        +     '}else{}'
+        +     '}else{'
         +         'gl_FragColor = vec_fragmentColor * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
-//      +     '}'
+        +     '}'
         + '}',
       'type': webgl_buffer.FRAGMENT_SHADER,
     });
@@ -1656,7 +1660,11 @@ function webgl_shader_update(){
       webgl_properties['shader-program'],
       'directionlighting'
     );
-    webgl_properties['shader-fog'] = webgl_buffer.getUniformLocation(
+    webgl_properties['shader-fog-density'] = webgl_buffer.getUniformLocation(
+      webgl_properties['shader-program'],
+      'float_fog'
+    );
+    webgl_properties['shader-fog-state'] = webgl_buffer.getUniformLocation(
       webgl_properties['shader-program'],
       'fog'
     );
@@ -1683,9 +1691,13 @@ function webgl_shader_update(){
         ? 1
         : 0
     );
+    webgl_buffer.uniform1f(
+      webgl_properties['shader-fog-density'],
+      webgl_properties['fog-density']
+    );
     webgl_buffer.uniform1i(
-      webgl_properties['shader-fog'],
-      webgl_properties['fog'] !== false
+      webgl_properties['shader-fog-state'],
+      webgl_properties['fog-state']
         ? 1
         : 0
     );
