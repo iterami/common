@@ -748,17 +748,11 @@ function core_handle_defaults(args){
     }
 
     let object = args['default'];
-
     for(let property in args['var']){
-        if(object === false){
-            object = {};
-        }
-
         object[property] = core_handle_defaults({
           'var': args['var'][property],
         });
     }
-
     return object;
 }
 
