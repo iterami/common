@@ -35,51 +35,6 @@ void gtk_begin_frameclock(GtkWidget *_glarea){
     gdk_frame_clock_begin_updating(frameclock);
 }
 
-struct nextvalue gtk_get_next_value(GtkTextBuffer *buffer, const int line, const int offset){
-    GtkTextIter end;
-    gchar *slice;
-    GtkTextIter start;
-    GtkTextIter substart;
-
-    gtk_text_buffer_get_iter_at_line(
-      buffer,
-      &start,
-      line
-    );
-    gtk_text_iter_set_line_offset(
-      &start,
-      offset
-    );
-    end = start;
-    substart = start;
-    gtk_text_iter_forward_char(&end);
-    slice = gtk_text_iter_get_text(
-      &substart,
-      &end
-    );
-    while(*slice != ','
-      && *slice != '|'){
-        gtk_text_iter_forward_char(&substart);
-        gtk_text_iter_forward_char(&end);
-        slice = gtk_text_iter_get_text(
-          &substart,
-          &end
-        );
-    }
-    g_free(slice);
-
-    const nextvalue result = {
-      gtk_text_buffer_get_text(
-        buffer,
-        &start,
-        &end,
-        FALSE
-      ),
-      gtk_text_iter_get_line_offset(&end)
-    };
-    return result;
-}
-
 void gtk_init_gtk(GtkApplication* app, const gchar *title){
     GtkCssProvider *provider;
 
