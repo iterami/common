@@ -1039,6 +1039,8 @@ function webgl_json_export(args){
         json['entities'] = [];
         for(let entity in webgl_character_homebase){
             let entity_json = {};
+            entity_json['id'] = core_entities[entity]['id'];
+
             Object.assign(
               entity_json,
               webgl_character_homebase[entity]
@@ -1058,6 +1060,8 @@ function webgl_json_export(args){
         json['entities'] = [];
         for(let entity in core_entities){
             let entity_json = {};
+            entity_json['id'] = core_entities[entity]['id'];
+
             Object.assign(
               entity_json,
               core_entities[entity]
