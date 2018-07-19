@@ -1668,7 +1668,7 @@ function webgl_shader_update(){
       'program': webgl_properties['shader-program'],
     });
 
-    var locations = {
+    let locations = {
       'alpha': 'alpha',
       'directional': 'directional',
       'fog-density': 'float_fog',
