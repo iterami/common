@@ -770,17 +770,17 @@ function webgl_init(args){
       'clearcolor-blue': args['clearcolor-blue'],
       'clearcolor-green': args['clearcolor-green'],
       'clearcolor-red': args['clearcolor-red'],
-      'directionlighting-blue': args['direction-blue'],
-      'directionlighting-green': args['direction-green'],
-      'directionlighting-red': args['direction-red'],
-      'directionlighting-vector': args['direction-vector'],
+      'directional-blue': args['direction-blue'],
+      'directional-green': args['direction-green'],
+      'directional-red': args['direction-red'],
+      'directional-vector': args['direction-vector'],
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
       'gravity-max': args['gravity-max'],
       'pointer': false,
       'shader-alpha': 0,
-      'shader-directionlighting': 0,
+      'shader-directional': 0,
       'shader-fog-density': 0,
       'shader-fog-state': 0,
       'shader-mat_cameraMatrix': 0,
@@ -1002,7 +1002,7 @@ function webgl_json_export(args){
     );
 
     delete json['shader-alpha'];
-    delete json['shader-directionlighting'];
+    delete json['shader-directional'];
     delete json['shader-fog-density'];
     delete json['shader-fog-state'];
     delete json['shader-mat_cameraMatrix'];
@@ -1607,7 +1607,7 @@ function webgl_shader_update(){
         + 'attribute vec3 vec_vertexNormal;'
         + 'attribute vec4 vec_vertexColor;'
         + 'attribute vec4 vec_vertexPosition;'
-        + 'uniform int directionlighting;'
+        + 'uniform int directional;'
         + 'uniform mat4 mat_cameraMatrix;'
         + 'uniform mat4 mat_normalMatrix;'
         + 'uniform mat4 mat_perspectiveMatrix;'
@@ -1621,16 +1621,16 @@ function webgl_shader_update(){
         +     'vec_fragmentColor = vec_vertexColor;'
         +     'vec_textureCoord = vec_texturePosition;'
         +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-        +     'if(directionlighting == 1){'
+        +     'if(directional == 1){'
         +         'vec_lighting = vec3('
         +           webgl_properties['ambient-red'] + ','
         +           webgl_properties['ambient-green'] + ','
         +           webgl_properties['ambient-blue']
         +         ') + (vec3('
-        +           webgl_properties['directionlighting-red'] + ','
-        +           webgl_properties['directionlighting-green'] + ','
-        +           webgl_properties['directionlighting-blue']
-        +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))), 0.0));'
+        +           webgl_properties['directional-red'] + ','
+        +           webgl_properties['directional-green'] + ','
+        +           webgl_properties['directional-blue']
+        +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directional-vector'] + '))), 0.0));'
         +     '}else{'
         +         'vec_lighting = vec3('
         +           webgl_properties['ambient-red'] + ','
@@ -1667,9 +1667,9 @@ function webgl_shader_update(){
       webgl_properties['shader-program'],
       'alpha'
     );
-    webgl_properties['shader-directionlighting'] = webgl_buffer.getUniformLocation(
+    webgl_properties['shader-directional'] = webgl_buffer.getUniformLocation(
       webgl_properties['shader-program'],
-      'directionlighting'
+      'directional'
     );
     webgl_properties['shader-fog-density'] = webgl_buffer.getUniformLocation(
       webgl_properties['shader-program'],
@@ -1697,7 +1697,7 @@ function webgl_shader_update(){
     );
 
     webgl_buffer.uniform1i(
-      webgl_properties['shader-directionlighting'],
+      webgl_properties['shader-directional'],
       webgl_properties['direction-vector'] !== false
         ? 1
         : 0
