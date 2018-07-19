@@ -392,12 +392,12 @@ function webgl_draw(){
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
     webgl_buffer.uniformMatrix4fv(
-      webgl_properties['shader-mat_normalMatrix'],
+      webgl_properties['shader']['mat_normalMatrix'],
       0,
       core_matrices['perspective']
     );
     webgl_buffer.uniformMatrix4fv(
-      webgl_properties['shader-mat_perspectiveMatrix'],
+      webgl_properties['shader']['mat_perspectiveMatrix'],
       0,
       core_matrices['perspective']
     );
@@ -525,7 +525,7 @@ function webgl_draw_entity(entity){
       core_entities[entity]['buffer']['normal']
     );
     webgl_buffer.vertexAttribPointer(
-      webgl_attributes['vec_vertexNormal'],
+      webgl_properties['attributes']['vec_vertexNormal'],
       3,
       webgl_buffer.FLOAT,
       false,
@@ -538,7 +538,7 @@ function webgl_draw_entity(entity){
       core_entities[entity]['buffer']['color']
     );
     webgl_buffer.vertexAttribPointer(
-      webgl_attributes['vec_vertexColor'],
+      webgl_properties['attributes']['vec_vertexColor'],
       4,
       webgl_buffer.FLOAT,
       false,
@@ -551,7 +551,7 @@ function webgl_draw_entity(entity){
       core_entities[entity]['buffer']['vertex']
     );
     webgl_buffer.vertexAttribPointer(
-      webgl_attributes['vec_vertexPosition'],
+      webgl_properties['attributes']['vec_vertexPosition'],
       4,
       webgl_buffer.FLOAT,
       false,
@@ -564,7 +564,7 @@ function webgl_draw_entity(entity){
       core_entities[entity]['buffer']['texture']
     );
     webgl_buffer.vertexAttribPointer(
-      webgl_attributes['vec_texturePosition'],
+      webgl_properties['attributes']['vec_texturePosition'],
       2,
       webgl_buffer.FLOAT,
       false,
@@ -578,16 +578,16 @@ function webgl_draw_entity(entity){
       core_entities[entity]['texture-gl']
     );
     webgl_buffer.uniform1i(
-      webgl_properties['shader-sampler'],
+      webgl_properties['shader']['sampler'],
       0
     );
 
     webgl_buffer.uniform1f(
-      webgl_properties['shader-alpha'],
+      webgl_properties['shader']['alpha'],
       core_entities[entity]['alpha']
     );
     webgl_buffer.uniformMatrix4fv(
-      webgl_properties['shader-mat_cameraMatrix'],
+      webgl_properties['shader']['mat_cameraMatrix'],
       0,
       core_matrices['camera']
     );
@@ -766,6 +766,7 @@ function webgl_init(args){
       'ambient-blue': args['ambient-blue'],
       'ambient-green': args['ambient-green'],
       'ambient-red': args['ambient-red'],
+      'attributes': {},
       'clearcolor-alpha': args['clearcolor-alpha'],
       'clearcolor-blue': args['clearcolor-blue'],
       'clearcolor-green': args['clearcolor-green'],
@@ -779,15 +780,17 @@ function webgl_init(args){
       'gravity-acceleration': args['gravity-acceleration'],
       'gravity-max': args['gravity-max'],
       'pointer': false,
-      'shader-alpha': 0,
-      'shader-directional': 0,
-      'shader-fog-density': 0,
-      'shader-fog-state': 0,
-      'shader-mat_cameraMatrix': 0,
-      'shader-mat_normalMatrix': 0,
-      'shader-mat_perspectiveMatrix': 0,
-      'shader-program': 0,
-      'shader-sampler': 0,
+      'shader': {
+        'alpha': 0,
+        'directional': 0,
+        'fog-density': 0,
+        'fog-state': 0,
+        'mat_cameraMatrix': 0,
+        'mat_normalMatrix': 0,
+        'mat_perspectiveMatrix': 0,
+        'program': 0,
+        'sampler': 0,
+      },
       'spawn-rotate-x': args['spawn-rotate-x'],
       'spawn-rotate-y': args['spawn-rotate-y'],
       'spawn-rotate-z': args['spawn-rotate-z'],
@@ -1001,16 +1004,9 @@ function webgl_json_export(args){
       webgl_properties
     );
 
+    delete json['attributes'];
     delete json['pointer'];
-    delete json['shader-alpha'];
-    delete json['shader-directional'];
-    delete json['shader-fog-density'];
-    delete json['shader-fog-state'];
-    delete json['shader-mat_cameraMatrix'];
-    delete json['shader-mat_normalMatrix'];
-    delete json['shader-mat_perspectiveMatrix'];
-    delete json['shader-program'];
-    delete json['shader-sampler'];
+    delete json['shader'];
 
     if(args['character']
       && webgl_character_level() > -1){
@@ -1578,11 +1574,11 @@ function webgl_shader_create(args){
 }
 
 function webgl_shader_update(){
-    if(webgl_properties['shader-program'] !== 0){
-        webgl_buffer.deleteProgram(webgl_properties['shader-program']);
+    if(webgl_properties['shader']['program'] !== 0){
+        webgl_buffer.deleteProgram(webgl_properties['shader']['program']);
     }
 
-    webgl_properties['shader-program'] = webgl_program_create({
+    webgl_properties['shader']['program'] = webgl_program_create({
       'id': 'shaders',
       'shaderlist': [
         webgl_shader_create({
@@ -1665,7 +1661,7 @@ function webgl_shader_update(){
         'vec_vertexPosition',
         'vec_texturePosition',
       ],
-      'program': webgl_properties['shader-program'],
+      'program': webgl_properties['shader']['program'],
     });
 
     let locations = {
@@ -1679,24 +1675,24 @@ function webgl_shader_update(){
       'sampler': 'sampler',
     };
     for(let location in locations){
-        webgl_properties['shader-' + location] = webgl_buffer.getUniformLocation(
-          webgl_properties['shader-program'],
+        webgl_properties['shader'][location] = webgl_buffer.getUniformLocation(
+          webgl_properties['shader']['program'],
           locations[location]
         );
     }
 
     webgl_buffer.uniform1i(
-      webgl_properties['shader-directional'],
+      webgl_properties['shader']['directional'],
       webgl_properties['directional-vector'] !== false
         ? 1
         : 0
     );
     webgl_buffer.uniform1f(
-      webgl_properties['shader-fog-density'],
+      webgl_properties['shader']['fog-density'],
       webgl_properties['fog-density']
     );
     webgl_buffer.uniform1i(
-      webgl_properties['shader-fog-state'],
+      webgl_properties['shader']['fog-state'],
       webgl_properties['fog-state']
         ? 1
         : 0
@@ -1755,11 +1751,11 @@ function webgl_texture_set_todo(args){
 // Required args: attributes, program
 function webgl_vertexattribarray_set(args){
     for(let attribute in args['attributes']){
-        webgl_attributes[args['attributes'][attribute]] = webgl_buffer.getAttribLocation(
+        webgl_properties['attributes'][args['attributes'][attribute]] = webgl_buffer.getAttribLocation(
           args['program'],
           args['attributes'][attribute]
         );
-        webgl_buffer.enableVertexAttribArray(webgl_attributes[args['attributes'][attribute]]);
+        webgl_buffer.enableVertexAttribArray(webgl_properties['attributes'][args['attributes'][attribute]]);
     }
 }
 
@@ -1795,7 +1791,6 @@ function webgl_vertexcolorarray(args){
     return color;
 }
 
-window.webgl_attributes = {};
 window.webgl_buffer = 0;
 window.webgl_canvas = 0;
 window.webgl_fonts = {
