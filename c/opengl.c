@@ -832,6 +832,21 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
+            // Parse dx.
+            if(strcmp(json_level_entities_element_property->name->string, "dx") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse dy.
+            if(strcmp(json_level_entities_element_property->name->string, "dy") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse dz.
+            if(strcmp(json_level_entities_element_property->name->string, "dz") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
             // Parse gravity.
             if(strcmp(json_level_entities_element_property->name->string, "gravity") == 0){
                 value = json_level_entities_element_property->value;
@@ -901,6 +916,11 @@ void opengl_load_level(const gchar *filename){
 
             // Parse skybox.
             if(strcmp(json_level_entities_element_property->name->string, "skybox") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse speed.
+            if(strcmp(json_level_entities_element_property->name->string, "speed") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 

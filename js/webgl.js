@@ -1001,6 +1001,7 @@ function webgl_json_export(args){
       webgl_properties
     );
 
+    delete json['pointer'];
     delete json['shader-alpha'];
     delete json['shader-directional'];
     delete json['shader-fog-density'];
@@ -1049,6 +1050,9 @@ function webgl_json_export(args){
             delete entity_json['buffer'];
             delete entity_json['image'];
             delete entity_json['normals'];
+            delete entity_json['rotate-radians-x'];
+            delete entity_json['rotate-radians-y'];
+            delete entity_json['rotate-radians-z'];
             delete entity_json['texture-gl'];
             delete entity_json['textureData'];
             delete entity_json['vertices-length'];
@@ -1070,6 +1074,9 @@ function webgl_json_export(args){
             delete entity_json['buffer'];
             delete entity_json['image'];
             delete entity_json['normals'];
+            delete entity_json['rotate-radians-x'];
+            delete entity_json['rotate-radians-y'];
+            delete entity_json['rotate-radians-z'];
             delete entity_json['texture-gl'];
             delete entity_json['textureData'];
             delete entity_json['vertices-length'];
