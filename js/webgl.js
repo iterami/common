@@ -1668,38 +1668,22 @@ function webgl_shader_update(){
       'program': webgl_properties['shader-program'],
     });
 
-    webgl_properties['shader-alpha'] = webgl_buffer.getUniformLocation(
-      webgl_properties['shader-program'],
-      'alpha'
-    );
-    webgl_properties['shader-directional'] = webgl_buffer.getUniformLocation(
-      webgl_properties['shader-program'],
-      'directional'
-    );
-    webgl_properties['shader-fog-density'] = webgl_buffer.getUniformLocation(
-      webgl_properties['shader-program'],
-      'float_fog'
-    );
-    webgl_properties['shader-fog-state'] = webgl_buffer.getUniformLocation(
-      webgl_properties['shader-program'],
-      'fog'
-    );
-    webgl_properties['shader-mat_cameraMatrix'] = webgl_buffer.getUniformLocation(
-      webgl_properties['shader-program'],
-      'mat_cameraMatrix'
-    );
-    webgl_properties['shader-mat_normalMatrix'] = webgl_buffer.getUniformLocation(
-      webgl_properties['shader-program'],
-      'mat_normalMatrix'
-    );
-    webgl_properties['shader-mat_perspectiveMatrix'] = webgl_buffer.getUniformLocation(
-      webgl_properties['shader-program'],
-      'mat_perspectiveMatrix'
-    );
-    webgl_properties['shader-sampler'] = webgl_buffer.getUniformLocation(
-      webgl_properties['shader-program'],
-      'sampler'
-    );
+    var locations = {
+      'alpha': 'alpha',
+      'directional': 'directional',
+      'fog-density': 'float_fog',
+      'fog-state': 'fog',
+      'mat_cameraMatrix': 'mat_cameraMatrix',
+      'mat_normalMatrix': 'mat_normalMatrix',
+      'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
+      'sampler': 'sampler',
+    };
+    for(let location in locations){
+        webgl_properties['shader-' + location] = webgl_buffer.getUniformLocation(
+          webgl_properties['shader-program'],
+          locations[location]
+        );
+    }
 
     webgl_buffer.uniform1i(
       webgl_properties['shader-directional'],
