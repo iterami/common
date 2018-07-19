@@ -717,8 +717,8 @@ function webgl_entity_todo(entity){
 }
 
 // Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-alpha,
-//   clearcolor-blue, clearcolor-green, clearcolor-red, direction-blue, direction-green,
-//   direction-red, direction-vector, fog-density, fog-state, gravity-acceleration, gravity-max,
+//   clearcolor-blue, clearcolor-green, clearcolor-red, directional-blue, directional-green,
+//   directional-red, directional-vector, fog-density, fog-state, gravity-acceleration, gravity-max,
 //   spawn-rotate-x, spawn-rotate-y, spawn-rotate-z, spawn-translate-x, spawn-translate-y,
 //   spawn-translate-z
 function webgl_init(args){
@@ -732,10 +732,10 @@ function webgl_init(args){
         'clearcolor-blue': 0,
         'clearcolor-green': 0,
         'clearcolor-red': 0,
-        'direction-blue': 1,
-        'direction-green': 1,
-        'direction-red': 1,
-        'direction-vector': false,
+        'directional-blue': 1,
+        'directional-green': 1,
+        'directional-red': 1,
+        'directional-vector': false,
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
@@ -770,10 +770,10 @@ function webgl_init(args){
       'clearcolor-blue': args['clearcolor-blue'],
       'clearcolor-green': args['clearcolor-green'],
       'clearcolor-red': args['clearcolor-red'],
-      'directional-blue': args['direction-blue'],
-      'directional-green': args['direction-green'],
-      'directional-red': args['direction-red'],
-      'directional-vector': args['direction-vector'],
+      'directional-blue': args['directional-blue'],
+      'directional-green': args['directional-green'],
+      'directional-red': args['directional-red'],
+      'directional-vector': args['directional-vector'],
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
@@ -1176,10 +1176,10 @@ function webgl_load_level_init(args){
       'clearcolor-blue': args['json']['clearcolor-blue'],
       'clearcolor-green': args['json']['clearcolor-green'],
       'clearcolor-red': args['json']['clearcolor-red'],
-      'direction-blue': args['json']['direction-blue'],
-      'direction-green': args['json']['direction-green'],
-      'direction-red': args['json']['direction-red'],
-      'direction-vector': args['json']['direction-vector'],
+      'directional-blue': args['json']['directional-blue'],
+      'directional-green': args['json']['directional-green'],
+      'directional-red': args['json']['directional-red'],
+      'directional-vector': args['json']['directional-vector'],
       'fog-density': args['json']['fog-density'],
       'fog-state': args['json']['fog-state'],
       'gravity-acceleration': args['json']['gravity-acceleration'],
@@ -1698,7 +1698,7 @@ function webgl_shader_update(){
 
     webgl_buffer.uniform1i(
       webgl_properties['shader-directional'],
-      webgl_properties['direction-vector'] !== false
+      webgl_properties['directional-vector'] !== false
         ? 1
         : 0
     );
