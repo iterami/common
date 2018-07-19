@@ -454,8 +454,8 @@ function webgl_draw(){
     if(webgl_properties['pointer'] !== false){
         webgl_canvas.fillStyle = webgl_properties['pointer'];
         webgl_canvas.fillRect(
-          webgl_canvas_properties['width-half'] - 1,
-          webgl_canvas_properties['height-half'] - 1,
+          webgl_properties['canvas']['width-half'] - 1,
+          webgl_properties['canvas']['height-half'] - 1,
           2,
           2
         );
@@ -749,24 +749,24 @@ function webgl_init(args){
       },
     });
 
-    webgl_canvas_properties = {
-      'fillStyle': '#fff',
-      'font': webgl_fonts['medium'],
-      'height': 0,
-      'height-half': 0,
-      'lineJoin': 'miter',
-      'lineWidth': 1,
-      'strokeStyle': '#fff',
-      'textAlign': 'start',
-      'textBaseline': 'alphabetic',
-      'width': 0,
-      'width-half': 0,
-    };
     webgl_properties = {
       'ambient-blue': args['ambient-blue'],
       'ambient-green': args['ambient-green'],
       'ambient-red': args['ambient-red'],
       'attributes': {},
+      'canvas': {
+        'fillStyle': '#fff',
+        'font': webgl_fonts['medium'],
+        'height': 0,
+        'height-half': 0,
+        'lineJoin': 'miter',
+        'lineWidth': 1,
+        'strokeStyle': '#fff',
+        'textAlign': 'start',
+        'textBaseline': 'alphabetic',
+        'width': 0,
+        'width-half': 0,
+      },
       'clearcolor-alpha': args['clearcolor-alpha'],
       'clearcolor-blue': args['clearcolor-blue'],
       'clearcolor-green': args['clearcolor-green'],
@@ -995,6 +995,7 @@ function webgl_json_export(args){
     );
 
     delete json['attributes'];
+    delete json['canvas'];
     delete json['pointer'];
     delete json['shader'];
 
@@ -1477,7 +1478,7 @@ function webgl_normals(args){
 }
 
 function webgl_perspective(){
-    core_matrices['perspective'][0] = webgl_canvas_properties['height'] / webgl_canvas_properties['width'];
+    core_matrices['perspective'][0] = webgl_properties['canvas']['height'] / webgl_properties['canvas']['width'];
     core_matrices['perspective'][5] = 1;
     core_matrices['perspective'][10] = -1;
     core_matrices['perspective'][11] = -1;
@@ -1520,28 +1521,28 @@ function webgl_resize(){
     let buffer = document.getElementById('buffer');
     let canvas = document.getElementById('canvas');
 
-    webgl_canvas_properties['height'] = window.innerHeight;
-    webgl_canvas_properties['height-half'] = webgl_canvas_properties['height'] / 2;
-    buffer.height = webgl_canvas_properties['height'];
-    canvas.height = webgl_canvas_properties['height'];
+    webgl_properties['canvas']['height'] = window.innerHeight;
+    webgl_properties['canvas']['height-half'] = webgl_properties['canvas']['height'] / 2;
+    buffer.height = webgl_properties['canvas']['height'];
+    canvas.height = webgl_properties['canvas']['height'];
 
-    webgl_canvas_properties['width'] = window.innerWidth;
-    webgl_canvas_properties['width-half'] = webgl_canvas_properties['width'] / 2;
-    buffer.width = webgl_canvas_properties['width'];
-    canvas.width = webgl_canvas_properties['width'];
+    webgl_properties['canvas']['width'] = window.innerWidth;
+    webgl_properties['canvas']['width-half'] = webgl_properties['canvas']['width'] / 2;
+    buffer.width = webgl_properties['canvas']['width'];
+    canvas.width = webgl_properties['canvas']['width'];
 
-    webgl_buffer.viewportHeight = webgl_canvas_properties['height'];
-    webgl_buffer.viewportWidth = webgl_canvas_properties['width'];
+    webgl_buffer.viewportHeight = webgl_properties['canvas']['height'];
+    webgl_buffer.viewportWidth = webgl_properties['canvas']['width'];
     webgl_buffer.viewport(
       0,
       0,
-      webgl_canvas_properties['width'],
-      webgl_canvas_properties['height']
+      webgl_properties['canvas']['width'],
+      webgl_properties['canvas']['height']
     );
 
     Object.assign(
       webgl_buffer,
-      webgl_canvas_properties
+      webgl_properties['canvas']
     );
 
     webgl_perspective();
@@ -1788,7 +1789,6 @@ window.webgl_fonts = {
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-window.webgl_canvas_properties = {};
 window.webgl_character = {};
 window.webgl_character_homebase = [];
 window.webgl_properties = {};
