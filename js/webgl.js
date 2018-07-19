@@ -1578,85 +1578,83 @@ function webgl_shader_create(args){
 }
 
 function webgl_shader_update(){
-    let fragment_shader = webgl_shader_create({
-      'id': 'fragment',
-      'source':
-          'uniform lowp float alpha;'
-        + 'uniform lowp float float_fog;'
-        + 'uniform int fog;'
-        + 'uniform sampler2D sampler;'
-        + 'varying mediump float float_fogDistance;'
-        + 'varying mediump vec2 vec_textureCoord;'
-        + 'varying mediump vec3 vec_lighting;'
-        + 'varying lowp vec4 vec_fragmentColor;'
-        + 'void main(void){'
-        +     'if(fog == 1){'
-        +         'gl_FragColor = mix('
-        +           'vec4('
-        +             webgl_properties['clearcolor-red'] + ','
-        +             webgl_properties['clearcolor-green'] + ','
-        +             webgl_properties['clearcolor-blue'] + ','
-        +             webgl_properties['clearcolor-alpha']
-        +           '),'
-        +           'vec_fragmentColor,'
-        +           'clamp(exp(' + webgl_properties['fog-density'] + ' * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
-        +         ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
-        +     '}else{'
-        +         'gl_FragColor = vec_fragmentColor * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
-        +     '}'
-        + '}',
-      'type': webgl_buffer.FRAGMENT_SHADER,
-    });
-    let vertex_shader = webgl_shader_create({
-      'id': 'vertex',
-      'source':
-          'attribute vec2 vec_texturePosition;'
-        + 'attribute vec3 vec_vertexNormal;'
-        + 'attribute vec4 vec_vertexColor;'
-        + 'attribute vec4 vec_vertexPosition;'
-        + 'uniform int directional;'
-        + 'uniform mat4 mat_cameraMatrix;'
-        + 'uniform mat4 mat_normalMatrix;'
-        + 'uniform mat4 mat_perspectiveMatrix;'
-        + 'varying float float_fogDistance;'
-        + 'varying vec2 vec_textureCoord;'
-        + 'varying vec3 vec_lighting;'
-        + 'varying vec4 vec_fragmentColor;'
-        + 'void main(void){'
-        +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
-        +     'float_fogDistance = length(gl_Position.xyz);'
-        +     'vec_fragmentColor = vec_vertexColor;'
-        +     'vec_textureCoord = vec_texturePosition;'
-        +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
-        +     'if(directional == 1){'
-        +         'vec_lighting = vec3('
-        +           webgl_properties['ambient-red'] + ','
-        +           webgl_properties['ambient-green'] + ','
-        +           webgl_properties['ambient-blue']
-        +         ') + (vec3('
-        +           webgl_properties['directional-red'] + ','
-        +           webgl_properties['directional-green'] + ','
-        +           webgl_properties['directional-blue']
-        +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directional-vector'] + '))), 0.0));'
-        +     '}else{'
-        +         'vec_lighting = vec3('
-        +           webgl_properties['ambient-red'] + ','
-        +           webgl_properties['ambient-green'] + ','
-        +           webgl_properties['ambient-blue']
-        +         ');'
-        +     '}'
-        + '}',
-      'type': webgl_buffer.VERTEX_SHADER,
-    });
-
     if(webgl_properties['shader-program'] !== 0){
         webgl_buffer.deleteProgram(webgl_properties['shader-program']);
     }
+
     webgl_properties['shader-program'] = webgl_program_create({
       'id': 'shaders',
       'shaderlist': [
-        fragment_shader,
-        vertex_shader,
+        webgl_shader_create({
+          'id': 'fragment',
+          'source':
+              'uniform lowp float alpha;'
+            + 'uniform lowp float float_fog;'
+            + 'uniform int fog;'
+            + 'uniform sampler2D sampler;'
+            + 'varying mediump float float_fogDistance;'
+            + 'varying mediump vec2 vec_textureCoord;'
+            + 'varying mediump vec3 vec_lighting;'
+            + 'varying lowp vec4 vec_fragmentColor;'
+            + 'void main(void){'
+            +     'if(fog == 1){'
+            +         'gl_FragColor = mix('
+            +           'vec4('
+            +             webgl_properties['clearcolor-red'] + ','
+            +             webgl_properties['clearcolor-green'] + ','
+            +             webgl_properties['clearcolor-blue'] + ','
+            +             webgl_properties['clearcolor-alpha']
+            +           '),'
+            +           'vec_fragmentColor,'
+            +           'clamp(exp(' + webgl_properties['fog-density'] + ' * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
+            +         ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
+            +     '}else{'
+            +         'gl_FragColor = vec_fragmentColor * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
+            +     '}'
+            + '}',
+          'type': webgl_buffer.FRAGMENT_SHADER,
+        }),
+        webgl_shader_create({
+          'id': 'vertex',
+          'source':
+              'attribute vec2 vec_texturePosition;'
+            + 'attribute vec3 vec_vertexNormal;'
+            + 'attribute vec4 vec_vertexColor;'
+            + 'attribute vec4 vec_vertexPosition;'
+            + 'uniform int directional;'
+            + 'uniform mat4 mat_cameraMatrix;'
+            + 'uniform mat4 mat_normalMatrix;'
+            + 'uniform mat4 mat_perspectiveMatrix;'
+            + 'varying float float_fogDistance;'
+            + 'varying vec2 vec_textureCoord;'
+            + 'varying vec3 vec_lighting;'
+            + 'varying vec4 vec_fragmentColor;'
+            + 'void main(void){'
+            +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
+            +     'float_fogDistance = length(gl_Position.xyz);'
+            +     'vec_fragmentColor = vec_vertexColor;'
+            +     'vec_textureCoord = vec_texturePosition;'
+            +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
+            +     'if(directional == 1){'
+            +         'vec_lighting = vec3('
+            +           webgl_properties['ambient-red'] + ','
+            +           webgl_properties['ambient-green'] + ','
+            +           webgl_properties['ambient-blue']
+            +         ') + (vec3('
+            +           webgl_properties['directional-red'] + ','
+            +           webgl_properties['directional-green'] + ','
+            +           webgl_properties['directional-blue']
+            +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directional-vector'] + '))), 0.0));'
+            +     '}else{'
+            +         'vec_lighting = vec3('
+            +           webgl_properties['ambient-red'] + ','
+            +           webgl_properties['ambient-green'] + ','
+            +           webgl_properties['ambient-blue']
+            +         ');'
+            +     '}'
+            + '}',
+          'type': webgl_buffer.VERTEX_SHADER,
+        }),
       ],
     });
 
