@@ -763,9 +763,9 @@ function webgl_init(args){
       'width-half': 0,
     };
     webgl_properties = {
-      'ambientlighting-blue': args['ambient-blue'],
-      'ambientlighting-green': args['ambient-green'],
-      'ambientlighting-red': args['ambient-red'],
+      'ambient-blue': args['ambient-blue'],
+      'ambient-green': args['ambient-green'],
+      'ambient-red': args['ambient-red'],
       'clearcolor-alpha': args['clearcolor-alpha'],
       'clearcolor-blue': args['clearcolor-blue'],
       'clearcolor-green': args['clearcolor-green'],
@@ -1619,9 +1619,9 @@ function webgl_shader_update(){
         +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
         +     'if(directionlighting == 1){'
         +         'vec_lighting = vec3('
-        +           webgl_properties['ambientlighting-red'] + ','
-        +           webgl_properties['ambientlighting-green'] + ','
-        +           webgl_properties['ambientlighting-blue']
+        +           webgl_properties['ambient-red'] + ','
+        +           webgl_properties['ambient-green'] + ','
+        +           webgl_properties['ambient-blue']
         +         ') + (vec3('
         +           webgl_properties['directionlighting-red'] + ','
         +           webgl_properties['directionlighting-green'] + ','
@@ -1629,9 +1629,9 @@ function webgl_shader_update(){
         +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directionlighting-vector'] + '))), 0.0));'
         +     '}else{'
         +         'vec_lighting = vec3('
-        +           webgl_properties['ambientlighting-red'] + ','
-        +           webgl_properties['ambientlighting-green'] + ','
-        +           webgl_properties['ambientlighting-blue']
+        +           webgl_properties['ambient-red'] + ','
+        +           webgl_properties['ambient-green'] + ','
+        +           webgl_properties['ambient-blue']
         +         ');'
         +     '}'
         + '}',
