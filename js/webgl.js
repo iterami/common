@@ -448,8 +448,8 @@ function webgl_draw(){
         );
     }
 
-    if(webgl_properties['pointer'] !== false){
-        webgl_canvas.fillStyle = webgl_properties['pointer'];
+    if(webgl_character['camera-zoom-current'] === 0){
+        webgl_canvas.fillStyle = '#fff';
         webgl_canvas.fillRect(
           webgl_properties['canvas']['width-half'] - 1,
           webgl_properties['canvas']['height-half'] - 1,
@@ -772,7 +772,6 @@ function webgl_init(args){
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
       'gravity-max': args['gravity-max'],
-      'pointer': false,
       'shader': {},
       'spawn-rotate-x': args['spawn-rotate-x'],
       'spawn-rotate-y': args['spawn-rotate-y'],
@@ -989,7 +988,6 @@ function webgl_json_export(args){
 
     delete json['attributes'];
     delete json['canvas'];
-    delete json['pointer'];
     delete json['shader'];
 
     if(args['character']
