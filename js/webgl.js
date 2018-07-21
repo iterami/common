@@ -242,6 +242,7 @@ function webgl_collision(args){
 
     let collide_range = 0;
     let collision = false;
+    let collision_sign = 1;
     let entity_dx = 0;
     let entity_dy = 0;
     let entity_dz = 0;
@@ -278,9 +279,8 @@ function webgl_collision(args){
               && entity_y < target['translate-y'] + target['vertices'][0] + collide_range
               && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
               && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
-                collision = true;
+                collision = 'x';
                 entity_dx = 0;
-                entity_x = target['translate-x'] + collide_range;
             }
 
         }else if(target['normals'][0] === -1
@@ -291,9 +291,9 @@ function webgl_collision(args){
               && entity_y < target['translate-y'] + target['vertices'][0] + collide_range
               && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
               && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
-                collision = true;
+                collision = 'x';
+                collision_sign = -1;
                 entity_dx = 0;
-                entity_x = target['translate-x'] - collide_range;
             }
         }
     }
@@ -307,9 +307,8 @@ function webgl_collision(args){
               && entity_y <= target['translate-y'] + collide_range
               && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
               && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
-                collision = true;
+                collision = 'y';
                 entity_dy = 0;
-                entity_y = target['translate-y'] + collide_range;
             }
 
         }else if(target['normals'][1] === -1
@@ -320,9 +319,9 @@ function webgl_collision(args){
               && entity_y <= target['translate-y']
               && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
               && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
-                collision = true;
+                collision = 'y';
+                collision_sign = -1;
                 entity_dy = 0;
-                entity_y = target['translate-y'] - collide_range;
             }
         }
     }
@@ -336,9 +335,8 @@ function webgl_collision(args){
               && entity_y < target['translate-y'] + target['vertices'][10] + collide_range
               && entity_z >= target['translate-z']
               && entity_z <= target['translate-z'] + collide_range){
-                collision = true;
+                collision = 'z';
                 entity_dz = 0;
-                entity_z = target['translate-z'] + collide_range;
             }
 
         }else if(target['normals'][2] === -1
@@ -349,18 +347,20 @@ function webgl_collision(args){
               && entity_y < target['translate-y'] + target['vertices'][10] + collide_range
               && entity_z >= target['translate-z'] - collide_range
               && entity_z <= target['translate-z']){
-                collision = true;
+                collision = 'z';
+                collision_sign = -1;
                 entity_dz = 0;
-                entity_z = target['translate-z'] - collide_range;
             }
         }
     }
 
-    if(collision){
+    if(collision !== false){
         if(args['character']){
             webgl_character['dx'] = entity_dx;
             webgl_character['dy'] = entity_dy;
             webgl_character['dz'] = entity_dz;
+
+            webgl_character['translate-' + collision] = target['translate-' + collision] + (collide_range * collision_sign);
 
             if(webgl_character['camera-type'] === 'gravity'){
                 webgl_character['jump-allow'] = webgl_character['dy'] === 0;
@@ -384,6 +384,8 @@ function webgl_collision(args){
             core_entities[args['entity']]['dx'] = entity_dx;
             core_entities[args['entity']]['dy'] = entity_dy;
             core_entities[args['entity']]['dz'] = entity_dz;
+
+            core_entities[args['entity']]['translate-' + collision] = target['translate-' + collision] + (collide_range * collision_sign);
         }
     }
 }
