@@ -579,10 +579,6 @@ function webgl_draw_entity(entity){
       webgl_buffer.TEXTURE_2D,
       core_entities[entity]['texture-gl']
     );
-    webgl_buffer.uniform1i(
-      webgl_properties['shader']['sampler'],
-      0
-    );
 
     webgl_buffer.uniform1f(
       webgl_properties['shader']['alpha'],
