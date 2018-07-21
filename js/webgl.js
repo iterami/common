@@ -394,11 +394,6 @@ function webgl_draw(){
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
     webgl_buffer.uniformMatrix4fv(
-      webgl_properties['shader']['mat_normalMatrix'],
-      false,
-      core_matrices['perspective']
-    );
-    webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_perspectiveMatrix'],
       false,
       core_matrices['perspective']
@@ -1608,7 +1603,6 @@ function webgl_shader_update(){
             + 'attribute vec4 vec_vertexPosition;'
             + 'uniform int directional;'
             + 'uniform mat4 mat_cameraMatrix;'
-            + 'uniform mat4 mat_normalMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
             + 'varying float float_fogDistance;'
             + 'varying vec2 vec_textureCoord;'
@@ -1619,7 +1613,7 @@ function webgl_shader_update(){
             +     'float_fogDistance = length(gl_Position.xyz);'
             +     'vec_fragmentColor = vec_vertexColor;'
             +     'vec_textureCoord = vec_texturePosition;'
-            +     'vec4 transformedNormal = mat_normalMatrix * vec4(vec_vertexNormal, 1.0);'
+            +     'vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);'
             +     'if(directional == 1){'
             +         'vec_lighting = vec3('
             +           webgl_properties['ambient-red'] + ','
@@ -1659,7 +1653,6 @@ function webgl_shader_update(){
       'fog-density': 'float_fog',
       'fog-state': 'fog',
       'mat_cameraMatrix': 'mat_cameraMatrix',
-      'mat_normalMatrix': 'mat_normalMatrix',
       'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
       'sampler': 'sampler',
     };
