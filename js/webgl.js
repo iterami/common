@@ -393,12 +393,12 @@ function webgl_draw(){
 
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_normalMatrix'],
-      0,
+      false,
       core_matrices['perspective']
     );
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_perspectiveMatrix'],
-      0,
+      false,
       core_matrices['perspective']
     );
 
@@ -588,7 +588,7 @@ function webgl_draw_entity(entity){
     );
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_cameraMatrix'],
-      0,
+      false,
       core_matrices['camera']
     );
 
