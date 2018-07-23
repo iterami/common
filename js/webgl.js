@@ -1522,7 +1522,7 @@ function webgl_particles_create(args){
     });
 
     for(let i = 0; i < args['count']; i++){
-        let id = core_uid();
+        let id = '_particle-' + core_uid();
 
         core_entity_create({
           'id': id,
