@@ -1607,6 +1607,7 @@ function webgl_shader_update(){
             + 'varying vec3 vec_lighting;'
             + 'varying vec4 vec_fragmentColor;'
             + 'void main(void){'
+            +     'gl_PointSize = 10.0;'
             +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
             +     'float_fogDistance = length(gl_Position.xyz);'
             +     'vec_fragmentColor = vec_vertexColor;'
