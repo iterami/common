@@ -1320,11 +1320,11 @@ function webgl_logicloop(){
     }
 
     if(webgl_character['collides']){
-        for(let other_entity in core_entities){
-            if(core_entities[other_entity]['collision']){
+        for(let entity in core_entities){
+            if(core_entities[entity]['collision']){
                 webgl_collision({
                   'character': true,
-                  'target': other_entity,
+                  'target': entity,
                 });
             }
         }
