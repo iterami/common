@@ -155,24 +155,20 @@ function webgl_camera_rotate(args){
         });
     }
 
-    for(let axis in axes){
-        webgl_character[prefix + 'radians-' + axis] = core_degrees_to_radians({
-          'degrees': webgl_character[prefix + axis],
-        });
-    }
-
     if(args['camera']
       && args['character']){
         if(core_mouse['down']){
             webgl_character['rotate-y'] = webgl_character['camera-rotate-y'];
-            webgl_character['rotate-radians-y'] = webgl_character['camera-rotate-radians-y'];
 
         }else{
             webgl_character['rotate-y'] += args['y'];
-            webgl_character['rotate-radians-y'] = core_degrees_to_radians({
-              'degrees': webgl_character['rotate-y'],
-            });
         }
+    }
+
+    for(let axis in axes){
+        webgl_character[prefix + 'radians-' + axis] = core_degrees_to_radians({
+          'degrees': webgl_character[prefix + axis],
+        });
     }
 }
 
