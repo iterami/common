@@ -145,10 +145,9 @@ function webgl_camera_rotate(args){
     }
 
     if(args['xlock']){
-        let max = 89;
-        if(webgl_character[prefix + 'x'] > 180){
-            max += 271;
-        }
+        let max = webgl_character[prefix + 'x'] > 180
+          ? 360
+          : 89;
         webgl_character[prefix + 'x'] = core_clamp({
           'max': max,
           'min': max - 89,
