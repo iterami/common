@@ -429,6 +429,14 @@ function webgl_draw(){
           }
       },
     });
+    core_group_modify({
+      'groups': [
+        'particles',
+      ],
+      'todo': function(entity){
+          webgl_draw_entity(entity);
+      },
+    });
 
     webgl_canvas.drawImage(
       document.getElementById('buffer'),
@@ -681,16 +689,22 @@ function webgl_entity_radians(args){
 }
 
 function webgl_entity_todo(entity){
+    core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 4;
+
     core_entities[entity]['normals'] = webgl_normals({
       'rotate-x': core_entities[entity]['rotate-x'],
       'rotate-y': core_entities[entity]['rotate-y'],
       'rotate-z': core_entities[entity]['rotate-z'],
+      'vertices-length': core_entities[entity]['vertices-length'],
+    });
+
+    webgl_entity_radians({
+      'entity': entity,
     });
 
     if(!core_entities[entity]['draw']){
         return;
     }
-    core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 4;
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
       'colorData': core_entities[entity]['vertex-colors'],
@@ -702,10 +716,6 @@ function webgl_entity_todo(entity){
     webgl_texture_set({
       'entityid': entity,
       'image': webgl_textures[core_entities[entity]['texture']],
-    });
-
-    webgl_entity_radians({
-      'entity': entity,
     });
 }
 
@@ -837,6 +847,7 @@ function webgl_init(args){
 
     webgl_shader_update();
 
+    core_groups['particles'] = {};
     core_groups['skybox'] = {};
     core_entity_set({
       'default': true,
@@ -1328,6 +1339,22 @@ function webgl_logicloop(){
       },
     });
 
+    core_group_modify({
+      'groups': [
+        'particles',
+      ],
+      'todo': function(entity){
+          core_entities[entity]['lifespan'] -= 1;
+          if(core_entities[entity]['lifespan'] <= 0){
+              core_entity_remove({
+                'entities': [
+                  entity,
+                ],
+              });
+          }
+      },
+    });
+
     webgl_character['translate-x'] += webgl_character['dx'];
     webgl_character['translate-y'] += webgl_character['dy'];
     webgl_character['translate-z'] += webgl_character['dz'];
@@ -1423,7 +1450,7 @@ function webgl_logicloop_handle_entity(entity){
     }
 }
 
-// Optional args: rotate-x, rotate-y, rotate-z
+// Optional args: rotate-x, rotate-y, rotate-z, vertices-length
 function webgl_normals(args){
     args = core_args({
       'args': args,
@@ -1431,6 +1458,7 @@ function webgl_normals(args){
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
+        'vertices-length': 1,
       },
     });
 
@@ -1460,12 +1488,70 @@ function webgl_normals(args){
         });
     }
 
-    return [
-      normal_x, normal_y, normal_z,
-      normal_x, normal_y, normal_z,
-      normal_x, normal_y, normal_z,
-      normal_x, normal_y, normal_z,
-    ];
+    let normals = [];
+    for(let i = 0; i < args['vertices-length']; i++){
+        normals.push(
+          normal_x,
+          normal_y,
+          normal_z
+        );
+    }
+
+    return normals;
+}
+
+// Optional args: collide-range, collides, color, count, gravity, lifespan
+function webgl_particles_create(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'collide-range': .2,
+        'collides': true,
+        'color': [1, 1, 1, 1],
+        'count': 1,
+        'dx': 0,
+        'dy': 0,
+        'dz': 0,
+        'gravity': true,
+        'lifespan': 100,
+        'speed': .2,
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    for(let i = 0; i < args['count']; i++){
+        let id = core_uid();
+
+        core_entity_create({
+          'id': id,
+          'properties': {
+            'collide-range': args['collide-range'],
+            'collides': args['collides'],
+            'draw-type': 'POINTS',
+            'dx': args['dx'],
+            'dy': args['dy'],
+            'dz': args['dz'],
+            'gravity': args['gravity'],
+            'lifespan': args['lifespan'],
+            'normals': [0, 1, 0],
+            'speed': args['speed'],
+            'translate-x': args['x'],
+            'translate-y': args['y'],
+            'translate-z': args['z'],
+            'vertex-color': [1, 1, 1, 1],
+            'vertices': [0, 0, 0, 0],
+          },
+        });
+        core_group_move({
+          'entities': [
+            id,
+          ],
+          'from': 'foreground',
+          'to': 'particles',
+        });
+    }
 }
 
 function webgl_perspective(){
