@@ -1500,7 +1500,8 @@ function webgl_normals(args){
     return normals;
 }
 
-// Optional args: collide-range, collides, color, count, gravity, lifespan
+// Optional args: collide-range, collides, color, count, dx, dy, dz, gravity,
+//   lifespan, rotate-x, rotate-y, rotate-z, speed, translate-x, translate-y, translate-z
 function webgl_particles_create(args){
     args = core_args({
       'args': args,
@@ -1514,10 +1515,13 @@ function webgl_particles_create(args){
         'dz': 0,
         'gravity': true,
         'lifespan': 100,
+        'rotate-x': 0,
+        'rotate-y': 0,
+        'rotate-z': 0,
         'speed': .2,
-        'x': 0,
-        'y': 0,
-        'z': 0,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
       },
     });
 
@@ -1536,13 +1540,19 @@ function webgl_particles_create(args){
             'gravity': args['gravity'],
             'lifespan': args['lifespan'],
             'normals': [0, 1, 0],
+            'rotate-x': args['rotate-x'],
+            'rotate-y': args['rotate-y'],
+            'rotate-z': args['rotate-z'],
             'speed': args['speed'],
-            'translate-x': args['x'],
-            'translate-y': args['y'],
-            'translate-z': args['z'],
+            'translate-x': args['translate-x'],
+            'translate-y': args['translate-y'],
+            'translate-z': args['translate-z'],
             'vertex-colors': args['color'],
             'vertices': [0, 0, 0, 1],
           },
+        });
+        webgl_entity_radians({
+          'entity': id,
         });
         core_group_move({
           'entities': [
