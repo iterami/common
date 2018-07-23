@@ -131,14 +131,14 @@ function webgl_camera_rotate(args){
       'z': args['z'],
     };
     let prefix = args['camera']
-      ? 'camera-'
-      : '';
+      ? 'camera-rotate-'
+      : 'rotate-';
     for(let axis in axes){
-        webgl_character[prefix + 'rotate-' + axis] = core_clamp({
+        webgl_character[prefix + axis] = core_clamp({
           'max': 360,
           'min': 0,
           'value': core_round({
-            'number': webgl_character[prefix + 'rotate-' + axis] + axes[axis],
+            'number': webgl_character[prefix + axis] + axes[axis],
           }),
           'wrap': true,
         });
@@ -146,19 +146,19 @@ function webgl_camera_rotate(args){
 
     if(args['xlock']){
         let max = 89;
-        if(webgl_character[prefix + 'rotate-x'] > 180){
+        if(webgl_character[prefix + 'x'] > 180){
             max += 271;
         }
-        webgl_character[prefix + 'rotate-x'] = core_clamp({
+        webgl_character[prefix + 'x'] = core_clamp({
           'max': max,
           'min': max - 89,
-          'value': webgl_character[prefix + 'rotate-x'],
+          'value': webgl_character[prefix + 'x'],
         });
     }
 
     for(let axis in axes){
-        webgl_character[prefix + 'rotate-radians-' + axis] = core_degrees_to_radians({
-          'degrees': webgl_character[prefix + 'rotate-' + axis],
+        webgl_character[prefix + 'radians-' + axis] = core_degrees_to_radians({
+          'degrees': webgl_character[prefix + axis],
         });
     }
 
