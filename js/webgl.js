@@ -378,7 +378,18 @@ function webgl_collision(args){
                     args['target'],
                   ],
                 });
+
+                return false;
             }
+
+        }else if(core_groups['particles'][args['entity']]){
+            core_entity_remove({
+              'entities': [
+                args['entity'],
+              ],
+            });
+
+            return false;
 
         }else{
             core_entities[args['entity']]['dx'] = entity_dx;
@@ -388,6 +399,8 @@ function webgl_collision(args){
             core_entities[args['entity']]['translate-' + collision] = target['translate-' + collision] + (collide_range * collision_sign);
         }
     }
+
+    return true;
 }
 
 function webgl_draw(){
@@ -1344,6 +1357,11 @@ function webgl_logicloop(){
         'particles',
       ],
       'todo': function(entity){
+          webgl_entity_move({
+            'entity': entity,
+            'multiplier': -1,
+          });
+
           core_entities[entity]['lifespan'] -= 1;
           if(core_entities[entity]['lifespan'] <= 0){
               core_entity_remove({
@@ -1435,11 +1453,13 @@ function webgl_logicloop_handle_entity(entity){
             for(let other_entity in core_entities){
                 if(core_entities[other_entity]['collision']
                   && entity !== other_entity){
-                    webgl_collision({
+                    if(!webgl_collision({
                       'character': false,
                       'entity': entity,
                       'target': other_entity,
-                    });
+                    })){
+                        return;
+                    }
                 }
             }
         }
@@ -1500,28 +1520,25 @@ function webgl_normals(args){
     return normals;
 }
 
-// Optional args: collide-range, collides, color, count, dx, dy, dz, gravity,
-//   lifespan, rotate-x, rotate-y, rotate-z, speed, translate-x, translate-y, translate-z
+// Optional args: collide-range, collides, color, count, gravity, lifespan,
+//   rotate-x, rotate-y, rotate-z, speed, translate-x, translate-y, translate-z
 function webgl_particles_create(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'collide-range': .2,
+        'collide-range': 1,
         'collides': true,
         'color': [1, 1, 1, 1],
         'count': 1,
-        'dx': 0,
-        'dy': 0,
-        'dz': 0,
         'gravity': true,
         'lifespan': 100,
-        'rotate-x': 0,
-        'rotate-y': 0,
-        'rotate-z': 0,
-        'speed': .2,
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
+        'rotate-x': webgl_character['rotate-x'],
+        'rotate-y': webgl_character['rotate-y'],
+        'rotate-z': webgl_character['rotate-z'],
+        'speed': 1,
+        'translate-x': webgl_character['translate-x'],
+        'translate-y': webgl_character['translate-y'],
+        'translate-z': webgl_character['translate-z'],
       },
     });
 
@@ -1534,9 +1551,6 @@ function webgl_particles_create(args){
             'collide-range': args['collide-range'],
             'collides': args['collides'],
             'draw-type': 'POINTS',
-            'dx': args['dx'],
-            'dy': args['dy'],
-            'dz': args['dz'],
             'gravity': args['gravity'],
             'lifespan': args['lifespan'],
             'normals': [0, 1, 0],
