@@ -1540,7 +1540,7 @@ function webgl_particles_create(args){
             'translate-x': args['x'],
             'translate-y': args['y'],
             'translate-z': args['z'],
-            'vertex-colors': [1, 1, 1, 1],
+            'vertex-colors': args['color'],
             'vertices': [0, 0, 0, 1],
           },
         });
