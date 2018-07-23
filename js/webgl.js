@@ -424,6 +424,7 @@ function webgl_draw(){
     core_group_modify({
       'groups': [
         'foreground',
+        'particles',
       ],
       'todo': function(entity){
           if(core_entities[entity]['alpha'] === 1){
@@ -434,19 +435,12 @@ function webgl_draw(){
     core_group_modify({
       'groups': [
         'foreground',
+        'particles',
       ],
       'todo': function(entity){
           if(core_entities[entity]['alpha'] < 1){
               webgl_draw_entity(entity);
           }
-      },
-    });
-    core_group_modify({
-      'groups': [
-        'particles',
-      ],
-      'todo': function(entity){
-          webgl_draw_entity(entity);
       },
     });
 
