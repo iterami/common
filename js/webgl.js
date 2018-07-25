@@ -691,7 +691,6 @@ function webgl_entity_radians(args){
     core_entities[args['entity']]['rotate-radians-z'] = core_degrees_to_radians({
       'degrees': core_entities[args['entity']]['rotate-z'],
     });
-
 }
 
 function webgl_entity_todo(entity){
