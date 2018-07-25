@@ -1881,7 +1881,7 @@ function webgl_vertexcolorarray(args){
           args['rgbarray'][i]['red'] / 256,
           args['rgbarray'][i]['green'] / 256,
           args['rgbarray'][i]['blue'] / 256,
-          1,
+          1
         );
     }
 
