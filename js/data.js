@@ -260,7 +260,8 @@ function data_webgl_skybox(args){
     webgl_attach({
       'entity': 'skybox-back',
       'offset-z': 5,
-      'to': '_character-camera',
+      'to': '_me',
+      'type': 'character',
     });
     core_entity_create({
       'id': 'skybox-bottom',
@@ -277,7 +278,8 @@ function data_webgl_skybox(args){
     webgl_attach({
       'entity': 'skybox-bottom',
       'offset-y': -5,
-      'to': '_character-camera',
+      'to': '_me',
+      'type': 'character',
     });
     core_entity_create({
       'id': 'skybox-front',
@@ -295,7 +297,8 @@ function data_webgl_skybox(args){
     webgl_attach({
       'entity': 'skybox-front',
       'offset-z': -5,
-      'to': '_character-camera',
+      'to': '_me',
+      'type': 'character',
     });
     core_entity_create({
       'id': 'skybox-left',
@@ -313,7 +316,8 @@ function data_webgl_skybox(args){
     webgl_attach({
       'entity': 'skybox-left',
       'offset-x': -5,
-      'to': '_character-camera',
+      'to': '_me',
+      'type': 'character',
     });
     core_entity_create({
       'id': 'skybox-right',
@@ -331,7 +335,8 @@ function data_webgl_skybox(args){
     webgl_attach({
       'entity': 'skybox-right',
       'offset-x': 5,
-      'to': '_character-camera',
+      'to': '_me',
+      'type': 'character',
     });
     core_entity_create({
       'id': 'skybox-top',
@@ -349,7 +354,8 @@ function data_webgl_skybox(args){
     webgl_attach({
       'entity': 'skybox-top',
       'offset-y': 5,
-      'to': '_character-camera',
+      'to': '_me',
+      'type': 'character',
     });
 
     core_group_move({
