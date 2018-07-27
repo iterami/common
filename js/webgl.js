@@ -241,6 +241,8 @@ function webgl_character_spawn(args){
       'y': webgl_properties['spawn-rotate-y'],
       'z': webgl_properties['spawn-rotate-z'],
     });
+
+    webgl_characters[args['character']]['jump-allow'] = false;
 }
 
 // Required args: alpha, blue, green, red
