@@ -946,7 +946,7 @@ function webgl_init(args){
 }
 
 // Optional args: camera-type, camera-zoom-current, camera-zoom-max, collide-range, collides,
-//   dx, dy, dz, entities, experience, health-current, health-max, inventory, jump-height, level, speed
+//   dx, dy, dz, entities, experience, health-current, health-max, id, inventory, jump-height, level, speed
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -963,6 +963,7 @@ function webgl_init_character(args){
         'experience': 0,
         'health-current': 100,
         'health-max': 100,
+        'id': '_me',
         'inventory': false,
         'jump-height': .6,
         'level': -1,
@@ -970,8 +971,7 @@ function webgl_init_character(args){
       },
     });
 
-    webgl_characters = {};
-    webgl_characters['_me'] = {
+    webgl_characters[args['id']] = {
       'camera-rotate-radians-x': 0,
       'camera-rotate-radians-y': 0,
       'camera-rotate-radians-z': 0,
@@ -1007,7 +1007,7 @@ function webgl_init_character(args){
     };
     if(args['inventory'] !== false){
         Object.assign(
-          webgl_characters['_me']['inventory'],
+          webgl_characters[args['id']]['inventory'],
           args['inventory']
         );
     }
