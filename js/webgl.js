@@ -1153,8 +1153,8 @@ function webgl_load_level_init(args){
     }
 
     if(args['character'] === 1){
-        if(!args['json']['character']
-          || args['json']['character'] === false){
+        if(args['json']['characters'] === false
+          || !args['json']['characters']){
             return;
         }
     }
@@ -1163,7 +1163,6 @@ function webgl_load_level_init(args){
     core_storage_save();
 
     if(args['character'] === -1){
-        args['json']['character'] = false;
         webgl_init_character({
           'camera-type': 'free',
           'camera-zoom-current': 0,
@@ -1175,28 +1174,30 @@ function webgl_load_level_init(args){
 
     }else if(webgl_character_level() < 0
       || args['character'] === 1){
-        if(args['json']['character']
-          && args['json']['character'] !== false){
-            webgl_init_character({
-              'camera-type': args['json']['character']['camera-type'],
-              'camera-zoom-current': args['json']['character']['camera-zoom-current'],
-              'camera-zoom-max': args['json']['character']['camera-zoom-max'],
-              'collide-range': args['json']['character']['collide-range'],
-              'collides': args['json']['character']['collides'],
-              'dx': args['json']['character']['dx'],
-              'dy': args['json']['character']['dy'],
-              'dz': args['json']['character']['dz'],
-              'entities': args['json']['character']['entities'],
-              'experience': args['json']['character']['experience'],
-              'health-current': args['json']['character']['health-current'],
-              'health-max': args['json']['character']['health-max'],
-              'inventory': args['json']['character']['inventory'],
-              'jump-height': args['json']['character']['jump-height'],
-              'level': args['json']['character']['level'],
-              'speed': args['json']['character']['speed'],
-            });
-
-            webgl_character_homebase = args['json']['entities'];
+        if(args['json']['characters']
+          && args['json']['characters'] !== false){
+            for(let character in args['json']['characters']){
+                webgl_init_character({
+                  'camera-type': args['json']['characters'][character]['camera-type'],
+                  'camera-zoom-current': args['json']['characters'][character]['camera-zoom-current'],
+                  'camera-zoom-max': args['json']['characters'][character]['camera-zoom-max'],
+                  'collide-range': args['json']['characters'][character]['collide-range'],
+                  'collides': args['json']['characters'][character]['collides'],
+                  'dx': args['json']['characters'][character]['dx'],
+                  'dy': args['json']['characters'][character]['dy'],
+                  'dz': args['json']['characters'][character]['dz'],
+                  'entities': args['json']['characters'][character]['entities'],
+                  'experience': args['json']['characters'][character]['experience'],
+                  'health-current': args['json']['characters'][character]['health-current'],
+                  'health-max': args['json']['characters'][character]['health-max'],
+                  'id': args['json']['characters'][character]['id'],
+                  'inventory': args['json']['characters'][character]['inventory'],
+                  'jump-height': args['json']['characters'][character]['jump-height'],
+                  'level': args['json']['characters'][character]['level'],
+                  'speed': args['json']['characters'][character]['speed'],
+                });
+            }
+            webgl_character_homebase = webgl_characters['_me']['entities'];
 
         }else{
             webgl_init_character({
@@ -1262,19 +1263,23 @@ function webgl_load_level_init(args){
             });
         }
     }
-    for(let entity in webgl_characters['_me']['entities']){
-        core_entity_create({
-          'id': webgl_characters['_me']['entities'][entity]['id'],
-          'properties': webgl_characters['_me']['entities'][entity],
-          'types': webgl_characters['_me']['entities'][entity]['types'],
-        });
-        webgl_attach({
-          'entity': webgl_characters['_me']['entities'][entity]['id'],
-          'offset-x': webgl_characters['_me']['entities'][entity]['attach-offset-x'],
-          'offset-y': webgl_characters['_me']['entities'][entity]['attach-offset-y'],
-          'offset-z': webgl_characters['_me']['entities'][entity]['attach-offset-z'],
-          'to': '_character-camera',
-        });
+    for(let character in webgl_characters){
+        for(let entity in webgl_characters[character]['entities']){
+            core_entity_create({
+              'id': webgl_characters[character]['entities'][entity]['id'],
+              'properties': webgl_characters[character]['entities'][entity],
+              'types': webgl_characters[character]['entities'][entity]['types'],
+            });
+            if(character === '_me'){
+                webgl_attach({
+                  'entity': webgl_characters[character]['entities'][entity]['id'],
+                  'offset-x': webgl_characters[character]['entities'][entity]['attach-offset-x'],
+                  'offset-y': webgl_characters[character]['entities'][entity]['attach-offset-y'],
+                  'offset-z': webgl_characters[character]['entities'][entity]['attach-offset-z'],
+                  'to': '_character-camera',
+                });
+            }
+        }
     }
 
     webgl_character_spawn();

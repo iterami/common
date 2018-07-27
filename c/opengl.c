@@ -542,8 +542,8 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
-        // Parse character.
-        if(strcmp(json_object->name->string, "character") == 0){
+        // Parse characters.
+        if(strcmp(json_object->name->string, "characters") == 0){
             json_object = json_object->next;
         }
 
