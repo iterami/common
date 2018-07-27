@@ -1110,17 +1110,13 @@ function webgl_json_export(args){
     document.getElementById(args['target']).value = JSON.stringify(json);
 }
 
-// Required args: json
-// Optional args: character
+// Optional args: character, json
 function webgl_load_level(args){
-    if(args['json'] === false){
-        return;
-    }
-
     args = core_args({
       'args': args,
       'defaults': {
         'character': 0,
+        'json': false,
       },
     });
 
@@ -1142,8 +1138,20 @@ function webgl_load_level(args){
     }
 }
 
-// Required args: character, json
+// Required args: character
+// Optional args: json
 function webgl_load_level_init(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'json': false,
+      },
+    });
+
+    if(args['json'] === false){
+        args['json'] = {};
+    }
+
     if(args['character'] === 1){
         if(!args['json']['character']
           || args['json']['character'] === false){
