@@ -660,6 +660,7 @@ function webgl_entity_move(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'character': '_me',
         'entity': false,
         'multiplier': 1,
         'strafe': false,
@@ -669,14 +670,14 @@ function webgl_entity_move(args){
 
     if(args['entity'] === false){
         let movement = core_move_3d({
-          'angle': webgl_characters['_me']['rotate-y'],
-          'speed': webgl_characters['_me']['speed'] * args['multiplier'],
+          'angle': webgl_characters[args['character']]['rotate-y'],
+          'speed': webgl_characters[args['character']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
 
-        webgl_characters['_me']['dx'] += movement['x'];
-        webgl_characters['_me']['dy'] += args['y'];
-        webgl_characters['_me']['dz'] += movement['z'];
+        webgl_characters[args['character']]['dx'] += movement['x'];
+        webgl_characters[args['character']]['dy'] += args['y'];
+        webgl_characters[args['character']]['dz'] += movement['z'];
 
     }else{
         let movement = core_move_3d({
@@ -696,6 +697,7 @@ function webgl_entity_move_to(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'character': '_me',
         'entity': false,
         'x': 0,
         'y': 0,
@@ -704,9 +706,9 @@ function webgl_entity_move_to(args){
     });
 
     if(args['entity'] === false){
-        webgl_characters['_me']['translate-x'] = args['x'];
-        webgl_characters['_me']['translate-y'] = args['y'];
-        webgl_characters['_me']['translate-z'] = args['z'];
+        webgl_characters[args['character']]['translate-x'] = args['x'];
+        webgl_characters[args['character']]['translate-y'] = args['y'];
+        webgl_characters[args['character']]['translate-z'] = args['z'];
 
     }else{
         core_entities[args['entity']]['translate-x'] = args['x'];
