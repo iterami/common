@@ -21,7 +21,7 @@ function webgl_attach(args){
 }
 
 // Required args: entity
-// Optional args: axes
+// Optional args: axes, character
 function webgl_billboard(args){
     args = core_args({
       'args': args,
@@ -29,11 +29,13 @@ function webgl_billboard(args){
         'axes': [
           'y',
         ],
+        'character': '_me',
       },
     });
 
     for(let axis in args['axes']){
-        core_entities[args['entity']]['rotate-' + args['axes'][axis]] = 360 - webgl_characters['_me']['camera-rotate-' + args['axes'][axis]];
+        core_entities[args['entity']]['rotate-' + args['axes'][axis]]
+          = 360 - webgl_characters[args['character']]['camera-rotate-' + args['axes'][axis]];
     }
 
     webgl_entity_radians({
