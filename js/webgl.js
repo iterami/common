@@ -1386,6 +1386,16 @@ function webgl_logicloop(){
                 }
             }
         }
+
+        webgl_characters[character]['translate-x'] = core_round({
+          'number': webgl_characters[character]['translate-x'] + webgl_characters[character]['dx'],
+        });
+        webgl_characters[character]['translate-y'] = core_round({
+          'number': webgl_characters[character]['translate-y'] + webgl_characters[character]['dy'],
+        });
+        webgl_characters[character]['translate-z'] = core_round({
+          'number': webgl_characters[character]['translate-z'] + webgl_characters[character]['dz'],
+        });
     }
 
     core_group_modify({
@@ -1416,16 +1426,6 @@ function webgl_logicloop(){
               });
           }
       },
-    });
-
-    webgl_characters['_me']['translate-x'] = core_round({
-      'number': webgl_characters['_me']['translate-x'] + webgl_characters['_me']['dx'],
-    });
-    webgl_characters['_me']['translate-y'] = core_round({
-      'number': webgl_characters['_me']['translate-y'] + webgl_characters['_me']['dy'],
-    });
-    webgl_characters['_me']['translate-z'] = core_round({
-      'number': webgl_characters['_me']['translate-z'] + webgl_characters['_me']['dz'],
     });
 
     webgl_characters['_me']['dx'] = 0;
