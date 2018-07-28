@@ -1375,7 +1375,8 @@ function webgl_logicloop(){
               webgl_properties['gravity-max']
             );
 
-            if(webgl_characters[character]['jump-allow']
+            if(character === '_me'
+              && webgl_characters[character]['jump-allow']
               && core_keys[32]['state']){
                 webgl_characters[character]['jump-allow'] = false;
                 webgl_characters[character]['dy'] = webgl_characters[character]['jump-height'];
