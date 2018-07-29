@@ -186,12 +186,12 @@ function webgl_character_jump(args){
       },
     });
 
-    if(args['character'] !== '_me'){
+    if(args['character'] !== '_me'
+      || !core_keys[32]['state']){
         return;
     }
 
-    if(webgl_characters[args['character']]['jump-allow']
-      && core_keys[32]['state']){
+    if(webgl_characters[args['character']]['jump-allow']){
         webgl_characters[args['character']]['jump-allow'] = false;
         webgl_characters[args['character']]['dy'] = webgl_characters[args['character']]['jump-height'];
     }
