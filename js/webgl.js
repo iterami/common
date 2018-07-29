@@ -178,6 +178,26 @@ function webgl_camera_zoom(event){
 }
 
 // Optional args: character
+function webgl_character_jump(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': '_me',
+      },
+    });
+
+    if(args['character'] !== '_me'){
+        return;
+    }
+
+    if(webgl_characters[args['character']]['jump-allow']
+      && core_keys[32]['state']){
+        webgl_characters[args['character']]['jump-allow'] = false;
+        webgl_characters[args['character']]['dy'] = webgl_characters[args['character']]['jump-height'];
+    }
+}
+
+// Optional args: character
 function webgl_character_level(args){
     args = core_args({
       'args': args,
@@ -1375,12 +1395,9 @@ function webgl_logicloop(){
               webgl_properties['gravity-max']
             );
 
-            if(character === '_me'
-              && webgl_characters[character]['jump-allow']
-              && core_keys[32]['state']){
-                webgl_characters[character]['jump-allow'] = false;
-                webgl_characters[character]['dy'] = webgl_characters[character]['jump-height'];
-            }
+            webgl_character_jump({
+              'character': character,
+            });
         }
 
         if(webgl_characters[character]['collides']){
