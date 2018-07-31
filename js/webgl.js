@@ -1489,29 +1489,16 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(core_entities[entity]['attach-to'] !== false){
-        if(core_entities[entity]['attach-type'] === 'character'){
-            core_entities[entity]['translate-x'] = webgl_characters[core_entities[entity]['attach-to']]['translate-x']
-              + webgl_characters[core_entities[entity]['attach-to']]['dx']
-              + core_entities[entity]['attach-offset-x'];
-            core_entities[entity]['translate-y'] = webgl_characters[core_entities[entity]['attach-to']]['translate-y']
-              + webgl_characters[core_entities[entity]['attach-to']]['dy']
-              + core_entities[entity]['attach-offset-y'];
-            core_entities[entity]['translate-z'] = webgl_characters[core_entities[entity]['attach-to']]['translate-z']
-              + webgl_characters[core_entities[entity]['attach-to']]['dz']
-              + core_entities[entity]['attach-offset-z'];
+        let target = core_entities[entity]['attach-type'] === 'character'
+          ? webgl_characters[core_entities[entity]['attach-to']]
+          : core_entities[core_entities[entity]['attach-to']];
 
-        }else{
-            let attachto = core_entities[core_entities[entity]['attach-to']];
-            core_entities[entity]['translate-x'] = attachto['translate-x']
-              + attachto['dx']
-              + core_entities[entity]['attach-offset-x'];
-            core_entities[entity]['translate-y'] = attachto['translate-y']
-              + attachto['dy']
-              + core_entities[entity]['attach-offset-y'];
-            core_entities[entity]['translate-z'] = attachto['translate-z']
-              + attachto['dz']
-              + core_entities[entity]['attach-offset-z'];
-        }
+        core_entities[entity]['translate-x'] = target['translate-x'] + target['dx']
+          + core_entities[entity]['attach-offset-x'];
+        core_entities[entity]['translate-y'] = target['translate-y'] + target['dy']
+          + core_entities[entity]['attach-offset-y'];
+        core_entities[entity]['translate-z'] = target['translate-z'] + target['dz']
+          + core_entities[entity]['attach-offset-z'];
 
     }else{
         if(core_entities[entity]['gravity']){
