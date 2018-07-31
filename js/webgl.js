@@ -187,7 +187,8 @@ function webgl_character_jump(args){
     });
 
     if(args['character'] !== '_me'
-      || !core_keys[32]['state']){
+      || !core_keys[32]['state']
+      || webgl_characters['_me']['health-current'] <= 0){
         return;
     }
 
@@ -206,6 +207,11 @@ function webgl_character_kill(args){
         'delete': false,
       },
     });
+
+    if(args['character'] === '_me'
+      && webgl_character_level() < 0){
+        return;
+    }
 
     for(let entity in core_entities){
         if(core_entities[entity]['attach-to'] !== args['character']){
