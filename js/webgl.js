@@ -1317,6 +1317,22 @@ function webgl_load_level_init(args){
             });
         }
     }
+    if(args['json']['randomized']){
+        for(let i in args['json']['randomized']){
+            if(args['json']['randomized'][i]['character'] === true){
+                webgl_characters[args['json']['randomized'][i]['character']][args['json']['randomized'][i]['property']]
+                  = args['json']['randomized'][i]['min'] + core_random_number({
+                      'multiplier': args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min'],
+                    });
+
+            }else{
+                core_entities[args['json']['randomized'][i]['character']][args['json']['randomized'][i]['property']]
+                  = args['json']['randomized'][i]['min'] + core_random_number({
+                      'multiplier': args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min'],
+                    });
+            }
+        }
+    }
 
     webgl_character_spawn();
     core_escape();
