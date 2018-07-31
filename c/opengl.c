@@ -1076,6 +1076,12 @@ void opengl_load_level(const gchar *filename){
             opengl_entity_bind(id);
         }
 
+        json_object = json_object->next;
+
+        // Parse randomized.
+        if(strcmp(json_object->name->string, "randomized") == 0){
+        }
+
         g_free(json_raw);
     }
 
