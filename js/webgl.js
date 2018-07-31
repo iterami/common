@@ -193,7 +193,7 @@ function webgl_character_jump(args){
 
     if(webgl_characters[args['character']]['jump-allow']){
         webgl_characters[args['character']]['jump-allow'] = false;
-        webgl_characters[args['character']]['dy'] = webgl_characters[args['character']]['jump-height'] * webgl_properties['jump-multiplier'];
+        webgl_characters[args['character']]['dy'] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
     }
 }
 
@@ -668,7 +668,7 @@ function webgl_entity_move(args){
     if(args['entity'] === false){
         let movement = core_move_3d({
           'angle': webgl_characters[args['character']]['rotate-y'],
-          'speed': webgl_characters[args['character']]['speed'] * args['multiplier'],
+          'speed': webgl_characters[args['character']]['speed'] * webgl_properties['multiplier-speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
 
@@ -679,7 +679,7 @@ function webgl_entity_move(args){
     }else{
         let movement = core_move_3d({
           'angle': core_entities[args['entity']]['rotate-y'],
-          'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
+          'speed': core_entities[args['entity']]['speed'] * webgl_properties['multiplier-speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
 
@@ -761,7 +761,7 @@ function webgl_entity_todo(entity){
 // Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-alpha,
 //   clearcolor-blue, clearcolor-green, clearcolor-red, directional-blue, directional-green,
 //   directional-red, directional-vector, fog-density, fog-state, gravity-acceleration, gravity-max,
-//   jump-multiplier, spawn-rotate-x, spawn-rotate-y, spawn-rotate-z,
+//   multiplier-jump, multiplier-speed, spawn-rotate-x, spawn-rotate-y, spawn-rotate-z,
 //   spawn-translate-x, spawn-translate-y, spawn-translate-z
 function webgl_init(args){
     args = core_args({
@@ -782,7 +782,8 @@ function webgl_init(args){
         'fog-state': false,
         'gravity-acceleration': -.05,
         'gravity-max': -1,
-        'jump-multiplier': 1,
+        'multiplier-jump': 1,
+        'multiplier-speed': 1,
         'spawn-rotate-x': 0,
         'spawn-rotate-y': 0,
         'spawn-rotate-z': 0,
@@ -822,7 +823,8 @@ function webgl_init(args){
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
       'gravity-max': args['gravity-max'],
-      'jump-multiplier': args['jump-multiplier'],
+      'multiplier-jump': args['multiplier-jump'],
+      'multiplier-speed': args['multiplier-speed'],
       'shader': {},
       'spawn-rotate-x': args['spawn-rotate-x'],
       'spawn-rotate-y': args['spawn-rotate-y'],
@@ -1235,7 +1237,8 @@ function webgl_load_level_init(args){
       'fog-state': args['json']['fog-state'],
       'gravity-acceleration': args['json']['gravity-acceleration'],
       'gravity-max': args['json']['gravity-max'],
-      'jump-multiplier': args['json']['jump-multiplier'],
+      'multiplier-jump': args['json']['multiplier-jump'],
+      'multiplier-speed': args['json']['multiplier-speed'],
       'spawn-rotate-x': args['json']['spawn-rotate-x'],
       'spawn-rotate-y': args['json']['spawn-rotate-y'],
       'spawn-rotate-z': args['json']['spawn-rotate-z'],
