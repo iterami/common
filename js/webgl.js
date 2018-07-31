@@ -726,7 +726,7 @@ function webgl_entity_move(args){
         });
 
         webgl_characters[args['character']]['dx'] += movement['x'];
-        webgl_characters[args['character']]['dy'] += args['y'];
+        webgl_characters[args['character']]['dy'] += args['y'] * webgl_properties['multiplier-speed'];
         webgl_characters[args['character']]['dz'] += movement['z'];
 
     }else{
@@ -737,7 +737,7 @@ function webgl_entity_move(args){
         });
 
         core_entities[args['entity']]['dx'] = movement['x'];
-        core_entities[args['entity']]['dy'] = args['y'];
+        core_entities[args['entity']]['dy'] = args['y'] * webgl_properties['multiplier-speed'];
         core_entities[args['entity']]['dz'] = movement['z'];
     }
 }
