@@ -767,6 +767,7 @@ void opengl_load_level(const gchar *filename){
             gboolean draw = TRUE;
             gchar *draw_type = "TRIANGLE_STRIP";
             gboolean gravity = FALSE;
+            gboolean kill = FALSE;
             float rotate_x = 0;
             float rotate_y = 0;
             float rotate_z = 0;
@@ -882,6 +883,14 @@ void opengl_load_level(const gchar *filename){
 
             // Parse item.
             if(strcmp(json_level_entities_element_property->name->string, "item") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse kill.
+            if(strcmp(json_level_entities_element_property->name->string, "kill") == 0){
+                value = json_level_entities_element_property->value;
+                kill = value->type == json_type_true ? TRUE : FALSE;
+
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 

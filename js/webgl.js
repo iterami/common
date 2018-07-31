@@ -962,6 +962,7 @@ function webgl_init(args){
         'dz': 0,
         'gravity': false,
         'item': false,
+        'kill': false,
         'normals': [],
         'rotate-radians-x': 0,
         'rotate-radians-y': 0,
