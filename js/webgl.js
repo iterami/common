@@ -294,127 +294,104 @@ function webgl_collision(args){
       },
     });
 
-    let collide_range = 0;
+    let collider = args['character']
+      ? webgl_characters[args['character-id']]
+      : core_entities[args['entity']];
     let collision = false;
     let collision_sign = 1;
-    let entity_dx = 0;
-    let entity_dy = 0;
-    let entity_dz = 0;
-    let entity_x = 0;
-    let entity_y = 0;
-    let entity_z = 0;
     let target = core_entities[args['target']];
-
-    if(args['character']){
-        collide_range = webgl_characters[args['character-id']]['collide-range'];
-        entity_dx = webgl_characters[args['character-id']]['dx'];
-        entity_dy = webgl_characters[args['character-id']]['dy'];
-        entity_dz = webgl_characters[args['character-id']]['dz'];
-        entity_x = webgl_characters[args['character-id']]['translate-x'];
-        entity_y = webgl_characters[args['character-id']]['translate-y'];
-        entity_z = webgl_characters[args['character-id']]['translate-z'];
-
-    }else{
-        collide_range = core_entities[args['entity']]['collide-range'];
-        entity_dx = core_entities[args['entity']]['dx'];
-        entity_dy = core_entities[args['entity']]['dy'];
-        entity_dz = core_entities[args['entity']]['dz'];
-        entity_x = core_entities[args['entity']]['translate-x'];
-        entity_y = core_entities[args['entity']]['translate-y'];
-        entity_z = core_entities[args['entity']]['translate-z'];
-    }
 
     if(target['normals'][0] !== 0){
         if(target['normals'][0] === 1
-          && entity_dx < 0){
-            if(entity_x >= target['translate-x']
-              && entity_x <= target['translate-x'] + collide_range
-              && entity_y > target['translate-y'] + target['vertices'][4] - collide_range
-              && entity_y < target['translate-y'] + target['vertices'][0] + collide_range
-              && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
-              && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
+          && collider['dx'] < 0){
+            if(collider['translate-x'] >= target['translate-x']
+              && collider['translate-x'] <= target['translate-x'] + collider['collide-range']
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - collider['collide-range']
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range']
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
                 collision = 'x';
-                entity_dx = 0;
+                collider['dx'] = 0;
             }
 
         }else if(target['normals'][0] === -1
-          && entity_dx > 0){
-            if(entity_x >= target['translate-x'] - collide_range
-              && entity_x <= target['translate-x']
-              && entity_y > target['translate-y'] + target['vertices'][4] - collide_range
-              && entity_y < target['translate-y'] + target['vertices'][0] + collide_range
-              && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
-              && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
+          && collider['dx'] > 0){
+            if(collider['translate-x'] >= target['translate-x'] - collider['collide-range']
+              && collider['translate-x'] <= target['translate-x']
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - collider['collide-range']
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range']
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
                 collision = 'x';
                 collision_sign = -1;
-                entity_dx = 0;
+                collider['dx'] = 0;
             }
         }
     }
 
     if(target['normals'][1] !== 0){
         if(target['normals'][1] === 1
-          && entity_dy < 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][4] - collide_range
-              && entity_x <= target['translate-x'] + target['vertices'][0] + collide_range
-              && entity_y >= target['translate-y']
-              && entity_y <= target['translate-y'] + collide_range
-              && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
-              && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
+          && collider['dy'] < 0){
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range']
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range']
+              && collider['translate-y'] >= target['translate-y']
+              && collider['translate-y'] <= target['translate-y'] + collider['collide-range']
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
                 collision = 'y';
-                entity_dy = 0;
+                collider['dy'] = 0;
             }
 
         }else if(target['normals'][1] === -1
-          && entity_dy > 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][4] - collide_range
-              && entity_x <= target['translate-x'] + target['vertices'][0] + collide_range
-              && entity_y >= target['translate-y'] - collide_range
-              && entity_y <= target['translate-y']
-              && entity_z >= target['translate-z'] + target['vertices'][2] - collide_range
-              && entity_z <= target['translate-z'] + target['vertices'][10] + collide_range){
+          && collider['dy'] > 0){
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range']
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range']
+              && collider['translate-y'] >= target['translate-y'] - collider['collide-range']
+              && collider['translate-y'] <= target['translate-y']
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
                 collision = 'y';
                 collision_sign = -1;
-                entity_dy = 0;
+                collider['dy'] = 0;
             }
         }
     }
 
     if(target['normals'][2] !== 0){
         if(target['normals'][2] === 1
-          && entity_dz < 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][4] - collide_range
-              && entity_x <= target['translate-x'] + target['vertices'][0] + collide_range
-              && entity_y > target['translate-y'] + target['vertices'][2] - collide_range
-              && entity_y < target['translate-y'] + target['vertices'][10] + collide_range
-              && entity_z >= target['translate-z']
-              && entity_z <= target['translate-z'] + collide_range){
+          && collider['dz'] < 0){
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range']
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range']
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - collider['collide-range']
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range']
+              && collider['translate-z'] >= target['translate-z']
+              && collider['translate-z'] <= target['translate-z'] + collider['collide-range']){
                 collision = 'z';
-                entity_dz = 0;
+                collider['dz'] = 0;
             }
 
         }else if(target['normals'][2] === -1
-          && entity_dz > 0){
-            if(entity_x >= target['translate-x'] + target['vertices'][4] - collide_range
-              && entity_x <= target['translate-x'] + target['vertices'][0] + collide_range
-              && entity_y > target['translate-y'] + target['vertices'][2] - collide_range
-              && entity_y < target['translate-y'] + target['vertices'][10] + collide_range
-              && entity_z >= target['translate-z'] - collide_range
-              && entity_z <= target['translate-z']){
+          && collider['dz'] > 0){
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range']
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range']
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - collider['collide-range']
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range']
+              && collider['translate-z'] >= target['translate-z'] - collider['collide-range']
+              && collider['translate-z'] <= target['translate-z']){
                 collision = 'z';
                 collision_sign = -1;
-                entity_dz = 0;
+                collider['dz'] = 0;
             }
         }
     }
 
     if(collision !== false){
         if(args['character']){
-            webgl_characters[args['character-id']]['dx'] = entity_dx;
-            webgl_characters[args['character-id']]['dy'] = entity_dy;
-            webgl_characters[args['character-id']]['dz'] = entity_dz;
+            webgl_characters[args['character-id']]['dx'] = collider['dx'];
+            webgl_characters[args['character-id']]['dy'] = collider['dy'];
+            webgl_characters[args['character-id']]['dz'] = collider['dz'];
 
-            webgl_characters[args['character-id']]['translate-' + collision] = target['translate-' + collision] + (collide_range * collision_sign);
+            webgl_characters[args['character-id']]['translate-' + collision] = target['translate-' + collision] + (collider['collide-range'] * collision_sign);
 
             if(webgl_characters[args['character-id']]['camera-type'] === 'gravity'){
                 webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']]['dy'] === 0;
@@ -446,9 +423,9 @@ function webgl_collision(args){
             return false;
 
         }else{
-            core_entities[args['entity']]['dx'] = entity_dx;
-            core_entities[args['entity']]['dy'] = entity_dy;
-            core_entities[args['entity']]['dz'] = entity_dz;
+            core_entities[args['entity']]['dx'] = collider['dx'];
+            core_entities[args['entity']]['dy'] = collider['dy'];
+            core_entities[args['entity']]['dz'] = collider['dz'];
 
             core_entities[args['entity']]['translate-' + collision] = target['translate-' + collision] + (collide_range * collision_sign);
         }
