@@ -505,7 +505,8 @@ void opengl_load_level(const gchar *filename){
         float fog_state = FALSE;
         float gravity_acceleration = -.05;
         float gravity_max = -1;
-        float jump_multiplier = 1;
+        float multiplier_jump = 1;
+        float multiplier_speed = 1;
 
         // Parse ambient-alpha.
         if(strcmp(json_object->name->string, "ambient-alpha") == 0){
@@ -660,15 +661,6 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
-        // Parse jump-multiplier.
-        if(strcmp(json_object->name->string, "jump-multiplier") == 0){
-            value = json_object->value;
-            number = (struct json_number_s*)value->payload;
-            jump_multiplier = atof(number->number);
-
-            json_object = json_object->next;
-        }
-
         // Parse groups.
         if(strcmp(json_object->name->string, "groups") == 0){
             json_array = json_object->value->payload;
@@ -701,6 +693,24 @@ void opengl_load_level(const gchar *filename){
               NULL,
               0
             );
+        }
+
+        // Parse multiplier-jump.
+        if(strcmp(json_object->name->string, "multiplier-jump") == 0){
+            value = json_object->value;
+            number = (struct json_number_s*)value->payload;
+            multiplier_jump = atof(number->number);
+
+            json_object = json_object->next;
+        }
+
+        // Parse multiplier-speed.
+        if(strcmp(json_object->name->string, "multiplier-speed") == 0){
+            value = json_object->value;
+            number = (struct json_number_s*)value->payload;
+            multiplier_speed = atof(number->number);
+
+            json_object = json_object->next;
         }
 
         // Parse spawn-rotate-x.
