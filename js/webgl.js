@@ -459,7 +459,7 @@ function webgl_collision(args){
 
                 return false;
 
-            }else if(target['kill'] === true){
+            }else if(target['collide-type'] === 'kill'){
                 webgl_character_kill({
                   'character': args['character-id'],
                   'delete': args['character-id'] !== '_me',
@@ -958,6 +958,7 @@ function webgl_init(args){
         'attach-to': false,
         'attach-type': 'entity',
         'billboard': false,
+        'collide-type': false,
         'collide-range': 2.5,
         'collides': false,
         'collision': false,
@@ -968,7 +969,6 @@ function webgl_init(args){
         'dz': 0,
         'gravity': false,
         'item': false,
-        'kill': false,
         'normals': [],
         'rotate-radians-x': 0,
         'rotate-radians-y': 0,
