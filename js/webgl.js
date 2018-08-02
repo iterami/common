@@ -496,6 +496,115 @@ function webgl_collision(args){
     return true;
 }
 
+// Optional args: collision, exclude, height, length, prefix, translate-x, translate-y, translate-z, vertex-colors, width
+function webgl_cuboid(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'collision': true,
+        'exclude': {},
+        'height': 1,
+        'length': 1,
+        'prefix': core_uid(),
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+        'vertex-colors': webgl_vertexcolorarray(),
+        'width': 1,
+      },
+    });
+
+    let half_height = args['height'] / 2;
+    let half_length = args['length'] / 2;
+    let half_width = args['width'] / 2;
+    let properties = {
+      'collision': args['collision'],
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'],
+      'translate-z': args['translate-z'],
+      'vertex-colors': args['vertex-colors'],
+    };
+
+    properties['translate-y'] = args['translate-y'] + half_height;
+    properties['vertices'] = [
+      half_width, 0, -half_length, 1,
+      -half_width, 0, -half_length, 1,
+      -half_width, 0, half_length, 1,
+      half_width, 0, half_length, 1
+    ];
+    if(args['exclude']['top'] !== true){
+        core_entity_create({
+          'id': args['prefix'] + '-top',
+          'properties': properties,
+        });
+    }
+
+    // Bottom.
+    properties['rotate-x'] = 180;
+    properties['translate-y'] = args['translate-y'] - half_height;
+    if(args['exclude']['bottom'] !== true){
+        core_entity_create({
+          'id': args['prefix'] + '-bottom',
+          'properties': properties,
+        });
+    }
+
+    // Front.
+    properties['rotate-x'] = 90;
+    properties['translate-y'] = 0;
+    properties['translate-z'] = args['translate-z'] + half_length;
+    properties['vertices'] = [
+      half_width, 0, -half_height, 1,
+      -half_width, 0, -half_height, 1,
+      -half_width, 0, half_height, 1,
+      half_width, 0, half_height, 1
+    ];
+    if(args['exclude']['front'] !== true){
+        core_entity_create({
+          'id': args['prefix'] + '-front',
+          'properties': properties,
+        });
+    }
+
+    // Back.
+    properties['rotate-x'] = 270;
+    properties['translate-z'] = args['translate-z'] - half_length;
+    if(args['exclude']['back'] !== true){
+        core_entity_create({
+          'id': args['prefix'] + '-back',
+          'properties': properties,
+        });
+    }
+
+    // Left.
+    properties['rotate-x'] = 0;
+    properties['rotate-z'] = 90;
+    properties['translate-x'] = args['translate-x'] - half_width;
+    properties['translate-z'] = 0;
+    properties['vertices'] = [
+      half_height, 0, -half_length, 1,
+      -half_height, 0, -half_length, 1,
+      -half_height, 0, half_length, 1,
+      half_height, 0, half_length, 1
+    ];
+    if(args['exclude']['left'] !== true){
+        core_entity_create({
+          'id': args['prefix'] + '-left',
+          'properties': properties,
+        });
+    }
+
+    // Right.
+    properties['rotate-z'] = 270;
+    properties['translate-x'] = args['translate-x'] + half_width;
+    if(args['exclude']['right'] !== true){
+        core_entity_create({
+          'id': args['prefix'] + '-right',
+          'properties': properties,
+        });
+    }
+}
+
 function webgl_draw(){
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
