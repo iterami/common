@@ -1360,13 +1360,15 @@ function webgl_load_level_init(args){
     }
     if(args['json']['randomized']){
         for(let i in args['json']['randomized']){
-            let target = args['json']['randomized'][i]['character'] === true
-              ? webgl_characters[args['json']['randomized'][i]['id']]
-              : core_entities[args['json']['randomized'][i]['id']];
+            for(let id in args['json']['randomized'][i]['ids']){
+                let target = args['json']['randomized'][i]['character'] === true
+                  ? webgl_characters[args['json']['randomized'][i]['ids'][id]]
+                  : core_entities[args['json']['randomized'][i]['ids'][id]];
 
-            target[args['json']['randomized'][i]['property']] = core_random_number({
-              'multiplier': args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min'],
-            }) + args['json']['randomized'][i]['min'];
+                target[args['json']['randomized'][i]['property']] = core_random_number({
+                  'multiplier': args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min'],
+                }) + args['json']['randomized'][i]['min'];
+            }
         }
     }
 
