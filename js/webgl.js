@@ -468,7 +468,7 @@ function webgl_collision(args){
 
                 return false;
 
-            }else if(target['collide-type'] === 'kill'){
+            }else if(target['collide-event'] === 'kill'){
                 webgl_character_damage({
                   'character': args['character-id'],
                   'kill': true,
@@ -1076,7 +1076,7 @@ function webgl_init(args){
         'attach-to': false,
         'attach-type': 'entity',
         'billboard': false,
-        'collide-type': false,
+        'collide-event': false,
         'collide-range': 2.5,
         'collides': false,
         'collision': false,
