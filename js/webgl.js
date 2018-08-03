@@ -498,7 +498,7 @@ function webgl_cuboid(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'collision': true,
+        'collision': false,
         'exclude': {},
         'height': 1,
         'length': 1,
