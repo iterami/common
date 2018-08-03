@@ -227,9 +227,6 @@ function webgl_character_damage(args){
     }
 
     webgl_characters[args['character']]['health-current'] = 0;
-    webgl_character_spawn({
-      'character': args['character'],
-    });
 }
 
 // Optional args: character
