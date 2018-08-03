@@ -1422,7 +1422,7 @@ function webgl_load_level_init(args){
           'exclude': args['json']['cuboids'][cuboid]['exclude'],
           'height': args['json']['cuboids'][cuboid]['height'],
           'length': args['json']['cuboids'][cuboid]['length'],
-          'prefix': cuboid,
+          'prefix': args['json']['cuboids'][cuboid]['prefix'],
           'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
           'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
           'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
