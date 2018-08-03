@@ -1996,23 +1996,18 @@ function webgl_shader_update(){
             +     'float_fogDistance = length(gl_Position.xyz);'
             +     'vec_fragmentColor = vec_vertexColor;'
             +     'vec_textureCoord = vec_texturePosition;'
+            +     'vec_lighting = vec3('
+            +       webgl_properties['ambient-red'] + ','
+            +       webgl_properties['ambient-green'] + ','
+            +       webgl_properties['ambient-blue']
+            +     ');'
             +     'if(directional == 1){'
             +         'vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);'
-            +         'vec_lighting = vec3('
-            +           webgl_properties['ambient-red'] + ','
-            +           webgl_properties['ambient-green'] + ','
-            +           webgl_properties['ambient-blue']
-            +         ') + (vec3('
+            +         'vec_lighting += (vec3('
             +           webgl_properties['directional-red'] + ','
             +           webgl_properties['directional-green'] + ','
             +           webgl_properties['directional-blue']
             +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directional-vector'] + '))), 0.0));'
-            +     '}else{'
-            +         'vec_lighting = vec3('
-            +           webgl_properties['ambient-red'] + ','
-            +           webgl_properties['ambient-green'] + ','
-            +           webgl_properties['ambient-blue']
-            +         ');'
             +     '}'
             + '}',
           'type': webgl_buffer.VERTEX_SHADER,
