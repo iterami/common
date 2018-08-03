@@ -548,7 +548,7 @@ function webgl_cuboid(args){
 
     // Front.
     properties['rotate-x'] = 90;
-    properties['translate-y'] = 0;
+    properties['translate-y'] = args['translate-y'];
     properties['translate-z'] = args['translate-z'] + half_length;
     properties['vertices'] = [
       half_width, 0, -half_height, 1,
@@ -577,7 +577,7 @@ function webgl_cuboid(args){
     properties['rotate-x'] = 0;
     properties['rotate-z'] = 90;
     properties['translate-x'] = args['translate-x'] - half_width;
-    properties['translate-z'] = 0;
+    properties['translate-z'] = args['translate-z'];
     properties['vertices'] = [
       half_height, 0, -half_length, 1,
       -half_height, 0, -half_length, 1,
@@ -1416,6 +1416,21 @@ function webgl_load_level_init(args){
       'spawn-translate-z': args['json']['spawn-translate-z'],
     });
 
+    for(let cuboid in args['json']['cuboids']){
+        webgl_cuboid({
+          'collision': args['json']['cuboids'][cuboid]['collision'],
+          'exclude': args['json']['cuboids'][cuboid]['exclude'],
+          'height': args['json']['cuboids'][cuboid]['height'],
+          'length': args['json']['cuboids'][cuboid]['length'],
+          'prefix': cuboid,
+          'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
+          'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
+          'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
+          'vertex-colors': args['json']['cuboids'][cuboid]['vertex-colors'],
+          'width': args['json']['cuboids'][cuboid]['width'],
+        });
+    }
+
     for(let entity in args['json']['entities']){
         core_entity_create({
           'id': args['json']['entities'][entity]['id'],
@@ -1452,6 +1467,7 @@ function webgl_load_level_init(args){
             });
         }
     }
+
     for(let character in webgl_characters){
         if(webgl_characters[character]['health-current'] <= 0){
             webgl_characters[character]['health-current'] = 1;
@@ -1473,6 +1489,7 @@ function webgl_load_level_init(args){
             });
         }
     }
+
     if(args['json']['randomized']){
         for(let i in args['json']['randomized']){
             for(let id in args['json']['randomized'][i]['ids']){
