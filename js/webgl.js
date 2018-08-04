@@ -1576,46 +1576,48 @@ function webgl_logicloop(){
             }
         }
 
-        if(core_keys[core_storage_data['move-↓']]['state']){
-            forwardback += 1;
-        }
-
-        if(core_keys[core_storage_data['move-↑']]['state']){
-            forwardback -= 1;
-        }
-
-        if(webgl_characters['_me']['camera-type'] === 'free'){
-            if(core_keys[32]['state']){
-                webgl_entity_move({
-                  'multiplier': 0,
-                  'y': webgl_characters['_me']['speed'],
-                });
+        if(webgl_characters['_me']['dy'] === 0){
+            if(core_keys[core_storage_data['move-↓']]['state']){
+                forwardback += 1;
             }
 
-            if(core_keys[67]['state']){
+            if(core_keys[core_storage_data['move-↑']]['state']){
+                forwardback -= 1;
+            }
+
+            if(webgl_characters['_me']['camera-type'] === 'free'){
+                if(core_keys[32]['state']){
+                    webgl_entity_move({
+                      'multiplier': 0,
+                      'y': webgl_characters['_me']['speed'],
+                    });
+                }
+
+                if(core_keys[67]['state']){
+                    webgl_entity_move({
+                      'multiplier': 0,
+                      'y': -webgl_characters['_me']['speed'],
+                    });
+                }
+            }
+
+            if(forwardback !== 0
+              && leftright !== 0){
+                forwardback *= webgl_diagonal;
+                leftright *= webgl_diagonal;
+            }
+
+            if(forwardback !== 0){
                 webgl_entity_move({
-                  'multiplier': 0,
-                  'y': -webgl_characters['_me']['speed'],
+                  'multiplier': forwardback,
                 });
             }
-        }
-
-        if(forwardback !== 0
-          && leftright !== 0){
-            forwardback *= webgl_diagonal;
-            leftright *= webgl_diagonal;
-        }
-
-        if(forwardback !== 0){
-            webgl_entity_move({
-              'multiplier': forwardback,
-            });
-        }
-        if(leftright !== 0){
-            webgl_entity_move({
-              'multiplier': leftright,
-              'strafe': true,
-            });
+            if(leftright !== 0){
+                webgl_entity_move({
+                  'multiplier': leftright,
+                  'strafe': true,
+                });
+            }
         }
     }
 
@@ -1688,11 +1690,13 @@ function webgl_logicloop(){
         });
     }
 
-    webgl_characters['_me']['dx'] = 0;
     if(webgl_characters['_me']['camera-type'] === 'free'){
         webgl_characters['_me']['dy'] = 0;
     }
-    webgl_characters['_me']['dz'] = 0;
+    if(webgl_characters['_me']['dy'] === 0){
+        webgl_characters['_me']['dx'] = 0;
+        webgl_characters['_me']['dz'] = 0;
+    }
 
     core_matrix_identity({
       'id': 'camera',
