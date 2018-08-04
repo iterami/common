@@ -1446,7 +1446,12 @@ function webgl_load_level_init(args){
           'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
           'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
           'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
-          'vertex-colors': args['json']['cuboids'][cuboid]['vertex-colors'],
+          'vertex-colors-back': args['json']['cuboids'][cuboid]['vertex-colors-back'],
+          'vertex-colors-bottom': args['json']['cuboids'][cuboid]['vertex-colors-bottom'],
+          'vertex-colors-front': args['json']['cuboids'][cuboid]['vertex-colors-front'],
+          'vertex-colors-left': args['json']['cuboids'][cuboid]['vertex-colors-left'],
+          'vertex-colors-right': args['json']['cuboids'][cuboid]['vertex-colors-right'],
+          'vertex-colors-top': args['json']['cuboids'][cuboid]['vertex-colors-top'],
           'width': args['json']['cuboids'][cuboid]['width'],
         });
     }
