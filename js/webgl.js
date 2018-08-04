@@ -1015,6 +1015,12 @@ function webgl_init(args){
       'spawn-translate-z': args['spawn-translate-z'],
     };
 
+    webgl_diagonal = Math.sin(core_degrees_to_radians({
+      'degrees': 45,
+    })) / Math.sin(core_degrees_to_radians({
+      'degrees': 90,
+    }))
+
     core_html({
       'parent': document.body,
       'properties': {
@@ -1527,14 +1533,14 @@ function webgl_load_level_init(args){
 function webgl_logicloop(){
     if(webgl_characters['_me']['camera-type'] !== false
       && webgl_characters['_me']['health-current'] > 0){
+        let forwardback = 0;
+        let leftright = 0;
+
         if(core_keys[core_storage_data['move-←']]['state']){
             if(webgl_characters['_me']['camera-zoom-max'] === 0
               || (core_mouse['down']
               && core_mouse['button'] === 2)){
-                webgl_entity_move({
-                  'multiplier': -1,
-                  'strafe': true,
-                });
+                leftright -= 1;
 
             }else{
                 webgl_camera_rotate({
@@ -1549,9 +1555,7 @@ function webgl_logicloop(){
             if(webgl_characters['_me']['camera-zoom-max'] === 0
               || (core_mouse['down']
               && core_mouse['button'] === 2)){
-                webgl_entity_move({
-                  'strafe': true,
-                });
+                leftright += 1;
 
             }else{
                 webgl_camera_rotate({
@@ -1563,13 +1567,11 @@ function webgl_logicloop(){
         }
 
         if(core_keys[core_storage_data['move-↓']]['state']){
-            webgl_entity_move();
+            forwardback += 1;
         }
 
         if(core_keys[core_storage_data['move-↑']]['state']){
-            webgl_entity_move({
-              'multiplier': -1,
-            });
+            forwardback -= 1;
         }
 
         if(webgl_characters['_me']['camera-type'] === 'free'){
@@ -1586,6 +1588,24 @@ function webgl_logicloop(){
                   'y': -webgl_characters['_me']['speed'],
                 });
             }
+        }
+
+        if(forwardback !== 0
+          && leftright !== 0){
+            forwardback *= webgl_diagonal;
+            leftright *= webgl_diagonal;
+        }
+
+        if(forwardback !== 0){
+            webgl_entity_move({
+              'multiplier': forwardback,
+            });
+        }
+        if(leftright !== 0){
+            webgl_entity_move({
+              'multiplier': leftright,
+              'strafe': true,
+            });
         }
     }
 
@@ -2162,6 +2182,7 @@ window.webgl_fonts = {
 };
 window.webgl_characters = {};
 window.webgl_character_homebase = [];
+window.webgl_diagonal = 0;
 window.webgl_properties = {};
 window.webgl_text = {};
 window.webgl_textures = {
