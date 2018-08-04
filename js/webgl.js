@@ -1798,6 +1798,11 @@ function webgl_normals(args){
             'degrees': args['rotate-x'],
           })),
         });
+        normal_y = core_round({
+          'number': Math.cos(core_degrees_to_radians({
+            'degrees': args['rotate-x'],
+          })),
+        });
 
     }else if(args['rotate-z'] !== 0){
         normal_x = -core_round({
@@ -1805,13 +1810,14 @@ function webgl_normals(args){
             'degrees': args['rotate-z'],
           })),
         });
-
-    }else{
         normal_y = core_round({
           'number': Math.cos(core_degrees_to_radians({
-            'degrees': args['rotate-y'],
+            'degrees': args['rotate-z'],
           })),
         });
+
+    }else{
+        normal_y = 1;
     }
 
     let normals = [];
