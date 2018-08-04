@@ -1360,6 +1360,11 @@ function webgl_load_level_init(args){
         }
     }
 
+    for(let character in webgl_characters){
+        if(character !== '_me'){
+            delete webgl_characters[character];
+        }
+    }
     core_entity_remove_all();
     core_storage_save();
 
