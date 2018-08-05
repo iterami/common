@@ -949,6 +949,21 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
+            // Parse spawn-entity.
+            if(strcmp(json_level_entities_element_property->name->string, "spawn-entity") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse spawn-interval-current.
+            if(strcmp(json_level_entities_element_property->name->string, "spawn-interval-current") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse spawn-interval-max.
+            if(strcmp(json_level_entities_element_property->name->string, "spawn-interval-max") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
             // Parse speed.
             if(strcmp(json_level_entities_element_property->name->string, "speed") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
