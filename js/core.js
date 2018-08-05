@@ -313,12 +313,14 @@ function core_degrees_to_radians(args){
 }
 
 // Required args: x0, x1, y0, y1
-// Optional args: decimals
+// Optional args: decimals, z0, z1
 function core_distance(args){
     args = core_args({
       'args': args,
       'defaults': {
         'decimals': core_storage_data['decimals'],
+        'z0': 0,
+        'z1': 0,
       },
     });
 
@@ -330,6 +332,9 @@ function core_distance(args){
           2
         ) + Math.pow(
           args['y0'] - args['y1'],
+          2
+        ) + Math.pow(
+          args['z0'] - args['z1'],
           2
         )
       ),

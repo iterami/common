@@ -806,6 +806,19 @@ function webgl_draw_entity(entity){
       webgl_properties['shader']['alpha'],
       core_entities[entity]['alpha']
     );
+    webgl_buffer.uniform1f(
+      webgl_properties['shader']['point-size'],
+      core_entities[entity]['draw-type'] === 'POINTS'
+        ? 500 / core_distance({
+            'x0': webgl_characters[webgl_character_id]['translate-x'],
+            'y0': webgl_characters[webgl_character_id]['translate-y'],
+            'z0': webgl_characters[webgl_character_id]['translate-z'],
+            'x1': core_entities[entity]['translate-x'],
+            'y1': core_entities[entity]['translate-y'],
+            'z1': core_entities[entity]['translate-z'],
+          })
+        : 1
+    );
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_cameraMatrix'],
       false,
@@ -2048,12 +2061,13 @@ function webgl_shader_update(){
             + 'uniform int directional;'
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
+            + 'uniform float pointSize;'
             + 'varying float float_fogDistance;'
             + 'varying vec2 vec_textureCoord;'
             + 'varying vec3 vec_lighting;'
             + 'varying vec4 vec_fragmentColor;'
             + 'void main(void){'
-            +     'gl_PointSize = 10.0;'
+            +     'gl_PointSize = pointSize;'
             +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
             +     'float_fogDistance = length(gl_Position.xyz);'
             +     'vec_fragmentColor = vec_vertexColor;'
@@ -2094,6 +2108,7 @@ function webgl_shader_update(){
       'fog-state': 'fog',
       'mat_cameraMatrix': 'mat_cameraMatrix',
       'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
+      'point-size': 'pointSize',
       'sampler': 'sampler',
     };
     for(let location in locations){
