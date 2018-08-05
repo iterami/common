@@ -1683,8 +1683,32 @@ function webgl_logicloop(){
             'multiplier': -1,
           });
 
+          let remove = false;
+
           core_entities[entity]['lifespan'] -= 1;
           if(core_entities[entity]['lifespan'] <= 0){
+              remove = true;
+          }else{
+              for(let character in webgl_characters){
+                  if(core_distance({
+                    'x0': webgl_characters[character]['translate-x'],
+                    'y0': webgl_characters[character]['translate-y'],
+                    'z0': webgl_characters[character]['translate-z'],
+                    'x1': core_entities[entity]['translate-x'],
+                    'y1': core_entities[entity]['translate-y'],
+                    'z1': core_entities[entity]['translate-z'],
+                  }) < webgl_characters[character]['collide-range']){
+                      webgl_character_damage({
+                        'character': character,
+                        'damage': 10,
+                      });
+                      remove = true;
+                      break;
+                  }
+              }
+          }
+
+          if(remove){
               core_entity_remove({
                 'entities': [
                   entity,
