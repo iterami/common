@@ -636,8 +636,8 @@ function webgl_draw(){
     webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
     core_group_modify({
       'groups': [
-        'foreground',
         'particles',
+        'foreground',
       ],
       'todo': function(entity){
           if(core_entities[entity]['alpha'] === 1){
@@ -647,8 +647,8 @@ function webgl_draw(){
     });
     core_group_modify({
       'groups': [
-        'foreground',
         'particles',
+        'foreground',
       ],
       'todo': function(entity){
           if(core_entities[entity]['alpha'] < 1){
@@ -1113,6 +1113,9 @@ function webgl_init(args){
         'scale-x': 1,
         'scale-y': 1,
         'scale-z': 1,
+        'spawn-entity': false,
+        'spawn-interval-current': 0,
+        'spawn-interval-max': 100,
         'speed': .2,
         'texture': '_default',
         'textureData': [
@@ -1778,6 +1781,23 @@ function webgl_logicloop_handle_entity(entity){
     core_entities[entity]['translate-z'] = core_round({
       'number': core_entities[entity]['translate-z'] + core_entities[entity]['dz'],
     });
+
+    if(core_entities[entity]['spawn-entity'] !== false){
+        core_entities[entity]['spawn-interval-current']++;
+
+        if(core_entities[entity]['spawn-interval-current'] >= core_entities[entity]['spawn-interval-max']){
+            core_entities[entity]['spawn-interval-current'] = 0;
+
+            webgl_particles_create({
+              'rotate-x': core_entities[entity]['rotate-x'],
+              'rotate-y': core_entities[entity]['rotate-y'],
+              'rotate-z': core_entities[entity]['rotate-z'],
+              'translate-x': core_entities[entity]['translate-x'],
+              'translate-y': core_entities[entity]['translate-y'],
+              'translate-z': core_entities[entity]['translate-z'],
+            });
+        }
+    }
 }
 
 // Optional args: rotate-x, rotate-y, rotate-z, vertices-length
