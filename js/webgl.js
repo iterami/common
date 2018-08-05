@@ -2181,6 +2181,10 @@ function webgl_texture_set(args){
 }
 
 function webgl_texture_set_todo(args){
+    if(!core_entities[args['entityid']]){
+        return;
+    }
+
     webgl_buffer.bindTexture(
       webgl_buffer.TEXTURE_2D,
       core_entities[args['entityid']]['texture-gl']
