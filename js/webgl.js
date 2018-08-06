@@ -1690,6 +1690,12 @@ function webgl_logicloop(){
               remove = true;
           }else{
               for(let character in webgl_characters){
+                  if(webgl_character_level({
+                      'character': character
+                    }) < 0){
+                      continue;
+                  }
+
                   if(core_distance({
                     'x0': webgl_characters[character]['translate-x'],
                     'y0': webgl_characters[character]['translate-y'],
