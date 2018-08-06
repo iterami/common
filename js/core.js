@@ -312,13 +312,16 @@ function core_degrees_to_radians(args){
     });
 }
 
-// Required args: x0, x1, y0, y1
-// Optional args: decimals, z0, z1
+// Optional args: decimals, x0, x1, y0, y1, z0, z1
 function core_distance(args){
     args = core_args({
       'args': args,
       'defaults': {
         'decimals': core_storage_data['decimals'],
+        'x0': 0,
+        'x1': 0,
+        'y0': 0,
+        'y1': 0,
         'z0': 0,
         'z1': 0,
       },
