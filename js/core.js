@@ -1035,16 +1035,8 @@ function core_html_format(args){
     });
 }
 
-// Required args: id
-// Optional args: properties
+// Required args: id, properties
 function core_html_modify(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'properties': {},
-      },
-    });
-
     let element = document.getElementById(args['id']);
     if(!element){
         return;
