@@ -2068,15 +2068,13 @@ function core_storage_update(){
     }
 }
 
-// Required args: group, id
-// Optional args: content, default, label
+// Required args: content, group, id, label
+// Optional args: default
 function core_tab_create(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'content': '',
         'default': false,
-        'label': '',
       },
     });
 
