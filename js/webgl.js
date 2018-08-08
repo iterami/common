@@ -189,8 +189,9 @@ function webgl_character_damage(args){
       },
     });
 
-    if(args['character'] === webgl_character_id
-      && webgl_character_level() < 0){
+    if(webgl_character_level({
+        'character': args['character'],
+      }) < 0){
         return;
     }
 
