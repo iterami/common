@@ -588,13 +588,19 @@ function core_events_todoloop(){
     }
 }
 
-// Required args: length, x0, x1, y0, y1
-// Optional args: decimals
+// Optional args: decimals, length, x0, x1, y0, y1, z0, z1
 function core_fixed_length_line(args){
     args = core_args({
       'args': args,
       'defaults': {
         'decimals': core_storage_data['decimals'],
+        'length': 1,
+        'x0': 0,
+        'x1': 0,
+        'y0': 0,
+        'y1': 0,
+        'z0': 0,
+        'z1': 0,
       },
     });
 
@@ -603,12 +609,16 @@ function core_fixed_length_line(args){
       'x1': args['x1'],
       'y0': args['y0'],
       'y1': args['y1'],
+      'z0': args['z0'],
+      'z1': args['z1'],
     });
 
     args['x1'] /= line_distance;
     args['x1'] *= args['length'];
     args['y1'] /= line_distance;
     args['y1'] *= args['length'];
+    args['z1'] /= line_distance;
+    args['z1'] *= args['length'];
 
     return {
       'x': core_round({
@@ -618,6 +628,10 @@ function core_fixed_length_line(args){
       'y': core_round({
         'decimals': args['decimals'],
         'number': args['y1'],
+      }),
+      'z': core_round({
+        'decimals': args['decimals'],
+        'number': args['z1'],
       }),
     };
 }
