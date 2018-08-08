@@ -2049,7 +2049,7 @@ function webgl_resize(){
     });
 }
 
-// Required args: id, source, type
+// Required args: source, type
 function webgl_shader_create(args){
     let shader = webgl_buffer.createShader(args['type']);
     webgl_buffer.shaderSource(
@@ -2069,7 +2069,6 @@ function webgl_shader_update(){
     webgl_properties['shader']['program'] = webgl_program_create({
       'shaders': [
         webgl_shader_create({
-          'id': 'fragment',
           'source':
               'uniform lowp float alpha;'
             + 'uniform lowp float float_fog;'
@@ -2098,7 +2097,6 @@ function webgl_shader_update(){
           'type': webgl_buffer.FRAGMENT_SHADER,
         }),
         webgl_shader_create({
-          'id': 'vertex',
           'source':
               'attribute vec2 vec_texturePosition;'
             + 'attribute vec3 vec_vertexNormal;'
