@@ -322,8 +322,18 @@ function webgl_character_spawn(args){
     webgl_characters[args['character']]['jump-allow'] = false;
 }
 
-// Required args: alpha, blue, green, red
+// Optional args: alpha, blue, green, red
 function webgl_clearcolor_set(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'alpha': 1,
+        'blue': 0,
+        'green': 0,
+        'red': 0,
+      },
+    });
+
     webgl_properties['clearcolor-alpha'] = args['alpha'];
     webgl_properties['clearcolor-blue'] = args['blue'];
     webgl_properties['clearcolor-green'] = args['green'];
