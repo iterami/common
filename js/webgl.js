@@ -1090,8 +1090,14 @@ function webgl_init(args){
 
     webgl_shader_update();
 
-    core_groups['particles'] = {};
-    core_groups['skybox'] = {};
+    core_group_create({
+      ids: [
+        'foreground',
+        'particles',
+        'skybox',
+        'webgl',
+      ],
+    });
     core_entity_set({
       'default': true,
       'groups': [

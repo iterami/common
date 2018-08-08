@@ -485,7 +485,11 @@ function core_entity_set(args){
         core_entity_types_default.push(args['type']);
     }
 
-    core_groups[args['type']] = {};
+    core_group_create({
+      'ids': [
+        args['type'],
+      ],
+    });
 }
 
 function core_escape(){
@@ -621,11 +625,23 @@ function core_fixed_length_line(args){
 // Required args: entities, group
 function core_group_add(args){
     if(!(args['group'] in core_groups)){
-        core_groups[args['group']] = {};
+        core_group_create({
+          'id': args['group'],
+        });
     }
 
     for(let entity in args['entities']){
         core_groups[args['group']][args['entities'][entity]] = true;
+
+        core_groups['_length'][args['group']]++;
+    }
+}
+
+// Required args: ids
+function core_group_create(args){
+    for(let id in args['ids']){
+        core_groups[args['ids'][id]] = {};
+        core_groups['_length'][args['ids'][id]] = 0;
     }
 }
 
@@ -675,19 +691,21 @@ function core_group_remove(args){
       },
     });
 
-    if(core_groups[args['group']] !== void 0){
-        for(let entity in args['entities']){
-            if(core_entity_info[args['group']]
-              && core_groups[args['group']][args['entities'][entity]] !== void 0){
-                core_entity_info[args['group']]['count']--;
-            }
-            delete core_groups[args['group']][args['entities'][entity]];
-        }
+    if(core_groups[args['group']] === void 0){
+        return;
+
+    }
+
+    for(let entity in args['entities']){
+        delete core_groups[args['group']][args['entities'][entity]];
+
+        core_groups['_length'][args['group']]--;
     }
 
     if(args['delete-empty']
-      && core_groups[args['group']].length === 0){
+      && core_groups['_length'][args['group']] === 0){
         delete core_groups[args['group']];
+        delete core_groups['_length'][args['group']];
     }
 }
 
@@ -2343,7 +2361,9 @@ window.core_entity_info = {};
 window.core_entity_types_default = [];
 window.core_events = {};
 window.core_gamepads = {};
-window.core_groups = {};
+window.core_groups = {
+  '_length': {},
+};
 window.core_images = {};
 window.core_intervals = {};
 window.core_key_rebinds = {};
