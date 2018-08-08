@@ -1999,13 +1999,13 @@ function webgl_pick_color(args){
     return pixelarray;
 }
 
-// Required args: id, shaderlist
+// Required args: shaders
 function webgl_program_create(args){
     let program = webgl_buffer.createProgram();
-    for(let shader in args['shaderlist']){
+    for(let shader in args['shaders']){
         webgl_buffer.attachShader(
           program,
-          args['shaderlist'][shader]
+          args['shaders'][shader]
         );
     }
     webgl_buffer.linkProgram(program);
@@ -2067,8 +2067,7 @@ function webgl_shader_update(){
     }
 
     webgl_properties['shader']['program'] = webgl_program_create({
-      'id': 'shaders',
-      'shaderlist': [
+      'shaders': [
         webgl_shader_create({
           'id': 'fragment',
           'source':
