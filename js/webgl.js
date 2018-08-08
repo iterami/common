@@ -347,7 +347,7 @@ function webgl_clearcolor_set(args){
 }
 
 // Required args: target
-// Optional args: character, entity
+// Optional args: character, character-id, entity
 function webgl_collision(args){
     args = core_args({
       'args': args,
