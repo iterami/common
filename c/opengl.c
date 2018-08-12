@@ -628,6 +628,11 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
+        // Parse directional-state.
+        if(strcmp(json_object->name->string, "directional-state") == 0){
+            json_object = json_object->next;
+        }
+
         // Parse directional-vector.
         if(strcmp(json_object->name->string, "directional-vector") == 0){
             json_object = json_object->next;
