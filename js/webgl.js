@@ -965,9 +965,9 @@ function webgl_entity_todo(entity){
 
 // Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-alpha,
 //   clearcolor-blue, clearcolor-green, clearcolor-red, directional-blue, directional-green,
-//   directional-red, directional-vector, fog-density, fog-state, gravity-acceleration, gravity-max,
-//   multiplier-jump, multiplier-speed, spawn-rotate-x, spawn-rotate-y, spawn-rotate-z,
-//   spawn-translate-x, spawn-translate-y, spawn-translate-z
+//   directional-red, directional-state, directional-vector, fog-density, fog-state,
+//   gravity-acceleration, gravity-max, multiplier-jump, multiplier-speed, spawn-rotate-x,
+//   spawn-rotate-y, spawn-rotate-z, spawn-translate-x, spawn-translate-y, spawn-translate-z
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -982,7 +982,8 @@ function webgl_init(args){
         'directional-blue': 1,
         'directional-green': 1,
         'directional-red': 1,
-        'directional-vector': false,
+        'directional-state': false,
+        'directional-vector': "0, 1, 0",
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
@@ -1023,6 +1024,7 @@ function webgl_init(args){
       'directional-blue': args['directional-blue'],
       'directional-green': args['directional-green'],
       'directional-red': args['directional-red'],
+      'directional-state': args['directional-state'],
       'directional-vector': args['directional-vector'],
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
@@ -1459,6 +1461,7 @@ function webgl_load_level_init(args){
       'directional-blue': args['json']['directional-blue'],
       'directional-green': args['json']['directional-green'],
       'directional-red': args['json']['directional-red'],
+      'directional-state': args['json']['directional-state'],
       'directional-vector': args['json']['directional-vector'],
       'fog-density': args['json']['fog-density'],
       'fog-state': args['json']['fog-state'],
@@ -2164,7 +2167,7 @@ function webgl_shader_update(){
 
     webgl_buffer.uniform1i(
       webgl_properties['shader']['directional'],
-      webgl_properties['directional-vector'] !== false
+      webgl_properties['directional-state']
         ? 1
         : 0
     );
