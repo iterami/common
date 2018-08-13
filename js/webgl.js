@@ -197,6 +197,10 @@ function webgl_character_damage(args){
 
     webgl_characters[args['character']]['health-current'] -= args['damage'];
 
+    if(webgl_characters[args['character']]['health-current'] > webgl_characters[args['character']]['health-max']){
+        webgl_characters[args['character']]['health-current'] = webgl_characters[args['character']]['health-max'];
+    }
+
     if(webgl_characters[args['character']]['health-current'] > 0
       && !args['kill']){
         return;
