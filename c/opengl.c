@@ -487,7 +487,6 @@ void opengl_load_level(const gchar *filename){
         struct json_value_s* value;
 
         // Default level values.
-        float ambient_alpha = 1;
         float ambient_blue = 1;
         float ambient_green = 1;
         float ambient_red = 1;
@@ -506,15 +505,6 @@ void opengl_load_level(const gchar *filename){
         float gravity_max = -1;
         float multiplier_jump = 1;
         float multiplier_speed = 1;
-
-        // Parse ambient-alpha.
-        if(strcmp(json_object->name->string, "ambient-alpha") == 0){
-            value = json_object->value;
-            number = (struct json_number_s*)value->payload;
-            ambient_alpha = atof(number->number);
-
-            json_object = json_object->next;
-        }
 
         // Parse ambient-blue.
         if(strcmp(json_object->name->string, "ambient-blue") == 0){
