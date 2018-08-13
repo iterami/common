@@ -92,6 +92,10 @@ function core_audio_node_create(args){
       },
     });
 
+    if(core_audio_context === 0){
+        core_audio_context = new window.AudioContext();
+    }
+
     let source = core_audio_context['create' + args['properties']['label']](
       args['properties']['arg0'],
       args['properties']['arg1'],
@@ -1153,8 +1157,6 @@ function core_init(){
     window.ontouchend = core_handle_mouseup;
     window.ontouchmove = core_handle_mousemove;
     window.ontouchstart = core_handle_mousedown;
-
-    core_audio_context = new window.AudioContext();
 
     // Global storage.
     core_storage_add({
