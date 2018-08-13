@@ -461,7 +461,9 @@ function webgl_collision(args){
 
             webgl_characters[args['character-id']]['translate-' + collision] = target['translate-' + collision] + (collider['collide-range'] * collision_sign);
 
-            if(webgl_characters[args['character-id']]['camera-type'] === 'gravity'){
+            if(webgl_characters[args['character-id']]['camera-type'] === 'gravity'
+              && collision === 'y'
+              && collision_sign === 1){
                 webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']]['dy'] === 0;
             }
 
