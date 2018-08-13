@@ -874,7 +874,7 @@ function webgl_entity_move(args){
         if(webgl_character_level({
             'character': args['character'],
           }) > -1){
-            args['multiplier'] *= args['multiplier-speed'];
+            args['multiplier'] *= webgl_properties['multiplier-speed'];
         }
 
         if(args['y']){
