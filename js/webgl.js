@@ -1084,8 +1084,10 @@ function webgl_init(args){
       'type': 'canvas',
     });
 
-    core_matrices['camera'] = core_matrix_create();
-    core_matrices['perspective'] = core_matrix_create();
+    core_matrices = {
+      'camera': core_matrix_create(),
+      'perspective': core_matrix_create(),
+    };
 
     webgl_buffer = document.getElementById('buffer').getContext(
       'webgl',
