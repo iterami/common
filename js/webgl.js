@@ -326,19 +326,17 @@ function webgl_character_spawn(args){
     webgl_characters[args['character']]['jump-allow'] = false;
 }
 
-// Optional args: alpha, blue, green, red
+// Optional args: blue, green, red
 function webgl_clearcolor_set(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'alpha': 1,
         'blue': 0,
         'green': 0,
         'red': 0,
       },
     });
 
-    webgl_properties['clearcolor-alpha'] = args['alpha'];
     webgl_properties['clearcolor-blue'] = args['blue'];
     webgl_properties['clearcolor-green'] = args['green'];
     webgl_properties['clearcolor-red'] = args['red'];
@@ -346,7 +344,7 @@ function webgl_clearcolor_set(args){
       webgl_properties['clearcolor-red'],
       webgl_properties['clearcolor-green'],
       webgl_properties['clearcolor-blue'],
-      webgl_properties['clearcolor-alpha']
+      1
     );
 }
 
@@ -991,7 +989,7 @@ function webgl_entity_todo(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-alpha,
+// Optional args: ambient-blue, ambient-green, ambient-red,
 //   clearcolor-blue, clearcolor-green, clearcolor-red, directional-blue, directional-green,
 //   directional-red, directional-state, directional-vector, fog-density, fog-state,
 //   gravity-acceleration, gravity-max, multiplier-jump, multiplier-speed, spawn-rotate-x,
@@ -1003,7 +1001,6 @@ function webgl_init(args){
         'ambient-blue': 1,
         'ambient-green': 1,
         'ambient-red': 1,
-        'clearcolor-alpha': 1,
         'clearcolor-blue': 0,
         'clearcolor-green': 0,
         'clearcolor-red': 0,
@@ -1045,7 +1042,6 @@ function webgl_init(args){
         'width': 0,
         'width-half': 0,
       },
-      'clearcolor-alpha': args['clearcolor-alpha'],
       'clearcolor-blue': args['clearcolor-blue'],
       'clearcolor-green': args['clearcolor-green'],
       'clearcolor-red': args['clearcolor-red'],
@@ -1115,7 +1111,6 @@ function webgl_init(args){
     webgl_resize();
 
     webgl_clearcolor_set({
-      'alpha': webgl_properties['clearcolor-alpha'],
       'blue': webgl_properties['clearcolor-blue'],
       'green': webgl_properties['clearcolor-green'],
       'red': webgl_properties['clearcolor-red'],
@@ -1482,7 +1477,6 @@ function webgl_load_level_init(args){
       'ambient-blue': args['json']['ambient-blue'],
       'ambient-green': args['json']['ambient-green'],
       'ambient-red': args['json']['ambient-red'],
-      'clearcolor-alpha': args['json']['clearcolor-alpha'],
       'clearcolor-blue': args['json']['clearcolor-blue'],
       'clearcolor-green': args['json']['clearcolor-green'],
       'clearcolor-red': args['json']['clearcolor-red'],
@@ -2115,7 +2109,7 @@ function webgl_shader_update(){
             +             webgl_properties['clearcolor-red'] + ','
             +             webgl_properties['clearcolor-green'] + ','
             +             webgl_properties['clearcolor-blue'] + ','
-            +             webgl_properties['clearcolor-alpha']
+            +             '1'
             +           '),'
             +           'vec_fragmentColor,'
             +           'clamp(exp(' + webgl_properties['fog-density'] + ' * float_fogDistance * -float_fogDistance), 0.0, 1.0)'

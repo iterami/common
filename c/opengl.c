@@ -493,7 +493,6 @@ void opengl_load_level(const gchar *filename){
         float ambient_red = 1;
         float camera_speed = .1;
         gchar *camera_type = "free";
-        float clearcolor_alpha = 1;
         float clearcolor_blue = 0;
         float clearcolor_green = 0;
         float clearcolor_red = 0;
@@ -546,15 +545,6 @@ void opengl_load_level(const gchar *filename){
 
         // Parse characters.
         if(strcmp(json_object->name->string, "characters") == 0){
-            json_object = json_object->next;
-        }
-
-        // Parse clearcolor-alpha.
-        if(strcmp(json_object->name->string, "clearcolor-alpha") == 0){
-            value = json_object->value;
-            number = (struct json_number_s*)value->payload;
-            clearcolor_alpha = atof(number->number);
-
             json_object = json_object->next;
         }
 
