@@ -753,6 +753,9 @@ function core_handle_beforeunload(event){
       'object': core_events,
       'todo': true,
     });
+
+    core_storage_save();
+
     if(core_type({
       'type': 'string',
       'var': result,
@@ -1179,9 +1182,6 @@ function core_init(){
     // Global event binds.
     core_keys_rebind();
     core_events_bind({
-      'beforeunload': {
-        'todo': core_storage_save,
-      },
       'elements': {
         'settings-reset': {
           'onclick': core_storage_reset,
