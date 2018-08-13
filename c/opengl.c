@@ -824,8 +824,8 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse collide-event.
-            if(strcmp(json_level_entities_element_property->name->string, "collide-event") == 0){
+            // Parse collide-damage.
+            if(strcmp(json_level_entities_element_property->name->string, "collide-damage") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 

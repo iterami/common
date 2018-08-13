@@ -476,10 +476,10 @@ function webgl_collision(args){
 
                 return false;
 
-            }else if(target['collide-event'] === 'kill'){
+            }else if(target['collide-damage'] !== 0){
                 webgl_character_damage({
                   'character': args['character-id'],
-                  'kill': true,
+                  'damage': target['collide-damage'],
                 });
             }
 
@@ -1146,7 +1146,7 @@ function webgl_init(args){
         'attach-to': false,
         'attach-type': 'entity',
         'billboard': false,
-        'collide-event': false,
+        'collide-damage': 0,
         'collide-range': 2.5,
         'collides': false,
         'collision': false,
@@ -1746,7 +1746,7 @@ function webgl_logicloop(){
                   }) < webgl_characters[character]['collide-range']){
                       webgl_character_damage({
                         'character': character,
-                        'damage': 10,
+                        'damage': core_entities[entity]['collide-damage'],
                       });
                       remove = true;
                       break;
