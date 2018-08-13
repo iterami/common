@@ -866,31 +866,53 @@ function webgl_entity_move(args){
         'entity': false,
         'multiplier': 1,
         'strafe': false,
-        'y': 0,
+        'y': false,
       },
     });
 
     if(args['entity'] === false){
-        let movement = core_move_3d({
-          'angle': webgl_characters[args['character']]['rotate-y'],
-          'speed': webgl_characters[args['character']]['speed'] * webgl_properties['multiplier-speed'] * args['multiplier'],
-          'strafe': args['strafe'],
-        });
-        webgl_characters[args['character']]['dx'] += movement['x'];
-        webgl_characters[args['character']]['dy'] += args['y'] * webgl_properties['multiplier-speed'];
-        webgl_characters[args['character']]['dz'] += movement['z'];
+        if(webgl_character_level({
+            'character': args['character'],
+          }) > -1){
+            args['multiplier'] *= args['multiplier-speed'];
+        }
+
+        if(args['y']){
+            let dy = webgl_characters[args['character']]['speed'] * args['multiplier'];
+            dy *= args['strafe']
+              ? -1
+              : 1;
+            webgl_characters[args['character']]['dy'] += dy;
+
+        }else{
+            let movement = core_move_3d({
+              'angle': webgl_characters[args['character']]['rotate-y'],
+              'speed': webgl_characters[args['character']]['speed'] * args['multiplier'],
+              'strafe': args['strafe'],
+            });
+            webgl_characters[args['character']]['dx'] += movement['x'];
+            webgl_characters[args['character']]['dz'] += movement['z'];
+        }
 
         return;
     }
 
-    let movement = core_move_3d({
-      'angle': core_entities[args['entity']]['rotate-y'],
-      'speed': core_entities[args['entity']]['speed'] * webgl_properties['multiplier-speed'] * args['multiplier'],
-      'strafe': args['strafe'],
-    });
-    core_entities[args['entity']]['dx'] = movement['x'];
-    core_entities[args['entity']]['dy'] = args['y'] * webgl_properties['multiplier-speed'];
-    core_entities[args['entity']]['dz'] = movement['z'];
+    if(args['y']){
+        let dy = core_entities[args['entity']]['speed'] * args['multiplier'];
+        dy *= args['strafe']
+          ? -1
+          : 1;
+        core_entities[args['entity']]['dy'] = dy;
+
+    }else{
+        let movement = core_move_3d({
+          'angle': core_entities[args['entity']]['rotate-y'],
+          'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
+          'strafe': args['strafe'],
+        });
+        core_entities[args['entity']]['dx'] = movement['x'];
+        core_entities[args['entity']]['dz'] = movement['z'];
+    }
 }
 
 // Optional args: entity, x, y, z
@@ -1624,15 +1646,14 @@ function webgl_logicloop(){
             if(webgl_characters[webgl_character_id]['camera-type'] === 'free'){
                 if(core_keys[32]['state']){
                     webgl_entity_move({
-                      'multiplier': 0,
-                      'y': webgl_characters[webgl_character_id]['speed'],
+                      'y': true,
                     });
                 }
 
                 if(core_keys[67]['state']){
                     webgl_entity_move({
-                      'multiplier': 0,
-                      'y': -webgl_characters[webgl_character_id]['speed'],
+                      'strafe': true,
+                      'y': true,
                     });
                 }
             }
