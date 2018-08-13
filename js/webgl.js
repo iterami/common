@@ -1084,10 +1084,8 @@ function webgl_init(args){
       'type': 'canvas',
     });
 
-    core_matrices = {
-      'camera': core_matrix_create(),
-      'perspective': core_matrix_create(),
-    };
+    core_matrices['camera'] = core_matrix_create();
+    core_matrices['perspective'] = core_matrix_create();
 
     webgl_buffer = document.getElementById('buffer').getContext(
       'webgl',
@@ -1412,11 +1410,10 @@ function webgl_load_level_init(args){
         args['json'] = {};
     }
 
-    if(args['character'] === 1){
-        if(args['json']['characters'] === false
-          || !args['json']['characters']){
-            return;
-        }
+    if(args['character'] === 1
+      && (args['json']['characters'] === false
+        || !args['json']['characters'])){
+        return;
     }
 
     for(let character in webgl_characters){
