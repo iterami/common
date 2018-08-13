@@ -495,7 +495,6 @@ void opengl_load_level(const gchar *filename){
         float clearcolor_blue = 0;
         float clearcolor_green = 0;
         float clearcolor_red = 0;
-        float directional_alpha = 1;
         float directional_blue = 1;
         float directional_green = 1;
         float directional_red = 1;
@@ -571,15 +570,6 @@ void opengl_load_level(const gchar *filename){
           clearcolor_blue,
           clearcolor_alpha
         );
-
-        // Parse directional-alpha.
-        if(strcmp(json_object->name->string, "directional-alpha") == 0){
-            value = json_object->value;
-            number = (struct json_number_s*)value->payload;
-            directional_alpha = atof(number->number);
-
-            json_object = json_object->next;
-        }
 
         // Parse directional-blue.
         if(strcmp(json_object->name->string, "directional-blue") == 0){
