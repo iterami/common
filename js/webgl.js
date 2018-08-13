@@ -1416,6 +1416,7 @@ function webgl_load_level_init(args){
 
     if(args['character'] === 1
       && (args['json']['characters'] === false
+        || !args['json']['characters']
         || args['json']['characters'][0]['id'] !== '_me')){
         return;
     }
@@ -1428,35 +1429,6 @@ function webgl_load_level_init(args){
     core_entity_remove_all();
     core_storage_save();
 
-    if(args['json']['characters']
-      && args['json']['characters'] !== false){
-        for(let character in args['json']['characters']){
-            webgl_init_character({
-              'camera-type': args['json']['characters'][character]['camera-type'],
-              'camera-zoom-current': args['json']['characters'][character]['camera-zoom-current'],
-              'camera-zoom-max': args['json']['characters'][character]['camera-zoom-max'],
-              'collide-range': args['json']['characters'][character]['collide-range'],
-              'collides': args['json']['characters'][character]['collides'],
-              'dx': args['json']['characters'][character]['dx'],
-              'dy': args['json']['characters'][character]['dy'],
-              'dz': args['json']['characters'][character]['dz'],
-              'entities': args['json']['characters'][character]['entities'],
-              'experience': args['json']['characters'][character]['experience'],
-              'health-current': args['json']['characters'][character]['health-current'],
-              'health-max': args['json']['characters'][character]['health-max'],
-              'id': args['json']['characters'][character]['id'],
-              'inventory': args['json']['characters'][character]['inventory'],
-              'jump-height': args['json']['characters'][character]['jump-height'],
-              'level': args['json']['characters'][character]['level'],
-              'speed': args['json']['characters'][character]['speed'],
-            });
-
-            if(args['json']['characters'][character]['id'] === webgl_character_id){
-                webgl_character_homebase = args['json']['entities'];
-            }
-        }
-    }
-
     if(args['character'] === -1){
         webgl_init_character({
           'camera-type': 'free',
@@ -1467,12 +1439,41 @@ function webgl_load_level_init(args){
         });
         webgl_character_homebase = [];
 
-    }else if(!webgl_characters[webgl_character_id]
-      && (webgl_character_level() < 0
-        || args['character'] === 1)){
-        webgl_init_character({
-          'level': args['character'],
-        });
+    }else if(webgl_character_level() < 0
+      || args['character'] === 1){
+        if(args['json']['characters']
+          && args['json']['characters'] !== false){
+            for(let character in args['json']['characters']){
+                webgl_init_character({
+                  'camera-type': args['json']['characters'][character]['camera-type'],
+                  'camera-zoom-current': args['json']['characters'][character]['camera-zoom-current'],
+                  'camera-zoom-max': args['json']['characters'][character]['camera-zoom-max'],
+                  'collide-range': args['json']['characters'][character]['collide-range'],
+                  'collides': args['json']['characters'][character]['collides'],
+                  'dx': args['json']['characters'][character]['dx'],
+                  'dy': args['json']['characters'][character]['dy'],
+                  'dz': args['json']['characters'][character]['dz'],
+                  'entities': args['json']['characters'][character]['entities'],
+                  'experience': args['json']['characters'][character]['experience'],
+                  'health-current': args['json']['characters'][character]['health-current'],
+                  'health-max': args['json']['characters'][character]['health-max'],
+                  'id': args['json']['characters'][character]['id'],
+                  'inventory': args['json']['characters'][character]['inventory'],
+                  'jump-height': args['json']['characters'][character]['jump-height'],
+                  'level': args['json']['characters'][character]['level'],
+                  'speed': args['json']['characters'][character]['speed'],
+                });
+
+                if(args['json']['characters'][character]['id'] === webgl_character_id){
+                    webgl_character_homebase = args['json']['entities'];
+                }
+            }
+
+        }else if(!webgl_characters[webgl_character_id]){
+            webgl_init_character({
+              'level': args['character'],
+            });
+        }
     }
 
     webgl_init({
