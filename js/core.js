@@ -757,6 +757,13 @@ function core_handle_beforeunload(event){
     }
 }
 
+function core_handle_blur(event){
+    for(let key in core_keys){
+        core_keys[key]['state'] = false;
+    }
+    core_mouse['down'] = false;
+}
+
 function core_handle_contextmenu(event){
     let result = core_handle_event({
       'event': event,
@@ -1134,6 +1141,7 @@ function core_init(){
     document.onpointerlockchange = core_handle_pointerlockchange;
     document.onwebkitpointerlockchange = core_handle_pointerlockchange;
     window.onbeforeunload = core_handle_beforeunload;
+    window.onblur = core_handle_blur;
     window.oncontextmenu = core_handle_contextmenu;
     window.ongamepadconnected = core_handle_gamepadconnected;
     window.ongamepaddisconnected = core_handle_gamepaddisconnected;
