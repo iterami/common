@@ -243,16 +243,15 @@ function webgl_character_jump(args){
       },
     });
 
-    if(args['character'] !== webgl_character_id
+    if(!webgl_characters[args['character']]['jump-allow']
+      || args['character'] !== webgl_character_id
       || !core_keys[32]['state']
       || webgl_characters[webgl_character_id]['health-current'] <= 0){
         return;
     }
 
-    if(webgl_characters[args['character']]['jump-allow']){
-        webgl_characters[args['character']]['jump-allow'] = false;
-        webgl_characters[args['character']]['dy'] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
-    }
+    webgl_characters[args['character']]['jump-allow'] = false;
+    webgl_characters[args['character']]['dy'] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
 }
 
 // Optional args: character
