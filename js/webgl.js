@@ -1605,7 +1605,6 @@ function webgl_load_level_init(args){
 function webgl_logicloop(){
     if(webgl_characters[webgl_character_id]['camera-type'] !== false
       && webgl_characters[webgl_character_id]['health-current'] > 0){
-        let forwardback = 0;
         let leftright = 0;
 
         if(core_keys[core_storage_data['move-←']]['state']){
@@ -1639,6 +1638,8 @@ function webgl_logicloop(){
         }
 
         if(webgl_characters[webgl_character_id]['jump-allow']){
+            let forwardback = 0;
+
             if(core_keys[core_storage_data['move-↓']]['state']){
                 forwardback += 1;
             }
