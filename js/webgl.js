@@ -1639,7 +1639,7 @@ function webgl_logicloop(){
             }
         }
 
-        if(webgl_characters[webgl_character_id]['dy'] === 0){
+        if(webgl_characters[webgl_character_id]['jump-allow']){
             if(core_keys[core_storage_data['move-↓']]['state']){
                 forwardback += 1;
             }
