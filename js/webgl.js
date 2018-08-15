@@ -1413,7 +1413,7 @@ function webgl_load_level_init(args){
     if(args['character'] === 1
       && (args['json']['characters'] === false
         || !args['json']['characters']
-        || args['json']['characters'][0]['id'] !== '_me')){
+        || args['json']['characters'][0]['id'] !== webgl_character_id)){
         return;
     }
 
@@ -1439,7 +1439,7 @@ function webgl_load_level_init(args){
     if(args['json']['characters']
       && args['json']['characters'] !== false){
         for(let character in args['json']['characters']){
-            if(args['json']['characters'][character]['id'] === '_me'
+            if(args['json']['characters'][character]['id'] === webgl_character_id
               && args['character'] !== 1
               && webgl_character_level() > -1){
                 continue;
