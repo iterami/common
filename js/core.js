@@ -711,7 +711,6 @@ function core_group_remove(args){
 
     if(core_groups[args['group']] === void 0){
         return;
-
     }
 
     for(let entity in args['entities']){
