@@ -190,8 +190,8 @@ function webgl_character_damage(args){
     });
 
     if(webgl_character_level({
-        'character': args['character'],
-      }) < 0){
+      'character': args['character'],
+    }) < 0){
         return;
     }
 
@@ -458,7 +458,9 @@ function webgl_collision(args){
 
             webgl_characters[args['character-id']]['translate-' + collision] = target['translate-' + collision] + (collider['collide-range'] * collision_sign);
 
-            if(webgl_characters[args['character-id']]['camera-type'] === 'gravity'
+            if(webgl_character_level({
+                'character': args['character-id']
+              }) > -1
               && collision === 'y'
               && collision_sign === 1){
                 webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']]['dy'] === 0;
@@ -875,8 +877,8 @@ function webgl_entity_move(args){
 
     if(args['entity'] === false){
         if(webgl_character_level({
-            'character': args['character'],
-          }) > -1){
+          'character': args['character'],
+        }) > -1){
             args['multiplier'] *= webgl_properties['multiplier-speed'];
         }
 
@@ -1202,13 +1204,12 @@ function webgl_init(args){
     });
 }
 
-// Optional args: camera-type, camera-zoom-current, camera-zoom-max, collide-range, collides,
-//   dx, dy, dz, entities, experience, health-current, health-max, id, inventory, jump-height, level, speed
+// Optional args: camera-zoom-current, camera-zoom-max, collide-range, collides, dx, dy, dz,
+//   entities, experience, health-current, health-max, id, inventory, jump-height, level, speed
 function webgl_init_character(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'camera-type': 'gravity',
         'camera-zoom-current': 20,
         'camera-zoom-max': 30,
         'collide-range': 2.5,
@@ -1235,7 +1236,6 @@ function webgl_init_character(args){
       'camera-rotate-x': 0,
       'camera-rotate-y': 0,
       'camera-rotate-z': 0,
-      'camera-type': args['camera-type'],
       'camera-zoom-current': args['camera-zoom-current'],
       'camera-zoom-max': args['camera-zoom-max'],
       'collide-range': args['collide-range'],
@@ -1427,7 +1427,6 @@ function webgl_load_level_init(args){
 
     if(args['character'] === -1){
         webgl_init_character({
-          'camera-type': 'free',
           'camera-zoom-current': 0,
           'camera-zoom-max': 0,
           'entities': [],
@@ -1447,7 +1446,6 @@ function webgl_load_level_init(args){
             }
 
             webgl_init_character({
-              'camera-type': args['json']['characters'][character]['camera-type'],
               'camera-zoom-current': args['json']['characters'][character]['camera-zoom-current'],
               'camera-zoom-max': args['json']['characters'][character]['camera-zoom-max'],
               'collide-range': args['json']['characters'][character]['collide-range'],
@@ -1648,7 +1646,7 @@ function webgl_logicloop(){
                 forwardback -= 1;
             }
 
-            if(webgl_characters[webgl_character_id]['camera-type'] === 'free'){
+            if(webgl_character_level() === -1){
                 if(core_keys[32]['state']){
                     webgl_entity_move({
                       'y': true,
@@ -1686,7 +1684,9 @@ function webgl_logicloop(){
     logic();
 
     for(let character in webgl_characters){
-        if(webgl_characters[character]['camera-type'] === 'gravity'){
+        if(webgl_character_level({
+          'character': character
+        }) > -1){
             webgl_characters[character]['dy'] = Math.max(
               webgl_characters[character]['dy'] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
@@ -1782,7 +1782,7 @@ function webgl_logicloop(){
         });
     }
 
-    if(webgl_characters[webgl_character_id]['camera-type'] === 'free'){
+    if(webgl_character_level() === -1){
         webgl_characters[webgl_character_id]['dy'] = 0;
     }
     if(webgl_characters[webgl_character_id]['dy'] === 0){
