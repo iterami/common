@@ -404,10 +404,15 @@ function core_entity_handle_defaults(args){
     }
 
     if(core_groups[args['type']][args['id']] === void 0){
+        core_group_add({
+          'entities': [
+            args['id'],
+          ],
+          'group': args['type'],
+        });
+
         core_entity_info[args['type']]['count']++;
     }
-
-    core_groups[args['type']][args['id']] = true;
 
     for(let group in core_entity_info[args['type']]['groups']){
         core_group_add({
