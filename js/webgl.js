@@ -1603,7 +1603,7 @@ function webgl_load_level_init(args){
 }
 
 function webgl_logicloop(){
-    if(webgl_characters[webgl_character_id]['health-current'] > 0){
+    if(webgl_character_level() > -2){
         let leftright = 0;
 
         if(core_keys[core_storage_data['move-←']]['state']){
@@ -1636,7 +1636,8 @@ function webgl_logicloop(){
             }
         }
 
-        if(webgl_characters[webgl_character_id]['jump-allow']){
+        if(webgl_characters[webgl_character_id]['jump-allow']
+          || webgl_character_level() === -1){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
