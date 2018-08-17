@@ -1684,7 +1684,7 @@ function webgl_logicloop(){
         }
     }
 
-    logic();
+    repo_logic();
 
     for(let character in webgl_characters){
         if(webgl_character_level({
