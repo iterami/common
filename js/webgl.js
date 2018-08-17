@@ -510,8 +510,8 @@ function webgl_collision(args){
 }
 
 // Optional args: collision, exclude, height, length, prefix, translate-x, translate-y, translate-z,
-//   vertex-colors-back, vertex-colors-bottom, vertex-colors-front, vertex-colors-left, vertex-colors-right,
-//   vertex-colors-top, width
+//   vertex-colors-all, vertex-colors-back, vertex-colors-bottom, vertex-colors-front, vertex-colors-left,
+//   vertex-colors-right, vertex-colors-top, width
 function webgl_cuboid(args){
     args = core_args({
       'args': args,
@@ -524,6 +524,7 @@ function webgl_cuboid(args){
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
+        'vertex-colors-all': false,
         'vertex-colors-back': webgl_vertexcolorarray(),
         'vertex-colors-bottom': webgl_vertexcolorarray(),
         'vertex-colors-front': webgl_vertexcolorarray(),
@@ -543,6 +544,15 @@ function webgl_cuboid(args){
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
     };
+
+    if(args['vertex-colors-all'] !== false){
+        args['vertex-colors-back'] = args['vertex-colors-all'];
+        args['vertex-colors-bottom'] = args['vertex-colors-all'];
+        args['vertex-colors-front'] = args['vertex-colors-all'];
+        args['vertex-colors-left'] = args['vertex-colors-all'];
+        args['vertex-colors-right'] = args['vertex-colors-all'];
+        args['vertex-colors-top'] = args['vertex-colors-all'];
+    }
 
     // Top.
     properties['translate-y'] = args['translate-y'] + half_height;
