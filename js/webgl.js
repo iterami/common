@@ -685,10 +685,7 @@ function webgl_cuboid_tree(args){
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'] + args['height-trunk'] / 2,
       'translate-z': args['translate-z'],
-      'vertex-colors-back': args['vertex-colors-trunk'],
-      'vertex-colors-front': args['vertex-colors-trunk'],
-      'vertex-colors-left': args['vertex-colors-trunk'],
-      'vertex-colors-right': args['vertex-colors-trunk'],
+      'vertex-colors-all': args['vertex-colors-trunk'],
       'width': args['width-trunk'],
     });
     webgl_cuboid({
@@ -699,12 +696,7 @@ function webgl_cuboid_tree(args){
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'] + args['height-trunk'] + args['height-leaves'] / 2,
       'translate-z': args['translate-z'],
-      'vertex-colors-back': args['vertex-colors-leaves'],
-      'vertex-colors-bottom': args['vertex-colors-leaves'],
-      'vertex-colors-front': args['vertex-colors-leaves'],
-      'vertex-colors-left': args['vertex-colors-leaves'],
-      'vertex-colors-right': args['vertex-colors-leaves'],
-      'vertex-colors-top': args['vertex-colors-leaves'],
+      'vertex-colors-all': args['vertex-colors-leaves'],
       'width': args['width-leaves'],
     });
 }
@@ -1588,6 +1580,7 @@ function webgl_load_level_init(args){
           'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
           'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
           'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
+          'vertex-colors-all': args['json']['cuboids'][cuboid]['vertex-colors-all'],
           'vertex-colors-back': args['json']['cuboids'][cuboid]['vertex-colors-back'],
           'vertex-colors-bottom': args['json']['cuboids'][cuboid]['vertex-colors-bottom'],
           'vertex-colors-front': args['json']['cuboids'][cuboid]['vertex-colors-front'],
