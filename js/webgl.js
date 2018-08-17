@@ -1411,8 +1411,7 @@ function webgl_load_level_init(args){
     }
 
     if(args['character'] === 1
-      && (args['json']['characters'] === false
-        || !args['json']['characters']
+      && (!args['json']['characters']
         || args['json']['characters'][0]['id'] !== webgl_character_id)){
         return;
     }
