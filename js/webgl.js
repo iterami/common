@@ -1440,7 +1440,7 @@ function webgl_load_level_init(args){
         for(let character in args['json']['characters']){
             if(args['json']['characters'][character]['id'] === webgl_character_id
               && args['character'] !== 1
-              && webgl_character_level() > -1){
+              && webgl_character_level() > -2){
                 continue;
             }
 
