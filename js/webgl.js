@@ -1076,7 +1076,7 @@ function webgl_init(args){
         'directional-blue': 1,
         'directional-green': 1,
         'directional-red': 1,
-        'directional-state': false,
+        'directional-state': true,
         'directional-vector': "0, 1, 0",
         'fog-density': .0001,
         'fog-state': false,
