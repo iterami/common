@@ -1857,9 +1857,11 @@ function webgl_logicloop(){
     }
 
     if(webgl_character_level() === -1){
+        webgl_characters[webgl_character_id]['dx'] = 0;
         webgl_characters[webgl_character_id]['dy'] = 0;
-    }
-    if(webgl_characters[webgl_character_id]['jump-allow']){
+        webgl_characters[webgl_character_id]['dz'] = 0;
+
+    }else if(webgl_characters[webgl_character_id]['jump-allow']){
         webgl_characters[webgl_character_id]['dx'] = 0;
         webgl_characters[webgl_character_id]['dz'] = 0;
     }
