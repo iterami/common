@@ -1792,6 +1792,7 @@ function core_repo_init(args){
     for(let entity in args['entities']){
         core_entity_set({
           'default': args['entities'][entity]['default'],
+          'groups': args['entities'][entity]['groups'],
           'properties': args['entities'][entity]['properties'],
           'todo': args['entities'][entity]['todo'],
           'type': entity,
