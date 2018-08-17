@@ -146,6 +146,10 @@ function core_audio_onended(args){
 
 // Required args: id
 function core_audio_source_create(args){
+    if(core_audio_context === 0){
+        core_audio_context = new window.AudioContext();
+    }
+
     core_audio_sources[args['id']] = {
       'duration': core_audio[args['id']]['duration'] || 0,
       'start': core_audio[args['id']]['start'] || 0,
