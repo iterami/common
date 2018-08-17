@@ -1596,6 +1596,9 @@ function webgl_load_level_init(args){
     }
 
     webgl_character_spawn();
+    core_call({
+      'todo': 'repo_load_level',
+    });
     core_escape();
 }
 
@@ -2072,10 +2075,6 @@ function webgl_resize(){
     );
 
     webgl_perspective();
-
-    core_call({
-      'todo': 'resize_logic',
-    });
 }
 
 // Required args: source, type
