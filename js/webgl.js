@@ -631,6 +631,74 @@ function webgl_cuboid(args){
     }
 }
 
+// Optional args: collision, height-leaves, height-trunk, length-leaves, length-trunk, prefix, translate-x,
+//   translate-y, translate-z, vertex-colors-leaves, vertex-colors-trunk, width-leaves, width-trunk
+function webgl_cuboid_tree(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'collision': false,
+        'height-leaves': 10,
+        'height-trunk': 10,
+        'length-leaves': 10,
+        'length-trunk': 2,
+        'prefix': core_uid(),
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+        'vertex-colors-leaves': [
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+        ],
+        'vertex-colors-trunk': [
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+        ],
+        'width-leaves': 10,
+        'width-trunk': 2,
+      },
+    });
+
+    webgl_cuboid({
+      'collision': args['collision'],
+      'exclude': {
+        'bottom': true,
+        'top': true,
+      },
+      'height': args['height-trunk'],
+      'length': args['length-trunk'],
+      'prefix': args['prefix'] + '-trunk',
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'] + args['height-trunk'] / 2,
+      'translate-z': args['translate-z'],
+      'vertex-colors-back': args['vertex-colors-trunk'],
+      'vertex-colors-front': args['vertex-colors-trunk'],
+      'vertex-colors-left': args['vertex-colors-trunk'],
+      'vertex-colors-right': args['vertex-colors-trunk'],
+      'width': args['width-trunk'],
+    });
+    webgl_cuboid({
+      'collision': args['collision'],
+      'height': args['height-leaves'],
+      'length': args['length-leaves'],
+      'prefix': args['prefix'] + '-leaves',
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'] + args['height-trunk'] + args['height-leaves'] / 2,
+      'translate-z': args['translate-z'],
+      'vertex-colors-back': args['vertex-colors-leaves'],
+      'vertex-colors-bottom': args['vertex-colors-leaves'],
+      'vertex-colors-front': args['vertex-colors-leaves'],
+      'vertex-colors-left': args['vertex-colors-leaves'],
+      'vertex-colors-right': args['vertex-colors-leaves'],
+      'vertex-colors-top': args['vertex-colors-leaves'],
+      'width': args['width-leaves'],
+    });
+}
+
 function webgl_draw(){
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
