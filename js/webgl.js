@@ -1281,7 +1281,7 @@ function webgl_init_character(args){
       'args': args,
       'defaults': {
         'camera-zoom-current': 20,
-        'camera-zoom-max': 30,
+        'camera-zoom-max': 50,
         'collide-range': 2.5,
         'collides': true,
         'dx': 0,
