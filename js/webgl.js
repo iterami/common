@@ -1571,24 +1571,41 @@ function webgl_load_level_init(args){
     });
 
     for(let cuboid in args['json']['cuboids']){
-        webgl_cuboid({
-          'collision': args['json']['cuboids'][cuboid]['collision'],
-          'exclude': args['json']['cuboids'][cuboid]['exclude'],
-          'height': args['json']['cuboids'][cuboid]['height'],
-          'length': args['json']['cuboids'][cuboid]['length'],
-          'prefix': args['json']['cuboids'][cuboid]['prefix'],
-          'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
-          'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
-          'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
-          'vertex-colors-all': args['json']['cuboids'][cuboid]['vertex-colors-all'],
-          'vertex-colors-back': args['json']['cuboids'][cuboid]['vertex-colors-back'],
-          'vertex-colors-bottom': args['json']['cuboids'][cuboid]['vertex-colors-bottom'],
-          'vertex-colors-front': args['json']['cuboids'][cuboid]['vertex-colors-front'],
-          'vertex-colors-left': args['json']['cuboids'][cuboid]['vertex-colors-left'],
-          'vertex-colors-right': args['json']['cuboids'][cuboid]['vertex-colors-right'],
-          'vertex-colors-top': args['json']['cuboids'][cuboid]['vertex-colors-top'],
-          'width': args['json']['cuboids'][cuboid]['width'],
-        });
+        if(args['json']['cuboids'][cuboid]['tree'] === true){
+            webgl_cuboid_tree({
+              'collision': args['json']['cuboids'][cuboid]['collision'],
+              'height-leaves': args['json']['cuboids'][cuboid]['height'],
+              'height-trunk': args['json']['cuboids'][cuboid]['height'],
+              'length-leaves': args['json']['cuboids'][cuboid]['length'],
+              'length-trunk': args['json']['cuboids'][cuboid]['length'] / 5,
+              'prefix': args['json']['cuboids'][cuboid]['prefix'],
+              'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
+              'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
+              'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
+              'width-leaves': args['json']['cuboids'][cuboid]['width'],
+              'width-trunk': args['json']['cuboids'][cuboid]['width'] / 5,
+            });
+
+        }else{
+            webgl_cuboid({
+              'collision': args['json']['cuboids'][cuboid]['collision'],
+              'exclude': args['json']['cuboids'][cuboid]['exclude'],
+              'height': args['json']['cuboids'][cuboid]['height'],
+              'length': args['json']['cuboids'][cuboid]['length'],
+              'prefix': args['json']['cuboids'][cuboid]['prefix'],
+              'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
+              'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
+              'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
+              'vertex-colors-all': args['json']['cuboids'][cuboid]['vertex-colors-all'],
+              'vertex-colors-back': args['json']['cuboids'][cuboid]['vertex-colors-back'],
+              'vertex-colors-bottom': args['json']['cuboids'][cuboid]['vertex-colors-bottom'],
+              'vertex-colors-front': args['json']['cuboids'][cuboid]['vertex-colors-front'],
+              'vertex-colors-left': args['json']['cuboids'][cuboid]['vertex-colors-left'],
+              'vertex-colors-right': args['json']['cuboids'][cuboid]['vertex-colors-right'],
+              'vertex-colors-top': args['json']['cuboids'][cuboid]['vertex-colors-top'],
+              'width': args['json']['cuboids'][cuboid]['width'],
+            });
+        }
     }
 
     for(let entity in args['json']['entities']){
