@@ -641,13 +641,15 @@ function webgl_cuboid(args){
     }
 }
 
-// Optional args: collision, height-leaves, height-trunk, length-leaves, length-trunk, prefix, translate-x,
-//   translate-y, translate-z, vertex-colors-leaves, vertex-colors-trunk, width-leaves, width-trunk
+// Optional args: collision-leaves, collision-trunk, height-leaves, height-trunk,
+//   length-leaves, length-trunk, prefix, translate-x, translate-y, translate-z,
+//   vertex-colors-leaves, vertex-colors-trunk, width-leaves, width-trunk
 function webgl_cuboid_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'collision': false,
+        'collision-leaves': false,
+        'collision-trunk': false,
         'height-leaves': 10,
         'height-trunk': 10,
         'length-leaves': 10,
@@ -674,7 +676,7 @@ function webgl_cuboid_tree(args){
     });
 
     webgl_cuboid({
-      'collision': args['collision'],
+      'collision': args['collision-trunk'],
       'exclude': {
         'bottom': true,
         'top': true,
@@ -689,7 +691,7 @@ function webgl_cuboid_tree(args){
       'width': args['width-trunk'],
     });
     webgl_cuboid({
-      'collision': args['collision'],
+      'collision': args['collision-leaves'],
       'height': args['height-leaves'],
       'length': args['length-leaves'],
       'prefix': args['prefix'] + '-leaves',
@@ -1573,7 +1575,8 @@ function webgl_load_level_init(args){
     for(let cuboid in args['json']['cuboids']){
         if(args['json']['cuboids'][cuboid]['tree'] === true){
             webgl_cuboid_tree({
-              'collision': args['json']['cuboids'][cuboid]['collision'],
+              'collision-leaves': args['json']['cuboids'][cuboid]['collision'],
+              'collision-trunk': args['json']['cuboids'][cuboid]['collision'],
               'height-leaves': args['json']['cuboids'][cuboid]['height'],
               'height-trunk': args['json']['cuboids'][cuboid]['height'],
               'length-leaves': args['json']['cuboids'][cuboid]['length'],
