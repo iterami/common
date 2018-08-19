@@ -240,6 +240,10 @@ function webgl_character_home(){
     }
 
     webgl_level_unload();
+    webgl_entity_create({
+      'entities': webgl_character_homebase,
+    });
+    webgl_character_spawn();
 }
 
 // Optional args: character
@@ -942,6 +946,75 @@ function webgl_drawloop(){
     });
 }
 
+// Optional args: entities
+function webgl_entity_create(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'entities': [],
+      },
+    });
+
+    for(let entity in args['entities']){
+        core_entity_create({
+          'id': args['entities'][entity]['id'],
+          'properties': args['entities'][entity],
+          'types': args['entities'][entity]['types'],
+        });
+
+        let attach = false;
+        let attach_type = 'entity';
+
+        if(args['entities'][entity]['skybox'] === true){
+            core_group_move({
+              'entities': [
+                args['entities'][entity]['id'],
+              ],
+              'from': 'foreground',
+              'to': 'skybox',
+            });
+            attach = webgl_character_id;
+            attach_type = 'character';
+
+        }else if(args['entities'][entity]['attach-to'] !== void 0){
+            attach = args['entities'][entity]['attach-to'];
+        }
+
+        if(attach !== false){
+            webgl_attach({
+              'entity': args['entities'][entity]['id'],
+              'offset-x': args['entities'][entity]['attach-offset-x'],
+              'offset-y': args['entities'][entity]['attach-offset-y'],
+              'offset-z': args['entities'][entity]['attach-offset-z'],
+              'to': attach,
+              'type': attach_type,
+            });
+        }
+    }
+
+    for(let character in webgl_characters){
+        if(webgl_characters[character]['health-current'] <= 0){
+            webgl_characters[character]['health-current'] = 1;
+        }
+
+        for(let entity in webgl_characters[character]['entities']){
+            core_entity_create({
+              'id': webgl_characters[character]['entities'][entity]['id'],
+              'properties': webgl_characters[character]['entities'][entity],
+              'types': webgl_characters[character]['entities'][entity]['types'],
+            });
+            webgl_attach({
+              'entity': webgl_characters[character]['entities'][entity]['id'],
+              'offset-x': webgl_characters[character]['entities'][entity]['attach-offset-x'],
+              'offset-y': webgl_characters[character]['entities'][entity]['attach-offset-y'],
+              'offset-z': webgl_characters[character]['entities'][entity]['attach-offset-z'],
+              'to': character,
+              'type': 'character',
+            });
+        }
+    }
+}
+
 // Optional args: entity, multiplier, strafe, y
 function webgl_entity_move(args){
     args = core_args({
@@ -1506,7 +1579,6 @@ function webgl_level_init(args){
           'id': webgl_character_id,
         });
         webgl_character_homebase = [];
-
     }
 
     if(args['json']['characters']
@@ -1613,64 +1685,9 @@ function webgl_level_init(args){
         }
     }
 
-    for(let entity in args['json']['entities']){
-        core_entity_create({
-          'id': args['json']['entities'][entity]['id'],
-          'properties': args['json']['entities'][entity],
-          'types': args['json']['entities'][entity]['types'],
-        });
-
-        let attach = false;
-        let attach_type = 'entity';
-
-        if(args['json']['entities'][entity]['skybox'] === true){
-            core_group_move({
-              'entities': [
-                args['json']['entities'][entity]['id'],
-              ],
-              'from': 'foreground',
-              'to': 'skybox',
-            });
-            attach = webgl_character_id;
-            attach_type = 'character';
-
-        }else if(args['json']['entities'][entity]['attach-to'] !== void 0){
-            attach = args['json']['entities'][entity]['attach-to'];
-        }
-
-        if(attach !== false){
-            webgl_attach({
-              'entity': args['json']['entities'][entity]['id'],
-              'offset-x': args['json']['entities'][entity]['attach-offset-x'],
-              'offset-y': args['json']['entities'][entity]['attach-offset-y'],
-              'offset-z': args['json']['entities'][entity]['attach-offset-z'],
-              'to': attach,
-              'type': attach_type,
-            });
-        }
-    }
-
-    for(let character in webgl_characters){
-        if(webgl_characters[character]['health-current'] <= 0){
-            webgl_characters[character]['health-current'] = 1;
-        }
-
-        for(let entity in webgl_characters[character]['entities']){
-            core_entity_create({
-              'id': webgl_characters[character]['entities'][entity]['id'],
-              'properties': webgl_characters[character]['entities'][entity],
-              'types': webgl_characters[character]['entities'][entity]['types'],
-            });
-            webgl_attach({
-              'entity': webgl_characters[character]['entities'][entity]['id'],
-              'offset-x': webgl_characters[character]['entities'][entity]['attach-offset-x'],
-              'offset-y': webgl_characters[character]['entities'][entity]['attach-offset-y'],
-              'offset-z': webgl_characters[character]['entities'][entity]['attach-offset-z'],
-              'to': character,
-              'type': 'character',
-            });
-        }
-    }
+    webgl_entity_create({
+      'entities': args['json']['entities'],
+    });
 
     if(args['json']['randomized']){
         for(let i in args['json']['randomized']){
