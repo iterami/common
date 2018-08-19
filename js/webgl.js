@@ -234,6 +234,14 @@ function webgl_character_damage(args){
     webgl_characters[args['character']]['health-current'] = 0;
 }
 
+function webgl_character_home(){
+    if(webgl_character_homebase.length === 0){
+        return;
+    }
+
+    webgl_level_unload();
+}
+
 // Optional args: character
 function webgl_character_jump(args){
     args = core_args({
@@ -1440,7 +1448,7 @@ function webgl_json_export(args){
 }
 
 // Optional args: character, json
-function webgl_load_level(args){
+function webgl_level_load(args){
     args = core_args({
       'args': args,
       'defaults': {
@@ -1452,7 +1460,7 @@ function webgl_load_level(args){
     if(typeof args['json'] === 'object'){
         let filereader = new FileReader();
         filereader.onload = function(event){
-            webgl_load_level_init({
+            webgl_level_init({
               'character': args['character'],
               'json': JSON.parse(event.target.result),
             });
@@ -1462,7 +1470,7 @@ function webgl_load_level(args){
         return;
     }
 
-    webgl_load_level_init({
+    webgl_level_init({
       'character': args['character'],
       'json': JSON.parse(args['json']),
     });
@@ -1470,7 +1478,7 @@ function webgl_load_level(args){
 
 // Required args: character
 // Optional args: json
-function webgl_load_level_init(args){
+function webgl_level_init(args){
     args = core_args({
       'args': args,
       'defaults': {
@@ -1488,13 +1496,7 @@ function webgl_load_level_init(args){
         return;
     }
 
-    for(let character in webgl_characters){
-        if(character !== webgl_character_id){
-            delete webgl_characters[character];
-        }
-    }
-    core_entity_remove_all();
-    core_storage_save();
+    webgl_level_unload();
 
     if(args['character'] === -1){
         webgl_init_character({
@@ -1688,9 +1690,19 @@ function webgl_load_level_init(args){
 
     webgl_character_spawn();
     core_call({
-      'todo': 'repo_load_level',
+      'todo': 'repo_level_load',
     });
     core_escape();
+}
+
+function webgl_level_unload(){
+    for(let character in webgl_characters){
+        if(character !== webgl_character_id){
+            delete webgl_characters[character];
+        }
+    }
+    core_entity_remove_all();
+    core_storage_save();
 }
 
 function webgl_logicloop(){
