@@ -2332,12 +2332,19 @@ function core_ui_update(args){
             continue;
         }
 
+        core_ui_values[id] = args['ids'][id];
+
         let element = document.getElementById('ui-' + id);
         element[element.tagName !== 'INPUT'
           ? 'innerHTML'
           : 'value'] = args['ids'][id];
 
-        core_ui_values[id] = args['ids'][id];
+        let elements = document.getElementsByClassName('ui-' + id);
+        for(let i = 0; i < elements.length; i++){
+             elements.item(i)[element.tagName !== 'INPUT'
+               ? 'innerHTML'
+               : 'value'] = args['ids'][id];
+        }
     }
 }
 
