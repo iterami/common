@@ -1799,11 +1799,13 @@ function webgl_logicloop(){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
-                forwardback += .5;
+                forwardback = .5;
             }
 
             if(core_keys[core_storage_data['move-↑']]['state']){
-                forwardback -= 1;
+                forwardback = forwardback === 0
+                  ? -1
+                  : 0;
             }
 
             if(webgl_character_level() === -1){
