@@ -576,6 +576,9 @@ function webgl_cuboid(args){
     let half_height = args['height'] / 2;
     let half_length = args['length'] / 2;
     let half_width = args['width'] / 2;
+    let vertices_height = Math.abs(half_height);
+    let vertices_length = Math.abs(half_length);
+    let vertices_width = Math.abs(half_width);
     let properties = {
       'collision': args['collision'],
       'translate-x': args['translate-x'],
@@ -595,10 +598,10 @@ function webgl_cuboid(args){
     // Top.
     properties['translate-y'] = args['translate-y'] + half_height;
     properties['vertices'] = [
-      half_width, 0, -half_length, 1,
-      -half_width, 0, -half_length, 1,
-      -half_width, 0, half_length, 1,
-      half_width, 0, half_length, 1
+      vertices_width, 0, -vertices_length, 1,
+      -vertices_width, 0, -vertices_length, 1,
+      -vertices_width, 0, vertices_length, 1,
+      vertices_width, 0, vertices_length, 1
     ];
     if(args['exclude']['top'] !== true){
         properties['vertex-colors'] = args['vertex-colors-top'];
@@ -624,10 +627,10 @@ function webgl_cuboid(args){
     properties['translate-y'] = args['translate-y'];
     properties['translate-z'] = args['translate-z'] + half_length;
     properties['vertices'] = [
-      half_width, 0, -half_height, 1,
-      -half_width, 0, -half_height, 1,
-      -half_width, 0, half_height, 1,
-      half_width, 0, half_height, 1
+      vertices_width, 0, -vertices_height, 1,
+      -vertices_width, 0, -vertices_height, 1,
+      -vertices_width, 0, vertices_height, 1,
+      vertices_width, 0, vertices_height, 1
     ];
     if(args['exclude']['front'] !== true){
         properties['vertex-colors'] = args['vertex-colors-front'];
@@ -654,10 +657,10 @@ function webgl_cuboid(args){
     properties['translate-x'] = args['translate-x'] - half_width;
     properties['translate-z'] = args['translate-z'];
     properties['vertices'] = [
-      half_height, 0, -half_length, 1,
-      -half_height, 0, -half_length, 1,
-      -half_height, 0, half_length, 1,
-      half_height, 0, half_length, 1
+      vertices_height, 0, -vertices_length, 1,
+      -vertices_height, 0, -vertices_length, 1,
+      -vertices_height, 0, vertices_length, 1,
+      vertices_height, 0, vertices_length, 1
     ];
     if(args['exclude']['left'] !== true){
         properties['vertex-colors'] = args['vertex-colors-left'];
