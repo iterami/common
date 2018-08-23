@@ -1799,7 +1799,7 @@ function webgl_logicloop(){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
-                forwardback += 1;
+                forwardback += .5;
             }
 
             if(core_keys[core_storage_data['move-↑']]['state']){
