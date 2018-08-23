@@ -183,7 +183,7 @@ function webgl_character_damage(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
-        'damage': '100',
+        'damage': 100,
         'delete': false,
         'kill': false,
       },
