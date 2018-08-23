@@ -2125,7 +2125,8 @@ function core_tab_switch(args){
         }
     }
 
-    document.getElementById('tabcontent-' + info[2]).style.display = document.getElementById('tabcontent-' + info[2]).style.display === 'block'
+    let element = document.getElementById('tabcontent-' + info[2]);
+    element.style.display = element.style.display === 'block'
       ? 'none'
       : 'block';
 }
