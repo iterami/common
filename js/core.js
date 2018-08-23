@@ -1122,7 +1122,6 @@ function core_init(){
 
     core_tab_create({
       'content': '<table><tr><td><input id=audio-volume><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=jump><td>Jump<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=move-↑><td>Move ↑<tr><td><input id=move-←><td>Move ←<tr><td><input id=move-↓><td>Move ↓<tr><td><input id=move-→><td>Move →</table>',
-      'default': true,
       'group': 'core-menu',
       'id': 'iterami',
       'label': 'iterami',
@@ -1813,9 +1812,6 @@ function core_repo_init(args){
           'id': 'repo',
           'label': core_repo_title,
         });
-        core_tab_switch({
-          'id': 'tab_core-menu_repo',
-        });
     }
     document.getElementById('core-menu-root').innerHTML = args['github'];
     let repo_title = document.getElementById('core-menu-title');
@@ -2088,15 +2084,7 @@ function core_storage_update(){
 }
 
 // Required args: content, group, id, label
-// Optional args: default
 function core_tab_create(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'default': false,
-      },
-    });
-
     core_tabs[args['id']] = {
       'content': args['content'],
       'group': args['group'],
@@ -2121,9 +2109,7 @@ function core_tab_create(args){
       'properties': {
         'id': 'tabcontent-' + args['id'],
         'innerHTML': args['content'],
-        'style': args['default']
-          ? ''
-          : 'display:none',
+        'style': 'display:none',
       },
     });
 }
@@ -2133,12 +2119,15 @@ function core_tab_switch(args){
     let info = args['id'].split('_');
 
     for(let tab in core_tabs){
-        if(core_tabs[tab]['group'] === info[1]){
+        if(core_tabs[tab]['group'] === info[1]
+          && tab !== info[2]){
             document.getElementById('tabcontent-' + tab).style.display = 'none';
         }
     }
 
-    document.getElementById('tabcontent-' + info[2]).style.display = 'block';
+    document.getElementById('tabcontent-' + info[2]).style.display = document.getElementById('tabcontent-' + info[2]).style.display === 'block'
+      ? 'none'
+      : 'block';
 }
 
 // Required args: target
