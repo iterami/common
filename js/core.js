@@ -1757,7 +1757,8 @@ function core_replace_multiple(args){
 }
 
 // Required args: title
-// Optional args: audios, beforeunload, entities, github, globals, images, info, keybinds, menu, mousebinds, storage, storage-menu, ui
+// Optional args: audios, beforeunload, entities, github, globals, images,
+//   info, keybinds, menu, mousebinds, storage, storage-menu, tabs, ui
 function core_repo_init(args){
     args = core_args({
       'args': args,
@@ -1775,6 +1776,7 @@ function core_repo_init(args){
         'mousebinds': false,
         'storage': {},
         'storage-menu': '',
+        'tabs': {},
         'ui': '',
       },
     });
@@ -1817,6 +1819,21 @@ function core_repo_init(args){
     let repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/' + args['github'] + '/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
+
+    for(let tab in args['tabs']){
+        core_tab_create({
+          'content': args['tabs'][tab]['content'],
+          'group': args['tabs'][tab]['group'],
+          'id': tab,
+          'label': args['tabs'][tab]['label'],
+        });
+
+        if(args['tabs'][tab]['default']){
+            core_tab_switch({
+              'id': 'tab_' + args['tabs'][tab]['group'] + '_' + tab,
+            });
+        }
+    }
 
     core_storage_update();
 
