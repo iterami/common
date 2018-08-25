@@ -235,7 +235,8 @@ function webgl_character_damage(args){
 }
 
 function webgl_character_home(){
-    if(webgl_character_homebase['entities'].length === 0){
+    if(!webgl_characters[webgl_character_id]
+      || webgl_character_homebase['entities'].length === 0){
         return;
     }
 
@@ -318,6 +319,10 @@ function webgl_character_origin(args){
       },
     });
 
+    if(!webgl_characters[webgl_character_id]){
+        return;
+    }
+
     webgl_entity_move_to();
     webgl_characters[args['character']]['camera-rotate-radians-x'] = 0;
     webgl_characters[args['character']]['camera-rotate-radians-y'] = 0;
@@ -344,6 +349,10 @@ function webgl_character_spawn(args){
         'character': webgl_character_id,
       },
     });
+
+    if(!webgl_characters[webgl_character_id]){
+        return;
+    }
 
     webgl_character_origin({
       'character': args['character'],
