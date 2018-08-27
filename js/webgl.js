@@ -256,6 +256,7 @@ function webgl_character_home(){
       'fog-density': webgl_character_homebase['properties']['fog-density'],
       'fog-state': webgl_character_homebase['properties']['fog-state'],
       'gravity-acceleration': webgl_character_homebase['properties']['gravity-acceleration'],
+      'gravity-axis': webgl_character_homebase['properties']['gravity-axis'],
       'gravity-max': webgl_character_homebase['properties']['gravity-max'],
       'multiplier-jump': webgl_character_homebase['properties']['multiplier-jump'],
       'multiplier-speed': webgl_character_homebase['properties']['multiplier-speed'],
@@ -1184,7 +1185,7 @@ function webgl_entity_todo(entity){
 // Optional args: ambient-blue, ambient-green, ambient-red,
 //   clearcolor-blue, clearcolor-green, clearcolor-red, directional-blue, directional-green,
 //   directional-red, directional-state, directional-vector, fog-density, fog-state,
-//   gravity-acceleration, gravity-max, multiplier-jump, multiplier-speed, spawn-rotate-x,
+//   gravity-acceleration, gravity-axis, gravity-max, multiplier-jump, multiplier-speed, spawn-rotate-x,
 //   spawn-rotate-y, spawn-rotate-z, spawn-translate-x, spawn-translate-y, spawn-translate-z
 function webgl_init(args){
     args = core_args({
@@ -1204,6 +1205,7 @@ function webgl_init(args){
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
+        'gravity-axis': 'y',
         'gravity-max': -1,
         'multiplier-jump': 1,
         'multiplier-speed': 1,
@@ -1245,6 +1247,7 @@ function webgl_init(args){
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
+      'gravity-axis': args['gravity-axis'],
       'gravity-max': args['gravity-max'],
       'multiplier-jump': args['multiplier-jump'],
       'multiplier-speed': args['multiplier-speed'],
@@ -1649,6 +1652,7 @@ function webgl_level_init(args){
       'fog-density': args['json']['fog-density'],
       'fog-state': args['json']['fog-state'],
       'gravity-acceleration': args['json']['gravity-acceleration'],
+      'gravity-axis': args['json']['gravity-axis'],
       'gravity-max': args['json']['gravity-max'],
       'multiplier-jump': args['json']['multiplier-jump'],
       'multiplier-speed': args['json']['multiplier-speed'],
@@ -1861,8 +1865,8 @@ function webgl_logicloop(){
         if(webgl_character_level({
           'character': character
         }) > -1){
-            webgl_characters[character]['dy'] = Math.max(
-              webgl_characters[character]['dy'] + webgl_properties['gravity-acceleration'],
+            webgl_characters[character]['d' + webgl_properties['gravity-axis']] = Math.max(
+              webgl_characters[character]['d' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
 
@@ -2017,8 +2021,8 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(core_entities[entity]['gravity']){
-        core_entities[entity]['dy'] = Math.max(
-          core_entities[entity]['dy'] + webgl_properties['gravity-acceleration'],
+        core_entities[entity]['d' + webgl_properties['gravity-axis']] = Math.max(
+          core_entities[entity]['d' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
           webgl_properties['gravity-max']
         );
     }
