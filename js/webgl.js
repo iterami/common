@@ -1218,7 +1218,7 @@ function webgl_init(args){
         'fog-state': false,
         'gravity-acceleration': -.05,
         'gravity-axis': 'dy',
-        'gravity-max': -1,
+        'gravity-max': -2,
         'multiplier-jump': 1,
         'multiplier-speed': 1,
         'spawn-rotate-x': 0,
