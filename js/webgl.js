@@ -1683,7 +1683,8 @@ function webgl_level_init(args){
           'entities': [],
           'id': webgl_character_id,
         });
-        webgl_character_homebase = {};
+        webgl_character_homebase['entities'] = {};
+        webgl_character_homebase['properties'] = {};
     }
 
     if(args['json']['characters']
