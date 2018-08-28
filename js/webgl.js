@@ -508,7 +508,7 @@ function webgl_collision(args){
             if(webgl_character_level({
                 'character': args['character-id']
               }) > -1){
-                if(collision === 'y'
+                if(collision === webgl_properties['gravity-axis']
                   && collision_sign === 1){
                     webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']]['dy'] === 0;
                 }
