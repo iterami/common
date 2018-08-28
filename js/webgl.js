@@ -88,6 +88,12 @@ function webgl_buffer_set_type(args){
 function webgl_camera_handle(){
     if(core_mouse['pointerlock-state']
       || core_mouse['down']){
+        if(webgl_character_level({
+          'character': webgl_character_id,
+        }) < -1){
+            return;
+        }
+
         webgl_camera_rotate({
           'character': webgl_characters[webgl_character_id]['camera-zoom-max'] === 0 || core_mouse['button'] === 2,
           'x': core_mouse['movement-y'] / 10,
