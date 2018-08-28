@@ -290,7 +290,7 @@ function webgl_character_jump(args){
     }
 
     webgl_characters[args['character']]['jump-allow'] = false;
-    webgl_characters[args['character']]['d' + webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
+    webgl_characters[args['character']][webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
 }
 
 // Optional args: character
@@ -422,7 +422,7 @@ function webgl_collision(args){
               && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range']
               && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
               && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
-                collision = 'x';
+                collision = 'dx';
                 collider['dx'] = 0;
             }
 
@@ -434,7 +434,7 @@ function webgl_collision(args){
               && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range']
               && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
               && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
-                collision = 'x';
+                collision = 'dx';
                 collision_sign = -1;
                 collider['dx'] = 0;
             }
@@ -450,7 +450,7 @@ function webgl_collision(args){
               && collider['translate-y'] <= target['translate-y'] + collider['collide-range']
               && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
               && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
-                collision = 'y';
+                collision = 'dy';
                 collider['dy'] = 0;
             }
 
@@ -462,7 +462,7 @@ function webgl_collision(args){
               && collider['translate-y'] <= target['translate-y']
               && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
               && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
-                collision = 'y';
+                collision = 'dy';
                 collision_sign = -1;
                 collider['dy'] = 0;
             }
@@ -478,7 +478,7 @@ function webgl_collision(args){
               && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range']
               && collider['translate-z'] >= target['translate-z']
               && collider['translate-z'] <= target['translate-z'] + collider['collide-range']){
-                collision = 'z';
+                collision = 'dz';
                 collider['dz'] = 0;
             }
 
@@ -490,7 +490,7 @@ function webgl_collision(args){
               && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range']
               && collider['translate-z'] >= target['translate-z'] - collider['collide-range']
               && collider['translate-z'] <= target['translate-z']){
-                collision = 'z';
+                collision = 'dz';
                 collision_sign = -1;
                 collider['dz'] = 0;
             }
@@ -503,14 +503,14 @@ function webgl_collision(args){
             webgl_characters[args['character-id']]['dy'] = collider['dy'];
             webgl_characters[args['character-id']]['dz'] = collider['dz'];
 
-            webgl_characters[args['character-id']]['translate-' + collision] = target['translate-' + collision] + (collider['collide-range'] * collision_sign);
+            webgl_characters[args['character-id']]['translate-' + collision[1]] = target['translate-' + collision[1]] + (collider['collide-range'] * collision_sign);
 
             if(webgl_character_level({
                 'character': args['character-id']
               }) > -1){
                 if(collision === webgl_properties['gravity-axis']
                   && collision_sign === 1){
-                    webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']]['d' + webgl_properties['gravity-axis']] === 0;
+                    webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']][webgl_properties['gravity-axis']] === 0;
                 }
 
                 if(target['item'] !== false){
@@ -1205,7 +1205,7 @@ function webgl_init(args){
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
-        'gravity-axis': 'y',
+        'gravity-axis': 'dy',
         'gravity-max': -1,
         'multiplier-jump': 1,
         'multiplier-speed': 1,
@@ -1811,7 +1811,7 @@ function webgl_logicloop(){
 
         if(webgl_character_level() === -1
           || (webgl_characters[webgl_character_id]['jump-allow']
-            && webgl_characters[webgl_character_id]['d' + webgl_properties['gravity-axis']] === 0)){
+            && webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] === 0)){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
@@ -1865,8 +1865,8 @@ function webgl_logicloop(){
         if(webgl_character_level({
           'character': character
         }) > -1){
-            webgl_characters[character]['d' + webgl_properties['gravity-axis']] = Math.max(
-              webgl_characters[character]['d' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+            webgl_characters[character][webgl_properties['gravity-axis']] = Math.max(
+              webgl_characters[character][webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
 
@@ -1966,7 +1966,7 @@ function webgl_logicloop(){
         webgl_characters[webgl_character_id]['dz'] = 0;
 
     }else if(webgl_characters[webgl_character_id]['jump-allow']
-      && webgl_characters[webgl_character_id]['d' + webgl_properties['gravity-axis']] === 0){
+      && webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] === 0){
         webgl_characters[webgl_character_id]['dx'] = 0;
         webgl_characters[webgl_character_id]['dz'] = 0;
     }
@@ -2021,8 +2021,8 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(core_entities[entity]['gravity']){
-        core_entities[entity]['d' + webgl_properties['gravity-axis']] = Math.max(
-          core_entities[entity]['d' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+        core_entities[entity][webgl_properties['gravity-axis']] = Math.max(
+          core_entities[entity][webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
           webgl_properties['gravity-max']
         );
     }
