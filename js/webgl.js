@@ -513,6 +513,13 @@ function webgl_collision(args){
                     webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']][webgl_properties['gravity-axis']] === 0;
                 }
 
+                if(target['collide-damage'] !== 0){
+                    webgl_character_damage({
+                      'character': args['character-id'],
+                      'damage': target['collide-damage'],
+                    });
+                }
+
                 if(target['item'] !== false){
                     if(!(target['item'] in webgl_characters[args['character-id']]['inventory'])){
                         webgl_characters[args['character-id']]['inventory'][target['item']] = 0;
@@ -528,12 +535,6 @@ function webgl_collision(args){
 
                     return false;
                 }
-
-            }else if(target['collide-damage'] !== 0){
-                webgl_character_damage({
-                  'character': args['character-id'],
-                  'damage': target['collide-damage'],
-                });
             }
 
         }else if(core_groups['particles'][args['entity']]){
