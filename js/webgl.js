@@ -163,6 +163,12 @@ function webgl_camera_rotate(args){
 }
 
 function webgl_camera_zoom(event){
+    if(webgl_character_level({
+      'character': webgl_character_id,
+    }) < -1){
+        return;
+    }
+
     if(event.deltaY > 0){
         webgl_characters[webgl_character_id]['camera-zoom-current'] = Math.min(
           webgl_characters[webgl_character_id]['camera-zoom-current'] + 1,
