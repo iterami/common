@@ -290,7 +290,7 @@ function webgl_character_jump(args){
     }
 
     webgl_characters[args['character']]['jump-allow'] = false;
-    webgl_characters[args['character']]['dy'] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
+    webgl_characters[args['character']]['d' + webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
 }
 
 // Optional args: character
@@ -510,7 +510,7 @@ function webgl_collision(args){
               }) > -1){
                 if(collision === webgl_properties['gravity-axis']
                   && collision_sign === 1){
-                    webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']]['dy'] === 0;
+                    webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']]['d' + webgl_properties['gravity-axis']] === 0;
                 }
 
                 if(target['item'] !== false){
@@ -1811,7 +1811,7 @@ function webgl_logicloop(){
 
         if(webgl_character_level() === -1
           || (webgl_characters[webgl_character_id]['jump-allow']
-            && webgl_characters[webgl_character_id]['dy'] === 0)){
+            && webgl_characters[webgl_character_id]['d' + webgl_properties['gravity-axis']] === 0)){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
@@ -1966,7 +1966,7 @@ function webgl_logicloop(){
         webgl_characters[webgl_character_id]['dz'] = 0;
 
     }else if(webgl_characters[webgl_character_id]['jump-allow']
-      && webgl_characters[webgl_character_id]['dy'] === 0){
+      && webgl_characters[webgl_character_id]['d' + webgl_properties['gravity-axis']] === 0){
         webgl_characters[webgl_character_id]['dx'] = 0;
         webgl_characters[webgl_character_id]['dz'] = 0;
     }
