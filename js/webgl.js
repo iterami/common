@@ -1079,13 +1079,9 @@ function webgl_entity_move(args){
       },
     });
 
-    if(args['entity'] === false){
-        if(webgl_character_level({
-          'character': args['character'],
-        }) > -1){
-            args['multiplier'] *= webgl_properties['multiplier-speed'];
-        }
+    args['multiplier'] *= webgl_properties['multiplier-speed'];
 
+    if(args['entity'] === false){
         if(args['y']){
             let dy = webgl_characters[args['character']]['speed'] * args['multiplier'];
             dy *= args['strafe']
