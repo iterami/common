@@ -1213,7 +1213,7 @@ function webgl_init(args){
         'directional-green': 1,
         'directional-red': 1,
         'directional-state': true,
-        'directional-vector': "0, 1, 0",
+        'directional-vector': '0, 1, 0',
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
