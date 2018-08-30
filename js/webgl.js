@@ -1940,6 +1940,7 @@ function webgl_logicloop(){
           core_entities[entity]['lifespan'] -= 1;
           if(core_entities[entity]['lifespan'] <= 0){
               remove = true;
+
           }else{
               for(let character in webgl_characters){
                   if(webgl_character_level({
