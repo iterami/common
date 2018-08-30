@@ -1106,12 +1106,22 @@ function webgl_entity_move(args){
 
     }else{
         let movement = core_move_3d({
-          'angle': core_entities[args['entity']]['rotate-y'],
+          'angle': core_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis'][1]],
           'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
-        core_entities[args['entity']]['dx'] = movement['x'];
-        core_entities[args['entity']]['dz'] = movement['z'];
+        if(webgl_properties['gravity-axis'] === 'dy'){
+            core_entities[args['entity']]['dx'] = movement['x'];
+            core_entities[args['entity']]['dz'] = movement['z'];
+
+        }else if(webgl_properties['gravity-axis'] === 'dx'){
+            core_entities[args['entity']]['dy'] = movement['x'];
+            core_entities[args['entity']]['dz'] = movement['z'];
+
+        }else{
+            core_entities[args['entity']]['dx'] = movement['x'];
+            core_entities[args['entity']]['dy'] = movement['z'];
+        }
     }
 }
 
