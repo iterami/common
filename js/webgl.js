@@ -2368,11 +2368,11 @@ function webgl_shader_update(){
             +     ');'
             +     'if(directional == 1){'
             +         'vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);'
-            +         'vec_lighting += (vec3('
+            +         'vec_lighting += vec3('
             +           webgl_properties['directional-red'] + ','
             +           webgl_properties['directional-green'] + ','
             +           webgl_properties['directional-blue']
-            +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directional-vector'] + '))), 0.0));'
+            +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directional-vector'] + '))), 0.0);'
             +     '}'
             + '}',
           'type': webgl_buffer.VERTEX_SHADER,
