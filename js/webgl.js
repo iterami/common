@@ -2443,6 +2443,7 @@ function webgl_texture_set(args){
     });
 }
 
+// Required args: entityid
 function webgl_texture_set_todo(args){
     if(!core_entities[args['entityid']]){
         return;
