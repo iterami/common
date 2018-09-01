@@ -1435,8 +1435,8 @@ function webgl_init(args){
     });
 }
 
-// Optional args: camera-zoom-current, camera-zoom-max, collide-range, collides, dx, dy, dz,
-//   entities, experience, health-current, health-max, id, inventory, jump-height, level, speed
+// Optional args: camera-zoom-current, camera-zoom-max, collide-range, collides, dx, dy, dz, entities,
+//   experience, health-current, health-max, id, inventory, jump-height, level, speed, talk, trade
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -1457,6 +1457,8 @@ function webgl_init_character(args){
         'jump-height': .6,
         'level': -1,
         'speed': .2,
+        'talk': false,
+        'trade': [],
       },
     });
 
@@ -1489,6 +1491,8 @@ function webgl_init_character(args){
       'rotate-y': 0,
       'rotate-z': 0,
       'speed': args['speed'],
+      'talk': args['talk'],
+      'trade': args['trade'],
       'translate-x': 0,
       'translate-y': 0,
       'translate-z': 0,
@@ -1742,6 +1746,8 @@ function webgl_level_init(args){
               'inventory': args['json']['characters'][character]['inventory'],
               'jump-height': args['json']['characters'][character]['jump-height'],
               'level': args['json']['characters'][character]['level'],
+              'talk': args['json']['characters'][character]['talk'],
+              'trade': args['json']['characters'][character]['trade'],
               'speed': args['json']['characters'][character]['speed'],
             });
 
@@ -1904,6 +1910,7 @@ function webgl_logicloop(){
 
     repo_logic();
 
+    let npc_talk = '';
     for(let character in webgl_characters){
         if(webgl_character_level({
           'character': character,
@@ -1929,7 +1936,29 @@ function webgl_logicloop(){
                 }
             }
         }
+
+        if(character !== webgl_character_id
+          && (webgl_characters[character]['talk'] !== false
+            || webgl_characters[character]['trade'].length > 0)){
+            if(core_distance({
+                'x0': webgl_characters[webgl_character_id]['translate-x'],
+                'y0': webgl_characters[webgl_character_id]['translate-y'],
+                'z0': webgl_characters[webgl_character_id]['translate-z'],
+                'x1': webgl_characters[character]['translate-x'],
+                'y1': webgl_characters[character]['translate-y'],
+                'z1': webgl_characters[character]['translate-z'],
+              }) < 15){
+                if(webgl_characters[character]['talk'] !== false){
+                    npc_talk = webgl_characters[character]['talk'];
+                }
+            }
+        }
     }
+    core_ui_update({
+      'ids': {
+        'npc-talk': npc_talk,
+      },
+    });
 
     core_group_modify({
       'groups': [
