@@ -2324,8 +2324,8 @@ function webgl_shader_update(){
             + 'varying mediump vec3 vec_lighting;'
             + 'varying lowp vec4 vec_fragmentColor;'
             + 'void main(void){'
-            +     'if(fog == 1){'
-            +         'gl_FragColor = mix('
+            +     'gl_FragColor = (fog == 1'
+            +       '? mix('
             +           'vec4('
             +             webgl_properties['clearcolor-red'] + ','
             +             webgl_properties['clearcolor-green'] + ','
@@ -2334,10 +2334,8 @@ function webgl_shader_update(){
             +           '),'
             +           'vec_fragmentColor,'
             +           'clamp(exp(' + webgl_properties['fog-density'] + ' * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
-            +         ') * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
-            +     '}else{'
-            +         'gl_FragColor = vec_fragmentColor * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
-            +     '}'
+            +         ')'
+            +       ': vec_fragmentColor) * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
             + '}',
           'type': webgl_buffer.FRAGMENT_SHADER,
         }),
