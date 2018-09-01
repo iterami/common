@@ -1641,9 +1641,14 @@ function webgl_level_init(args){
         args['json'] = {};
     }
 
-    if(args['character'] === 1
-      && (!args['json']['characters']
-        || args['json']['characters'][0]['id'] !== webgl_character_id)){
+    if(args['character'] === 1){
+        if(!args['json']['characters']
+          || args['json']['characters'][0]['id'] !== webgl_character_id){
+            return;
+        }
+
+    }else if(args['character'] === 0
+      && webgl_character_level() < 0){
         return;
     }
 
