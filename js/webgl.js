@@ -513,7 +513,7 @@ function webgl_collision(args){
             webgl_characters[args['character-id']]['translate-' + collision[1]] = target['translate-' + collision[1]] + (collider['collide-range'] * collision_sign);
 
             if(webgl_character_level({
-                'character': args['character-id']
+                'character': args['character-id'],
               }) > -1){
                 if(target['collide-damage'] !== 0){
                     webgl_character_damage({
@@ -1901,7 +1901,7 @@ function webgl_logicloop(){
 
     for(let character in webgl_characters){
         if(webgl_character_level({
-          'character': character
+          'character': character,
         }) > -1){
             webgl_characters[character][webgl_properties['gravity-axis']] = Math.max(
               webgl_characters[character][webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
@@ -1954,7 +1954,7 @@ function webgl_logicloop(){
           }else{
               for(let character in webgl_characters){
                   if(webgl_character_level({
-                      'character': character
+                      'character': character,
                     }) < 0){
                       continue;
                   }
