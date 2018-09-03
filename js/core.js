@@ -1617,6 +1617,14 @@ function core_move_3d(args){
     };
 }
 
+// Required args: number
+function core_number_commas(args){
+    return String(args['number']).replace(
+      /\B(?=(\d{3})+(?!\d))/g,
+      ','
+    );
+}
+
 // Required args: x0, x1, y0, y1
 function core_point_angle(args){
     return Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
