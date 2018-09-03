@@ -1618,9 +1618,22 @@ function core_move_3d(args){
 }
 
 // Required args: number
+// Optional args: decimals
 function core_number_format(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
     if(core_number_formatter === false){
-        core_number_formatter = new Intl.NumberFormat();
+        core_number_formatter = new Intl.NumberFormat(
+          void 0,
+          {
+            'maximumFractionDigits': args['decimals'],
+          }
+        );
     }
 
     return core_number_formatter.format(args['number']);
