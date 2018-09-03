@@ -1618,11 +1618,12 @@ function core_move_3d(args){
 }
 
 // Required args: number
-function core_number_commas(args){
-    return String(args['number']).replace(
-      /\B(?=(\d{3})+(?!\d))/g,
-      ','
-    );
+function core_number_format(args){
+    if(core_number_formatter === false){
+        core_number_formatter = new Intl.NumberFormat();
+    }
+
+    return core_number_formatter.format(args['number']);
 }
 
 // Required args: x0, x1, y0, y1
@@ -2417,6 +2418,7 @@ window.core_matrices = {};
 window.core_menu_open = false;
 window.core_mode = 0;
 window.core_mouse = {};
+window.core_number_formatter = false;
 window.core_radian = 180 / Math.PI;
 window.core_random_boolean_chance = .5;
 window.core_random_integer_max = 100;
