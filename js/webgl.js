@@ -89,8 +89,8 @@ function webgl_camera_handle(){
     if(core_mouse['pointerlock-state']
       || core_mouse['down']){
         if(webgl_character_level({
-          'character': webgl_character_id,
-        }) < -1){
+            'character': webgl_character_id,
+          }) < -1){
             return;
         }
 
@@ -165,8 +165,8 @@ function webgl_camera_rotate(args){
 
 function webgl_camera_zoom(event){
     if(webgl_character_level({
-      'character': webgl_character_id,
-    }) < -1){
+        'character': webgl_character_id,
+      }) < -1){
         return;
     }
 
@@ -197,8 +197,8 @@ function webgl_character_damage(args){
     });
 
     if(webgl_character_level({
-      'character': args['character'],
-    }) < 0){
+        'character': args['character'],
+      }) < 0){
         return;
     }
 
@@ -1831,7 +1831,7 @@ function webgl_logicloop(){
         if(core_keys[core_storage_data['move-←']]['state']){
             if(webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
               || (core_mouse['down']
-              && core_mouse['button'] === 2)){
+                && core_mouse['button'] === 2)){
                 leftright -= 1;
 
             }else{
@@ -1846,7 +1846,7 @@ function webgl_logicloop(){
         if(core_keys[core_storage_data['move-→']]['state']){
             if(webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
               || (core_mouse['down']
-              && core_mouse['button'] === 2)){
+                && core_mouse['button'] === 2)){
                 leftright += 1;
 
             }else{
@@ -1913,8 +1913,8 @@ function webgl_logicloop(){
     let npc_talk = '';
     for(let character in webgl_characters){
         if(webgl_character_level({
-          'character': character,
-        }) > -1){
+            'character': character,
+          }) > -1){
             webgl_characters[character][webgl_properties['gravity-axis']] = Math.max(
               webgl_characters[character][webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
@@ -1994,13 +1994,13 @@ function webgl_logicloop(){
                   }
 
                   if(core_distance({
-                    'x0': webgl_characters[character]['translate-x'],
-                    'y0': webgl_characters[character]['translate-y'],
-                    'z0': webgl_characters[character]['translate-z'],
-                    'x1': core_entities[entity]['translate-x'],
-                    'y1': core_entities[entity]['translate-y'],
-                    'z1': core_entities[entity]['translate-z'],
-                  }) < webgl_characters[character]['collide-range']){
+                      'x0': webgl_characters[character]['translate-x'],
+                      'y0': webgl_characters[character]['translate-y'],
+                      'z0': webgl_characters[character]['translate-z'],
+                      'x1': core_entities[entity]['translate-x'],
+                      'y1': core_entities[entity]['translate-y'],
+                      'z1': core_entities[entity]['translate-z'],
+                    }) < webgl_characters[character]['collide-range']){
                       webgl_character_damage({
                         'character': character,
                         'damage': core_entities[entity]['collide-damage'],
