@@ -2105,10 +2105,10 @@ function webgl_logicloop_handle_entity(entity){
             if(core_entities[other_entity]['collision']
               && entity !== other_entity){
                 if(!webgl_collision({
-                  'character': false,
-                  'entity': entity,
-                  'target': other_entity,
-                })){
+                    'character': false,
+                    'entity': entity,
+                    'target': other_entity,
+                  })){
                     return;
                 }
             }
