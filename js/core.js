@@ -104,9 +104,9 @@ function core_audio_node_create(args){
 
     for(let property in args['properties']){
         if(core_type({
-          'type': 'object',
-          'var': args['properties'][property],
-        })){
+            'type': 'object',
+            'var': args['properties'][property],
+          })){
             for(let subproperty in args['properties'][property]){
                 source[property][subproperty] = args['properties'][property][subproperty];
             }
@@ -242,8 +242,8 @@ function core_call(args){
     });
 
     if(core_type({
-      'var': args['todo'],
-    })){
+        'var': args['todo'],
+      })){
         window[args['todo']](args['args']);
     }
 }
@@ -765,9 +765,9 @@ function core_handle_beforeunload(event){
     core_storage_save();
 
     if(core_type({
-      'type': 'string',
-      'var': result,
-    })){
+        'type': 'string',
+        'var': result,
+      })){
         return result;
     }
 }
@@ -803,9 +803,9 @@ function core_handle_defaults(args){
     });
 
     if(!core_type({
-      'type': 'object',
-      'var': args['var'],
-    })){
+        'type': 'object',
+        'var': args['var'],
+      })){
         return args['var'];
     }
 
@@ -873,12 +873,12 @@ function core_handle_keydown(event){
     }
 
     if(core_handle_event({
-      'event': event,
-      'key': key['code'],
-      'object': core_keys,
-      'state': true,
-      'todo': true,
-    })){
+        'event': event,
+        'key': key['code'],
+        'object': core_keys,
+        'state': true,
+        'todo': true,
+      })){
         return;
     }
 
@@ -895,11 +895,11 @@ function core_handle_keyup(event){
     let key = core_events_keyinfo(event);
 
     if(core_handle_event({
-      'event': event,
-      'key': key['code'],
-      'object': core_keys,
-      'state': false,
-    })){
+        'event': event,
+        'key': key['code'],
+        'object': core_keys,
+        'state': false,
+      })){
         return;
     }
 
@@ -2091,21 +2091,21 @@ function core_storage_type_convert(args){
     let core_storage_default = core_storage_info[args['key']]['default'];
 
     if(core_type({
-      'type': 'string',
-      'var': core_storage_default,
-    })){
+        'type': 'string',
+        'var': core_storage_default,
+      })){
         return args['value'];
 
     }else if(!Number.isNaN(Number.parseFloat(core_storage_default))){
         return Number.parseFloat(args['value']);
 
     }else if(core_type({
-      'type': 'boolean',
-      'var': core_storage_default,
-    }) && !core_type({
-      'type': 'boolean',
-      'var': args['value'],
-    })){
+        'type': 'boolean',
+        'var': core_storage_default,
+      }) && !core_type({
+        'type': 'boolean',
+        'var': args['value'],
+      })){
         return args['value'] === 'true';
     }
 
