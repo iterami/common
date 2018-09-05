@@ -1947,6 +1947,7 @@ function webgl_logicloop(){
     repo_logic();
 
     let npc_talk = '';
+    let npc_trade = '';
     for(let character in webgl_characters){
         if(webgl_character_level({
             'character': character,
@@ -1987,6 +1988,9 @@ function webgl_logicloop(){
                 if(webgl_characters[character]['talk'] !== false){
                     npc_talk = webgl_characters[character]['talk'];
                 }
+                if(webgl_characters[character]['trade'].length > 0){
+                    npc_trade = character;
+                }
             }
         }
     }
@@ -1995,6 +1999,51 @@ function webgl_logicloop(){
         'npc-talk': npc_talk,
       },
     });
+
+    if(npc_trade === ''){
+        webgl_character_trading = '';
+        core_ui_update({
+          'ids': {
+            'npc-trade': '',
+          },
+        });
+
+    }else if(npc_trade !== webgl_character_trading){
+        webgl_character_trading = npc_trade;
+        let npc_trades = webgl_characters[npc_trade]['trade'];
+
+        let elements = {};
+        npc_trade = '<table>';
+        for(let trade in npc_trades){
+            npc_trade += '<tr><td><input id=npc-trade-' + trade + ' type=button value=Trade>'
+              + '<td>[' + npc_trades[trade]['get-amount'] + ' ' + npc_trades[trade]['get-id']
+                + '] for [' + npc_trades[trade]['give-amount'] + ' ' + npc_trades[trade]['give-id'] + ']';
+
+            elements['npc-trade-' + trade] = {
+              'onclick': function(){
+                  webgl_character_trade({
+                    'character-0': webgl_character_id,
+                    'character-1': webgl_character_trading,
+                    'item-0-amount': npc_trades[trade]['get-amount'],
+                    'item-0-id': npc_trades[trade]['get-id'],
+                    'item-1-amount': npc_trades[trade]['give-amount'],
+                    'item-1-id': npc_trades[trade]['give-id'],
+                  });
+              },
+            }
+        }
+        npc_trade += '</table>';
+
+        core_ui_update({
+          'ids': {
+            'npc-trade': npc_trade,
+          },
+        });
+
+        core_events_bind({
+          'elements': elements,
+        });
+    }
 
     core_group_modify({
       'groups': [
@@ -2600,6 +2649,7 @@ window.webgl_fonts = {
 window.webgl_character_count = 0;
 window.webgl_character_homebase = {};
 window.webgl_character_id = '_me';
+window.webgl_character_trading = '';
 window.webgl_characters = {};
 window.webgl_diagonal = 0;
 window.webgl_properties = {};
