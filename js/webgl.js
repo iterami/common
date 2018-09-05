@@ -391,17 +391,26 @@ function webgl_character_trade(args){
         return;
     }
 
-    webgl_characters[args['character-0']]['inventory'][args['item-0-id']] -= args['item-0-amount'];
-    webgl_characters[args['character-1']]['inventory'][args['item-1-id']] -= args['item-1-amount'];
+    let character_0_inventory = webgl_characters[args['character-0']]['inventory'];
+    let character_1_inventory = webgl_characters[args['character-1']]['inventory'];
 
-    if(!webgl_characters[args['character-0']]['inventory'][args['item-1-id']]){
-        webgl_characters[args['character-0']]['inventory'][args['item-1-id']] = 0;
+    character_0_inventory[args['item-0-id']] -= args['item-0-amount'];
+    character_1_inventory[args['item-1-id']] -= args['item-1-amount'];
+    if(character_0_inventory[args['item-0-id']] === 0){
+        delete character_0_inventory[args['item-0-id']];
     }
-    if(!webgl_characters[args['character-1']]['inventory'][args['item-0-id']]){
-        webgl_characters[args['character-1']]['inventory'][args['item-0-id']] = 0;
+    if(character_1_inventory[args['item-1-id']] === 0){
+        delete character_1_inventory[args['item-1-id']];
     }
-    webgl_characters[args['character-0']]['inventory'][args['item-1-id']] += args['item-1-amount'];
-    webgl_characters[args['character-1']]['inventory'][args['item-0-id']] += args['item-0-amount'];
+
+    if(!character_0_inventory[args['item-1-id']]){
+        character_0_inventory[args['item-1-id']] = 0;
+    }
+    if(!character_1_inventory[args['item-0-id']]){
+        character_1_inventory[args['item-0-id']] = 0;
+    }
+    character_0_inventory[args['item-1-id']] += args['item-1-amount'];
+    character_1_inventory[args['item-0-id']] += args['item-0-amount'];
 }
 
 // Optional args: blue, green, red
