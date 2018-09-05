@@ -380,6 +380,30 @@ function webgl_character_spawn(args){
     webgl_characters[args['character']]['jump-allow'] = false;
 }
 
+// Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
+function webgl_character_trade(args){
+    if(!webgl_characters[args['character-0']]
+      || !webgl_characters[args['character-1']]
+      || !webgl_characters[args['character-0']]['inventory'][args['item-0-id']]
+      || !webgl_characters[args['character-1']]['inventory'][args['item-1-id']]
+      || webgl_characters[args['character-0']]['inventory'][args['item-0-id']] < args['item-0-amount']
+      || webgl_characters[args['character-1']]['inventory'][args['item-1-id']] < args['item-1-amount']){
+        return;
+    }
+
+    webgl_characters[args['character-0']]['inventory'][args['item-0-id']] -= args['item-0-amount'];
+    webgl_characters[args['character-1']]['inventory'][args['item-1-id']] -= args['item-1-amount'];
+
+    if(!webgl_characters[args['character-0']]['inventory'][args['item-1-id']]){
+        webgl_characters[args['character-0']]['inventory'][args['item-1-id']] = 0;
+    }
+    if(!webgl_characters[args['character-1']]['inventory'][args['item-0-id']]){
+        webgl_characters[args['character-1']]['inventory'][args['item-0-id']] = 0;
+    }
+    webgl_characters[args['character-0']]['inventory'][args['item-1-id']] += args['item-1-amount'];
+    webgl_characters[args['character-1']]['inventory'][args['item-0-id']] += args['item-0-amount'];
+}
+
 // Optional args: blue, green, red
 function webgl_clearcolor_set(args){
     args = core_args({
