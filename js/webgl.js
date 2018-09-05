@@ -235,6 +235,7 @@ function webgl_character_damage(args){
 
     if(args['delete']){
         delete webgl_characters[args['character']];
+        webgl_character_count--;
         return;
     }
 
@@ -1503,6 +1504,7 @@ function webgl_init_character(args){
           args['inventory']
         );
     }
+    webgl_character_count++;
 }
 
 // Optional args: character, target
@@ -1819,6 +1821,7 @@ function webgl_level_unload(){
             delete webgl_characters[character];
         }
     }
+    webgl_character_count = 0;
     core_entity_remove_all();
     core_storage_save();
 }
@@ -2561,9 +2564,10 @@ window.webgl_fonts = {
   'medium': '200% monospace',
   'small': '100% monospace',
 };
-window.webgl_characters = {};
+window.webgl_character_count = 0;
 window.webgl_character_homebase = {};
 window.webgl_character_id = '_me';
+window.webgl_characters = {};
 window.webgl_diagonal = 0;
 window.webgl_properties = {};
 window.webgl_text = {};
