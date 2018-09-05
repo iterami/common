@@ -387,6 +387,8 @@ function webgl_character_trade(args){
 
     if(!webgl_characters[args['character-0']]
       || !webgl_characters[args['character-1']]
+      || !webgl_characters[args['character-0']]['health-current'] <= 0
+      || !webgl_characters[args['character-1']]['health-current'] <= 0
       || !character_0_inventory[args['item-0-id']]
       || !character_1_inventory[args['item-1-id']]
       || character_0_inventory[args['item-0-id']] < args['item-0-amount']
