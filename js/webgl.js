@@ -382,17 +382,17 @@ function webgl_character_spawn(args){
 
 // Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
 function webgl_character_trade(args){
-    if(!webgl_characters[args['character-0']]
-      || !webgl_characters[args['character-1']]
-      || !webgl_characters[args['character-0']]['inventory'][args['item-0-id']]
-      || !webgl_characters[args['character-1']]['inventory'][args['item-1-id']]
-      || webgl_characters[args['character-0']]['inventory'][args['item-0-id']] < args['item-0-amount']
-      || webgl_characters[args['character-1']]['inventory'][args['item-1-id']] < args['item-1-amount']){
-        return;
-    }
-
     let character_0_inventory = webgl_characters[args['character-0']]['inventory'];
     let character_1_inventory = webgl_characters[args['character-1']]['inventory'];
+
+    if(!webgl_characters[args['character-0']]
+      || !webgl_characters[args['character-1']]
+      || !character_0_inventory[args['item-0-id']]
+      || !character_1_inventory[args['item-1-id']]
+      || character_0_inventory[args['item-0-id']] < args['item-0-amount']
+      || character_1_inventory[args['item-1-id']] < args['item-1-amount']){
+        return;
+    }
 
     character_0_inventory[args['item-0-id']] -= args['item-0-amount'];
     character_1_inventory[args['item-1-id']] -= args['item-1-amount'];
