@@ -1338,14 +1338,6 @@ function webgl_init(args){
     })) / Math.sin(core_degrees_to_radians({
       'degrees': 90,
     }));
-    core_image({
-      'id': '_webgl-texture-debug',
-      'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
-    });
-    core_image({
-      'id': '_webgl-texture-default',
-      'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
-    });
 
     core_html({
       'parent': document.body,
@@ -1448,7 +1440,7 @@ function webgl_init(args){
         'spawn-interval-current': 0,
         'spawn-interval-max': 100,
         'speed': .2,
-        'texture': '_webgl-texture-default',
+        'texture': '_texture-default',
         'textureData': [
           0, 1,
           0, 0,
@@ -2556,7 +2548,7 @@ function webgl_texture_set(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'image': '_webgl-texture-default',
+        'image': '_texture-default',
       },
     });
 

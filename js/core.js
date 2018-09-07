@@ -1780,7 +1780,7 @@ function core_replace_multiple(args){
 
 // Required args: title
 // Optional args: audios, beforeunload, entities, github, globals, images,
-//   info, keybinds, menu, mousebinds, storage, storage-menu, tabs, ui
+//   info, keybinds, menu, mousebinds, storage, storage-menu, tabs, textures, ui
 function core_repo_init(args){
     args = core_args({
       'args': args,
@@ -1799,6 +1799,7 @@ function core_repo_init(args){
         'storage': {},
         'storage-menu': '',
         'tabs': {},
+        'textures': false,
         'ui': '',
       },
     });
@@ -1877,6 +1878,16 @@ function core_repo_init(args){
         core_image({
           'id': image,
           'src': args['images'][image],
+        });
+    }
+    if(args['textures']){
+        core_image({
+          'id': '_texture-debug',
+          'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
+        });
+        core_image({
+          'id': '_texture-default',
+          'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
         });
     }
 
