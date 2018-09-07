@@ -1607,7 +1607,6 @@ function webgl_json_export(args){
             );
 
             delete entity_json['buffer'];
-            delete entity_json['image'];
             delete entity_json['normals'];
             delete entity_json['rotate-radians-x'];
             delete entity_json['rotate-radians-y'];
@@ -1631,7 +1630,6 @@ function webgl_json_export(args){
             );
 
             delete entity_json['buffer'];
-            delete entity_json['image'];
             delete entity_json['normals'];
             delete entity_json['rotate-radians-x'];
             delete entity_json['rotate-radians-y'];
@@ -2563,7 +2561,6 @@ function webgl_texture_set(args){
     });
 
     core_entities[args['entityid']]['texture-gl'] = webgl_buffer.createTexture();
-    core_entities[args['entityid']]['image'] = args['image'];
 
     webgl_buffer.bindTexture(
       webgl_buffer.TEXTURE_2D,
@@ -2575,7 +2572,7 @@ function webgl_texture_set(args){
       webgl_buffer.RGBA,
       webgl_buffer.RGBA,
       webgl_buffer.UNSIGNED_BYTE,
-      core_images[core_entities[args['entityid']]['image']]
+      core_images[args['image']]
     );
     webgl_buffer.texParameteri(
       webgl_buffer.TEXTURE_2D,
