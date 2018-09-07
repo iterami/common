@@ -1251,7 +1251,7 @@ function webgl_entity_todo(entity){
 
     webgl_texture_set({
       'entityid': entity,
-      'image': webgl_textures[core_entities[entity]['texture']],
+      'image': core_images[core_entities[entity]['texture']],
     });
 }
 
@@ -1337,7 +1337,15 @@ function webgl_init(args){
       'degrees': 45,
     })) / Math.sin(core_degrees_to_radians({
       'degrees': 90,
-    }))
+    }));
+    core_image({
+      'id': '_webgl-texture-debug',
+      'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
+    });
+    core_image({
+      'id': '_webgl-texture-default',
+      'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
+    });
 
     core_html({
       'parent': document.body,
@@ -1440,7 +1448,7 @@ function webgl_init(args){
         'spawn-interval-current': 0,
         'spawn-interval-max': 100,
         'speed': .2,
-        'texture': '_default',
+        'texture': '_webgl-texture-default',
         'textureData': [
           0, 1,
           0, 0,
@@ -2550,25 +2558,12 @@ function webgl_texture_set(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'image': webgl_textures['_default'],
+        'image': core_images['_webgl-texture-default'],
       },
     });
 
     core_entities[args['entityid']]['texture-gl'] = webgl_buffer.createTexture();
-    core_entities[args['entityid']]['image'] = core_image({
-      'id': args['entityid'] + '-texture',
-      'src': args['image'],
-      'todo': function(){
-          webgl_texture_set_todo(args);
-      },
-    });
-}
-
-// Required args: entityid
-function webgl_texture_set_todo(args){
-    if(!core_entities[args['entityid']]){
-        return;
-    }
+    core_entities[args['entityid']]['image'] = args['image'];
 
     webgl_buffer.bindTexture(
       webgl_buffer.TEXTURE_2D,
@@ -2656,7 +2651,3 @@ window.webgl_characters = {};
 window.webgl_diagonal = 0;
 window.webgl_properties = {};
 window.webgl_text = {};
-window.webgl_textures = {
-  '_debug': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
-  '_default': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
-};
