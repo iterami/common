@@ -2015,6 +2015,10 @@ function webgl_logicloop(){
         let elements = {};
         npc_trade = '<table>';
         for(let trade in npc_trades){
+            if(webgl_characters[webgl_character_trading]['inventory'][npc_trades[trade]['give-id']] < npc_trades[trade]['give-amount']){
+                continue;
+            }
+
             npc_trade += '<tr><td><input id=npc-trade-' + trade + ' type=button value=Trade>'
               + '<td>[' + npc_trades[trade]['get-amount'] + ' ' + npc_trades[trade]['get-id']
                 + '] for [' + npc_trades[trade]['give-amount'] + ' ' + npc_trades[trade]['give-id'] + ']';
