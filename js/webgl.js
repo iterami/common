@@ -1472,7 +1472,8 @@ function webgl_init(args){
 }
 
 // Optional args: camera-zoom-current, camera-zoom-max, collide-range, collides, dx, dy, dz, entities,
-//   experience, health-current, health-max, id, inventory, jump-height, level, speed, talk, trade
+//   experience, health-current, health-max, id, inventory, jump-height, level, rotate-x, rotate-y,
+//   rotate-z, speed, talk, trade, translate-x, translate-y, translate-z
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -1492,9 +1493,15 @@ function webgl_init_character(args){
         'inventory': false,
         'jump-height': .6,
         'level': -1,
+        'rotate-x': 0,
+        'rotate-y': 0,
+        'rotate-z': 0,
         'speed': .2,
         'talk': false,
         'trade': [],
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
       },
     });
 
@@ -1523,16 +1530,20 @@ function webgl_init_character(args){
       'rotate-radians-x': 0,
       'rotate-radians-y': 0,
       'rotate-radians-z': 0,
-      'rotate-x': 0,
-      'rotate-y': 0,
-      'rotate-z': 0,
+      'rotate-x': args['rotate-x'],
+      'rotate-y': args['rotate-y'],
+      'rotate-z': args['rotate-z'],
       'speed': args['speed'],
       'talk': args['talk'],
       'trade': args['trade'],
-      'translate-x': 0,
-      'translate-y': 0,
-      'translate-z': 0,
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'],
+      'translate-z': args['translate-z'],
     };
+    webgl_entity_radians({
+      'character': true,
+      'entity': args['id'],
+    });
     if(args['inventory'] !== false){
         Object.assign(
           webgl_characters[args['id']]['inventory'],
@@ -1781,9 +1792,15 @@ function webgl_level_init(args){
               'inventory': args['json']['characters'][character]['inventory'],
               'jump-height': args['json']['characters'][character]['jump-height'],
               'level': args['json']['characters'][character]['level'],
+              'rotate-x': args['json']['characters'][character]['rotate-x'],
+              'rotate-y': args['json']['characters'][character]['rotate-y'],
+              'rotate-z': args['json']['characters'][character]['rotate-z'],
+              'speed': args['json']['characters'][character]['speed'],
               'talk': args['json']['characters'][character]['talk'],
               'trade': args['json']['characters'][character]['trade'],
-              'speed': args['json']['characters'][character]['speed'],
+              'translate-x': args['json']['characters'][character]['translate-x'],
+              'translate-y': args['json']['characters'][character]['translate-y'],
+              'translate-z': args['json']['characters'][character]['translate-z'],
             });
 
             if(args['json']['characters'][character]['id'] === webgl_character_id){
