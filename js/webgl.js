@@ -654,6 +654,14 @@ function webgl_cuboid(args){
       'translate-z': args['translate-z'],
     };
 
+    if(args['all-alpha'] !== false){
+        args['back-alpha'] = args['all-alpha'];
+        args['bottom-alpha'] = args['all-alpha'];
+        args['front-alpha'] = args['all-alpha'];
+        args['left-alpha'] = args['all-alpha'];
+        args['right-alpha'] = args['all-alpha'];
+        args['top-alpha'] = args['all-alpha'];
+    }
     if(args['all-vertex-colors'] !== false){
         args['back-vertex-colors'] = args['all-vertex-colors'];
         args['bottom-vertex-colors'] = args['all-vertex-colors'];
@@ -672,7 +680,7 @@ function webgl_cuboid(args){
       vertices_width, 0, vertices_length, 1
     ];
     if(args['exclude']['top'] !== true){
-        properties['alpha'] = args['top-alpha'] || args['all-alpha'];
+        properties['alpha'] = args['top-alpha'];
         properties['collision'] = args['top-collision'] || args['all-collision'];
         properties['vertex-colors'] = args['top-vertex-colors'];
         core_entity_create({
@@ -685,7 +693,7 @@ function webgl_cuboid(args){
     properties['rotate-x'] = 180;
     properties['translate-y'] = args['translate-y'] - half_height;
     if(args['exclude']['bottom'] !== true){
-        properties['alpha'] = args['bottom-alpha'] || args['all-alpha'];
+        properties['alpha'] = args['bottom-alpha'];
         properties['collision'] = args['bottom-collision'] || args['all-collision'];
         properties['vertex-colors'] = args['bottom-vertex-colors'];
         core_entity_create({
@@ -705,7 +713,7 @@ function webgl_cuboid(args){
       vertices_width, 0, vertices_height, 1
     ];
     if(args['exclude']['front'] !== true){
-        properties['alpha'] = args['front-alpha'] || args['all-alpha'];
+        properties['alpha'] = args['front-alpha'];
         properties['collision'] = args['front-collision'] || args['all-collision'];
         properties['vertex-colors'] = args['front-vertex-colors'];
         core_entity_create({
@@ -718,7 +726,7 @@ function webgl_cuboid(args){
     properties['rotate-x'] = 270;
     properties['translate-z'] = args['translate-z'] - half_length;
     if(args['exclude']['back'] !== true){
-        properties['alpha'] = args['back-alpha'] || args['all-alpha'];
+        properties['alpha'] = args['back-alpha'];
         properties['collision'] = args['back-collision'] || args['all-collision'];
         properties['vertex-colors'] = args['back-vertex-colors'];
         core_entity_create({
@@ -739,7 +747,7 @@ function webgl_cuboid(args){
       vertices_height, 0, vertices_length, 1
     ];
     if(args['exclude']['left'] !== true){
-        properties['alpha'] = args['left-alpha'] || args['all-alpha'];
+        properties['alpha'] = args['left-alpha'];
         properties['collision'] = args['left-collision'] || args['all-collision'];
         properties['vertex-colors'] = args['left-vertex-colors'];
         core_entity_create({
@@ -752,7 +760,7 @@ function webgl_cuboid(args){
     properties['rotate-z'] = 270;
     properties['translate-x'] = args['translate-x'] + half_width;
     if(args['exclude']['right'] !== true){
-        properties['alpha'] = args['right-alpha'] || args['all-alpha'];
+        properties['alpha'] = args['right-alpha'];
         properties['collision'] = args['right-collision'] || args['all-collision'];
         properties['vertex-colors'] = args['right-vertex-colors'];
         core_entity_create({
