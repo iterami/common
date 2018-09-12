@@ -69,9 +69,6 @@ ul{
     margin: 0;
     text-align: left;
 }
-#repo-ui{
-    user-select: none;
-}
 .right{
     text-align: right;
 }

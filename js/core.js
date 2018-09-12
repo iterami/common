@@ -508,19 +508,20 @@ function core_entity_set(args){
 function core_escape(){
     core_menu_open = !core_menu_open;
 
-    document.getElementById('core-menu').style.display = core_menu_open
-      ? 'inline'
-      : 'none';
-    document.getElementById('repo-ui').style.display = core_menu_open
-      ? 'none'
-      : 'block';
-
     if(!core_menu_open){
+        document.getElementById('core-ui').style.userSelect = 'none';
+        document.getElementById('core-menu').style.display = 'none';
+        document.getElementById('repo-ui').style.display = 'block';
+
         core_storage_save();
         core_interval_resume_all();
 
     }else{
         core_interval_pause_all();
+
+        document.getElementById('core-ui').style.userSelect = 'auto';
+        document.getElementById('core-menu').style.display = 'inline';
+        document.getElementById('repo-ui').style.display = 'none';
     }
 
     core_call({
