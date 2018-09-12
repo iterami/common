@@ -509,8 +509,8 @@ function core_escape(){
     core_menu_open = !core_menu_open;
 
     if(!core_menu_open){
-        document.getElementById('core-ui').style.userSelect = 'none';
         document.getElementById('core-menu').style.display = 'none';
+        document.getElementById('core-ui').style.userSelect = 'none';
         document.getElementById('repo-ui').style.display = 'block';
 
         core_storage_save();
@@ -519,9 +519,9 @@ function core_escape(){
     }else{
         core_interval_pause_all();
 
+        document.getElementById('repo-ui').style.display = 'none';
         document.getElementById('core-ui').style.userSelect = 'auto';
         document.getElementById('core-menu').style.display = 'inline';
-        document.getElementById('repo-ui').style.display = 'none';
     }
 
     core_call({
