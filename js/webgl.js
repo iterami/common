@@ -1243,7 +1243,7 @@ function webgl_entity_todo(entity){
     }
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
-      'colorData': core_entities[entity]['vertex-colors'],
+      'colorData': core_entities[entity]['vertex-colors'] || webgl_vertexcolorarray(),
       'normalData': core_entities[entity]['normals'],
       'textureData': core_entities[entity]['textureData'],
       'vertexData': core_entities[entity]['vertices'],
