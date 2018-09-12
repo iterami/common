@@ -1694,14 +1694,16 @@ function webgl_level_load(args){
     });
 
     if(typeof args['json'] === 'object'){
-        let filereader = new FileReader();
-        filereader.onload = function(event){
-            webgl_level_init({
-              'character': args['character'],
-              'json': JSON.parse(event.target.result),
-            });
-        };
-        filereader.readAsText(args['json']);
+        core_file({
+          'file': args['json'],
+          'todo': function(event){
+              webgl_level_init({
+                'character': args['character'],
+                'json': JSON.parse(event.target.result),
+              });
+          },
+          'type': 'readAsText',
+        });
 
         return;
     }

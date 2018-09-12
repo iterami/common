@@ -602,6 +602,23 @@ function core_events_todoloop(){
     }
 }
 
+// Required args: file, todo
+// Optional args: type
+function core_file(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'type': 'readAsDataURL',
+      },
+    });
+
+    let filereader = new FileReader();
+    filereader.onload = function(event){
+        args['todo'](event);
+    };
+    filereader[args['type']](args['file']);
+}
+
 // Optional args: decimals, length, x0, x1, y0, y1, z0, z1
 function core_fixed_length_line(args){
     args = core_args({
