@@ -382,37 +382,37 @@ function webgl_character_spawn(args){
 
 // Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
 function webgl_character_trade(args){
-    let character_0_inventory = webgl_characters[args['character-0']]['inventory'];
-    let character_1_inventory = webgl_characters[args['character-1']]['inventory'];
+    let inventory_0 = webgl_characters[args['character-0']]['inventory'];
+    let inventory_1 = webgl_characters[args['character-1']]['inventory'];
 
     if(!webgl_characters[args['character-0']]
       || !webgl_characters[args['character-1']]
       || webgl_characters[args['character-0']]['health-current'] <= 0
       || webgl_characters[args['character-1']]['health-current'] <= 0
-      || !character_0_inventory[args['item-0-id']]
-      || !character_1_inventory[args['item-1-id']]
-      || character_0_inventory[args['item-0-id']] < args['item-0-amount']
-      || character_1_inventory[args['item-1-id']] < args['item-1-amount']){
+      || !inventory_0[args['item-0-id']]
+      || !inventory_1[args['item-1-id']]
+      || inventory_0[args['item-0-id']] < args['item-0-amount']
+      || inventory_1[args['item-1-id']] < args['item-1-amount']){
         return;
     }
 
-    character_0_inventory[args['item-0-id']] -= args['item-0-amount'];
-    character_1_inventory[args['item-1-id']] -= args['item-1-amount'];
-    if(character_0_inventory[args['item-0-id']] === 0){
-        delete character_0_inventory[args['item-0-id']];
+    inventory_0[args['item-0-id']] -= args['item-0-amount'];
+    inventory_1[args['item-1-id']] -= args['item-1-amount'];
+    if(inventory_0[args['item-0-id']] === 0){
+        delete inventory_0[args['item-0-id']];
     }
-    if(character_1_inventory[args['item-1-id']] === 0){
-        delete character_1_inventory[args['item-1-id']];
+    if(inventory_1[args['item-1-id']] === 0){
+        delete inventory_1[args['item-1-id']];
     }
 
-    if(!character_0_inventory[args['item-1-id']]){
-        character_0_inventory[args['item-1-id']] = 0;
+    if(!inventory_0[args['item-1-id']]){
+        inventory_0[args['item-1-id']] = 0;
     }
-    if(!character_1_inventory[args['item-0-id']]){
-        character_1_inventory[args['item-0-id']] = 0;
+    if(!inventory_1[args['item-0-id']]){
+        inventory_1[args['item-0-id']] = 0;
     }
-    character_0_inventory[args['item-1-id']] += args['item-1-amount'];
-    character_1_inventory[args['item-0-id']] += args['item-0-amount'];
+    inventory_0[args['item-1-id']] += args['item-1-amount'];
+    inventory_1[args['item-0-id']] += args['item-0-amount'];
 }
 
 // Optional args: blue, green, red
