@@ -1290,11 +1290,11 @@ function webgl_entity_todo(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red,
-//   clearcolor-blue, clearcolor-green, clearcolor-red, directional-blue, directional-green,
-//   directional-red, directional-state, directional-vector, fog-density, fog-state,
-//   gravity-acceleration, gravity-axis, gravity-max, multiplier-jump, multiplier-speed, spawn-rotate-x,
-//   spawn-rotate-y, spawn-rotate-z, spawn-translate-x, spawn-translate-y, spawn-translate-z
+// Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-blue, clearcolor-green,
+//   clearcolor-red, directional-blue, directional-green, directional-red, directional-state,
+//   directional-vector, fog-density, fog-state, gravity-acceleration, gravity-axis, gravity-max,
+//   jump-movement, multiplier-jump, multiplier-speed, spawn-rotate-x, spawn-rotate-y, spawn-rotate-z,
+//   spawn-translate-x, spawn-translate-y, spawn-translate-z
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -1315,6 +1315,7 @@ function webgl_init(args){
         'gravity-acceleration': -.05,
         'gravity-axis': 'dy',
         'gravity-max': -2,
+        'jump-movement': false,
         'multiplier-jump': 1,
         'multiplier-speed': 1,
         'spawn-rotate-x': 0,
@@ -1357,6 +1358,7 @@ function webgl_init(args){
       'gravity-acceleration': args['gravity-acceleration'],
       'gravity-axis': args['gravity-axis'],
       'gravity-max': args['gravity-max'],
+      'jump-movement': args['jump-movement'],
       'multiplier-jump': args['multiplier-jump'],
       'multiplier-speed': args['multiplier-speed'],
       'shader': {},
@@ -1960,9 +1962,10 @@ function webgl_logicloop(){
             }
         }
 
-        if(webgl_character_level() === -1
-          || (webgl_characters[webgl_character_id]['jump-allow']
-            && webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] === 0)){
+        if((webgl_characters[webgl_character_id]['jump-allow']
+            && webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] === 0)
+          || webgl_character_level() === -1
+          || webgl_properties['jump-movement']){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
@@ -2193,8 +2196,9 @@ function webgl_logicloop(){
         webgl_characters[webgl_character_id]['dy'] = 0;
         webgl_characters[webgl_character_id]['dz'] = 0;
 
-    }else if(webgl_characters[webgl_character_id]['jump-allow']
-      && webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] === 0){
+    }else if((webgl_characters[webgl_character_id]['jump-allow']
+        && webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] === 0)
+      || webgl_properties['jump-movement']){
         webgl_characters[webgl_character_id]['dx'] = 0;
         webgl_characters[webgl_character_id]['dz'] = 0;
     }
