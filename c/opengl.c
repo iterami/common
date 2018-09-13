@@ -568,8 +568,13 @@ void opengl_load_level(const gchar *filename){
           clearcolor_red,
           clearcolor_green,
           clearcolor_blue,
-          clearcolor_alpha
+          1
         );
+
+        // Parse cuboids.
+        if(strcmp(json_object->name->string, "cuboids") == 0){
+            json_object = json_object->next;
+        }
 
         // Parse directional-blue.
         if(strcmp(json_object->name->string, "directional-blue") == 0){
@@ -670,6 +675,11 @@ void opengl_load_level(const gchar *filename){
             );
         }
 
+        // Parse jump-movement.
+        if(strcmp(json_object->name->string, "jump-movement") == 0){
+            json_object = json_object->next;
+        }
+
         // Parse multiplier-jump.
         if(strcmp(json_object->name->string, "multiplier-jump") == 0){
             value = json_object->value;
@@ -766,11 +776,6 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse attach-to.
-            if(strcmp(json_level_entities_element_property->name->string, "attach-to") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
             // Parse attach-offset-x.
             if(strcmp(json_level_entities_element_property->name->string, "attach-offset-x") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
@@ -783,6 +788,16 @@ void opengl_load_level(const gchar *filename){
 
             // Parse attach-offset-z.
             if(strcmp(json_level_entities_element_property->name->string, "attach-offset-z") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse attach-to.
+            if(strcmp(json_level_entities_element_property->name->string, "attach-to") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse attach-type.
+            if(strcmp(json_level_entities_element_property->name->string, "attach-type") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
