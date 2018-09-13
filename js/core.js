@@ -1861,6 +1861,7 @@ function core_repo_init(args){
     repo_title.href = 'https://github.com/' + args['github'] + '/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
 
+    let have_default = false;
     for(let tab in args['tabs']){
         core_tab_create({
           'content': args['tabs'][tab]['content'],
@@ -1873,7 +1874,13 @@ function core_repo_init(args){
             core_tab_switch({
               'id': 'tab_' + args['tabs'][tab]['group'] + '_' + tab,
             });
+            have_default = true;
         }
+    }
+    if(!have_default){
+        core_tab_switch({
+          'id': 'tab_core-menu_repo',
+        });
     }
 
     core_storage_update();
@@ -2186,6 +2193,11 @@ function core_tab_create(args){
 function core_tab_switch(args){
     let info = args['id'].split('_');
 
+    let element = document.getElementById('tabcontent-' + info[2]);
+    if(!element){
+        return;
+    }
+
     for(let tab in core_tabs){
         if(core_tabs[tab]['group'] === info[1]
           && tab !== info[2]){
@@ -2193,7 +2205,6 @@ function core_tab_switch(args){
         }
     }
 
-    let element = document.getElementById('tabcontent-' + info[2]);
     element.style.display = element.style.display === 'block'
       ? 'none'
       : 'block';
