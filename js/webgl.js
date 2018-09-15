@@ -403,7 +403,7 @@ function webgl_character_trade(args){
           'item': args['item-0-id'],
         });
     }
-    if(inventory_0[args['item-1-id']]['equipped']){
+    if(inventory_1[args['item-1-id']]['equipped']){
         webgl_item_equip({
           'character': args['character-1'],
           'equipped': false,
@@ -413,27 +413,36 @@ function webgl_character_trade(args){
 
     inventory_0[args['item-0-id']]['amount'] -= args['item-0-amount'];
     inventory_1[args['item-1-id']]['amount'] -= args['item-1-amount'];
-    if(inventory_0[args['item-0-id']]['amount'] === 0){
-        delete inventory_0[args['item-0-id']];
-    }
-    if(inventory_1[args['item-1-id']]['amount'] === 0){
-        delete inventory_1[args['item-1-id']];
-    }
 
     if(!inventory_0[args['item-1-id']]){
         webgl_item_reset({
           'character': args['character-0'],
           'item': args['item-1-id'],
         });
+        Object.assign(
+          inventory_0[args['item-1-id']]['stats'],
+          inventory_1[args['item-1-id']]['stats']
+        );
     }
     if(!inventory_1[args['item-0-id']]){
         webgl_item_reset({
           'character': args['character-1'],
           'item': args['item-0-id'],
         });
+        Object.assign(
+          inventory_1[args['item-0-id']]['stats'],
+          inventory_0[args['item-0-id']]['stats']
+        );
     }
     inventory_0[args['item-1-id']]['amount'] += args['item-1-amount'];
     inventory_1[args['item-0-id']]['amount'] += args['item-0-amount'];
+
+    if(inventory_0[args['item-0-id']]['amount'] === 0){
+        delete inventory_0[args['item-0-id']];
+    }
+    if(inventory_1[args['item-1-id']]['amount'] === 0){
+        delete inventory_1[args['item-1-id']];
+    }
 }
 
 // Optional args: blue, green, red
