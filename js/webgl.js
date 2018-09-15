@@ -396,6 +396,11 @@ function webgl_character_trade(args){
         return;
     }
 
+    if(inventory_0[args['item-0-id']]['equipped']){
+    }
+    if(inventory_0[args['item-1-id']]['equipped']){
+    }
+
     inventory_0[args['item-0-id']]['amount'] -= args['item-0-amount'];
     inventory_1[args['item-1-id']]['amount'] -= args['item-1-amount'];
     if(inventory_0[args['item-0-id']]['amount'] === 0){
@@ -1611,6 +1616,7 @@ function webgl_item_reset(args){
 
     webgl_characters[args['character']]['inventory'][args['item']] = {
       'amount': 0,
+      'equipped': false,
     };
 }
 
