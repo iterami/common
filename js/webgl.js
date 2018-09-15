@@ -406,14 +406,16 @@ function webgl_character_trade(args){
     }
 
     if(!inventory_0[args['item-1-id']]){
-        inventory_0[args['item-1-id']] = {
-          'amount': 0,
-        };
+        webgl_item_reset({
+          'character': args['character-0'],
+          'item': args['item-1-id'],
+        });
     }
     if(!inventory_1[args['item-0-id']]){
-        inventory_1[args['item-0-id']] = {
-          'amount': 0,
-        };
+        webgl_item_reset({
+          'character': args['character-1'],
+          'item': args['item-0-id'],
+        });
     }
     inventory_0[args['item-1-id']]['amount'] += args['item-1-amount'];
     inventory_1[args['item-0-id']]['amount'] += args['item-0-amount'];
@@ -564,9 +566,10 @@ function webgl_collision(args){
 
                 if(target['item'] !== false){
                     if(!(target['item'] in webgl_characters[args['character-id']]['inventory'])){
-                        webgl_characters[args['character-id']]['inventory'][target['item']] = {
-                          'amount': 0,
-                        };
+                        webgl_item_reset({
+                          'character': args['character-id'],
+                          'item': target['item'],
+                        });
                     }
 
                     webgl_characters[args['character-id']]['inventory'][target['item']]['amount']++;
@@ -1202,7 +1205,7 @@ function webgl_entity_move(args){
     }
 }
 
-// Optional args: entity, x, y, z
+// Optional args: character, entity, x, y, z
 function webgl_entity_move_to(args){
     args = core_args({
       'args': args,
@@ -1594,6 +1597,21 @@ function webgl_init_character(args){
         );
     }
     webgl_character_count++;
+}
+
+// Required args: item
+// Optional args: character
+function webgl_item_reset(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+      },
+    });
+
+    webgl_characters[args['character']]['inventory'][args['item']] = {
+      'amount': 0,
+    };
 }
 
 // Optional args: character, target
