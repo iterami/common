@@ -588,15 +588,20 @@ function webgl_collision(args){
                     });
                 }
 
-                if(target['item'] !== false){
-                    if(!(target['item'] in webgl_characters[args['character-id']]['inventory'])){
+                if(target['item-id'] !== false){
+                    if(!(target['item-id'] in webgl_characters[args['character-id']]['inventory'])){
                         webgl_item_reset({
                           'character': args['character-id'],
-                          'item': target['item'],
+                          'item': target['item-id'],
                         });
+
+                        Object.assign(
+                          webgl_characters[args['character-id']]['inventory'][target['item-id']]['stats'],
+                          target['item-stats']
+                        );
                     }
 
-                    webgl_characters[args['character-id']]['inventory'][target['item']]['amount']++;
+                    webgl_characters[args['character-id']]['inventory'][target['item-id']]['amount'] += target['item-amount'];
 
                     core_entity_remove({
                       'entities': [
@@ -1495,7 +1500,9 @@ function webgl_init(args){
         'dy': 0,
         'dz': 0,
         'gravity': false,
-        'item': false,
+        'item-amount': 1,
+        'item-id': false,
+        'item-stats': {},
         'normals': [],
         'rotate-radians-x': 0,
         'rotate-radians-y': 0,
