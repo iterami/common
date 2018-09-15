@@ -1631,6 +1631,16 @@ function webgl_item_equip(args){
     }
 
     webgl_characters[args['character']]['inventory'][args['item']]['equipped'] = args['equipped'];
+
+    let stats = webgl_characters[args['character']]['inventory'][args['item']]['stats'];
+    for(let stat in stats){
+        let dstat = stats[stat];
+        if(args['equipped']){
+            dstat *= -1;
+        }
+
+        webgl_characters[stat] += dstat;
+    }
 }
 
 // Required args: item
@@ -1646,6 +1656,7 @@ function webgl_item_reset(args){
     webgl_characters[args['character']]['inventory'][args['item']] = {
       'amount': 0,
       'equipped': false,
+      'stats': {},
     };
 }
 
