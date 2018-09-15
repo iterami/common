@@ -391,28 +391,32 @@ function webgl_character_trade(args){
       || webgl_characters[args['character-1']]['health-current'] <= 0
       || !inventory_0[args['item-0-id']]
       || !inventory_1[args['item-1-id']]
-      || inventory_0[args['item-0-id']] < args['item-0-amount']
-      || inventory_1[args['item-1-id']] < args['item-1-amount']){
+      || inventory_0[args['item-0-id']]['amount'] < args['item-0-amount']
+      || inventory_1[args['item-1-id']]['amount'] < args['item-1-amount']){
         return;
     }
 
-    inventory_0[args['item-0-id']] -= args['item-0-amount'];
-    inventory_1[args['item-1-id']] -= args['item-1-amount'];
-    if(inventory_0[args['item-0-id']] === 0){
+    inventory_0[args['item-0-id']]['amount'] -= args['item-0-amount'];
+    inventory_1[args['item-1-id']]['amount'] -= args['item-1-amount'];
+    if(inventory_0[args['item-0-id']]['amount'] === 0){
         delete inventory_0[args['item-0-id']];
     }
-    if(inventory_1[args['item-1-id']] === 0){
+    if(inventory_1[args['item-1-id']]['amount'] === 0){
         delete inventory_1[args['item-1-id']];
     }
 
     if(!inventory_0[args['item-1-id']]){
-        inventory_0[args['item-1-id']] = 0;
+        inventory_0[args['item-1-id']] = {
+          'amount': 0,
+        };
     }
     if(!inventory_1[args['item-0-id']]){
-        inventory_1[args['item-0-id']] = 0;
+        inventory_1[args['item-0-id']] = {
+          'amount': 0,
+        };
     }
-    inventory_0[args['item-1-id']] += args['item-1-amount'];
-    inventory_1[args['item-0-id']] += args['item-0-amount'];
+    inventory_0[args['item-1-id']]['amount'] += args['item-1-amount'];
+    inventory_1[args['item-0-id']]['amount'] += args['item-0-amount'];
 }
 
 // Optional args: blue, green, red
@@ -560,10 +564,12 @@ function webgl_collision(args){
 
                 if(target['item'] !== false){
                     if(!(target['item'] in webgl_characters[args['character-id']]['inventory'])){
-                        webgl_characters[args['character-id']]['inventory'][target['item']] = 0;
+                        webgl_characters[args['character-id']]['inventory'][target['item']] = {
+                          'amount': 0,
+                        };
                     }
 
-                    webgl_characters[args['character-id']]['inventory'][target['item']]++;
+                    webgl_characters[args['character-id']]['inventory'][target['item']]['amount']++;
 
                     core_entity_remove({
                       'entities': [
@@ -2084,7 +2090,7 @@ function webgl_logicloop(){
         let elements = {};
         npc_trade = '<table>';
         for(let trade in npc_trades){
-            if(webgl_characters[webgl_character_trading]['inventory'][npc_trades[trade]['give-id']] < npc_trades[trade]['give-amount']){
+            if(webgl_characters[webgl_character_trading]['inventory'][npc_trades[trade]['give-id']]['amount'] < npc_trades[trade]['give-amount']){
                 continue;
             }
 
