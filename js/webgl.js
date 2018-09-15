@@ -397,8 +397,18 @@ function webgl_character_trade(args){
     }
 
     if(inventory_0[args['item-0-id']]['equipped']){
+        webgl_item_equip({
+          'character': args['character-0'],
+          'equipped': false,
+          'item': args['item-0-id'],
+        });
     }
     if(inventory_0[args['item-1-id']]['equipped']){
+        webgl_item_equip({
+          'character': args['character-1'],
+          'equipped': false,
+          'item': args['item-1-id'],
+        });
     }
 
     inventory_0[args['item-0-id']]['amount'] -= args['item-0-amount'];
@@ -1602,6 +1612,25 @@ function webgl_init_character(args){
         );
     }
     webgl_character_count++;
+}
+
+// Required args: item
+// Optional args: character, equipped
+function webgl_item_equip(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'equipped': true,
+      },
+    });
+
+    if(!webgl_characters[args['character']]['inventory'][args['item']]
+      || webgl_characters[args['character']]['inventory'][args['item']]['equipped'] === args['equipped']){
+        return;
+    }
+
+    webgl_characters[args['character']]['inventory'][args['item']]['equipped'] = args['equipped'];
 }
 
 // Required args: item
