@@ -2287,6 +2287,9 @@ function webgl_logicloop(){
       || webgl_properties['jump-movement']){
         webgl_characters[webgl_character_id]['dx'] = 0;
         webgl_characters[webgl_character_id]['dz'] = 0;
+
+    }else if(webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] !== 0){
+        webgl_characters[webgl_character_id]['jump-allow'] = false;
     }
 
     core_matrix_identity({
