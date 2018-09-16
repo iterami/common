@@ -13,11 +13,12 @@ function webgl_attach(args){
       },
     });
 
-    core_entities[args['entity']]['attach-offset-x'] = args['offset-x'];
-    core_entities[args['entity']]['attach-offset-y'] = args['offset-y'];
-    core_entities[args['entity']]['attach-offset-z'] = args['offset-z'];
-    core_entities[args['entity']]['attach-to'] = args['to'];
-    core_entities[args['entity']]['attach-type'] = args['type'];
+    let entity = core_entities[args['entity']];
+    entity['attach-offset-x'] = args['offset-x'];
+    entity['attach-offset-y'] = args['offset-y'];
+    entity['attach-offset-z'] = args['offset-z'];
+    entity['attach-to'] = args['to'];
+    entity['attach-type'] = args['type'];
 }
 
 // Required args: entity
@@ -170,15 +171,16 @@ function webgl_camera_zoom(event){
         return;
     }
 
+    let character = webgl_characters[webgl_character_id];
     if(event.deltaY > 0){
-        webgl_characters[webgl_character_id]['camera-zoom-current'] = Math.min(
-          webgl_characters[webgl_character_id]['camera-zoom-current'] + 1,
-          webgl_characters[webgl_character_id]['camera-zoom-max']
+        character['camera-zoom-current'] = Math.min(
+          character['camera-zoom-current'] + 1,
+          character['camera-zoom-max']
         );
 
     }else{
-        webgl_characters[webgl_character_id]['camera-zoom-current'] = Math.max(
-          webgl_characters[webgl_character_id]['camera-zoom-current'] - 1,
+        character['camera-zoom-current'] = Math.max(
+          character['camera-zoom-current'] - 1,
           0
         );
     }
@@ -249,32 +251,7 @@ function webgl_character_home(){
     }
 
     webgl_level_unload();
-    webgl_init({
-      'ambient-blue': webgl_character_homebase['properties']['ambient-blue'],
-      'ambient-green': webgl_character_homebase['properties']['ambient-green'],
-      'ambient-red': webgl_character_homebase['properties']['ambient-red'],
-      'clearcolor-blue': webgl_character_homebase['properties']['clearcolor-blue'],
-      'clearcolor-green': webgl_character_homebase['properties']['clearcolor-green'],
-      'clearcolor-red': webgl_character_homebase['properties']['clearcolor-red'],
-      'directional-blue': webgl_character_homebase['properties']['directional-blue'],
-      'directional-green': webgl_character_homebase['properties']['directional-green'],
-      'directional-red': webgl_character_homebase['properties']['directional-red'],
-      'directional-state': webgl_character_homebase['properties']['directional-state'],
-      'directional-vector': webgl_character_homebase['properties']['directional-vector'],
-      'fog-density': webgl_character_homebase['properties']['fog-density'],
-      'fog-state': webgl_character_homebase['properties']['fog-state'],
-      'gravity-acceleration': webgl_character_homebase['properties']['gravity-acceleration'],
-      'gravity-axis': webgl_character_homebase['properties']['gravity-axis'],
-      'gravity-max': webgl_character_homebase['properties']['gravity-max'],
-      'multiplier-jump': webgl_character_homebase['properties']['multiplier-jump'],
-      'multiplier-speed': webgl_character_homebase['properties']['multiplier-speed'],
-      'spawn-rotate-x': webgl_character_homebase['properties']['spawn-rotate-x'],
-      'spawn-rotate-y': webgl_character_homebase['properties']['spawn-rotate-y'],
-      'spawn-rotate-z': webgl_character_homebase['properties']['spawn-rotate-z'],
-      'spawn-translate-x': webgl_character_homebase['properties']['spawn-translate-x'],
-      'spawn-translate-y': webgl_character_homebase['properties']['spawn-translate-y'],
-      'spawn-translate-z': webgl_character_homebase['properties']['spawn-translate-z'],
-    });
+    webgl_init(webgl_character_homebase);
     webgl_entity_create({
       'entities': webgl_character_homebase['entities'],
     });
@@ -1576,11 +1553,12 @@ function webgl_item_equip(args){
       },
     });
 
-    if(!webgl_characters[args['character']]['inventory'][args['item']]
-      || webgl_characters[args['character']]['inventory'][args['item']]['equipped'] === args['equip']){
+    let item = webgl_characters[args['character']]['inventory'][args['item']];
+
+    if(!item
+      || item['equipped'] === args['equip']){
         return;
     }
-    let item = webgl_characters[args['character']]['inventory'][args['item']];
 
     item['equipped'] = args['equip'];
 
