@@ -1569,12 +1569,18 @@ function webgl_item_equip(args){
             dstat *= -1;
         }
 
-        webgl_characters[stat] += dstat;
+        webgl_characters[args['character']][stat] += dstat;
     }
 
     for(let entity in item['entities']){
-        core_entity_create({
+        let entity_id = core_entity_create({
           'properties': item['entities'][entity],
+        });
+
+        webgl_attach({
+          'entity': entity_id,
+          'to': args['character'],
+          'type': 'character',
         });
     }
 }
