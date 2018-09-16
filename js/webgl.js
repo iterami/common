@@ -380,71 +380,6 @@ function webgl_character_spawn(args){
     webgl_characters[args['character']]['jump-allow'] = false;
 }
 
-// Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
-function webgl_character_trade(args){
-    let inventory_0 = webgl_characters[args['character-0']]['inventory'];
-    let inventory_1 = webgl_characters[args['character-1']]['inventory'];
-
-    if(!webgl_characters[args['character-0']]
-      || !webgl_characters[args['character-1']]
-      || webgl_characters[args['character-0']]['health-current'] <= 0
-      || webgl_characters[args['character-1']]['health-current'] <= 0
-      || !inventory_0[args['item-0-id']]
-      || !inventory_1[args['item-1-id']]
-      || inventory_0[args['item-0-id']]['amount'] < args['item-0-amount']
-      || inventory_1[args['item-1-id']]['amount'] < args['item-1-amount']){
-        return;
-    }
-
-    if(inventory_0[args['item-0-id']]['equipped']){
-        webgl_item_equip({
-          'character': args['character-0'],
-          'equip': false,
-          'item': args['item-0-id'],
-        });
-    }
-    if(inventory_1[args['item-1-id']]['equipped']){
-        webgl_item_equip({
-          'character': args['character-1'],
-          'equip': false,
-          'item': args['item-1-id'],
-        });
-    }
-
-    inventory_0[args['item-0-id']]['amount'] -= args['item-0-amount'];
-    inventory_1[args['item-1-id']]['amount'] -= args['item-1-amount'];
-
-    if(!inventory_0[args['item-1-id']]){
-        webgl_item_reset({
-          'character': args['character-0'],
-          'item': args['item-1-id'],
-        });
-        Object.assign(
-          inventory_0[args['item-1-id']]['stats'],
-          inventory_1[args['item-1-id']]['stats']
-        );
-    }
-    if(!inventory_1[args['item-0-id']]){
-        webgl_item_reset({
-          'character': args['character-1'],
-          'item': args['item-0-id'],
-        });
-        Object.assign(
-          inventory_1[args['item-0-id']]['stats'],
-          inventory_0[args['item-0-id']]['stats']
-        );
-    }
-    inventory_0[args['item-1-id']]['amount'] += args['item-1-amount'];
-    inventory_1[args['item-0-id']]['amount'] += args['item-0-amount'];
-
-    if(inventory_0[args['item-0-id']]['amount'] === 0){
-        delete inventory_0[args['item-0-id']];
-    }
-    if(inventory_1[args['item-1-id']]['amount'] === 0){
-        delete inventory_1[args['item-1-id']];
-    }
-}
-
 // Optional args: blue, green, red
 function webgl_clearcolor_set(args){
     args = core_args({
@@ -1676,6 +1611,71 @@ function webgl_item_reset(args){
     };
 }
 
+// Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
+function webgl_item_trade(args){
+    let inventory_0 = webgl_characters[args['character-0']]['inventory'];
+    let inventory_1 = webgl_characters[args['character-1']]['inventory'];
+
+    if(!webgl_characters[args['character-0']]
+      || !webgl_characters[args['character-1']]
+      || webgl_characters[args['character-0']]['health-current'] <= 0
+      || webgl_characters[args['character-1']]['health-current'] <= 0
+      || !inventory_0[args['item-0-id']]
+      || !inventory_1[args['item-1-id']]
+      || inventory_0[args['item-0-id']]['amount'] < args['item-0-amount']
+      || inventory_1[args['item-1-id']]['amount'] < args['item-1-amount']){
+        return;
+    }
+
+    if(inventory_0[args['item-0-id']]['equipped']){
+        webgl_item_equip({
+          'character': args['character-0'],
+          'equip': false,
+          'item': args['item-0-id'],
+        });
+    }
+    if(inventory_1[args['item-1-id']]['equipped']){
+        webgl_item_equip({
+          'character': args['character-1'],
+          'equip': false,
+          'item': args['item-1-id'],
+        });
+    }
+
+    inventory_0[args['item-0-id']]['amount'] -= args['item-0-amount'];
+    inventory_1[args['item-1-id']]['amount'] -= args['item-1-amount'];
+
+    if(!inventory_0[args['item-1-id']]){
+        webgl_item_reset({
+          'character': args['character-0'],
+          'item': args['item-1-id'],
+        });
+        Object.assign(
+          inventory_0[args['item-1-id']]['stats'],
+          inventory_1[args['item-1-id']]['stats']
+        );
+    }
+    if(!inventory_1[args['item-0-id']]){
+        webgl_item_reset({
+          'character': args['character-1'],
+          'item': args['item-0-id'],
+        });
+        Object.assign(
+          inventory_1[args['item-0-id']]['stats'],
+          inventory_0[args['item-0-id']]['stats']
+        );
+    }
+    inventory_0[args['item-1-id']]['amount'] += args['item-1-amount'];
+    inventory_1[args['item-0-id']]['amount'] += args['item-0-amount'];
+
+    if(inventory_0[args['item-0-id']]['amount'] === 0){
+        delete inventory_0[args['item-0-id']];
+    }
+    if(inventory_1[args['item-1-id']]['amount'] === 0){
+        delete inventory_1[args['item-1-id']];
+    }
+}
+
 // Optional args: character, target
 function webgl_json_export(args){
     args = core_args({
@@ -2180,7 +2180,7 @@ function webgl_logicloop(){
 
             elements['npc-trade-' + trade] = {
               'onclick': function(){
-                  webgl_character_trade({
+                  webgl_item_trade({
                     'character-0': webgl_character_id,
                     'character-1': webgl_character_trading,
                     'item-0-amount': npc_trades[trade]['get-amount'],
