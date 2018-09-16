@@ -396,6 +396,8 @@ function core_entity_create(args){
     for(let type in args['types']){
         core_entity_info[args['types'][type]]['todo'](args['id']);
     }
+
+    return args['id'];
 }
 
 // Required args: id, type
