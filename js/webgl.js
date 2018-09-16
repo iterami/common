@@ -1840,32 +1840,7 @@ function webgl_level_init(args){
 
     webgl_level_unload();
 
-    webgl_init({
-      'ambient-blue': args['json']['ambient-blue'],
-      'ambient-green': args['json']['ambient-green'],
-      'ambient-red': args['json']['ambient-red'],
-      'clearcolor-blue': args['json']['clearcolor-blue'],
-      'clearcolor-green': args['json']['clearcolor-green'],
-      'clearcolor-red': args['json']['clearcolor-red'],
-      'directional-blue': args['json']['directional-blue'],
-      'directional-green': args['json']['directional-green'],
-      'directional-red': args['json']['directional-red'],
-      'directional-state': args['json']['directional-state'],
-      'directional-vector': args['json']['directional-vector'],
-      'fog-density': args['json']['fog-density'],
-      'fog-state': args['json']['fog-state'],
-      'gravity-acceleration': args['json']['gravity-acceleration'],
-      'gravity-axis': args['json']['gravity-axis'],
-      'gravity-max': args['json']['gravity-max'],
-      'multiplier-jump': args['json']['multiplier-jump'],
-      'multiplier-speed': args['json']['multiplier-speed'],
-      'spawn-rotate-x': args['json']['spawn-rotate-x'],
-      'spawn-rotate-y': args['json']['spawn-rotate-y'],
-      'spawn-rotate-z': args['json']['spawn-rotate-z'],
-      'spawn-translate-x': args['json']['spawn-translate-x'],
-      'spawn-translate-y': args['json']['spawn-translate-y'],
-      'spawn-translate-z': args['json']['spawn-translate-z'],
-    });
+    webgl_init(args['json']);
 
     if(args['character'] === -1){
         webgl_init_character({
@@ -1887,32 +1862,7 @@ function webgl_level_init(args){
                 continue;
             }
 
-            webgl_init_character({
-              'camera-zoom-current': args['json']['characters'][character]['camera-zoom-current'],
-              'camera-zoom-max': args['json']['characters'][character]['camera-zoom-max'],
-              'collide-range': args['json']['characters'][character]['collide-range'],
-              'collides': args['json']['characters'][character]['collides'],
-              'dx': args['json']['characters'][character]['dx'],
-              'dy': args['json']['characters'][character]['dy'],
-              'dz': args['json']['characters'][character]['dz'],
-              'entities': args['json']['characters'][character]['entities'],
-              'experience': args['json']['characters'][character]['experience'],
-              'health-current': args['json']['characters'][character]['health-current'],
-              'health-max': args['json']['characters'][character]['health-max'],
-              'id': args['json']['characters'][character]['id'],
-              'inventory': args['json']['characters'][character]['inventory'],
-              'jump-height': args['json']['characters'][character]['jump-height'],
-              'level': args['json']['characters'][character]['level'],
-              'rotate-x': args['json']['characters'][character]['rotate-x'],
-              'rotate-y': args['json']['characters'][character]['rotate-y'],
-              'rotate-z': args['json']['characters'][character]['rotate-z'],
-              'speed': args['json']['characters'][character]['speed'],
-              'talk': args['json']['characters'][character]['talk'],
-              'trade': args['json']['characters'][character]['trade'],
-              'translate-x': args['json']['characters'][character]['translate-x'],
-              'translate-y': args['json']['characters'][character]['translate-y'],
-              'translate-z': args['json']['characters'][character]['translate-z'],
-            });
+            webgl_init_character(args['json']['characters'][character]);
 
             if(args['json']['characters'][character]['id'] === webgl_character_id){
                 webgl_character_homebase['entities'] = args['json']['entities'];
@@ -1946,35 +1896,7 @@ function webgl_level_init(args){
             continue;
         }
 
-        webgl_cuboid({
-          'all-alpha': args['json']['cuboids'][cuboid]['all-alpha'],
-          'all-collision': args['json']['cuboids'][cuboid]['all-collision'],
-          'all-vertex-colors': args['json']['cuboids'][cuboid]['all-vertex-colors'],
-          'back-alpha': args['json']['cuboids'][cuboid]['back-alpha'],
-          'back-collision': args['json']['cuboids'][cuboid]['back-collision'],
-          'back-vertex-colors': args['json']['cuboids'][cuboid]['back-vertex-colors'],
-          'bottom-vertex-colors': webgl_vertexcolorarray(),
-          'exclude': args['json']['cuboids'][cuboid]['exclude'],
-          'front-alpha': args['json']['cuboids'][cuboid]['front-alpha'],
-          'front-collision': args['json']['cuboids'][cuboid]['front-collision'],
-          'front-vertex-colors': args['json']['cuboids'][cuboid]['front-vertex-colors'],
-          'height': args['json']['cuboids'][cuboid]['height'],
-          'left-alpha': args['json']['cuboids'][cuboid]['left-alpha'],
-          'left-collision': args['json']['cuboids'][cuboid]['left-collision'],
-          'left-vertex-colors': args['json']['cuboids'][cuboid]['left-vertex-colors'],
-          'length': args['json']['cuboids'][cuboid]['length'],
-          'prefix': args['json']['cuboids'][cuboid]['prefix'],
-          'right-alpha': args['json']['cuboids'][cuboid]['right-alpha'],
-          'right-collision': args['json']['cuboids'][cuboid]['right-collision'],
-          'right-vertex-colors': args['json']['cuboids'][cuboid]['right-vertex-colors'],
-          'top-alpha': args['json']['cuboids'][cuboid]['top-alpha'],
-          'top-collision': args['json']['cuboids'][cuboid]['top-collision'],
-          'top-vertex-colors': args['json']['cuboids'][cuboid]['top-vertex-colors'],
-          'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
-          'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
-          'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
-          'width': args['json']['cuboids'][cuboid]['width'],
-        });
+        webgl_cuboid(args['json']['cuboids'][cuboid]);
     }
 
     webgl_entity_create({
