@@ -399,14 +399,14 @@ function webgl_character_trade(args){
     if(inventory_0[args['item-0-id']]['equipped']){
         webgl_item_equip({
           'character': args['character-0'],
-          'equipped': false,
+          'equip': false,
           'item': args['item-0-id'],
         });
     }
     if(inventory_1[args['item-1-id']]['equipped']){
         webgl_item_equip({
           'character': args['character-1'],
-          'equipped': false,
+          'equip': false,
           'item': args['item-1-id'],
         });
     }
@@ -1631,27 +1631,27 @@ function webgl_init_character(args){
 }
 
 // Required args: item
-// Optional args: character, equipped
+// Optional args: character, equip
 function webgl_item_equip(args){
     args = core_args({
       'args': args,
       'defaults': {
         'character': webgl_character_id,
-        'equipped': true,
+        'equip': true,
       },
     });
 
     if(!webgl_characters[args['character']]['inventory'][args['item']]
-      || webgl_characters[args['character']]['inventory'][args['item']]['equipped'] === args['equipped']){
+      || webgl_characters[args['character']]['inventory'][args['item']]['equipped'] === args['equip']){
         return;
     }
 
-    webgl_characters[args['character']]['inventory'][args['item']]['equipped'] = args['equipped'];
+    webgl_characters[args['character']]['inventory'][args['item']]['equipped'] = args['equip'];
 
     let stats = webgl_characters[args['character']]['inventory'][args['item']]['stats'];
     for(let stat in stats){
         let dstat = stats[stat];
-        if(args['equipped']){
+        if(args['equip']){
             dstat *= -1;
         }
 
