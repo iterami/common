@@ -1580,10 +1580,11 @@ function webgl_item_equip(args){
       || webgl_characters[args['character']]['inventory'][args['item']]['equipped'] === args['equip']){
         return;
     }
+    let item = webgl_characters[args['character']]['inventory'][args['item']];
 
-    webgl_characters[args['character']]['inventory'][args['item']]['equipped'] = args['equip'];
+    item['equipped'] = args['equip'];
 
-    let stats = webgl_characters[args['character']]['inventory'][args['item']]['stats'];
+    let stats = item['stats'];
     for(let stat in stats){
         let dstat = stats[stat];
         if(args['equip']){
@@ -1591,6 +1592,12 @@ function webgl_item_equip(args){
         }
 
         webgl_characters[stat] += dstat;
+    }
+
+    for(let entity in item['entities']){
+        core_entity_create({
+          'properties': item['entities'][entity],
+        });
     }
 }
 
@@ -1606,6 +1613,7 @@ function webgl_item_reset(args){
 
     webgl_characters[args['character']]['inventory'][args['item']] = {
       'amount': 0,
+      'entities': [],
       'equipped': false,
       'stats': {},
     };
