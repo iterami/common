@@ -1413,6 +1413,7 @@ function webgl_init(args){
         'dz': 0,
         'gravity': false,
         'item-amount': 1,
+        'item-entities': [],
         'item-id': false,
         'item-stats': {},
         'normals': [],
