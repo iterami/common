@@ -1579,21 +1579,28 @@ function webgl_item_equip(args){
         let entity_id = '_item-' + args['character'] + '-' + args['item'] + '-' + entity;
 
         if(args['equip']){
+            let properties = {};
+            Object.assign(
+              properties,
+              item['entities'][entity]
+            );
+            properties['id'] = entity_id;
+
             core_entity_create({
               'id': entity_id,
-              'properties': item['entities'][entity],
+              'properties': properties,
             });
 
             webgl_attach({
               'entity': entity_id,
-              'offset-x': item['entities'][entity]['attach-offset-x'],
-              'offset-y': item['entities'][entity]['attach-offset-y'],
-              'offset-z': item['entities'][entity]['attach-offset-z'],
+              'offset-x': properties['attach-offset-x'],
+              'offset-y': properties['attach-offset-y'],
+              'offset-z': properties['attach-offset-z'],
               'to': args['character'],
               'type': 'character',
             });
 
-            webgl_characters[args['character']]['entities'].push(item['entities'][entity]);
+            webgl_characters[args['character']]['entities'].push(properties);
 
             continue;
         }
@@ -1606,7 +1613,7 @@ function webgl_item_equip(args){
 
         for(let character_entity in webgl_characters[args['character']]['entities']){
             if(webgl_characters[args['character']]['entities'][character_entity]['id'] === entity_id){
-                webgl_characters[args['character']]['entities'][character_entity].splice(
+                webgl_characters[args['character']]['entities'].splice(
                   character_entity,
                   1
                 );
