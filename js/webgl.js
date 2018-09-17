@@ -879,7 +879,8 @@ function webgl_draw_entity(entity){
       ],
       'id': 'camera',
     });
-    if(core_entities[entity]['attach-to'] !== false){
+    if(core_entities[entity]['attach-to'] !== false
+      && core_entities[entity]['billboard'] === false){
         if(core_entities[entity]['attach-type'] === 'character'){
             if(!core_groups['skybox'][entity]){
                 core_matrix_rotate({
