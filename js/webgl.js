@@ -1024,7 +1024,7 @@ function webgl_entity_create(args){
     });
 
     for(let entity in args['entities']){
-        core_entity_create({
+        let entity_id = core_entity_create({
           'id': args['entities'][entity]['id'],
           'properties': args['entities'][entity],
           'types': args['entities'][entity]['types'],
@@ -1036,7 +1036,7 @@ function webgl_entity_create(args){
         if(args['entities'][entity]['skybox'] === true){
             core_group_move({
               'entities': [
-                args['entities'][entity]['id'],
+                entity_id,
               ],
               'from': 'foreground',
               'to': 'skybox',
@@ -1050,7 +1050,7 @@ function webgl_entity_create(args){
 
         if(attach !== false){
             webgl_attach({
-              'entity': args['entities'][entity]['id'],
+              'entity': entity_id,
               'offset-x': args['entities'][entity]['attach-offset-x'],
               'offset-y': args['entities'][entity]['attach-offset-y'],
               'offset-z': args['entities'][entity]['attach-offset-z'],
@@ -1066,13 +1066,14 @@ function webgl_entity_create(args){
         }
 
         for(let entity in webgl_characters[character]['entities']){
-            core_entity_create({
+            let entity_id = core_entity_create({
               'id': webgl_characters[character]['entities'][entity]['id'],
               'properties': webgl_characters[character]['entities'][entity],
               'types': webgl_characters[character]['entities'][entity]['types'],
             });
+
             webgl_attach({
-              'entity': webgl_characters[character]['entities'][entity]['id'],
+              'entity': entity_id,
               'offset-x': webgl_characters[character]['entities'][entity]['attach-offset-x'],
               'offset-y': webgl_characters[character]['entities'][entity]['attach-offset-y'],
               'offset-z': webgl_characters[character]['entities'][entity]['attach-offset-z'],
@@ -2416,10 +2417,8 @@ function webgl_particles_create(args){
     });
 
     for(let i = 0; i < args['count']; i++){
-        let id = '_particle-' + core_uid();
-
-        core_entity_create({
-          'id': id,
+        let id = core_entity_create({
+          'id': '_particle-' + core_uid(),
           'properties': {
             'collide-range': args['collide-range'],
             'collides': args['collides'],
