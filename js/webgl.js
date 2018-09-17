@@ -1574,15 +1574,38 @@ function webgl_item_equip(args){
     }
 
     for(let entity in item['entities']){
-        let entity_id = core_entity_create({
-          'properties': item['entities'][entity],
+        if(args['equip']){
+            let entity_id = core_entity_create({
+              'properties': item['entities'][entity],
+            });
+
+            webgl_attach({
+              'entity': entity_id,
+              'to': args['character'],
+              'type': 'character',
+            });
+
+            webgl_characters[args['character']]['entities'].push(item['entities'][entity]);
+
+            continue;
+        }
+
+        core_entity_remove({
+          'entities': [
+            entity,
+          ],
         });
 
-        webgl_attach({
-          'entity': entity_id,
-          'to': args['character'],
-          'type': 'character',
-        });
+        for(let character_entity in webgl_characters[args['character']]['entities']){
+            if(webgl_characters[args['character']]['entities'][character_entity]['id'] === entity){
+                webgl_characters[args['character']]['entities'][character_entity].splice(
+                  character_entity,
+                  1
+                );
+
+                break;
+            }
+        }
     }
 }
 
