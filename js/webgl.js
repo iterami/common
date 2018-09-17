@@ -507,6 +507,7 @@ function webgl_collision(args){
                           'item': target['item-id'],
                         });
 
+                        webgl_characters[args['character-id']]['inventory'][target['item-id']]['entities'] = target['item-entities'].slice();
                         Object.assign(
                           webgl_characters[args['character-id']]['inventory'][target['item-id']]['stats'],
                           target['item-stats']
@@ -1581,6 +1582,9 @@ function webgl_item_equip(args){
 
             webgl_attach({
               'entity': entity_id,
+              'offset-x': item['entities'][entity]['attach-offset-x'],
+              'offset-y': item['entities'][entity]['attach-offset-y'],
+              'offset-z': item['entities'][entity]['attach-offset-z'],
               'to': args['character'],
               'type': 'character',
             });
@@ -1666,6 +1670,8 @@ function webgl_item_trade(args){
           'character': args['character-0'],
           'item': args['item-1-id'],
         });
+
+        inventory_0[args['item-1-id']]['entities'] = inventory_1[args['item-1-id']]['entities'].slice();
         Object.assign(
           inventory_0[args['item-1-id']]['stats'],
           inventory_1[args['item-1-id']]['stats']
@@ -1676,6 +1682,8 @@ function webgl_item_trade(args){
           'character': args['character-1'],
           'item': args['item-0-id'],
         });
+
+        inventory_1[args['item-0-id']]['entities'] = inventory_0[args['item-0-id']]['entities'].slice();
         Object.assign(
           inventory_1[args['item-0-id']]['stats'],
           inventory_0[args['item-0-id']]['stats']
