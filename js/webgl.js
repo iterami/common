@@ -1568,7 +1568,7 @@ function webgl_item_equip(args){
     let stats = item['stats'];
     for(let stat in stats){
         let dstat = stats[stat];
-        if(args['equip']){
+        if(!args['equip']){
             dstat *= -1;
         }
 
@@ -1576,8 +1576,11 @@ function webgl_item_equip(args){
     }
 
     for(let entity in item['entities']){
+        let entity_id = '_item-' + args['character'] + '-' + args['item'] + '-' + entity;
+
         if(args['equip']){
-            let entity_id = core_entity_create({
+            core_entity_create({
+              'id': entity_id,
               'properties': item['entities'][entity],
             });
 
@@ -1597,12 +1600,12 @@ function webgl_item_equip(args){
 
         core_entity_remove({
           'entities': [
-            entity,
+            entity_id,
           ],
         });
 
         for(let character_entity in webgl_characters[args['character']]['entities']){
-            if(webgl_characters[args['character']]['entities'][character_entity]['id'] === entity){
+            if(webgl_characters[args['character']]['entities'][character_entity]['id'] === entity_id){
                 webgl_characters[args['character']]['entities'][character_entity].splice(
                   character_entity,
                   1
