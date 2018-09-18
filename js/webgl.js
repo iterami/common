@@ -216,6 +216,7 @@ function webgl_character_damage(args){
     }
 
     // Unattach all attached entities.
+    /*
     for(let entity in core_entities){
         if(core_entities[entity]['attach-to'] !== args['character']){
             continue;
@@ -234,6 +235,7 @@ function webgl_character_damage(args){
 
         core_entities[entity]['attach-to'] = false;
     }
+    */
 
     if(args['delete']){
         delete webgl_characters[args['character']];
