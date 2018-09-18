@@ -1643,12 +1643,11 @@ function webgl_item_reset(args){
 
     webgl_characters[args['character']]['inventory'][args['item']] = {
       'amount': 0,
-      'entities': [],
+      'entities': args['entities'].slice(),
       'equipped': false,
       'stats': {},
     };
 
-    webgl_characters[args['character']]['inventory'][args['item']]['entities'] = args['entities'].slice();
     Object.assign(
       webgl_characters[args['character']]['inventory'][args['item']]['stats'],
       args['stats']
