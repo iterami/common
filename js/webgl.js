@@ -2209,7 +2209,8 @@ function webgl_logicloop(){
               for(let character in webgl_characters){
                   if(webgl_character_level({
                       'character': character,
-                    }) < 0){
+                    }) < 0
+                    || core_entities[entity]['parent'] === character){
                       continue;
                   }
 
@@ -2356,6 +2357,7 @@ function webgl_logicloop_handle_entity(entity){
             core_entities[entity]['spawn-interval-current'] = 0;
 
             webgl_particles_create({
+              'parent': entity,
               'rotate-x': core_entities[entity]['rotate-x'],
               'rotate-y': core_entities[entity]['rotate-y'],
               'rotate-z': core_entities[entity]['rotate-z'],
@@ -2423,7 +2425,7 @@ function webgl_normals(args){
     return normals;
 }
 
-// Optional args: collide-range, collides, color, count, gravity, lifespan,
+// Optional args: collide-range, collides, color, count, gravity, lifespan, parent,
 //   rotate-x, rotate-y, rotate-z, speed, translate-x, translate-y, translate-z
 function webgl_particles_create(args){
     args = core_args({
@@ -2435,6 +2437,7 @@ function webgl_particles_create(args){
         'count': 1,
         'gravity': true,
         'lifespan': 100,
+        'parent': webgl_character_id,
         'rotate-x': webgl_characters[webgl_character_id]['rotate-x'],
         'rotate-y': webgl_characters[webgl_character_id]['rotate-y'],
         'rotate-z': webgl_characters[webgl_character_id]['rotate-z'],
@@ -2455,6 +2458,7 @@ function webgl_particles_create(args){
             'gravity': args['gravity'],
             'lifespan': args['lifespan'],
             'normals': [0, 1, 0],
+            'parent': args['parent'],
             'rotate-x': args['rotate-x'],
             'rotate-y': args['rotate-y'],
             'rotate-z': args['rotate-z'],
