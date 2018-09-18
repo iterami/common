@@ -1419,7 +1419,7 @@ function webgl_init(args){
         'item-amount': 1,
         'item-entities': [],
         'item-id': false,
-        'item-spell': {},
+        'item-spell': false,
         'item-stats': {},
         'normals': [],
         'rotate-radians-x': 0,
@@ -1639,7 +1639,7 @@ function webgl_item_reset(args){
       'defaults': {
         'character': webgl_character_id,
         'entities': [],
-        'spell': {},
+        'spell': false,
         'stats': {},
       },
     });
@@ -1648,14 +1648,17 @@ function webgl_item_reset(args){
       'amount': 0,
       'entities': args['entities'].slice(),
       'equipped': false,
-      'spell': {},
+      'spell': false,
       'stats': {},
     };
 
-    Object.assign(
-      properties['spell'],
-      args['spell']
-    );
+    if(args['spell'] !== false){
+        properties['spell'] = {};
+        Object.assign(
+          properties['spell'],
+          args['spell']
+        );
+    }
     Object.assign(
       properties['stats'],
       args['stats']
