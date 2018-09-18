@@ -510,7 +510,7 @@ function webgl_collision(args){
                           'character': args['character-id'],
                           'entities': target['item-entities'],
                           'item': target['item-id'],
-                          'spell': target['item-spell'],
+                          'spell': target['item-spellproperties'],
                           'stats': target['item-stats'],
                         });
                     }
@@ -1420,6 +1420,7 @@ function webgl_init(args){
         'item-entities': [],
         'item-id': false,
         'item-spell': false,
+        'item-spellproperties': {},
         'item-stats': {},
         'normals': [],
         'rotate-radians-x': 0,
@@ -1648,17 +1649,15 @@ function webgl_item_reset(args){
       'amount': 0,
       'entities': args['entities'].slice(),
       'equipped': false,
-      'spell': false,
+      'spell': args['spell'],
+      'spellproperties': {},
       'stats': {},
     };
 
-    if(args['spell'] !== false){
-        properties['spell'] = {};
-        Object.assign(
-          properties['spell'],
-          args['spell']
-        );
-    }
+    Object.assign(
+      properties['spellproperties'],
+      args['spellproperties']
+    );
     Object.assign(
       properties['stats'],
       args['stats']
