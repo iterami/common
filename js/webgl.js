@@ -96,7 +96,9 @@ function webgl_camera_handle(){
         }
 
         webgl_camera_rotate({
-          'character': webgl_characters[webgl_character_id]['camera-zoom-max'] === 0 || core_mouse['button'] === 2,
+          'character': webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
+            || (core_mouse['button'] === 2
+              && webgl_characters[webgl_character_id]['health-current'] > 0),
           'x': core_mouse['movement-y'] / 10,
           'y': core_mouse['movement-x'] / 10,
         });
