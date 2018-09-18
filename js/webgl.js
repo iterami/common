@@ -271,10 +271,10 @@ function webgl_character_jump(args){
       },
     });
 
-    if(!webgl_characters[args['character']]['jump-allow']
+    if(!core_keys[32]['state']
       || args['character'] !== webgl_character_id
-      || !core_keys[32]['state']
-      || webgl_characters[webgl_character_id]['health-current'] <= 0){
+      || webgl_characters[webgl_character_id]['health-current'] <= 0
+      || !webgl_characters[args['character']]['jump-allow']){
         return;
     }
 
@@ -1560,6 +1560,10 @@ function webgl_item_equip(args){
         'equip': true,
       },
     });
+
+    if(webgl_characters[args['character']]['health-current'] <= 0){
+        return;
+    }
 
     let item = webgl_characters[args['character']]['inventory'][args['item']];
 
