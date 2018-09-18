@@ -510,6 +510,7 @@ function webgl_collision(args){
                           'character': args['character-id'],
                           'entities': target['item-entities'],
                           'item': target['item-id'],
+                          'spell': target['item-spell'],
                           'stats': target['item-stats'],
                         });
                     }
@@ -1418,6 +1419,7 @@ function webgl_init(args){
         'item-amount': 1,
         'item-entities': [],
         'item-id': false,
+        'item-spell': {},
         'item-stats': {},
         'normals': [],
         'rotate-radians-x': 0,
@@ -1701,6 +1703,7 @@ function webgl_item_trade(args){
           'character': args['character-0'],
           'entities': inventory_1[args['item-1-id']]['entities'],
           'item': args['item-1-id'],
+          'spell': inventory_1[args['item-1-id']]['spell'],
           'stats': inventory_1[args['item-1-id']]['stats'],
         });
     }
@@ -1709,6 +1712,7 @@ function webgl_item_trade(args){
           'character': args['character-1'],
           'entities': inventory_0[args['item-0-id']]['entities'],
           'item': args['item-0-id'],
+          'spell': inventory_0[args['item-0-id']]['spell'],
           'stats': inventory_0[args['item-0-id']]['stats'],
         });
     }
