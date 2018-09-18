@@ -1630,28 +1630,36 @@ function webgl_item_equip(args){
 }
 
 // Required args: item
-// Optional args: character, entities, stats
+// Optional args: character, entities, spell, stats
 function webgl_item_reset(args){
     args = core_args({
       'args': args,
       'defaults': {
         'character': webgl_character_id,
         'entities': [],
+        'spell': {},
         'stats': {},
       },
     });
 
-    webgl_characters[args['character']]['inventory'][args['item']] = {
+    let properties = {
       'amount': 0,
       'entities': args['entities'].slice(),
       'equipped': false,
+      'spell': {},
       'stats': {},
     };
 
     Object.assign(
-      webgl_characters[args['character']]['inventory'][args['item']]['stats'],
+      properties['spell'],
+      args['spell']
+    );
+    Object.assign(
+      properties['stats'],
       args['stats']
     );
+
+    webgl_characters[args['character']]['inventory'][args['item']] = properties;
 }
 
 // Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
