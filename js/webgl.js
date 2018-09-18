@@ -508,14 +508,10 @@ function webgl_collision(args){
                     if(!(target['item-id'] in webgl_characters[args['character-id']]['inventory'])){
                         webgl_item_reset({
                           'character': args['character-id'],
+                          'entities': target['item-entities'],
                           'item': target['item-id'],
+                          'stats': target['item-stats'],
                         });
-
-                        webgl_characters[args['character-id']]['inventory'][target['item-id']]['entities'] = target['item-entities'].slice();
-                        Object.assign(
-                          webgl_characters[args['character-id']]['inventory'][target['item-id']]['stats'],
-                          target['item-stats']
-                        );
                     }
 
                     webgl_characters[args['character-id']]['inventory'][target['item-id']]['amount'] += target['item-amount'];
@@ -1634,12 +1630,14 @@ function webgl_item_equip(args){
 }
 
 // Required args: item
-// Optional args: character
+// Optional args: character, entities, stats
 function webgl_item_reset(args){
     args = core_args({
       'args': args,
       'defaults': {
         'character': webgl_character_id,
+        'entities': [],
+        'stats': {},
       },
     });
 
@@ -1649,6 +1647,12 @@ function webgl_item_reset(args){
       'equipped': false,
       'stats': {},
     };
+
+    webgl_characters[args['character']]['inventory'][args['item']]['entities'] = args['entities'].slice();
+    Object.assign(
+      webgl_characters[args['character']]['inventory'][args['item']]['stats'],
+      args['stats']
+    );
 }
 
 // Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
@@ -1688,26 +1692,18 @@ function webgl_item_trade(args){
     if(!inventory_0[args['item-1-id']]){
         webgl_item_reset({
           'character': args['character-0'],
+          'entities': inventory_1[args['item-1-id']]['entities'],
           'item': args['item-1-id'],
+          'stats': inventory_1[args['item-1-id']]['stats'],
         });
-
-        inventory_0[args['item-1-id']]['entities'] = inventory_1[args['item-1-id']]['entities'].slice();
-        Object.assign(
-          inventory_0[args['item-1-id']]['stats'],
-          inventory_1[args['item-1-id']]['stats']
-        );
     }
     if(!inventory_1[args['item-0-id']]){
         webgl_item_reset({
           'character': args['character-1'],
+          'entities': inventory_0[args['item-0-id']]['entities'],
           'item': args['item-0-id'],
+          'stats': inventory_0[args['item-0-id']]['stats'],
         });
-
-        inventory_1[args['item-0-id']]['entities'] = inventory_0[args['item-0-id']]['entities'].slice();
-        Object.assign(
-          inventory_1[args['item-0-id']]['stats'],
-          inventory_0[args['item-0-id']]['stats']
-        );
     }
     inventory_0[args['item-1-id']]['amount'] += args['item-1-amount'];
     inventory_1[args['item-0-id']]['amount'] += args['item-0-amount'];
