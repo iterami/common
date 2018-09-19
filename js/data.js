@@ -1,13 +1,13 @@
 'use strict';
 
-// Optional args: color, frequency, id, length-half, x, y
+// Required args: id,
+// Optional args: color, frequency, length-half, x, y
 function data_canvas_fence_2d(args){
     args = core_args({
       'args': args,
       'defaults': {
         'color': '#777',
         'frequency': 60,
-        'id': core_uid(),
         'length-half': 25,
         'x': 0,
         'y': 0,
@@ -65,7 +65,8 @@ function data_canvas_fence_2d(args){
     }
 }
 
-// Optional args: color-base, color-leaf, half-base, half-leaf, id, x, y
+// Required args: id
+// Optional args: color-base, color-leaf, half-base, half-leaf, x, y
 function data_canvas_tree_2d(args){
     args = core_args({
       'args': args,
@@ -74,7 +75,6 @@ function data_canvas_tree_2d(args){
         'color-leaf': '#' + core_random_hex(),
         'height-base': 25,
         'height-leaf': 75,
-        'id': core_uid(),
         'width-base': 25,
         'width-leaf': 75,
         'x': 0,
@@ -131,7 +131,8 @@ function data_canvas_tree_2d(args){
     });
 }
 
-// Optional args: billboard, color-base, color-leaf, dx, dy, dz, id, x, y, z
+// Required args: id,
+// Optional args: billboard, color-base, color-leaf, dx, dy, dz, x, y, z
 function data_webgl_tree_2d(args){
     args = core_args({
       'args': args,
@@ -150,7 +151,6 @@ function data_webgl_tree_2d(args){
         'dx': 0,
         'dy': 0,
         'dz': 0,
-        'id': core_uid(),
         'x': 0,
         'y': 0,
         'z': 0,

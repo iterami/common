@@ -352,12 +352,12 @@ function core_distance(args){
     });
 }
 
-// Optional args: id, properties, types
+// Required args: id,
+// Optional args: properties, types
 function core_entity_create(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'id': core_uid(),
         'properties': {},
         'types': [],
       },
@@ -447,7 +447,6 @@ function core_entity_remove(args){
 
     for(let entity in args['entities']){
         delete core_entities[args['entities'][entity]];
-        delete core_uids[args['entities'][entity]];
     }
 }
 
@@ -1226,15 +1225,14 @@ function core_interval_animationFrame(args){
     core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
 }
 
-// Required args: todo
-// Optional args: animationFrame, clear, id, interval, paused, set
+// Required args: id, todo
+// Optional args: animationFrame, clear, interval, paused, set
 function core_interval_modify(args){
     args = core_args({
       'args': args,
       'defaults': {
         'animationFrame': false,
         'clear': 'clearInterval',
-        'id': core_uid(),
         'interval': 25,
         'paused': false,
         'set': 'setInterval',
@@ -2365,30 +2363,6 @@ function core_type(args){
     return typeof args['var'] === args['type'];
 }
 
-function core_uid(){
-    let uid = core_uid_create();
-
-    while(core_uids[uid] !== void 0){
-        uid = core_uid_create();
-    }
-
-    core_uids[uid] = true;
-
-    return uid;
-}
-
-function core_uid_create(){
-    let uid = '';
-
-    for(let i = 0; i < 3; i++){
-        uid += core_random_integer({
-          'max': 1e17,
-        }).toString(34);
-    }
-
-    return uid;
-}
-
 // Optional args: ids
 function core_ui_update(args){
     args = core_args({
@@ -2485,6 +2459,5 @@ window.core_storage_info = {};
 window.core_tabs = {};
 window.core_tau = Math.PI * 2;
 window.core_ui_values = {};
-window.core_uids = {};
 
 window.onload = core_init;
