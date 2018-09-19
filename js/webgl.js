@@ -552,10 +552,11 @@ function webgl_collision(args){
     return true;
 }
 
+// Required args: prefix
 // Optional args: all-alpha, all-collision, all-vertex-colors, back-alpha,
 //   back-collision, back-vertex-colors, bottom-alpha, bottom-collision, bottom-vertex-colors,
 //   exclude, front-alpha, front-collision, front-vertex-colors, height, left-alpha,
-//   left-collision, left-vertex-colors, length, prefix, right-alpha, right-collision,
+//   left-collision, left-vertex-colors, length, right-alpha, right-collision,
 //   right-vertex-colors, top-alpha, top-collision, top-vertex-colors, translate-x,
 //   translate-y, translate-z, width
 function webgl_cuboid(args){
@@ -580,7 +581,6 @@ function webgl_cuboid(args){
         'left-collision': false,
         'left-vertex-colors': webgl_vertexcolorarray(),
         'length': 1,
-        'prefix': core_uid(),
         'right-alpha': 1,
         'right-collision': false,
         'right-vertex-colors': webgl_vertexcolorarray(),
@@ -722,8 +722,9 @@ function webgl_cuboid(args){
     }
 }
 
+// Required args: prefix
 // Optional args: collision-leaves, collision-trunk, height-leaves, height-trunk,
-//   length-leaves, length-trunk, prefix, translate-x, translate-y, translate-z,
+//   length-leaves, length-trunk, translate-x, translate-y, translate-z,
 //   vertex-colors-leaves, vertex-colors-trunk, width-leaves, width-trunk
 function webgl_cuboid_tree(args){
     args = core_args({
@@ -735,7 +736,6 @@ function webgl_cuboid_tree(args){
         'height-trunk': 10,
         'length-leaves': 10,
         'length-trunk': 2,
-        'prefix': core_uid(),
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -2449,7 +2449,6 @@ function webgl_particles_create(args){
 
     for(let i = 0; i < args['count']; i++){
         let id = core_entity_create({
-          'id': '_particle-' + core_uid(),
           'properties': {
             'collide-range': args['collide-range'],
             'collides': args['collides'],
