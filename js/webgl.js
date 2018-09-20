@@ -255,7 +255,7 @@ function webgl_character_home(){
     }
 
     webgl_level_unload();
-    webgl_init(webgl_character_homebase);
+    webgl_init(webgl_character_homebase['properties']);
     webgl_entity_create({
       'entities': webgl_character_homebase['entities'],
     });
