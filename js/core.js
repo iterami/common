@@ -1956,9 +1956,11 @@ function core_round(args){
       },
     });
 
+    /*
     if(String(args['number']).indexOf('e') >= 0){
         args['number'] = Number(args['number'].toFixed(args['decimals']));
     }
+    */
 
     let result = Number(
       Math.round(args['number'] + 'e+' + args['decimals'])
