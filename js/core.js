@@ -287,9 +287,13 @@ function core_date_to_timestamp(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'date': core_timestamp_to_date(),
+        'date': false,
       },
     });
+
+    if(args['date'] === false){
+        args['date'] = core_timestamp_to_date();
+    }
 
     return new Date(
       Date.UTC(
@@ -2218,9 +2222,13 @@ function core_time_diff(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'now': core_date_to_timestamp(),
+        'now': false,
       },
     });
+
+    if(args['now'] === false){
+        args['now'] = core_date_to_timestamp();
+    }
 
     let diff = args['target'] - args['now'];
     let prefix = '';
@@ -2242,10 +2250,14 @@ function core_time_format(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'date': core_timestamp_to_date(),
+        'date': false,
         'diff': false,
       },
     });
+
+    if(args['date'] === false){
+        core_timestamp_to_date();
+    }
 
     if(args['diff']){
         args['date']['date'] -= 1;
