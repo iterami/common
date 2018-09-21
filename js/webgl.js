@@ -568,25 +568,25 @@ function webgl_cuboid(args){
         'all-vertex-colors': false,
         'back-alpha': 1,
         'back-collision': false,
-        'back-vertex-colors': webgl_vertexcolorarray(),
+        'back-vertex-colors': false,
         'bottom-alpha': 1,
         'bottom-collision': false,
-        'bottom-vertex-colors': webgl_vertexcolorarray(),
+        'bottom-vertex-colors': false,
         'exclude': {},
         'front-alpha': 1,
         'front-collision': false,
-        'front-vertex-colors': webgl_vertexcolorarray(),
+        'front-vertex-colors': false,
         'height': 1,
         'left-alpha': 1,
         'left-collision': false,
-        'left-vertex-colors': webgl_vertexcolorarray(),
+        'left-vertex-colors': false,
         'length': 1,
         'right-alpha': 1,
         'right-collision': false,
-        'right-vertex-colors': webgl_vertexcolorarray(),
+        'right-vertex-colors': false,
         'top-alpha': 1,
         'top-collision': false,
-        'top-vertex-colors': webgl_vertexcolorarray(),
+        'top-vertex-colors': false,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -634,7 +634,7 @@ function webgl_cuboid(args){
     if(args['exclude']['top'] !== true){
         properties['alpha'] = args['top-alpha'];
         properties['collision'] = args['top-collision'] || args['all-collision'];
-        properties['vertex-colors'] = args['top-vertex-colors'];
+        properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray();
         core_entity_create({
           'id': args['prefix'] + '-top',
           'properties': properties,
@@ -647,7 +647,7 @@ function webgl_cuboid(args){
     if(args['exclude']['bottom'] !== true){
         properties['alpha'] = args['bottom-alpha'];
         properties['collision'] = args['bottom-collision'] || args['all-collision'];
-        properties['vertex-colors'] = args['bottom-vertex-colors'];
+        properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray();
         core_entity_create({
           'id': args['prefix'] + '-bottom',
           'properties': properties,
@@ -667,7 +667,7 @@ function webgl_cuboid(args){
     if(args['exclude']['front'] !== true){
         properties['alpha'] = args['front-alpha'];
         properties['collision'] = args['front-collision'] || args['all-collision'];
-        properties['vertex-colors'] = args['front-vertex-colors'];
+        properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray();
         core_entity_create({
           'id': args['prefix'] + '-front',
           'properties': properties,
@@ -680,7 +680,7 @@ function webgl_cuboid(args){
     if(args['exclude']['back'] !== true){
         properties['alpha'] = args['back-alpha'];
         properties['collision'] = args['back-collision'] || args['all-collision'];
-        properties['vertex-colors'] = args['back-vertex-colors'];
+        properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray();
         core_entity_create({
           'id': args['prefix'] + '-back',
           'properties': properties,
@@ -701,7 +701,7 @@ function webgl_cuboid(args){
     if(args['exclude']['left'] !== true){
         properties['alpha'] = args['left-alpha'];
         properties['collision'] = args['left-collision'] || args['all-collision'];
-        properties['vertex-colors'] = args['left-vertex-colors'];
+        properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray();
         core_entity_create({
           'id': args['prefix'] + '-left',
           'properties': properties,
@@ -714,7 +714,7 @@ function webgl_cuboid(args){
     if(args['exclude']['right'] !== true){
         properties['alpha'] = args['right-alpha'];
         properties['collision'] = args['right-collision'] || args['all-collision'];
-        properties['vertex-colors'] = args['right-vertex-colors'];
+        properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray();
         core_entity_create({
           'id': args['prefix'] + '-right',
           'properties': properties,
