@@ -2737,15 +2737,14 @@ function webgl_vertexcolorarray(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'rgbarray': [
-          core_random_rgb(),
-          core_random_rgb(),
-          core_random_rgb(),
-          core_random_rgb(),
-        ],
+        'rgbarray': [],
         'vertexcount': 4,
       },
     });
+
+    if(args['rgbarray'].length === 0){
+        args['rgbarray'].push(core_random_rgb());
+    }
 
     while(args['rgbarray'].length < args['vertexcount']){
         args['rgbarray'].push(args['rgbarray'][0]);
