@@ -291,13 +291,11 @@ function webgl_character_level(args){
       },
     });
 
-    if(webgl_characters[args['character']]
-      && 'level' in webgl_characters[args['character']]){
+    if(webgl_characters[args['character']]){
         return webgl_characters[args['character']]['level'];
-
-    }else{
-        return -2;
     }
+
+    return -2;
 }
 
 // Optional args: character
@@ -1226,10 +1224,6 @@ function webgl_entity_todo(entity){
     webgl_entity_radians({
       'entity': entity,
     });
-
-    if(!core_entities[entity]['draw']){
-        return;
-    }
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
       'colorData': core_entities[entity]['vertex-colors'] || webgl_vertexcolorarray(),
