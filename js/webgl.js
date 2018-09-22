@@ -976,16 +976,7 @@ function webgl_draw_entity(entity){
     );
     webgl_buffer.uniform1f(
       webgl_properties['shader']['point-size'],
-      core_entities[entity]['draw-type'] === 'POINTS'
-        ? 500 / core_distance({
-            'x0': webgl_characters[webgl_character_id]['translate-x'],
-            'y0': webgl_characters[webgl_character_id]['translate-y'],
-            'z0': webgl_characters[webgl_character_id]['translate-z'],
-            'x1': core_entities[entity]['translate-x'],
-            'y1': core_entities[entity]['translate-y'],
-            'z1': core_entities[entity]['translate-z'],
-          })
-        : 1
+      core_entities[entity]['point-size']
     );
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_cameraMatrix'],
@@ -1417,6 +1408,7 @@ function webgl_init(args){
         'item-spellproperties': {},
         'item-stats': {},
         'normals': [],
+        'point-size': 1,
         'rotate-radians-x': 0,
         'rotate-radians-y': 0,
         'rotate-radians-z': 0,
@@ -2359,6 +2351,17 @@ function webgl_logicloop_handle_entity(entity){
               'translate-z': core_entities[entity]['translate-z'],
             });
         }
+    }
+
+    if(core_entities[entity]['draw-type'] === 'POINTS'){
+        core_entities[entity]['point-size'] = 500 / core_distance({
+          'x0': webgl_characters[webgl_character_id]['translate-x'],
+          'y0': webgl_characters[webgl_character_id]['translate-y'],
+          'z0': webgl_characters[webgl_character_id]['translate-z'],
+          'x1': core_entities[entity]['translate-x'],
+          'y1': core_entities[entity]['translate-y'],
+          'z1': core_entities[entity]['translate-z'],
+        });
     }
 }
 
