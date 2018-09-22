@@ -356,16 +356,18 @@ function core_distance(args){
     });
 }
 
-// Required args: id,
-// Optional args: properties, types
+// Optional args: id, properties, types
 function core_entity_create(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'id': core_id_count,
         'properties': {},
         'types': [],
       },
     });
+
+    core_id_count++;
 
     let entity = {};
 
@@ -2453,6 +2455,7 @@ window.core_gamepads = {};
 window.core_groups = {
   '_length': {},
 };
+window.core_id_count = 0;
 window.core_images = {};
 window.core_intervals = {};
 window.core_key_rebinds = {};
