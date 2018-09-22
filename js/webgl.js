@@ -550,11 +550,10 @@ function webgl_collision(args){
     return true;
 }
 
-// Required args: prefix
 // Optional args: all-alpha, all-collision, all-vertex-colors, back-alpha,
 //   back-collision, back-vertex-colors, bottom-alpha, bottom-collision, bottom-vertex-colors,
 //   exclude, front-alpha, front-collision, front-vertex-colors, height, left-alpha,
-//   left-collision, left-vertex-colors, length, right-alpha, right-collision,
+//   left-collision, left-vertex-colors, length, prefix, right-alpha, right-collision,
 //   right-vertex-colors, top-alpha, top-collision, top-vertex-colors, translate-x,
 //   translate-y, translate-z, width
 function webgl_cuboid(args){
@@ -579,6 +578,7 @@ function webgl_cuboid(args){
         'left-collision': false,
         'left-vertex-colors': false,
         'length': 1,
+        'prefix': core_id_count,
         'right-alpha': 1,
         'right-collision': false,
         'right-vertex-colors': false,
