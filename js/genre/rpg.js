@@ -128,7 +128,7 @@ function rpg_character_handle(){
             }
 
             if(character === '0'
-              && !core_mouse['down']){
+              && !core_mouse['down-0']){
                 continue;
             }
 

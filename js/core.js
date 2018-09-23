@@ -801,7 +801,11 @@ function core_handle_blur(event){
     for(let key in core_keys){
         core_keys[key]['state'] = false;
     }
-    core_mouse['down'] = false;
+    core_mouse['down-0'] = false;
+    core_mouse['down-1'] = false;
+    core_mouse['down-2'] = false;
+    core_mouse['down-3'] = false;
+    core_mouse['down-4'] = false;
 }
 
 function core_handle_contextmenu(event){
@@ -947,8 +951,7 @@ function core_handle_mousedown(event){
         return;
     }
 
-    core_mouse['button'] = event.button;
-    core_mouse['down'] = true;
+    core_mouse['down-' + event.button] = true;
     core_mouse['down-x'] = core_mouse['x'];
     core_mouse['down-y'] = core_mouse['y'];
     core_handle_event({
@@ -977,12 +980,7 @@ function core_handle_mousemove(event){
 }
 
 function core_handle_mouseup(event){
-    if(!core_mouse['down']){
-        return;
-    }
-
-    core_mouse['button'] = -1;
-    core_mouse['down'] = false;
+    core_mouse['down-' + event.button] = false;
     core_handle_event({
       'event': event,
       'key': 'mouseup',
@@ -1154,8 +1152,11 @@ function core_init(){
 
     // Keyboard/mouse init.
     core_mouse = {
-      'button': -1,
-      'down': false,
+      'down-0': false,
+      'down-1': false,
+      'down-2': false,
+      'down-3': false,
+      'down-4': false,
       'down-x': 0,
       'down-y': 0,
       'movement-x': 0,

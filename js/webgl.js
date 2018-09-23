@@ -88,7 +88,8 @@ function webgl_buffer_set_type(args){
 
 function webgl_camera_handle(){
     if(core_mouse['pointerlock-state']
-      || core_mouse['down']){
+      || core_mouse['down-0']
+      || core_mouse['down-2']){
         if(webgl_character_level({
             'character': webgl_character_id,
           }) < -1){
@@ -97,7 +98,7 @@ function webgl_camera_handle(){
 
         webgl_camera_rotate({
           'character': webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
-            || (core_mouse['button'] === 2
+            || (core_mouse['down-2']
               && webgl_characters[webgl_character_id]['health-current'] > 0),
           'x': core_mouse['movement-y'] / 10,
           'y': core_mouse['movement-x'] / 10,
@@ -152,7 +153,7 @@ function webgl_camera_rotate(args){
 
     if(args['camera']
       && args['character']){
-        if(core_mouse['down']){
+        if(core_mouse['down-2']){
             webgl_characters[args['character-id']]['rotate-y'] = webgl_characters[args['character-id']]['camera-rotate-y'];
 
         }else{
@@ -1981,14 +1982,12 @@ function webgl_logicloop(){
 
         if(core_keys[core_storage_data['move-←']]['state']){
             if(webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
-              || (core_mouse['down']
-                && core_mouse['button'] === 2)){
+              || core_mouse['down-2']){
                 leftright -= 1;
 
             }else{
                 webgl_camera_rotate({
-                  'camera': !(core_mouse['down']
-                    && core_mouse['button'] === 0),
+                  'camera': !core_mouse['down-0'],
                   'y': -5,
                 });
             }
@@ -1996,14 +1995,12 @@ function webgl_logicloop(){
 
         if(core_keys[core_storage_data['move-→']]['state']){
             if(webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
-              || (core_mouse['down']
-                && core_mouse['button'] === 2)){
+              || core_mouse['down-2']){
                 leftright += 1;
 
             }else{
                 webgl_camera_rotate({
-                  'camera': !(core_mouse['down']
-                    && core_mouse['button'] === 0),
+                  'camera': !core_mouse['down-0'],
                   'y': 5,
                 });
             }
