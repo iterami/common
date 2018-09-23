@@ -153,12 +153,9 @@ function webgl_camera_rotate(args){
 
     if(args['camera']
       && args['character']){
-        if(core_mouse['down-2']){
-            webgl_characters[args['character-id']]['rotate-y'] = webgl_characters[args['character-id']]['camera-rotate-y'];
-
-        }else{
-            webgl_characters[args['character-id']]['rotate-y'] += args['y'];
-        }
+        webgl_characters[args['character-id']]['rotate-y'] = core_mouse['down-2']
+          ? webgl_characters[args['character-id']]['camera-rotate-y']
+          : webgl_characters[args['character-id']]['rotate-y'] + args['y'];
     }
 
     webgl_entity_radians({
