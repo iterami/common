@@ -426,7 +426,7 @@ function core_entity_handle_defaults(args){
     }
 }
 
-// Reqruied args: entities
+// Required args: entities
 function core_entity_remove(args){
     args = core_args({
       'args': args,
