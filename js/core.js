@@ -2117,7 +2117,8 @@ function core_storage_save(){
         });
         core_storage_data[key] = data;
 
-        if(data !== core_storage_info[key]['default']){
+        if(data !== NaN
+          && data !== core_storage_info[key]['default']){
             window.localStorage.setItem(
               core_storage_info[key]['prefix'] + key,
               data
