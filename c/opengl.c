@@ -814,8 +814,13 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse collide-range.
-            if(strcmp(json_level_entities_element_property->name->string, "collide-range") == 0){
+            // Parse collide-range-horizontal.
+            if(strcmp(json_level_entities_element_property->name->string, "collide-range-horizontal") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse collide-range-vertical.
+            if(strcmp(json_level_entities_element_property->name->string, "collide-range-vertical") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 

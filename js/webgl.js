@@ -402,23 +402,23 @@ function webgl_collision(args){
         if(target['normals'][0] === 1
           && collider['dx'] < 0){
             if(collider['translate-x'] >= target['translate-x']
-              && collider['translate-x'] <= target['translate-x'] + collider['collide-range']
-              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - collider['collide-range']
-              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
+              && collider['translate-x'] <= target['translate-x'] + collider['collide-range-horizontal']
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - collider['collide-range-vertical']
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range-vertical']
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range-horizontal']
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range-horizontal']){
                 collision = 'dx';
                 collider['dx'] = 0;
             }
 
         }else if(target['normals'][0] === -1
           && collider['dx'] > 0){
-            if(collider['translate-x'] >= target['translate-x'] - collider['collide-range']
+            if(collider['translate-x'] >= target['translate-x'] - collider['collide-range-horizontal']
               && collider['translate-x'] <= target['translate-x']
-              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - collider['collide-range']
-              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - collider['collide-range-vertical']
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range-vertical']
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range-horizontal']
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range-horizontal']){
                 collision = 'dx';
                 collision_sign = -1;
                 collider['dx'] = 0;
@@ -429,24 +429,24 @@ function webgl_collision(args){
     if(target['normals'][1] !== 0){
         if(target['normals'][1] === 1
           && collider['dy'] < 0){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range']
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range-horizontal']
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range-horizontal']
               && collider['translate-y'] >= target['translate-y']
-              && collider['translate-y'] <= target['translate-y'] + collider['collide-range']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
+              && collider['translate-y'] <= target['translate-y'] + collider['collide-range-vertical']
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range-horizontal']
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range-horizontal']){
                 collision = 'dy';
                 collider['dy'] = 0;
             }
 
         }else if(target['normals'][1] === -1
           && collider['dy'] > 0){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range']
-              && collider['translate-y'] >= target['translate-y'] - collider['collide-range']
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range-horizontal']
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range-horizontal']
+              && collider['translate-y'] >= target['translate-y'] - collider['collide-range-vertical']
               && collider['translate-y'] <= target['translate-y']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range']){
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range-horizontal']
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range-horizontal']){
                 collision = 'dy';
                 collision_sign = -1;
                 collider['dy'] = 0;
@@ -457,23 +457,23 @@ function webgl_collision(args){
     if(target['normals'][2] !== 0){
         if(target['normals'][2] === 1
           && collider['dz'] < 0){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range']
-              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - collider['collide-range']
-              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range']
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range-horizontal']
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range-horizontal']
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - collider['collide-range-vertical']
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range-vertical']
               && collider['translate-z'] >= target['translate-z']
-              && collider['translate-z'] <= target['translate-z'] + collider['collide-range']){
+              && collider['translate-z'] <= target['translate-z'] + collider['collide-range-horizontal']){
                 collision = 'dz';
                 collider['dz'] = 0;
             }
 
         }else if(target['normals'][2] === -1
           && collider['dz'] > 0){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range']
-              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - collider['collide-range']
-              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range']
-              && collider['translate-z'] >= target['translate-z'] - collider['collide-range']
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range-horizontal']
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range-horizontal']
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - collider['collide-range-vertical']
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range-vertical']
+              && collider['translate-z'] >= target['translate-z'] - collider['collide-range-horizontal']
               && collider['translate-z'] <= target['translate-z']){
                 collision = 'dz';
                 collision_sign = -1;
@@ -488,7 +488,11 @@ function webgl_collision(args){
             webgl_characters[args['character-id']]['dy'] = collider['dy'];
             webgl_characters[args['character-id']]['dz'] = collider['dz'];
 
-            webgl_characters[args['character-id']]['translate-' + collision[1]] = target['translate-' + collision[1]] + (collider['collide-range'] * collision_sign);
+            let collide_range = collider[collision === 'dy'
+              ? 'collide-range-vertical'
+              : 'collide-range-horizontal'];
+
+            webgl_characters[args['character-id']]['translate-' + collision[1]] = target['translate-' + collision[1]] + (collide_range * collision_sign);
 
             if(webgl_character_level({
                 'character': args['character-id'],
@@ -1390,7 +1394,8 @@ function webgl_init(args){
         'attach-type': 'entity',
         'billboard': false,
         'collide-damage': 0,
-        'collide-range': 2.5,
+        'collide-range-horizontal': 2.5,
+        'collide-range-vertical': 2.5,
         'collides': false,
         'collision': false,
         'draw': true,
@@ -1451,16 +1456,17 @@ function webgl_init(args){
     });
 }
 
-// Optional args: camera-zoom-current, camera-zoom-max, collide-range, collides, dx, dy, dz, entities,
-//   experience, health-current, health-max, id, inventory, jump-height, level, rotate-x, rotate-y,
-//   rotate-z, speed, talk, trade, translate-x, translate-y, translate-z
+// Optional args: camera-zoom-current, camera-zoom-max, collide-range-horizontal, collide-range-vertical,
+//   collides, dx, dy, dz, entities, experience, health-current, health-max, id, inventory, jump-height,
+//   level, rotate-x, rotate-y, rotate-z, speed, talk, trade, translate-x, translate-y, translate-z
 function webgl_init_character(args){
     args = core_args({
       'args': args,
       'defaults': {
         'camera-zoom-current': 20,
         'camera-zoom-max': 50,
-        'collide-range': 2.5,
+        'collide-range-horizontal': 2.5,
+        'collide-range-vertical': 2.5,
         'collides': true,
         'dx': 0,
         'dy': 0,
@@ -1494,7 +1500,8 @@ function webgl_init_character(args){
       'camera-rotate-z': 0,
       'camera-zoom-current': args['camera-zoom-current'],
       'camera-zoom-max': args['camera-zoom-max'],
-      'collide-range': args['collide-range'],
+      'collide-range-horizontal': args['collide-range-horizontal'],
+      'collide-range-vertical': args['collide-range-vertical'],
       'collides': args['collides'],
       'dx': args['dx'],
       'dy': args['dy'],
@@ -2193,14 +2200,15 @@ function webgl_logicloop(){
                       continue;
                   }
 
-                  if(core_distance({
-                      'x0': webgl_characters[character]['translate-x'],
-                      'y0': webgl_characters[character]['translate-y'],
-                      'z0': webgl_characters[character]['translate-z'],
-                      'x1': core_entities[entity]['translate-x'],
-                      'y1': core_entities[entity]['translate-y'],
-                      'z1': core_entities[entity]['translate-z'],
-                    }) < webgl_characters[character]['collide-range']){
+                  let distance = core_distance({
+                    'x0': webgl_characters[character]['translate-x'],
+                    'y0': webgl_characters[character]['translate-y'],
+                    'z0': webgl_characters[character]['translate-z'],
+                    'x1': core_entities[entity]['translate-x'],
+                    'y1': core_entities[entity]['translate-y'],
+                    'z1': core_entities[entity]['translate-z'],
+                  });
+                  if(distance < webgl_characters[character]['collide-range-horizontal']){
                       webgl_character_damage({
                         'character': character,
                         'damage': core_entities[entity]['collide-damage'],
@@ -2441,7 +2449,8 @@ function webgl_particles_create(args){
     for(let i = 0; i < args['count']; i++){
         let id = core_entity_create({
           'properties': {
-            'collide-range': args['collide-range'],
+            'collide-range-horizontal': args['collide-range'],
+            'collide-range-vertical': args['collide-range'],
             'collides': args['collides'],
             'draw-type': 'POINTS',
             'gravity': args['gravity'],
