@@ -880,6 +880,8 @@ function webgl_draw_entity(entity){
               'id': 'camera',
             });
         }
+
+    }else if(core_entities[entity]['path-active']){
     }
     core_matrix_rotate({
       'dimensions': [
@@ -1226,6 +1228,7 @@ function webgl_init(args){
         'jump-movement': false,
         'multiplier-jump': 1,
         'multiplier-speed': 1,
+        'paths': {},
         'spawn-rotate-x': 0,
         'spawn-rotate-y': 0,
         'spawn-rotate-z': 0,
@@ -1283,6 +1286,15 @@ function webgl_init(args){
     })) / Math.sin(core_degrees_to_radians({
       'degrees': 90,
     }));
+
+    webgl_paths = {};
+    for(let path in args['paths']){
+        webgl_paths[path] = {};
+        Object.assign(
+          webgl_paths[path],
+          args['paths'][path]
+        );
+    }
 
     core_html({
       'parent': document.body,
@@ -1378,6 +1390,9 @@ function webgl_init(args){
         'item-spellproperties': {},
         'item-stats': {},
         'normals': [],
+        'path-active': false,
+        'path-id': '',
+        'path-point': 0,
         'point-size': 1,
         'rotate-radians-x': 0,
         'rotate-radians-y': 0,
@@ -2730,5 +2745,6 @@ window.webgl_character_id = '_me';
 window.webgl_character_trading = '';
 window.webgl_characters = {};
 window.webgl_diagonal = 0;
+window.webgl_paths = {};
 window.webgl_properties = {};
 window.webgl_text = {};

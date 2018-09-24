@@ -698,6 +698,11 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
+        // Parse paths.
+        if(strcmp(json_object->name->string, "paths") == 0){
+            json_object = json_object->next;
+        }
+
         // Parse spawn-rotate-x.
         if(strcmp(json_object->name->string, "spawn-rotate-x") == 0){
             json_object = json_object->next;
