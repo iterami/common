@@ -1154,10 +1154,10 @@ function core_init(){
     window.onmousedown = core_handle_mousedown;
     window.onmousemove = core_handle_mousemove;
     window.onmouseup = core_handle_mouseup;
-    window.onwheel = core_handle_mousewheel;
     window.ontouchend = core_handle_mouseup;
     window.ontouchmove = core_handle_mousemove;
     window.ontouchstart = core_handle_mousedown;
+    window.onwheel = core_handle_mousewheel;
 
     // Global storage.
     core_storage_add({
