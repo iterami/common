@@ -1390,6 +1390,7 @@ function webgl_init(args){
         'item-stats': {},
         'normals': [],
         'path-active': false,
+        'path-direction': 1,
         'path-id': '',
         'path-point': 0,
         'point-size': 1,
@@ -2279,17 +2280,48 @@ function webgl_logicloop_handle_entity(entity){
 
     }else{
         if(core_entities[entity]['path-active']){
+            let path = webgl_paths[core_entities[entity]['path-id']];
+            let point = path['points'][core_entities[entity]['path-point']];
+
             core_entities[entity]['rotate-y'] = core_radians_to_degrees({
               'radians': core_point_angle({
                 'x0': core_entities[entity]['translate-x'],
-                'x1': webgl_paths[core_entities[entity]['path-id']]['points'][core_entities[entity]['path-point']]['translate-x'],
+                'x1': point['translate-x'],
                 'y0': core_entities[entity]['translate-z'],
-                'y1': webgl_paths[core_entities[entity]['path-id']]['points'][core_entities[entity]['path-point']]['translate-z'],
+                'y1': point['translate-z'],
               }),
             });
             webgl_entity_radians({
               'entity': entity,
             });
+
+            webgl_entity_move({
+              'entity': entity,
+              'multiplier': -1,
+            });
+
+            if(core_distance({
+                'x0': core_entities[entity]['translate-x'],
+                'y0': core_entities[entity]['translate-y'],
+                'z0': core_entities[entity]['translate-z'],
+                'x1': point['translate-x'],
+                'y1': point['translate-y'],
+                'z1': point['translate-z'],
+              }) < core_entities[entity]['collide-range-horizontal']){
+                core_entities[entity]['path-point'] += core_entities[entity]['path-direction'];
+
+                if(core_entities[entity]['path-point'] > path['points'].length){
+                    if(path['end'] === 1){
+                        core_entities[entity]['path-point'] = 0;
+
+                    }else if(path['end'] === -1){
+                        core_entities[entity]['path-direction'] *= -1;
+
+                    }else{
+                        core_entities[entity]['path-active'] = false;
+                    }
+                }
+            }
         }
 
         if(core_entities[entity]['gravity']){
