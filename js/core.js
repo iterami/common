@@ -2331,15 +2331,15 @@ function core_ui_update(args){
         core_ui_values[id] = args['ids'][id];
 
         let element = document.getElementById(id);
-        element[element.tagName !== 'INPUT'
+        let type = element.tagName !== 'INPUT'
           ? 'innerHTML'
-          : 'value'] = args['ids'][id];
+          : 'value';
+
+        element[type] = args['ids'][id];
 
         let elements = document.getElementsByClassName(id);
         for(let i = 0; i < elements.length; i++){
-             elements.item(i)[element.tagName !== 'INPUT'
-               ? 'innerHTML'
-               : 'value'] = args['ids'][id];
+             elements.item(i)[type] = args['ids'][id];
         }
     }
 }
