@@ -2279,6 +2279,17 @@ function webgl_logicloop_handle_entity(entity){
 
     }else{
         if(core_entities[entity]['path-active']){
+            core_entities[entity]['rotate-y'] = core_radians_to_degrees({
+              'radians': core_point_angle({
+                'x0': core_entities[entity]['translate-x'],
+                'x1': webgl_paths[core_entities[entity]['path-id']]['points'][core_entities[entity]['path-point']]['translate-x'],
+                'y0': core_entities[entity]['translate-z'],
+                'y1': webgl_paths[core_entities[entity]['path-id']]['points'][core_entities[entity]['path-point']]['translate-z'],
+              }),
+            });
+            webgl_entity_radians({
+              'entity': entity,
+            });
         }
 
         if(core_entities[entity]['gravity']){
