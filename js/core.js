@@ -2337,7 +2337,8 @@ function core_ui_update(args){
 
         let elements = document.getElementsByClassName(id);
         for(let i = 0; i < elements.length; i++){
-             elements.item(i)[elements[i].tagName !== 'INPUT'
+             let item = elements.item(i);
+             item[item.tagName !== 'INPUT'
                ? 'innerHTML'
                : 'value'] = args['ids'][id];
         }
