@@ -1141,9 +1141,7 @@ function core_init(){
       'y': 0,
     };
 
-    document.onmozpointerlockchange = core_handle_pointerlockchange;
     document.onpointerlockchange = core_handle_pointerlockchange;
-    document.onwebkitpointerlockchange = core_handle_pointerlockchange;
     window.onbeforeunload = core_handle_beforeunload;
     window.onblur = core_handle_blur;
     window.oncontextmenu = core_handle_contextmenu;
