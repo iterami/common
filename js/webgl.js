@@ -881,7 +881,6 @@ function webgl_draw_entity(entity){
             });
         }
 
-    }else if(core_entities[entity]['path-active']){
     }
     core_matrix_rotate({
       'dimensions': [
@@ -2277,13 +2276,27 @@ function webgl_logicloop_handle_entity(entity){
           + core_entities[entity]['attach-offset-z'];
 
         return;
-    }
 
-    if(core_entities[entity]['gravity']){
-        core_entities[entity][webgl_properties['gravity-axis']] = Math.max(
-          core_entities[entity][webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
-          webgl_properties['gravity-max']
-        );
+    }else{
+        if(core_entities[entity]['path-active']){
+        }
+
+        if(core_entities[entity]['gravity']){
+            core_entities[entity][webgl_properties['gravity-axis']] = Math.max(
+              core_entities[entity][webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+              webgl_properties['gravity-max']
+            );
+        }
+
+        core_entities[entity]['translate-x'] = core_round({
+          'number': core_entities[entity]['translate-x'] + core_entities[entity]['dx'],
+        });
+        core_entities[entity]['translate-y'] = core_round({
+          'number': core_entities[entity]['translate-y'] + core_entities[entity]['dy'],
+        });
+        core_entities[entity]['translate-z'] = core_round({
+          'number': core_entities[entity]['translate-z'] + core_entities[entity]['dz'],
+        });
     }
 
     if(core_entities[entity]['collides']){
@@ -2301,15 +2314,16 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
-    core_entities[entity]['translate-x'] = core_round({
-      'number': core_entities[entity]['translate-x'] + core_entities[entity]['dx'],
-    });
-    core_entities[entity]['translate-y'] = core_round({
-      'number': core_entities[entity]['translate-y'] + core_entities[entity]['dy'],
-    });
-    core_entities[entity]['translate-z'] = core_round({
-      'number': core_entities[entity]['translate-z'] + core_entities[entity]['dz'],
-    });
+    if(core_entities[entity]['draw-type'] === 'POINTS'){
+        core_entities[entity]['point-size'] = 500 / core_distance({
+          'x0': webgl_characters[webgl_character_id]['translate-x'],
+          'y0': webgl_characters[webgl_character_id]['translate-y'],
+          'z0': webgl_characters[webgl_character_id]['translate-z'],
+          'x1': core_entities[entity]['translate-x'],
+          'y1': core_entities[entity]['translate-y'],
+          'z1': core_entities[entity]['translate-z'],
+        });
+    }
 
     if(core_entities[entity]['spawn-entity'] !== false){
         core_entities[entity]['spawn-interval-current']++;
@@ -2327,17 +2341,6 @@ function webgl_logicloop_handle_entity(entity){
               'translate-z': core_entities[entity]['translate-z'],
             });
         }
-    }
-
-    if(core_entities[entity]['draw-type'] === 'POINTS'){
-        core_entities[entity]['point-size'] = 500 / core_distance({
-          'x0': webgl_characters[webgl_character_id]['translate-x'],
-          'y0': webgl_characters[webgl_character_id]['translate-y'],
-          'z0': webgl_characters[webgl_character_id]['translate-z'],
-          'x1': core_entities[entity]['translate-x'],
-          'y1': core_entities[entity]['translate-y'],
-          'z1': core_entities[entity]['translate-z'],
-        });
     }
 }
 
