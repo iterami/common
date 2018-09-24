@@ -1,7 +1,6 @@
 'use strict';
 
 // Required args: todo, url
-// Optional args: data, type
 function core_ajax(args){
     args = core_args({
       'args': args,
