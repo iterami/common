@@ -987,10 +987,7 @@ function core_handle_pointerlockchange(event){
         return;
     }
 
-    core_mouse['pointerlock-state'] = element === core_vendor_prefix({
-      'property': 'pointerLockElement',
-      'var': document,
-    });
+    core_mouse['pointerlock-state'] = element === document.pointerLockElement;
 
     if(!core_mouse['pointerlock-state']){
         core_escape();
@@ -1893,10 +1890,6 @@ function core_requestpointerlock(args){
         return;
     }
 
-    element.requestPointerLock = core_vendor_prefix({
-      'property': 'requestPointerLock',
-      'var': element,
-    });
     element.requestPointerLock();
 
     core_mouse['pointerlock-id'] = args['id'];
@@ -2365,17 +2358,6 @@ function core_uri(args){
       args['type'],
       args['quality']
     );
-}
-
-// Required args: property, var
-function core_vendor_prefix(args){
-    let unprefixed = args['property'].charAt(0).toUpperCase() + args['property'].slice(1);
-
-    return args['var'][args['property']]
-      || args['var']['webkit' + unprefixed]
-      || args['var']['moz' + unprefixed]
-      || args['var']['ms' + unprefixed]
-      || args['var']['o' + unprefixed];
 }
 
 window.core_ajax_properties = {
