@@ -973,10 +973,6 @@ function core_handle_mousewheel(event){
         return;
     }
 
-    let delta = Number(
-      event.wheelDelta
-        || -event.detail
-    );
     core_handle_event({
       'event': event,
       'key': 'mousewheel',
@@ -1145,15 +1141,6 @@ function core_init(){
       'y': 0,
     };
 
-    document.addEventListener(
-      'onmousewheel' in window
-        ? 'mousewheel'
-        : 'DOMMouseScroll',
-      core_handle_mousewheel,
-      {
-        'passive': true,
-      }
-    );
     document.onmozpointerlockchange = core_handle_pointerlockchange;
     document.onpointerlockchange = core_handle_pointerlockchange;
     document.onwebkitpointerlockchange = core_handle_pointerlockchange;
@@ -1167,6 +1154,7 @@ function core_init(){
     window.onmousedown = core_handle_mousedown;
     window.onmousemove = core_handle_mousemove;
     window.onmouseup = core_handle_mouseup;
+    window.onwheel = core_handle_mousewheel;
     window.ontouchend = core_handle_mouseup;
     window.ontouchmove = core_handle_mousemove;
     window.ontouchstart = core_handle_mousedown;
