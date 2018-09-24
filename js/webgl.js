@@ -1097,7 +1097,7 @@ function webgl_entity_move(args){
 
     }else{
         let movement = core_move_3d({
-          'angle': core_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis'][1]],
+          'angle': -core_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis'][1]],
           'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
@@ -2283,7 +2283,7 @@ function webgl_logicloop_handle_entity(entity){
             let path = webgl_paths[core_entities[entity]['path-id']];
             let point = path['points'][core_entities[entity]['path-point']];
 
-            core_entities[entity]['rotate-y'] = core_radians_to_degrees({
+            core_entities[entity]['rotate-y'] = 90 + core_radians_to_degrees({
               'radians': core_point_angle({
                 'x0': core_entities[entity]['translate-x'],
                 'x1': point['translate-x'],
@@ -2297,7 +2297,6 @@ function webgl_logicloop_handle_entity(entity){
 
             webgl_entity_move({
               'entity': entity,
-              'multiplier': -1,
             });
 
             if(core_distance({
