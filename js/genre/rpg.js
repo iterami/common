@@ -19,7 +19,6 @@ function rpg_character_affect(args){
     }
 }
 
-// Optional args: properties
 function rpg_character_create(args){
     args = core_args({
       'args': args,
@@ -197,7 +196,6 @@ function rpg_handle_all(){
     });
 }
 
-// Optional args: properties, type
 function rpg_item_create(args){
     args = core_args({
       'args': args,
@@ -229,7 +227,6 @@ function rpg_item_create(args){
 }
 
 // Required args: id
-// Optional args: character
 function rpg_item_select(args){
     args = core_args({
       'args': args,
@@ -265,7 +262,6 @@ function rpg_item_toggle(id){
 }
 */
 
-// Optional args: properties
 function rpg_particle_create(args){
     args = core_args({
       'args': args,
@@ -362,7 +358,6 @@ function rpg_particle_handle(){
     }
 }
 
-// Optional args: properties
 function rpg_spawner_create(args){
     args = core_args({
       'args': args,
@@ -403,7 +398,6 @@ function rpg_unload(){
     rpg_world_static.length = 0;
 }
 
-// Optional args: properties
 function rpg_world_dynamic_create(args){
     args = core_args({
       'args': args,

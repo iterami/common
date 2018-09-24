@@ -80,7 +80,6 @@ function core_audio_create(args){
     }
 }
 
-// Optional args: id, properties
 function core_audio_node_create(args){
     args = core_args({
       'args': args,
@@ -202,7 +201,6 @@ function core_audio_start(args){
 }
 
 // Required args: id
-// Optional args: when
 function core_audio_stop(args){
     args = core_args({
       'args': args,
@@ -214,7 +212,6 @@ function core_audio_stop(args){
     core_audio_sources[args['id']][core_audio[args['id']]['connections'][0]['label']].stop(args['when']);
 }
 
-// Optional args: when
 function core_audio_stop_all(args){
     args = core_args({
       'args': args,
@@ -232,7 +229,6 @@ function core_audio_stop_all(args){
 }
 
 // Required args: todo
-// Optional args: args
 function core_call(args){
     args = core_args({
       'args': args,
@@ -249,7 +245,6 @@ function core_call(args){
 }
 
 // Required args: max, min, value
-// Optional args: decimals, wrap
 function core_clamp(args){
     args = core_args({
       'args': args,
@@ -282,7 +277,6 @@ function core_clamp(args){
     return args['value'];
 }
 
-// Optional args: date
 function core_date_to_timestamp(args){
     args = core_args({
       'args': args,
@@ -309,7 +303,6 @@ function core_date_to_timestamp(args){
 }
 
 // Required args: degrees
-// Optional args: decimals
 function core_degrees_to_radians(args){
     args = core_args({
       'args': args,
@@ -324,7 +317,6 @@ function core_degrees_to_radians(args){
     });
 }
 
-// Optional args: decimals, x0, x1, y0, y1, z0, z1
 function core_distance(args){
     args = core_args({
       'args': args,
@@ -356,7 +348,6 @@ function core_distance(args){
     });
 }
 
-// Optional args: id, properties, types
 function core_entity_create(args){
     args = core_args({
       'args': args,
@@ -437,7 +428,6 @@ function core_entity_handle_defaults(args){
 }
 
 // Reqruied args: entities
-// Optional args: delete-empty
 function core_entity_remove(args){
     args = core_args({
       'args': args,
@@ -456,7 +446,6 @@ function core_entity_remove(args){
     }
 }
 
-// Optional args: delete-empty, group
 function core_entity_remove_all(args){
     args = core_args({
       'args': args,
@@ -482,7 +471,6 @@ function core_entity_remove_all(args){
 }
 
 // Required args: type
-// Optional args: default, groups, properties, todo
 function core_entity_set(args){
     args = core_args({
       'args': args,
@@ -536,7 +524,6 @@ function core_escape(){
     });
 }
 
-// Optional args: beforeunload, clearkeys, clearmouse, elements, keybinds, mousebinds
 function core_events_bind(args){
     args = core_args({
       'args': args,
@@ -610,7 +597,6 @@ function core_events_todoloop(){
 }
 
 // Required args: file, todo
-// Optional args: type
 function core_file(args){
     args = core_args({
       'args': args,
@@ -626,7 +612,6 @@ function core_file(args){
     filereader[args['type']](args['file']);
 }
 
-// Optional args: decimals, length, x0, x1, y0, y1, z0, z1
 function core_fixed_length_line(args){
     args = core_args({
       'args': args,
@@ -698,7 +683,6 @@ function core_group_create(args){
 }
 
 // Required args: groups, todo
-// Optional args: pretodo
 function core_group_modify(args){
     args = core_args({
       'args': args,
@@ -734,7 +718,6 @@ function core_group_move(args){
 }
 
 // Required args: entities, group
-// Optional args: delete-empty
 function core_group_remove(args){
     args = core_args({
       'args': args,
@@ -761,7 +744,6 @@ function core_group_remove(args){
 }
 
 // Required args: entities
-// Optional args: delete-empty
 function core_group_remove_all(args){
     args = core_args({
       'args': args,
@@ -821,7 +803,6 @@ function core_handle_contextmenu(event){
     }
 }
 
-// Optional args: default, var
 function core_handle_defaults(args){
     args = core_args({
       'args': args,
@@ -848,7 +829,6 @@ function core_handle_defaults(args){
 }
 
 // Required args: event, key, object
-// Optional args: state, todo
 function core_handle_event(args){
     args = core_args({
       'args': args,
@@ -1037,7 +1017,6 @@ function core_hex_to_rgb(args){
     return 'rgb(' + rgb['red'] + ', ' + rgb['green'] + ', ' + rgb['blue'] + ')';
 }
 
-// Optional args: parent, properties, type
 function core_html(args){
     args = core_args({
       'args': args,
@@ -1094,7 +1073,6 @@ function core_html_modify(args){
 }
 
 // Required args: id, src
-// Optional args: todo
 function core_image(args){
     args = core_args({
       'args': args,
@@ -1233,7 +1211,6 @@ function core_interval_animationFrame(args){
 }
 
 // Required args: id, todo
-// Optional args: animationFrame, clear, interval, paused, set
 function core_interval_modify(args){
     args = core_args({
       'args': args,
@@ -1365,7 +1342,6 @@ function core_keys_rebind(){
 }
 
 // Required args: keybinds
-// Optional args: clear
 function core_keys_updatebinds(args){
     args = core_args({
       'args': args,
@@ -1504,7 +1480,6 @@ function core_matrix_rotate(args){
 }
 
 // Required args: id
-// Optional args: decimals
 function core_matrix_round(args){
     args = core_args({
       'args': args,
@@ -1535,7 +1510,6 @@ function core_matrix_translate(args){
 }
 
 // Required args: mousebinds
-// Optional args: clear
 function core_mouse_updatebinds(args){
     args = core_args({
       'args': args,
@@ -1558,7 +1532,6 @@ function core_mouse_updatebinds(args){
 }
 
 // Required args: x0, x1, y0, y1
-// Optional args: decimals, multiplier
 function core_move_2d(args){
     args = core_args({
       'args': args,
@@ -1610,7 +1583,6 @@ function core_move_2d_diagonal(args){
 }
 
 // Required args; angle
-// Optional args: decimals, multiplier, speed, strafe
 function core_move_3d(args){
     args = core_args({
       'args': args,
@@ -1643,7 +1615,6 @@ function core_move_3d(args){
 }
 
 // Required args: number
-// Optional args: decimals
 function core_number_format(args){
     args = core_args({
       'args': args,
@@ -1670,7 +1641,6 @@ function core_point_angle(args){
 }
 
 // Required args: radians
-// Optional args: decimals
 function core_radians_to_degrees(args){
     args = core_args({
       'args': args,
@@ -1685,7 +1655,6 @@ function core_radians_to_degrees(args){
     });
 }
 
-// Optional args: chance
 function core_random_boolean(args){
     args = core_args({
       'args': args,
@@ -1707,7 +1676,6 @@ function core_random_hex(){
     return red.slice(-2) + green.slice(-2) + blue.slice(-2);
 }
 
-// Optional args: max, todo
 function core_random_integer(args){
     args = core_args({
       'args': args,
@@ -1731,7 +1699,6 @@ function core_random_key(args){
     })];
 }
 
-// Optional args: multiplier
 function core_random_number(args){
     args = core_args({
       'args': args,
@@ -1757,7 +1724,6 @@ function core_random_rgb(){
   };
 }
 
-// Optional args: characters, length
 function core_random_string(args){
     args = core_args({
       'args': args,
@@ -1804,7 +1770,6 @@ function core_replace_multiple(args){
 }
 
 // Required args: title
-// Optional args: audios, beforeunload, entities, github, globals, images,
 //   info, keybinds, menu, mousebinds, storage, storage-menu, tabs, textures, ui
 function core_repo_init(args){
     args = core_args({
@@ -1926,7 +1891,6 @@ function core_repo_init(args){
     document.getElementById('repo-ui').innerHTML = args['ui'];
 }
 
-// Optional args: id
 function core_requestpointerlock(args){
     if(core_menu_open){
         return;
@@ -1954,7 +1918,6 @@ function core_requestpointerlock(args){
 }
 
 // Required args: number
-// Optional args: decimals
 function core_round(args){
     args = core_args({
       'args': args,
@@ -1981,7 +1944,6 @@ function core_round(args){
 }
 
 // Required args: array, todo
-// Optional args: reverse
 function core_sort_custom(args){
     args = core_args({
       'args': args,
@@ -1997,7 +1959,6 @@ function core_sort_custom(args){
 }
 
 // Required args: array
-// Optional args: reverse
 function core_sort_numbers(args){
     core_sort_custom({
       'array': args['array'],
@@ -2019,7 +1980,6 @@ function core_sort_random(args){
 }
 
 // Required args: array, property
-// Optional args: reverse
 function core_sort_property(args){
     core_sort_custom({
       'array': args['array'],
@@ -2038,7 +1998,6 @@ function core_sort_property(args){
 }
 
 // Required args, array
-// Optional args: reverse
 function core_sort_strings(args){
     core_sort_custom({
       'array': args['array'],
@@ -2050,7 +2009,6 @@ function core_sort_strings(args){
 }
 
 // Required args: storage
-// Optional args: prefix
 function core_storage_add(args){
     args = core_args({
       'args': args,
@@ -2223,7 +2181,6 @@ function core_tab_switch(args){
 }
 
 // Required args: target
-// Optional args: now
 function core_time_diff(args){
     args = core_args({
       'args': args,
@@ -2251,7 +2208,6 @@ function core_time_diff(args){
     });
 }
 
-// Optional args: date, diff
 function core_time_format(args){
     args = core_args({
       'args': args,
@@ -2322,7 +2278,6 @@ function core_time_from_inputs(){
     });
 }
 
-// Optional args: timestamp
 function core_timestamp_to_date(args){
     args = core_args({
       'args': args,
@@ -2358,7 +2313,6 @@ function core_two_digits(args){
 }
 
 // Required args: var
-// Optional args: type
 function core_type(args){
     args = core_args({
       'args': args,
@@ -2383,7 +2337,6 @@ function core_type(args){
     return typeof args['var'] === args['type'];
 }
 
-// Optional args: ids
 function core_ui_update(args){
     args = core_args({
       'args': args,
@@ -2413,7 +2366,6 @@ function core_ui_update(args){
     }
 }
 
-// Optional args: id, quality, type
 function core_uri(args){
     args = core_args({
       'args': args,

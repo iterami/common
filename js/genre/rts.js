@@ -1,7 +1,6 @@
 'use strict';
 
 // Required args: player, type, x, y
-// Optional args: fog
 function rts_building_build(args){
     if(rts_players[args['player']]['money'] < rts_buildings[args['type']]['cost']){
         return;
@@ -463,7 +462,6 @@ function rts_camera_validatemove(args){
     }
 }
 
-// Optional args: minimap
 function rts_destionation_set(args){
     args = core_args({
       'args': args,

@@ -1,7 +1,6 @@
 'use strict';
 
 // Required args: entity, to
-// Optional args: offset-x, offset-y, offset-z, type
 function webgl_attach(args){
     args = core_args({
       'args': args,
@@ -22,7 +21,6 @@ function webgl_attach(args){
 }
 
 // Required args: entity
-// Optional args: axes, character
 function webgl_billboard(args){
     args = core_args({
       'args': args,
@@ -63,7 +61,6 @@ function webgl_buffer_set(args){
 }
 
 // Required args: data
-// Optional args: type
 function webgl_buffer_set_type(args){
     args = core_args({
       'args': args,
@@ -106,7 +103,6 @@ function webgl_camera_handle(){
     }
 }
 
-// Optional args: camera, character, character-id, x, xlock, y, z
 function webgl_camera_rotate(args){
     args = core_args({
       'args': args,
@@ -186,7 +182,6 @@ function webgl_camera_zoom(event){
     }
 }
 
-// Optional args: character, damage, delete, kill
 function webgl_character_damage(args){
     args = core_args({
       'args': args,
@@ -260,7 +255,6 @@ function webgl_character_home(){
     webgl_character_spawn();
 }
 
-// Optional args: character
 function webgl_character_jump(args){
     args = core_args({
       'args': args,
@@ -280,7 +274,6 @@ function webgl_character_jump(args){
     webgl_characters[args['character']][webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
 }
 
-// Optional args: character
 function webgl_character_level(args){
     args = core_args({
       'args': args,
@@ -296,7 +289,6 @@ function webgl_character_level(args){
     return -2;
 }
 
-// Optional args: character
 function webgl_character_origin(args){
     args = core_args({
       'args': args,
@@ -327,7 +319,6 @@ function webgl_character_origin(args){
     webgl_characters[args['character']]['rotate-z'] = 0;
 }
 
-// Optional args: character
 function webgl_character_spawn(args){
     args = core_args({
       'args': args,
@@ -357,7 +348,6 @@ function webgl_character_spawn(args){
     webgl_characters[args['character']]['jump-allow'] = false;
 }
 
-// Optional args: blue, green, red
 function webgl_clearcolor_set(args){
     args = core_args({
       'args': args,
@@ -380,7 +370,6 @@ function webgl_clearcolor_set(args){
 }
 
 // Required args: target
-// Optional args: character, character-id, entity
 function webgl_collision(args){
     args = core_args({
       'args': args,
@@ -552,12 +541,6 @@ function webgl_collision(args){
     return true;
 }
 
-// Optional args: all-alpha, all-collision, all-vertex-colors, back-alpha,
-//   back-collision, back-vertex-colors, bottom-alpha, bottom-collision, bottom-vertex-colors,
-//   exclude, front-alpha, front-collision, front-vertex-colors, height, left-alpha,
-//   left-collision, left-vertex-colors, length, prefix, right-alpha, right-collision,
-//   right-vertex-colors, top-alpha, top-collision, top-vertex-colors, translate-x,
-//   translate-y, translate-z, width
 function webgl_cuboid(args){
     args = core_args({
       'args': args,
@@ -723,9 +706,6 @@ function webgl_cuboid(args){
 }
 
 // Required args: prefix
-// Optional args: collision-leaves, collision-trunk, height-leaves, height-trunk,
-//   length-leaves, length-trunk, translate-x, translate-y, translate-z,
-//   vertex-colors-leaves, vertex-colors-trunk, width-leaves, width-trunk
 function webgl_cuboid_tree(args){
     args = core_args({
       'args': args,
@@ -1007,7 +987,6 @@ function webgl_drawloop(){
     });
 }
 
-// Optional args: entities
 function webgl_entity_create(args){
     args = core_args({
       'args': args,
@@ -1077,7 +1056,6 @@ function webgl_entity_create(args){
     }
 }
 
-// Optional args: entity, multiplier, strafe, y
 function webgl_entity_move(args){
     args = core_args({
       'args': args,
@@ -1141,7 +1119,6 @@ function webgl_entity_move(args){
     }
 }
 
-// Optional args: character, entity, x, y, z
 function webgl_entity_move_to(args){
     args = core_args({
       'args': args,
@@ -1168,7 +1145,6 @@ function webgl_entity_move_to(args){
 }
 
 // Required args: entity
-// Optional args: character
 function webgl_entity_radians(args){
     args = core_args({
       'args': args,
@@ -1231,11 +1207,6 @@ function webgl_entity_todo(entity){
     });
 }
 
-// Optional args: ambient-blue, ambient-green, ambient-red, clearcolor-blue, clearcolor-green,
-//   clearcolor-red, directional-blue, directional-green, directional-red, directional-state,
-//   directional-vector, fog-density, fog-state, gravity-acceleration, gravity-axis, gravity-max,
-//   jump-movement, multiplier-jump, multiplier-speed, spawn-rotate-x, spawn-rotate-y, spawn-rotate-z,
-//   spawn-translate-x, spawn-translate-y, spawn-translate-z
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -1456,9 +1427,6 @@ function webgl_init(args){
     });
 }
 
-// Optional args: camera-zoom-current, camera-zoom-max, collide-range-horizontal, collide-range-vertical,
-//   collides, dx, dy, dz, entities, experience, health-current, health-max, id, inventory, jump-height,
-//   level, rotate-x, rotate-y, rotate-z, speed, talk, trade, translate-x, translate-y, translate-z
 function webgl_init_character(args){
     args = core_args({
       'args': args,
@@ -1541,7 +1509,6 @@ function webgl_init_character(args){
 }
 
 // Required args: item
-// Optional args: character, equip
 function webgl_item_equip(args){
     args = core_args({
       'args': args,
@@ -1624,7 +1591,6 @@ function webgl_item_equip(args){
 }
 
 // Required args: item
-// Optional args: character, entities, spell, stats
 function webgl_item_reset(args){
     args = core_args({
       'args': args,
@@ -1720,7 +1686,6 @@ function webgl_item_trade(args){
     }
 }
 
-// Optional args: character, target
 function webgl_json_export(args){
     args = core_args({
       'args': args,
@@ -1815,7 +1780,6 @@ function webgl_json_export(args){
     document.getElementById(args['target']).value = JSON.stringify(json);
 }
 
-// Optional args: character, json
 function webgl_level_load(args){
     args = core_args({
       'args': args,
@@ -1847,7 +1811,6 @@ function webgl_level_load(args){
 }
 
 // Required args: character
-// Optional args: json
 function webgl_level_init(args){
     args = core_args({
       'args': args,
@@ -2367,7 +2330,6 @@ function webgl_logicloop_handle_entity(entity){
     }
 }
 
-// Optional args: rotate-x, rotate-y, rotate-z, vertices-length
 function webgl_normals(args){
     args = core_args({
       'args': args,
@@ -2423,8 +2385,6 @@ function webgl_normals(args){
     return normals;
 }
 
-// Optional args: collide-range, collides, color, count, gravity, lifespan, parent,
-//   rotate-x, rotate-y, rotate-z, speed, translate-x, translate-y, translate-z
 function webgl_particles_create(args){
     args = core_args({
       'args': args,
@@ -2682,7 +2642,6 @@ function webgl_shader_update(){
 }
 
 // Required args: entity
-// Optional args: texture
 function webgl_texture_set(args){
     args = core_args({
       'args': args,
@@ -2732,7 +2691,6 @@ function webgl_vertexattribarray_set(args){
     }
 }
 
-// Optional args: rgbarray, vertexcount
 function webgl_vertexcolorarray(args){
     args = core_args({
       'args': args,

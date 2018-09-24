@@ -1,7 +1,6 @@
 'use strict';
 
 // Required args: base, entity
-// Optional args: offset-x, offset-y
 function canvas_attach(args){
     args = core_args({
       'args': args,
@@ -68,7 +67,6 @@ function canvas_drawloop(){
 }
 
 // Required args: vertices
-// Optional args: properties, style, type, x, y
 function canvas_draw_path(args){
     args = core_args({
       'args': args,
@@ -115,7 +113,6 @@ function canvas_draw_path(args){
 }
 
 // Required args: stops
-// Optional args: height, width, x, y
 function canvas_gradient(args){
     args = core_args({
       'args': args,
@@ -142,7 +139,6 @@ function canvas_gradient(args){
     return gradient;
 }
 
-// Optional args: contextmenu
 function canvas_init(args){
     args = core_args({
       'args': args,
@@ -270,7 +266,6 @@ function canvas_resize(){
     });
 }
 
-// Optional args: mode, newgame
 function canvas_setmode(args){
     args = core_args({
       'args': args,

@@ -21,7 +21,6 @@ function race_init(){
 }
 
 // Required args: id
-// Optional args: properties
 function race_racer_create(args){
     args = core_args({
       'args': args,

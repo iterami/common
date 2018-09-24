@@ -1,6 +1,5 @@
 'use strict';
 
-// Optional args: id
 function platform_coin_collide(args){
     args = core_args({
       'args': args,
@@ -22,7 +21,6 @@ function platform_coin_collide(args){
 function platform_init(){
 }
 
-// Optional args: id, velocity
 function platform_jump(args){
     args = core_args({
       'args': args,
@@ -35,7 +33,6 @@ function platform_jump(args){
     platform_players['player']['y-velocity'] = args['velocity'];
 }
 
-// Optional args: all, id
 function platform_player_reset(args){
     args = core_args({
       'args': args,

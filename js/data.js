@@ -1,7 +1,6 @@
 'use strict';
 
 // Required args: id,
-// Optional args: color, frequency, length-half, x, y
 function data_canvas_fence_2d(args){
     args = core_args({
       'args': args,
@@ -66,7 +65,6 @@ function data_canvas_fence_2d(args){
 }
 
 // Required args: id
-// Optional args: color-base, color-leaf, half-base, half-leaf, x, y
 function data_canvas_tree_2d(args){
     args = core_args({
       'args': args,
@@ -132,7 +130,6 @@ function data_canvas_tree_2d(args){
 }
 
 // Required args: id,
-// Optional args: billboard, color-base, color-leaf, dx, dy, dz, x, y, z
 function data_webgl_tree_2d(args){
     args = core_args({
       'args': args,
