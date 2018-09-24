@@ -87,9 +87,7 @@ function webgl_camera_handle(){
     if(core_mouse['pointerlock-state']
       || core_mouse['down-0']
       || core_mouse['down-2']){
-        if(webgl_character_level({
-            'character': webgl_character_id,
-          }) < -1){
+        if(webgl_character_level() < -1){
             return;
         }
 
@@ -161,9 +159,7 @@ function webgl_camera_rotate(args){
 }
 
 function webgl_camera_zoom(event){
-    if(webgl_character_level({
-        'character': webgl_character_id,
-      }) < -1){
+    if(webgl_character_level() < -1){
         return;
     }
 
