@@ -613,10 +613,12 @@ function webgl_cuboid(args){
     if(args['exclude']['top'] !== true){
         properties['alpha'] = args['top-alpha'];
         properties['collision'] = args['top-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-top';
         properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray();
-        core_entity_create({
-          'id': args['prefix'] + '-top',
-          'properties': properties,
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
         });
     }
 
@@ -626,10 +628,12 @@ function webgl_cuboid(args){
     if(args['exclude']['bottom'] !== true){
         properties['alpha'] = args['bottom-alpha'];
         properties['collision'] = args['bottom-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-bottom';
         properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray();
-        core_entity_create({
-          'id': args['prefix'] + '-bottom',
-          'properties': properties,
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
         });
     }
 
@@ -646,10 +650,12 @@ function webgl_cuboid(args){
     if(args['exclude']['front'] !== true){
         properties['alpha'] = args['front-alpha'];
         properties['collision'] = args['front-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-front';
         properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray();
-        core_entity_create({
-          'id': args['prefix'] + '-front',
-          'properties': properties,
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
         });
     }
 
@@ -659,10 +665,12 @@ function webgl_cuboid(args){
     if(args['exclude']['back'] !== true){
         properties['alpha'] = args['back-alpha'];
         properties['collision'] = args['back-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-back';
         properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray();
-        core_entity_create({
-          'id': args['prefix'] + '-back',
-          'properties': properties,
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
         });
     }
 
@@ -680,10 +688,12 @@ function webgl_cuboid(args){
     if(args['exclude']['left'] !== true){
         properties['alpha'] = args['left-alpha'];
         properties['collision'] = args['left-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-left';
         properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray();
-        core_entity_create({
-          'id': args['prefix'] + '-left',
-          'properties': properties,
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
         });
     }
 
@@ -693,10 +703,12 @@ function webgl_cuboid(args){
     if(args['exclude']['right'] !== true){
         properties['alpha'] = args['right-alpha'];
         properties['collision'] = args['right-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-right';
         properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray();
-        core_entity_create({
-          'id': args['prefix'] + '-right',
-          'properties': properties,
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
         });
     }
 }
@@ -843,54 +855,6 @@ function webgl_draw_entity(entity){
         });
     }
 
-    core_matrix_clone({
-      'id': 'camera',
-      'to': 'cache',
-    });
-
-    core_matrix_translate({
-      'dimensions': [
-        -core_entities[entity]['translate-x'],
-        -core_entities[entity]['translate-y'],
-        -core_entities[entity]['translate-z'],
-      ],
-      'id': 'camera',
-    });
-    if(core_entities[entity]['attach-to'] !== false
-      && core_entities[entity]['billboard'] === false){
-        if(core_entities[entity]['attach-type'] === 'character'){
-            if(!core_groups['skybox'][entity]){
-                core_matrix_rotate({
-                  'dimensions': [
-                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-x'],
-                    -webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-y'],
-                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-z'],
-                  ],
-                  'id': 'camera',
-                });
-            }
-
-        }else{
-            core_matrix_rotate({
-              'dimensions': [
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-x'],
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-y'],
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-z'],
-              ],
-              'id': 'camera',
-            });
-        }
-
-    }
-    core_matrix_rotate({
-      'dimensions': [
-        core_entities[entity]['rotate-radians-x'],
-        core_entities[entity]['rotate-radians-y'],
-        core_entities[entity]['rotate-radians-z'],
-      ],
-      'id': 'camera',
-    });
-
     webgl_buffer.bindBuffer(
       webgl_buffer.ARRAY_BUFFER,
       core_entities[entity]['buffer']['normal']
@@ -960,7 +924,7 @@ function webgl_draw_entity(entity){
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_cameraMatrix'],
       false,
-      core_matrices['camera']
+      core_matrices[entity]
     );
 
     webgl_buffer.drawArrays(
@@ -968,11 +932,6 @@ function webgl_draw_entity(entity){
       0,
       core_entities[entity]['vertices-length']
     );
-
-    core_matrix_copy({
-      'id': 'cache',
-      'to': 'camera',
-    });
 }
 
 function webgl_drawloop(){
@@ -998,6 +957,7 @@ function webgl_entity_create(args){
           'properties': args['entities'][entity],
           'types': args['entities'][entity]['types'],
         });
+        core_matrices[entity_id] = core_matrix_create();
 
         let attach = false;
         let attach_type = 'entity';
@@ -1040,6 +1000,7 @@ function webgl_entity_create(args){
               'properties': webgl_characters[character]['entities'][entity],
               'types': webgl_characters[character]['entities'][entity]['types'],
             });
+            core_matrices[entity_id] = core_matrix_create();
 
             webgl_attach({
               'entity': entity_id,
@@ -1567,6 +1528,7 @@ function webgl_item_equip(args){
               'id': entity_id,
               'properties': properties,
             });
+            core_matrices[entity_id] = core_matrix_create();
 
             webgl_attach({
               'entity': entity_id,
@@ -2367,6 +2329,53 @@ function webgl_logicloop_handle_entity(entity){
         });
     }
 
+    core_matrix_clone({
+      'id': 'camera',
+      'to': entity,
+    });
+    core_matrix_translate({
+      'dimensions': [
+        -core_entities[entity]['translate-x'],
+        -core_entities[entity]['translate-y'],
+        -core_entities[entity]['translate-z'],
+      ],
+      'id': entity,
+    });
+    if(core_entities[entity]['attach-to'] !== false
+      && core_entities[entity]['billboard'] === false){
+        if(core_entities[entity]['attach-type'] === 'character'){
+            if(!core_groups['skybox'][entity]){
+                core_matrix_rotate({
+                  'dimensions': [
+                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-x'],
+                    -webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-y'],
+                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-z'],
+                  ],
+                  'id': entity,
+                });
+            }
+
+        }else{
+            core_matrix_rotate({
+              'dimensions': [
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-x'],
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-y'],
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-z'],
+              ],
+              'id': entity,
+            });
+        }
+
+    }
+    core_matrix_rotate({
+      'dimensions': [
+        core_entities[entity]['rotate-radians-x'],
+        core_entities[entity]['rotate-radians-y'],
+        core_entities[entity]['rotate-radians-z'],
+      ],
+      'id': entity,
+    });
+
     if(core_entities[entity]['spawn-entity'] !== false){
         core_entities[entity]['spawn-interval-current']++;
 
@@ -2484,6 +2493,7 @@ function webgl_particles_create(args){
             'vertices': [0, 0, 0, 1],
           },
         });
+        core_matrices[id] = core_matrix_create();
         webgl_entity_radians({
           'entity': id,
         });
