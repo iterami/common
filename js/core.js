@@ -466,6 +466,8 @@ function core_entity_remove_all(args){
             entity,
           ],
         });
+
+        delete core_matrices[entity];
     }
 }
 
