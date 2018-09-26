@@ -382,28 +382,31 @@ function webgl_collision(args){
     let collision = false;
     let collision_sign = 1;
     let target = core_entities[args['target']];
+    let x_range = collider['collide-range-horizontal'] + Math.abs(collider['dx']);
+    let y_range = collider['collide-range-vertical'] + Math.abs(collider['dy']);
+    let z_range = collider['collide-range-horizontal'] + Math.abs(collider['dz']);
 
     if(target['normals'][0] !== 0){
         if(target['normals'][0] === 1
           && collider['dx'] < 0){
             if(collider['translate-x'] >= target['translate-x']
-              && collider['translate-x'] <= target['translate-x'] + collider['collide-range-horizontal']
-              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - collider['collide-range-vertical']
-              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range-vertical']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range-horizontal']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range-horizontal']){
+              && collider['translate-x'] <= target['translate-x'] + x_range
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - y_range
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + y_range
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - z_range
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + z_range){
                 collision = 'dx';
                 collider['dx'] = 0;
             }
 
         }else if(target['normals'][0] === -1
           && collider['dx'] > 0){
-            if(collider['translate-x'] >= target['translate-x'] - collider['collide-range-horizontal']
+            if(collider['translate-x'] >= target['translate-x'] - x_range
               && collider['translate-x'] <= target['translate-x']
-              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - collider['collide-range-vertical']
-              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + collider['collide-range-vertical']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range-horizontal']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range-horizontal']){
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - y_range
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + y_range
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - z_range
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + z_range){
                 collision = 'dx';
                 collision_sign = -1;
                 collider['dx'] = 0;
@@ -414,24 +417,24 @@ function webgl_collision(args){
     if(target['normals'][1] !== 0){
         if(target['normals'][1] === 1
           && collider['dy'] < 0){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range-horizontal']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range-horizontal']
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - x_range
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + x_range
               && collider['translate-y'] >= target['translate-y']
-              && collider['translate-y'] <= target['translate-y'] + collider['collide-range-vertical']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range-horizontal']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range-horizontal']){
+              && collider['translate-y'] <= target['translate-y'] + y_range
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - z_range
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + z_range){
                 collision = 'dy';
                 collider['dy'] = 0;
             }
 
         }else if(target['normals'][1] === -1
           && collider['dy'] > 0){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range-horizontal']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range-horizontal']
-              && collider['translate-y'] >= target['translate-y'] - collider['collide-range-vertical']
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - x_range
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + x_range
+              && collider['translate-y'] >= target['translate-y'] - y_range
               && collider['translate-y'] <= target['translate-y']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - collider['collide-range-horizontal']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + collider['collide-range-horizontal']){
+              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - z_range
+              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + z_range){
                 collision = 'dy';
                 collision_sign = -1;
                 collider['dy'] = 0;
@@ -442,23 +445,23 @@ function webgl_collision(args){
     if(target['normals'][2] !== 0){
         if(target['normals'][2] === 1
           && collider['dz'] < 0){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range-horizontal']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range-horizontal']
-              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - collider['collide-range-vertical']
-              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range-vertical']
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - x_range
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + x_range
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - y_range
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + y_range
               && collider['translate-z'] >= target['translate-z']
-              && collider['translate-z'] <= target['translate-z'] + collider['collide-range-horizontal']){
+              && collider['translate-z'] <= target['translate-z'] + z_range){
                 collision = 'dz';
                 collider['dz'] = 0;
             }
 
         }else if(target['normals'][2] === -1
           && collider['dz'] > 0){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - collider['collide-range-horizontal']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + collider['collide-range-horizontal']
-              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - collider['collide-range-vertical']
-              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + collider['collide-range-vertical']
-              && collider['translate-z'] >= target['translate-z'] - collider['collide-range-horizontal']
+            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - x_range
+              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + x_range
+              && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - y_range
+              && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + y_range
+              && collider['translate-z'] >= target['translate-z'] - z_range
               && collider['translate-z'] <= target['translate-z']){
                 collision = 'dz';
                 collision_sign = -1;
