@@ -2238,8 +2238,6 @@ function webgl_logicloop_handle_entity(entity){
         core_entities[entity]['translate-z'] = target['translate-z'] + target['dz']
           + core_entities[entity]['attach-offset-z'];
 
-        return;
-
     }else{
         if(core_entities[entity]['path-active']){
             let path = webgl_paths[core_entities[entity]['path-id']];
