@@ -2243,13 +2243,11 @@ function webgl_logicloop_handle_entity(entity){
             let path = webgl_paths[core_entities[entity]['path-id']];
             let point = path['points'][core_entities[entity]['path-point']];
 
-            let angle = core_radians_to_degrees({
-              'radians': core_point_angle({
-                'x0': core_entities[entity]['translate-x'],
-                'x1': point['translate-x'],
-                'y0': core_entities[entity]['translate-z'],
-                'y1': point['translate-z'],
-              }),
+            let angle = core_point_angle({
+              'x0': core_entities[entity]['translate-x'],
+              'x1': point['translate-x'],
+              'y0': core_entities[entity]['translate-z'],
+              'y1': point['translate-z'],
             });
 
             core_entities[entity]['dx'] = core_round({
@@ -2274,17 +2272,40 @@ function webgl_logicloop_handle_entity(entity){
                 'y1': point['translate-y'],
                 'z1': point['translate-z'],
               }) < core_entities[entity]['collide-range-horizontal']){
-                core_entities[entity]['path-point'] += core_entities[entity]['path-direction'];
+                if(core_entities[entity]['path-direction'] > 0){
+                    if(core_entities[entity]['path-point'] >= path['points'].length - 1){
+                        if(path['end'] === 1){
+                            core_entities[entity]['path-point'] = 0;
 
-                if(core_entities[entity]['path-point'] > path['points'].length){
-                    if(path['end'] === 1){
-                        core_entities[entity]['path-point'] = 0;
+                        }else if(path['end'] === -1){
+                            core_entities[entity]['path-direction'] = -1;
+                            core_entities[entity]['path-point'] -= 1;
 
-                    }else if(path['end'] === -1){
-                        core_entities[entity]['path-direction'] *= -1;
+                        }else{
+                            core_entities[entity]['path-active'] = false;
+                            core_entities[entity]['path-point'] = 0;
+                        }
 
                     }else{
-                        core_entities[entity]['path-active'] = false;
+                        core_entities[entity]['path-point'] += 1;
+                    }
+
+                }else{
+                    if(core_entities[entity]['path-point'] <= 0){
+                        if(path['end'] === 1){
+                            core_entities[entity]['path-point'] = path['points'].length - 1;
+
+                        }else if(path['end'] === -1){
+                            core_entities[entity]['path-direction'] = 1;
+                            core_entities[entity]['path-point'] += 1;
+
+                        }else{
+                            core_entities[entity]['path-active'] = false;
+                            core_entities[entity]['path-point'] = 0;
+                        }
+
+                    }else{
+                        core_entities[entity]['path-point'] -= 1;
                     }
                 }
             }
