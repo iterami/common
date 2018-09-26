@@ -1351,6 +1351,7 @@ function webgl_init(args){
         'item-stats': {},
         'normals': [],
         'path-direction': 1,
+        'path-end': false,
         'path-id': false,
         'path-point': 0,
         'point-size': 1,
@@ -2270,16 +2271,20 @@ function webgl_logicloop_handle_entity(entity){
               }) < core_entities[entity]['collide-range-horizontal']){
                 if(core_entities[entity]['path-direction'] > 0){
                     if(core_entities[entity]['path-point'] >= path['points'].length - 1){
-                        if(path['end'] === 2){
+                        let end = core_entities[entity]['path-end'] !== false
+                          ? core_entities[entity]['path-end']
+                          : path['end'];
+
+                        if(end === 2){
                             core_entities[entity]['path-point'] = 1;
                             core_entities[entity]['translate-x'] = path['points'][0]['translate-x'];
                             core_entities[entity]['translate-y'] = path['points'][0]['translate-y'];
                             core_entities[entity]['translate-z'] = path['points'][0]['translate-z'];
 
-                        }else if(path['end'] === 1){
+                        }else if(end === 1){
                             core_entities[entity]['path-point'] = 0;
 
-                        }else if(path['end'] === -1){
+                        }else if(end === -1){
                             core_entities[entity]['path-direction'] = -1;
                             core_entities[entity]['path-point'] -= 1;
 
@@ -2294,16 +2299,20 @@ function webgl_logicloop_handle_entity(entity){
 
                 }else{
                     if(core_entities[entity]['path-point'] <= 0){
-                        if(path['end'] === 2){
+                        let end = core_entities[entity]['path-end'] !== false
+                          ? core_entities[entity]['path-end']
+                          : path['end'];
+
+                        if(end === 2){
                             core_entities[entity]['path-point'] = path['points'].length - 2;
                             core_entities[entity]['translate-x'] = path['points'][core_entities[entity]['path-point']]['translate-x'];
                             core_entities[entity]['translate-y'] = path['points'][core_entities[entity]['path-point']]['translate-y'];
                             core_entities[entity]['translate-z'] = path['points'][core_entities[entity]['path-point']]['translate-z'];
 
-                        }else if(path['end'] === 1){
+                        }else if(end === 1){
                             core_entities[entity]['path-point'] = path['points'].length - 1;
 
-                        }else if(path['end'] === -1){
+                        }else if(end === -1){
                             core_entities[entity]['path-direction'] = 1;
                             core_entities[entity]['path-point'] += 1;
 
@@ -2547,12 +2556,14 @@ function webgl_path_use(args){
       'args': args,
       'defaults': {
         'path-direction': 1,
+        'path-end': false,
         'path-id': false,
         'path-point': 0,
       },
     });
 
     core_entities[args['entity']]['path-direction'] = args['path-direction'];
+    core_entities[args['entity']]['path-end'] = args['path-end'];
     core_entities[args['entity']]['path-id'] = args['path-id'];
     core_entities[args['entity']]['path-point'] = args['path-point'];
 }
