@@ -2231,12 +2231,9 @@ function webgl_logicloop_handle_entity(entity){
           ? webgl_characters[core_entities[entity]['attach-to']]
           : core_entities[core_entities[entity]['attach-to']];
 
-        core_entities[entity]['translate-x'] = target['translate-x'] + target['dx']
-          + core_entities[entity]['attach-offset-x'];
-        core_entities[entity]['translate-y'] = target['translate-y'] + target['dy']
-          + core_entities[entity]['attach-offset-y'];
-        core_entities[entity]['translate-z'] = target['translate-z'] + target['dz']
-          + core_entities[entity]['attach-offset-z'];
+        core_entities[entity]['translate-x'] = target['translate-x'] + core_entities[entity]['attach-offset-x'];
+        core_entities[entity]['translate-y'] = target['translate-y'] + core_entities[entity]['attach-offset-y'];
+        core_entities[entity]['translate-z'] = target['translate-z'] + core_entities[entity]['attach-offset-z'];
 
     }else{
         if(core_entities[entity]['path-active']){
