@@ -1350,9 +1350,8 @@ function webgl_init(args){
         'item-spellproperties': {},
         'item-stats': {},
         'normals': [],
-        'path-active': false,
         'path-direction': 1,
-        'path-id': '',
+        'path-id': false,
         'path-point': 0,
         'point-size': 1,
         'rotate-radians-x': 0,
@@ -2236,7 +2235,7 @@ function webgl_logicloop_handle_entity(entity){
         core_entities[entity]['translate-z'] = target['translate-z'] + core_entities[entity]['attach-offset-z'];
 
     }else{
-        if(core_entities[entity]['path-active']){
+        if(core_entities[entity]['path-id'] !== false){
             let path = webgl_paths[core_entities[entity]['path-id']];
             let point = path['points'][core_entities[entity]['path-point']];
 
@@ -2279,7 +2278,7 @@ function webgl_logicloop_handle_entity(entity){
                             core_entities[entity]['path-point'] -= 1;
 
                         }else{
-                            core_entities[entity]['path-active'] = false;
+                            core_entities[entity]['path-id'] = false;
                             core_entities[entity]['path-point'] = 0;
                         }
 
@@ -2297,7 +2296,7 @@ function webgl_logicloop_handle_entity(entity){
                             core_entities[entity]['path-point'] += 1;
 
                         }else{
-                            core_entities[entity]['path-active'] = false;
+                            core_entities[entity]['path-id'] = false;
                             core_entities[entity]['path-point'] = 0;
                         }
 
