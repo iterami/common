@@ -2541,6 +2541,22 @@ function webgl_particles_create(args){
     }
 }
 
+// Required args: entity
+function webgl_path_use(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'path-direction': 1,
+        'path-id': false,
+        'path-point': 0,
+      },
+    });
+
+    core_entities[args['entity']]['path-direction'] = args['path-direction'];
+    core_entities[args['entity']]['path-id'] = args['path-id'];
+    core_entities[args['entity']]['path-point'] = args['path-point'];
+}
+
 function webgl_perspective(){
     core_matrices['perspective'][0] = webgl_properties['canvas']['height'] / webgl_properties['canvas']['width'];
     core_matrices['perspective'][5] = 1;
