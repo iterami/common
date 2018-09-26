@@ -2243,7 +2243,7 @@ function webgl_logicloop_handle_entity(entity){
             let path = webgl_paths[core_entities[entity]['path-id']];
             let point = path['points'][core_entities[entity]['path-point']];
 
-            core_entities[entity]['rotate-y'] = 90 + core_radians_to_degrees({
+            let angle = core_radians_to_degrees({
               'radians': core_point_angle({
                 'x0': core_entities[entity]['translate-x'],
                 'x1': point['translate-x'],
@@ -2251,13 +2251,20 @@ function webgl_logicloop_handle_entity(entity){
                 'y1': point['translate-z'],
               }),
             });
-            webgl_entity_radians({
-              'entity': entity,
+
+            core_entities[entity]['dx'] = core_round({
+              'number': Math.cos(angle),
+            });
+            core_entities[entity]['dz'] = core_round({
+              'number': Math.sin(angle),
             });
 
-            webgl_entity_move({
-              'entity': entity,
-            });
+            if(core_entities[entity]['translate-x'] > point['translate-x']){
+                core_entities[entity]['dx'] *= -1;
+            }
+            if(core_entities[entity]['translate-z'] > point['translate-z']){
+                core_entities[entity]['dz'] *= -1;
+            }
 
             if(core_distance({
                 'x0': core_entities[entity]['translate-x'],
