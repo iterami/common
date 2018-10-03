@@ -1921,8 +1921,9 @@ function webgl_lines_tree(args){
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
+        'trunk-count-max': 5,
+        'trunk-count-min': 1,
         'trunk-height': 10,
-        'trunk-pieces': 1,
         'vertex-colors-leaves': [
           0, .5, 0, 1,
           0, .5, 0, 1,
@@ -1949,9 +1950,11 @@ function webgl_lines_tree(args){
     };
 
     // Create trunk.
-    for(let i = 0; i < args['trunk-pieces']; i++){
+    let trunk_count = core_random_integer({
+      'max': args['trunk-count-max'] - args['trunk-count-min'] + 1,
+    }) + args['trunk-count-min'];
+    for(let i = 0; i < trunk_count; i++){
         properties['id'] = args['prefix'] + '-trunk-' + i;
-        properties['translate-y'] += i * 10;
         properties['vertices'] = [
           1, args['trunk-height'], 0, 1,
           -1, args['trunk-height'], 0, 1,
@@ -1963,6 +1966,7 @@ function webgl_lines_tree(args){
             properties,
           ],
         });
+        properties['translate-y'] += 10;
     }
 
     // Create branches.
