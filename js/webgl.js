@@ -1913,6 +1913,63 @@ function webgl_level_unload(){
     core_storage_save();
 }
 
+// Required args: prefix
+function webgl_lines_tree(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+        'trunk-height': 10,
+        'trunk-pieces': 1,
+        'vertex-colors-leaves': [
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+        ],
+        'vertex-colors-trunk': [
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+        ],
+      },
+    });
+
+    let properties = {
+      'billboard': [
+        'y',
+      ],
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'],
+      'translate-z': args['translate-z'],
+      'vertex-colors': args['vertex-colors-trunk'],
+    };
+
+    // Create trunk.
+    for(let i = 0; i < args['trunk-pieces']; i++){
+        properties['id'] = args['prefix'] + '-trunk-' + i;
+        properties['translate-y'] += i * 10;
+        properties['vertices'] = [
+          1, args['trunk-height'], 0, 1,
+          -1, args['trunk-height'], 0, 1,
+          -1, 0, 0, 1,
+          1, 0, 0, 1
+        ];
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Create branches.
+
+    // Create leaves.
+}
+
 function webgl_logicloop(){
     if(webgl_character_level() > -2
       && webgl_characters[webgl_character_id]['health-current'] > 0){
