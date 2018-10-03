@@ -1754,7 +1754,6 @@ function core_replace_multiple(args){
 }
 
 // Required args: title
-//   info, keybinds, menu, mousebinds, storage, storage-menu, tabs, textures, ui
 function core_repo_init(args){
     args = core_args({
       'args': args,
