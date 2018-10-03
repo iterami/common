@@ -1868,32 +1868,12 @@ function webgl_level_init(args){
         });
     }
 
-    for(let cuboid in args['json']['cuboids']){
-        if(args['json']['cuboids'][cuboid]['tree'] === true){
-            webgl_cuboid_tree({
-              'collision-leaves': args['json']['cuboids'][cuboid]['all-collision'],
-              'collision-trunk': args['json']['cuboids'][cuboid]['all-collision'],
-              'height-leaves': args['json']['cuboids'][cuboid]['height'],
-              'height-trunk': args['json']['cuboids'][cuboid]['height'],
-              'length-leaves': args['json']['cuboids'][cuboid]['length'],
-              'length-trunk': args['json']['cuboids'][cuboid]['length'] / 5,
-              'prefix': args['json']['cuboids'][cuboid]['prefix'],
-              'translate-x': args['json']['cuboids'][cuboid]['translate-x'],
-              'translate-y': args['json']['cuboids'][cuboid]['translate-y'],
-              'translate-z': args['json']['cuboids'][cuboid]['translate-z'],
-              'width-leaves': args['json']['cuboids'][cuboid]['width'],
-              'width-trunk': args['json']['cuboids'][cuboid]['width'] / 5,
-            });
-
-            continue;
-        }
-
-        webgl_cuboid(args['json']['cuboids'][cuboid]);
-    }
-
     webgl_entity_create({
       'entities': args['json']['entities'],
     });
+    for(let prefab in args['json']['prefabs']){
+        window[args['json']['prefabs'][prefab]['type']](args['json']['prefabs'][prefab]['properties']);
+    }
 
     webgl_character_spawn();
     core_call({
