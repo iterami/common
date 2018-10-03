@@ -1893,9 +1893,11 @@ function webgl_lines_tree(args){
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
+        'trunk-branch-max': 4,
+        'trunk-branch-min': 0,
         'trunk-count-max': 10,
         'trunk-count-min': 1,
-        'trunk-height': 10,
+        'trunk-length': 10,
         'trunk-width-max': 2,
         'trunk-width-min': 1,
         'vertex-colors-leaves': [
@@ -1914,26 +1916,28 @@ function webgl_lines_tree(args){
     });
 
     let properties = {
-      'billboard': [
-        'y',
-      ],
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
       'vertex-colors': args['vertex-colors-trunk'],
     };
 
-    // Create trunk.
+    // Create trunk section.
     let trunk_count = core_random_integer({
       'max': args['trunk-count-max'] - args['trunk-count-min'] + 1,
     }) + args['trunk-count-min'];
     let trunk_width = args['trunk-width-max'] / 2;
     let trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
-    for(let i = 0; i < trunk_count; i++){
-        properties['id'] = args['prefix'] + '-trunk-' + i;
+    for(let trunk = 0; trunk < trunk_count; trunk++){
+        properties['id'] = args['prefix'] + '-trunk-' + trunk;
+        properties['billboard'] = [
+          'y',
+        ];
+        properties['rotate-x'] = 0;
+        properties['rotate-z'] = 0;
         properties['vertices'] = [
-          trunk_width, args['trunk-height'], 0, 1,
-          -trunk_width, args['trunk-height'], 0, 1,
+          trunk_width, args['trunk-length'], 0, 1,
+          -trunk_width, args['trunk-length'], 0, 1,
           -trunk_width, 0, 0, 1,
           trunk_width, 0, 0, 1
         ];
@@ -1945,9 +1949,36 @@ function webgl_lines_tree(args){
 
         properties['translate-y'] += 10;
         trunk_width -= trunk_width_decrease;
-    }
 
-    // Create branches.
+        // Add branches.
+        let branch_count = core_random_integer({
+          'max': args['trunk-branch-max'] - args['trunk-branch-min'] + 1,
+        }) + args['trunk-branch-min'];
+        let branch_length = args['trunk-length'] / 2;
+        let branch_width = trunk_width / 2;
+        for(let branch = 0; branch < branch_count; branch++){
+            properties['id'] = args['prefix'] + '-trunk-' + trunk + '-branch-' + branch;
+            properties['billboard'] = false;
+            properties['rotate-x'] = core_random_number({
+              'multiplier': 45,
+            }) + 90;
+            properties['rotate-z'] = core_random_number({
+              'multiplier': 360,
+            });
+            properties['vertices'] = [
+              branch_width, branch_length, 0, 1,
+              -branch_width, branch_length, 0, 1,
+              -branch_width, 0, 0, 1,
+              branch_width, 0, 0, 1
+            ];
+
+            webgl_entity_create({
+              'entities': [
+                properties,
+              ],
+            });
+        }
+    }
 
     // Create leaves.
 }
