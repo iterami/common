@@ -1921,9 +1921,11 @@ function webgl_lines_tree(args){
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
-        'trunk-count-max': 5,
+        'trunk-count-max': 10,
         'trunk-count-min': 1,
         'trunk-height': 10,
+        'trunk-width-max': 2,
+        'trunk-width-min': 1,
         'vertex-colors-leaves': [
           0, .5, 0, 1,
           0, .5, 0, 1,
@@ -1953,20 +1955,24 @@ function webgl_lines_tree(args){
     let trunk_count = core_random_integer({
       'max': args['trunk-count-max'] - args['trunk-count-min'] + 1,
     }) + args['trunk-count-min'];
+    let trunk_width = args['trunk-width-max'] / 2;
+    let trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
     for(let i = 0; i < trunk_count; i++){
         properties['id'] = args['prefix'] + '-trunk-' + i;
         properties['vertices'] = [
-          1, args['trunk-height'], 0, 1,
-          -1, args['trunk-height'], 0, 1,
-          -1, 0, 0, 1,
-          1, 0, 0, 1
+          trunk_width, args['trunk-height'], 0, 1,
+          -trunk_width, args['trunk-height'], 0, 1,
+          -trunk_width, 0, 0, 1,
+          trunk_width, 0, 0, 1
         ];
         webgl_entity_create({
           'entities': [
             properties,
           ],
         });
+
         properties['translate-y'] += 10;
+        trunk_width -= trunk_width_decrease;
     }
 
     // Create branches.
