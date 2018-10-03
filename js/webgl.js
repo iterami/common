@@ -476,12 +476,6 @@ function webgl_collision(args){
             webgl_characters[args['character-id']]['dy'] = collider['dy'];
             webgl_characters[args['character-id']]['dz'] = collider['dz'];
 
-            let collide_range = collider[collision === 'dy'
-              ? 'collide-range-vertical'
-              : 'collide-range-horizontal'];
-
-            webgl_characters[args['character-id']]['translate-' + collision[1]] = target['translate-' + collision[1]] + (collide_range * collision_sign);
-
             if(webgl_character_level({
                 'character': args['character-id'],
               }) > -1){
@@ -532,8 +526,6 @@ function webgl_collision(args){
             core_entities[args['entity']]['dx'] = collider['dx'];
             core_entities[args['entity']]['dy'] = collider['dy'];
             core_entities[args['entity']]['dz'] = collider['dz'];
-
-            core_entities[args['entity']]['translate-' + collision] = target['translate-' + collision] + (collide_range * collision_sign);
         }
     }
 
