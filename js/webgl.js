@@ -1049,7 +1049,7 @@ function webgl_entity_move(args){
 
     }else{
         let movement = core_move_3d({
-          'angle': -core_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis'][1]],
+          'angle': core_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis'][1]],
           'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
