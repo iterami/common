@@ -920,10 +920,6 @@ function webgl_draw_entity(entity){
       webgl_properties['shader']['alpha'],
       core_entities[entity]['alpha']
     );
-    webgl_buffer.uniform1f(
-      webgl_properties['shader']['point-size'],
-      core_entities[entity]['point-size']
-    );
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_cameraMatrix'],
       false,
@@ -1357,7 +1353,6 @@ function webgl_init(args){
         'path-end': false,
         'path-id': false,
         'path-point': 0,
-        'point-size': 1,
         'rotate-radians-x': 0,
         'rotate-radians-y': 0,
         'rotate-radians-z': 0,
@@ -2364,17 +2359,6 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
-    if(core_entities[entity]['draw-type'] === 'POINTS'){
-        core_entities[entity]['point-size'] = 500 / core_distance({
-          'x0': webgl_characters[webgl_character_id]['translate-x'],
-          'y0': webgl_characters[webgl_character_id]['translate-y'],
-          'z0': webgl_characters[webgl_character_id]['translate-z'],
-          'x1': core_entities[entity]['translate-x'],
-          'y1': core_entities[entity]['translate-y'],
-          'z1': core_entities[entity]['translate-z'],
-        });
-    }
-
     core_matrix_clone({
       'id': 'camera',
       'to': entity,
@@ -2696,15 +2680,14 @@ function webgl_shader_update(){
             + 'uniform int directional;'
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
-            + 'uniform float pointSize;'
             + 'varying float float_fogDistance;'
             + 'varying vec2 vec_textureCoord;'
             + 'varying vec3 vec_lighting;'
             + 'varying vec4 vec_fragmentColor;'
             + 'void main(void){'
-            +     'gl_PointSize = pointSize;'
             +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
             +     'float_fogDistance = length(gl_Position.xyz);'
+            +     'gl_PointSize = 500. / float_fogDistance;'
             +     'vec_fragmentColor = vec_vertexColor;'
             +     'vec_textureCoord = vec_texturePosition;'
             +     'vec_lighting = vec3('
@@ -2743,7 +2726,6 @@ function webgl_shader_update(){
       'fog-state': 'fog',
       'mat_cameraMatrix': 'mat_cameraMatrix',
       'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
-      'point-size': 'pointSize',
       'sampler': 'sampler',
     };
     for(let location in locations){
