@@ -732,9 +732,16 @@ function core_group_remove(args){
     }
 
     for(let entity in args['entities']){
+        if(!core_groups[args['group']][args['entities'][entity]]){
+            continue;
+        }
+
         delete core_groups[args['group']][args['entities'][entity]];
 
         core_groups['_length'][args['group']]--;
+        if(core_entity_info[args['group']]){
+            core_entity_info[args['group']]['count']--;
+        }
     }
 
     if(args['delete-empty']
