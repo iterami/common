@@ -267,7 +267,7 @@ function webgl_character_jump(args){
     }
 
     webgl_characters[args['character']]['jump-allow'] = false;
-    webgl_characters[args['character']][webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
+    webgl_characters[args['character']]['change']['translate-' + webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
 }
 
 function webgl_character_level(args){
@@ -304,9 +304,11 @@ function webgl_character_origin(args){
     webgl_characters[args['character']]['camera-rotate-x'] = 0;
     webgl_characters[args['character']]['camera-rotate-y'] = 0;
     webgl_characters[args['character']]['camera-rotate-z'] = 0;
-    webgl_characters[args['character']]['dx'] = 0;
-    webgl_characters[args['character']]['dy'] = 0;
-    webgl_characters[args['character']]['dz'] = 0;
+    webgl_characters[args['character']]['change'] = {
+      'translate-x': 0,
+      'translate-y': 0,
+      'translate-z': 0,
+    };
     webgl_characters[args['character']]['rotate-radians-x'] = 0;
     webgl_characters[args['character']]['rotate-radians-y'] = 0;
     webgl_characters[args['character']]['rotate-radians-z'] = 0;
@@ -382,99 +384,99 @@ function webgl_collision(args){
     let collision = false;
     let collision_sign = 1;
     let target = core_entities[args['target']];
-    let x_range = collider['collide-range-horizontal'] + Math.abs(collider['dx']);
-    let y_range = collider['collide-range-vertical'] + Math.abs(collider['dy']);
-    let z_range = collider['collide-range-horizontal'] + Math.abs(collider['dz']);
+    let x_range = collider['collide-range-horizontal'] + Math.abs(collider['change']['translate-x']);
+    let y_range = collider['collide-range-vertical'] + Math.abs(collider['change']['translate-y']);
+    let z_range = collider['collide-range-horizontal'] + Math.abs(collider['change']['translate-z']);
 
     if(target['normals'][0] !== 0){
         if(target['normals'][0] === 1
-          && collider['dx'] < 0){
+          && collider['change']['translate-x'] < 0){
             if(collider['translate-x'] >= target['translate-x']
               && collider['translate-x'] <= target['translate-x'] + x_range
               && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - y_range
               && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + y_range
               && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - z_range
               && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + z_range){
-                collision = 'dx';
-                collider['dx'] = 0;
+                collision = 'x';
+                collider['change']['translate-x'] = 0;
             }
 
         }else if(target['normals'][0] === -1
-          && collider['dx'] > 0){
+          && collider['change']['translate-x'] > 0){
             if(collider['translate-x'] >= target['translate-x'] - x_range
               && collider['translate-x'] <= target['translate-x']
               && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - y_range
               && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + y_range
               && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - z_range
               && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + z_range){
-                collision = 'dx';
+                collision = 'x';
                 collision_sign = -1;
-                collider['dx'] = 0;
+                collider['change']['translate-x'] = 0;
             }
         }
     }
 
     if(target['normals'][1] !== 0){
         if(target['normals'][1] === 1
-          && collider['dy'] < 0){
+          && collider['change']['translate-y'] < 0){
             if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - x_range
               && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + x_range
               && collider['translate-y'] >= target['translate-y']
               && collider['translate-y'] <= target['translate-y'] + y_range
               && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - z_range
               && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + z_range){
-                collision = 'dy';
-                collider['dy'] = 0;
+                collision = 'y';
+                collider['change']['translate-y'] = 0;
             }
 
         }else if(target['normals'][1] === -1
-          && collider['dy'] > 0){
+          && collider['change']['translate-y'] > 0){
             if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - x_range
               && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + x_range
               && collider['translate-y'] >= target['translate-y'] - y_range
               && collider['translate-y'] <= target['translate-y']
               && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - z_range
               && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + z_range){
-                collision = 'dy';
+                collision = 'y';
                 collision_sign = -1;
-                collider['dy'] = 0;
+                collider['change']['translate-y'] = 0;
             }
         }
     }
 
     if(target['normals'][2] !== 0){
         if(target['normals'][2] === 1
-          && collider['dz'] < 0){
+          && collider['change']['translate-z'] < 0){
             if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - x_range
               && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + x_range
               && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - y_range
               && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + y_range
               && collider['translate-z'] >= target['translate-z']
               && collider['translate-z'] <= target['translate-z'] + z_range){
-                collision = 'dz';
-                collider['dz'] = 0;
+                collision = 'z';
+                collider['change']['translate-z'] = 0;
             }
 
         }else if(target['normals'][2] === -1
-          && collider['dz'] > 0){
+          && collider['change']['translate-z'] > 0){
             if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - x_range
               && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + x_range
               && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - y_range
               && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + y_range
               && collider['translate-z'] >= target['translate-z'] - z_range
               && collider['translate-z'] <= target['translate-z']){
-                collision = 'dz';
+                collision = 'z';
                 collision_sign = -1;
-                collider['dz'] = 0;
+                collider['change']['translate-z'] = 0;
             }
         }
     }
 
     if(collision !== false){
         if(args['character']){
-            webgl_characters[args['character-id']]['dx'] = collider['dx'];
-            webgl_characters[args['character-id']]['dy'] = collider['dy'];
-            webgl_characters[args['character-id']]['dz'] = collider['dz'];
+            webgl_characters[args['character-id']]['change']['translate-x'] = collider['change']['translate-x'];
+            webgl_characters[args['character-id']]['change']['translate-y'] = collider['change']['translate-y'];
+            webgl_characters[args['character-id']]['change']['translate-z'] = collider['change']['translate-z'];
 
             if(webgl_character_level({
                 'character': args['character-id'],
@@ -509,7 +511,7 @@ function webgl_collision(args){
 
                 }else if(collision === webgl_properties['gravity-axis']
                   && collision_sign === 1){
-                    webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']][webgl_properties['gravity-axis']] === 0;
+                    webgl_characters[args['character-id']]['jump-allow'] = webgl_characters[args['character-id']]['change']['translate-' + webgl_properties['gravity-axis']] === 0;
                 }
             }
 
@@ -523,9 +525,9 @@ function webgl_collision(args){
             return false;
 
         }else{
-            core_entities[args['entity']]['dx'] = collider['dx'];
-            core_entities[args['entity']]['dy'] = collider['dy'];
-            core_entities[args['entity']]['dz'] = collider['dz'];
+            core_entities[args['entity']]['change']['translate-x'] = collider['change']['translate-x'];
+            core_entities[args['entity']]['change']['translate-y'] = collider['change']['translate-y'];
+            core_entities[args['entity']]['change']['translate-z'] = collider['change']['translate-z'];
         }
     }
 
@@ -1025,7 +1027,7 @@ function webgl_entity_move(args){
             dy *= args['strafe']
               ? -1
               : 1;
-            webgl_characters[args['character']]['dy'] += dy;
+            webgl_characters[args['character']]['change']['translate-y'] += dy;
 
         }else{
             let movement = core_move_3d({
@@ -1033,8 +1035,8 @@ function webgl_entity_move(args){
               'speed': webgl_characters[args['character']]['speed'] * args['multiplier'],
               'strafe': args['strafe'],
             });
-            webgl_characters[args['character']]['dx'] += movement['x'];
-            webgl_characters[args['character']]['dz'] += movement['z'];
+            webgl_characters[args['character']]['change']['translate-x'] += movement['x'];
+            webgl_characters[args['character']]['change']['translate-z'] += movement['z'];
         }
 
         return;
@@ -1045,25 +1047,25 @@ function webgl_entity_move(args){
         dy *= args['strafe']
           ? -1
           : 1;
-        core_entities[args['entity']]['dy'] = dy;
+        core_entities[args['entity']]['change']['translate-y'] = dy;
 
     }else{
         let movement = core_move_3d({
-          'angle': core_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis'][1]],
+          'angle': core_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis']],
           'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
-        if(webgl_properties['gravity-axis'] === 'dy'){
-            core_entities[args['entity']]['dx'] = movement['x'];
-            core_entities[args['entity']]['dz'] = movement['z'];
+        if(webgl_properties['gravity-axis'] === 'y'){
+            core_entities[args['entity']]['change']['translate-x'] = movement['x'];
+            core_entities[args['entity']]['change']['translate-z'] = movement['z'];
 
-        }else if(webgl_properties['gravity-axis'] === 'dx'){
-            core_entities[args['entity']]['dy'] = movement['x'];
-            core_entities[args['entity']]['dz'] = movement['z'];
+        }else if(webgl_properties['gravity-axis'] === 'x'){
+            core_entities[args['entity']]['change']['translate-y'] = movement['x'];
+            core_entities[args['entity']]['change']['translate-z'] = movement['z'];
 
         }else{
-            core_entities[args['entity']]['dx'] = movement['x'];
-            core_entities[args['entity']]['dy'] = movement['z'];
+            core_entities[args['entity']]['change']['translate-x'] = movement['x'];
+            core_entities[args['entity']]['change']['translate-y'] = movement['z'];
         }
     }
 }
@@ -1174,7 +1176,7 @@ function webgl_init(args){
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
-        'gravity-axis': 'dy',
+        'gravity-axis': 'y',
         'gravity-max': -2,
         'jump-movement': false,
         'multiplier-jump': 1,
@@ -1323,6 +1325,7 @@ function webgl_init(args){
         'attach-to': false,
         'attach-type': 'entity',
         'billboard': false,
+        'change': {},
         'collide-damage': 0,
         'collide-range-horizontal': 2,
         'collide-range-vertical': 3,
@@ -1330,9 +1333,6 @@ function webgl_init(args){
         'collision': false,
         'draw': true,
         'draw-type': 'TRIANGLE_FAN',
-        'dx': 0,
-        'dy': 0,
-        'dz': 0,
         'gravity': false,
         'item-amount': 1,
         'item-entities': [],
@@ -1395,12 +1395,10 @@ function webgl_init_character(args){
       'defaults': {
         'camera-zoom-current': 20,
         'camera-zoom-max': 50,
+        'change': {},
         'collide-range-horizontal': 2,
         'collide-range-vertical': 3,
         'collides': true,
-        'dx': 0,
-        'dy': 0,
-        'dz': 0,
         'entities': [],
         'experience': 0,
         'health-current': 100,
@@ -1433,9 +1431,7 @@ function webgl_init_character(args){
       'collide-range-horizontal': args['collide-range-horizontal'],
       'collide-range-vertical': args['collide-range-vertical'],
       'collides': args['collides'],
-      'dx': args['dx'],
-      'dy': args['dy'],
-      'dz': args['dz'],
+      'change': args['change'],
       'entities': args['entities'],
       'experience': args['experience'],
       'health-current': args['health-current'],
@@ -1457,6 +1453,9 @@ function webgl_init_character(args){
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
     };
+    webgl_characters[args['id']]['change']['translate-x'] = args['change']['translate-x'] || 0;
+    webgl_characters[args['id']]['change']['translate-y'] = args['change']['translate-y'] || 0;
+    webgl_characters[args['id']]['change']['translate-z'] = args['change']['translate-z'] || 0;
     webgl_entity_radians({
       'character': true,
       'entity': args['id'],
@@ -2015,7 +2014,7 @@ function webgl_logicloop(){
         }
 
         if((webgl_characters[webgl_character_id]['jump-allow']
-            && webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] === 0)
+            && webgl_characters[webgl_character_id]['change']['translate-' + webgl_properties['gravity-axis']] === 0)
           || webgl_character_level() === -1
           || webgl_properties['jump-movement']){
             let forwardback = 0;
@@ -2073,8 +2072,8 @@ function webgl_logicloop(){
         if(webgl_character_level({
             'character': character,
           }) > -1){
-            webgl_characters[character][webgl_properties['gravity-axis']] = Math.max(
-              webgl_characters[character][webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+            webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] = Math.max(
+              webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
 
@@ -2234,29 +2233,25 @@ function webgl_logicloop(){
     });
 
     for(let character in webgl_characters){
-        webgl_characters[character]['translate-x'] = core_round({
-          'number': webgl_characters[character]['translate-x'] + webgl_characters[character]['dx'],
-        });
-        webgl_characters[character]['translate-y'] = core_round({
-          'number': webgl_characters[character]['translate-y'] + webgl_characters[character]['dy'],
-        });
-        webgl_characters[character]['translate-z'] = core_round({
-          'number': webgl_characters[character]['translate-z'] + webgl_characters[character]['dz'],
-        });
+        for(let change in webgl_characters[character]['change']){
+            webgl_characters[character][change] = core_round({
+              'number': webgl_characters[character][change] + webgl_characters[character]['change'][change],
+            });
+        }
     }
 
     if(webgl_character_level() === -1){
-        webgl_characters[webgl_character_id]['dx'] = 0;
-        webgl_characters[webgl_character_id]['dy'] = 0;
-        webgl_characters[webgl_character_id]['dz'] = 0;
+        webgl_characters[webgl_character_id]['change']['translate-x'] = 0;
+        webgl_characters[webgl_character_id]['change']['translate-y'] = 0;
+        webgl_characters[webgl_character_id]['change']['translate-z'] = 0;
 
     }else if((webgl_characters[webgl_character_id]['jump-allow']
-        && webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] === 0)
+        && webgl_characters[webgl_character_id]['change']['translate-' + webgl_properties['gravity-axis']] === 0)
       || webgl_properties['jump-movement']){
-        webgl_characters[webgl_character_id]['dx'] = 0;
-        webgl_characters[webgl_character_id]['dz'] = 0;
+        webgl_characters[webgl_character_id]['change']['translate-x'] = 0;
+        webgl_characters[webgl_character_id]['change']['translate-z'] = 0;
 
-    }else if(webgl_characters[webgl_character_id][webgl_properties['gravity-axis']] !== 0){
+    }else if(webgl_characters[webgl_character_id]['change']['translate-' + webgl_properties['gravity-axis']] !== 0){
         webgl_characters[webgl_character_id]['jump-allow'] = false;
     }
 
@@ -2315,18 +2310,18 @@ function webgl_logicloop_handle_entity(entity){
               'y1': point['translate-z'],
             });
 
-            core_entities[entity]['dx'] = core_round({
+            core_entities[entity]['change']['translate-x'] = core_round({
               'number': Math.cos(angle),
             });
-            core_entities[entity]['dz'] = core_round({
+            core_entities[entity]['change']['translate-z'] = core_round({
               'number': Math.sin(angle),
             });
 
             if(core_entities[entity]['translate-x'] > point['translate-x']){
-                core_entities[entity]['dx'] *= -1;
+                core_entities[entity]['change']['translate-x'] *= -1;
             }
             if(core_entities[entity]['translate-z'] > point['translate-z']){
-                core_entities[entity]['dz'] *= -1;
+                core_entities[entity]['change']['translate-z'] *= -1;
             }
 
             if(core_distance({
@@ -2397,21 +2392,17 @@ function webgl_logicloop_handle_entity(entity){
         }
 
         if(core_entities[entity]['gravity']){
-            core_entities[entity][webgl_properties['gravity-axis']] = Math.max(
-              core_entities[entity][webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+            core_entities[entity]['change']['translate-' + webgl_properties['gravity-axis']] = Math.max(
+              core_entities[entity]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
         }
 
-        core_entities[entity]['translate-x'] = core_round({
-          'number': core_entities[entity]['translate-x'] + core_entities[entity]['dx'],
-        });
-        core_entities[entity]['translate-y'] = core_round({
-          'number': core_entities[entity]['translate-y'] + core_entities[entity]['dy'],
-        });
-        core_entities[entity]['translate-z'] = core_round({
-          'number': core_entities[entity]['translate-z'] + core_entities[entity]['dz'],
-        });
+        for(let change in core_entities[entity]['change']){
+            core_entities[entity][change] = core_round({
+              'number': core_entities[entity][change] + core_entities[entity]['change'][change],
+            });
+        }
     }
 
     if(core_entities[entity]['collides']){
