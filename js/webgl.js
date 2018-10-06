@@ -2080,9 +2080,6 @@ function webgl_logicloop(){
               webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
-
-        }else{
-            continue;
         }
 
         if(webgl_characters[character]['collides']){
