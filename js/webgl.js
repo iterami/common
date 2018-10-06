@@ -1325,7 +1325,11 @@ function webgl_init(args){
         'attach-to': false,
         'attach-type': 'entity',
         'billboard': false,
-        'change': {},
+        'change': {
+          'translate-x': 0,
+          'translate-y': 0,
+          'translate-z': 0,
+        },
         'collide-damage': 0,
         'collide-range-horizontal': 2,
         'collide-range-vertical': 3,
