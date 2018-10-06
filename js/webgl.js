@@ -955,7 +955,7 @@ function webgl_entity_create(args){
         let attach = false;
         let attach_type = 'entity';
 
-        if(args['entities'][entity]['skybox'] === true){
+        if(core_groups['skybox'][args['entities'][entity]['id']] === true){
             core_group_move({
               'entities': [
                 entity_id,
