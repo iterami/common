@@ -107,7 +107,6 @@ function webgl_camera_rotate(args){
       'defaults': {
         'camera': true,
         'character': true,
-        'character-id': webgl_character_id,
         'x': 0,
         'xlock': true,
         'y': 0,
@@ -124,37 +123,37 @@ function webgl_camera_rotate(args){
       ? 'camera-rotate-'
       : 'rotate-';
     for(let axis in axes){
-        webgl_characters[args['character-id']][prefix + axis] = core_clamp({
+        webgl_characters[webgl_character_id][prefix + axis] = core_clamp({
           'max': 360,
           'min': 0,
           'value': core_round({
-            'number': webgl_characters[args['character-id']][prefix + axis] + axes[axis],
+            'number': webgl_characters[webgl_character_id][prefix + axis] + axes[axis],
           }),
           'wrap': true,
         });
     }
 
     if(args['xlock']){
-        let max = webgl_characters[args['character-id']][prefix + 'x'] > 180
+        let max = webgl_characters[webgl_character_id][prefix + 'x'] > 180
           ? 360
           : 89;
-        webgl_characters[args['character-id']][prefix + 'x'] = core_clamp({
+        webgl_characters[webgl_character_id][prefix + 'x'] = core_clamp({
           'max': max,
           'min': max - 89,
-          'value': webgl_characters[args['character-id']][prefix + 'x'],
+          'value': webgl_characters[webgl_character_id][prefix + 'x'],
         });
     }
 
     if(args['camera']
       && args['character']){
-        webgl_characters[args['character-id']]['rotate-y'] = core_mouse['down-2']
-          ? webgl_characters[args['character-id']]['camera-rotate-y']
-          : webgl_characters[args['character-id']]['rotate-y'] + args['y'];
+        webgl_characters[webgl_character_id]['rotate-y'] = core_mouse['down-2']
+          ? webgl_characters[webgl_character_id]['camera-rotate-y']
+          : webgl_characters[webgl_character_id]['rotate-y'] + args['y'];
     }
 
     webgl_entity_radians({
       'character': true,
-      'entity': args['character-id'],
+      'entity': webgl_character_id,
     });
 }
 
