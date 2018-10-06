@@ -259,9 +259,7 @@ function webgl_character_jump(args){
       },
     });
 
-    if(!core_keys[32]['state']
-      || args['character'] !== webgl_character_id
-      || webgl_characters[webgl_character_id]['health-current'] <= 0
+    if(webgl_characters[args['character']]['health-current'] <= 0
       || !webgl_characters[args['character']]['jump-allow']){
         return;
     }
@@ -2046,6 +2044,9 @@ function webgl_logicloop(){
                       'y': true,
                     });
                 }
+
+            }else if(core_keys[32]['state']){
+                webgl_character_jump();
             }
 
             if(forwardback !== 0
@@ -2081,9 +2082,8 @@ function webgl_logicloop(){
               webgl_properties['gravity-max']
             );
 
-            webgl_character_jump({
-              'character': character,
-            });
+        }else{
+            continue;
         }
 
         if(webgl_characters[character]['collides']){
