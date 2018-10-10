@@ -2077,9 +2077,9 @@ function webgl_logicloop(){
         webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
 
         if(webgl_characters[character]['camera-zoom-current'] > 0){
-            webgl_characters[character]['camera-x'] += 0;
+            webgl_characters[character]['camera-x'] += Math.sin(-webgl_characters[character]['camera-rotate-radians-y']) * webgl_characters[character]['camera-zoom-current'];
             webgl_characters[character]['camera-y'] += Math.sin(webgl_characters[character]['camera-rotate-radians-x']) * webgl_characters[character]['camera-zoom-current'];
-            webgl_characters[character]['camera-z'] += 0;
+            webgl_characters[character]['camera-z'] += Math.cos(-webgl_characters[character]['camera-rotate-radians-y']) * webgl_characters[character]['camera-zoom-current'];
         }
 
         if(webgl_characters[character]['collides']){
