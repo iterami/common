@@ -205,28 +205,6 @@ function webgl_character_damage(args){
         return;
     }
 
-    // Unattach all attached entities.
-    /*
-    for(let entity in core_entities){
-        if(core_entities[entity]['attach-to'] !== args['character']){
-            continue;
-        }
-
-        let axes = [
-          'x',
-          'y',
-          'z',
-        ];
-        let target = webgl_characters[core_entities[entity]['attach-to']];
-
-        for(let axis in axes){
-            core_entities[entity]['translate-' + axes[axis]] = target['translate-' + axes[axis]] + core_entities[entity]['attach-offset-' + axes[axis]];
-        }
-
-        core_entities[entity]['attach-to'] = false;
-    }
-    */
-
     if(args['delete']){
         delete webgl_characters[args['character']];
         webgl_character_count--;
