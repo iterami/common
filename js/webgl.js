@@ -957,6 +957,7 @@ function webgl_entity_create(args){
               'group': args['entities'][entity]['groups'][group],
             });
         }
+        delete core_entities[entity_id]['groups'];
 
         let attach = false;
         let attach_type = 'entity';
