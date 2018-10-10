@@ -101,25 +101,6 @@ function webgl_camera_handle(){
     }
 }
 
-function webgl_camera_position(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'character': webgl_character_id,
-      },
-    });
-
-    webgl_characters[args['character']]['camera-x'] = webgl_characters[args['character']]['translate-x'];
-    webgl_characters[args['character']]['camera-y'] = webgl_characters[args['character']]['translate-y'];
-    webgl_characters[args['character']]['camera-z'] = webgl_characters[args['character']]['translate-z'];
-
-    if(webgl_characters[args['character']]['camera-zoom-current'] > 0){
-        webgl_characters[args['character']]['camera-x'] += 0;
-        webgl_characters[args['character']]['camera-y'] += 0;
-        webgl_characters[args['character']]['camera-z'] += 0;
-    }
-}
-
 function webgl_camera_rotate(args){
     args = core_args({
       'args': args,
@@ -194,8 +175,6 @@ function webgl_camera_zoom(event){
           0
         );
     }
-
-    webgl_camera_position();
 }
 
 function webgl_character_damage(args){
@@ -333,8 +312,6 @@ function webgl_character_origin(args){
     webgl_characters[args['character']]['rotate-x'] = 0;
     webgl_characters[args['character']]['rotate-y'] = 0;
     webgl_characters[args['character']]['rotate-z'] = 0;
-
-    webgl_camera_position();
 }
 
 function webgl_character_spawn(args){
@@ -984,12 +961,12 @@ function webgl_entity_create(args){
         let attach = false;
         let attach_type = 'entity';
 
-        if(core_groups['skybox'][args['entities'][entity]['id']] === true){
+        if(core_groups['skybox'][entity_id] === true){
             core_group_remove({
               'entities': [
                 entity_id,
               ],
-              'from': 'foreground',
+              'group': 'foreground',
             });
             attach = webgl_character_id;
             attach_type = 'character';
@@ -1066,10 +1043,6 @@ function webgl_entity_move(args){
             webgl_characters[args['character']]['change']['translate-x'] += movement['x'];
             webgl_characters[args['character']]['change']['translate-z'] += movement['z'];
         }
-
-        webgl_camera_position({
-          'character': args['character'],
-        });
 
         return;
     }
@@ -2118,6 +2091,16 @@ function webgl_logicloop(){
               webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
+
+            webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
+            webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
+            webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
+
+            if(webgl_characters[character]['camera-zoom-current'] > 0){
+                webgl_characters[character]['camera-x'] += 0;
+                webgl_characters[character]['camera-y'] += Math.sin(webgl_characters[character]['camera-rotate-radians-x']) * webgl_characters[character]['camera-zoom-current'];
+                webgl_characters[character]['camera-z'] += 0;
+            }
         }
 
         if(webgl_characters[character]['collides']){
@@ -2327,19 +2310,23 @@ function webgl_logicloop_handle_entity(entity){
         core_entities[entity]['logic']();
     }
 
-    if(core_groups['skybox'][entity] === true){
-        core_entities[entity]['translate-x'] = webgl_characters[webgl_character_id]['camera-x'];
-        core_entities[entity]['translate-y'] = webgl_characters[webgl_character_id]['camera-y'];
-        core_entities[entity]['translate-z'] = webgl_characters[webgl_character_id]['camera-z'];
-
-    }else if(core_entities[entity]['attach-to'] !== false){
+    if(core_entities[entity]['attach-to'] !== false){
         let target = core_entities[entity]['attach-type'] === 'character'
           ? webgl_characters[core_entities[entity]['attach-to']]
           : core_entities[core_entities[entity]['attach-to']];
 
-        core_entities[entity]['translate-x'] = target['translate-x'] + core_entities[entity]['attach-offset-x'];
-        core_entities[entity]['translate-y'] = target['translate-y'] + core_entities[entity]['attach-offset-y'];
-        core_entities[entity]['translate-z'] = target['translate-z'] + core_entities[entity]['attach-offset-z'];
+        let x = target['translate-x'];
+        let y = target['translate-y'];
+        let z = target['translate-z'];
+        if(core_groups['skybox'][entity] === true){
+            x = target['camera-x'];
+            y = target['camera-y'];
+            z = target['camera-z'];
+        }
+
+        core_entities[entity]['translate-x'] = x + core_entities[entity]['attach-offset-x'];
+        core_entities[entity]['translate-y'] = y + core_entities[entity]['attach-offset-y'];
+        core_entities[entity]['translate-z'] = z + core_entities[entity]['attach-offset-z'];
 
     }else{
         if(core_entities[entity]['path-id'] !== false){
