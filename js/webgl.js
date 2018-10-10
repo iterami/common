@@ -2070,16 +2070,16 @@ function webgl_logicloop(){
               webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
+        }
 
-            webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
-            webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
-            webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
+        webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
+        webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
+        webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
 
-            if(webgl_characters[character]['camera-zoom-current'] > 0){
-                webgl_characters[character]['camera-x'] += 0;
-                webgl_characters[character]['camera-y'] += Math.sin(webgl_characters[character]['camera-rotate-radians-x']) * webgl_characters[character]['camera-zoom-current'];
-                webgl_characters[character]['camera-z'] += 0;
-            }
+        if(webgl_characters[character]['camera-zoom-current'] > 0){
+            webgl_characters[character]['camera-x'] += 0;
+            webgl_characters[character]['camera-y'] += Math.sin(webgl_characters[character]['camera-rotate-radians-x']) * webgl_characters[character]['camera-zoom-current'];
+            webgl_characters[character]['camera-z'] += 0;
         }
 
         if(webgl_characters[character]['collides']){
