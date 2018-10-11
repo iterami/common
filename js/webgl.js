@@ -757,12 +757,6 @@ function webgl_cuboid_tree(args){
 function webgl_draw(){
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
-    webgl_buffer.uniformMatrix4fv(
-      webgl_properties['shader']['mat_perspectiveMatrix'],
-      false,
-      core_matrices['perspective']
-    );
-
     webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
     webgl_buffer.uniform1i(
       webgl_properties['shader']['directional'],
@@ -2297,6 +2291,12 @@ function webgl_logicloop(){
       ],
       'id': 'camera',
     });
+
+    webgl_buffer.uniformMatrix4fv(
+      webgl_properties['shader']['mat_perspectiveMatrix'],
+      false,
+      core_matrices['perspective']
+    );
 }
 
 function webgl_logicloop_handle_entity(entity){
