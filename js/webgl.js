@@ -2827,6 +2827,131 @@ function webgl_shader_update(){
     );
 }
 
+// Required args: prefix
+function webgl_skybox(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'bottom-color-bottom': false,
+        'bottom-color-top': false,
+        'sides': 3,
+        'top-color-bottom': false,
+        'top-color-top': false,
+      },
+    });
+
+    if(args['bottom-color-bottom'] === false){
+        args['bottom-color-bottom'] = webgl_vertexcolorarray();
+    }
+    if(args['bottom-color-top'] === false){
+        args['bottom-color-top'] = webgl_vertexcolorarray();
+    }
+    if(args['top-color-bottom'] === false){
+        args['bottom-color-bottom'] = webgl_vertexcolorarray();
+    }
+    if(args['top-color-top'] === false){
+        args['bottom-color-top'] = webgl_vertexcolorarray();
+    }
+
+    let angle = core_degrees_to_radians({
+      'degrees': 360 / args['sides'],
+    });
+
+    // Top half.
+    let properties = {
+      'draw-type': 'TRIANGLE_FAN',
+      'groups': [
+        'skybox',
+      ],
+      'id': args['prefix'] + '-top',
+      'vertex-colors': [
+        args['top-color-top'][0], args['top-color-top'][1], args['top-color-top'][2], args['top-color-top'][3],
+      ],
+      'vertices': [
+        0, 5, 0, 1,
+      ],
+    };
+    for(let side = 0; side < args['sides']; side++){
+        let rotation = -angle * side;
+        let x = Math.cos(rotation) * 5;
+        let z = Math.sin(rotation) * 5;
+
+        properties['vertex-colors'].push(
+          args['top-color-bottom'][0],
+          args['top-color-bottom'][1],
+          args['top-color-bottom'][2],
+          args['top-color-bottom'][3]
+        );
+        properties['vertices'].push(
+          x,
+          0,
+          z,
+          1
+        );
+    }
+    properties['vertex-colors'].push(
+      args['top-color-bottom'][0],
+      args['top-color-bottom'][1],
+      args['top-color-bottom'][2],
+      args['top-color-bottom'][3]
+    );
+    properties['vertices'].push(
+      0,
+      0,
+      5,
+      1
+    );
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+
+    // Bottom half.
+    properties['id'] = args['prefix'] + '-bottom';
+    properties['vertex-colors'] = [
+      args['bottom-color-bottom'][0], args['bottom-color-bottom'][1], args['bottom-color-bottom'][2], args['bottom-color-bottom'][3],
+    ];
+    properties['vertices'] = [
+      0, -5, 0, 1,
+    ];
+    for(let side = 0; side < args['sides']; side++){
+        let rotation = -angle * side;
+        let x = Math.cos(rotation) * 5;
+        let z = Math.sin(rotation) * 5;
+
+        properties['vertex-colors'].push(
+          args['bottom-color-top'][0],
+          args['bottom-color-top'][1],
+          args['bottom-color-top'][2],
+          args['bottom-color-top'][3]
+        );
+        properties['vertices'].push(
+          x,
+          0,
+          z,
+          1
+        );
+    }
+    properties['vertex-colors'].push(
+      args['bottom-color-top'][0],
+      args['bottom-color-top'][1],
+      args['bottom-color-top'][2],
+      args['bottom-color-top'][3]
+    );
+    properties['vertices'].push(
+      0,
+      0,
+      5,
+      1
+    );
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+}
+
 // Required args: entity
 function webgl_texture_set(args){
     args = core_args({
