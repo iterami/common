@@ -526,6 +526,7 @@ function webgl_cuboid(args){
         'front-alpha': 1,
         'front-collision': false,
         'front-vertex-colors': false,
+        'groups': [],
         'height': 1,
         'left-alpha': 1,
         'left-collision': false,
@@ -552,6 +553,7 @@ function webgl_cuboid(args){
     let vertices_length = Math.abs(half_length);
     let vertices_width = Math.abs(half_width);
     let properties = {
+      'groups': args['groups'],
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
@@ -584,6 +586,7 @@ function webgl_cuboid(args){
     ];
     if(args['exclude']['top'] !== true){
         properties['alpha'] = args['top-alpha'];
+        properties['attach-offset-y'] = half_height;
         properties['collision'] = args['top-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-top';
         properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray();
@@ -599,6 +602,7 @@ function webgl_cuboid(args){
     properties['translate-y'] = args['translate-y'] - half_height;
     if(args['exclude']['bottom'] !== true){
         properties['alpha'] = args['bottom-alpha'];
+        properties['attach-offset-y'] = -half_height;
         properties['collision'] = args['bottom-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-bottom';
         properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray();
@@ -610,6 +614,7 @@ function webgl_cuboid(args){
     }
 
     // Front.
+    properties['attach-offset-y'] = 0;
     properties['rotate-x'] = 90;
     properties['translate-y'] = args['translate-y'];
     properties['translate-z'] = args['translate-z'] + half_length;
@@ -621,6 +626,7 @@ function webgl_cuboid(args){
     ];
     if(args['exclude']['front'] !== true){
         properties['alpha'] = args['front-alpha'];
+        properties['attach-offset-z'] = half_length;
         properties['collision'] = args['front-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-front';
         properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray();
@@ -636,6 +642,7 @@ function webgl_cuboid(args){
     properties['translate-z'] = args['translate-z'] - half_length;
     if(args['exclude']['back'] !== true){
         properties['alpha'] = args['back-alpha'];
+        properties['attach-offset-z'] = -half_length;
         properties['collision'] = args['back-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-back';
         properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray();
@@ -647,6 +654,7 @@ function webgl_cuboid(args){
     }
 
     // Left.
+    properties['attach-offset-z'] = 0;
     properties['rotate-x'] = 0;
     properties['rotate-z'] = 90;
     properties['translate-x'] = args['translate-x'] - half_width;
@@ -659,6 +667,7 @@ function webgl_cuboid(args){
     ];
     if(args['exclude']['left'] !== true){
         properties['alpha'] = args['left-alpha'];
+        properties['attach-offset-x'] = -half_width;
         properties['collision'] = args['left-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-left';
         properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray();
@@ -674,6 +683,7 @@ function webgl_cuboid(args){
     properties['translate-x'] = args['translate-x'] + half_width;
     if(args['exclude']['right'] !== true){
         properties['alpha'] = args['right-alpha'];
+        properties['attach-offset-x'] = half_width;
         properties['collision'] = args['right-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-right';
         properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray();
