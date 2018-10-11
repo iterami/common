@@ -1145,7 +1145,9 @@ function webgl_entity_todo(entity){
     });
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
-      'colorData': core_entities[entity]['vertex-colors'] || webgl_vertexcolorarray(),
+      'colorData': core_entities[entity]['vertex-colors'] || webgl_vertexcolorarray({
+        'vertexcount': core_entities[entity]['vertices-length'],
+      }),
       'normalData': core_entities[entity]['normals'],
       'textureData': core_entities[entity]['textureData'],
       'vertexData': core_entities[entity]['vertices'],
@@ -2847,22 +2849,22 @@ function webgl_skybox(args){
 
     if(args['bottom-color-bottom'] === false){
         args['bottom-color-bottom'] = webgl_vertexcolorarray({
-          'vertex-count': 1,
+          'vertexcount': 1,
         });
     }
     if(args['bottom-color-top'] === false){
         args['bottom-color-top'] = webgl_vertexcolorarray({
-          'vertex-count': 1,
+          'vertexcount': 1,
         });
     }
     if(args['top-color-bottom'] === false){
         args['top-color-bottom'] = webgl_vertexcolorarray({
-          'vertex-count': 1,
+          'vertexcount': 1,
         });
     }
     if(args['top-color-top'] === false){
         args['top-color-top'] = webgl_vertexcolorarray({
-          'vertex-count': 1,
+          'vertexcount': 1,
         });
     }
 
