@@ -1144,6 +1144,13 @@ function webgl_entity_todo(entity){
       'entity': entity,
     });
 
+    while(core_entities[entity]['textureData'].length < core_entities[entity]['vertices-length'] * 2){
+        core_entities[entity]['textureData'].push(
+          1,
+          1
+        );
+    }
+
     core_entities[entity]['buffer'] = webgl_buffer_set({
       'colorData': core_entities[entity]['vertex-colors'] || webgl_vertexcolorarray({
         'vertexcount': core_entities[entity]['vertices-length'],
@@ -2886,7 +2893,7 @@ function webgl_skybox(args){
         0, 5, 0, 1,
       ],
     };
-    for(let side = 0; side < args['sides']; side++){
+    for(let side = 0; side <= args['sides']; side++){
         let rotation = angle * side;
         let x = Math.cos(rotation) * 5;
         let z = Math.sin(rotation) * 5;
@@ -2918,7 +2925,7 @@ function webgl_skybox(args){
     properties['vertices'] = [
       0, -5, 0, 1,
     ];
-    for(let side = 0; side < args['sides']; side++){
+    for(let side = 0; side <= args['sides']; side++){
         let rotation = -angle * side;
         let x = Math.cos(rotation) * 5;
         let z = Math.sin(rotation) * 5;
