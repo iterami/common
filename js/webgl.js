@@ -2849,6 +2849,7 @@ function webgl_skybox(args){
         'bottom-color-bottom': false,
         'bottom-color-top': false,
         'sides': 3,
+        'size': 10,
         'top-color-bottom': false,
         'top-color-top': false,
       },
@@ -2890,13 +2891,13 @@ function webgl_skybox(args){
         args['top-color-top'][0], args['top-color-top'][1], args['top-color-top'][2], args['top-color-top'][3],
       ],
       'vertices': [
-        0, 5, 0, 1,
+        0, args['size'], 0, 1,
       ],
     };
     for(let side = 0; side <= args['sides']; side++){
         let rotation = angle * side;
-        let x = Math.cos(rotation) * 5;
-        let z = Math.sin(rotation) * 5;
+        let x = Math.cos(rotation) * args['size'];
+        let z = Math.sin(rotation) * args['size'];
 
         properties['vertex-colors'].push(
           args['top-color-bottom'][0],
@@ -2923,12 +2924,12 @@ function webgl_skybox(args){
       args['bottom-color-bottom'][0], args['bottom-color-bottom'][1], args['bottom-color-bottom'][2], args['bottom-color-bottom'][3],
     ];
     properties['vertices'] = [
-      0, -5, 0, 1,
+      0, -args['size'], 0, 1,
     ];
     for(let side = 0; side <= args['sides']; side++){
         let rotation = -angle * side;
-        let x = Math.cos(rotation) * 5;
-        let z = Math.sin(rotation) * 5;
+        let x = Math.cos(rotation) * args['size'];
+        let z = Math.sin(rotation) * args['size'];
 
         properties['vertex-colors'].push(
           args['bottom-color-top'][0],
