@@ -2841,16 +2841,24 @@ function webgl_skybox(args){
     });
 
     if(args['bottom-color-bottom'] === false){
-        args['bottom-color-bottom'] = webgl_vertexcolorarray();
+        args['bottom-color-bottom'] = webgl_vertexcolorarray({
+          'vertex-count': 1,
+        });
     }
     if(args['bottom-color-top'] === false){
-        args['bottom-color-top'] = webgl_vertexcolorarray();
+        args['bottom-color-top'] = webgl_vertexcolorarray({
+          'vertex-count': 1,
+        });
     }
     if(args['top-color-bottom'] === false){
-        args['bottom-color-bottom'] = webgl_vertexcolorarray();
+        args['top-color-bottom'] = webgl_vertexcolorarray({
+          'vertex-count': 1,
+        });
     }
     if(args['top-color-top'] === false){
-        args['bottom-color-top'] = webgl_vertexcolorarray();
+        args['top-color-top'] = webgl_vertexcolorarray({
+          'vertex-count': 1,
+        });
     }
 
     let angle = core_degrees_to_radians({
@@ -2872,7 +2880,7 @@ function webgl_skybox(args){
       ],
     };
     for(let side = 0; side < args['sides']; side++){
-        let rotation = -angle * side;
+        let rotation = angle * side;
         let x = Math.cos(rotation) * 5;
         let z = Math.sin(rotation) * 5;
 
@@ -2889,18 +2897,6 @@ function webgl_skybox(args){
           1
         );
     }
-    properties['vertex-colors'].push(
-      args['top-color-bottom'][0],
-      args['top-color-bottom'][1],
-      args['top-color-bottom'][2],
-      args['top-color-bottom'][3]
-    );
-    properties['vertices'].push(
-      0,
-      0,
-      5,
-      1
-    );
     webgl_entity_create({
       'entities': [
         properties,
@@ -2933,18 +2929,6 @@ function webgl_skybox(args){
           1
         );
     }
-    properties['vertex-colors'].push(
-      args['bottom-color-top'][0],
-      args['bottom-color-top'][1],
-      args['bottom-color-top'][2],
-      args['bottom-color-top'][3]
-    );
-    properties['vertices'].push(
-      0,
-      0,
-      5,
-      1
-    );
     webgl_entity_create({
       'entities': [
         properties,
