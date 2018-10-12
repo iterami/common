@@ -826,13 +826,6 @@ function webgl_draw_entity(entity){
         return;
     }
 
-    if(core_entities[entity]['billboard'] !== false){
-        webgl_billboard({
-          'axes': core_entities[entity]['billboard'],
-          'entity': entity,
-        });
-    }
-
     webgl_buffer.bindBuffer(
       webgl_buffer.ARRAY_BUFFER,
       core_entities[entity]['buffer']['normal']
@@ -2452,6 +2445,13 @@ function webgl_logicloop_handle_entity(entity){
               'number': core_entities[entity][change] + core_entities[entity]['change'][change],
             });
         }
+    }
+
+    if(core_entities[entity]['billboard'] !== false){
+        webgl_billboard({
+          'axes': core_entities[entity]['billboard'],
+          'entity': entity,
+        });
     }
 
     if(core_entities[entity]['collides']){
