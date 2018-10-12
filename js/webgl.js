@@ -2334,24 +2334,49 @@ function webgl_logicloop_handle_entity(entity){
     }else{
         if(core_entities[entity]['path-id'] !== false){
             let path = webgl_paths[core_entities[entity]['path-id']];
-            let point = path['points'][core_entities[entity]['path-point']];
+            let point = {};
+            Object.assign(
+              point,
+              path['points'][core_entities[entity]['path-point']]
+            );
+            if(point['translate-x'] === void 0){
+                point['translate-x'] = core_entities[entity]['translate-x'];
+            }
+            if(point['translate-y'] === void 0){
+                point['translate-y'] = core_entities[entity]['translate-y'];
+            }
+            if(point['translate-z'] === void 0){
+                point['translate-z'] = core_entities[entity]['translate-z'];
+            }
 
-            let angle = core_point_angle({
+            let angle_xz = core_point_angle({
               'x0': core_entities[entity]['translate-x'],
               'x1': point['translate-x'],
               'y0': core_entities[entity]['translate-z'],
               'y1': point['translate-z'],
             });
+            let angle_y = core_point_angle({
+              'x0': core_entities[entity]['translate-x'],
+              'x1': point['translate-x'],
+              'y0': core_entities[entity]['translate-y'],
+              'y1': point['translate-y'],
+            });
 
             core_entities[entity]['change']['translate-x'] = core_round({
-              'number': Math.cos(angle),
+              'number': Math.cos(angle_xz),
+            });
+            core_entities[entity]['change']['translate-y'] = core_round({
+              'number': Math.sin(angle_y),
             });
             core_entities[entity]['change']['translate-z'] = core_round({
-              'number': Math.sin(angle),
+              'number': Math.sin(angle_xz),
             });
 
             if(core_entities[entity]['translate-x'] > point['translate-x']){
                 core_entities[entity]['change']['translate-x'] *= -1;
+            }
+            if(core_entities[entity]['translate-y'] > point['translate-y']){
+                core_entities[entity]['change']['translate-y'] *= -1;
             }
             if(core_entities[entity]['translate-z'] > point['translate-z']){
                 core_entities[entity]['change']['translate-z'] *= -1;
