@@ -571,8 +571,8 @@ void opengl_load_level(const gchar *filename){
           1
         );
 
-        // Parse cuboids.
-        if(strcmp(json_object->name->string, "cuboids") == 0){
+        // Parse prefabs.
+        if(strcmp(json_object->name->string, "prefabs") == 0){
             json_object = json_object->next;
         }
 
@@ -814,6 +814,11 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
+            // Parse change.
+            if(strcmp(json_level_entities_element_property->name->string, "change") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
             // Parse collide-damage.
             if(strcmp(json_level_entities_element_property->name->string, "collide-damage") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
@@ -862,21 +867,6 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse dx.
-            if(strcmp(json_level_entities_element_property->name->string, "dx") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse dy.
-            if(strcmp(json_level_entities_element_property->name->string, "dy") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse dz.
-            if(strcmp(json_level_entities_element_property->name->string, "dz") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
             // Parse gravity.
             if(strcmp(json_level_entities_element_property->name->string, "gravity") == 0){
                 value = json_level_entities_element_property->value;
@@ -885,8 +875,48 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse item.
-            if(strcmp(json_level_entities_element_property->name->string, "item") == 0){
+            // Parse item-amount.
+            if(strcmp(json_level_entities_element_property->name->string, "item-amount") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse item-entities.
+            if(strcmp(json_level_entities_element_property->name->string, "item-entities") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse item-id.
+            if(strcmp(json_level_entities_element_property->name->string, "item-id") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse item-spell.
+            if(strcmp(json_level_entities_element_property->name->string, "item-spell") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse item-spellproperties.
+            if(strcmp(json_level_entities_element_property->name->string, "item-spellproperties") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse item-stats.
+            if(strcmp(json_level_entities_element_property->name->string, "item-stats") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse path-direction.
+            if(strcmp(json_level_entities_element_property->name->string, "path-direction") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse path-id.
+            if(strcmp(json_level_entities_element_property->name->string, "path-id") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse path-point.
+            if(strcmp(json_level_entities_element_property->name->string, "path-point") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
@@ -941,11 +971,6 @@ void opengl_load_level(const gchar *filename){
                 number = (struct json_number_s*)value->payload;
                 scale_z = atof(number->number);
 
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse skybox.
-            if(strcmp(json_level_entities_element_property->name->string, "skybox") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
