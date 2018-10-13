@@ -486,10 +486,6 @@ function webgl_collision(args){
                     });
 
                     return false;
-
-                }else if(collision === webgl_properties['gravity-axis']
-                  && collision_sign === 1){
-                    collider['jump-allow'] = collider['change']['translate-' + webgl_properties['gravity-axis']] === 0;
                 }
             }
 
@@ -506,6 +502,12 @@ function webgl_collision(args){
         if(Math.abs(target['translate-' + collision] - collider['translate-' + collision]) < range[collision]){
             collider['translate-' + collision] = target['translate-' + collision] + range[collision] * collision_sign;
             collider['change']['translate-' + collision] = 0;
+
+            if(args['entity'] === false
+              && collision === webgl_properties['gravity-axis']
+              && webgl_properties['gravity-max'] / webgl_properties['gravity-max'] === collision_sign){
+                collider['jump-allow'] = true;
+            }
         }
     }
 
