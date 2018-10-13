@@ -500,7 +500,11 @@ function webgl_collision(args){
         }
 
         if(Math.abs(target['translate-' + collision] - collider['translate-' + collision]) < range[collision]){
-            collider['translate-' + collision] = target['translate-' + collision] + range[collision] * collision_sign;
+            let range_axis = collision === 'y'
+              ? 'vertical'
+              : 'horizontal';
+
+            collider['translate-' + collision] = target['translate-' + collision] + collider['collide-range-' + range_axis] * collision_sign;
             collider['change']['translate-' + collision] = 0;
 
             if(args['entity'] === false
