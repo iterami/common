@@ -347,15 +347,14 @@ function webgl_collision(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': true,
         'character-id': webgl_character_id,
         'entity': false,
       },
     });
 
-    let collider = args['character']
-      ? webgl_characters[args['character-id']]
-      : core_entities[args['entity']];
+    let collider = args['entity'] !== false
+      ? core_entities[args['entity']]
+      : webgl_characters[args['character-id']];
     let collision = false;
     let collision_sign = 1;
     let target = core_entities[args['target']];
@@ -448,7 +447,7 @@ function webgl_collision(args){
     }
 
     if(collision !== false){
-        if(args['character']){
+        if(args['entity'] === false){
             if(webgl_character_level({
                 'character': args['character-id'],
               }) > -1){
@@ -2084,7 +2083,6 @@ function webgl_logicloop(){
             for(let entity in core_entities){
                 if(core_entities[entity]['collision']){
                     webgl_collision({
-                      'character': true,
                       'character-id': character,
                       'target': entity,
                     });
@@ -2459,7 +2457,6 @@ function webgl_logicloop_handle_entity(entity){
             if(core_entities[other_entity]['collision']
               && entity !== other_entity){
                 if(!webgl_collision({
-                    'character': false,
                     'entity': entity,
                     'target': other_entity,
                   })){
