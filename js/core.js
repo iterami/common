@@ -2166,6 +2166,18 @@ function core_tab_switch(args){
       : 'block';
 }
 
+// Required args: expect, function
+function core_test_function(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'args': {},
+      },
+    });
+
+    return window[function](args['args']) === args['expect'];
+}
+
 // Required args: target
 function core_time_diff(args){
     args = core_args({
