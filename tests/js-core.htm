@@ -73,6 +73,127 @@ function repo_init(){
         'expect': 33.1360831,
         'function': 'core_distance',
       },
+      {
+        'args': {
+          'hex': '#123',
+        },
+        'expect': 'rgb(17, 34, 51)',
+        'function': 'core_hex_to_rgb',
+      },
+      {
+        'args': {
+          'hex': '#123456',
+        },
+        'expect': 'rgb(18, 52, 86)',
+        'function': 'core_hex_to_rgb',
+      },
+      {
+        'args': {
+          'string': '<u>test</u>',
+        },
+        'expect': '&lt;u&gt;test&lt;/u&gt;',
+        'function': 'core_html_format',
+      },
+      {
+        'args': {
+          'number': '123456.789',
+        },
+        'expect': '123,456.789',
+        'function': 'core_number_format',
+      },
+      {
+        'args': {
+          'x0': 0,
+          'y0': 0,
+          'x1': 5,
+          'y1': 5,
+        },
+        'expect': 0.7853982,
+        'function': 'core_point_angle',
+      },
+      {
+        'args': {
+          'radians': 0.7853981633974483,
+        },
+        'expect': 45,
+        'function': 'core_radians_to_degrees',
+      },
+      {
+        'args': {
+          'h0': 10,
+          'w0': 10,
+          'x0': 5,
+          'y0': 5,
+          'h1': 10,
+          'w1': 10,
+          'x1': 0,
+          'y1': 0,
+        },
+        'expect': true,
+        'function': 'core_rectangle_overlap',
+      },
+      {
+        'args': {
+          'h0': 10,
+          'w0': 10,
+          'x0': 15,
+          'y0': 15,
+          'h1': 10,
+          'w1': 10,
+          'x1': 0,
+          'y1': 0,
+        },
+        'expect': false,
+        'function': 'core_rectangle_overlap',
+      },
+      {
+        'args': {
+          'patterns': {
+            'it': '',
+          },
+          'string': 'iterami iterami iterami',
+        },
+        'expect': 'erami erami erami',
+        'function': 'core_replace_multiple',
+      },
+      {
+        'args': {
+          'decimals': 0,
+          'number': 123.456,
+        },
+        'expect': 123,
+        'function': 'core_round',
+      },
+      {
+        'args': {
+          'decimals': 1,
+          'number': 123.456,
+        },
+        'expect': 123.5,
+        'function': 'core_round',
+      },
+      {
+        'args': {
+          'date': {
+            'date': 21,
+            'hour': 16,
+            'millisecond': 0,
+            'minute': 20,
+            'month': 2,
+            'second': 0,
+            'year': 2013,
+          },
+        },
+        'expect': '2013-02-21 16:20:00',
+        'function': 'core_time_format',
+      },
+      {
+        'args': {
+          'number': 7,
+        },
+        'expect': '07',
+        'function': 'core_two_digits',
+      },
     ];
 
     let results = '';
