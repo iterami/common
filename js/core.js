@@ -1008,6 +1008,11 @@ function core_hex_to_rgb(args){
     if(args['hex'][0] === '#'){
         args['hex'] = args['hex'].slice(1);
     }
+    if(args['hex'].length === 3){
+        args['hex'] = args['hex'][0] + args['hex'][0]
+          + args['hex'][1] + args['hex'][1]
+          + args['hex'][2] + args['hex'][2];
+    }
 
     let rgb = {
       'blue': '0x' + args['hex'][4] + args['hex'][5] | 0,
@@ -1628,7 +1633,17 @@ function core_number_format(args){
 
 // Required args: x0, x1, y0, y1
 function core_point_angle(args){
-    return Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
+    return core_round({
+      'decimals': args['decimals'],
+      'number': Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1'])),
+    });
 }
 
 // Required args: radians
