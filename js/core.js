@@ -2175,7 +2175,12 @@ function core_test_function(args){
       },
     });
 
-    return window[args['function']](args['args']) === args['expect'];
+    let result = window[args['function']](args['args']);
+
+    return {
+      'result': result,
+      'test': result === args['expect'],
+    };
 }
 
 // Required args: target

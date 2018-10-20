@@ -1,10 +1,10 @@
 <!doctype html>
 <meta charset=utf-8>
 <meta content="width=device-width,initial-scale=1" name=viewport>
-<title>Tests</title>
-<link href=../css/writings.css rel=stylesheet>
+<title>js/core.js Tests</title>
+<link href=../css/core.css rel=stylesheet>
 
-<a href=../../index.htm>iterami</a>/<a href=../index.htm>common</a>/Tests
+<a href=../../index.htm>iterami</a>/<a href=../index.htm>common</a>/<a href=index.htm>Tests</a>/js/core.js
 <table class=center>
   <thead>
     <tr class=header>
@@ -12,12 +12,13 @@
       <td>Args
       <td>Expected
       <td>Result
+      <td>Test
   <tbody id=results>
 </table>
 
 <script src=../js/core.js></script>
 <script>
-window.onload = function(){
+function repo_init(){
     let tests = [
       {
         'args': {
@@ -38,6 +39,40 @@ window.onload = function(){
         'expect': 90,
         'function': 'core_clamp',
       },
+      {
+        'args': {
+          'date': {
+            'date': 21,
+            'hour': 16,
+            'millisecond': 0,
+            'minute': 20,
+            'month': 2,
+            'second': 0,
+            'year': 2013,
+          },
+        },
+        'expect': 1361463600000,
+        'function': 'core_date_to_timestamp',
+      },
+      {
+        'args': {
+          'degrees': 145,
+        },
+        'expect': 2.5307274,
+        'function': 'core_degrees_to_radians',
+      },
+      {
+        'args': {
+          'x0': 4,
+          'y0': 8,
+          'z0': 15,
+          'x1': 16,
+          'y1': 23,
+          'z1': 42,
+        },
+        'expect': 33.1360831,
+        'function': 'core_distance',
+      },
     ];
 
     let results = '';
@@ -48,8 +83,9 @@ window.onload = function(){
           + '<td>' + tests[test]['function'] + '()'
           + '<td>' + JSON.stringify(tests[test]['args'])
           + '<td>' + tests[test]['expect']
-          + '<td>' + result;
+          + '<td>' + result['result']
+          + '<td>' + result['test'];
     }
     document.getElementById('results').innerHTML = results;
-};
+}
 </script>
