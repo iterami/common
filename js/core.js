@@ -2216,7 +2216,7 @@ function core_time_format(args){
     });
 
     if(args['date'] === false){
-        core_timestamp_to_date();
+        args['date'] = core_timestamp_to_date();
     }
 
     if(args['diff']){
