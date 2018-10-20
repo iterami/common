@@ -4,7 +4,7 @@
 <title>js/core.js Tests</title>
 <link href=../css/core.css rel=stylesheet>
 
-<a href=../../index.htm>iterami</a>/<a href=../index.htm>common</a>/<a href=index.htm>Tests</a>/js/core.js
+<a href=../../index.htm>iterami</a>/<a href=../index.htm>common</a>/Tests/js/core.js
 <table class=center>
   <thead>
     <tr class=header>
@@ -19,7 +19,7 @@
 <script src=../js/core.js></script>
 <script>
 function repo_init(){
-    let tests = [
+    const tests = [
       {
         'args': {
           'max': 360,
@@ -77,7 +77,17 @@ function repo_init(){
 
     let results = '';
     for(let test in tests){
-        let result = core_test_function(tests[test]);
+        let test_args = {};
+        Object.assign(
+          test_args,
+          tests[test]
+        );
+        test_args['args'] = {};
+        Object.assign(
+          test_args['args'],
+          tests[test]['args']
+        );
+        const result = core_test_function(test_args);
 
         results += '<tr>'
           + '<td>' + tests[test]['function'] + '()'
