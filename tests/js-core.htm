@@ -1,0 +1,55 @@
+<!doctype html>
+<meta charset=utf-8>
+<meta content="width=device-width,initial-scale=1" name=viewport>
+<title>Tests</title>
+<link href=../css/writings.css rel=stylesheet>
+
+<a href=../../index.htm>iterami</a>/<a href=../index.htm>common</a>/Tests
+<table class=center>
+  <thead>
+    <tr class=header>
+      <td>Function
+      <td>Args
+      <td>Expected
+      <td>Result
+  <tbody id=results>
+</table>
+
+<script src=../js/core.js></script>
+<script>
+window.onload = function(){
+    let tests = [
+      {
+        'args': {
+          'max': 360,
+          'min': 0,
+          'value': 450,
+        },
+        'expect': 360,
+        'function': 'core_clamp',
+      },
+      {
+        'args': {
+          'max': 360,
+          'min': 0,
+          'value': 450,
+          'wrap': true,
+        },
+        'expect': 90,
+        'function': 'core_clamp',
+      },
+    ];
+
+    let results = '';
+    for(let test in tests){
+        let result = core_test_function(tests[test]);
+
+        results += '<tr>'
+          + '<td>' + tests[test]['function'] + '()'
+          + '<td>' + JSON.stringify(tests[test]['args'])
+          + '<td>' + tests[test]['expect']
+          + '<td>' + result;
+    }
+    document.getElementById('results').innerHTML = results;
+};
+</script>
