@@ -1957,11 +1957,13 @@ function core_sort_custom(args){
     if(args['reverse']){
         args['array'].reverse();
     }
+
+    return args['array'];
 }
 
 // Required args: array
 function core_sort_numbers(args){
-    core_sort_custom({
+    return core_sort_custom({
       'array': args['array'],
       'reverse': args['reverse'],
       'todo': function(a, b){
@@ -1972,7 +1974,7 @@ function core_sort_numbers(args){
 
 // Required args: array
 function core_sort_random(args){
-    core_sort_custom({
+    return core_sort_custom({
       'array': args['array'],
       'todo': function(a, b){
           return Math.random() - .5;
@@ -1982,7 +1984,7 @@ function core_sort_random(args){
 
 // Required args: array, property
 function core_sort_property(args){
-    core_sort_custom({
+    return core_sort_custom({
       'array': args['array'],
       'reverse': args['reverse'],
       'todo': function(a, b){
@@ -2000,7 +2002,7 @@ function core_sort_property(args){
 
 // Required args, array
 function core_sort_strings(args){
-    core_sort_custom({
+    return core_sort_custom({
       'array': args['array'],
       'reverse': args['reverse'],
       'todo': function(a, b){
