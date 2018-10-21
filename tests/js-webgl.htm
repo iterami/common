@@ -21,6 +21,68 @@
 <script>
 function repo_init(){
     let tests = [
+      {
+        'args': void 0,
+        'expect': -2,
+        'function': 'webgl_character_level',
+      },
+      {
+        'args': void 0,
+        'expect': [
+          0,
+          1,
+          0,
+        ],
+        'function': 'webgl_normals',
+      },
+      {
+        'args': {
+          'rotate-z': 90,
+        },
+        'expect': [
+          1,
+          0,
+          0,
+        ],
+        'function': 'webgl_normals',
+      },
+      {
+        'args': {
+          'vertices-length': 2,
+        },
+        'expect': [
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+        ],
+        'function': 'webgl_normals',
+      },
+      {
+        'args': {
+          'rgbarray': [
+            {
+              'blue': 0,
+              'green': 256,
+              'red': 0,
+            },
+          ],
+          'vertexcount': 2,
+        },
+        'expect': [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+          0,
+          1,
+        ],
+        'function': 'webgl_vertexcolorarray',
+      },
     ];
 
     let results = '';
