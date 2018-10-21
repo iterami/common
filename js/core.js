@@ -2203,14 +2203,14 @@ function core_test_function(args){
         test = true;
         for(let item in result){
             if(args['expect'][item] === void 0
-              || result !== args['expect'][item]){
+              || result[item] !== args['expect'][item]){
                 test = false;
                 break;
             }
         }
 
     }else{
-        test === args['expect'];
+        test = result === args['expect'];
     }
 
     return {
