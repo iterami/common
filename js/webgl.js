@@ -2364,13 +2364,13 @@ function webgl_logicloop_handle_entity(entity){
             });
 
             core_entities[entity]['change']['translate-x'] = core_round({
-              'number': Math.cos(angle_xz),
+              'number': Math.cos(angle_xz) * Math.cos(angle_y),
             });
             core_entities[entity]['change']['translate-y'] = core_round({
               'number': Math.sin(angle_y),
             });
             core_entities[entity]['change']['translate-z'] = core_round({
-              'number': Math.sin(angle_xz),
+              'number': Math.sin(angle_xz) * Math.cos(angle_y),
             });
 
             if(core_entities[entity]['translate-x'] > point['translate-x']){
