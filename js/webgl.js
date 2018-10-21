@@ -2881,7 +2881,7 @@ function webgl_skybox(args){
         'bottom-color-bottom': false,
         'bottom-color-top': false,
         'sides': 3,
-        'size': 10,
+        'size': 99,
         'top-color-bottom': false,
         'top-color-top': false,
       },
