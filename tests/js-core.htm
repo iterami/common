@@ -21,6 +21,23 @@
 function repo_init(){
     const tests = [
       {
+        'args': void 0,
+        'expect': {},
+        'function': 'core_args',
+      },
+      {
+        'args': {
+          'args': {},
+          'defaults': {
+            'test-default-arg': 7,
+          },
+        },
+        'expect': {
+          'test-default-arg': 7,
+        },
+        'function': 'core_args',
+      },
+      {
         'args': {
           'max': 360,
           'min': 0,
@@ -72,6 +89,28 @@ function repo_init(){
         },
         'expect': 33.1360831,
         'function': 'core_distance',
+      },
+      {
+        'args': void 0,
+        'expect': 0,
+        'function': 'core_entity_create',
+      },
+      {
+        'args': {
+          'length': 5,
+          'x0': 0,
+          'y0': 0,
+          'z0': 0,
+          'x1': 1,
+          'y1': 1,
+          'z1': 1,
+        },
+        'expect': {
+          'x': 0,
+          'y': 0,
+          'z': 0,
+        },
+        'function': 'core_fixed_length_line',
       },
       {
         'args': {
@@ -213,8 +252,8 @@ function repo_init(){
         results += '<tr>'
           + '<td><a class=external href=https://github.com/iterami/Documentation.htm/blob/gh-pages/common/js/core.md#' + tests[test]['function'] + 'args>' + tests[test]['function'] + '()</a>'
           + '<td>' + JSON.stringify(tests[test]['args'])
-          + '<td>' + tests[test]['expect']
-          + '<td>' + result['result']
+          + '<td>' + JSON.stringify(tests[test]['expect'])
+          + '<td>' + JSON.stringify(result['result'])
           + '<td>' + result['test'];
     }
     document.getElementById('results').innerHTML = results;

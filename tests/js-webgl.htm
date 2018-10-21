@@ -1,0 +1,49 @@
+<!doctype html>
+<meta charset=utf-8>
+<meta content="width=device-width,initial-scale=1" name=viewport>
+<title>js/webgl.js Tests</title>
+<link href=../css/core.css rel=stylesheet>
+
+<a href=../../index.htm>iterami</a>/<a href=../index.htm>common</a>/Tests/js/webgl.js
+<table class=center>
+  <thead>
+    <tr class=header>
+      <td>Function
+      <td>Args
+      <td>Expected
+      <td>Result
+      <td>Test
+  <tbody id=results>
+</table>
+
+<script src=../js/core.js></script>
+<script src=../js/webgl.js></script>
+<script>
+function repo_init(){
+    let tests = [
+    ];
+
+    let results = '';
+    for(let test in tests){
+        let test_args = {};
+        Object.assign(
+          test_args,
+          tests[test]
+        );
+        test_args['args'] = {};
+        Object.assign(
+          test_args['args'],
+          tests[test]['args']
+        );
+        const result = core_test_function(test_args);
+
+        results += '<tr>'
+          + '<td><a class=external href=https://github.com/iterami/Documentation.htm/blob/gh-pages/common/js/webgl.md#' + tests[test]['function'] + 'args>' + tests[test]['function'] + '()</a>'
+          + '<td>' + JSON.stringify(tests[test]['args'])
+          + '<td>' + JSON.stringify(tests[test]['expect'])
+          + '<td>' + JSON.stringify(result['result'])
+          + '<td>' + result['test'];
+    }
+    document.getElementById('results').innerHTML = results;
+}
+</script>
