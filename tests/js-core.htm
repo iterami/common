@@ -102,15 +102,27 @@ function repo_init(){
           'y0': 0,
           'z0': 0,
           'x1': 1,
-          'y1': 1,
+          'y1': 0,
           'z1': 1,
         },
         'expect': {
-          'x': 0,
+          'x': 3.5355338,
           'y': 0,
-          'z': 0,
+          'z': 3.5355338,
         },
         'function': 'core_fixed_length_line',
+      },
+      {
+        'args': void 0,
+        'expect': {},
+        'function': 'core_handle_defaults',
+      },
+      {
+        'args': {
+          'var': 5,
+        },
+        'expect': 5,
+        'function': 'core_handle_defaults',
       },
       {
         'args': {
@@ -134,6 +146,63 @@ function repo_init(){
         'function': 'core_html_format',
       },
       {
+        'args': void 0,
+        'expect': {
+          '0': 0,
+          '1': 0,
+          '2': 0,
+          '3': 0,
+          '4': 0,
+          '5': 0,
+          '6': 0,
+          '7': 0,
+          '8': 0,
+          '9': 0,
+          '10': 0,
+          '11': 0,
+          '12': 0,
+          '13': 0,
+          '14': 0,
+          '15': 0,
+        },
+        'function': 'core_matrix_create',
+      },
+      {
+        'args': {
+          'multiplier': 2,
+          'x0': 0,
+          'y0': 0,
+          'x1': 1,
+          'y1': 1,
+        },
+        'expect': {
+          'angle': .7853982,
+          'x': 1.4142136,
+          'y': 1.4142136,
+        },
+        'function': 'core_move_2d',
+      },
+      {
+        'args': {
+          'speed': 2,
+          'dx': 1,
+          'dy': 1,
+        },
+        'expect': '?',
+        'function': 'core_move_2d_diagonal',
+      },
+      {
+        'args': {
+          'angle': 45,
+          'multiplier': 2,
+        },
+        'expect': {
+          'x': 1.4142136,
+          'z': 1.4142136,
+        },
+        'function': 'core_move_3d',
+      },
+      {
         'args': {
           'number': '123456.789',
         },
@@ -147,12 +216,12 @@ function repo_init(){
           'x1': 5,
           'y1': 5,
         },
-        'expect': 0.7853982,
+        'expect': .7853982,
         'function': 'core_point_angle',
       },
       {
         'args': {
-          'radians': 0.7853981633974483,
+          'radians': .7853981633974483,
         },
         'expect': 45,
         'function': 'core_radians_to_degrees',
@@ -213,6 +282,56 @@ function repo_init(){
       },
       {
         'args': {
+          'array': [
+            8,
+            16,
+            4,
+            42,
+            23,
+            15,
+          ],
+        },
+        'expect': [
+          4,
+          8,
+          15,
+          16,
+          23,
+          42,
+        ],
+        'function': 'core_sort_numbers',
+      },
+      {
+        'args': {
+          'array': [
+            'eight',
+            'sixteen',
+            'four',
+            'fortytwo',
+            'twentythree',
+            'fifteen',
+          ],
+        },
+        'expect': [
+          'eight',
+          'fifteen',
+          'fortytwo',
+          'four',
+          'sixteen',
+          'twentythree',
+        ],
+        'function': 'core_sort_strings',
+      },
+      {
+        'args': {
+          'now': 9876543210,
+          'target': 123456789,
+        },
+        'expect': '- 00-03-22 21:11:26',
+        'function': 'core_time_diff',
+      },
+      {
+        'args': {
           'date': {
             'date': 21,
             'hour': 16,
@@ -225,6 +344,13 @@ function repo_init(){
         },
         'expect': '2013-02-21 16:20:00',
         'function': 'core_time_format',
+      },
+      {
+        'args': {
+          'number': 7,
+        },
+        'expect': -2211753600000,
+        'function': 'core_time_from_inputs',
       },
       {
         'args': {
@@ -251,10 +377,19 @@ function repo_init(){
 
         results += '<tr>'
           + '<td><a class=external href=https://github.com/iterami/Documentation.htm/blob/gh-pages/common/js/core.md#' + tests[test]['function'] + 'args>' + tests[test]['function'] + '()</a>'
-          + '<td>' + JSON.stringify(tests[test]['args'])
-          + '<td>' + JSON.stringify(tests[test]['expect'])
-          + '<td>' + JSON.stringify(result['result'])
-          + '<td>' + result['test'];
+          + '<td>' + JSON.stringify(
+            tests[test]['args'],
+            null,
+            1
+          ) + '<td>' + JSON.stringify(
+            tests[test]['expect'],
+            null,
+            1
+          ) + '<td>' + JSON.stringify(
+            result['result'],
+            null,
+            1
+          ) + '<td>' + result['test'];
     }
     document.getElementById('results').innerHTML = results;
 }

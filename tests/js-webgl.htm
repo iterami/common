@@ -38,11 +38,20 @@ function repo_init(){
         const result = core_test_function(test_args);
 
         results += '<tr>'
-          + '<td><a class=external href=https://github.com/iterami/Documentation.htm/blob/gh-pages/common/js/webgl.md#' + tests[test]['function'] + 'args>' + tests[test]['function'] + '()</a>'
-          + '<td>' + JSON.stringify(tests[test]['args'])
-          + '<td>' + JSON.stringify(tests[test]['expect'])
-          + '<td>' + JSON.stringify(result['result'])
-          + '<td>' + result['test'];
+          + '<td><a class=external href=https://github.com/iterami/Documentation.htm/blob/gh-pages/common/js/core.md#' + tests[test]['function'] + 'args>' + tests[test]['function'] + '()</a>'
+          + '<td>' + JSON.stringify(
+            tests[test]['args'],
+            null,
+            1
+          ) + '<td>' + JSON.stringify(
+            tests[test]['expect'],
+            null,
+            1
+          ) + '<td>' + JSON.stringify(
+            result['result'],
+            null,
+            1
+          ) + '<td>' + result['test'];
     }
     document.getElementById('results').innerHTML = results;
 }
