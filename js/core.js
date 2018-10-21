@@ -2190,11 +2190,32 @@ function core_test_function(args){
       },
     });
 
+    let test = false;
     let result = window[args['function']](args['args']);
+
+    if(core_type({
+        'type': 'array',
+        'var': args['expect'],
+      }) || core_type({
+        'type': 'object',
+        'var': args['expect'],
+      })){
+        test = true;
+        for(let item in result){
+            if(args['expect'][item] === void 0
+              || result !== args['expect'][item]){
+                test = false;
+                break;
+            }
+        }
+
+    }else{
+        test === args['expect'];
+    }
 
     return {
       'result': result,
-      'test': result === args['expect'],
+      'test': test,
     };
 }
 
