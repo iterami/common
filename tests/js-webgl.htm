@@ -3,6 +3,7 @@
 <meta content="width=device-width,initial-scale=1" name=viewport>
 <title>js/webgl.js Tests</title>
 <link href=../css/core.css rel=stylesheet>
+<style>canvas{display:none}</style>
 
 <a href=../../index.htm>iterami</a>/<a href=../index.htm>common</a>/Tests/js/webgl.js
 <table class=center>
@@ -11,7 +12,7 @@
       <td>Function
       <td>Args
       <td>Expected
-      <td>Result
+      <td>Returned
       <td>Test
   <tbody id=results>
 </table>
@@ -23,12 +24,33 @@ function repo_init(){
     core_repo_init({
       'title': 'common',
     });
+    webgl_level_load({
+      'character': -1,
+    });
 
     let tests = [
       {
         'args': void 0,
+        'expect': -1,
+        'function': 'webgl_character_level',
+      },
+      {
+        'args': {
+          'character': 'fake-character',
+        },
         'expect': -2,
         'function': 'webgl_character_level',
+      },
+      {
+        'args': {
+          'green': 1,
+        },
+        'expect': function(returned){
+            return webgl_properties['clearcolor-blue'] === 0
+              && webgl_properties['clearcolor-green'] === 1
+              && webgl_properties['clearcolor-red'] === 0;
+        },
+        'function': 'webgl_clearcolor_set',
       },
       {
         'args': void 0,
@@ -102,6 +124,15 @@ function repo_init(){
           tests[test]['args']
         );
         const result = core_test_function(test_args);
+        const expect = core_type({
+          'var': tests[test]['expect'],
+        })
+          ? tests[test]['expect'].toString()
+          : JSON.stringify(
+            tests[test]['expect'],
+            void 0,
+            1
+          );
 
         results += '<tr ' + (!result['test'] ? ' style=background:#600' : '') + '>'
           + '<td><a class=external href=https://github.com/iterami/Documentation.htm/blob/gh-pages/common/js/webgl.md#' + tests[test]['function'] + 'args>' + tests[test]['function'] + '()</a>'
@@ -109,16 +140,16 @@ function repo_init(){
             tests[test]['args'],
             null,
             1
-          ) + '<td>' + JSON.stringify(
-            tests[test]['expect'],
-            null,
-            1
-          ) + '<td>' + JSON.stringify(
-            result['result'],
+          ) + '<td>' + expect
+          + '<td>' + JSON.stringify(
+            result['returned'],
             null,
             1
           ) + '<td>' + result['test'];
     }
     document.getElementById('results').innerHTML = results;
+}
+
+function repo_logic(){
 }
 </script>

@@ -11,7 +11,7 @@
       <td>Function
       <td>Args
       <td>Expected
-      <td>Result
+      <td>Returned
       <td>Test
   <tbody id=results>
 </table>
@@ -144,10 +144,37 @@ function repo_init(){
       },
       {
         'args': {
+          'parent': document.body,
+          'properties': {
+            'id': 'core_html-element',
+          },
+        },
+        'expect': function(returned){
+            return document.getElementById('core_html-element') === returned;
+        },
+        'function': 'core_html',
+      },
+      {
+        'args': {
           'string': '<u>test</u>',
         },
         'expect': '&lt;u&gt;test&lt;/u&gt;',
         'function': 'core_html_format',
+      },
+      {
+        'args': {
+          'id': 'core_html-element',
+          'properties': {
+            'id': 'core_html_modify-element',
+          },
+        },
+        'expect': function(returned){
+            if(document.getElementById('core_html_modify-element')){
+                return true;
+            }
+            return false;
+        },
+        'function': 'core_html_modify',
       },
       {
         'args': void 0,
@@ -378,6 +405,15 @@ function repo_init(){
           tests[test]['args']
         );
         const result = core_test_function(test_args);
+        const expect = core_type({
+          'var': tests[test]['expect'],
+        })
+          ? tests[test]['expect'].toString()
+          : JSON.stringify(
+            tests[test]['expect'],
+            void 0,
+            1
+          );
 
         results += '<tr ' + (!result['test'] ? ' style=background:#600' : '') + '>'
           + '<td><a class=external href=https://github.com/iterami/Documentation.htm/blob/gh-pages/common/js/core.md#' + tests[test]['function'] + 'args>' + tests[test]['function'] + '()</a>'
@@ -385,12 +421,9 @@ function repo_init(){
             tests[test]['args'],
             null,
             1
-          ) + '<td>' + JSON.stringify(
-            tests[test]['expect'],
-            null,
-            1
-          ) + '<td>' + JSON.stringify(
-            result['result'],
+          ) + '<td>' + expect
+          + '<td>' + JSON.stringify(
+            result['returned'],
             null,
             1
           ) + '<td>' + result['test'];
