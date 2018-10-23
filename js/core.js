@@ -2199,7 +2199,7 @@ function core_test_function(args){
         'type': 'function',
         'var': args['expect'],
       })){
-        test = result === args['expect']();
+        test = args['expect'](result);
 
     }else if(core_type({
         'type': 'array',
