@@ -2196,6 +2196,12 @@ function core_test_function(args){
     let result = window[args['function']](args['args']);
 
     if(core_type({
+        'type': 'function',
+        'var': args['expect'],
+      })){
+        test = result === args['expect']();
+
+    }else if(core_type({
         'type': 'array',
         'var': args['expect'],
       }) || core_type({
