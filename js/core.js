@@ -2193,13 +2193,13 @@ function core_test_function(args){
     });
 
     let test = false;
-    let result = window[args['function']](args['args']);
+    let returned = window[args['function']](args['args']);
 
     if(core_type({
         'type': 'function',
         'var': args['expect'],
       })){
-        test = args['expect'](result);
+        test = args['expect'](returned);
 
     }else if(core_type({
         'type': 'array',
@@ -2209,20 +2209,20 @@ function core_test_function(args){
         'var': args['expect'],
       })){
         test = true;
-        for(let item in result){
+        for(let item in returned){
             if(args['expect'][item] === void 0
-              || result[item] !== args['expect'][item]){
+              || returned[item] !== args['expect'][item]){
                 test = false;
                 break;
             }
         }
 
     }else{
-        test = result === args['expect'];
+        test = returned === args['expect'];
     }
 
     return {
-      'result': result,
+      'returned': returned,
       'test': test,
     };
 }
