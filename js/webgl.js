@@ -1577,6 +1577,7 @@ function webgl_item_reset(args){
         'character': webgl_character_id,
         'entities': [],
         'spell': false,
+        'spellproperties': {},
         'stats': {},
       },
     });
@@ -1759,36 +1760,6 @@ function webgl_json_export(args){
     document.getElementById(args['target']).value = JSON.stringify(json);
 }
 
-function webgl_level_load(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'character': 0,
-        'json': false,
-      },
-    });
-
-    if(typeof args['json'] === 'object'){
-        core_file({
-          'file': args['json'],
-          'todo': function(event){
-              webgl_level_init({
-                'character': args['character'],
-                'json': JSON.parse(event.target.result),
-              });
-          },
-          'type': 'readAsText',
-        });
-
-        return;
-    }
-
-    webgl_level_init({
-      'character': args['character'],
-      'json': JSON.parse(args['json']),
-    });
-}
-
 // Required args: character
 function webgl_level_init(args){
     args = core_args({
@@ -1888,6 +1859,36 @@ function webgl_level_init(args){
       'todo': 'repo_level_load',
     });
     core_escape();
+}
+
+function webgl_level_load(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': 0,
+        'json': false,
+      },
+    });
+
+    if(typeof args['json'] === 'object'){
+        core_file({
+          'file': args['json'],
+          'todo': function(event){
+              webgl_level_init({
+                'character': args['character'],
+                'json': JSON.parse(event.target.result),
+              });
+          },
+          'type': 'readAsText',
+        });
+
+        return;
+    }
+
+    webgl_level_init({
+      'character': args['character'],
+      'json': JSON.parse(args['json']),
+    });
 }
 
 function webgl_level_unload(){
