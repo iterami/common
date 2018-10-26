@@ -27,8 +27,22 @@ function repo_init(){
     webgl_level_load({
       'character': -1,
     });
+    webgl_init_character({
+      'id': 'test-character',
+      'level': 5,
+    });
 
     let tests = [
+      {
+        'args': {
+          'character': 'test-character',
+          'damage': 23,
+        },
+        'expect': function(returned){
+            return webgl_characters['test-character']['health-current'] === 77;
+        },
+        'function': 'webgl_character_damage',
+      },
       {
         'args': void 0,
         'expect': -1,
