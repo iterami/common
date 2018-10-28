@@ -22,18 +22,28 @@
 <script>
 function repo_init(){
     core_repo_init({
+      'keybinds': {
+        32: {},
+        67: {},
+      },
       'title': 'common',
+      'ui': '<hr><div id=npc-talk></div><div id=npc-trade></div>',
     });
     webgl_level_load({
       'character': -1,
     });
-    webgl_init_character({
-      'id': 'test-character',
-      'level': 5,
-    });
-    core_escape();
 
     let tests = [
+      {
+        'args': {
+          'id': 'test-character',
+          'level': 5,
+        },
+        'expect': function(returned){
+            return webgl_characters['test-character']['health-current'] === 100;
+        },
+        'function': 'webgl_init_character',
+      },
       {
         'args': {
           'character': 'test-character',
@@ -54,6 +64,13 @@ function repo_init(){
           'character': 'fake-character',
         },
         'expect': -2,
+        'function': 'webgl_character_level',
+      },
+      {
+        'args': {
+          'character': 'test-character',
+        },
+        'expect': 5,
         'function': 'webgl_character_level',
       },
       {
@@ -100,6 +117,19 @@ function repo_init(){
           0,
         ],
         'function': 'webgl_normals',
+      },
+      {
+        'args': {
+          'x': 0,
+          'y': 0,
+        },
+        'expect': [
+          0,
+          0,
+          0,
+          0,
+        ],
+        'function': 'webgl_pick_color',
       },
       {
         'args': {
