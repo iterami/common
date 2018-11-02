@@ -3054,9 +3054,9 @@ function webgl_vertexcolorarray(args){
     let color = [];
     for(let i = 0; i < args['vertexcount']; i++){
         color.push(
-          args['rgbarray'][i]['red'] / 256,
-          args['rgbarray'][i]['green'] / 256,
-          args['rgbarray'][i]['blue'] / 256,
+          args['rgbarray'][i]['red'] / 255,
+          args['rgbarray'][i]['green'] / 255,
+          args['rgbarray'][i]['blue'] / 255,
           1
         );
     }
