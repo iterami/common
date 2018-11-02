@@ -1701,7 +1701,7 @@ function core_random_key(args){
     let keys = Object.keys(args['object']);
 
     return keys[core_random_integer({
-      'max': keys.length - 1,
+      'max': keys.length,
     })];
 }
 
