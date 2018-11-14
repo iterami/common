@@ -2881,6 +2881,9 @@ function webgl_skybox(args){
       'defaults': {
         'bottom-color-bottom': false,
         'bottom-color-top': false,
+        'rotate-x': 0,
+        'rotate-y': 0,
+        'rotate-z': 0,
         'sides': 3,
         'size': 99,
         'top-color-bottom': false,
@@ -2920,6 +2923,9 @@ function webgl_skybox(args){
         'skybox',
       ],
       'id': args['prefix'] + '-top',
+      'rotate-x': args['rotate-x'],
+      'rotate-y': args['rotate-y'],
+      'rotate-z': args['rotate-z'],
       'vertex-colors': [
         args['top-color-top'][0], args['top-color-top'][1], args['top-color-top'][2], args['top-color-top'][3],
       ],
