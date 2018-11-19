@@ -11,7 +11,7 @@ function uri_get(args){
     };
 
     if(args['id'] in uri){
-        return uris[args['id']];
+        return uri[args['id']];
     }
 
     return false;
