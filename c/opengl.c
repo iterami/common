@@ -994,8 +994,13 @@ void opengl_load_level(const gchar *filename){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 
-            // Parse texture.
-            if(strcmp(json_level_entities_element_property->name->string, "texture") == 0){
+            // Parse texture-id.
+            if(strcmp(json_level_entities_element_property->name->string, "texture-id") == 0){
+                json_level_entities_element_property = json_level_entities_element_property->next;
+            }
+
+            // Parse texture-repeat.
+            if(strcmp(json_level_entities_element_property->name->string, "texture-repeat") == 0){
                 json_level_entities_element_property = json_level_entities_element_property->next;
             }
 

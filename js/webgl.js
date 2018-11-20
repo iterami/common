@@ -1146,10 +1146,17 @@ function webgl_entity_todo(entity){
       'entity': entity,
     });
 
-    while(core_entities[entity]['textureData'].length < core_entities[entity]['vertices-length'] * 2){
-        core_entities[entity]['textureData'].push(
-          1,
-          1
+    let textureData = [
+      0, core_entities[entity]['texture-repeat'],
+      0, 0,
+      core_entities[entity]['texture-repeat'], 0,
+      core_entities[entity]['texture-repeat'], core_entities[entity]['texture-repeat'],
+    ];
+
+    while(textureData.length < core_entities[entity]['vertices-length'] * 2){
+        textureData.push(
+          core_entities[entity]['texture-repeat'],
+          core_entities[entity]['texture-repeat']
         );
     }
 
@@ -1158,13 +1165,13 @@ function webgl_entity_todo(entity){
         'vertexcount': core_entities[entity]['vertices-length'],
       }),
       'normalData': core_entities[entity]['normals'],
-      'textureData': core_entities[entity]['textureData'],
+      'textureData': textureData,
       'vertexData': core_entities[entity]['vertices'],
     });
 
     webgl_texture_set({
       'entity': entity,
-      'texture': core_entities[entity]['texture'],
+      'texture': core_entities[entity]['texture-id'],
     });
 }
 
@@ -1372,13 +1379,8 @@ function webgl_init(args){
         'spawn-interval-current': 0,
         'spawn-interval-max': 100,
         'speed': .2,
-        'texture': 'default.png',
-        'textureData': [
-          0, 1,
-          0, 0,
-          1, 0,
-          1, 1,
-        ],
+        'texture-id': 'default.png',
+        'texture-repeat': 1,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -1727,7 +1729,6 @@ function webgl_json_export(args){
             delete entity_json['rotate-radians-y'];
             delete entity_json['rotate-radians-z'];
             delete entity_json['texture-gl'];
-            delete entity_json['textureData'];
             delete entity_json['vertices-length'];
 
             json['entities'].push(entity_json);
@@ -1750,7 +1751,6 @@ function webgl_json_export(args){
             delete entity_json['rotate-radians-y'];
             delete entity_json['rotate-radians-z'];
             delete entity_json['texture-gl'];
-            delete entity_json['textureData'];
             delete entity_json['vertices-length'];
 
             json['entities'].push(entity_json);
