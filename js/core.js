@@ -1883,14 +1883,14 @@ function core_repo_init(args){
         });
     }
     if(args['textures']){
-        core_image({
-          'id': '_texture-debug',
-          'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAD1BMVEUAAP8A/wD/AAAAAAD///8hKtLYAAAAIklEQVQoz2NwQQMMTkoQIAgBIiNMwIEBAowhwGSECaAnBwAdPj4tFnzwQgAAAABJRU5ErkJggg==',
-        });
-        core_image({
-          'id': '_texture-default',
-          'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
-        });
+        for(let texture in uris){
+            core_image({
+              'id': texture,
+              'src': uris[texture],
+            });
+        }
+
+        uris = false;
     }
 
     document.getElementById('repo-ui').innerHTML = args['ui'];

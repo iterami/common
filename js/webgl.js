@@ -1372,7 +1372,7 @@ function webgl_init(args){
         'spawn-interval-current': 0,
         'spawn-interval-max': 100,
         'speed': .2,
-        'texture': '_texture-default',
+        'texture': 'default.png',
         'textureData': [
           0, 1,
           0, 0,
@@ -2995,7 +2995,7 @@ function webgl_texture_set(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'texture': '_texture-default',
+        'texture': 'default.png',
       },
     });
 
