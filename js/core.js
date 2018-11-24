@@ -885,6 +885,7 @@ function core_handle_keydown(event){
     let key = core_events_keyinfo(event);
 
     if(core_menu_open
+      && core_menu_block_events
       && key['code'] !== 27){
         return;
     }
@@ -934,7 +935,8 @@ function core_handle_keyup(event){
 }
 
 function core_handle_mousedown(event){
-    if(core_menu_open
+    if((core_menu_open
+        && core_menu_block_events)
       || event['target'].id === 'core-toggle'){
         return;
     }
@@ -951,7 +953,8 @@ function core_handle_mousedown(event){
 }
 
 function core_handle_mousemove(event){
-    if(core_menu_open){
+    if(core_menu_open
+      && core_menu_block_events){
         return;
     }
 
@@ -978,7 +981,8 @@ function core_handle_mouseup(event){
 }
 
 function core_handle_mousewheel(event){
-    if(core_menu_open){
+    if(core_menu_open
+      && core_menu_block_events){
         return;
     }
 
@@ -1790,6 +1794,7 @@ function core_repo_init(args){
         'info': '',
         'keybinds': false,
         'menu': false,
+        'menu-block-events': true,
         'mousebinds': false,
         'storage': {},
         'storage-menu': '',
@@ -1865,6 +1870,7 @@ function core_repo_init(args){
     if(args['keybinds'] !== false){
         core_key_rebinds = args['keybinds'];
     }
+    core_menu_block_events = args['menu-block-events'];
     core_events_bind({
       'beforeunload': args['beforeunload'],
       'elements': args['events'],
@@ -2454,6 +2460,7 @@ window.core_intervals = {};
 window.core_key_rebinds = {};
 window.core_keys = {};
 window.core_matrices = {};
+window.core_menu_block_events = true;
 window.core_menu_open = false;
 window.core_mode = 0;
 window.core_mouse = {};
