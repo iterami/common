@@ -3013,6 +3013,7 @@ function webgl_texture_set(args){
       webgl_buffer.UNSIGNED_BYTE,
       core_images[args['texture']]
     );
+
     webgl_buffer.texParameteri(
       webgl_buffer.TEXTURE_2D,
       webgl_buffer.TEXTURE_MAG_FILTER,
@@ -3021,8 +3022,11 @@ function webgl_texture_set(args){
     webgl_buffer.texParameteri(
       webgl_buffer.TEXTURE_2D,
       webgl_buffer.TEXTURE_MIN_FILTER,
-      webgl_buffer.NEAREST
+      webgl_buffer.NEAREST_MIPMAP_LINEAR
     );
+
+    webgl_buffer.generateMipmap(webgl_buffer.TEXTURE_2D);
+
     webgl_buffer.bindTexture(
       webgl_buffer.TEXTURE_2D,
       void 0
