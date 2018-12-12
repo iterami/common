@@ -1,5 +1,5 @@
 iterami/common
 --------------
 
-* Contributing: https://github.com/iterami/Documentation.htm/blob/gh-pages/CONTRIBUTING.md
-* Documentation: https://github.com/iterami/Documentation.htm/blob/gh-pages/common/README.md
+* Contributing: https://github.com/iterami/Docs.htm/blob/gh-pages/CONTRIBUTING.md
+* Docs: https://github.com/iterami/Docs.htm/blob/gh-pages/common/README.md
