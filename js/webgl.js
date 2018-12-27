@@ -1830,6 +1830,12 @@ function webgl_level_init(args){
             if(args['json']['characters'][character]['id'] === webgl_character_id
               && args['character'] !== 1
               && webgl_character_level() > -2){
+                if(args['character'] === -1){
+                    webgl_entity_create({
+                      'entities': args['json']['characters'][character]['entities'],
+                    });
+                }
+
                 continue;
             }
 
