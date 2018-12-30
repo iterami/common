@@ -2362,6 +2362,10 @@ function webgl_logicloop_handle_entity(entity){
 
     }else{
         if(core_entities[entity]['path-id'] !== false){
+            let entity_translate_x = core_entities[entity]['translate-x'] - core_entities[entity]['attach-offset-x'];
+            let entity_translate_y = core_entities[entity]['translate-y'] - core_entities[entity]['attach-offset-y'];
+            let entity_translate_z = core_entities[entity]['translate-z'] - core_entities[entity]['attach-offset-z'];
+
             let path = webgl_paths[core_entities[entity]['path-id']];
             let point = {};
             Object.assign(
@@ -2369,25 +2373,25 @@ function webgl_logicloop_handle_entity(entity){
               path['points'][core_entities[entity]['path-point']]
             );
             if(point['translate-x'] === void 0){
-                point['translate-x'] = core_entities[entity]['translate-x'];
+                point['translate-x'] = entity_translate_x;
             }
             if(point['translate-y'] === void 0){
-                point['translate-y'] = core_entities[entity]['translate-y'];
+                point['translate-y'] = entity_translate_y;
             }
             if(point['translate-z'] === void 0){
-                point['translate-z'] = core_entities[entity]['translate-z'];
+                point['translate-z'] = entity_translate_z;
             }
 
             let angle_xz = core_point_angle({
-              'x0': core_entities[entity]['translate-x'],
+              'x0': entity_translate_x,
               'x1': point['translate-x'],
-              'y0': core_entities[entity]['translate-z'],
+              'y0': entity_translate_z,
               'y1': point['translate-z'],
             });
             let angle_y = core_point_angle({
-              'x0': core_entities[entity]['translate-x'],
+              'x0': entity_translate_x,
               'x1': point['translate-x'],
-              'y0': core_entities[entity]['translate-y'],
+              'y0': entity_translate_y,
               'y1': point['translate-y'],
             });
 
@@ -2401,20 +2405,20 @@ function webgl_logicloop_handle_entity(entity){
               'number': Math.sin(angle_xz) * Math.cos(angle_y),
             });
 
-            if(core_entities[entity]['translate-x'] > point['translate-x']){
+            if(entity_translate_x > point['translate-x']){
                 core_entities[entity]['change']['translate-x'] *= -1;
             }
-            if(core_entities[entity]['translate-y'] > point['translate-y']){
+            if(entity_translate_y > point['translate-y']){
                 core_entities[entity]['change']['translate-y'] *= -1;
             }
-            if(core_entities[entity]['translate-z'] > point['translate-z']){
+            if(entity_translate_z > point['translate-z']){
                 core_entities[entity]['change']['translate-z'] *= -1;
             }
 
             if(core_distance({
-                'x0': core_entities[entity]['translate-x'],
-                'y0': core_entities[entity]['translate-y'],
-                'z0': core_entities[entity]['translate-z'],
+                'x0': entity_translate_x,
+                'y0': entity_translate_y,
+                'z0': entity_translate_z,
                 'x1': point['translate-x'],
                 'y1': point['translate-y'],
                 'z1': point['translate-z'],
