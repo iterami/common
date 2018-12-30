@@ -507,10 +507,27 @@ function webgl_collision(args){
             collider['translate-' + collision] = target['translate-' + collision] + collider['collide-range-' + range_axis] * collision_sign;
             collider['change']['translate-' + collision] = 0;
 
-            if(args['entity'] === false
-              && collision === webgl_properties['gravity-axis']
-              && webgl_properties['gravity-max'] / webgl_properties['gravity-max'] === collision_sign){
-                collider['jump-allow'] = true;
+            if(collision === webgl_properties['gravity-axis']){
+                if(args['entity'] === false
+                  && webgl_properties['gravity-max'] / webgl_properties['gravity-max'] === collision_sign){
+                    collider['jump-allow'] = true;
+                }
+
+                let axis_first = 'x';
+                let axis_second = 'z';
+                if(collision === 'x'){
+                    axis_first = 'y';
+                }
+                if(collision === 'z'){
+                    axis_second = 'y';
+                }
+
+                if(target['change']['translate-' + axis_first] !== 0){
+                    collider['translate-' + axis_first] += target['change']['translate-' + axis_first];
+                }
+                if(target['change']['translate-' + axis_second] !== 0){
+                    collider['translate-' + axis_second] += target['change']['translate-' + axis_second];
+                }
             }
         }
     }
