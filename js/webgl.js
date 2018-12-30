@@ -513,20 +513,20 @@ function webgl_collision(args){
                     collider['jump-allow'] = true;
                 }
 
-                let axis_first = 'x';
-                let axis_second = 'z';
+                let axis_first = 'translate-x';
+                let axis_second = 'translate-z';
                 if(collision === 'x'){
-                    axis_first = 'y';
-                }
-                if(collision === 'z'){
-                    axis_second = 'y';
+                    axis_first = 'translate-y';
+
+                }else if(collision === 'z'){
+                    axis_second = 'translate-y';
                 }
 
-                if(target['change']['translate-' + axis_first] !== 0){
-                    collider['translate-' + axis_first] += target['change']['translate-' + axis_first];
+                if(target['change'][axis_first] !== 0){
+                    collider[axis_first] += target['change'][axis_first];
                 }
-                if(target['change']['translate-' + axis_second] !== 0){
-                    collider['translate-' + axis_second] += target['change']['translate-' + axis_second];
+                if(target['change'][axis_second] !== 0){
+                    collider[axis_second] += target['change'][axis_second];
                 }
             }
         }
@@ -1077,18 +1077,18 @@ function webgl_entity_move(args){
           'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
-        if(webgl_properties['gravity-axis'] === 'y'){
-            core_entities[args['entity']]['change']['translate-x'] = movement['x'];
-            core_entities[args['entity']]['change']['translate-z'] = movement['z'];
 
-        }else if(webgl_properties['gravity-axis'] === 'x'){
-            core_entities[args['entity']]['change']['translate-y'] = movement['x'];
-            core_entities[args['entity']]['change']['translate-z'] = movement['z'];
+        let axis_first = 'translate-x';
+        let axis_second = 'translate-z';
+        if(webgl_properties['gravity-axis'] === 'x'){
+            axis_first = 'y';
 
-        }else{
-            core_entities[args['entity']]['change']['translate-x'] = movement['x'];
-            core_entities[args['entity']]['change']['translate-y'] = movement['z'];
+        }else if(webgl_properties['gravity-axis'] === 'z'){
+            axis_second = 'y';
         }
+
+        core_entities[args['entity']]['change'][axis_first] = movement['x'];
+        core_entities[args['entity']]['change'][axis_second] = movement['z'];
     }
 }
 
