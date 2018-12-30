@@ -1721,17 +1721,17 @@ function core_random_number(args){
 }
 
 function core_random_rgb(){
-  return {
-    'blue': core_random_integer({
-      'max': 256,
-    }),
-    'green': core_random_integer({
-      'max': 256,
-    }),
-    'red': core_random_integer({
-      'max': 256,
-    }),
-  };
+    return {
+      'blue': core_random_integer({
+        'max': 256,
+      }),
+      'green': core_random_integer({
+        'max': 256,
+      }),
+      'red': core_random_integer({
+        'max': 256,
+      }),
+    };
 }
 
 function core_random_string(args){
@@ -1754,14 +1754,10 @@ function core_random_string(args){
 
 // Required args: h0, h1, w0, w1, x0, x1, y0, y1
 function core_rectangle_overlap(args){
-    let boolean = false;
-    if(args['x0'] < args['x1'] + args['w1']
+    return args['x0'] < args['x1'] + args['w1']
       && args['x0'] + args['w0'] > args['x1']
       && args['y0'] < args['y1'] + args['h1']
-      && args['y0'] + args['h0'] > args['y1']){
-        boolean = true;
-    }
-    return boolean;
+      && args['y0'] + args['h0'] > args['y1'];
 }
 
 // Required args: patterns, string
