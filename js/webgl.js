@@ -559,6 +559,7 @@ function webgl_cuboid(args){
         'left-vertex-colors': false,
         'length': 1,
         'prefix': core_id_count,
+        'properties': {},
         'right-alpha': 1,
         'right-collision': false,
         'right-vertex-colors': false,
@@ -584,6 +585,9 @@ function webgl_cuboid(args){
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
     };
+    for(let property in args['properties']){
+        properties[property] = args['properties'][property];
+    }
 
     if(args['all-alpha'] !== false){
         args['back-alpha'] = args['all-alpha'];
