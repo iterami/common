@@ -147,19 +147,21 @@ function canvas_init(args){
       },
     });
 
-    canvas_properties = {
-      'clearColor': '#000',
-      'fillStyle': '#fff',
-      'font': canvas_fonts['medium'],
-      'height': 0,
-      'lineJoin': 'miter',
-      'lineWidth': 1,
-      'strokeStyle': '#fff',
-      'style': 'fill',
-      'textAlign': 'start',
-      'textBaseline': 'alphabetic',
-      'width': 0,
-    };
+    canvas_setproperties({
+      'properties': {
+        'clearColor': '#000',
+        'fillStyle': '#fff',
+        'font': canvas_fonts['medium'],
+        'height': 0,
+        'lineJoin': 'miter',
+        'lineWidth': 1,
+        'strokeStyle': '#fff',
+        'style': 'fill',
+        'textAlign': 'start',
+        'textBaseline': 'alphabetic',
+        'width': 0,
+      },
+    });
 
     let properties = {
       'id': 'canvas',
@@ -199,9 +201,9 @@ function canvas_init(args){
     });
 
     if(core_type({
-      'var': 'logic',
-      'type': 'function',
-    })){
+        'var': 'logic',
+        'type': 'function',
+      })){
         core_interval_modify({
           'id': 'canvas-interval',
           'paused': true,
