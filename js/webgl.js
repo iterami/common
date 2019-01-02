@@ -2838,7 +2838,9 @@ function webgl_shader_update(){
             + 'uniform bool directional;'
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
-            + 'uniform vec3 vec_directional;'
+            + 'uniform vec3 vec_ambientColor;'
+            + 'uniform vec3 vec_directionalColor;'
+            + 'uniform vec3 vec_directionalVector;'
             + 'varying float float_fogDistance;'
             + 'varying vec2 vec_textureCoord;'
             + 'varying vec3 vec_lighting;'
@@ -2849,18 +2851,10 @@ function webgl_shader_update(){
             +     'gl_PointSize = 500. / float_fogDistance;'
             +     'vec_fragmentColor = vec_vertexColor;'
             +     'vec_textureCoord = vec_texturePosition;'
-            +     'vec_lighting = vec3('
-            +       webgl_properties['ambient-red'] + ','
-            +       webgl_properties['ambient-green'] + ','
-            +       webgl_properties['ambient-blue']
-            +     ');'
+            +     'vec_lighting = vec_ambientColor;'
             +     'if(directional){'
             +         'vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);'
-            +         'vec_lighting += vec3('
-            +           webgl_properties['directional-red'] + ','
-            +           webgl_properties['directional-green'] + ','
-            +           webgl_properties['directional-blue']
-            +         ') * max(dot(transformedNormal.xyz, normalize(vec_directional)), 0.0);'
+            +         'vec_lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), 0.0);'
             +     '}'
             + '}',
           'type': webgl_buffer.VERTEX_SHADER,
@@ -2880,8 +2874,10 @@ function webgl_shader_update(){
 
     let locations = {
       'alpha': 'alpha',
+      'ambient-color': 'vec_ambientColor',
       'directional': 'directional',
-      'directional-vector': 'vec_directional',
+      'directional-color': 'vec_directionalColor',
+      'directional-vector': 'vec_directionalVector',
       'fog-density': 'float_fogDensity',
       'fog-state': 'fog',
       'mat_cameraMatrix': 'mat_cameraMatrix',
@@ -2895,6 +2891,18 @@ function webgl_shader_update(){
         );
     }
 
+    webgl_buffer.uniform3f(
+      webgl_properties['shader']['ambient-color'],
+      webgl_properties['ambient-red'],
+      webgl_properties['ambient-green'],
+      webgl_properties['ambient-blue']
+    );
+    webgl_buffer.uniform3f(
+      webgl_properties['shader']['directional-color'],
+      webgl_properties['directional-red'],
+      webgl_properties['directional-green'],
+      webgl_properties['directional-blue']
+    );
     webgl_buffer.uniform3fv(
       webgl_properties['shader']['directional-vector'],
       webgl_properties['directional-vector']
