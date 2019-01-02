@@ -2807,14 +2807,14 @@ function webgl_shader_update(){
           'source':
               'uniform lowp float alpha;'
             + 'uniform lowp float float_fogDensity;'
-            + 'uniform int fog;'
+            + 'uniform bool fog;'
             + 'uniform sampler2D sampler;'
             + 'varying mediump float float_fogDistance;'
             + 'varying mediump vec2 vec_textureCoord;'
             + 'varying mediump vec3 vec_lighting;'
             + 'varying lowp vec4 vec_fragmentColor;'
             + 'void main(void){'
-            +     'gl_FragColor = (fog == 1'
+            +     'gl_FragColor = (fog'
             +       '? mix('
             +           'vec4('
             +             webgl_properties['clearcolor-red'] + ','
@@ -2835,7 +2835,7 @@ function webgl_shader_update(){
             + 'attribute vec3 vec_vertexNormal;'
             + 'attribute vec4 vec_vertexColor;'
             + 'attribute vec4 vec_vertexPosition;'
-            + 'uniform int directional;'
+            + 'uniform bool directional;'
             + 'uniform vec3 vec_directional;'
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
@@ -2854,7 +2854,7 @@ function webgl_shader_update(){
             +       webgl_properties['ambient-green'] + ','
             +       webgl_properties['ambient-blue']
             +     ');'
-            +     'if(directional == 1){'
+            +     'if(directional){'
             +         'vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);'
             +         'vec_lighting += vec3('
             +           webgl_properties['directional-red'] + ','
@@ -2906,8 +2906,6 @@ function webgl_shader_update(){
     webgl_buffer.uniform1i(
       webgl_properties['shader']['fog-state'],
       webgl_properties['fog-state']
-        ? 1
-        : 0
     );
 }
 
