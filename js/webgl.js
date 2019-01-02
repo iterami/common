@@ -2812,16 +2812,12 @@ function webgl_shader_update(){
             + 'varying mediump float float_fogDistance;'
             + 'varying mediump vec2 vec_textureCoord;'
             + 'varying mediump vec3 vec_lighting;'
+            + 'varying lowp vec4 vec_clearColorFragment;'
             + 'varying lowp vec4 vec_fragmentColor;'
             + 'void main(void){'
             +     'gl_FragColor = (fog'
             +       '? mix('
-            +           'vec4('
-            +             webgl_properties['clearcolor-red'] + ','
-            +             webgl_properties['clearcolor-green'] + ','
-            +             webgl_properties['clearcolor-blue'] + ','
-            +             '1'
-            +           '),'
+            +           'vec_clearColorFragment,'
             +           'vec_fragmentColor,'
             +           'clamp(exp(float_fogDensity * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
             +         ')'
@@ -2841,14 +2837,17 @@ function webgl_shader_update(){
             + 'uniform vec3 vec_ambientColor;'
             + 'uniform vec3 vec_directionalColor;'
             + 'uniform vec3 vec_directionalVector;'
+            + 'uniform vec4 vec_clearColor;'
             + 'varying float float_fogDistance;'
             + 'varying vec2 vec_textureCoord;'
             + 'varying vec3 vec_lighting;'
+            + 'varying vec4 vec_clearColorFragment;'
             + 'varying vec4 vec_fragmentColor;'
             + 'void main(void){'
             +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
             +     'float_fogDistance = length(gl_Position.xyz);'
             +     'gl_PointSize = 500. / float_fogDistance;'
+            +     'vec_clearColorFragment = vec_clearColor;'
             +     'vec_fragmentColor = vec_vertexColor;'
             +     'vec_textureCoord = vec_texturePosition;'
             +     'vec_lighting = vec_ambientColor;'
@@ -2875,6 +2874,7 @@ function webgl_shader_update(){
     let locations = {
       'alpha': 'alpha',
       'ambient-color': 'vec_ambientColor',
+      'clear-color': 'vec_clearColor',
       'directional': 'directional',
       'directional-color': 'vec_directionalColor',
       'directional-vector': 'vec_directionalVector',
@@ -2896,6 +2896,13 @@ function webgl_shader_update(){
       webgl_properties['ambient-red'],
       webgl_properties['ambient-green'],
       webgl_properties['ambient-blue']
+    );
+    webgl_buffer.uniform4f(
+      webgl_properties['shader']['clearcolor-color'],
+      webgl_properties['clearcolor-red'],
+      webgl_properties['clearcolor-green'],
+      webgl_properties['clearcolor-blue'],
+      1
     );
     webgl_buffer.uniform3f(
       webgl_properties['shader']['directional-color'],
