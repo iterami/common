@@ -2805,9 +2805,9 @@ function webgl_shader_update(){
       'shaders': [
         webgl_shader_create({
           'source':
-              'uniform lowp float alpha;'
+              'uniform bool fog;'
+            + 'uniform lowp float alpha;'
             + 'uniform lowp float float_fogDensity;'
-            + 'uniform bool fog;'
             + 'uniform sampler2D sampler;'
             + 'varying mediump float float_fogDistance;'
             + 'varying mediump vec2 vec_textureCoord;'
@@ -2836,9 +2836,9 @@ function webgl_shader_update(){
             + 'attribute vec4 vec_vertexColor;'
             + 'attribute vec4 vec_vertexPosition;'
             + 'uniform bool directional;'
-            + 'uniform vec3 vec_directional;'
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
+            + 'uniform vec3 vec_directional;'
             + 'varying float float_fogDistance;'
             + 'varying vec2 vec_textureCoord;'
             + 'varying vec3 vec_lighting;'
