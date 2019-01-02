@@ -2890,6 +2890,8 @@ function webgl_shader_recreate(){
           locations[location]
         );
     }
+
+    webgl_shader_update();
 }
 
 function webgl_shader_update(){
