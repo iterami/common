@@ -788,10 +788,6 @@ function webgl_draw(){
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
     webgl_buffer.disable(webgl_buffer.DEPTH_TEST);
-    webgl_buffer.uniform1i(
-      webgl_properties['shader']['directional'],
-      0
-    );
     core_group_modify({
       'groups': [
         'skybox',
@@ -800,12 +796,6 @@ function webgl_draw(){
           webgl_draw_entity(entity);
       },
     });
-    webgl_buffer.uniform1i(
-      webgl_properties['shader']['directional'],
-      webgl_properties['directional-state']
-        ? 1
-        : 0
-    );
     webgl_buffer.enable(webgl_buffer.DEPTH_TEST);
 
     core_group_modify({
@@ -2906,6 +2896,10 @@ function webgl_shader_update(){
       webgl_properties['clearcolor-red'],
       webgl_properties['clearcolor-green'],
       webgl_properties['clearcolor-blue']
+    );
+    webgl_buffer.uniform1i(
+      webgl_properties['shader']['directional'],
+      webgl_properties['directional-state']
     );
     webgl_buffer.uniform3f(
       webgl_properties['shader']['directional-color'],
