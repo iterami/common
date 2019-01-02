@@ -2806,7 +2806,7 @@ function webgl_shader_update(){
         webgl_shader_create({
           'source':
               'uniform lowp float alpha;'
-            + 'uniform lowp float float_fog;'
+            + 'uniform lowp float float_fogDensity;'
             + 'uniform int fog;'
             + 'uniform sampler2D sampler;'
             + 'varying mediump float float_fogDistance;'
@@ -2823,7 +2823,7 @@ function webgl_shader_update(){
             +             '1'
             +           '),'
             +           'vec_fragmentColor,'
-            +           'clamp(exp(' + webgl_properties['fog-density'] + ' * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
+            +           'clamp(exp(float_fogDensity * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
             +         ')'
             +       ': vec_fragmentColor) * texture2D(sampler, vec_textureCoord) * vec4(vec_lighting, 1.0) * alpha;'
             + '}',
@@ -2880,7 +2880,7 @@ function webgl_shader_update(){
     let locations = {
       'alpha': 'alpha',
       'directional': 'directional',
-      'fog-density': 'float_fog',
+      'fog-density': 'float_fogDensity',
       'fog-state': 'fog',
       'mat_cameraMatrix': 'mat_cameraMatrix',
       'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
