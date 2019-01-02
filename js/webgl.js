@@ -2441,33 +2441,31 @@ function webgl_logicloop_handle_entity(entity){
                         core_entities[entity]['path-point'] += 1;
                     }
 
-                }else{
-                    if(core_entities[entity]['path-point'] <= 0){
-                        let end = core_entities[entity]['path-end'] !== false
-                          ? core_entities[entity]['path-end']
-                          : path['end'];
+                }else if(core_entities[entity]['path-point'] <= 0){
+                    let end = core_entities[entity]['path-end'] !== false
+                      ? core_entities[entity]['path-end']
+                      : path['end'];
 
-                        if(end === 2){
-                            core_entities[entity]['path-point'] = path['points'].length - 2;
-                            core_entities[entity]['translate-x'] = path['points'][core_entities[entity]['path-point']]['translate-x'];
-                            core_entities[entity]['translate-y'] = path['points'][core_entities[entity]['path-point']]['translate-y'];
-                            core_entities[entity]['translate-z'] = path['points'][core_entities[entity]['path-point']]['translate-z'];
+                    if(end === 2){
+                        core_entities[entity]['path-point'] = path['points'].length - 2;
+                        core_entities[entity]['translate-x'] = path['points'][core_entities[entity]['path-point']]['translate-x'];
+                        core_entities[entity]['translate-y'] = path['points'][core_entities[entity]['path-point']]['translate-y'];
+                        core_entities[entity]['translate-z'] = path['points'][core_entities[entity]['path-point']]['translate-z'];
 
-                        }else if(end === 1){
-                            core_entities[entity]['path-point'] = path['points'].length - 1;
+                    }else if(end === 1){
+                        core_entities[entity]['path-point'] = path['points'].length - 1;
 
-                        }else if(end === -1){
-                            core_entities[entity]['path-direction'] = 1;
-                            core_entities[entity]['path-point'] += 1;
-
-                        }else{
-                            core_entities[entity]['path-id'] = false;
-                            core_entities[entity]['path-point'] = 0;
-                        }
+                    }else if(end === -1){
+                        core_entities[entity]['path-direction'] = 1;
+                        core_entities[entity]['path-point'] += 1;
 
                     }else{
-                        core_entities[entity]['path-point'] -= 1;
+                        core_entities[entity]['path-id'] = false;
+                        core_entities[entity]['path-point'] = 0;
                     }
+
+                }else{
+                    core_entities[entity]['path-point'] -= 1;
                 }
             }
         }
