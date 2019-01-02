@@ -1340,7 +1340,7 @@ function webgl_init(args){
       webgl_buffer.ONE_MINUS_SRC_ALPHA
     );
 
-    webgl_shader_update();
+    webgl_shader_recreate();
 
     core_group_create({
       ids: [
@@ -2796,7 +2796,7 @@ function webgl_shader_create(args){
     return shader;
 }
 
-function webgl_shader_update(){
+function webgl_shader_recreate(){
     if(webgl_properties['shader']['program'] !== 0){
         webgl_buffer.deleteProgram(webgl_properties['shader']['program']);
     }
@@ -2890,7 +2890,9 @@ function webgl_shader_update(){
           locations[location]
         );
     }
+}
 
+function webgl_shader_update(){
     webgl_buffer.uniform3f(
       webgl_properties['shader']['ambient-color'],
       webgl_properties['ambient-red'],
