@@ -1210,7 +1210,7 @@ function webgl_init(args){
         'directional-green': 1,
         'directional-red': 1,
         'directional-state': true,
-        'directional-vector': '0, 1, 0',
+        'directional-vector': [0, 1, 0],
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
@@ -2836,6 +2836,7 @@ function webgl_shader_update(){
             + 'attribute vec4 vec_vertexColor;'
             + 'attribute vec4 vec_vertexPosition;'
             + 'uniform int directional;'
+            + 'uniform vec3 vec_directional;'
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
             + 'varying float float_fogDistance;'
@@ -2859,7 +2860,7 @@ function webgl_shader_update(){
             +           webgl_properties['directional-red'] + ','
             +           webgl_properties['directional-green'] + ','
             +           webgl_properties['directional-blue']
-            +         ') * max(dot(transformedNormal.xyz, normalize(vec3(' + webgl_properties['directional-vector'] + '))), 0.0);'
+            +         ') * max(dot(transformedNormal.xyz, normalize(vec_directional)), 0.0);'
             +     '}'
             + '}',
           'type': webgl_buffer.VERTEX_SHADER,
@@ -2880,6 +2881,7 @@ function webgl_shader_update(){
     let locations = {
       'alpha': 'alpha',
       'directional': 'directional',
+      'directional-vector': 'vec_directional',
       'fog-density': 'float_fogDensity',
       'fog-state': 'fog',
       'mat_cameraMatrix': 'mat_cameraMatrix',
@@ -2893,6 +2895,10 @@ function webgl_shader_update(){
         );
     }
 
+    webgl_buffer.uniform3fv(
+      webgl_properties['shader']['directional-vector'],
+      webgl_properties['directional-vector']
+    );
     webgl_buffer.uniform1f(
       webgl_properties['shader']['fog-density'],
       webgl_properties['fog-density']
