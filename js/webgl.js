@@ -2812,12 +2812,12 @@ function webgl_shader_recreate(){
             + 'varying mediump float float_fogDistance;'
             + 'varying mediump vec2 vec_textureCoord;'
             + 'varying mediump vec3 vec_lighting;'
-            + 'varying lowp vec4 vec_clearColorFragment;'
+            + 'varying lowp vec3 vec_clearColorFragment;'
             + 'varying lowp vec4 vec_fragmentColor;'
             + 'void main(void){'
             +     'gl_FragColor = (fog'
             +       '? mix('
-            +           'vec_clearColorFragment,'
+            +           'vec4(vec_clearColorFragment, 1.0),'
             +           'vec_fragmentColor,'
             +           'clamp(exp(float_fogDensity * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
             +         ')'
@@ -2835,13 +2835,13 @@ function webgl_shader_recreate(){
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
             + 'uniform vec3 vec_ambientColor;'
+            + 'uniform vec3 vec_clearColor;'
             + 'uniform vec3 vec_directionalColor;'
             + 'uniform vec3 vec_directionalVector;'
-            + 'uniform vec4 vec_clearColor;'
             + 'varying float float_fogDistance;'
             + 'varying vec2 vec_textureCoord;'
+            + 'varying vec3 vec_clearColorFragment;'
             + 'varying vec3 vec_lighting;'
-            + 'varying vec4 vec_clearColorFragment;'
             + 'varying vec4 vec_fragmentColor;'
             + 'void main(void){'
             +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
@@ -2899,12 +2899,11 @@ function webgl_shader_update(){
       webgl_properties['ambient-green'],
       webgl_properties['ambient-blue']
     );
-    webgl_buffer.uniform4f(
+    webgl_buffer.uniform3f(
       webgl_properties['shader']['clearcolor-color'],
       webgl_properties['clearcolor-red'],
       webgl_properties['clearcolor-green'],
-      webgl_properties['clearcolor-blue'],
-      1
+      webgl_properties['clearcolor-blue']
     );
     webgl_buffer.uniform3f(
       webgl_properties['shader']['directional-color'],
