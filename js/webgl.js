@@ -608,6 +608,7 @@ function webgl_cuboid(args){
 
     // Top.
     properties['translate-y'] = args['translate-y'] + half_height;
+    properties['rotate-y'] = 270;
     properties['vertices'] = [
       vertices_width, 0, -vertices_length, 1,
       -vertices_width, 0, -vertices_length, 1,
@@ -629,6 +630,7 @@ function webgl_cuboid(args){
 
     // Bottom.
     properties['rotate-x'] = 180;
+    properties['rotate-y'] = 0;
     properties['translate-y'] = args['translate-y'] - half_height;
     if(args['exclude']['bottom'] !== true){
         properties['alpha'] = args['bottom-alpha'];
@@ -688,8 +690,8 @@ function webgl_cuboid(args){
     // Left.
     properties['attach-offset-z'] = 0;
     properties['rotate-x'] = 0;
-    properties['rotate-y'] = 0;
-    properties['rotate-z'] = 90;
+    properties['rotate-y'] = 180;
+    properties['rotate-z'] = 270;
     properties['translate-x'] = args['translate-x'] - half_width;
     properties['translate-z'] = args['translate-z'];
     properties['vertices'] = [
@@ -712,7 +714,7 @@ function webgl_cuboid(args){
     }
 
     // Right.
-    properties['rotate-z'] = 270;
+    properties['rotate-y'] = 0;
     properties['translate-x'] = args['translate-x'] + half_width;
     if(args['exclude']['right'] !== true){
         properties['alpha'] = args['right-alpha'];
