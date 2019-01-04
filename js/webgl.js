@@ -2793,9 +2793,11 @@ function webgl_shader_recreate(){
       'shaders': [
         webgl_shader_create({
           'source':
-              'varying lowp vec4 vec_fragmentColor;'
+              'uniform sampler2D sampler;'
+            + 'varying lowp vec2 vec_textureCoord;'
+            + 'varying lowp vec4 vec_fragmentColor;'
             + 'void main(void){'
-            +     'gl_FragColor = vec_fragmentColor;'
+            +     'gl_FragColor = vec_fragmentColor * texture2D(sampler, vec_textureCoord);'
             + '}',
           'type': webgl_buffer.FRAGMENT_SHADER,
         }),
@@ -2811,28 +2813,29 @@ function webgl_shader_recreate(){
             + 'uniform float float_fogDensity;'
             + 'uniform mat4 mat_cameraMatrix;'
             + 'uniform mat4 mat_perspectiveMatrix;'
-            + 'uniform sampler2D sampler;'
             + 'uniform vec3 vec_ambientColor;'
             + 'uniform vec3 vec_clearColor;'
             + 'uniform vec3 vec_directionalColor;'
             + 'uniform vec3 vec_directionalVector;'
+            + 'varying vec2 vec_textureCoord;'
             + 'varying vec4 vec_fragmentColor;'
             + 'void main(void){'
             +     'gl_Position = mat_perspectiveMatrix * mat_cameraMatrix * vec_vertexPosition;'
             +     'float float_fogDistance = length(gl_Position.xyz);'
             +     'gl_PointSize = 500. / float_fogDistance;'
             +     'vec3 vec_lighting = vec_ambientColor;'
+            +     'vec_textureCoord = vec_texturePosition;'
             +     'if(directional){'
             +         'vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);'
             +         'vec_lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), 0.0);'
             +     '}'
             +     'vec_fragmentColor = (fog'
             +       '? mix('
-            +           'vec4(vec_clearColor, 1),'
+            +           'vec4(vec_clearColor, 1.0),'
             +           'vec_vertexColor,'
             +           'clamp(exp(float_fogDensity * float_fogDistance * -float_fogDistance), 0.0, 1.0)'
             +         ')'
-            +       ': vec_vertexColor) * texture2D(sampler, vec_texturePosition) * vec4(vec_lighting, 1.0) * alpha;'
+            +       ': vec_vertexColor) * vec4(vec_lighting, 1.0) * alpha;'
             + '}',
           'type': webgl_buffer.VERTEX_SHADER,
         }),
