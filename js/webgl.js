@@ -1161,16 +1161,16 @@ function webgl_entity_todo(entity){
     });
 
     let textureData = [
-      0, core_entities[entity]['texture-repeat'],
+      0, core_entities[entity]['texture-repeat-y'],
       0, 0,
-      core_entities[entity]['texture-repeat'], 0,
-      core_entities[entity]['texture-repeat'], core_entities[entity]['texture-repeat'],
+      core_entities[entity]['texture-repeat-x'], 0,
+      core_entities[entity]['texture-repeat-x'], core_entities[entity]['texture-repeat-y'],
     ];
 
     while(textureData.length < core_entities[entity]['vertices-length'] * 2){
         textureData.push(
-          core_entities[entity]['texture-repeat'],
-          core_entities[entity]['texture-repeat']
+          core_entities[entity]['texture-repeat-x'],
+          core_entities[entity]['texture-repeat-y']
         );
     }
 
@@ -1394,7 +1394,8 @@ function webgl_init(args){
         'spawn-interval-max': 100,
         'speed': .2,
         'texture-id': 'default.png',
-        'texture-repeat': 1,
+        'texture-repeat-x': 1,
+        'texture-repeat-y': 1,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
