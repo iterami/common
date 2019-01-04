@@ -646,13 +646,14 @@ function webgl_cuboid(args){
     // Front.
     properties['attach-offset-y'] = 0;
     properties['rotate-x'] = 90;
+    properties['rotate-y'] = 270;
     properties['translate-y'] = args['translate-y'];
     properties['translate-z'] = args['translate-z'] + half_length;
     properties['vertices'] = [
-      vertices_width, 0, -vertices_height, 1,
-      -vertices_width, 0, -vertices_height, 1,
-      -vertices_width, 0, vertices_height, 1,
-      vertices_width, 0, vertices_height, 1
+      vertices_height, 0, -vertices_width, 1,
+      -vertices_height, 0, -vertices_width, 1,
+      -vertices_height, 0, vertices_width, 1,
+      vertices_height, 0, vertices_width, 1
     ];
     if(args['exclude']['front'] !== true){
         properties['alpha'] = args['front-alpha'];
@@ -669,6 +670,7 @@ function webgl_cuboid(args){
 
     // Back.
     properties['rotate-x'] = 270;
+    properties['rotate-y'] = 90;
     properties['translate-z'] = args['translate-z'] - half_length;
     if(args['exclude']['back'] !== true){
         properties['alpha'] = args['back-alpha'];
@@ -686,6 +688,7 @@ function webgl_cuboid(args){
     // Left.
     properties['attach-offset-z'] = 0;
     properties['rotate-x'] = 0;
+    properties['rotate-y'] = 0;
     properties['rotate-z'] = 90;
     properties['translate-x'] = args['translate-x'] - half_width;
     properties['translate-z'] = args['translate-z'];
@@ -767,6 +770,7 @@ function webgl_cuboid_tree(args){
       'length': args['length-trunk'],
       'properties': {
         'texture-id': 'wood.png',
+        'texture-repeat-y': 2,
       },
       'prefix': args['prefix'] + '-trunk',
       'translate-x': args['translate-x'],
