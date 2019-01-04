@@ -1167,10 +1167,10 @@ function webgl_entity_todo(entity){
     });
 
     let textureData = [
-      0, core_entities[entity]['texture-repeat-y'],
-      0, 0,
-      core_entities[entity]['texture-repeat-x'], 0,
       core_entities[entity]['texture-repeat-x'], core_entities[entity]['texture-repeat-y'],
+      core_entities[entity]['texture-repeat-x'], 0,
+      0, 0,
+      0, core_entities[entity]['texture-repeat-y'],
     ];
 
     while(textureData.length < core_entities[entity]['vertices-length'] * 2){
