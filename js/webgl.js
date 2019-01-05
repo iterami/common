@@ -560,6 +560,7 @@ function webgl_cuboid(args){
         'length': 1,
         'prefix': core_id_count,
         'properties': {},
+        'random-colors': false,
         'right-alpha': 1,
         'right-collision': false,
         'right-vertex-colors': false,
@@ -619,7 +620,9 @@ function webgl_cuboid(args){
         properties['attach-offset-y'] = half_height;
         properties['collision'] = args['top-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-top';
-        properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray();
+        properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
         webgl_entity_create({
           'entities': [
             properties,
@@ -635,7 +638,9 @@ function webgl_cuboid(args){
         properties['attach-offset-y'] = -half_height;
         properties['collision'] = args['bottom-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-bottom';
-        properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray();
+        properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
         webgl_entity_create({
           'entities': [
             properties,
@@ -659,7 +664,9 @@ function webgl_cuboid(args){
         properties['attach-offset-z'] = half_length;
         properties['collision'] = args['front-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-front';
-        properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray();
+        properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
         webgl_entity_create({
           'entities': [
             properties,
@@ -675,7 +682,9 @@ function webgl_cuboid(args){
         properties['attach-offset-z'] = -half_length;
         properties['collision'] = args['back-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-back';
-        properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray();
+        properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
         webgl_entity_create({
           'entities': [
             properties,
@@ -700,7 +709,9 @@ function webgl_cuboid(args){
         properties['attach-offset-x'] = -half_width;
         properties['collision'] = args['left-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-left';
-        properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray();
+        properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
         webgl_entity_create({
           'entities': [
             properties,
@@ -716,7 +727,9 @@ function webgl_cuboid(args){
         properties['attach-offset-x'] = half_width;
         properties['collision'] = args['right-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-right';
-        properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray();
+        properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
         webgl_entity_create({
           'entities': [
             properties,
@@ -1176,9 +1189,7 @@ function webgl_entity_todo(entity){
     }
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
-      'colorData': core_entities[entity]['vertex-colors'] || webgl_vertexcolorarray({
-        'vertexcount': core_entities[entity]['vertices-length'],
-      }),
+      'colorData': core_entities[entity]['vertex-colors'],
       'normalData': core_entities[entity]['normals'],
       'textureData': textureData,
       'vertexData': core_entities[entity]['vertices'],
@@ -2924,6 +2935,7 @@ function webgl_skybox(args){
       'defaults': {
         'bottom-color-bottom': false,
         'bottom-color-top': false,
+        'random-colors': false,
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
@@ -2936,22 +2948,22 @@ function webgl_skybox(args){
 
     if(args['bottom-color-bottom'] === false){
         args['bottom-color-bottom'] = webgl_vertexcolorarray({
-          'vertexcount': 1,
+          'random-colors': args['random-colors'],
         });
     }
     if(args['bottom-color-top'] === false){
         args['bottom-color-top'] = webgl_vertexcolorarray({
-          'vertexcount': 1,
+          'random-colors': args['random-colors'],
         });
     }
     if(args['top-color-bottom'] === false){
         args['top-color-bottom'] = webgl_vertexcolorarray({
-          'vertexcount': 1,
+          'random-colors': args['random-colors'],
         });
     }
     if(args['top-color-top'] === false){
         args['top-color-top'] = webgl_vertexcolorarray({
-          'vertexcount': 1,
+          'random-colors': args['random-colors'],
         });
     }
 
@@ -3091,13 +3103,21 @@ function webgl_vertexcolorarray(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'random-colors': false,
         'rgbarray': [],
         'vertexcount': 4,
       },
     });
 
     if(args['rgbarray'].length === 0){
-        args['rgbarray'].push(core_random_rgb());
+        args['rgbarray'].push(args['random-colors']
+          ? core_random_rgb()
+          : {
+            'blue': 255,
+            'green': 255,
+            'red': 255,
+          }
+        );
     }
 
     while(args['rgbarray'].length < args['vertexcount']){
