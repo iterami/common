@@ -2908,7 +2908,7 @@ function webgl_shader_update(){
       webgl_properties['ambient-blue']
     );
     webgl_buffer.uniform3f(
-      webgl_properties['shader']['clearcolor-color'],
+      webgl_properties['shader']['clear-color'],
       webgl_properties['clearcolor-red'],
       webgl_properties['clearcolor-green'],
       webgl_properties['clearcolor-blue']
