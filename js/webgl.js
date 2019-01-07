@@ -2813,7 +2813,7 @@ function webgl_shader_recreate(){
             + 'uniform bool fog;'
             + 'uniform float float_fogDensity;'
             + 'uniform sampler2D sampler;'
-            + 'uniform vec3 vec_clearColor;'
+            + 'uniform vec4 vec_clearColor;'
             + 'varying vec2 vec_textureCoord;'
             + 'varying vec4 vec_fragmentColor;'
             + 'varying vec4 vec_lighting;'
@@ -2823,7 +2823,7 @@ function webgl_shader_recreate(){
             +     'if(fog){'
             +         'float distance = length(vec_position.xyz);'
             +         'fragment_color = mix('
-            +           'vec4(vec_clearColor, 1.0),'
+            +           'vec_clearColor,'
             +           'fragment_color,'
             +           'clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)'
             +         ');'
@@ -2907,11 +2907,12 @@ function webgl_shader_update(){
       webgl_properties['ambient-green'],
       webgl_properties['ambient-blue']
     );
-    webgl_buffer.uniform3f(
+    webgl_buffer.uniform4f(
       webgl_properties['shader']['clearcolor-color'],
       webgl_properties['clearcolor-red'],
       webgl_properties['clearcolor-green'],
-      webgl_properties['clearcolor-blue']
+      webgl_properties['clearcolor-blue'],
+      1
     );
     webgl_buffer.uniform1i(
       webgl_properties['shader']['directional'],
