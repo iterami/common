@@ -2819,7 +2819,7 @@ function webgl_shader_recreate(){
             + 'varying vec4 vec_lighting;'
             + 'varying vec4 vec_position;'
             + 'void main(void){'
-            +     'vec4 fragment_color = vec_fragmentColor * texture2D(sampler, vec_textureCoord);'
+            +     'vec4 fragment_color = vec_fragmentColor * vec_lighting * texture2D(sampler, vec_textureCoord);'
             +     'if(fog){'
             +         'float distance = length(vec_position.xyz);'
             +         'fragment_color = mix('
@@ -2828,7 +2828,7 @@ function webgl_shader_recreate(){
             +           'clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)'
             +         ');'
             +     '}'
-            +     'gl_FragColor = fragment_color * vec_lighting;'
+            +     'gl_FragColor = fragment_color;'
             + '}',
           'type': webgl_buffer.FRAGMENT_SHADER,
         }),
