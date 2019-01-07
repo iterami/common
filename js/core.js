@@ -669,6 +669,10 @@ function core_group_add(args){
     }
 
     for(let entity in args['entities']){
+        if(core_groups[args['group']][args['entities'][entity]]){
+            return;
+        }
+
         core_groups[args['group']][args['entities'][entity]] = true;
 
         core_groups['_length'][args['group']]++;
