@@ -761,6 +761,10 @@ function core_group_remove_all(args){
     });
 
     for(let group in core_groups){
+        if(group === '_length'){
+            continue;
+        }
+
         core_group_remove({
           'delete-empty': args['delete-empty'],
           'entities': args['entities'],
