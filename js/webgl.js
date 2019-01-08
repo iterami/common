@@ -745,8 +745,8 @@ function webgl_cuboid_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'collision-leaves': false,
-        'collision-trunk': false,
+        'collision-leaves': true,
+        'collision-trunk': true,
         'height-leaves': 10,
         'height-trunk': 10,
         'length-leaves': 10,
@@ -1379,7 +1379,7 @@ function webgl_init(args){
         'collide-range-horizontal': 2,
         'collide-range-vertical': 3,
         'collides': false,
-        'collision': false,
+        'collision': true,
         'draw': true,
         'draw-type': 'TRIANGLE_FAN',
         'gravity': false,
@@ -2984,6 +2984,7 @@ function webgl_skybox(args){
 
     // Top half.
     let properties = {
+      'collision': false,
       'draw-type': 'TRIANGLE_FAN',
       'groups': [
         'skybox',
