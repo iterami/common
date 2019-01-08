@@ -532,6 +532,11 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
+        // Parse camera-zoom-max.
+        if(strcmp(json_object->name->string, "camera-zoom-max") == 0){
+            json_object = json_object->next;
+        }
+
         // Parse characters.
         if(strcmp(json_object->name->string, "characters") == 0){
             json_object = json_object->next;

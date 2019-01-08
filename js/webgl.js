@@ -92,7 +92,7 @@ function webgl_camera_handle(){
         }
 
         webgl_camera_rotate({
-          'character': webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
+          'character': webgl_properties['camera-zoom-max'] === 0
             || (core_mouse['down-2']
               && webgl_characters[webgl_character_id]['health-current'] > 0),
           'x': core_mouse['movement-y'] / 10,
@@ -164,14 +164,14 @@ function webgl_camera_zoom(event){
 
     let character = webgl_characters[webgl_character_id];
     if(event.deltaY > 0){
-        character['camera-zoom-current'] = Math.min(
-          character['camera-zoom-current'] + 1,
-          character['camera-zoom-max']
+        character['camera-zoom'] = Math.min(
+          character['camera-zoom'] + 1,
+          webgl_properties['camera-zoom-max']
         );
 
     }else{
-        character['camera-zoom-current'] = Math.max(
-          character['camera-zoom-current'] - 1,
+        character['camera-zoom'] = Math.max(
+          character['camera-zoom'] - 1,
           0
         );
     }
@@ -858,7 +858,7 @@ function webgl_draw(){
         );
     }
 
-    if(webgl_characters[webgl_character_id]['camera-zoom-current'] === 0){
+    if(webgl_characters[webgl_character_id]['camera-zoom'] === 0){
         webgl_canvas.fillStyle = '#fff';
         webgl_canvas.fillRect(
           webgl_properties['canvas']['width-half'] - 1,
@@ -1210,6 +1210,7 @@ function webgl_init(args){
         'ambient-blue': 1,
         'ambient-green': 1,
         'ambient-red': 1,
+        'camera-zoom-max': 50,
         'clearcolor-blue': 0,
         'clearcolor-green': 0,
         'clearcolor-red': 0,
@@ -1241,6 +1242,7 @@ function webgl_init(args){
       'ambient-green': args['ambient-green'],
       'ambient-red': args['ambient-red'],
       'attributes': {},
+      'camera-zoom-max': args['camera-zoom-max'],
       'canvas': {
         'fillStyle': '#fff',
         'font': webgl_fonts['medium'],
@@ -1438,8 +1440,7 @@ function webgl_init_character(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'camera-zoom-current': 20,
-        'camera-zoom-max': 50,
+        'camera-zoom': webgl_properties['camera-zoom-max'],
         'change': {},
         'collide-range-horizontal': 2,
         'collide-range-vertical': 3,
@@ -1474,8 +1475,7 @@ function webgl_init_character(args){
       'camera-x': 0,
       'camera-y': 0,
       'camera-z': 0,
-      'camera-zoom-current': args['camera-zoom-current'],
-      'camera-zoom-max': args['camera-zoom-max'],
+      'camera-zoom': args['camera-zoom'],
       'collide-range-horizontal': args['collide-range-horizontal'],
       'collide-range-vertical': args['collide-range-vertical'],
       'collides': args['collides'],
@@ -1844,13 +1844,13 @@ function webgl_level_init(args){
 
     if(args['character'] === -1){
         webgl_init_character({
-          'camera-zoom-current': 0,
-          'camera-zoom-max': 0,
+          'camera-zoom': 0,
           'entities': [],
           'id': webgl_character_id,
         });
         webgl_character_homebase['entities'] = {};
         webgl_character_homebase['properties'] = {};
+        webgl_properties['camera-zoom-max'] = 0;
     }
 
     if(args['json']['characters']
@@ -2041,7 +2041,7 @@ function webgl_logicloop(){
         let leftright = 0;
 
         if(core_keys[core_storage_data['move-←']]['state']){
-            if(webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
+            if(webgl_properties['camera-zoom-max'] === 0
               || core_mouse['down-2']){
                 leftright -= 1;
 
@@ -2054,7 +2054,7 @@ function webgl_logicloop(){
         }
 
         if(core_keys[core_storage_data['move-→']]['state']){
-            if(webgl_characters[webgl_character_id]['camera-zoom-max'] === 0
+            if(webgl_properties['camera-zoom-max'] === 0
               || core_mouse['down-2']){
                 leftright += 1;
 
@@ -2294,12 +2294,12 @@ function webgl_logicloop(){
         webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
         webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
 
-        if(webgl_characters[character]['camera-zoom-current'] > 0){
+        if(webgl_characters[character]['camera-zoom'] > 0){
             let cos = Math.cos(webgl_characters[character]['camera-rotate-radians-x']);
 
-            webgl_characters[character]['camera-x'] += Math.sin(-webgl_characters[character]['camera-rotate-radians-y']) * webgl_characters[character]['camera-zoom-current'] * cos;
-            webgl_characters[character]['camera-y'] += Math.sin(webgl_characters[character]['camera-rotate-radians-x']) * webgl_characters[character]['camera-zoom-current'];
-            webgl_characters[character]['camera-z'] += Math.cos(webgl_characters[character]['camera-rotate-radians-y']) * webgl_characters[character]['camera-zoom-current'] * cos;
+            webgl_characters[character]['camera-x'] += Math.sin(-webgl_characters[character]['camera-rotate-radians-y']) * webgl_characters[character]['camera-zoom'] * cos;
+            webgl_characters[character]['camera-y'] += Math.sin(webgl_characters[character]['camera-rotate-radians-x']) * webgl_characters[character]['camera-zoom'];
+            webgl_characters[character]['camera-z'] += Math.cos(webgl_characters[character]['camera-rotate-radians-y']) * webgl_characters[character]['camera-zoom'] * cos;
         }
     }
 
