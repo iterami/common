@@ -2379,23 +2379,15 @@ function webgl_logicloop_handle_entity(entity){
             let entity_translate_z = core_entities[entity]['translate-z'] - core_entities[entity]['attach-offset-z'];
 
             let path = webgl_paths[core_entities[entity]['path-id']];
-            let point = {};
-            Object.assign(
-              point,
-              path['points'][core_entities[entity]['path-point']]
-            );
-            if(point['speed'] === void 0){
-                point['speed'] = 1;
-            }
-            if(point['translate-x'] === void 0){
-                point['translate-x'] = entity_translate_x;
-            }
-            if(point['translate-y'] === void 0){
-                point['translate-y'] = entity_translate_y;
-            }
-            if(point['translate-z'] === void 0){
-                point['translate-z'] = entity_translate_z;
-            }
+            let point = core_handle_defaults({
+              'default': {
+                'speed': 1,
+                'translate-x': entity_translate_x,
+                'translate-y': entity_translate_y,
+                'translate-z': entity_translate_z,
+              },
+              'var': path['points'][core_entities[entity]['path-point']],
+            });
 
             let angle_xz = core_point_angle({
               'x0': entity_translate_x,
