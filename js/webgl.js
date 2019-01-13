@@ -2384,6 +2384,9 @@ function webgl_logicloop_handle_entity(entity){
               point,
               path['points'][core_entities[entity]['path-point']]
             );
+            if(point['speed'] === void 0){
+                point['speed'] = 1;
+            }
             if(point['translate-x'] === void 0){
                 point['translate-x'] = entity_translate_x;
             }
@@ -2407,14 +2410,16 @@ function webgl_logicloop_handle_entity(entity){
               'y1': point['translate-y'],
             });
 
+            let speed = core_entities[entity]['speed'] * point['speed'];
+
             core_entities[entity]['change']['translate-x'] = core_round({
-              'number': Math.cos(angle_xz) * Math.cos(angle_y) * core_entities[entity]['speed'],
+              'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
             });
             core_entities[entity]['change']['translate-y'] = core_round({
-              'number': Math.sin(angle_y) * core_entities[entity]['speed'],
+              'number': Math.sin(angle_y) * speed,
             });
             core_entities[entity]['change']['translate-z'] = core_round({
-              'number': Math.sin(angle_xz) * Math.cos(angle_y) * core_entities[entity]['speed'],
+              'number': Math.sin(angle_xz) * Math.cos(angle_y) * speed,
             });
 
             if(entity_translate_x > point['translate-x']){
