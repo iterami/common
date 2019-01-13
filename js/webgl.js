@@ -2432,6 +2432,13 @@ function webgl_logicloop_handle_entity(entity){
                 'y1': point['translate-y'],
                 'z1': point['translate-z'],
               }) < core_entities[entity]['collide-range-horizontal']){
+                core_entities[entity]['change']['translate-x'] = 0;
+                core_entities[entity]['change']['translate-y'] = 0;
+                core_entities[entity]['change']['translate-z'] = 0;
+                core_entities[entity]['translate-x'] = point['translate-x'] + core_entities[entity]['attach-offset-x'];
+                core_entities[entity]['translate-y'] = point['translate-y'] + core_entities[entity]['attach-offset-y'];
+                core_entities[entity]['translate-z'] = point['translate-z'] + core_entities[entity]['attach-offset-z'];
+
                 if(core_entities[entity]['path-direction'] > 0){
                     if(core_entities[entity]['path-point'] >= path['points'].length - 1){
                         let end = core_entities[entity]['path-end'] !== false
