@@ -279,7 +279,10 @@ function webgl_character_origin(args){
     webgl_characters[args['character']]['camera-rotate-x'] = 0;
     webgl_characters[args['character']]['camera-rotate-y'] = 0;
     webgl_characters[args['character']]['camera-rotate-z'] = 0;
-    webgl_characters[args['character']]['camera-zoom'] = webgl_properties['camera-zoom-max'];
+    webgl_characters[args['character']]['camera-zoom'] = Math.min(
+      webgl_characters[args['character']]['camera-zoom'],
+      webgl_properties['camera-zoom-max']
+    );
     webgl_characters[args['character']]['change'] = {
       'translate-x': 0,
       'translate-y': 0,
@@ -1441,7 +1444,7 @@ function webgl_init_character(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'camera-zoom': 0,
+        'camera-zoom': 50,
         'change': {},
         'collide-range-horizontal': 2,
         'collide-range-vertical': 3,
