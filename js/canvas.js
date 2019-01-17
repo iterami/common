@@ -151,7 +151,7 @@ function canvas_init(args){
       'properties': {
         'clearColor': '#000',
         'fillStyle': '#fff',
-        'font': canvas_fonts['medium'],
+        'font': '200% monospace',
         'height': 0,
         'lineJoin': 'miter',
         'lineWidth': 1,
@@ -308,9 +308,4 @@ function canvas_setproperties(args){
 
 window.canvas_buffer = 0;
 window.canvas_canvas = 0;
-window.canvas_fonts = {
-  'big': '300% monospace',
-  'medium': '200% monospace',
-  'small': '100% monospace',
-};
 window.canvas_properties = {};

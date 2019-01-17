@@ -1249,7 +1249,7 @@ function webgl_init(args){
       'camera-zoom-max': args['camera-zoom-max'],
       'canvas': {
         'fillStyle': '#fff',
-        'font': webgl_fonts['medium'],
+        'font': '200% monospace',
         'height': 0,
         'height-half': 0,
         'lineJoin': 'miter',
@@ -3159,11 +3159,6 @@ function webgl_vertexcolorarray(args){
 
 window.webgl_buffer = 0;
 window.webgl_canvas = 0;
-window.webgl_fonts = {
-  'big': '300% monospace',
-  'medium': '200% monospace',
-  'small': '100% monospace',
-};
 window.webgl_character_count = 0;
 window.webgl_character_homebase = {};
 window.webgl_character_id = '_me';
