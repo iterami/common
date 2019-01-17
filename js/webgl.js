@@ -1316,7 +1316,7 @@ function webgl_init(args){
     core_matrices['perspective'] = core_matrix_create();
 
     webgl_buffer = document.getElementById('buffer').getContext(
-      'webgl',
+      'webgl2',
       {
         'alpha': false,
         'antialias': true,
