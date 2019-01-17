@@ -272,7 +272,9 @@ function webgl_character_origin(args){
         return;
     }
 
-    webgl_entity_move_to();
+    webgl_entity_move_to({
+      'character': args['character'],
+    });
     webgl_characters[args['character']]['camera-rotate-radians-x'] = 0;
     webgl_characters[args['character']]['camera-rotate-radians-y'] = 0;
     webgl_characters[args['character']]['camera-rotate-radians-z'] = 0;
@@ -312,15 +314,18 @@ function webgl_character_spawn(args){
       'character': args['character'],
     });
     webgl_entity_move_to({
+      'character': args['character'],
       'x': webgl_properties['spawn-translate-x'],
       'y': webgl_properties['spawn-translate-y'],
       'z': webgl_properties['spawn-translate-z'],
     });
-    webgl_camera_rotate({
-      'x': webgl_properties['spawn-rotate-x'],
-      'y': webgl_properties['spawn-rotate-y'],
-      'z': webgl_properties['spawn-rotate-z'],
-    });
+    if(args['character'] === webgl_character_id){
+        webgl_camera_rotate({
+          'x': webgl_properties['spawn-rotate-x'],
+          'y': webgl_properties['spawn-rotate-y'],
+          'z': webgl_properties['spawn-rotate-z'],
+        });
+    }
 
     webgl_characters[args['character']]['jump-allow'] = false;
 }
