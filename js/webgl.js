@@ -1297,21 +1297,6 @@ function webgl_init(args){
       'spawn-translate-z': args['spawn-translate-z'],
     };
 
-    webgl_diagonal = Math.sin(core_degrees_to_radians({
-      'degrees': 45,
-    })) / Math.sin(core_degrees_to_radians({
-      'degrees': 90,
-    }));
-
-    webgl_paths = {};
-    for(let path in args['paths']){
-        webgl_paths[path] = {};
-        Object.assign(
-          webgl_paths[path],
-          args['paths'][path]
-        );
-    }
-
     core_html({
       'parent': document.body,
       'properties': {
@@ -1438,6 +1423,16 @@ function webgl_init(args){
       },
       'type': 'webgl',
     });
+
+    webgl_diagonal = Math.sin(core_degrees_to_radians({
+      'degrees': 45,
+    })) / Math.sin(core_degrees_to_radians({
+      'degrees': 90,
+    }));
+    Object.assign(
+      webgl_paths,
+      args['paths']
+    );
 
     core_interval_modify({
       'id': 'webgl-interval',
