@@ -1207,6 +1207,18 @@ function webgl_entity_todo(entity){
     });
 }
 
+// Required args: id
+function webgl_extension(args){
+    let extension = webgl_buffer.getExtension(args['id']);
+    let result = extension !== null;
+
+    if(result){
+        webgl_extensions[args['id']] = extension;
+    }
+
+    return result;
+}
+
 function webgl_init(args){
     args = core_args({
       'args': args,
@@ -3165,6 +3177,7 @@ window.webgl_character_id = '_me';
 window.webgl_character_trading = '';
 window.webgl_characters = {};
 window.webgl_diagonal = 0;
+window.webgl_extensions = {};
 window.webgl_paths = {};
 window.webgl_properties = {};
 window.webgl_text = {};
