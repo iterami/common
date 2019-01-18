@@ -1214,11 +1214,18 @@ function webgl_entity_todo(entity){
 
 // Required args: id
 function webgl_extension(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'label': args['id'],
+      },
+    });
+
     let extension = webgl_buffer.getExtension(args['id']);
     let result = extension !== null;
 
     if(result){
-        webgl_extensions[args['id']] = extension;
+        webgl_extensions[args['label']] = extension;
     }
 
     return result;
