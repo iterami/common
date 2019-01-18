@@ -1446,6 +1446,12 @@ function webgl_init(args){
       args['paths']
     );
 
+    // Init extensions.
+    webgl_extension({
+      'id': 'EXT_texture_filter_anisotropic',
+      'label': 'anisotropic',
+    });
+
     core_interval_modify({
       'id': 'webgl-interval',
       'paused': true,
@@ -3111,12 +3117,17 @@ function webgl_texture_set(args){
     webgl_buffer.texParameteri(
       webgl_buffer.TEXTURE_2D,
       webgl_buffer.TEXTURE_MAG_FILTER,
-      webgl_buffer.NEAREST
+      webgl_buffer.LINEAR
     );
     webgl_buffer.texParameteri(
       webgl_buffer.TEXTURE_2D,
       webgl_buffer.TEXTURE_MIN_FILTER,
-      webgl_buffer.NEAREST_MIPMAP_LINEAR
+      webgl_buffer.LINEAR_MIPMAP_LINEAR
+    );
+    webgl_buffer.texParameterf(
+      webgl_buffer.TEXTURE_2D,
+      webgl_extensions['anisotropic'].TEXTURE_MAX_ANISOTROPY_EXT,
+      webgl_buffer.getParameter(webgl_extensions['anisotropic'].MAX_TEXTURE_MAX_ANISOTROPY_EXT)
     );
 
     webgl_buffer.generateMipmap(webgl_buffer.TEXTURE_2D);
