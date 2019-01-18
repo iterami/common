@@ -3156,10 +3156,10 @@ function webgl_vertexcolorarray(args){
         args['rgbarray'].push(args['random-colors']
           ? core_random_rgb()
           : {
-            'blue': 255,
-            'green': 255,
-            'red': 255,
-          }
+              'blue': 255,
+              'green': 255,
+              'red': 255,
+            }
         );
     }
 
