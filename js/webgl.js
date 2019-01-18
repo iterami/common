@@ -379,12 +379,12 @@ function webgl_collision(args){
         if(target['normals'][0] === 1
           && (collider['change']['translate-x'] < 0
             || target['change']['translate-x'] > 0)){
-            if(collider['translate-x'] >= target['translate-x']
-              && collider['translate-x'] <= target['translate-x'] + range['x']
+            if(collider['translate-x'] > target['translate-x']
+              && collider['translate-x'] < target['translate-x'] + range['x']
               && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - range['y']
               && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + range['y']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - range['z']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + range['z']){
+              && collider['translate-z'] > target['translate-z'] + target['vertices'][2] - range['z']
+              && collider['translate-z'] < target['translate-z'] + target['vertices'][10] + range['z']){
                 collision = 'x';
                 collider['change']['translate-x'] = target['change']['translate-x'];
             }
@@ -392,29 +392,28 @@ function webgl_collision(args){
         }else if(target['normals'][0] === -1
           && (collider['change']['translate-x'] > 0
             || target['change']['translate-x'] < 0)){
-            if(collider['translate-x'] >= target['translate-x'] - range['x']
-              && collider['translate-x'] <= target['translate-x']
+            if(collider['translate-x'] > target['translate-x'] - range['x']
+              && collider['translate-x'] < target['translate-x']
               && collider['translate-y'] > target['translate-y'] + target['vertices'][4] - range['y']
               && collider['translate-y'] < target['translate-y'] + target['vertices'][0] + range['y']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - range['z']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + range['z']){
+              && collider['translate-z'] > target['translate-z'] + target['vertices'][2] - range['z']
+              && collider['translate-z'] < target['translate-z'] + target['vertices'][10] + range['z']){
                 collision = 'x';
                 collision_sign = -1;
                 collider['change']['translate-x'] = target['change']['translate-x'];
             }
         }
-    }
 
-    if(target['normals'][1] !== 0){
+    }else if(target['normals'][1] !== 0){
         if(target['normals'][1] === 1
           && (collider['change']['translate-y'] < 0
             || target['change']['translate-y'] > 0)){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - range['x']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + range['x']
-              && collider['translate-y'] >= target['translate-y']
-              && collider['translate-y'] <= target['translate-y'] + range['y']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - range['z']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + range['z']){
+            if(collider['translate-x'] > target['translate-x'] + target['vertices'][4] - range['x']
+              && collider['translate-x'] < target['translate-x'] + target['vertices'][0] + range['x']
+              && collider['translate-y'] > target['translate-y']
+              && collider['translate-y'] < target['translate-y'] + range['y']
+              && collider['translate-z'] > target['translate-z'] + target['vertices'][2] - range['z']
+              && collider['translate-z'] < target['translate-z'] + target['vertices'][10] + range['z']){
                 collision = 'y';
                 collider['change']['translate-y'] = target['change']['translate-y'];
             }
@@ -422,29 +421,28 @@ function webgl_collision(args){
         }else if(target['normals'][1] === -1
           && (collider['change']['translate-y'] > 0
             || target['change']['translate-y'] < 0)){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - range['x']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + range['x']
-              && collider['translate-y'] >= target['translate-y'] - range['y']
-              && collider['translate-y'] <= target['translate-y']
-              && collider['translate-z'] >= target['translate-z'] + target['vertices'][2] - range['z']
-              && collider['translate-z'] <= target['translate-z'] + target['vertices'][10] + range['z']){
+            if(collider['translate-x'] > target['translate-x'] + target['vertices'][4] - range['x']
+              && collider['translate-x'] < target['translate-x'] + target['vertices'][0] + range['x']
+              && collider['translate-y'] > target['translate-y'] - range['y']
+              && collider['translate-y'] < target['translate-y']
+              && collider['translate-z'] > target['translate-z'] + target['vertices'][2] - range['z']
+              && collider['translate-z'] < target['translate-z'] + target['vertices'][10] + range['z']){
                 collision = 'y';
                 collision_sign = -1;
                 collider['change']['translate-y'] = target['change']['translate-y'];
             }
         }
-    }
 
-    if(target['normals'][2] !== 0){
+    }else if(target['normals'][2] !== 0){
         if(target['normals'][2] === 1
           && (collider['change']['translate-z'] < 0
             || target['change']['translate-z'] > 0)){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - range['x']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + range['x']
+            if(collider['translate-x'] > target['translate-x'] + target['vertices'][4] - range['x']
+              && collider['translate-x'] < target['translate-x'] + target['vertices'][0] + range['x']
               && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - range['y']
               && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + range['y']
-              && collider['translate-z'] >= target['translate-z']
-              && collider['translate-z'] <= target['translate-z'] + range['z']){
+              && collider['translate-z'] > target['translate-z']
+              && collider['translate-z'] < target['translate-z'] + range['z']){
                 collision = 'z';
                 collider['change']['translate-z'] = target['change']['translate-z'];
             }
@@ -452,12 +450,12 @@ function webgl_collision(args){
         }else if(target['normals'][2] === -1
           && (collider['change']['translate-z'] > 0
             || target['change']['translate-z'] < 0)){
-            if(collider['translate-x'] >= target['translate-x'] + target['vertices'][4] - range['x']
-              && collider['translate-x'] <= target['translate-x'] + target['vertices'][0] + range['x']
+            if(collider['translate-x'] > target['translate-x'] + target['vertices'][4] - range['x']
+              && collider['translate-x'] < target['translate-x'] + target['vertices'][0] + range['x']
               && collider['translate-y'] > target['translate-y'] + target['vertices'][2] - range['y']
               && collider['translate-y'] < target['translate-y'] + target['vertices'][10] + range['y']
-              && collider['translate-z'] >= target['translate-z'] - range['z']
-              && collider['translate-z'] <= target['translate-z']){
+              && collider['translate-z'] > target['translate-z'] - range['z']
+              && collider['translate-z'] < target['translate-z']){
                 collision = 'z';
                 collision_sign = -1;
                 collider['change']['translate-z'] = target['change']['translate-z'];
