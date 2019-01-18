@@ -5,15 +5,17 @@ function core_ajax(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'data': core_ajax_properties['data'],
-        'type': core_ajax_properties['type'],
+        'data': null,
+        'readyState': 4,
+        'status': 200,
+        'type': 'GET',
       },
     });
 
     let ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function(){
-        if(this.readyState === core_ajax_properties['readyState']
-          && this.status === core_ajax_properties['status']){
+        if(this.readyState === args['readyState']
+          && this.status === args['status']){
             args['todo'](this.responseText);
         }
     };
@@ -2440,12 +2442,6 @@ function core_uri(args){
     );
 }
 
-window.core_ajax_properties = {
-  'data': null,
-  'readyState': 4,
-  'status': 200,
-  'type': 'GET',
-};
 window.core_audio = {};
 window.core_audio_context = 0;
 window.core_audio_sources = {};
