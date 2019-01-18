@@ -1486,6 +1486,7 @@ function webgl_init_character(args){
         'rotate-z': 0,
         'speed': .2,
         'talk': false,
+        'talk-range': 15,
         'trade': [],
         'translate-x': 0,
         'translate-y': 0,
@@ -1524,6 +1525,7 @@ function webgl_init_character(args){
       'rotate-z': args['rotate-z'],
       'speed': args['speed'],
       'talk': args['talk'],
+      'talk-range': args['talk-range'],
       'trade': args['trade'],
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
@@ -2183,7 +2185,7 @@ function webgl_logicloop(){
                 'x1': webgl_characters[character]['translate-x'],
                 'y1': webgl_characters[character]['translate-y'],
                 'z1': webgl_characters[character]['translate-z'],
-              }) < 15){
+              }) < webgl_characters[character]['talk-range']){
                 if(webgl_characters[character]['talk'] !== false){
                     npc_talk = webgl_characters[character]['talk'];
                 }
