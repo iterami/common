@@ -1679,7 +1679,7 @@ function core_random_boolean(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'chance': core_random_boolean_chance,
+        'chance': .5,
       },
     });
 
@@ -1700,7 +1700,7 @@ function core_random_integer(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'max': core_random_integer_max,
+        'max': 100,
         'todo': 'floor',
       },
     });
@@ -1748,8 +1748,8 @@ function core_random_string(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'characters': core_random_string_characters,
-        'length': core_random_string_length,
+        'characters': '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        'length': 100,
       },
     });
 
@@ -2466,10 +2466,6 @@ window.core_mode = 0;
 window.core_mouse = {};
 window.core_number_formatter = false;
 window.core_radian = 180 / Math.PI;
-window.core_random_boolean_chance = .5;
-window.core_random_integer_max = 100;
-window.core_random_string_characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-window.core_random_string_length = 100;
 window.core_repo_title = '';
 window.core_storage_data = {};
 window.core_storage_info = {};
