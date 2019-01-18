@@ -1265,10 +1265,50 @@ function webgl_init(args){
       },
     });
 
+    core_html({
+      'parent': document.body,
+      'properties': {
+        'id': 'canvas',
+      },
+      'type': 'canvas',
+    });
+    core_html({
+      'parent': document.body,
+      'properties': {
+        'id': 'buffer',
+      },
+      'type': 'canvas',
+    });
+
+    webgl_buffer = document.getElementById('buffer').getContext(
+      'webgl2',
+      {
+        'alpha': false,
+        'antialias': true,
+        'depth': true,
+        'premultipliedAlpha': false,
+        'preserveDrawingBuffer': false,
+        'stencil': false,
+      }
+    );
+    webgl_canvas = document.getElementById('canvas').getContext(
+      '2d',
+      {
+        'alpha': false,
+      }
+    );
+
+    // Init extensions.
+    webgl_extension({
+      'id': 'EXT_texture_filter_anisotropic',
+      'label': 'anisotropic',
+    });
+
     webgl_properties = {
       'ambient-blue': args['ambient-blue'],
       'ambient-green': args['ambient-green'],
       'ambient-red': args['ambient-red'],
+      'anisotropic': webgl_buffer.getParameter(webgl_extensions['anisotropic'].MAX_TEXTURE_MAX_ANISOTROPY_EXT),
       'attributes': {},
       'camera-zoom-max': args['camera-zoom-max'],
       'canvas': {
@@ -1309,41 +1349,8 @@ function webgl_init(args){
       'spawn-translate-z': args['spawn-translate-z'],
     };
 
-    core_html({
-      'parent': document.body,
-      'properties': {
-        'id': 'canvas',
-      },
-      'type': 'canvas',
-    });
-    core_html({
-      'parent': document.body,
-      'properties': {
-        'id': 'buffer',
-      },
-      'type': 'canvas',
-    });
-
     core_matrices['camera'] = core_matrix_create();
     core_matrices['perspective'] = core_matrix_create();
-
-    webgl_buffer = document.getElementById('buffer').getContext(
-      'webgl2',
-      {
-        'alpha': false,
-        'antialias': true,
-        'depth': true,
-        'premultipliedAlpha': false,
-        'preserveDrawingBuffer': false,
-        'stencil': false,
-      }
-    );
-    webgl_canvas = document.getElementById('canvas').getContext(
-      '2d',
-      {
-        'alpha': false,
-      }
-    );
 
     window.onresize = webgl_resize;
     webgl_resize();
@@ -1445,12 +1452,6 @@ function webgl_init(args){
       webgl_paths,
       args['paths']
     );
-
-    // Init extensions.
-    webgl_extension({
-      'id': 'EXT_texture_filter_anisotropic',
-      'label': 'anisotropic',
-    });
 
     core_interval_modify({
       'id': 'webgl-interval',
@@ -3117,7 +3118,7 @@ function webgl_texture_set(args){
     webgl_buffer.texParameterf(
       webgl_buffer.TEXTURE_2D,
       webgl_extensions['anisotropic'].TEXTURE_MAX_ANISOTROPY_EXT,
-      webgl_buffer.getParameter(webgl_extensions['anisotropic'].MAX_TEXTURE_MAX_ANISOTROPY_EXT)
+      webgl_properties['anisotropic']
     );
 
     webgl_buffer.generateMipmap(webgl_buffer.TEXTURE_2D);
