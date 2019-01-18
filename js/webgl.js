@@ -3114,16 +3114,6 @@ function webgl_texture_set(args){
       core_images[args['texture']]
     );
 
-    webgl_buffer.texParameteri(
-      webgl_buffer.TEXTURE_2D,
-      webgl_buffer.TEXTURE_MAG_FILTER,
-      webgl_buffer.LINEAR
-    );
-    webgl_buffer.texParameteri(
-      webgl_buffer.TEXTURE_2D,
-      webgl_buffer.TEXTURE_MIN_FILTER,
-      webgl_buffer.LINEAR_MIPMAP_LINEAR
-    );
     webgl_buffer.texParameterf(
       webgl_buffer.TEXTURE_2D,
       webgl_extensions['anisotropic'].TEXTURE_MAX_ANISOTROPY_EXT,
