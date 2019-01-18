@@ -92,7 +92,7 @@ function core_audio_node_create(args){
       },
     });
 
-    if(core_audio_context === 0){
+    if(core_audio_context === false){
         core_audio_context = new window.AudioContext();
     }
 
@@ -146,7 +146,7 @@ function core_audio_onended(args){
 
 // Required args: id
 function core_audio_source_create(args){
-    if(core_audio_context === 0){
+    if(core_audio_context === false){
         core_audio_context = new window.AudioContext();
     }
 
@@ -2443,7 +2443,7 @@ function core_uri(args){
 }
 
 window.core_audio = {};
-window.core_audio_context = 0;
+window.core_audio_context = false;
 window.core_audio_sources = {};
 window.core_degree = Math.PI / 180;
 window.core_entities = {};
