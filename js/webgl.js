@@ -2559,32 +2559,6 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
-    if(core_entities[entity]['attach-to'] !== false
-      && core_entities[entity]['billboard'] === false){
-        if(core_entities[entity]['attach-type'] === 'character'){
-            if(!core_groups['skybox'][entity]){
-                core_matrix_rotate({
-                  'dimensions': [
-                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-x'],
-                    -webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-y'],
-                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-z'],
-                  ],
-                  'id': entity,
-                });
-            }
-
-        }else{
-            core_matrix_rotate({
-              'dimensions': [
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-x'],
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-y'],
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-z'],
-              ],
-              'id': entity,
-            });
-        }
-    }
-
     if(core_entities[entity]['spawn-entity'] !== false){
         core_entities[entity]['spawn-interval-current']++;
 
@@ -2615,6 +2589,31 @@ function webgl_logicloop_handle_entity(entity){
       ],
       'id': entity,
     });
+    if(core_entities[entity]['attach-to'] !== false
+      && core_entities[entity]['billboard'] === false){
+        if(core_entities[entity]['attach-type'] === 'character'){
+            if(!core_groups['skybox'][entity]){
+                core_matrix_rotate({
+                  'dimensions': [
+                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-x'],
+                    -webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-y'],
+                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-z'],
+                  ],
+                  'id': entity,
+                });
+            }
+
+        }else{
+            core_matrix_rotate({
+              'dimensions': [
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-x'],
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-y'],
+                core_entities[core_entities[entity]['attach-to']]['rotate-radians-z'],
+              ],
+              'id': entity,
+            });
+        }
+    }
     core_matrix_rotate({
       'dimensions': [
         core_entities[entity]['rotate-radians-x'],
