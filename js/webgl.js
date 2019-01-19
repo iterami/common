@@ -2559,18 +2559,6 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
-    core_matrix_clone({
-      'id': 'camera',
-      'to': entity,
-    });
-    core_matrix_translate({
-      'dimensions': [
-        -core_entities[entity]['translate-x'],
-        -core_entities[entity]['translate-y'],
-        -core_entities[entity]['translate-z'],
-      ],
-      'id': entity,
-    });
     if(core_entities[entity]['attach-to'] !== false
       && core_entities[entity]['billboard'] === false){
         if(core_entities[entity]['attach-type'] === 'character'){
@@ -2595,16 +2583,7 @@ function webgl_logicloop_handle_entity(entity){
               'id': entity,
             });
         }
-
     }
-    core_matrix_rotate({
-      'dimensions': [
-        core_entities[entity]['rotate-radians-x'],
-        core_entities[entity]['rotate-radians-y'],
-        core_entities[entity]['rotate-radians-z'],
-      ],
-      'id': entity,
-    });
 
     if(core_entities[entity]['spawn-entity'] !== false){
         core_entities[entity]['spawn-interval-current']++;
@@ -2623,6 +2602,27 @@ function webgl_logicloop_handle_entity(entity){
             });
         }
     }
+
+    core_matrix_clone({
+      'id': 'camera',
+      'to': entity,
+    });
+    core_matrix_translate({
+      'dimensions': [
+        -core_entities[entity]['translate-x'],
+        -core_entities[entity]['translate-y'],
+        -core_entities[entity]['translate-z'],
+      ],
+      'id': entity,
+    });
+    core_matrix_rotate({
+      'dimensions': [
+        core_entities[entity]['rotate-radians-x'],
+        core_entities[entity]['rotate-radians-y'],
+        core_entities[entity]['rotate-radians-z'],
+      ],
+      'id': entity,
+    });
 }
 
 function webgl_normals(args){
