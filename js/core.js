@@ -2043,8 +2043,8 @@ function core_storage_add(args){
             core_storage_data[key] = core_storage_info[key]['default'];
         }
 
-        core_storage_data[key] = core_storage_type_convert({
-          'key': key,
+        core_storage_data[key] = core_type_convert({
+          'template': core_storage_info[key]['default'],
           'value': core_storage_data[key],
         });
     }
@@ -2084,8 +2084,8 @@ function core_storage_save(){
           'key': key,
         })];
 
-        let data = core_storage_type_convert({
-          'key': key,
+        let data = core_type_convert({
+          'template': core_storage_info[key]['default'],
           'value': core_storage_data[key],
         });
         core_storage_data[key] = data;
@@ -2105,32 +2105,6 @@ function core_storage_save(){
     }
 
     core_keys_rebind();
-}
-
-// Required args: key, value
-function core_storage_type_convert(args){
-    let core_storage_default = core_storage_info[args['key']]['default'];
-
-    if(core_type({
-        'type': 'string',
-        'var': core_storage_default,
-      })){
-        return args['value'];
-
-    }else if(!Number.isNaN(Number.parseFloat(core_storage_default))){
-        return Number.parseFloat(args['value']);
-
-    }else if(core_type({
-        'type': 'boolean',
-        'var': core_storage_default,
-      }) && !core_type({
-        'type': 'boolean',
-        'var': args['value'],
-      })){
-        return args['value'] === 'true';
-    }
-
-    return args['value'];
 }
 
 function core_storage_update(){
@@ -2394,6 +2368,30 @@ function core_type(args){
     }
 
     return typeof args['var'] === args['type'];
+}
+
+// Required args: template, value
+function core_type_convert(args){
+    if(core_type({
+        'type': 'string',
+        'var': args['template'],
+      })){
+        return args['value'];
+
+    }else if(!Number.isNaN(Number.parseFloat(args['template']))){
+        return Number.parseFloat(args['value']);
+
+    }else if(core_type({
+        'type': 'boolean',
+        'var': args['template'],
+      }) && !core_type({
+        'type': 'boolean',
+        'var': args['value'],
+      })){
+        return args['value'] === 'true';
+    }
+
+    return args['value'];
 }
 
 function core_ui_update(args){
