@@ -948,7 +948,7 @@ function core_handle_keyup(event){
 function core_handle_mousedown(event){
     if((core_menu_open
         && core_menu_block_events)
-      || event['target'].id === 'core-toggle'){
+      || event['target'].type === 'button'){
         return;
     }
 
