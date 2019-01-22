@@ -276,7 +276,10 @@ function core_clamp(args){
         );
     }
 
-    return args['value'];
+    return core_round({
+      'decimals': args['decimals'],
+      'number': args['value'],
+    });
 }
 
 function core_date_to_timestamp(args){
@@ -1643,16 +1646,12 @@ function core_number_format(args){
       },
     });
 
-    if(core_number_formatter === false){
-        core_number_formatter = new Intl.NumberFormat(
-          void 0,
-          {
-            'maximumFractionDigits': args['decimals'],
-          }
-        );
-    }
-
-    return core_number_formatter.format(args['number']);
+    return new Intl.NumberFormat(
+        void 0,
+        {
+          'maximumFractionDigits': args['decimals'],
+        }
+      ).format(args['number']);
 }
 
 // Required args: x0, x1, y0, y1
@@ -2471,7 +2470,6 @@ window.core_menu_block_events = true;
 window.core_menu_open = false;
 window.core_mode = 0;
 window.core_mouse = {};
-window.core_number_formatter = false;
 window.core_radian = 180 / Math.PI;
 window.core_repo_title = '';
 window.core_storage_data = {};
