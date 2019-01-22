@@ -165,7 +165,8 @@ function core_audio_source_create(args){
         });
 
         if(core_audio[args['id']]['connections'][i]['label'] === 'Gain'){
-            core_audio_sources[args['id']]['Gain']['gain']['value'] = core_audio[args['id']]['volume'] || core_storage_data['audio-volume'];
+            core_audio_sources[args['id']]['Gain']['gain']['value'] =
+              core_audio[args['id']]['volume'] || core_storage_data['audio-volume'];
         }
     }
 
@@ -1130,7 +1131,11 @@ function core_init(){
       'parent': 'core-ui',
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=../index.htm id=core-menu-root></a>/<a class=external id=core-menu-title rel=noopener></a><div id=core-menu-info></div><hr><span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><input id=settings-reset type=button value="Reset Settings">',
+        'innerHTML': '<a href=../index.htm id=core-menu-root></a>/<a class=external id=core-menu-title rel=noopener></a>'
+          + '<div id=core-menu-info></div><hr>'
+          + '<span id=core-menu-tabs></span>'
+          + '<div id=core-menu-tabcontent></div>'
+          + '<input id=settings-reset type=button value="Reset Settings">',
       },
       'type': 'span',
     });
@@ -1142,7 +1147,16 @@ function core_init(){
     });
 
     core_tab_create({
-      'content': '<table><tr><td><input id=audio-volume><td>Audio Volume<tr><td><input id=color-negative type=color><td>Color Negative<tr><td><input id=color-positive type=color><td>Color Positive<tr><td><input id=decimals><td>Decimals<tr><td><input id=jump><td>Jump<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity<tr><td><input id=move-↑><td>Move ↑<tr><td><input id=move-←><td>Move ←<tr><td><input id=move-↓><td>Move ↓<tr><td><input id=move-→><td>Move →</table>',
+      'content': '<table><tr><td><input id=audio-volume><td>Audio Volume'
+        + '<tr><td><input id=color-negative type=color><td>Color Negative'
+        + '<tr><td><input id=color-positive type=color><td>Color Positive'
+        + '<tr><td><input id=decimals><td>Decimals'
+        + '<tr><td><input id=jump><td>Jump'
+        + '<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity'
+        + '<tr><td><input id=move-↑><td>Move ↑'
+        + '<tr><td><input id=move-←><td>Move ←'
+        + '<tr><td><input id=move-↓><td>Move ↓'
+        + '<tr><td><input id=move-→><td>Move →</table>',
       'group': 'core-menu',
       'id': 'iterami',
       'label': 'iterami',
