@@ -1862,6 +1862,7 @@ function core_repo_init(args){
     let repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/' + args['github'] + '/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
+    document.getElementById('repo-ui').innerHTML = args['ui'];
 
     let have_default = false;
     for(let tab in args['tabs']){
@@ -1918,8 +1919,6 @@ function core_repo_init(args){
 
         uris = false;
     }
-
-    document.getElementById('repo-ui').innerHTML = args['ui'];
 }
 
 function core_requestpointerlock(args){
