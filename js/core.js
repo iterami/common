@@ -1146,6 +1146,7 @@ function core_init(){
       },
     });
 
+    // Global storage.
     core_tab_create({
       'content': '<table><tr><td><input id=audio-volume><td>Audio Volume'
         + '<tr><td><input id=color-negative type=color><td>Color Negative'
@@ -1161,42 +1162,6 @@ function core_init(){
       'id': 'iterami',
       'label': 'iterami',
     });
-
-    // Keyboard/mouse init.
-    core_mouse = {
-      'down-0': false,
-      'down-1': false,
-      'down-2': false,
-      'down-3': false,
-      'down-4': false,
-      'down-x': 0,
-      'down-y': 0,
-      'movement-x': 0,
-      'movement-y': 0,
-      'pointerlock-id': 'canvas',
-      'pointerlock-state': false,
-      'todo': {},
-      'x': 0,
-      'y': 0,
-    };
-
-    document.onpointerlockchange = core_handle_pointerlockchange;
-    window.onbeforeunload = core_handle_beforeunload;
-    window.onblur = core_handle_blur;
-    window.oncontextmenu = core_handle_contextmenu;
-    window.ongamepadconnected = core_handle_gamepadconnected;
-    window.ongamepaddisconnected = core_handle_gamepaddisconnected;
-    window.onkeydown = core_handle_keydown;
-    window.onkeyup = core_handle_keyup;
-    window.onmousedown = core_handle_mousedown;
-    window.onmousemove = core_handle_mousemove;
-    window.onmouseup = core_handle_mouseup;
-    window.ontouchend = core_handle_mouseup;
-    window.ontouchmove = core_handle_mousemove;
-    window.ontouchstart = core_handle_mousedown;
-    window.onwheel = core_handle_mousewheel;
-
-    // Global storage.
     core_storage_add({
       'prefix': 'core-',
       'storage': {
@@ -1214,8 +1179,38 @@ function core_init(){
     });
     core_storage_update();
 
-    // Global event binds.
-    core_keys_rebind();
+    // Events + Keyboard/Mouse.
+    core_mouse = {
+      'down-0': false,
+      'down-1': false,
+      'down-2': false,
+      'down-3': false,
+      'down-4': false,
+      'down-x': 0,
+      'down-y': 0,
+      'movement-x': 0,
+      'movement-y': 0,
+      'pointerlock-id': 'canvas',
+      'pointerlock-state': false,
+      'todo': {},
+      'x': 0,
+      'y': 0,
+    };
+    document.onpointerlockchange = core_handle_pointerlockchange;
+    window.onbeforeunload = core_handle_beforeunload;
+    window.onblur = core_handle_blur;
+    window.oncontextmenu = core_handle_contextmenu;
+    window.ongamepadconnected = core_handle_gamepadconnected;
+    window.ongamepaddisconnected = core_handle_gamepaddisconnected;
+    window.onkeydown = core_handle_keydown;
+    window.onkeyup = core_handle_keyup;
+    window.onmousedown = core_handle_mousedown;
+    window.onmousemove = core_handle_mousemove;
+    window.onmouseup = core_handle_mouseup;
+    window.ontouchend = core_handle_mouseup;
+    window.ontouchmove = core_handle_mousemove;
+    window.ontouchstart = core_handle_mousedown;
+    window.onwheel = core_handle_mousewheel;
     core_events_bind({
       'elements': {
         'settings-reset': {
@@ -1223,6 +1218,7 @@ function core_init(){
         },
       },
     });
+    core_keys_rebind();
 
     core_call({
       'todo': 'repo_init',
