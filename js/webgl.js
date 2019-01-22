@@ -2292,15 +2292,17 @@ function webgl_logicloop(){
                       continue;
                   }
 
-                  let distance = core_distance({
-                    'x0': webgl_characters[character]['translate-x'],
-                    'y0': webgl_characters[character]['translate-y'],
-                    'z0': webgl_characters[character]['translate-z'],
-                    'x1': core_entities[entity]['translate-x'],
-                    'y1': core_entities[entity]['translate-y'],
-                    'z1': core_entities[entity]['translate-z'],
-                  });
-                  if(distance < webgl_characters[character]['collide-range-horizontal']){
+                  if(core_distance({
+                      'x0': webgl_characters[character]['translate-x'],
+                      'y0': webgl_characters[character]['translate-y'],
+                      'z0': webgl_characters[character]['translate-z'],
+                      'x1': core_entities[entity]['translate-x'],
+                      'y1': core_entities[entity]['translate-y'],
+                      'z1': core_entities[entity]['translate-z'],
+                    }) < Math.max(
+                      webgl_characters[character]['collide-range-horizontal'],
+                      webgl_characters[character]['collide-range-vertical']
+                    )){
                       webgl_character_damage({
                         'character': character,
                         'damage': core_entities[entity]['collide-damage'],
@@ -2467,7 +2469,10 @@ function webgl_logicloop_handle_entity(entity){
                 'x1': point['translate-x'],
                 'y1': point['translate-y'],
                 'z1': point['translate-z'],
-              }) < core_entities[entity]['collide-range-horizontal']){
+              }) < Math.max(
+                core_entities[entity]['collide-range-horizontal'],
+                core_entities[entity]['collide-range-vertical']
+              )){
                 core_entities[entity]['change']['translate-x'] = 0;
                 core_entities[entity]['change']['translate-y'] = 0;
                 core_entities[entity]['change']['translate-z'] = 0;
