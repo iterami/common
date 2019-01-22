@@ -1314,7 +1314,6 @@ function webgl_init(args){
       'ambient-blue': args['ambient-blue'],
       'ambient-green': args['ambient-green'],
       'ambient-red': args['ambient-red'],
-      'anisotropic': webgl_buffer.getParameter(webgl_extensions['anisotropic'].MAX_TEXTURE_MAX_ANISOTROPY_EXT),
       'attributes': {},
       'camera-zoom-max': args['camera-zoom-max'],
       'canvas': {
@@ -2838,6 +2837,23 @@ function webgl_resize(){
     webgl_perspective();
 }
 
+function webgl_settings_init(){
+    core_tab_create({
+      'content': '<table><tr><td><input id=anisotropic><td>Anisotropic Filtering</table>',
+      'group': 'core-menu',
+      'id': 'webgl',
+      'label': 'WebGL',
+    });
+
+    core_storage_add({
+      'prefix': 'webgl-',
+      'storage': {
+        'anisotropic': 16,
+      },
+    });
+    core_storage_update();
+}
+
 // Required args: source, type
 function webgl_shader_create(args){
     let shader = webgl_buffer.createShader(args['type']);
@@ -3132,7 +3148,7 @@ function webgl_texture_set(args){
     webgl_buffer.texParameterf(
       webgl_buffer.TEXTURE_2D,
       webgl_extensions['anisotropic'].TEXTURE_MAX_ANISOTROPY_EXT,
-      webgl_properties['anisotropic']
+      core_storage_data['anisotropic']
     );
 
     webgl_buffer.generateMipmap(webgl_buffer.TEXTURE_2D);
