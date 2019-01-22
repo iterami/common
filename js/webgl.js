@@ -1269,38 +1269,40 @@ function webgl_init(args){
       },
     });
 
-    core_html({
-      'parent': document.body,
-      'properties': {
-        'id': 'canvas',
-      },
-      'type': 'canvas',
-    });
-    core_html({
-      'parent': document.body,
-      'properties': {
-        'id': 'buffer',
-      },
-      'type': 'canvas',
-    });
+    if(webgl_buffer === 0){
+        core_html({
+          'parent': document.body,
+          'properties': {
+            'id': 'canvas',
+          },
+          'type': 'canvas',
+        });
+        core_html({
+          'parent': document.body,
+          'properties': {
+            'id': 'buffer',
+          },
+          'type': 'canvas',
+        });
 
-    webgl_buffer = document.getElementById('buffer').getContext(
-      'webgl2',
-      {
-        'alpha': false,
-        'antialias': true,
-        'depth': true,
-        'premultipliedAlpha': false,
-        'preserveDrawingBuffer': false,
-        'stencil': false,
-      }
-    );
-    webgl_canvas = document.getElementById('canvas').getContext(
-      '2d',
-      {
-        'alpha': false,
-      }
-    );
+        webgl_buffer = document.getElementById('buffer').getContext(
+          'webgl2',
+          {
+            'alpha': false,
+            'antialias': true,
+            'depth': true,
+            'premultipliedAlpha': false,
+            'preserveDrawingBuffer': false,
+            'stencil': false,
+          }
+        );
+        webgl_canvas = document.getElementById('canvas').getContext(
+          '2d',
+          {
+            'alpha': false,
+          }
+        );
+    }
 
     // Init extensions.
     webgl_extension({
