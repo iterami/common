@@ -357,8 +357,6 @@ function webgl_clearcolor_set(args){
       webgl_properties['clearcolor-blue'],
       1
     );
-
-    webgl_shader_update();
 }
 
 // Required args: target
