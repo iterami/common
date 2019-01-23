@@ -3074,7 +3074,10 @@ function webgl_skybox(args){
       'rotate-y': args['rotate-y'],
       'rotate-z': args['rotate-z'],
       'vertex-colors': [
-        args['top-color-top'][0], args['top-color-top'][1], args['top-color-top'][2], args['top-color-top'][3],
+        args['top-color-top'][0],
+        args['top-color-top'][1],
+        args['top-color-top'][2],
+        args['top-color-top'][3],
       ],
       'vertices': [
         0, args['size'], 0, 1,
@@ -3107,7 +3110,10 @@ function webgl_skybox(args){
     // Bottom half.
     properties['id'] = args['prefix'] + '-bottom';
     properties['vertex-colors'] = [
-      args['bottom-color-bottom'][0], args['bottom-color-bottom'][1], args['bottom-color-bottom'][2], args['bottom-color-bottom'][3],
+      args['bottom-color-bottom'][0],
+      args['bottom-color-bottom'][1],
+      args['bottom-color-bottom'][2],
+      args['bottom-color-bottom'][3],
     ];
     properties['vertices'] = [
       0, -args['size'], 0, 1,
