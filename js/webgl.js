@@ -2128,6 +2128,7 @@ function webgl_logicloop(){
 
             if(core_keys[core_storage_data['move-↓']]['state']){
                 forwardback = .5;
+                leftright *= .5;
             }
 
             if(core_keys[core_storage_data['move-↑']]['state']){
