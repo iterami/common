@@ -1,6 +1,7 @@
 #grid,
 GtkFileChooserWidget .view,
 GtkListBox,
+GtkMenuBar,
 GtkNotebook,
 GtkTextView,
 GtkWindow{
@@ -11,13 +12,11 @@ GtkWindow{
 GtkFileChooserWidget .view:selected{
     color: #fff;
 }
-GtkNotebook,
-GtkTextView:selected,
-GtkWindow{
-    background-color: #3c3b37;
-}
 GtkPlacesSidebar{
     border: 0;
+}
+GtkTextView:selected{
+    background-color: #3c3b37;
 }
 #map{
     font-size: 2px;
