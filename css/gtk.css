@@ -12,11 +12,12 @@ GtkWindow{
 GtkFileChooserWidget .view:selected{
     color: #fff;
 }
-GtkPlacesSidebar{
-    border: 0;
-}
+GtkPaned,
 GtkTextView:selected{
     background-color: #3c3b37;
+}
+GtkPlacesSidebar{
+    border: 0;
 }
 #map{
     font-size: 2px;
