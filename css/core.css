@@ -37,6 +37,9 @@ select{
 .external{
     color: #f70;
 }
+.header{
+    background: #333;
+}
 hr{
     border: 4px solid #222;
     margin: 4px 0;
@@ -79,6 +82,7 @@ table{
 td{
     border: 1px solid #444;
     padding: 5px;
+    vertical-align: top;
 }
 textarea{
     background: #000;
@@ -91,7 +95,6 @@ textarea{
 a:hover{
     color: #777;
 }
-.header,
 tr:hover{
-    background: #333;
+    background: #111;
 }
