@@ -1954,6 +1954,7 @@ function webgl_level_load(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'cache': false,
         'character': 0,
         'json': false,
       },
@@ -1978,6 +1979,11 @@ function webgl_level_load(args){
       'character': args['character'],
       'json': JSON.parse(args['json']),
     });
+
+    if(args['cache'] !== false){
+        webgl_levelcache['id'] = args['cache'];
+        webgl_levelcahce['json'] = args['json'];
+    }
 }
 
 function webgl_level_unload(){
@@ -3244,6 +3250,7 @@ window.webgl_character_trading = '';
 window.webgl_characters = {};
 window.webgl_diagonal = 0;
 window.webgl_extensions = {};
+window.webgl_levelcache = {};
 window.webgl_paths = {};
 window.webgl_properties = {};
 window.webgl_text = {};
