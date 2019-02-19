@@ -1982,7 +1982,7 @@ function webgl_level_load(args){
 
     if(args['cache'] !== false){
         webgl_levelcache['id'] = args['cache'];
-        webgl_levelcahce['json'] = args['json'];
+        webgl_levelcache['json'] = args['json'];
     }
 }
 
