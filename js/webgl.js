@@ -768,10 +768,10 @@ function webgl_cuboid_tree(args){
         'trunk-size-y': 10,
         'trunk-size-z': 2,
         'vertex-colors-leaves': [
-          0, .5, 0, 1,
-          0, .5, 0, 1,
-          0, .5, 0, 1,
-          0, .5, 0, 1,
+          0, 1, 0, 1,
+          0, 1, 0, 1,
+          0, 1, 0, 1,
+          0, 1, 0, 1,
         ],
         'vertex-colors-trunk': [
           1, 1, 1, 1,
@@ -805,6 +805,9 @@ function webgl_cuboid_tree(args){
       'all-collision': args['collision-leaves'],
       'all-vertex-colors': args['vertex-colors-leaves'],
       'prefix': args['prefix'] + '-leaves',
+      'properties': {
+        'texture-id': 'lavaleaf.png',
+      },
       'size-x': args['leaves-size-x'],
       'size-y': args['leaves-size-y'],
       'size-z': args['leaves-size-z'],
