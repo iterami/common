@@ -537,11 +537,6 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
-        // Parse characters.
-        if(strcmp(json_object->name->string, "characters") == 0){
-            json_object = json_object->next;
-        }
-
         // Parse clearcolor-blue.
         if(strcmp(json_object->name->string, "clearcolor-blue") == 0){
             value = json_object->value;
@@ -575,11 +570,6 @@ void opengl_load_level(const gchar *filename){
           clearcolor_blue,
           1
         );
-
-        // Parse prefabs.
-        if(strcmp(json_object->name->string, "prefabs") == 0){
-            json_object = json_object->next;
-        }
 
         // Parse directional-blue.
         if(strcmp(json_object->name->string, "directional-blue") == 0){
@@ -637,6 +627,11 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
+        // Parse gravity-axis.
+        if(strcmp(json_object->name->string, "gravity-axis") == 0){
+            json_object = json_object->next;
+        }
+
         // Parse gravity-max.
         if(strcmp(json_object->name->string, "gravity-max") == 0){
             value = json_object->value;
@@ -644,40 +639,6 @@ void opengl_load_level(const gchar *filename){
             gravity_max = atof(number->number);
 
             json_object = json_object->next;
-        }
-
-        // Parse groups.
-        if(strcmp(json_object->name->string, "groups") == 0){
-            json_array = json_object->value->payload;
-            int group_count = json_array->length;
-
-            int i;
-            json_array_element = json_array->start;
-            const gchar *groups_array[group_count];
-            for(i = 0; i < group_count; i++){
-                if(i != 0){
-                    json_array_element = json_array_element->next;
-                }
-
-                struct json_value_s* group_value = json_object->value;
-                struct json_string_s* string = (struct json_string_s*)group_value->payload;
-
-                groups_array[i] = (gchar*)string->string;
-            }
-
-            opengl_groups_create(
-              groups_array,
-              group_count
-            );
-            g_free(groups_array);
-
-            json_object = json_object->next;
-
-        }else{
-            opengl_groups_create(
-              NULL,
-              0
-            );
         }
 
         // Parse jump-movement.
@@ -738,425 +699,471 @@ void opengl_load_level(const gchar *filename){
             json_object = json_object->next;
         }
 
-        // Parse entities.
-        json_array = json_object->value->payload;
-        entity_count = json_array->length;
+        // Parse groups.
+        if(strcmp(json_object->name->string, "groups") == 0){
+            json_array = json_object->value->payload;
+            int group_count = json_array->length;
+
+            int i;
+            json_array_element = json_array->start;
+            const gchar *groups_array[group_count];
+            for(i = 0; i < group_count; i++){
+                if(i != 0){
+                    json_array_element = json_array_element->next;
+                }
+
+                struct json_value_s* group_value = json_object->value;
+                struct json_string_s* string = (struct json_string_s*)group_value->payload;
+
+                groups_array[i] = (gchar*)string->string;
+            }
+
+            opengl_groups_create(
+              groups_array,
+              group_count
+            );
+            g_free(groups_array);
+
+            json_object = json_object->next;
+
+        }else{
+            opengl_groups_create(
+              NULL,
+              0
+            );
+        }
 
         opengl_generate_all();
 
-        int id;
-        json_array_element = json_array->start;
-        for(id = 0; id < entity_count; id++){
-            if(id != 0){
-                json_array_element = json_array_element->next;
-            }
-
-            struct json_object_s* json_level_entities_element_property_object = (struct json_object_s*)json_array_element->value->payload;
-            struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
-
-            // Default entity values.
-            float alpha = 1;
-            gboolean billboard = FALSE;
-            gboolean collides = FALSE;
-            gboolean collision = FALSE;
-            gboolean draw = TRUE;
-            gchar *draw_type = "TRIANGLE_STRIP";
-            gboolean gravity = FALSE;
-            float rotate_x = 0;
-            float rotate_y = 0;
-            float rotate_z = 0;
-            float scale_x = 1;
-            float scale_y = 1;
-            float scale_z = 1;
-            float translate_x = 0;
-            float translate_y = 0;
-            float translate_z = 0;
-
-            // Parse id.
-            if(strcmp(json_level_entities_element_property->name->string, "id") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse alpha.
-            if(strcmp(json_level_entities_element_property->name->string, "alpha") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                alpha = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse attach-offset-x.
-            if(strcmp(json_level_entities_element_property->name->string, "attach-offset-x") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse attach-offset-y.
-            if(strcmp(json_level_entities_element_property->name->string, "attach-offset-y") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse attach-offset-z.
-            if(strcmp(json_level_entities_element_property->name->string, "attach-offset-z") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse attach-to.
-            if(strcmp(json_level_entities_element_property->name->string, "attach-to") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse attach-type.
-            if(strcmp(json_level_entities_element_property->name->string, "attach-type") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse billboard.
-            if(strcmp(json_level_entities_element_property->name->string, "billboard") == 0){
-                value = json_level_entities_element_property->value;
-                billboard = value->type == json_type_false ? FALSE : TRUE;
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse change.
-            if(strcmp(json_level_entities_element_property->name->string, "change") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse collide-damage.
-            if(strcmp(json_level_entities_element_property->name->string, "collide-damage") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse collide-range-horizontal.
-            if(strcmp(json_level_entities_element_property->name->string, "collide-range-horizontal") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse collide-range-vertical.
-            if(strcmp(json_level_entities_element_property->name->string, "collide-range-vertical") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse collides.
-            if(strcmp(json_level_entities_element_property->name->string, "collides") == 0){
-                value = json_level_entities_element_property->value;
-                collides = value->type == json_type_true ? TRUE : FALSE;
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse collision.
-            if(strcmp(json_level_entities_element_property->name->string, "collision") == 0){
-                value = json_level_entities_element_property->value;
-                collision = value->type == json_type_true ? TRUE : FALSE;
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse draw.
-            if(strcmp(json_level_entities_element_property->name->string, "draw") == 0){
-                value = json_level_entities_element_property->value;
-                draw = value->type == json_type_true ? TRUE : FALSE;
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse draw-type.
-            if(strcmp(json_level_entities_element_property->name->string, "draw-type") == 0){
-                value = json_level_entities_element_property->value;
-                struct json_string_s* string = (struct json_string_s*)value->payload;
-                draw_type = (gchar*)string->string;
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse gravity.
-            if(strcmp(json_level_entities_element_property->name->string, "gravity") == 0){
-                value = json_level_entities_element_property->value;
-                gravity = value->type == json_type_true ? TRUE : FALSE;
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse item-amount.
-            if(strcmp(json_level_entities_element_property->name->string, "item-amount") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse item-entities.
-            if(strcmp(json_level_entities_element_property->name->string, "item-entities") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse item-id.
-            if(strcmp(json_level_entities_element_property->name->string, "item-id") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse item-spell.
-            if(strcmp(json_level_entities_element_property->name->string, "item-spell") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse item-spellproperties.
-            if(strcmp(json_level_entities_element_property->name->string, "item-spellproperties") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse item-stats.
-            if(strcmp(json_level_entities_element_property->name->string, "item-stats") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse path-direction.
-            if(strcmp(json_level_entities_element_property->name->string, "path-direction") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse path-id.
-            if(strcmp(json_level_entities_element_property->name->string, "path-id") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse path-point.
-            if(strcmp(json_level_entities_element_property->name->string, "path-point") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse rotate-x.
-            if(strcmp(json_level_entities_element_property->name->string, "rotate-x") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                rotate_x = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse rotate-y.
-            if(strcmp(json_level_entities_element_property->name->string, "rotate-y") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                rotate_y = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse rotate-z.
-            if(strcmp(json_level_entities_element_property->name->string, "rotate-z") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                rotate_z = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse scale-x.
-            if(strcmp(json_level_entities_element_property->name->string, "scale-x") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                scale_x = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse scale-y.
-            if(strcmp(json_level_entities_element_property->name->string, "scale-y") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                scale_y = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse scale-z.
-            if(strcmp(json_level_entities_element_property->name->string, "scale-z") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                scale_z = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse spawn-entity.
-            if(strcmp(json_level_entities_element_property->name->string, "spawn-entity") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse spawn-interval-current.
-            if(strcmp(json_level_entities_element_property->name->string, "spawn-interval-current") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse spawn-interval-max.
-            if(strcmp(json_level_entities_element_property->name->string, "spawn-interval-max") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse speed.
-            if(strcmp(json_level_entities_element_property->name->string, "speed") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse texture-id.
-            if(strcmp(json_level_entities_element_property->name->string, "texture-id") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse texture-repeat-x.
-            if(strcmp(json_level_entities_element_property->name->string, "texture-repeat-x") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse texture-repeat-y.
-            if(strcmp(json_level_entities_element_property->name->string, "texture-repeat-y") == 0){
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse translate-x.
-            if(strcmp(json_level_entities_element_property->name->string, "translate-x") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                translate_x = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse translate-y.
-            if(strcmp(json_level_entities_element_property->name->string, "translate-y") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                translate_y = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse translate-z.
-            if(strcmp(json_level_entities_element_property->name->string, "translate-z") == 0){
-                value = json_level_entities_element_property->value;
-                number = (struct json_number_s*)value->payload;
-                translate_z = atof(number->number);
-
-                json_level_entities_element_property = json_level_entities_element_property->next;
-            }
-
-            // Parse vertex-colors. Required.
-            value = json_level_entities_element_property->value;
-            struct json_array_s* array_payload = (struct json_array_s*)value->payload;
-
-            size_t vertices_count = array_payload->length / 4;
-            size_t vertices_size = sizeof(GLfloat) * (vertices_count * 4);
-
-            entitystruct entity = {
-              alpha,
-              billboard,
-              g_malloc(vertices_size),
-              draw,
-              opengl_string_to_primitive(draw_type),
-              id,
-              rotate_x,
-              rotate_y,
-              rotate_z,
-              translate_x,
-              translate_y,
-              translate_z,
-              vertices_count,
-              g_malloc(vertices_size),
-              vertices_size
-            };
-
-            int i;
-            struct json_array_element_s* sub_array_element = array_payload->start;
-            for(i = 0; i < vertices_count; i++){
-                if(i != 0){
-                    sub_array_element = sub_array_element->next;
+        // Parse entities.
+        if(strcmp(json_object->name->string, "entities") == 0){
+            json_array = json_object->value->payload;
+            entity_count = json_array->length;
+
+            int id;
+            json_array_element = json_array->start;
+            for(id = 0; id < entity_count; id++){
+                if(id != 0){
+                    json_array_element = json_array_element->next;
                 }
 
-                value = sub_array_element->value;
-                number = (struct json_number_s*)value->payload;
-                entity.colors_array[i * 4] = atof(number->number);
+                struct json_object_s* json_level_entities_element_property_object = (struct json_object_s*)json_array_element->value->payload;
+                struct json_object_element_s* json_level_entities_element_property = json_level_entities_element_property_object->start;
 
-                sub_array_element = sub_array_element->next;
-                value = sub_array_element->value;
-                number = (struct json_number_s*)value->payload;
-                entity.colors_array[i * 4 + 1] = atof(number->number);
+                // Default entity values.
+                float alpha = 1;
+                gboolean billboard = FALSE;
+                gboolean collides = FALSE;
+                gboolean collision = FALSE;
+                gboolean draw = TRUE;
+                gchar *draw_type = "TRIANGLE_STRIP";
+                gboolean gravity = FALSE;
+                float rotate_x = 0;
+                float rotate_y = 0;
+                float rotate_z = 0;
+                float scale_x = 1;
+                float scale_y = 1;
+                float scale_z = 1;
+                float translate_x = 0;
+                float translate_y = 0;
+                float translate_z = 0;
 
-                sub_array_element = sub_array_element->next;
-                value = sub_array_element->value;
-                number = (struct json_number_s*)value->payload;
-                entity.colors_array[i * 4 + 2] = atof(number->number);
-
-                sub_array_element = sub_array_element->next;
-                value = sub_array_element->value;
-                number = (struct json_number_s*)value->payload;
-                entity.colors_array[i * 4 + 3] = atof(number->number);
-            }
-
-            // Parse vertices. Required.
-            json_level_entities_element_property = json_level_entities_element_property->next;
-            value = json_level_entities_element_property->value;
-            array_payload = (struct json_array_s*)value->payload;
-
-            sub_array_element = array_payload->start;
-            for(i = 0; i < vertices_count; i++){
-                if(i != 0){
-                    sub_array_element = sub_array_element->next;
+                // Parse id.
+                if(strcmp(json_level_entities_element_property->name->string, "id") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
                 }
 
-                value = sub_array_element->value;
-                number = (struct json_number_s*)value->payload;
-                entity.vertices_array[i * 4] = atof(number->number);
+                // Parse alpha.
+                if(strcmp(json_level_entities_element_property->name->string, "alpha") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    alpha = atof(number->number);
 
-                sub_array_element = sub_array_element->next;
-                value = sub_array_element->value;
-                number = (struct json_number_s*)value->payload;
-                entity.vertices_array[i * 4 + 1] = atof(number->number);
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
 
-                sub_array_element = sub_array_element->next;
-                value = sub_array_element->value;
-                number = (struct json_number_s*)value->payload;
-                entity.vertices_array[i * 4 + 2] = atof(number->number);
+                // Parse attach-offset-x.
+                if(strcmp(json_level_entities_element_property->name->string, "attach-offset-x") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
 
-                sub_array_element = sub_array_element->next;
-                value = sub_array_element->value;
-                number = (struct json_number_s*)value->payload;
-                entity.vertices_array[i * 4 + 3] = atof(number->number);
-            }
+                // Parse attach-offset-y.
+                if(strcmp(json_level_entities_element_property->name->string, "attach-offset-y") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
 
-            entities[id] = entity;
+                // Parse attach-offset-z.
+                if(strcmp(json_level_entities_element_property->name->string, "attach-offset-z") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
 
-            // Parse groups.
-            if(strcmp(json_level_entities_element_property->name->string, "groups") == 0){
-                struct json_array_s* groups_array = json_level_entities_element_property->value->payload;
-                struct json_array_element_s* groups_array_element = groups_array->start;
+                // Parse attach-to.
+                if(strcmp(json_level_entities_element_property->name->string, "attach-to") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
 
-                while(groups_array_element != NULL){
-                    groups_array_element = groups_array_element->next;
+                // Parse attach-type.
+                if(strcmp(json_level_entities_element_property->name->string, "attach-type") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
 
-                    int i;
-                    for(i = 0; i < group_count; i++){
-                        value = groups_array_element->value;
-                        struct json_string_s* group_name = (struct json_string_s*)value->payload;
+                // Parse billboard.
+                if(strcmp(json_level_entities_element_property->name->string, "billboard") == 0){
+                    value = json_level_entities_element_property->value;
+                    billboard = value->type == json_type_false ? FALSE : TRUE;
 
-                        if(strcmp(group_name->string, groups[i].id) == 0){
-                            opengl_group_add(
-                              &groups[i],
-                              &entities[id]
-                            );
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
 
-                            break;
+                // Parse change.
+                if(strcmp(json_level_entities_element_property->name->string, "change") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse collide-damage.
+                if(strcmp(json_level_entities_element_property->name->string, "collide-damage") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse collide-range-horizontal.
+                if(strcmp(json_level_entities_element_property->name->string, "collide-range-horizontal") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse collide-range-vertical.
+                if(strcmp(json_level_entities_element_property->name->string, "collide-range-vertical") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse collides.
+                if(strcmp(json_level_entities_element_property->name->string, "collides") == 0){
+                    value = json_level_entities_element_property->value;
+                    collides = value->type == json_type_true ? TRUE : FALSE;
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse collision.
+                if(strcmp(json_level_entities_element_property->name->string, "collision") == 0){
+                    value = json_level_entities_element_property->value;
+                    collision = value->type == json_type_true ? TRUE : FALSE;
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse draw.
+                if(strcmp(json_level_entities_element_property->name->string, "draw") == 0){
+                    value = json_level_entities_element_property->value;
+                    draw = value->type == json_type_true ? TRUE : FALSE;
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse draw-type.
+                if(strcmp(json_level_entities_element_property->name->string, "draw-type") == 0){
+                    value = json_level_entities_element_property->value;
+                    struct json_string_s* string = (struct json_string_s*)value->payload;
+                    draw_type = (gchar*)string->string;
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse gravity.
+                if(strcmp(json_level_entities_element_property->name->string, "gravity") == 0){
+                    value = json_level_entities_element_property->value;
+                    gravity = value->type == json_type_true ? TRUE : FALSE;
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse item-amount.
+                if(strcmp(json_level_entities_element_property->name->string, "item-amount") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse item-entities.
+                if(strcmp(json_level_entities_element_property->name->string, "item-entities") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse item-id.
+                if(strcmp(json_level_entities_element_property->name->string, "item-id") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse item-spell.
+                if(strcmp(json_level_entities_element_property->name->string, "item-spell") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse item-spellproperties.
+                if(strcmp(json_level_entities_element_property->name->string, "item-spellproperties") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse item-stats.
+                if(strcmp(json_level_entities_element_property->name->string, "item-stats") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse path-direction.
+                if(strcmp(json_level_entities_element_property->name->string, "path-direction") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse path-id.
+                if(strcmp(json_level_entities_element_property->name->string, "path-id") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse path-point.
+                if(strcmp(json_level_entities_element_property->name->string, "path-point") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse rotate-x.
+                if(strcmp(json_level_entities_element_property->name->string, "rotate-x") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    rotate_x = atof(number->number);
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse rotate-y.
+                if(strcmp(json_level_entities_element_property->name->string, "rotate-y") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    rotate_y = atof(number->number);
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse rotate-z.
+                if(strcmp(json_level_entities_element_property->name->string, "rotate-z") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    rotate_z = atof(number->number);
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse scale-x.
+                if(strcmp(json_level_entities_element_property->name->string, "scale-x") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    scale_x = atof(number->number);
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse scale-y.
+                if(strcmp(json_level_entities_element_property->name->string, "scale-y") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    scale_y = atof(number->number);
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse scale-z.
+                if(strcmp(json_level_entities_element_property->name->string, "scale-z") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    scale_z = atof(number->number);
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse spawn-entity.
+                if(strcmp(json_level_entities_element_property->name->string, "spawn-entity") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse spawn-interval-current.
+                if(strcmp(json_level_entities_element_property->name->string, "spawn-interval-current") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse spawn-interval-max.
+                if(strcmp(json_level_entities_element_property->name->string, "spawn-interval-max") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse speed.
+                if(strcmp(json_level_entities_element_property->name->string, "speed") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse texture-id.
+                if(strcmp(json_level_entities_element_property->name->string, "texture-id") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse texture-repeat-x.
+                if(strcmp(json_level_entities_element_property->name->string, "texture-repeat-x") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse texture-repeat-y.
+                if(strcmp(json_level_entities_element_property->name->string, "texture-repeat-y") == 0){
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse translate-x.
+                if(strcmp(json_level_entities_element_property->name->string, "translate-x") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    translate_x = atof(number->number);
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse translate-y.
+                if(strcmp(json_level_entities_element_property->name->string, "translate-y") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    translate_y = atof(number->number);
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                    // Parse translate-z.
+                    if(strcmp(json_level_entities_element_property->name->string, "translate-z") == 0){
+                        value = json_level_entities_element_property->value;
+                        number = (struct json_number_s*)value->payload;
+                        translate_z = atof(number->number);
+
+                        json_level_entities_element_property = json_level_entities_element_property->next;
+                }
+
+                // Parse vertex-colors. Required.
+                value = json_level_entities_element_property->value;
+                struct json_array_s* array_payload = (struct json_array_s*)value->payload;
+
+                size_t vertices_count = array_payload->length / 4;
+                size_t vertices_size = sizeof(GLfloat) * (vertices_count * 4);
+
+                entitystruct entity = {
+                  alpha,
+                  billboard,
+                  g_malloc(vertices_size),
+                  draw,
+                  opengl_string_to_primitive(draw_type),
+                  id,
+                  rotate_x,
+                  rotate_y,
+                  rotate_z,
+                  translate_x,
+                  translate_y,
+                  translate_z,
+                  vertices_count,
+                  g_malloc(vertices_size),
+                  vertices_size
+                };
+
+                int i;
+                struct json_array_element_s* sub_array_element = array_payload->start;
+                for(i = 0; i < vertices_count; i++){
+                    if(i != 0){
+                        sub_array_element = sub_array_element->next;
+                    }
+
+                    value = sub_array_element->value;
+                    number = (struct json_number_s*)value->payload;
+                    entity.colors_array[i * 4] = atof(number->number);
+
+                    sub_array_element = sub_array_element->next;
+                    value = sub_array_element->value;
+                    number = (struct json_number_s*)value->payload;
+                    entity.colors_array[i * 4 + 1] = atof(number->number);
+
+                    sub_array_element = sub_array_element->next;
+                    value = sub_array_element->value;
+                    number = (struct json_number_s*)value->payload;
+                    entity.colors_array[i * 4 + 2] = atof(number->number);
+
+                    sub_array_element = sub_array_element->next;
+                    value = sub_array_element->value;
+                    number = (struct json_number_s*)value->payload;
+                    entity.colors_array[i * 4 + 3] = atof(number->number);
+                }
+
+                // Parse vertices. Required.
+                json_level_entities_element_property = json_level_entities_element_property->next;
+                value = json_level_entities_element_property->value;
+                array_payload = (struct json_array_s*)value->payload;
+
+                sub_array_element = array_payload->start;
+                for(i = 0; i < vertices_count; i++){
+                    if(i != 0){
+                        sub_array_element = sub_array_element->next;
+                    }
+
+                    value = sub_array_element->value;
+                    number = (struct json_number_s*)value->payload;
+                    entity.vertices_array[i * 4] = atof(number->number);
+
+                    sub_array_element = sub_array_element->next;
+                    value = sub_array_element->value;
+                    number = (struct json_number_s*)value->payload;
+                    entity.vertices_array[i * 4 + 1] = atof(number->number);
+
+                    sub_array_element = sub_array_element->next;
+                    value = sub_array_element->value;
+                    number = (struct json_number_s*)value->payload;
+                    entity.vertices_array[i * 4 + 2] = atof(number->number);
+
+                    sub_array_element = sub_array_element->next;
+                    value = sub_array_element->value;
+                    number = (struct json_number_s*)value->payload;
+                    entity.vertices_array[i * 4 + 3] = atof(number->number);
+                }
+
+                entities[id] = entity;
+
+                // Parse groups.
+                if(strcmp(json_level_entities_element_property->name->string, "groups") == 0){
+                    struct json_array_s* groups_array = json_level_entities_element_property->value->payload;
+                    struct json_array_element_s* groups_array_element = groups_array->start;
+
+                    while(groups_array_element != NULL){
+                        groups_array_element = groups_array_element->next;
+
+                        int i;
+                        for(i = 0; i < group_count; i++){
+                            value = groups_array_element->value;
+                            struct json_string_s* group_name = (struct json_string_s*)value->payload;
+
+                            if(strcmp(group_name->string, groups[i].id) == 0){
+                                opengl_group_add(
+                                  &groups[i],
+                                  &entities[id]
+                                );
+
+                                break;
+                            }
                         }
                     }
+
+                    json_level_entities_element_property = json_level_entities_element_property->next;
                 }
 
-                json_level_entities_element_property = json_level_entities_element_property->next;
+                opengl_entity_bind(id);
             }
 
-            opengl_entity_bind(id);
+            json_object = json_object->next;
         }
 
-        json_object = json_object->next;
+        // Parse prefabs.
+        if(strcmp(json_object->name->string, "prefabs") == 0){
+            json_object = json_object->next;
+        }
+
+        // Parse characters.
+        if(strcmp(json_object->name->string, "characters") == 0){
+            json_object = json_object->next;
+        }
 
         // Parse randomized.
         if(strcmp(json_object->name->string, "randomized") == 0){
