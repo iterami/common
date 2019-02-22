@@ -221,8 +221,7 @@ function webgl_character_damage(args){
 }
 
 function webgl_character_home(){
-    if(!webgl_characters[webgl_character_id]
-      || webgl_character_homebase['entities'].length === 0){
+    if(!webgl_characters[webgl_character_id]){
         return;
     }
 
