@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include "gtk.h"
 
-GtkWidget * gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelgroup, const guint key, GdkModifierType modifier){
+void gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelgroup, const guint key, GdkModifierType modifier, GCallback callback, GtkWidget *widget){
     GtkWidget *menuitem;
 
     menuitem = gtk_menu_item_new_with_mnemonic(label);
@@ -20,7 +20,20 @@ GtkWidget * gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup 
       menuitem
     );
 
-    return menuitem;
+    if(callback != NULL){
+        g_signal_connect_swapped(
+          menuitem,
+          "activate",
+          callback,
+          widget
+       );
+
+    }else{
+        gtk_widget_set_sensitive(
+          menuitem,
+          FALSE
+        );
+    }
 }
 
 void gtk_begin_frameclock(GtkWidget *_glarea){
