@@ -1028,13 +1028,13 @@ void opengl_load_level(const gchar *filename){
                     json_level_entities_element_property = json_level_entities_element_property->next;
                 }
 
-                    // Parse translate-z.
-                    if(strcmp(json_level_entities_element_property->name->string, "translate-z") == 0){
-                        value = json_level_entities_element_property->value;
-                        number = (struct json_number_s*)value->payload;
-                        translate_z = atof(number->number);
+                // Parse translate-z.
+                if(strcmp(json_level_entities_element_property->name->string, "translate-z") == 0){
+                    value = json_level_entities_element_property->value;
+                    number = (struct json_number_s*)value->payload;
+                    translate_z = atof(number->number);
 
-                        json_level_entities_element_property = json_level_entities_element_property->next;
+                    json_level_entities_element_property = json_level_entities_element_property->next;
                 }
 
                 // Parse vertex-colors. Required.
