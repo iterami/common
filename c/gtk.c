@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 #include "gtk.h"
 
-void gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelgroup, const guint key, GdkModifierType modifier, GCallback callback, GtkWidget *widget){
+void gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelgroup, const guint key, GdkModifierType modifier, GCallback callback, gpointer data){
     GtkWidget *menuitem;
 
     menuitem = gtk_menu_item_new_with_mnemonic(label);
@@ -25,7 +25,7 @@ void gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelg
           menuitem,
           "activate",
           callback,
-          widget
+          data
        );
 
     }else{
