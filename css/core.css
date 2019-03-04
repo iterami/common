@@ -30,9 +30,9 @@ select{
 .hidden{
     display: none;
 }
-#core-toggle{
+#core-toggle,
+.inline{
     display: inline-block;
-    font-size: 10px;
 }
 .external{
     color: #f70;
@@ -43,9 +43,6 @@ select{
 hr{
     border: 4px solid #222;
     margin: 4px 0;
-}
-.inline{
-    display: inline-block;
 }
 input{
     border-color: #aaa;
