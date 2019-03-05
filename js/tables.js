@@ -7,8 +7,8 @@ function tables_init(){
         let headers = Array.from(tables[i].firstElementChild.firstElementChild.children);
 
         for(let header in headers){
-            headers[header].innerHTML += '<input onclick="tables_sort(this,' + header + ',0)" type=button value=↑>'
-              + '<input onclick="tables_sort(this,' + header + ',1)" type=button value=↓>';
+            headers[header].innerHTML += '<input onclick="tables_sort(this,' + header + ',1)" type=button value=↑>'
+              + '<input onclick="tables_sort(this,' + header + ',0)" type=button value=↓>';
         }
     }
 }
@@ -26,7 +26,7 @@ function tables_sort(element, column, direction){
     column_content.sort(function(a, b){
       return a.localeCompare(b);
     });
-    if(direction === 1){
+    if(direction === 0){
         column_content.reverse();
     }
 
