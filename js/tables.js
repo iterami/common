@@ -7,4 +7,8 @@ function tables_init(){
     }
 }
 
+function tables_sort(button){
+    let column_content = [];
+}
+
 tables_init();
