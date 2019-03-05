@@ -15,11 +15,17 @@ function tables_init(){
 
 function tables_sort(element, column, direction){
     let table = element.closest('table');
-
-    let column_content = [];
     let rows = Array.from(table.firstElementChild.children);
 
+    let column_content = [];
+    let header_html = rows[0].outerHTML;
+    let sorted_html = '';
+
     for(let row in rows){
+        if(row == 0){
+            continue;
+        }
+
         column_content.push(rows[row].children[column].innerText);
     }
 
@@ -30,8 +36,21 @@ function tables_sort(element, column, direction){
         column_content.reverse();
     }
 
-    for(let row in rows){
+    for(let sorted in column_content){
+        for(let row in rows){
+            if(row == 0){
+                continue;
+            }
+
+            if(rows[row].children[column].innerText === column_content[sorted]){
+                sorted_html += rows[row].outerHTML;
+
+                break;
+            }
+        }
     }
+
+    table.firstElementChild.innerHTML = header_html + sorted_html;
 }
 
 tables_init();
