@@ -20,6 +20,7 @@ function tables_sort(element, column, direction){
     let column_content = [];
     let header_html = rows[0].outerHTML;
     let sorted_html = '';
+    let used_rows = [];
 
     for(let row in rows){
         if(row == 0){
@@ -42,8 +43,12 @@ function tables_sort(element, column, direction){
                 continue;
             }
 
-            if(rows[row].children[column].innerText === column_content[sorted]){
+            let parent = rows[row].children;
+
+            if(parent[column].innerText === column_content[sorted]
+              && !used_rows.includes(parent[0].innerText)){
                 sorted_html += rows[row].outerHTML;
+                used_rows.push(parent[0].innerText);
 
                 break;
             }
