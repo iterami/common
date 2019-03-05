@@ -20,12 +20,15 @@ function tables_sort(element, column, direction){
     let rows = Array.from(table.firstElementChild.children);
 
     for(let row in rows){
-        column_content.push(rows[row].children[column].innerHTML);
+        column_content.push(rows[row].children[column].innerText);
     }
 
     column_content.sort(function(a, b){
       return a.localeCompare(b);
     });
+    if(direction === 1){
+        column_content.reverse();
+    }
 
     for(let row in rows){
     }
