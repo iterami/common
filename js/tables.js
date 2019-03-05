@@ -18,7 +18,6 @@ function tables_sort(element, column, direction){
     let rows = Array.from(table.firstElementChild.children);
 
     let column_content = [];
-    let header_html = rows[0].outerHTML;
     let sorted_html = '';
     let used_rows = [];
 
@@ -55,7 +54,7 @@ function tables_sort(element, column, direction){
         }
     }
 
-    table.firstElementChild.innerHTML = header_html + sorted_html;
+    table.firstElementChild.innerHTML = rows[0].outerHTML + sorted_html;
 }
 
 tables_init();
