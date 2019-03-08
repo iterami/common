@@ -30,7 +30,7 @@ function tables_sort(element, column, direction){
     }
 
     column_content.sort(function(a, b){
-      return a.localeCompare(b);
+        return a.localeCompare(b);
     });
     if(direction === 0){
         column_content.reverse();
