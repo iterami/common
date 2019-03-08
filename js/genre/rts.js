@@ -65,15 +65,15 @@ function rts_building_build(args){
 
     // Don't allow building on other buildings.
     for(let building in rts_players[args['player']]['buildings']){
-        if(core_rectangle_overlap({
-          'h0': rts_buildings[args['type']]['height'],
-          'h1': rts_players[args['player']]['buildings'][building]['height'],
-          'w0': rts_buildings[args['type']]['width'],
-          'w1': rts_players[args['player']]['buildings'][building]['width'],
-          'x0': args['x'],
-          'x1': rts_players[args['player']]['buildings'][building]['x'],
-          'y0': args['y'],
-          'y1': rts_players[args['player']]['buildings'][building]['y'],
+        if(core_cuboid_overlap({
+          'height-0': rts_buildings[args['type']]['height'],
+          'height-1': rts_players[args['player']]['buildings'][building]['height'],
+          'width-0': rts_buildings[args['type']]['width'],
+          'width-1': rts_players[args['player']]['buildings'][building]['width'],
+          'x-0': args['x'],
+          'x-1': rts_players[args['player']]['buildings'][building]['x'],
+          'y-0': args['y'],
+          'y-1': rts_players[args['player']]['buildings'][building]['y'],
         })){
             return;
         }
@@ -81,15 +81,15 @@ function rts_building_build(args){
 
     // Don't allow building on dynamic world elements.
     for(let element in rts_world_dynamic){
-        if(core_rectangle_overlap({
-          'h0': rts_buildings[args['type']]['height'],
-          'h1': rts_world_dynamic[element]['height'],
-          'w0': rts_buildings[args['type']]['width'],
-          'w1': rts_world_dynamic[element]['width'],
-          'x0': args['x'],
-          'x1': rts_world_dynamic[element]['x'],
-          'y0': args['y'],
-          'y1': rts_world_dynamic[element]['y'],
+        if(core_cuboid_overlap({
+          'height-0': rts_buildings[args['type']]['height'],
+          'height-1': rts_world_dynamic[element]['height'],
+          'width-0': rts_buildings[args['type']]['width'],
+          'width-1': rts_world_dynamic[element]['width'],
+          'x-0': args['x'],
+          'x-1': rts_world_dynamic[element]['x'],
+          'y-0': args['y'],
+          'y-1': rts_world_dynamic[element]['y'],
         })){
             return;
         }

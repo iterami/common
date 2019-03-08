@@ -282,6 +282,26 @@ function core_clamp(args){
     });
 }
 
+// Required args: height-0, height-1, width-0, width-1, x-0, x-1, y-0, y-1
+function core_cuboid_overlap(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'depth-0': 0,
+        'depth-1': 0,
+        'z-0': 0,
+        'z-1': 0,
+      },
+    });
+
+    return args['x-0'] <= args['x-1'] + args['width-1']
+      && args['x-0'] >= args['x-1'] - args['width-0']
+      && args['y-0'] <= args['y-1'] + args['height-1']
+      && args['y-0'] >= args['y-1'] - args['height-0']
+      && args['z-0'] <= args['z-1'] + args['depth-1']
+      && args['z-0'] >= args['z-1'] - args['depth-0'];
+}
+
 function core_date_to_timestamp(args){
     args = core_args({
       'args': args,
@@ -1769,14 +1789,6 @@ function core_random_string(args){
         })];
     }
     return string;
-}
-
-// Required args: h0, h1, w0, w1, x0, x1, y0, y1
-function core_rectangle_overlap(args){
-    return args['x0'] < args['x1'] + args['w1']
-      && args['x0'] + args['w0'] > args['x1']
-      && args['y0'] < args['y1'] + args['h1']
-      && args['y0'] + args['h0'] > args['y1'];
 }
 
 // Required args: patterns, string
