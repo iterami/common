@@ -2364,9 +2364,9 @@ function webgl_path_move(args){
         args['entity']['change']['translate-x'] = 0;
         args['entity']['change']['translate-y'] = 0;
         args['entity']['change']['translate-z'] = 0;
-        args['entity']['translate-x'] = point['translate-x'] + args['entity']['attach-offset-x'];
-        args['entity']['translate-y'] = point['translate-y'] + args['entity']['attach-offset-y'];
-        args['entity']['translate-z'] = point['translate-z'] + args['entity']['attach-offset-z'];
+        args['entity']['translate-x'] = point['translate-x'];
+        args['entity']['translate-y'] = point['translate-y'];
+        args['entity']['translate-z'] = point['translate-z'];
 
         if(args['entity']['path-direction'] > 0){
             if(args['entity']['path-point'] >= path['points'].length - 1){
