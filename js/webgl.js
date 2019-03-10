@@ -728,9 +728,6 @@ function webgl_entity_create(args){
         }
         delete core_entities[entity_id]['groups'];
 
-        let attach = false;
-        let attach_type = 'entity';
-
         if(core_groups['skybox'][entity_id] === true){
             core_group_remove({
               'entities': [
@@ -738,21 +735,18 @@ function webgl_entity_create(args){
               ],
               'group': 'foreground',
             });
-            attach = webgl_character_id;
-            attach_type = 'character';
-
-        }else if(args['entities'][entity]['attach-to'] !== void 0){
-            attach = args['entities'][entity]['attach-to'];
+            args['entities']['attach-to'] = webgl_character_id;
+            args['entities']['attach-type'] = 'character';
         }
 
-        if(attach !== false){
+        if(args['entities']['attach-to'] !== void 0){
             webgl_attach({
               'entity': entity_id,
               'offset-x': args['entities'][entity]['attach-offset-x'],
               'offset-y': args['entities'][entity]['attach-offset-y'],
               'offset-z': args['entities'][entity]['attach-offset-z'],
-              'to': attach,
-              'type': attach_type,
+              'to': args['entities']['attach-to'],
+              'type': args['entities']['attach-type'],
             });
         }
     }
@@ -2481,6 +2475,7 @@ function webgl_prefab_cuboid(args){
         'bottom-alpha': 1,
         'bottom-collision': false,
         'bottom-vertex-colors': false,
+        'character': webgl_character_id,
         'exclude': {},
         'front-alpha': 1,
         'front-collision': false,
@@ -2514,6 +2509,8 @@ function webgl_prefab_cuboid(args){
     let vertices_size_y = Math.abs(half_size_y);
     let vertices_size_z = Math.abs(half_size_z);
     let properties = {
+      'attach-to': args['character'],
+      'attach-type': 'character',
       'groups': args['groups'],
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
@@ -2676,6 +2673,7 @@ function webgl_prefab_cuboid_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'character': webgl_character_id,
         'collision-leaves': true,
         'collision-trunk': true,
         'leaves-size-x': 10,
@@ -2705,6 +2703,7 @@ function webgl_prefab_cuboid_tree(args){
     webgl_prefab_cuboid({
       'all-collision': args['collision-trunk'],
       'all-vertex-colors': args['vertex-colors-trunk'],
+      'character': args['character'],
       'exclude': {
         'bottom': true,
         'top': true,
@@ -2724,6 +2723,7 @@ function webgl_prefab_cuboid_tree(args){
     webgl_prefab_cuboid({
       'all-collision': args['collision-leaves'],
       'all-vertex-colors': args['vertex-colors-leaves'],
+      'character': args['character'],
       'prefix': args['prefix'] + '-leaves',
       'properties': {
         'texture-id': 'lavaleaf.png',
@@ -2742,6 +2742,7 @@ function webgl_prefab_lines_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'character': webgl_character_id,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -2768,6 +2769,8 @@ function webgl_prefab_lines_tree(args){
     });
 
     let properties = {
+      'attach-to': args['character'],
+      'attach-type': 'character',
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
@@ -2842,6 +2845,7 @@ function webgl_prefab_skybox(args){
       'defaults': {
         'bottom-color-bottom': false,
         'bottom-color-top': false,
+        'character': webgl_character_id,
         'random-colors': false,
         'rotate-x': 0,
         'rotate-y': 0,
