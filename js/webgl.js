@@ -2514,9 +2514,6 @@ function webgl_prefab_cuboid(args){
       'attach-to': args['character'],
       'attach-type': 'character',
       'groups': args['groups'],
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'],
-      'translate-z': args['translate-z'],
     };
     for(let property in args['properties']){
         properties[property] = args['properties'][property];
@@ -2540,7 +2537,6 @@ function webgl_prefab_cuboid(args){
     }
 
     // Top.
-    properties['translate-y'] = args['translate-y'] + half_size_y;
     properties['vertices'] = [
       vertices_size_x, 0, -vertices_size_z, 1,
       -vertices_size_x, 0, -vertices_size_z, 1,
@@ -2549,7 +2545,7 @@ function webgl_prefab_cuboid(args){
     ];
     if(args['exclude']['top'] !== true){
         properties['alpha'] = args['top-alpha'];
-        properties['attach-offset-y'] = half_size_y;
+        properties['attach-offset-y'] = args['translate-y'] + half_size_y;
         properties['collision'] = args['top-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-top';
         properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray({
@@ -2564,10 +2560,9 @@ function webgl_prefab_cuboid(args){
 
     // Bottom.
     properties['rotate-x'] = 180;
-    properties['translate-y'] = args['translate-y'] - half_size_y;
     if(args['exclude']['bottom'] !== true){
         properties['alpha'] = args['bottom-alpha'];
-        properties['attach-offset-y'] = -half_size_y;
+        properties['attach-offset-y'] = args['translate-y'] - half_size_y;
         properties['collision'] = args['bottom-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-bottom';
         properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray({
@@ -2583,8 +2578,6 @@ function webgl_prefab_cuboid(args){
     // Front.
     properties['attach-offset-y'] = 0;
     properties['rotate-x'] = 90;
-    properties['translate-y'] = args['translate-y'];
-    properties['translate-z'] = args['translate-z'] + half_size_z;
     properties['vertices'] = [
       vertices_size_x, 0, -vertices_size_y, 1,
       -vertices_size_x, 0, -vertices_size_y, 1,
@@ -2593,7 +2586,8 @@ function webgl_prefab_cuboid(args){
     ];
     if(args['exclude']['front'] !== true){
         properties['alpha'] = args['front-alpha'];
-        properties['attach-offset-z'] = half_size_z;
+        properties['attach-offset-y'] = args['translate-y'];
+        properties['attach-offset-z'] = args['translate-z'] + half_size_z;
         properties['collision'] = args['front-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-front';
         properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray({
@@ -2608,10 +2602,9 @@ function webgl_prefab_cuboid(args){
 
     // Back.
     properties['rotate-x'] = 270;
-    properties['translate-z'] = args['translate-z'] - half_size_z;
     if(args['exclude']['back'] !== true){
         properties['alpha'] = args['back-alpha'];
-        properties['attach-offset-z'] = -half_size_z;
+        properties['attach-offset-z'] = args['translate-z'] - half_size_z;
         properties['collision'] = args['back-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-back';
         properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray({
@@ -2628,8 +2621,6 @@ function webgl_prefab_cuboid(args){
     properties['attach-offset-z'] = 0;
     properties['rotate-x'] = 0;
     properties['rotate-z'] = 90;
-    properties['translate-x'] = args['translate-x'] - half_size_x;
-    properties['translate-z'] = args['translate-z'];
     properties['vertices'] = [
       vertices_size_y, 0, -vertices_size_z, 1,
       -vertices_size_y, 0, -vertices_size_z, 1,
@@ -2638,7 +2629,8 @@ function webgl_prefab_cuboid(args){
     ];
     if(args['exclude']['left'] !== true){
         properties['alpha'] = args['left-alpha'];
-        properties['attach-offset-x'] = -half_size_x;
+        properties['attach-offset-x'] = args['translate-x'] - half_size_x;
+        properties['attach-offset-z'] = args['translate-z'];
         properties['collision'] = args['left-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-left';
         properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray({
@@ -2653,10 +2645,9 @@ function webgl_prefab_cuboid(args){
 
     // Right.
     properties['rotate-z'] = 270;
-    properties['translate-x'] = args['translate-x'] + half_size_x;
     if(args['exclude']['right'] !== true){
         properties['alpha'] = args['right-alpha'];
-        properties['attach-offset-x'] = half_size_x;
+        properties['attach-offset-x'] = args['translate-x'] + half_size_x;
         properties['collision'] = args['right-collision'] || args['all-collision'];
         properties['id'] = args['prefix'] + '-right';
         properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray({
@@ -2771,11 +2762,11 @@ function webgl_prefab_lines_tree(args){
     });
 
     let properties = {
+      'attach-offset-x': args['translate-x'],
+      'attach-offset-y': args['translate-y'],
+      'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'character',
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'],
-      'translate-z': args['translate-z'],
       'vertex-colors': args['vertex-colors-trunk'],
     };
 
@@ -2804,7 +2795,7 @@ function webgl_prefab_lines_tree(args){
           ],
         });
 
-        properties['translate-y'] += 10;
+        properties['attach-offset-y'] += 10;
         trunk_width -= trunk_width_decrease;
 
         // Add branches.
