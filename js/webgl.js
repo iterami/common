@@ -534,11 +534,13 @@ function webgl_collision(args){
                     axis_second = 'translate-y';
                 }
 
-                if(target['change'][axis_first] !== 0){
-                    collider[axis_first] += target['change'][axis_first];
+                let axis_first_change = webgl_characters[target['attach-to']]['change'][axis_first];
+                if(axis_first_change !== 0){
+                    collider[axis_first] += axis_first_change;
                 }
-                if(target['change'][axis_second] !== 0){
-                    collider[axis_second] += target['change'][axis_second];
+                let axis_second_change = webgl_characters[target['attach-to']]['change'][axis_second];
+                if(axis_second_change !== 0){
+                    collider[axis_second] += axis_second_change;
                 }
             }
         }
