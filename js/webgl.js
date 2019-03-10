@@ -1238,6 +1238,10 @@ function webgl_init_character(args){
         'inventory': false,
         'jump-height': .6,
         'level': -1,
+        'path-direction': 1,
+        'path-end': false,
+        'path-id': false,
+        'path-point': 0,
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
@@ -1274,6 +1278,10 @@ function webgl_init_character(args){
       'jump-allow': false,
       'jump-height': args['jump-height'],
       'level': args['level'],
+      'path-direction': args['path-direction'],
+      'path-end': args['path-end'],
+      'path-id': args['path-id'],
+      'path-point': args['path-point'],
       'rotate-radians-x': 0,
       'rotate-radians-y': 0,
       'rotate-radians-z': 0,
@@ -1732,7 +1740,8 @@ function webgl_level_unload(){
 
 function webgl_logicloop(){
     if(webgl_character_level() > -2
-      && webgl_characters[webgl_character_id]['health-current'] > 0){
+      && webgl_characters[webgl_character_id]['health-current'] > 0
+      && webgl_characters[webgl_character_id]['path-id'] === false){
         let leftright = 0;
 
         if(core_keys[core_storage_data['move-←']]['state']){
@@ -1982,6 +1991,10 @@ function webgl_logicloop(){
     });
 
     for(let character in webgl_characters){
+        webgl_path_move({
+          'entity': webgl_characters[character],
+        });
+
         for(let change in webgl_characters[character]['change']){
             webgl_characters[character][change] = core_round({
               'number': webgl_characters[character][change] + webgl_characters[character]['change'][change],
@@ -2014,7 +2027,7 @@ function webgl_logicloop(){
         if(webgl_characters[webgl_character_id]['jump-allow']
           || webgl_properties['jump-movement']){
             webgl_characters[webgl_character_id]['change']['translate-x'] = 0;
-           webgl_characters[webgl_character_id]['change']['translate-z'] = 0;
+            webgl_characters[webgl_character_id]['change']['translate-z'] = 0;
         }
     }
 
@@ -2291,31 +2304,27 @@ function webgl_path_move(args){
         return;
     }
 
-    let entity_translate_x = args['entity']['translate-x'] - args['entity']['attach-offset-x'];
-    let entity_translate_y = args['entity']['translate-y'] - args['entity']['attach-offset-y'];
-    let entity_translate_z = args['entity']['translate-z'] - args['entity']['attach-offset-z'];
-
     let path = webgl_paths[args['entity']['path-id']];
     let point = core_handle_defaults({
       'default': {
         'speed': 1,
-        'translate-x': entity_translate_x,
-        'translate-y': entity_translate_y,
-        'translate-z': entity_translate_z,
+        'translate-x': args['entity']['translate-x'],
+        'translate-y': args['entity']['translate-y'],
+        'translate-z': args['entity']['translate-z'],
       },
       'var': path['points'][args['entity']['path-point']],
     });
 
     let angle_xz = core_point_angle({
-      'x0': entity_translate_x,
+      'x0': args['entity']['translate-x'],
       'x1': point['translate-x'],
-      'y0': entity_translate_z,
+      'y0': args['entity']['translate-z'],
       'y1': point['translate-z'],
     });
     let angle_y = core_point_angle({
-      'x0': entity_translate_x,
+      'x0': args['entity']['translate-x'],
       'x1': point['translate-x'],
-      'y0': entity_translate_y,
+      'y0': args['entity']['translate-y'],
       'y1': point['translate-y'],
     });
 
@@ -2331,27 +2340,27 @@ function webgl_path_move(args){
       'number': Math.sin(angle_xz) * Math.cos(angle_y) * speed,
     });
 
-    if(entity_translate_x > point['translate-x']){
+    if(args['entity']['translate-x'] > point['translate-x']){
         args['entity']['change']['translate-x'] *= -1;
     }
-    if(entity_translate_y > point['translate-y']){
+    if(args['entity']['translate-y'] > point['translate-y']){
         args['entity']['change']['translate-y'] *= -1;
     }
-    if(entity_translate_z > point['translate-z']){
+    if(args['entity']['translate-z'] > point['translate-z']){
         args['entity']['change']['translate-z'] *= -1;
     }
 
     if(core_distance({
-        'x0': entity_translate_x,
-        'y0': entity_translate_y,
-        'z0': entity_translate_z,
+        'x0': args['entity']['translate-x'],
+        'y0': args['entity']['translate-y'],
+        'z0': args['entity']['translate-z'],
         'x1': point['translate-x'],
         'y1': point['translate-y'],
         'z1': point['translate-z'],
       }) < Math.max(
          args['entity']['collide-range-horizontal'],
          args['entity']['collide-range-vertical']
-    )){
+      )){
         args['entity']['change']['translate-x'] = 0;
         args['entity']['change']['translate-y'] = 0;
         args['entity']['change']['translate-z'] = 0;
@@ -2428,10 +2437,10 @@ function webgl_path_use(args){
       },
     });
 
-    core_entities[args['entity']]['path-direction'] = args['path-direction'];
-    core_entities[args['entity']]['path-end'] = args['path-end'];
-    core_entities[args['entity']]['path-id'] = args['path-id'];
-    core_entities[args['entity']]['path-point'] = args['path-point'];
+    args['entity']['path-direction'] = args['path-direction'];
+    args['entity']['path-end'] = args['path-end'];
+    args['entity']['path-id'] = args['path-id'];
+    args['entity']['path-point'] = args['path-point'];
 }
 
 function webgl_perspective(){
