@@ -788,11 +788,11 @@ function webgl_cuboid_tree(args){
         'bottom': true,
         'top': true,
       },
+      'prefix': args['prefix'] + '-trunk',
       'properties': {
         'texture-id': 'wood.png',
         'texture-repeat-y': 2,
       },
-      'prefix': args['prefix'] + '-trunk',
       'size-x': args['trunk-size-x'],
       'size-y': args['trunk-size-y'],
       'size-z': args['trunk-size-z'],
