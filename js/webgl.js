@@ -547,275 +547,6 @@ function webgl_collision(args){
     return true;
 }
 
-function webgl_cuboid(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'all-alpha': false,
-        'all-collision': true,
-        'all-vertex-colors': false,
-        'back-alpha': 1,
-        'back-collision': false,
-        'back-vertex-colors': false,
-        'bottom-alpha': 1,
-        'bottom-collision': false,
-        'bottom-vertex-colors': false,
-        'exclude': {},
-        'front-alpha': 1,
-        'front-collision': false,
-        'front-vertex-colors': false,
-        'groups': [],
-        'left-alpha': 1,
-        'left-collision': false,
-        'left-vertex-colors': false,
-        'prefix': core_id_count,
-        'properties': {},
-        'random-colors': false,
-        'right-alpha': 1,
-        'right-collision': false,
-        'right-vertex-colors': false,
-        'size-x': 1,
-        'size-y': 1,
-        'size-z': 1,
-        'top-alpha': 1,
-        'top-collision': false,
-        'top-vertex-colors': false,
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
-      },
-    });
-
-    let half_size_x = args['size-x'] / 2;
-    let half_size_y = args['size-y'] / 2;
-    let half_size_z = args['size-z'] / 2;
-    let vertices_size_x = Math.abs(half_size_x);
-    let vertices_size_y = Math.abs(half_size_y);
-    let vertices_size_z = Math.abs(half_size_z);
-    let properties = {
-      'groups': args['groups'],
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'],
-      'translate-z': args['translate-z'],
-    };
-    for(let property in args['properties']){
-        properties[property] = args['properties'][property];
-    }
-
-    if(args['all-alpha'] !== false){
-        args['back-alpha'] = args['all-alpha'];
-        args['bottom-alpha'] = args['all-alpha'];
-        args['front-alpha'] = args['all-alpha'];
-        args['left-alpha'] = args['all-alpha'];
-        args['right-alpha'] = args['all-alpha'];
-        args['top-alpha'] = args['all-alpha'];
-    }
-    if(args['all-vertex-colors'] !== false){
-        args['back-vertex-colors'] = args['all-vertex-colors'];
-        args['bottom-vertex-colors'] = args['all-vertex-colors'];
-        args['front-vertex-colors'] = args['all-vertex-colors'];
-        args['left-vertex-colors'] = args['all-vertex-colors'];
-        args['right-vertex-colors'] = args['all-vertex-colors'];
-        args['top-vertex-colors'] = args['all-vertex-colors'];
-    }
-
-    // Top.
-    properties['translate-y'] = args['translate-y'] + half_size_y;
-    properties['vertices'] = [
-      vertices_size_x, 0, -vertices_size_z, 1,
-      -vertices_size_x, 0, -vertices_size_z, 1,
-      -vertices_size_x, 0, vertices_size_z, 1,
-      vertices_size_x, 0, vertices_size_z, 1
-    ];
-    if(args['exclude']['top'] !== true){
-        properties['alpha'] = args['top-alpha'];
-        properties['attach-offset-y'] = half_size_y;
-        properties['collision'] = args['top-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-top';
-        properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-        });
-    }
-
-    // Bottom.
-    properties['rotate-x'] = 180;
-    properties['translate-y'] = args['translate-y'] - half_size_y;
-    if(args['exclude']['bottom'] !== true){
-        properties['alpha'] = args['bottom-alpha'];
-        properties['attach-offset-y'] = -half_size_y;
-        properties['collision'] = args['bottom-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-bottom';
-        properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-        });
-    }
-
-    // Front.
-    properties['attach-offset-y'] = 0;
-    properties['rotate-x'] = 90;
-    properties['translate-y'] = args['translate-y'];
-    properties['translate-z'] = args['translate-z'] + half_size_z;
-    properties['vertices'] = [
-      vertices_size_x, 0, -vertices_size_y, 1,
-      -vertices_size_x, 0, -vertices_size_y, 1,
-      -vertices_size_x, 0, vertices_size_y, 1,
-      vertices_size_x, 0, vertices_size_y, 1
-    ];
-    if(args['exclude']['front'] !== true){
-        properties['alpha'] = args['front-alpha'];
-        properties['attach-offset-z'] = half_size_z;
-        properties['collision'] = args['front-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-front';
-        properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-        });
-    }
-
-    // Back.
-    properties['rotate-x'] = 270;
-    properties['translate-z'] = args['translate-z'] - half_size_z;
-    if(args['exclude']['back'] !== true){
-        properties['alpha'] = args['back-alpha'];
-        properties['attach-offset-z'] = -half_size_z;
-        properties['collision'] = args['back-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-back';
-        properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-        });
-    }
-
-    // Left.
-    properties['attach-offset-z'] = 0;
-    properties['rotate-x'] = 0;
-    properties['rotate-z'] = 90;
-    properties['translate-x'] = args['translate-x'] - half_size_x;
-    properties['translate-z'] = args['translate-z'];
-    properties['vertices'] = [
-      vertices_size_y, 0, -vertices_size_z, 1,
-      -vertices_size_y, 0, -vertices_size_z, 1,
-      -vertices_size_y, 0, vertices_size_z, 1,
-      vertices_size_y, 0, vertices_size_z, 1
-    ];
-    if(args['exclude']['left'] !== true){
-        properties['alpha'] = args['left-alpha'];
-        properties['attach-offset-x'] = -half_size_x;
-        properties['collision'] = args['left-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-left';
-        properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-        });
-    }
-
-    // Right.
-    properties['rotate-z'] = 270;
-    properties['translate-x'] = args['translate-x'] + half_size_x;
-    if(args['exclude']['right'] !== true){
-        properties['alpha'] = args['right-alpha'];
-        properties['attach-offset-x'] = half_size_x;
-        properties['collision'] = args['right-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-right';
-        properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-        });
-    }
-}
-
-// Required args: prefix
-function webgl_cuboid_tree(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'collision-leaves': true,
-        'collision-trunk': true,
-        'leaves-size-x': 10,
-        'leaves-size-y': 10,
-        'leaves-size-z': 10,
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
-        'trunk-size-x': 2,
-        'trunk-size-y': 10,
-        'trunk-size-z': 2,
-        'vertex-colors-leaves': [
-          0, 1, 0, 1,
-          0, 1, 0, 1,
-          0, 1, 0, 1,
-          0, 1, 0, 1,
-        ],
-        'vertex-colors-trunk': [
-          1, .5, 0, 1,
-          1, .5, 0, 1,
-          1, .5, 0, 1,
-          1, .5, 0, 1,
-        ],
-      },
-    });
-
-    webgl_cuboid({
-      'all-collision': args['collision-trunk'],
-      'all-vertex-colors': args['vertex-colors-trunk'],
-      'exclude': {
-        'bottom': true,
-        'top': true,
-      },
-      'prefix': args['prefix'] + '-trunk',
-      'properties': {
-        'texture-id': 'wood.png',
-        'texture-repeat-y': 2,
-      },
-      'size-x': args['trunk-size-x'],
-      'size-y': args['trunk-size-y'],
-      'size-z': args['trunk-size-z'],
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'] + args['trunk-size-y'] / 2,
-      'translate-z': args['translate-z'],
-    });
-    webgl_cuboid({
-      'all-collision': args['collision-leaves'],
-      'all-vertex-colors': args['vertex-colors-leaves'],
-      'prefix': args['prefix'] + '-leaves',
-      'properties': {
-        'texture-id': 'lavaleaf.png',
-      },
-      'size-x': args['leaves-size-x'],
-      'size-y': args['leaves-size-y'],
-      'size-z': args['leaves-size-z'],
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'] + args['trunk-size-y'] + args['leaves-size-y'] / 2,
-      'translate-z': args['translate-z'],
-    });
-}
-
 function webgl_draw(){
     webgl_buffer.clear(webgl_buffer.COLOR_BUFFER_BIT | webgl_buffer.DEPTH_BUFFER_BIT);
 
@@ -1942,7 +1673,7 @@ function webgl_level_init(args){
       'entities': args['json']['entities'],
     });
     for(let prefab in args['json']['prefabs']){
-        window[args['json']['prefabs'][prefab]['type']](args['json']['prefabs'][prefab]['properties']);
+        window['webgl_prefab_' + args['json']['prefabs'][prefab]['type']](args['json']['prefabs'][prefab]['properties']);
     }
 
     webgl_character_spawn();
@@ -1997,104 +1728,6 @@ function webgl_level_unload(){
     webgl_character_count = 0;
     core_entity_remove_all();
     core_storage_save();
-}
-
-// Required args: prefix
-function webgl_lines_tree(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
-        'trunk-branch-max': 4,
-        'trunk-branch-min': 0,
-        'trunk-count-max': 10,
-        'trunk-count-min': 1,
-        'trunk-length': 10,
-        'trunk-width-max': 2,
-        'trunk-width-min': 1,
-        'vertex-colors-leaves': [
-          0, .5, 0, 1,
-          0, .5, 0, 1,
-          0, .5, 0, 1,
-          0, .5, 0, 1,
-        ],
-        'vertex-colors-trunk': [
-          .4, .2, 0, 1,
-          .4, .2, 0, 1,
-          .4, .2, 0, 1,
-          .4, .2, 0, 1,
-        ],
-      },
-    });
-
-    let properties = {
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'],
-      'translate-z': args['translate-z'],
-      'vertex-colors': args['vertex-colors-trunk'],
-    };
-
-    // Create trunk section.
-    let trunk_count = core_random_integer({
-      'max': args['trunk-count-max'] - args['trunk-count-min'] + 1,
-    }) + args['trunk-count-min'];
-    let trunk_width = args['trunk-width-max'] / 2;
-    let trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
-    for(let trunk = 0; trunk < trunk_count; trunk++){
-        properties['id'] = args['prefix'] + '-trunk-' + trunk;
-        properties['billboard'] = [
-          'y',
-        ];
-        properties['rotate-x'] = 0;
-        properties['rotate-z'] = 0;
-        properties['vertices'] = [
-          trunk_width, args['trunk-length'], 0, 1,
-          -trunk_width, args['trunk-length'], 0, 1,
-          -trunk_width, 0, 0, 1,
-          trunk_width, 0, 0, 1
-        ];
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-        });
-
-        properties['translate-y'] += 10;
-        trunk_width -= trunk_width_decrease;
-
-        // Add branches.
-        let branch_count = core_random_integer({
-          'max': args['trunk-branch-max'] - args['trunk-branch-min'] + 1,
-        }) + args['trunk-branch-min'];
-        let branch_length = args['trunk-length'] / 2;
-        let branch_width = trunk_width / 2;
-        for(let branch = 0; branch < branch_count; branch++){
-            properties['id'] = args['prefix'] + '-trunk-' + trunk + '-branch-' + branch;
-            properties['billboard'] = false;
-            properties['rotate-x'] = core_random_number({
-              'multiplier': 45,
-            }) + 90;
-            properties['rotate-z'] = core_random_number({
-              'multiplier': 360,
-            });
-            properties['vertices'] = [
-              branch_width, branch_length, 0, 1,
-              -branch_width, branch_length, 0, 1,
-              -branch_width, 0, 0, 1,
-              branch_width, 0, 0, 1
-            ];
-
-            webgl_entity_create({
-              'entities': [
-                properties,
-              ],
-            });
-        }
-    }
-
-    // Create leaves.
 }
 
 function webgl_logicloop(){
@@ -2817,6 +2450,497 @@ function webgl_pick_color(args){
     return pixelarray;
 }
 
+function webgl_prefab_cuboid(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'all-alpha': false,
+        'all-collision': true,
+        'all-vertex-colors': false,
+        'back-alpha': 1,
+        'back-collision': false,
+        'back-vertex-colors': false,
+        'bottom-alpha': 1,
+        'bottom-collision': false,
+        'bottom-vertex-colors': false,
+        'exclude': {},
+        'front-alpha': 1,
+        'front-collision': false,
+        'front-vertex-colors': false,
+        'groups': [],
+        'left-alpha': 1,
+        'left-collision': false,
+        'left-vertex-colors': false,
+        'prefix': core_id_count,
+        'properties': {},
+        'random-colors': false,
+        'right-alpha': 1,
+        'right-collision': false,
+        'right-vertex-colors': false,
+        'size-x': 1,
+        'size-y': 1,
+        'size-z': 1,
+        'top-alpha': 1,
+        'top-collision': false,
+        'top-vertex-colors': false,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
+    });
+
+    let half_size_x = args['size-x'] / 2;
+    let half_size_y = args['size-y'] / 2;
+    let half_size_z = args['size-z'] / 2;
+    let vertices_size_x = Math.abs(half_size_x);
+    let vertices_size_y = Math.abs(half_size_y);
+    let vertices_size_z = Math.abs(half_size_z);
+    let properties = {
+      'groups': args['groups'],
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'],
+      'translate-z': args['translate-z'],
+    };
+    for(let property in args['properties']){
+        properties[property] = args['properties'][property];
+    }
+
+    if(args['all-alpha'] !== false){
+        args['back-alpha'] = args['all-alpha'];
+        args['bottom-alpha'] = args['all-alpha'];
+        args['front-alpha'] = args['all-alpha'];
+        args['left-alpha'] = args['all-alpha'];
+        args['right-alpha'] = args['all-alpha'];
+        args['top-alpha'] = args['all-alpha'];
+    }
+    if(args['all-vertex-colors'] !== false){
+        args['back-vertex-colors'] = args['all-vertex-colors'];
+        args['bottom-vertex-colors'] = args['all-vertex-colors'];
+        args['front-vertex-colors'] = args['all-vertex-colors'];
+        args['left-vertex-colors'] = args['all-vertex-colors'];
+        args['right-vertex-colors'] = args['all-vertex-colors'];
+        args['top-vertex-colors'] = args['all-vertex-colors'];
+    }
+
+    // Top.
+    properties['translate-y'] = args['translate-y'] + half_size_y;
+    properties['vertices'] = [
+      vertices_size_x, 0, -vertices_size_z, 1,
+      -vertices_size_x, 0, -vertices_size_z, 1,
+      -vertices_size_x, 0, vertices_size_z, 1,
+      vertices_size_x, 0, vertices_size_z, 1
+    ];
+    if(args['exclude']['top'] !== true){
+        properties['alpha'] = args['top-alpha'];
+        properties['attach-offset-y'] = half_size_y;
+        properties['collision'] = args['top-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-top';
+        properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Bottom.
+    properties['rotate-x'] = 180;
+    properties['translate-y'] = args['translate-y'] - half_size_y;
+    if(args['exclude']['bottom'] !== true){
+        properties['alpha'] = args['bottom-alpha'];
+        properties['attach-offset-y'] = -half_size_y;
+        properties['collision'] = args['bottom-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-bottom';
+        properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Front.
+    properties['attach-offset-y'] = 0;
+    properties['rotate-x'] = 90;
+    properties['translate-y'] = args['translate-y'];
+    properties['translate-z'] = args['translate-z'] + half_size_z;
+    properties['vertices'] = [
+      vertices_size_x, 0, -vertices_size_y, 1,
+      -vertices_size_x, 0, -vertices_size_y, 1,
+      -vertices_size_x, 0, vertices_size_y, 1,
+      vertices_size_x, 0, vertices_size_y, 1
+    ];
+    if(args['exclude']['front'] !== true){
+        properties['alpha'] = args['front-alpha'];
+        properties['attach-offset-z'] = half_size_z;
+        properties['collision'] = args['front-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-front';
+        properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Back.
+    properties['rotate-x'] = 270;
+    properties['translate-z'] = args['translate-z'] - half_size_z;
+    if(args['exclude']['back'] !== true){
+        properties['alpha'] = args['back-alpha'];
+        properties['attach-offset-z'] = -half_size_z;
+        properties['collision'] = args['back-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-back';
+        properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Left.
+    properties['attach-offset-z'] = 0;
+    properties['rotate-x'] = 0;
+    properties['rotate-z'] = 90;
+    properties['translate-x'] = args['translate-x'] - half_size_x;
+    properties['translate-z'] = args['translate-z'];
+    properties['vertices'] = [
+      vertices_size_y, 0, -vertices_size_z, 1,
+      -vertices_size_y, 0, -vertices_size_z, 1,
+      -vertices_size_y, 0, vertices_size_z, 1,
+      vertices_size_y, 0, vertices_size_z, 1
+    ];
+    if(args['exclude']['left'] !== true){
+        properties['alpha'] = args['left-alpha'];
+        properties['attach-offset-x'] = -half_size_x;
+        properties['collision'] = args['left-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-left';
+        properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Right.
+    properties['rotate-z'] = 270;
+    properties['translate-x'] = args['translate-x'] + half_size_x;
+    if(args['exclude']['right'] !== true){
+        properties['alpha'] = args['right-alpha'];
+        properties['attach-offset-x'] = half_size_x;
+        properties['collision'] = args['right-collision'] || args['all-collision'];
+        properties['id'] = args['prefix'] + '-right';
+        properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+}
+
+// Required args: prefix
+function webgl_prefab_cuboid_tree(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'collision-leaves': true,
+        'collision-trunk': true,
+        'leaves-size-x': 10,
+        'leaves-size-y': 10,
+        'leaves-size-z': 10,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+        'trunk-size-x': 2,
+        'trunk-size-y': 10,
+        'trunk-size-z': 2,
+        'vertex-colors-leaves': [
+          0, 1, 0, 1,
+          0, 1, 0, 1,
+          0, 1, 0, 1,
+          0, 1, 0, 1,
+        ],
+        'vertex-colors-trunk': [
+          1, .5, 0, 1,
+          1, .5, 0, 1,
+          1, .5, 0, 1,
+          1, .5, 0, 1,
+        ],
+      },
+    });
+
+    webgl_prefab_cuboid({
+      'all-collision': args['collision-trunk'],
+      'all-vertex-colors': args['vertex-colors-trunk'],
+      'exclude': {
+        'bottom': true,
+        'top': true,
+      },
+      'prefix': args['prefix'] + '-trunk',
+      'properties': {
+        'texture-id': 'wood.png',
+        'texture-repeat-y': 2,
+      },
+      'size-x': args['trunk-size-x'],
+      'size-y': args['trunk-size-y'],
+      'size-z': args['trunk-size-z'],
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'] + args['trunk-size-y'] / 2,
+      'translate-z': args['translate-z'],
+    });
+    webgl_prefab_cuboid({
+      'all-collision': args['collision-leaves'],
+      'all-vertex-colors': args['vertex-colors-leaves'],
+      'prefix': args['prefix'] + '-leaves',
+      'properties': {
+        'texture-id': 'lavaleaf.png',
+      },
+      'size-x': args['leaves-size-x'],
+      'size-y': args['leaves-size-y'],
+      'size-z': args['leaves-size-z'],
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'] + args['trunk-size-y'] + args['leaves-size-y'] / 2,
+      'translate-z': args['translate-z'],
+    });
+}
+
+// Required args: prefix
+function webgl_prefab_lines_tree(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+        'trunk-branch-max': 4,
+        'trunk-branch-min': 0,
+        'trunk-count-max': 10,
+        'trunk-count-min': 1,
+        'trunk-length': 10,
+        'trunk-width-max': 2,
+        'trunk-width-min': 1,
+        'vertex-colors-leaves': [
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+          0, .5, 0, 1,
+        ],
+        'vertex-colors-trunk': [
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+          .4, .2, 0, 1,
+        ],
+      },
+    });
+
+    let properties = {
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'],
+      'translate-z': args['translate-z'],
+      'vertex-colors': args['vertex-colors-trunk'],
+    };
+
+    // Create trunk section.
+    let trunk_count = core_random_integer({
+      'max': args['trunk-count-max'] - args['trunk-count-min'] + 1,
+    }) + args['trunk-count-min'];
+    let trunk_width = args['trunk-width-max'] / 2;
+    let trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
+    for(let trunk = 0; trunk < trunk_count; trunk++){
+        properties['id'] = args['prefix'] + '-trunk-' + trunk;
+        properties['billboard'] = [
+          'y',
+        ];
+        properties['rotate-x'] = 0;
+        properties['rotate-z'] = 0;
+        properties['vertices'] = [
+          trunk_width, args['trunk-length'], 0, 1,
+          -trunk_width, args['trunk-length'], 0, 1,
+          -trunk_width, 0, 0, 1,
+          trunk_width, 0, 0, 1
+        ];
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+
+        properties['translate-y'] += 10;
+        trunk_width -= trunk_width_decrease;
+
+        // Add branches.
+        let branch_count = core_random_integer({
+          'max': args['trunk-branch-max'] - args['trunk-branch-min'] + 1,
+        }) + args['trunk-branch-min'];
+        let branch_length = args['trunk-length'] / 2;
+        let branch_width = trunk_width / 2;
+        for(let branch = 0; branch < branch_count; branch++){
+            properties['id'] = args['prefix'] + '-trunk-' + trunk + '-branch-' + branch;
+            properties['billboard'] = false;
+            properties['rotate-x'] = core_random_number({
+              'multiplier': 45,
+            }) + 90;
+            properties['rotate-z'] = core_random_number({
+              'multiplier': 360,
+            });
+            properties['vertices'] = [
+              branch_width, branch_length, 0, 1,
+              -branch_width, branch_length, 0, 1,
+              -branch_width, 0, 0, 1,
+              branch_width, 0, 0, 1
+            ];
+
+            webgl_entity_create({
+              'entities': [
+                properties,
+              ],
+            });
+        }
+    }
+
+    // Create leaves.
+}
+
+// Required args: prefix
+function webgl_prefab_skybox(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'bottom-color-bottom': false,
+        'bottom-color-top': false,
+        'random-colors': false,
+        'rotate-x': 0,
+        'rotate-y': 0,
+        'rotate-z': 0,
+        'sides': 3,
+        'size': 99,
+        'top-color-bottom': false,
+        'top-color-top': false,
+      },
+    });
+
+    if(args['bottom-color-bottom'] === false){
+        args['bottom-color-bottom'] = webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+    }
+    if(args['bottom-color-top'] === false){
+        args['bottom-color-top'] = webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+    }
+    if(args['top-color-bottom'] === false){
+        args['top-color-bottom'] = webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+    }
+    if(args['top-color-top'] === false){
+        args['top-color-top'] = webgl_vertexcolorarray({
+          'random-colors': args['random-colors'],
+        });
+    }
+
+    let angle = core_degrees_to_radians({
+      'degrees': 360 / args['sides'],
+    });
+
+    // Top half.
+    let properties = {
+      'collision': false,
+      'draw-type': 'TRIANGLE_FAN',
+      'groups': [
+        'skybox',
+      ],
+      'id': args['prefix'] + '-top',
+      'rotate-x': args['rotate-x'],
+      'rotate-y': args['rotate-y'],
+      'rotate-z': args['rotate-z'],
+      'vertex-colors': [
+        args['top-color-top'][0],
+        args['top-color-top'][1],
+        args['top-color-top'][2],
+        args['top-color-top'][3],
+      ],
+      'vertices': [
+        0, args['size'], 0, 1,
+      ],
+    };
+    for(let side = 0; side <= args['sides']; side++){
+        let rotation = angle * side;
+        let x = Math.cos(rotation) * args['size'];
+        let z = Math.sin(rotation) * args['size'];
+
+        properties['vertex-colors'].push(
+          args['top-color-bottom'][0],
+          args['top-color-bottom'][1],
+          args['top-color-bottom'][2],
+          args['top-color-bottom'][3]
+        );
+        properties['vertices'].push(
+          x,
+          0,
+          z,
+          1
+        );
+    }
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+
+    // Bottom half.
+    properties['id'] = args['prefix'] + '-bottom';
+    properties['vertex-colors'] = [
+      args['bottom-color-bottom'][0],
+      args['bottom-color-bottom'][1],
+      args['bottom-color-bottom'][2],
+      args['bottom-color-bottom'][3],
+    ];
+    properties['vertices'] = [
+      0, -args['size'], 0, 1,
+    ];
+    for(let side = 0; side <= args['sides']; side++){
+        let rotation = -angle * side;
+        let x = Math.cos(rotation) * args['size'];
+        let z = Math.sin(rotation) * args['size'];
+
+        properties['vertex-colors'].push(
+          args['bottom-color-top'][0],
+          args['bottom-color-top'][1],
+          args['bottom-color-top'][2],
+          args['bottom-color-top'][3]
+        );
+        properties['vertices'].push(
+          x,
+          0,
+          z,
+          1
+        );
+    }
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+}
+
 // Required args: shaders
 function webgl_program_create(args){
     let program = webgl_buffer.createProgram();
@@ -3030,130 +3154,6 @@ function webgl_shader_update(){
       webgl_properties['shader']['fog-state'],
       webgl_properties['fog-state']
     );
-}
-
-// Required args: prefix
-function webgl_skybox(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'bottom-color-bottom': false,
-        'bottom-color-top': false,
-        'random-colors': false,
-        'rotate-x': 0,
-        'rotate-y': 0,
-        'rotate-z': 0,
-        'sides': 3,
-        'size': 99,
-        'top-color-bottom': false,
-        'top-color-top': false,
-      },
-    });
-
-    if(args['bottom-color-bottom'] === false){
-        args['bottom-color-bottom'] = webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-    }
-    if(args['bottom-color-top'] === false){
-        args['bottom-color-top'] = webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-    }
-    if(args['top-color-bottom'] === false){
-        args['top-color-bottom'] = webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-    }
-    if(args['top-color-top'] === false){
-        args['top-color-top'] = webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-    }
-
-    let angle = core_degrees_to_radians({
-      'degrees': 360 / args['sides'],
-    });
-
-    // Top half.
-    let properties = {
-      'collision': false,
-      'draw-type': 'TRIANGLE_FAN',
-      'groups': [
-        'skybox',
-      ],
-      'id': args['prefix'] + '-top',
-      'rotate-x': args['rotate-x'],
-      'rotate-y': args['rotate-y'],
-      'rotate-z': args['rotate-z'],
-      'vertex-colors': [
-        args['top-color-top'][0],
-        args['top-color-top'][1],
-        args['top-color-top'][2],
-        args['top-color-top'][3],
-      ],
-      'vertices': [
-        0, args['size'], 0, 1,
-      ],
-    };
-    for(let side = 0; side <= args['sides']; side++){
-        let rotation = angle * side;
-        let x = Math.cos(rotation) * args['size'];
-        let z = Math.sin(rotation) * args['size'];
-
-        properties['vertex-colors'].push(
-          args['top-color-bottom'][0],
-          args['top-color-bottom'][1],
-          args['top-color-bottom'][2],
-          args['top-color-bottom'][3]
-        );
-        properties['vertices'].push(
-          x,
-          0,
-          z,
-          1
-        );
-    }
-    webgl_entity_create({
-      'entities': [
-        properties,
-      ],
-    });
-
-    // Bottom half.
-    properties['id'] = args['prefix'] + '-bottom';
-    properties['vertex-colors'] = [
-      args['bottom-color-bottom'][0],
-      args['bottom-color-bottom'][1],
-      args['bottom-color-bottom'][2],
-      args['bottom-color-bottom'][3],
-    ];
-    properties['vertices'] = [
-      0, -args['size'], 0, 1,
-    ];
-    for(let side = 0; side <= args['sides']; side++){
-        let rotation = -angle * side;
-        let x = Math.cos(rotation) * args['size'];
-        let z = Math.sin(rotation) * args['size'];
-
-        properties['vertex-colors'].push(
-          args['bottom-color-top'][0],
-          args['bottom-color-top'][1],
-          args['bottom-color-top'][2],
-          args['bottom-color-top'][3]
-        );
-        properties['vertices'].push(
-          x,
-          0,
-          z,
-          1
-        );
-    }
-    webgl_entity_create({
-      'entities': [
-        properties,
-      ],
-    });
 }
 
 // Required args: entity
