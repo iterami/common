@@ -273,7 +273,7 @@ function webgl_character_origin(args){
       },
     });
 
-    if(!webgl_characters[webgl_character_id]){
+    if(!webgl_characters[args['character']]){
         return;
     }
 
@@ -311,7 +311,7 @@ function webgl_character_spawn(args){
       },
     });
 
-    if(!webgl_characters[webgl_character_id]){
+    if(!webgl_characters[args['character']]){
         return;
     }
 
