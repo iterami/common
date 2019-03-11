@@ -214,6 +214,13 @@ function webgl_character_damage(args){
     if(args['delete']){
         delete webgl_characters[args['character']];
         webgl_character_count--;
+
+        for(let entity in core_entities){
+            if(core_entities[entity]['attach-to'] === args['character']){
+                core_entities[entity]['attach-to'] = false;
+            }
+        }
+
         return;
     }
 
