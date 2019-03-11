@@ -310,6 +310,25 @@ function webgl_character_origin(args){
     webgl_characters[args['character']]['rotate-z'] = 0;
 }
 
+// Required args: id
+function webgl_character_set(args){
+    webgl_character_id = args['id'];
+
+    webgl_characters[webgl_character_id]['camera-zoom'] = Math.min(
+      webgl_characters[webgl_character_id]['camera-zoom'],
+      webgl_properties['camera-zoom-max']
+    );
+
+    core_group_modify({
+      'groups': [
+        'skybox',
+      ],
+      'todo': function(entity){
+          core_entities[entity]['attach-to'] = webgl_character_id;
+      },
+    });
+}
+
 function webgl_character_spawn(args){
     args = core_args({
       'args': args,
