@@ -1626,7 +1626,7 @@ function webgl_level_init(args){
         }
 
     }else if(args['character'] === 0
-      && webgl_character_level() < 0){
+      && webgl_character_level() < -1){
         return;
     }
 
@@ -2329,7 +2329,8 @@ function webgl_particles_create(args){
 
 // Required args: entity
 function webgl_path_move(args){
-    if(args['entity']['path-id'] === false){
+    if(args['entity']['path-id'] === false
+      || webgl_paths[args['entity']['path-id']] === void 0){
         return;
     }
 
