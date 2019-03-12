@@ -1275,6 +1275,7 @@ function webgl_init_character(args){
         1
       ),
       'health-max': args['health-max'],
+      'id': args['id'],
       'inventory': {},
       'jump-allow': false,
       'jump-height': args['jump-height'],
