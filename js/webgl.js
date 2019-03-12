@@ -1027,7 +1027,7 @@ function webgl_init(args){
         'gravity-acceleration': -.05,
         'gravity-axis': 'y',
         'gravity-max': -2,
-        'jump-movement': false,
+        'jump-movement': 0,
         'multiplier-jump': 1,
         'multiplier-speed': 1,
         'paths': {},
@@ -1795,7 +1795,7 @@ function webgl_logicloop(){
         if((webgl_characters[webgl_character_id]['jump-allow']
             && webgl_characters[webgl_character_id]['change']['translate-' + webgl_properties['gravity-axis']] === 0)
           || webgl_character_level() === -1
-          || webgl_properties['jump-movement']){
+          || webgl_properties['jump-movement'] > 0){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
@@ -1831,6 +1831,12 @@ function webgl_logicloop(){
               && leftright !== 0){
                 forwardback *= webgl_diagonal;
                 leftright *= webgl_diagonal;
+            }
+
+            if(!webgl_characters[webgl_character_id]['jump-allow']
+              && webgl_properties['jump-movement'] > 0){
+                forwardback *= webgl_properties['jump-movement'];
+                leftright *= webgl_properties['jump-movement'];
             }
 
             if(forwardback !== 0){
@@ -2047,7 +2053,7 @@ function webgl_logicloop(){
         }
 
         if(webgl_characters[webgl_character_id]['jump-allow']
-          || webgl_properties['jump-movement']){
+          || webgl_properties['jump-movement'] > 0){
             webgl_characters[webgl_character_id]['change']['translate-x'] = 0;
             webgl_characters[webgl_character_id]['change']['translate-z'] = 0;
         }
