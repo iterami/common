@@ -1757,6 +1757,7 @@ function webgl_level_unload(){
     }
     webgl_character_count = 0;
     core_entity_remove_all();
+    webgl_paths = {};
     core_storage_save();
 }
 
