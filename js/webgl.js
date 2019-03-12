@@ -228,15 +228,15 @@ function webgl_character_damage(args){
 }
 
 function webgl_character_home(){
-    if(!webgl_characters[webgl_character_id]){
+    if(webgl_characters[webgl_character_id] === void 0){
         return;
     }
 
     webgl_level_unload();
     webgl_init(webgl_character_homebase['properties']);
-    webgl_entity_create({
-      'entities': webgl_character_homebase['entities'],
-    });
+    for(let character in webgl_character_homebase['characters']){
+        webgl_init_character(webgl_character_homebase['characters'][character]);
+    }
     webgl_character_spawn();
 }
 
@@ -280,7 +280,7 @@ function webgl_character_origin(args){
       },
     });
 
-    if(!webgl_characters[args['character']]){
+    if(webgl_characters[args['character']] === void 0){
         return;
     }
 
@@ -337,7 +337,7 @@ function webgl_character_spawn(args){
       },
     });
 
-    if(!webgl_characters[args['character']]){
+    if(webgl_characters[args['character']] === void 0){
         return;
     }
 
@@ -1332,6 +1332,10 @@ function webgl_init_character(args){
         );
     }
     webgl_character_count++;
+
+    webgl_entity_create({
+      'entities': webgl_characters[args['id']]['entities'],
+    });
 }
 
 // Required args: item
@@ -1456,8 +1460,8 @@ function webgl_item_trade(args){
     let inventory_0 = webgl_characters[args['character-0']]['inventory'];
     let inventory_1 = webgl_characters[args['character-1']]['inventory'];
 
-    if(!webgl_characters[args['character-0']]
-      || !webgl_characters[args['character-1']]
+    if(webgl_characters[args['character-0']] === void 0
+      || webgl_characters[args['character-1']] === void 0
       || webgl_characters[args['character-0']]['health-current'] <= 0
       || webgl_characters[args['character-1']]['health-current'] <= 0
       || !inventory_0[args['item-0-id']]
@@ -1665,7 +1669,7 @@ function webgl_level_init(args){
           'entities': [],
           'id': webgl_character_id,
         });
-        webgl_character_homebase['entities'] = {};
+        webgl_character_homebase['characters'] = [];
         webgl_character_homebase['properties'] = {};
         webgl_properties['camera-zoom-max'] = 0;
     }
@@ -1673,30 +1677,22 @@ function webgl_level_init(args){
     if(args['json']['characters']
       && args['json']['characters'] !== false){
         for(let character in args['json']['characters']){
-            if(args['json']['characters'][character]['id'] === webgl_character_id
-              && args['character'] !== 1
-              && webgl_character_level() > -2){
-                if(args['character'] === -1){
-                    webgl_entity_create({
-                      'entities': args['json']['characters'][character]['entities'],
-                    });
-                }
-
-                continue;
-            }
-
             webgl_init_character(args['json']['characters'][character]);
-
-            if(args['json']['characters'][character]['id'] === webgl_character_id){
-                webgl_character_homebase['entities'] = args['json']['entities'];
-                webgl_character_homebase['properties'] = webgl_properties;
-            }
         }
 
-    }else if(!webgl_characters[webgl_character_id]){
+    }else if(webgl_characters[webgl_character_id] === void 0){
         webgl_init_character({
           'level': args['character'],
         });
+    }
+
+    if(args['character'] === 1){
+        webgl_character_homebase['characters'] = {};
+        Object.assign(
+          webgl_character_homebase['characters'],
+          webgl_characters
+        );
+        webgl_character_homebase['properties'] = webgl_properties;
     }
 
     webgl_entity_create({
