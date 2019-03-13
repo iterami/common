@@ -734,6 +734,7 @@ function webgl_entity_create(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'character': false,
         'entities': [],
       },
     });
@@ -763,18 +764,22 @@ function webgl_entity_create(args){
               ],
               'group': 'foreground',
             });
-            args['entities']['attach-to'] = webgl_character_id;
-            args['entities']['attach-type'] = 'character';
+            args['entities'][entity]['attach-to'] = webgl_character_id;
+            args['entities'][entity]['attach-type'] = 'character';
+
+        }else if(args['character'] !== false){
+            args['entities'][entity]['attach-to'] = args['character'];
+            args['entities'][entity]['attach-type'] = 'character';
         }
 
-        if(args['entities']['attach-to'] !== void 0){
+        if(args['entities'][entity]['attach-to'] !== void 0){
             webgl_attach({
               'entity': entity_id,
               'offset-x': args['entities'][entity]['attach-offset-x'],
               'offset-y': args['entities'][entity]['attach-offset-y'],
               'offset-z': args['entities'][entity]['attach-offset-z'],
-              'to': args['entities']['attach-to'],
-              'type': args['entities']['attach-type'],
+              'to': args['entities'][entity]['attach-to'],
+              'type': args['entities'][entity]['attach-type'],
             });
         }
     }
@@ -1313,23 +1318,10 @@ function webgl_init_character(args){
     }
     webgl_character_count++;
 
-    for(let entity in webgl_characters[args['id']]['entities']){
-        let entity_id = core_entity_create({
-          'id': webgl_characters[args['id']]['entities'][entity]['id'],
-          'properties': webgl_characters[args['id']]['entities'][entity],
-          'types': webgl_characters[args['id']]['entities'][entity]['types'],
-        });
-        core_matrices[entity_id] = core_matrix_create();
-
-        webgl_attach({
-          'entity': entity_id,
-          'offset-x': webgl_characters[args['id']]['entities'][entity]['attach-offset-x'],
-          'offset-y': webgl_characters[args['id']]['entities'][entity]['attach-offset-y'],
-          'offset-z': webgl_characters[args['id']]['entities'][entity]['attach-offset-z'],
-          'to': args['id'],
-          'type': 'character',
-        });
-    }
+    webgl_entity_create({
+      'character': args['id'],
+      'entities': webgl_characters[args['id']]['entities'],
+    });
 }
 
 // Required args: item
@@ -1376,19 +1368,11 @@ function webgl_item_equip(args){
             );
             properties['id'] = entity_id;
 
-            core_entity_create({
-              'id': entity_id,
-              'properties': properties,
-            });
-            core_matrices[entity_id] = core_matrix_create();
-
-            webgl_attach({
-              'entity': entity_id,
-              'offset-x': properties['attach-offset-x'],
-              'offset-y': properties['attach-offset-y'],
-              'offset-z': properties['attach-offset-z'],
-              'to': args['character'],
-              'type': 'character',
+            webgl_entity_create({
+              'character': args['character'],
+              'entities': [
+                properties,
+              ],
             });
 
             webgl_characters[args['character']]['entities'].push(properties);
