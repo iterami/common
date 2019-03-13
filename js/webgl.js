@@ -228,7 +228,7 @@ function webgl_character_damage(args){
 }
 
 function webgl_character_home(){
-    if(webgl_characters[webgl_character_id] === void 0){
+    if(webgl_character_homebase['properties'] === void 0){
         return;
     }
 
@@ -1727,6 +1727,13 @@ function webgl_level_load(args){
 }
 
 function webgl_level_unload(){
+    if(webgl_character_homebase['properties'] !== void 0){
+        Object.assign(
+          webgl_character_homebase['characters'][webgl_character_id],
+          webgl_characters[webgl_character_id]
+        );
+    }
+
     for(let character in webgl_characters){
         if(character !== webgl_character_id){
             delete webgl_characters[character];
