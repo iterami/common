@@ -2311,6 +2311,8 @@ function webgl_particles_create(args){
     for(let i = 0; i < args['count']; i++){
         let id = core_entity_create({
           'properties': {
+            'attach-to': webgl_character_id,
+            'attach-type': 'webgl_characters',
             'collide-range-horizontal': args['collide-range'],
             'collide-range-vertical': args['collide-range'],
             'collides': args['collides'],
