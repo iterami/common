@@ -1658,8 +1658,7 @@ function webgl_level_init(args){
           'entities': [],
           'id': webgl_character_id,
         });
-        webgl_character_homebase['characters'] = [];
-        webgl_character_homebase['properties'] = {};
+        webgl_character_homebase = {};
         webgl_properties['camera-zoom-max'] = 0;
 
     }else if(webgl_characters[webgl_character_id] === void 0){
