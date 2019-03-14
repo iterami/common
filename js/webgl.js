@@ -392,27 +392,12 @@ function webgl_collision(args){
       },
     });
 
-    let collider = 0;
-    let collider_position = {
-      'x': 0,
-      'y': 0,
-      'z': 0,
-    };
-
-    if(args['entity'] !== false){
-        collider = core_entities[args['entity']];
-
-        collider_position['x'] = window[collider['attach-type']][collider['attach-to']]['translate-x'] + collider['attach-offset-x'];
-        collider_position['y'] = window[collider['attach-type']][collider['attach-to']]['translate-y'] + collider['attach-offset-y'];
-        collider_position['z'] = window[collider['attach-type']][collider['attach-to']]['translate-z'] + collider['attach-offset-z'];
-
-    }else{
-        collider = webgl_characters[args['character-id']];
-
-        collider_position['x'] = collider['translate-x'];
-        collider_position['y'] = collider['translate-y'];
-        collider_position['z'] = collider['translate-z'];
-    }
+    let collider = args['entity'] !== false
+      ? core_entities[args['entity']]
+      : webgl_characters[args['character-id']];
+    let collider_position = webgl_get_translation({
+      'entity': collider,
+    });
 
     let collision = false;
     let collision_sign = 1;
@@ -422,11 +407,9 @@ function webgl_collision(args){
       'z': collider['collide-range-horizontal'] + Math.abs(collider['change']['translate-z']),
     };
     let target = core_entities[args['target']];
-    let target_position = {
-      'x': window[target['attach-type']][target['attach-to']]['translate-x'] + target['attach-offset-x'],
-      'y': window[target['attach-type']][target['attach-to']]['translate-y'] + target['attach-offset-y'],
-      'z': window[target['attach-type']][target['attach-to']]['translate-z'] + target['attach-offset-z'],
-    };
+    let target_position = webgl_get_translation({
+      'entity': target,
+    });
 
     if(target['normals'][0] !== 0){
         if(target['normals'][0] === 1
@@ -1009,6 +992,24 @@ function webgl_extension(args){
     }
 
     return result;
+}
+
+// Required args: entity
+function webgl_get_translation(args){
+    if(args['entity']['attach-to'] === void 0
+      || args['entity']['attach-to'] === false){
+        return {
+          'x': args['entity']['translate-x'],
+          'y': args['entity']['translate-y'],
+          'z': args['entity']['translate-z'],
+        };
+    }
+
+    return {
+      'x': window[args['entity']['attach-type']][args['entity']['attach-to']]['translate-x'] + args['entity']['attach-offset-x'],
+      'y': window[args['entity']['attach-type']][args['entity']['attach-to']]['translate-y'] + args['entity']['attach-offset-y'],
+      'z': window[args['entity']['attach-type']][args['entity']['attach-to']]['translate-z'] + args['entity']['attach-offset-z'],
+    };
 }
 
 function webgl_init(args){
@@ -2165,7 +2166,7 @@ function webgl_logicloop_handle_entity(entity){
             core_entities[entity]['spawn-interval-current'] = 0;
 
             webgl_particles_create({
-              'parent': entity,
+              'parent': core_entities[entity],
               'rotate-x': core_entities[entity]['rotate-x'],
               'rotate-y': core_entities[entity]['rotate-y'],
               'rotate-z': core_entities[entity]['rotate-z'],
@@ -2287,6 +2288,7 @@ function webgl_normals(args){
     return normals;
 }
 
+// Required args: parent
 function webgl_particles_create(args){
     args = core_args({
       'args': args,
@@ -2297,7 +2299,6 @@ function webgl_particles_create(args){
         'count': 1,
         'gravity': true,
         'lifespan': 100,
-        'parent': webgl_character_id,
         'rotate-x': webgl_characters[webgl_character_id]['rotate-x'],
         'rotate-y': webgl_characters[webgl_character_id]['rotate-y'],
         'rotate-z': webgl_characters[webgl_character_id]['rotate-z'],
@@ -2309,10 +2310,12 @@ function webgl_particles_create(args){
     });
 
     for(let i = 0; i < args['count']; i++){
+        let position = webgl_get_translation({
+          'entity': args['parent'],
+        });
+
         let id = core_entity_create({
           'properties': {
-            'attach-to': webgl_character_id,
-            'attach-type': 'webgl_characters',
             'collide-range-horizontal': args['collide-range'],
             'collide-range-vertical': args['collide-range'],
             'collides': args['collides'],
@@ -2320,14 +2323,14 @@ function webgl_particles_create(args){
             'gravity': args['gravity'],
             'lifespan': args['lifespan'],
             'normals': [0, 1, 0],
-            'parent': args['parent'],
+            'parent': args['parent']['id'],
             'rotate-x': args['rotate-x'],
             'rotate-y': args['rotate-y'],
             'rotate-z': args['rotate-z'],
             'speed': args['speed'],
-            'translate-x': args['translate-x'],
-            'translate-y': args['translate-y'],
-            'translate-z': args['translate-z'],
+            'translate-x': position['x'],
+            'translate-y': position['y'],
+            'translate-z': position['z'],
             'vertex-colors': args['color'],
             'vertices': [0, 0, 0, 1],
           },
