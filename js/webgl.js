@@ -382,119 +382,107 @@ function webgl_clearcolor_set(args){
     );
 }
 
-// Required args: target
+// Required args: collider, target
 function webgl_collision(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'character-id': webgl_character_id,
-        'entity': false,
-      },
-    });
-
-    let collider = args['entity'] !== false
-      ? core_entities[args['entity']]
-      : webgl_characters[args['character-id']];
     let collider_position = webgl_get_translation({
-      'entity': collider,
+      'entity': args['collider'],
     });
 
     let collision = false;
     let collision_sign = 1;
     let range = {
-      'x': collider['collide-range-horizontal'] + Math.abs(collider['change']['translate-x']),
-      'y': collider['collide-range-vertical'] + Math.abs(collider['change']['translate-y']),
-      'z': collider['collide-range-horizontal'] + Math.abs(collider['change']['translate-z']),
+      'x': args['collider']['collide-range-horizontal'] + Math.abs(args['collider']['change']['translate-x']),
+      'y': args['collider']['collide-range-vertical'] + Math.abs(args['collider']['change']['translate-y']),
+      'z': args['collider']['collide-range-horizontal'] + Math.abs(args['collider']['change']['translate-z']),
     };
-    let target = core_entities[args['target']];
     let target_position = webgl_get_translation({
-      'entity': target,
+      'entity': args['target'],
     });
 
-    if(target['normals'][0] !== 0){
-        if(target['normals'][0] === 1
-          && (collider['change']['translate-x'] < 0
-            || target['change']['translate-x'] > 0)){
+    if(args['target']['normals'][0] !== 0){
+        if(args['target']['normals'][0] === 1
+          && (args['collider']['change']['translate-x'] < 0
+            || args['target']['change']['translate-x'] > 0)){
             if(collider_position['x'] > target_position['x']
               && collider_position['x'] < target_position['x'] + range['x']
-              && collider_position['y'] > target_position['y'] + target['vertices'][4] - range['y']
-              && collider_position['y'] < target_position['y'] + target['vertices'][0] + range['y']
-              && collider_position['z'] > target_position['z'] + target['vertices'][2] - range['z']
-              && collider_position['z'] < target_position['z'] + target['vertices'][10] + range['z']){
+              && collider_position['y'] > target_position['y'] + args['target']['vertices'][4] - range['y']
+              && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y']
+              && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
+              && collider_position['z'] < target_position['z'] + args['target']['vertices'][10] + range['z']){
                 collision = 'x';
-                collider['change']['translate-x'] = target['change']['translate-x'];
+                args['collider']['change']['translate-x'] = args['target']['change']['translate-x'];
             }
 
-        }else if(target['normals'][0] === -1
-          && (collider['change']['translate-x'] > 0
-            || target['change']['translate-x'] < 0)){
+        }else if(args['target']['normals'][0] === -1
+          && (args['collider']['change']['translate-x'] > 0
+            || args['target']['change']['translate-x'] < 0)){
             if(collider_position['x'] > target_position['x'] - range['x']
               && collider_position['x'] < target_position['x']
-              && collider_position['y'] > target_position['y'] + target['vertices'][4] - range['y']
-              && collider_position['y'] < target_position['y'] + target['vertices'][0] + range['y']
-              && collider_position['z'] > target_position['z'] + target['vertices'][2] - range['z']
-              && collider_position['z'] < target_position['z'] + target['vertices'][10] + range['z']){
+              && collider_position['y'] > target_position['y'] + args['target']['vertices'][4] - range['y']
+              && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y']
+              && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
+              && collider_position['z'] < target_position['z'] + args['target']['vertices'][10] + range['z']){
                 collision = 'x';
                 collision_sign = -1;
-                collider['change']['translate-x'] = target['change']['translate-x'];
+                args['collider']['change']['translate-x'] = args['target']['change']['translate-x'];
             }
         }
 
-    }else if(target['normals'][1] !== 0){
-        if(target['normals'][1] === 1
-          && (collider['change']['translate-y'] < 0
-            || target['change']['translate-y'] > 0)){
-            if(collider_position['x'] > target_position['x'] + target['vertices'][4] - range['x']
-              && collider_position['x'] < target_position['x'] + target['vertices'][0] + range['x']
+    }else if(args['target']['normals'][1] !== 0){
+        if(args['target']['normals'][1] === 1
+          && (args['collider']['change']['translate-y'] < 0
+            || args['target']['change']['translate-y'] > 0)){
+            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][4] - range['x']
+              && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
               && collider_position['y'] > target_position['y']
               && collider_position['y'] < target_position['y'] + range['y']
-              && collider_position['z'] > target_position['z'] + target['vertices'][2] - range['z']
-              && collider_position['z'] < target_position['z'] + target['vertices'][10] + range['z']){
+              && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
+              && collider_position['z'] < target_position['z'] + args['target']['vertices'][10] + range['z']){
                 collision = 'y';
-                collider['change']['translate-y'] = target['change']['translate-y'];
+                args['collider']['change']['translate-y'] = args['target']['change']['translate-y'];
             }
 
-        }else if(target['normals'][1] === -1
-          && (collider['change']['translate-y'] > 0
-            || target['change']['translate-y'] < 0)){
-            if(collider_position['x'] > target_position['x'] + target['vertices'][4] - range['x']
-              && collider_position['x'] < target_position['x'] + target['vertices'][0] + range['x']
+        }else if(args['target']['normals'][1] === -1
+          && (args['collider']['change']['translate-y'] > 0
+            || args['target']['change']['translate-y'] < 0)){
+            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][4] - range['x']
+              && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
               && collider_position['y'] > target_position['y'] - range['y']
               && collider_position['y'] < target_position['y']
-              && collider_position['z'] > target_position['z'] + target['vertices'][2] - range['z']
-              && collider_position['z'] < target_position['z'] + target['vertices'][10] + range['z']){
+              && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
+              && collider_position['z'] < target_position['z'] + args['target']['vertices'][10] + range['z']){
                 collision = 'y';
                 collision_sign = -1;
-                collider['change']['translate-y'] = target['change']['translate-y'];
+                args['collider']['change']['translate-y'] = args['target']['change']['translate-y'];
             }
         }
 
-    }else if(target['normals'][2] !== 0){
-        if(target['normals'][2] === 1
-          && (collider['change']['translate-z'] < 0
-            || target['change']['translate-z'] > 0)){
-            if(collider_position['x'] > target_position['x'] + target['vertices'][4] - range['x']
-              && collider_position['x'] < target_position['x'] + target['vertices'][0] + range['x']
-              && collider_position['y'] > target_position['y'] + target['vertices'][2] - range['y']
-              && collider_position['y'] < target_position['y'] + target['vertices'][10] + range['y']
+    }else if(args['target']['normals'][2] !== 0){
+        if(args['target']['normals'][2] === 1
+          && (args['collider']['change']['translate-z'] < 0
+            || args['target']['change']['translate-z'] > 0)){
+            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][4] - range['x']
+              && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
+              && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
+              && collider_position['y'] < target_position['y'] + args['target']['vertices'][10] + range['y']
               && collider_position['z'] > target_position['z']
               && collider_position['z'] < target_position['z'] + range['z']){
                 collision = 'z';
-                collider['change']['translate-z'] = target['change']['translate-z'];
+                args['collider']['change']['translate-z'] = args['target']['change']['translate-z'];
             }
 
-        }else if(target['normals'][2] === -1
-          && (collider['change']['translate-z'] > 0
-            || target['change']['translate-z'] < 0)){
-            if(collider_position['x'] > target_position['x'] + target['vertices'][4] - range['x']
-              && collider_position['x'] < target_position['x'] + target['vertices'][0] + range['x']
-              && collider_position['y'] > target_position['y'] + target['vertices'][2] - range['y']
-              && collider_position['y'] < target_position['y'] + target['vertices'][10] + range['y']
+        }else if(args['target']['normals'][2] === -1
+          && (args['collider']['change']['translate-z'] > 0
+            || args['target']['change']['translate-z'] < 0)){
+            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][4] - range['x']
+              && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
+              && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
+              && collider_position['y'] < target_position['y'] + args['target']['vertices'][10] + range['y']
               && collider_position['z'] > target_position['z'] - range['z']
               && collider_position['z'] < target_position['z']){
                 collision = 'z';
                 collision_sign = -1;
-                collider['change']['translate-z'] = target['change']['translate-z'];
+                args['collider']['change']['translate-z'] = args['target']['change']['translate-z'];
             }
         }
     }
@@ -504,25 +492,25 @@ function webgl_collision(args){
             if(webgl_character_level({
                 'character': args['character-id'],
               }) > -1){
-                if(target['collide-damage'] !== 0){
+                if(args['target']['collide-damage'] !== 0){
                     webgl_character_damage({
                       'character': args['character-id'],
-                      'damage': target['collide-damage'],
+                      'damage': args['target']['collide-damage'],
                     });
                 }
 
-                if(target['item-id'] !== false){
-                    if(!(target['item-id'] in collider['inventory'])){
+                if(args['target']['item-id'] !== false){
+                    if(!(args['target']['item-id'] in args['collider']['inventory'])){
                         webgl_item_reset({
                           'character': args['character-id'],
-                          'entities': target['item-entities'],
-                          'item': target['item-id'],
-                          'spell': target['item-spellproperties'],
-                          'stats': target['item-stats'],
+                          'entities': args['target']['item-entities'],
+                          'item': args['target']['item-id'],
+                          'spell': args['target']['item-spellproperties'],
+                          'stats': args['target']['item-stats'],
                         });
                     }
 
-                    collider['inventory'][target['item-id']]['amount'] += target['item-amount'];
+                    args['collider']['inventory'][args['target']['item-id']]['amount'] += args['target']['item-amount'];
 
                     core_entity_remove({
                       'entities': [
@@ -549,13 +537,13 @@ function webgl_collision(args){
               ? 'vertical'
               : 'horizontal';
 
-            collider['translate-' + collision] = target_position[collision] + collider['collide-range-' + range_axis] * collision_sign;
-            collider['change']['translate-' + collision] = 0;
+            args['collider']['translate-' + collision] = target_position[collision] + args['collider']['collide-range-' + range_axis] * collision_sign;
+            args['collider']['change']['translate-' + collision] = 0;
 
             if(collision === webgl_properties['gravity-axis']){
                 if(args['entity'] === false
                   && webgl_properties['gravity-max'] / webgl_properties['gravity-max'] === collision_sign){
-                    collider['jump-allow'] = true;
+                    args['collider']['jump-allow'] = true;
                 }
 
                 let axis_first = 'translate-x';
@@ -567,13 +555,13 @@ function webgl_collision(args){
                     axis_second = 'translate-y';
                 }
 
-                let axis_first_change = webgl_characters[target['attach-to']]['change'][axis_first];
+                let axis_first_change = webgl_characters[args['target']['attach-to']]['change'][axis_first];
                 if(axis_first_change !== 0){
-                    collider[axis_first] += axis_first_change;
+                    args['collider'][axis_first] += axis_first_change;
                 }
-                let axis_second_change = webgl_characters[target['attach-to']]['change'][axis_second];
+                let axis_second_change = webgl_characters[args['target']['attach-to']]['change'][axis_second];
                 if(axis_second_change !== 0){
-                    collider[axis_second] += axis_second_change;
+                    args['collider'][axis_second] += axis_second_change;
                 }
             }
         }
@@ -1881,8 +1869,8 @@ function webgl_logicloop(){
             for(let entity in core_entities){
                 if(core_entities[entity]['collision']){
                     webgl_collision({
-                      'character-id': character,
-                      'target': entity,
+                      'collider': webgl_characters[character],
+                      'target': core_entities[entity],
                     });
                 }
             }
@@ -2150,8 +2138,8 @@ function webgl_logicloop_handle_entity(entity){
             if(core_entities[other_entity]['collision']
               && entity !== other_entity){
                 if(!webgl_collision({
-                    'entity': entity,
-                    'target': other_entity,
+                    'collider': core_entities[entity],
+                    'target': core_entities[other_entity],
                   })){
                     return;
                 }
