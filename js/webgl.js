@@ -387,7 +387,6 @@ function webgl_collision(args){
     let collider_position = webgl_get_translation({
       'entity': args['collider'],
     });
-
     let collision = false;
     let collision_sign = 1;
     let range = {
@@ -488,7 +487,7 @@ function webgl_collision(args){
     }
 
     if(collision !== false){
-        if(args['entity'] === false){
+        if(args['collider']['attach-to'] === void 0){
             if(webgl_character_level({
                 'character': args['character-id'],
               }) > -1){
@@ -522,10 +521,10 @@ function webgl_collision(args){
                 }
             }
 
-        }else if(core_groups['particles'][args['entity']]){
+        }else if(core_groups['particles'][args['collider']['id']]){
             core_entity_remove({
               'entities': [
-                args['entity'],
+                args['collider']['id'],
               ],
             });
 
@@ -541,7 +540,7 @@ function webgl_collision(args){
             args['collider']['change']['translate-' + collision] = 0;
 
             if(collision === webgl_properties['gravity-axis']){
-                if(args['entity'] === false
+                if(args['collider']['jump-allow'] === false
                   && webgl_properties['gravity-max'] / webgl_properties['gravity-max'] === collision_sign){
                     args['collider']['jump-allow'] = true;
                 }
@@ -923,6 +922,7 @@ function webgl_entity_radians(args){
 }
 
 function webgl_entity_todo(entity){
+    core_entities[entity]['id'] = entity;
     core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 4;
 
     core_entities[entity]['normals'] = webgl_normals({
