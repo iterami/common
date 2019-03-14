@@ -8,7 +8,7 @@ function webgl_attach(args){
         'offset-x': 0,
         'offset-y': 0,
         'offset-z': 0,
-        'type': 'entity',
+        'type': 'core_entities',
       },
     });
 
@@ -402,9 +402,9 @@ function webgl_collision(args){
     if(args['entity'] !== false){
         collider = core_entities[args['entity']];
 
-        collider_position['x'] = webgl_characters[collider['attach-to']]['translate-x'] + collider['attach-offset-x'];
-        collider_position['y'] = webgl_characters[collider['attach-to']]['translate-y'] + collider['attach-offset-y'];
-        collider_position['z'] = webgl_characters[collider['attach-to']]['translate-z'] + collider['attach-offset-z'];
+        collider_position['x'] = window[collider['attach-type']][collider['attach-to']]['translate-x'] + collider['attach-offset-x'];
+        collider_position['y'] = window[collider['attach-type']][collider['attach-to']]['translate-y'] + collider['attach-offset-y'];
+        collider_position['z'] = window[collider['attach-type']][collider['attach-to']]['translate-z'] + collider['attach-offset-z'];
 
     }else{
         collider = webgl_characters[args['character-id']];
@@ -423,9 +423,9 @@ function webgl_collision(args){
     };
     let target = core_entities[args['target']];
     let target_position = {
-      'x': webgl_characters[target['attach-to']]['translate-x'] + target['attach-offset-x'],
-      'y': webgl_characters[target['attach-to']]['translate-y'] + target['attach-offset-y'],
-      'z': webgl_characters[target['attach-to']]['translate-z'] + target['attach-offset-z'],
+      'x': window[target['attach-type']][target['attach-to']]['translate-x'] + target['attach-offset-x'],
+      'y': window[target['attach-type']][target['attach-to']]['translate-y'] + target['attach-offset-y'],
+      'z': window[target['attach-type']][target['attach-to']]['translate-z'] + target['attach-offset-z'],
     };
 
     if(target['normals'][0] !== 0){
@@ -789,11 +789,11 @@ function webgl_entity_create(args){
               'group': 'foreground',
             });
             args['entities'][entity]['attach-to'] = webgl_character_id;
-            args['entities'][entity]['attach-type'] = 'character';
+            args['entities'][entity]['attach-type'] = 'webgl_characters';
 
         }else if(args['character'] !== false){
             args['entities'][entity]['attach-to'] = args['character'];
-            args['entities'][entity]['attach-type'] = 'character';
+            args['entities'][entity]['attach-type'] = 'webgl_characters';
         }
 
         if(args['entities'][entity]['attach-to'] !== void 0){
@@ -1172,7 +1172,7 @@ function webgl_init(args){
         'attach-offset-y': 0,
         'attach-offset-z': 0,
         'attach-to': false,
-        'attach-type': 'entity',
+        'attach-type': 'core_entities',
         'billboard': false,
         'change': {
           'translate-x': 0,
@@ -2101,7 +2101,7 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(core_entities[entity]['attach-to'] !== false){
-        let target = core_entities[entity]['attach-type'] === 'character'
+        let target = core_entities[entity]['attach-type'] === 'webgl_characters'
           ? webgl_characters[core_entities[entity]['attach-to']]
           : core_entities[core_entities[entity]['attach-to']];
 
@@ -2190,7 +2190,7 @@ function webgl_logicloop_handle_entity(entity){
     });
     if(core_entities[entity]['attach-to'] !== false
       && core_entities[entity]['billboard'] === false){
-        if(core_entities[entity]['attach-type'] === 'character'){
+        if(core_entities[entity]['attach-type'] === 'webgl_characters'){
             if(!core_groups['skybox'][entity]){
                 core_matrix_rotate({
                   'dimensions': [
@@ -2563,7 +2563,7 @@ function webgl_prefab_cuboid(args){
     let vertices_size_z = Math.abs(half_size_z);
     let properties = {
       'attach-to': args['character'],
-      'attach-type': 'character',
+      'attach-type': 'webgl_characters',
       'groups': args['groups'],
     };
     for(let property in args['properties']){
@@ -2817,7 +2817,7 @@ function webgl_prefab_lines_tree(args){
       'attach-offset-y': args['translate-y'],
       'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
-      'attach-type': 'character',
+      'attach-type': 'webgl_characters',
       'vertex-colors': args['vertex-colors-trunk'],
     };
 
