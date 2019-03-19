@@ -615,11 +615,11 @@ function webgl_collision(args){
     if(collision !== false){
         if(args['collider']['attach-to'] === void 0){
             if(webgl_character_level({
-                'character': args['character-id'],
+                'character': args['collider']['id'],
               }) > -1){
                 if(args['target']['collide-damage'] !== 0){
                     webgl_character_damage({
-                      'character': args['character-id'],
+                      'character': args['collider']['id'],
                       'damage': args['target']['collide-damage'],
                     });
                 }
@@ -627,7 +627,7 @@ function webgl_collision(args){
                 if(args['target']['item-id'] !== false){
                     if(!(args['target']['item-id'] in args['collider']['inventory'])){
                         webgl_item_reset({
-                          'character': args['character-id'],
+                          'character': args['collider']['id'],
                           'entities': args['target']['item-entities'],
                           'item': args['target']['item-id'],
                           'spell': args['target']['item-spellproperties'],
@@ -639,7 +639,7 @@ function webgl_collision(args){
 
                     core_entity_remove({
                       'entities': [
-                        args['target'],
+                        args['target']['id'],
                       ],
                     });
 
