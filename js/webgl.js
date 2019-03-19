@@ -877,7 +877,8 @@ function webgl_entity_create(args){
         }
         delete core_entities[entity_id]['groups'];
 
-        if(core_groups['skybox'][entity_id] === true){
+        if(core_groups['skybox']
+          && core_groups['skybox'][entity_id] === true){
             core_group_remove({
               'entities': [
                 entity_id,
@@ -1631,7 +1632,13 @@ function webgl_level_init(args){
         args['json'] = {};
     }
 
-    if(args['character'] === 0
+    if(args['character'] === 1){
+        if(!args['json']['characters']
+          || args['json']['characters'][0]['id'] !== webgl_character_id){
+            return;
+        }
+
+    }else if(args['character'] === 0
       && webgl_character_level() < -1){
         return;
     }
@@ -1664,15 +1671,6 @@ function webgl_level_init(args){
     webgl_level_unload();
 
     webgl_init(args['json']);
-
-    if(args['character'] === 1
-      && !webgl_characters[webgl_character_id]
-      && (!args['json']['characters']
-        || args['json']['characters'][0]['id'] !== webgl_character_id)){
-        webgl_character_random({
-          'id': webgl_character_id,
-        });
-    }
 
     if(args['json']['characters']
       && args['json']['characters'] !== false){
