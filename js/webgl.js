@@ -2570,14 +2570,6 @@ function webgl_prefab_cuboid(args){
     let vertices_size_x = Math.abs(half_size_x);
     let vertices_size_y = Math.abs(half_size_y);
     let vertices_size_z = Math.abs(half_size_z);
-    let properties = {
-      'attach-to': args['character'],
-      'attach-type': 'webgl_characters',
-      'groups': args['groups'],
-    };
-    for(let property in args['properties']){
-        properties[property] = args['properties'][property];
-    }
 
     if(args['all-alpha'] !== false){
         args['back-alpha'] = args['all-alpha'];
@@ -2597,127 +2589,212 @@ function webgl_prefab_cuboid(args){
     }
 
     // Top.
-    properties['vertices'] = [
-      vertices_size_x, 0, -vertices_size_z, 1,
-      -vertices_size_x, 0, -vertices_size_z, 1,
-      -vertices_size_x, 0, vertices_size_z, 1,
-      vertices_size_x, 0, vertices_size_z, 1
-    ];
     if(args['exclude']['top'] !== true){
-        properties['alpha'] = args['top-alpha'];
-        properties['attach-offset-y'] = args['translate-y'] + half_size_y;
-        properties['collision'] = args['top-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-top';
-        properties['vertex-colors'] = args['top-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
+        let properties = {
+          'alpha': args['top-alpha'],
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'] + half_size_y,
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'collision': args['top-collision'] || args['all-collision'],
+          'groups': args['groups'],
+          'id': args['prefix'] + '-top',
+          'vertex-colors': args['top-vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': args['random-colors'],
+          }),
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_z, 1,
+            -vertices_size_x, 0, -vertices_size_z, 1,
+            -vertices_size_x, 0, vertices_size_z, 1,
+            vertices_size_x, 0, vertices_size_z, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['properties']
+        );
         webgl_entity_create({
           'entities': [
             properties,
           ],
         });
+        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Bottom.
-    properties['rotate-x'] = 180;
     if(args['exclude']['bottom'] !== true){
-        properties['alpha'] = args['bottom-alpha'];
-        properties['attach-offset-y'] = args['translate-y'] - half_size_y;
-        properties['collision'] = args['bottom-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-bottom';
-        properties['vertex-colors'] = args['bottom-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
+        let properties = {
+          'alpha': args['bottom-alpha'],
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'] - half_size_y,
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'collision': args['bottom-collision'] || args['all-collision'],
+          'groups': args['groups'],
+          'id': args['prefix'] + '-bottom',
+          'rotate-x': 180,
+          'vertex-colors': args['bottom-vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': args['random-colors'],
+          }),
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_z, 1,
+            -vertices_size_x, 0, -vertices_size_z, 1,
+            -vertices_size_x, 0, vertices_size_z, 1,
+            vertices_size_x, 0, vertices_size_z, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['properties']
+        );
         webgl_entity_create({
           'entities': [
             properties,
           ],
         });
+        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Front.
-    properties['attach-offset-y'] = 0;
-    properties['rotate-x'] = 90;
-    properties['vertices'] = [
-      vertices_size_x, 0, -vertices_size_y, 1,
-      -vertices_size_x, 0, -vertices_size_y, 1,
-      -vertices_size_x, 0, vertices_size_y, 1,
-      vertices_size_x, 0, vertices_size_y, 1
-    ];
     if(args['exclude']['front'] !== true){
-        properties['alpha'] = args['front-alpha'];
-        properties['attach-offset-y'] = args['translate-y'];
-        properties['attach-offset-z'] = args['translate-z'] + half_size_z;
-        properties['collision'] = args['front-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-front';
-        properties['vertex-colors'] = args['front-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
+        let properties = {
+          'alpha': args['front-alpha'],
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'] + half_size_z,
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'collision': args['front-collision'] || args['all-collision'],
+          'groups': args['groups'],
+          'id': args['prefix'] + '-front',
+          'rotate-x': 90,
+          'vertex-colors': args['front-vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': args['random-colors'],
+          }),
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_y, 1,
+            -vertices_size_x, 0, -vertices_size_y, 1,
+            -vertices_size_x, 0, vertices_size_y, 1,
+            vertices_size_x, 0, vertices_size_y, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['properties']
+        );
         webgl_entity_create({
           'entities': [
             properties,
           ],
         });
+        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Back.
-    properties['rotate-x'] = 270;
     if(args['exclude']['back'] !== true){
-        properties['alpha'] = args['back-alpha'];
-        properties['attach-offset-z'] = args['translate-z'] - half_size_z;
-        properties['collision'] = args['back-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-back';
-        properties['vertex-colors'] = args['back-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
+        let properties = {
+          'alpha': args['back-alpha'],
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'] - half_size_z,
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'collision': args['back-collision'] || args['all-collision'],
+          'groups': args['groups'],
+          'id': args['prefix'] + '-back',
+          'rotate-x': 270,
+          'vertex-colors': args['back-vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': args['random-colors'],
+          }),
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_y, 1,
+            -vertices_size_x, 0, -vertices_size_y, 1,
+            -vertices_size_x, 0, vertices_size_y, 1,
+            vertices_size_x, 0, vertices_size_y, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['properties']
+        );
         webgl_entity_create({
           'entities': [
             properties,
           ],
         });
+        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Left.
-    properties['attach-offset-z'] = 0;
-    properties['rotate-x'] = 0;
-    properties['rotate-z'] = 90;
-    properties['vertices'] = [
-      vertices_size_y, 0, -vertices_size_z, 1,
-      -vertices_size_y, 0, -vertices_size_z, 1,
-      -vertices_size_y, 0, vertices_size_z, 1,
-      vertices_size_y, 0, vertices_size_z, 1
-    ];
     if(args['exclude']['left'] !== true){
-        properties['alpha'] = args['left-alpha'];
-        properties['attach-offset-x'] = args['translate-x'] - half_size_x;
-        properties['attach-offset-z'] = args['translate-z'];
-        properties['collision'] = args['left-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-left';
-        properties['vertex-colors'] = args['left-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
+        let properties = {
+          'alpha': args['left-alpha'],
+          'attach-offset-x': args['translate-x'] - half_size_x,
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'collision': args['left-collision'] || args['all-collision'],
+          'groups': args['groups'],
+          'id': args['prefix'] + '-left',
+          'rotate-z': 90,
+          'vertex-colors': args['left-vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': args['random-colors'],
+          }),
+          'vertices': [
+            vertices_size_y, 0, -vertices_size_z, 1,
+            -vertices_size_y, 0, -vertices_size_z, 1,
+            -vertices_size_y, 0, vertices_size_z, 1,
+            vertices_size_y, 0, vertices_size_z, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['properties']
+        );
         webgl_entity_create({
           'entities': [
             properties,
           ],
         });
+        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Right.
-    properties['rotate-z'] = 270;
     if(args['exclude']['right'] !== true){
-        properties['alpha'] = args['right-alpha'];
-        properties['attach-offset-x'] = args['translate-x'] + half_size_x;
-        properties['collision'] = args['right-collision'] || args['all-collision'];
-        properties['id'] = args['prefix'] + '-right';
-        properties['vertex-colors'] = args['right-vertex-colors'] || webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
+        let properties = {
+          'alpha': args['right-alpha'],
+          'attach-offset-x': args['translate-x'] + half_size_x,
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'collision': args['right-collision'] || args['all-collision'],
+          'groups': args['groups'],
+          'id': args['prefix'] + '-right',
+          'rotate-z': 270,
+          'vertex-colors': args['right-vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': args['random-colors'],
+          }),
+          'vertices': [
+            vertices_size_y, 0, -vertices_size_z, 1,
+            -vertices_size_y, 0, -vertices_size_z, 1,
+            -vertices_size_y, 0, vertices_size_z, 1,
+            vertices_size_y, 0, vertices_size_z, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['properties']
+        );
         webgl_entity_create({
           'entities': [
             properties,
           ],
         });
+        webgl_characters[args['character']]['entities'].push(properties);
     }
 }
 
