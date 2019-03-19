@@ -411,6 +411,31 @@ function webgl_character_origin(args){
 }
 
 // Required args: id
+function webgl_character_random(args){
+    let horizontal = core_random_number({
+      'multiplier': 2,
+    }) + 2;
+    let vertical = core_random_number({
+      'multiplier': 5,
+    }) + 2;
+
+    webgl_character_init({
+      'collide-range-horizontal': horizontal,
+      'collide-range-vertical': vertical,
+      'id': args['id'],
+    });
+
+    webgl_prefab_cuboid({
+      'all-collision': false,
+      'character': args['id'],
+      'random-colors': true,
+      'size-x': horizontal * 2,
+      'size-y': vertical * 2,
+      'size-z': horizontal * 2,
+    });
+}
+
+// Required args: id
 function webgl_character_set(args){
     webgl_character_id = args['id'];
 
