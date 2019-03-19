@@ -1959,16 +1959,25 @@ function core_round(args){
       },
     });
 
-    /*
-    if(String(args['number']).indexOf('e') >= 0){
-        args['number'] = Number(args['number'].toFixed(args['decimals']));
+    let eIndex = String(args['number']).indexOf('e');
+    let eString = '';
+    if(eIndex >= 0){
+        eString = String(args['number']).slice(eIndex);
+        args['number'] = String(args['number']).slice(
+          0,
+          eIndex
+        );
     }
-    */
 
     let result = Number(
       Math.round(args['number'] + 'e+' + args['decimals'])
         + 'e-' + args['decimals']
     );
+
+    if(eString.length > 0){
+        result = Number(result + eString);
+    }
+
     if(Number.isNaN(result)){
         result = 0;
     }
