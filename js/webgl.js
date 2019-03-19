@@ -2196,8 +2196,7 @@ function webgl_logicloop_handle_entity(entity){
       ],
       'id': entity,
     });
-    if(core_entities[entity]['attach-to'] !== false
-      && core_entities[entity]['billboard'] === false){
+    if(core_entities[entity]['attach-to'] !== false){
         if(core_entities[entity]['attach-type'] === 'webgl_characters'){
             if(!core_groups['skybox'][entity]){
                 core_matrix_rotate({
