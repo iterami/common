@@ -94,6 +94,7 @@ function webgl_camera_handle(){
         webgl_camera_rotate({
           'character': webgl_properties['camera-zoom-max'] === 0
             || (core_mouse['down-2']
+              && webgl_character_level() !== 0
               && webgl_characters[webgl_character_id]['health-current'] > 0),
           'x': core_mouse['movement-y'] / 10,
           'y': core_mouse['movement-x'] / 10,
@@ -1823,7 +1824,7 @@ function webgl_level_unload(){
 }
 
 function webgl_logicloop(){
-    if(webgl_character_level() > -2
+    if(webgl_character_level() !== 0
       && webgl_characters[webgl_character_id]['health-current'] > 0
       && webgl_characters[webgl_character_id]['path-id'] === false){
         let leftright = 0;
