@@ -1978,7 +1978,8 @@ function core_round(args){
         result = Number(result + eString);
     }
 
-    if(Number.isNaN(result)){
+    if(Number.isNaN(result)
+      || Math.abs(result) < Number('1e-' + args['decimals'])){
         result = 0;
     }
 
