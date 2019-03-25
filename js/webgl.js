@@ -196,7 +196,7 @@ function webgl_character_damage(args){
 
     if(webgl_character_level({
         'character': args['character'],
-      }) < 0){
+      }) < 1){
         return;
     }
 
@@ -282,7 +282,7 @@ function webgl_character_init(args){
         'id': webgl_character_id,
         'inventory': false,
         'jump-height': .6,
-        'level': -1,
+        'level': 0,
         'path-direction': 1,
         'path-end': false,
         'path-id': false,
@@ -448,7 +448,7 @@ function webgl_character_random(args){
       'collide-range-horizontal': horizontal,
       'collide-range-vertical': vertical,
       'id': args['id'],
-      'level': 0,
+      'level': 1,
     });
 
     webgl_prefab_cuboid({
@@ -1662,7 +1662,7 @@ function webgl_level_init(args){
         }
 
     }else if(args['character'] === 0
-      && webgl_character_level() < -1){
+      && webgl_character_level() < 0){
         return;
     }
 
@@ -1707,6 +1707,7 @@ function webgl_level_init(args){
           'camera-zoom': 0,
           'entities': [],
           'id': webgl_character_id,
+          'level': -1,
         });
         webgl_character_homebase = {};
         webgl_properties['camera-zoom-max'] = 0;
@@ -1921,7 +1922,7 @@ function webgl_logicloop(){
     for(let character in webgl_characters){
         if(webgl_character_level({
             'character': character,
-          }) > -1){
+          }) > 0){
             webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] = Math.max(
               webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
@@ -2041,10 +2042,10 @@ function webgl_logicloop(){
 
           }else{
               for(let character in webgl_characters){
-                  if(webgl_character_level({
+                  if(core_entities[entity]['parent'] === character
+                    || webgl_character_level({
                       'character': character,
-                    }) < 0
-                    || core_entities[entity]['parent'] === character){
+                    }) < 0){
                       continue;
                   }
 
