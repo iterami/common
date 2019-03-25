@@ -237,7 +237,33 @@ function webgl_character_home(){
     for(let character in webgl_character_homebase['characters']){
         webgl_character_init(webgl_character_homebase['characters'][character]);
     }
+    webgl_entity_create({
+      'entities': webgl_character_homebase['world'],
+    });
     webgl_character_spawn();
+    webgl_entity_create({
+      'entities': webgl_character_homebase['entities'],
+    });
+}
+
+function webgl_character_home_entityupdate(){
+    webgl_character_homebase['entities'] = [];
+    core_group_modify({
+      'groups': [
+        'webgl',
+      ],
+      'todo': function(entity){
+          if(core_entities[entity]['attach-to'] === webgl_character_id
+            && core_groups['skybox'][entity] !== true){
+              let properties = {};
+              Object.assign(
+                properties,
+                core_entities[entity]
+              );
+              webgl_character_homebase['entities'].push(properties);
+          }
+      },
+    });
 }
 
 function webgl_character_init(args){
@@ -289,7 +315,6 @@ function webgl_character_init(args){
       'collide-range-vertical': args['collide-range-vertical'],
       'collides': args['collides'],
       'change': args['change'],
-      'entities': args['entities'],
       'experience': args['experience'],
       'health-current': Math.max(
         args['health-current'],
@@ -336,7 +361,7 @@ function webgl_character_init(args){
 
     webgl_entity_create({
       'character': args['id'],
-      'entities': webgl_characters[args['id']]['entities'],
+      'entities': args['entities'],
     });
 }
 
@@ -1406,8 +1431,6 @@ function webgl_item_equip(args){
               ],
             });
 
-            webgl_characters[args['character']]['entities'].push(properties);
-
             continue;
         }
 
@@ -1699,20 +1722,42 @@ function webgl_level_init(args){
 
     if(args['character'] === 1){
         webgl_character_homebase['characters'] = {};
+        webgl_character_homebase['properties'] = webgl_properties;
+        webgl_character_homebase['world'] = [];
+
         Object.assign(
           webgl_character_homebase['characters'],
           webgl_characters
         );
-        webgl_character_homebase['properties'] = webgl_properties;
+
+        for(let character in args['json']['characters']){
+            if(character == 0){
+                continue;
+            }
+
+            let entities = args['json']['characters'][character]['entities'];
+            for(let entity in entities){
+                let properties = {};
+                Object.assign(
+                  properties,
+                  entities[entity]
+                );
+                webgl_character_homebase['world'].push(properties);
+            }
+        }
     }
 
     webgl_entity_create({
       'entities': args['json']['entities'],
     });
+    webgl_entity_create({
+      'entities': webgl_character_homebase['entities'],
+    });
     for(let prefab in args['json']['prefabs']){
         window['webgl_prefab_' + args['json']['prefabs'][prefab]['type']](args['json']['prefabs'][prefab]['properties']);
     }
 
+    webgl_character_home_entityupdate();
     webgl_character_spawn();
     core_call({
       'todo': 'repo_level_load',
@@ -1764,6 +1809,7 @@ function webgl_level_unload(){
         );
     }
 
+    webgl_character_home_entityupdate();
     for(let character in webgl_characters){
         if(character !== webgl_character_id){
             delete webgl_characters[character];
@@ -2619,7 +2665,6 @@ function webgl_prefab_cuboid(args){
             properties,
           ],
         });
-        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Bottom.
@@ -2654,7 +2699,6 @@ function webgl_prefab_cuboid(args){
             properties,
           ],
         });
-        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Front.
@@ -2689,7 +2733,6 @@ function webgl_prefab_cuboid(args){
             properties,
           ],
         });
-        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Back.
@@ -2724,7 +2767,6 @@ function webgl_prefab_cuboid(args){
             properties,
           ],
         });
-        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Left.
@@ -2759,7 +2801,6 @@ function webgl_prefab_cuboid(args){
             properties,
           ],
         });
-        webgl_characters[args['character']]['entities'].push(properties);
     }
 
     // Right.
@@ -2794,7 +2835,6 @@ function webgl_prefab_cuboid(args){
             properties,
           ],
         });
-        webgl_characters[args['character']]['entities'].push(properties);
     }
 }
 
