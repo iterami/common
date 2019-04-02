@@ -1,7 +1,8 @@
 a{
     color: #4c4;
 }
-body{
+body,
+input[type=button]{
     background: #000;
     color: #aaa;
     font: bold 14px monospace;
@@ -22,6 +23,9 @@ body{
 }
 hr{
     border: 2px solid #333;
+}
+input[type=button]{
+    cursor: pointer;
 }
 ol,
 ul{
