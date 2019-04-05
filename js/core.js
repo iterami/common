@@ -1826,7 +1826,6 @@ function core_repo_init(args){
         'storage': {},
         'storage-menu': '',
         'tabs': {},
-        'textures': false,
         'ui': '',
       },
     });
@@ -1915,16 +1914,6 @@ function core_repo_init(args){
           'id': image,
           'src': args['images'][image],
         });
-    }
-    if(args['textures']){
-        for(let texture in uris){
-            core_image({
-              'id': texture,
-              'src': uris[texture],
-            });
-        }
-
-        uris = false;
     }
 }
 
