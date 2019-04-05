@@ -233,7 +233,6 @@ function webgl_character_home(){
         return;
     }
 
-    webgl_level_unload();
     webgl_init(webgl_character_homebase['properties']);
     for(let character in webgl_character_homebase['characters']){
         webgl_character_init(webgl_character_homebase['characters'][character]);
@@ -1178,6 +1177,8 @@ function webgl_init(args){
       },
     });
 
+    webgl_level_unload();
+
     if(webgl_buffer === 0){
         core_html({
           'parent': document.body,
@@ -1691,8 +1692,6 @@ function webgl_level_init(args){
             }
         }
     }
-
-    webgl_level_unload();
 
     webgl_init(args['json']);
 
