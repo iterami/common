@@ -633,7 +633,7 @@ function webgl_collision(args){
             }
         }
 
-        if(args['target']['event-type'] === 'collision'){
+        if(args['target']['event-range'] === 0){
             webgl_event({
               'parent': args['target'],
               'target': args['collider'],
@@ -1307,9 +1307,9 @@ function webgl_init(args){
         'draw': true,
         'draw-type': 'TRIANGLE_FAN',
         'event-modify': {},
+        'event-range': false,
         'event-target-id': false,
         'event-target-type': 'character',
-        'event-type': false,
         'gravity': false,
         'item-amount': 1,
         'item-entities': [],
@@ -2142,6 +2142,9 @@ function webgl_logicloop(){
 function webgl_logicloop_handle_entity(entity){
     if(core_entities[entity]['logic']){
         core_entities[entity]['logic']();
+    }
+
+    if(core_entities[entity]['event-range'] > 0){
     }
 
     if(core_entities[entity]['attach-to'] !== false){
