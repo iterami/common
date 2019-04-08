@@ -1300,7 +1300,6 @@ function webgl_init(args){
           'translate-y': 0,
           'translate-z': 0,
         },
-        'collide-damage': 0,
         'collide-range-horizontal': 2,
         'collide-range-vertical': 3,
         'collides': false,
@@ -1908,8 +1907,8 @@ function webgl_logicloop(){
 
     repo_logic();
 
+    let npc = '';
     let npc_talk = '';
-    let npc_trade = '';
     for(let character in webgl_characters){
         if(webgl_character_level({
             'character': character,
@@ -1942,22 +1941,23 @@ function webgl_logicloop(){
                 'y1': webgl_characters[character]['translate-y'],
                 'z1': webgl_characters[character]['translate-z'],
               }) < webgl_characters[character]['talk-range']){
+                npc = character;
                 if(webgl_characters[character]['talk'] !== false){
                     npc_talk = webgl_characters[character]['talk'];
-                }
-                if(webgl_characters[character]['trade'].length > 0){
-                    npc_trade = character;
                 }
             }
         }
     }
     core_ui_update({
       'ids': {
+        'npc': npc === ''
+          ? ''
+          :'[' + npc + ']',
         'npc-talk': npc_talk,
       },
     });
 
-    if(npc_trade === ''){
+    if(npc === ''){
         webgl_character_trading = '';
         core_ui_update({
           'ids': {
@@ -1965,12 +1965,12 @@ function webgl_logicloop(){
           },
         });
 
-    }else if(npc_trade !== webgl_character_trading){
-        webgl_character_trading = npc_trade;
-        let npc_trades = webgl_characters[npc_trade]['trade'];
+    }else if(npc !== webgl_character_trading){
+        webgl_character_trading = npc;
+        let npc_trades = webgl_characters[npc]['trade'];
 
         let elements = {};
-        npc_trade = '<table>';
+        let npc_trade = '<table>';
         for(let trade in npc_trades){
             if(webgl_characters[webgl_character_trading]['inventory'][npc_trades[trade]['give-id']]['amount'] < npc_trades[trade]['give-amount']){
                 continue;
