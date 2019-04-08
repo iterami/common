@@ -2146,6 +2146,84 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(core_entities[entity]['event-range'] > 0){
+        let event_position = webgl_get_translation({
+          'entity': core_entities[entity],
+        });
+
+        if(core_entities[entity]['event-target-type'] === 'character'){
+            if(core_entities[entity]['event-target-id'] !== false){
+                let character = webgl_characters[core_entities[entity]['event-target-id']];
+
+                if(core_distance({
+                    'x0': character['translate-x'],
+                    'y0': character['translate-y'],
+                    'z0': character['translate-z'],
+                    'x1': event_position['x'],
+                    'y1': event_position['y'],
+                    'z1': event_position['z'],
+                  }) < core_entities[entity]['event-range']){
+                    webgl_event({
+                      'parent': core_entities[entity],
+                      'target': character,
+                    });
+                }
+
+            }else{
+                for(let character in webgl_characters){
+                    if(core_distance({
+                        'x0': webgl_characters[character]['translate-x'],
+                        'y0': webgl_characters[character]['translate-y'],
+                        'z0': webgl_characters[character]['translate-z'],
+                        'x1': event_position['x'],
+                        'y1': event_position['y'],
+                        'z1': event_position['z'],
+                      }) < core_entities[entity]['event-range']){
+                        webgl_event({
+                          'parent': core_entities[entity],
+                          'target': webgl_characters[character],
+                        });
+                    }
+                }
+            }
+
+        }else{
+            if(core_entities[entity]['event-target-id'] !== false){
+                let target_position = webgl_get_translation({
+                  'entity': core_entities[core_entities[entity]['event-target-id']],
+                });
+
+                if(core_distance({
+                    'x0': target_position['x'],
+                    'y0': target_position['y'],
+                    'z0': target_position['z'],
+                    'x1': event_position['x'],
+                    'y1': event_position['y'],
+                    'z1': event_position['z'],
+                  }) < core_entities[entity]['event-range']){
+                    webgl_event({
+                      'parent': core_entities[entity],
+                      'target': core_entities[core_entities[entity]['event-target-id']],
+                    });
+                }
+
+            }else{
+                for(let target in core_entities){
+                    if(core_distance({
+                        'x0': core_entities[target]['translate-x'],
+                        'y0': core_entities[target]['translate-y'],
+                        'z0': core_entities[target]['translate-z'],
+                        'x1': event_position['x'],
+                        'y1': event_position['y'],
+                        'z1': event_position['z'],
+                      }) < core_entities[entity]['event-range']){
+                        webgl_event({
+                          'parent': core_entities[entity],
+                          'target': core_entities[target],
+                        });
+                    }
+                }
+            }
+        }
     }
 
     if(core_entities[entity]['attach-to'] !== false){
