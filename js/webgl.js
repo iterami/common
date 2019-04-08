@@ -184,50 +184,6 @@ function webgl_camera_zoom(event){
     }
 }
 
-function webgl_character_damage(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'character': webgl_character_id,
-        'damage': 100,
-        'delete': false,
-        'kill': false,
-      },
-    });
-
-    if(webgl_character_level({
-        'character': args['character'],
-      }) < 1){
-        return;
-    }
-
-    webgl_characters[args['character']]['health-current'] -= args['damage'];
-
-    if(webgl_characters[args['character']]['health-current'] > webgl_characters[args['character']]['health-max']){
-        webgl_characters[args['character']]['health-current'] = webgl_characters[args['character']]['health-max'];
-    }
-
-    if(webgl_characters[args['character']]['health-current'] > 0
-      && !args['kill']){
-        return;
-    }
-
-    if(args['delete']){
-        delete webgl_characters[args['character']];
-        webgl_character_count--;
-
-        for(let entity in core_entities){
-            if(core_entities[entity]['attach-to'] === args['character']){
-                core_entities[entity]['attach-to'] = false;
-            }
-        }
-
-        return;
-    }
-
-    webgl_characters[args['character']]['health-current'] = 0;
-}
-
 function webgl_character_home(){
     if(webgl_character_homebase['properties'] === void 0){
         return;
@@ -687,13 +643,6 @@ function webgl_collision(args){
         if(webgl_character_level({
             'character': args['collider']['id'],
           }) > -1){
-            if(args['target']['collide-damage'] !== 0){
-                webgl_character_damage({
-                  'character': args['collider']['id'],
-                  'damage': args['target']['collide-damage'],
-                });
-            }
-
             if(args['target']['item-id'] !== false){
                 if(!(args['target']['item-id'] in args['collider']['inventory'])){
                     webgl_item_reset({
@@ -1136,7 +1085,11 @@ function webgl_event(args){
     }
 
     for(let stat in args['parent']['event-modify']){
-        args['target'][stat] += args['parent']['event-modify'][stat];
+        webgl_stat_modify({
+          'amount': args['parent']['event-modify'][stat],
+          'parent': args['target'],
+          'stat': stat,
+        });
     }
 }
 
@@ -2098,9 +2051,9 @@ function webgl_logicloop(){
                       webgl_characters[character]['collide-range-horizontal'],
                       webgl_characters[character]['collide-range-vertical']
                     )){
-                      webgl_character_damage({
-                        'character': character,
-                        'damage': core_entities[entity]['collide-damage'],
+                      webgl_event({
+                        'parent': core_entities[entity],
+                        'target': webgl_characters[character],
                       });
                       remove = true;
                       break;
@@ -3385,6 +3338,38 @@ function webgl_shader_update(){
       webgl_properties['shader']['fog-state'],
       webgl_properties['fog-state']
     );
+}
+
+// Required args: parent, stat
+function webgl_stat_modify(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'amount': 1,
+      },
+    });
+
+    if(args['parent'][args['stat']] === void 0){
+        return;
+    }
+
+    args['parent'][args['stat']] += args['amount'];
+
+    if(args['stat'] === 'health-current'){
+        if(args['parent']['health-current'] > args['parent']['health-max']){
+            args['parent']['health-current'] = args['parent']['health-max'];
+        }
+
+        if(args['parent']['health-current'] <= 0){
+            args['parent']['health-current'] = 0;
+
+            for(let entity in core_entities){
+                if(core_entities[entity]['attach-to'] === args['character']){
+                   core_entities[entity]['attach-to'] = false;
+                }
+            }
+        }
+    }
 }
 
 // Required args: entity
