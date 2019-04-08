@@ -535,6 +535,10 @@ function webgl_clearcolor_set(args){
 
 // Required args: collider, target
 function webgl_collision(args){
+    if(args['collider']['attach-to'] !== void 0){
+        return;
+    }
+
     let collider_position = webgl_get_translation({
       'entity': args['collider'],
     });
@@ -638,51 +642,8 @@ function webgl_collision(args){
     }
 
     if(collision !== false){
-        if(args['collider']['attach-to'] === void 0){
-            if(webgl_character_level({
-                'character': args['collider']['id'],
-              }) > -1){
-                if(args['target']['collide-damage'] !== 0){
-                    webgl_character_damage({
-                      'character': args['collider']['id'],
-                      'damage': args['target']['collide-damage'],
-                    });
-                }
-
-                if(args['target']['item-id'] !== false){
-                    if(!(args['target']['item-id'] in args['collider']['inventory'])){
-                        webgl_item_reset({
-                          'character': args['collider']['id'],
-                          'entities': args['target']['item-entities'],
-                          'item': args['target']['item-id'],
-                          'spell': args['target']['item-spellproperties'],
-                          'stats': args['target']['item-stats'],
-                        });
-                    }
-
-                    args['collider']['inventory'][args['target']['item-id']]['amount'] += args['target']['item-amount'];
-
-                    core_entity_remove({
-                      'entities': [
-                        args['target']['id'],
-                      ],
-                    });
-
-                    return false;
-                }
-            }
-
-        }else if(core_groups['particles'][args['collider']['id']]){
-            core_entity_remove({
-              'entities': [
-                args['collider']['id'],
-              ],
-            });
-
-            return false;
-        }
-
-        if(Math.abs(target_position[collision] - collider_position[collision]) < range[collision]){
+        if(!core_groups['particles'][args['collider']['id']]
+          && Math.abs(target_position[collision] - collider_position[collision]) < range[collision]){
             let range_axis = collision === 'y'
               ? 'vertical'
               : 'horizontal';
@@ -714,6 +675,56 @@ function webgl_collision(args){
                     args['collider'][axis_second] += axis_second_change;
                 }
             }
+        }
+
+        if(args['target']['event-type'] === 'collision'){
+            webgl_event({
+              'parent': args['target'],
+              'target': args['collider'],
+            });
+        }
+
+        if(webgl_character_level({
+            'character': args['collider']['id'],
+          }) > -1){
+            if(args['target']['collide-damage'] !== 0){
+                webgl_character_damage({
+                  'character': args['collider']['id'],
+                  'damage': args['target']['collide-damage'],
+                });
+            }
+
+            if(args['target']['item-id'] !== false){
+                if(!(args['target']['item-id'] in args['collider']['inventory'])){
+                    webgl_item_reset({
+                      'character': args['collider']['id'],
+                      'entities': args['target']['item-entities'],
+                      'item': args['target']['item-id'],
+                      'spell': args['target']['item-spellproperties'],
+                      'stats': args['target']['item-stats'],
+                    });
+                }
+
+                args['collider']['inventory'][args['target']['item-id']]['amount'] += args['target']['item-amount'];
+
+                core_entity_remove({
+                  'entities': [
+                    args['target']['id'],
+                  ],
+                });
+
+                return false;
+            }
+        }
+
+        if(core_groups['particles'][args['collider']['id']]){
+            core_entity_remove({
+              'entities': [
+                args['collider']['id'],
+              ],
+            });
+
+            return false;
         }
     }
 
@@ -1106,6 +1117,29 @@ function webgl_entity_todo(entity){
     });
 }
 
+// Required args: parent, target
+function webgl_event(args){
+    let type = 'entity';
+    if(webgl_character_level({
+        'character': args['target']['id'],
+      }) > -2){
+        type = 'character';
+    }
+
+    if(args['parent']['event-target-type'] !== type){
+        return;
+    }
+
+    if(args['parent']['event-target-id'] !== false
+      && args['parent']['event-target-id'] !== args['target']['id']){
+        return;
+    }
+
+    for(let stat in args['parent']['event-modify']){
+        args['target'][stat] += args['parent']['event-modify'][stat];
+    }
+}
+
 // Required args: id
 function webgl_extension(args){
     args = core_args({
@@ -1320,6 +1354,10 @@ function webgl_init(args){
         'collision': true,
         'draw': true,
         'draw-type': 'TRIANGLE_FAN',
+        'event-modify': {},
+        'event-target-id': false,
+        'event-target-type': 'character',
+        'event-type': false,
         'gravity': false,
         'item-amount': 1,
         'item-entities': [],
