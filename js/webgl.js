@@ -1086,9 +1086,10 @@ function webgl_event(args){
 
     for(let stat in args['parent']['event-modify']){
         webgl_stat_modify({
-          'amount': args['parent']['event-modify'][stat],
+          'amount': args['parent']['event-modify'][stat]['amount'],
           'parent': args['target'],
-          'stat': stat,
+          'set': args['parent']['event-modify'][stat]['set'],
+          'stat': args['parent']['event-modify'][stat]['stat'],
         });
     }
 }
@@ -1306,7 +1307,7 @@ function webgl_init(args){
         'collision': true,
         'draw': true,
         'draw-type': 'TRIANGLE_FAN',
-        'event-modify': {},
+        'event-modify': [],
         'event-range': false,
         'event-target-id': false,
         'event-target-type': 'character',
@@ -3349,6 +3350,7 @@ function webgl_stat_modify(args){
       'args': args,
       'defaults': {
         'amount': 1,
+        'set': false,
       },
     });
 
@@ -3356,7 +3358,9 @@ function webgl_stat_modify(args){
         return;
     }
 
-    args['parent'][args['stat']] += args['amount'];
+    args['parent'][args['stat']] = args['set']
+      ? args['amount']
+      : args['parent'][args['stat']] + args['amount'];
 
     if(args['stat'] === 'health-current'){
         if(args['parent']['health-current'] > args['parent']['health-max']){
