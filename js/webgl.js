@@ -2170,6 +2170,10 @@ function webgl_logicloop_handle_entity(entity){
 
             }else{
                 for(let character in webgl_characters){
+                    if(character === core_entities[entity]['attach-to']){
+                        continue;
+                    }
+
                     if(core_distance({
                         'x0': webgl_characters[character]['translate-x'],
                         'y0': webgl_characters[character]['translate-y'],
@@ -2208,6 +2212,10 @@ function webgl_logicloop_handle_entity(entity){
 
             }else{
                 for(let target in core_entities){
+                    if(target === entity){
+                        continue;
+                    }
+
                     if(core_distance({
                         'x0': core_entities[target]['translate-x'],
                         'y0': core_entities[target]['translate-y'],
