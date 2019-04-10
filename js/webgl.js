@@ -3222,6 +3222,9 @@ function webgl_prefab_tiles(args){
       'defaults': {
         'character': webgl_character_id,
         'prefix': core_id_count,
+        'rotate-x': 0,
+        'rotate-y': 0,
+        'rotate-z': 0,
         'tiles-max': 5,
         'tiles-min': 1,
         'translate-x': 0,
@@ -3236,6 +3239,9 @@ function webgl_prefab_tiles(args){
     let tile_offset_x = args['translate-x'];
     let tile_offset_y = args['translate-y'];
     let tile_offset_z = args['translate-z'];
+    let tile_rotate_x = args['rotate-x'];
+    let tile_rotate_y = args['rotate-y'];
+    let tile_rotate_z = args['rotate-z'];
     let tiles = args['tiles'].length;
 
     for(let tile = 0; tile < tile_count; tile++){
@@ -3269,6 +3275,19 @@ function webgl_prefab_tiles(args){
             }
             properties['attach-offset-z'] += tile_offset_z;
 
+            if(properties['attach-rotate-x'] === void 0){
+                properties['attach-rotate-x'] = 0;
+            }
+            properties['attach-rotate-x'] += tile_rotate_x;
+            if(properties['attach-rotate-y'] === void 0){
+                properties['attach-rotate-y'] = 0;
+            }
+            properties['attach-rotate-y'] += tile_rotate_y;
+            if(properties['attach-rotate-z'] === void 0){
+                properties['attach-rotate-z'] = 0;
+            }
+            properties['attach-rotate-z'] += tile_rotate_z;
+
             webgl_entity_create({
               'entities': [
                 properties,
@@ -3284,6 +3303,15 @@ function webgl_prefab_tiles(args){
         }
         if(args['tiles'][selected]['attach-offset-z'] !== void 0){
             tile_offset_z += args['tiles'][selected]['attach-offset-z'];
+        }
+        if(args['tiles'][selected]['attach-rotate-x'] !== void 0){
+            tile_rotate_x += args['tiles'][selected]['attach-rotate-x'];
+        }
+        if(args['tiles'][selected]['attach-rotate-y'] !== void 0){
+            tile_rotate_y += args['tiles'][selected]['attach-rotate-y'];
+        }
+        if(args['tiles'][selected]['attach-rotate-z'] !== void 0){
+            tile_rotate_z += args['tiles'][selected]['attach-rotate-z'];
         }
     }
 }
