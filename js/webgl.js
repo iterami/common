@@ -3233,8 +3233,23 @@ function webgl_prefab_tiles(args){
     let tile_count = core_random_integer({
       'max': args['tiles-max'] - args['tiles-min'] + 1,
     }) + args['tiles-min'];
+    let tile_offset_x = 0;
+    let tile_offset_y = 0;
+    let tile_offset_z = 0;
+    let tiles = args['tiles'].length;
 
-    for(let i = 0; i < tile_count; i++){
+    for(let tile = 0; tile < tile_count; tile++){
+        let selected = core_random_integer({
+          'max': tiles,
+        });
+
+        webgl_entity_create({
+          'entities': args['tiles'][selected],
+        });
+
+        tile_offset_x += args['tiles'][selected]['attach-offset-x'];
+        tile_offset_y += args['tiles'][selected]['attach-offset-y'];
+        tile_offset_z += args['tiles'][selected]['attach-offset-z'];
     }
 }
 
