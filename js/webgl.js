@@ -3224,6 +3224,9 @@ function webgl_prefab_tiles(args){
         'prefix': core_id_count,
         'tiles-max': 5,
         'tiles-min': 1,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
       },
     });
 
