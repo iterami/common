@@ -3275,9 +3275,15 @@ function webgl_prefab_tiles(args){
             });
         }
 
-        tile_offset_x += args['tiles'][selected]['attach-offset-x'];
-        tile_offset_y += args['tiles'][selected]['attach-offset-y'];
-        tile_offset_z += args['tiles'][selected]['attach-offset-z'];
+        if(args['tiles'][selected]['attach-offset-x'] !== void 0){
+            tile_offset_x += args['tiles'][selected]['attach-offset-x'];
+        }
+        if(args['tiles'][selected]['attach-offset-y'] !== void 0){
+            tile_offset_y += args['tiles'][selected]['attach-offset-y'];
+        }
+        if(args['tiles'][selected]['attach-offset-z'] !== void 0){
+            tile_offset_z += args['tiles'][selected]['attach-offset-z'];
+        }
     }
 }
 
