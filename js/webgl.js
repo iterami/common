@@ -3248,6 +3248,7 @@ function webgl_prefab_tiles(args){
             let properties = {
               'attach-to': args['character'],
               'attach-type': 'webgl_characters',
+              'id': args['prefix'] + '-' + tile + '-' + entity,
             };
 
             Object.assign(
