@@ -2920,7 +2920,6 @@ function webgl_prefab_cuboid(args){
     }
 }
 
-// Required args: prefix
 function webgl_prefab_cuboid_tree(args){
     args = core_args({
       'args': args,
@@ -2931,6 +2930,7 @@ function webgl_prefab_cuboid_tree(args){
         'leaves-size-x': 10,
         'leaves-size-y': 10,
         'leaves-size-z': 10,
+        'prefix': core_id_count,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -2989,12 +2989,12 @@ function webgl_prefab_cuboid_tree(args){
     });
 }
 
-// Required args: prefix
 function webgl_prefab_lines_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
         'character': webgl_character_id,
+        'prefix': core_id_count,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -3090,7 +3090,6 @@ function webgl_prefab_lines_tree(args){
     // Create leaves.
 }
 
-// Required args: prefix
 function webgl_prefab_skybox(args){
     args = core_args({
       'args': args,
@@ -3098,6 +3097,7 @@ function webgl_prefab_skybox(args){
         'bottom-color-bottom': false,
         'bottom-color-top': false,
         'character': webgl_character_id,
+        'prefix': core_id_count,
         'random-colors': false,
         'rotate-x': 0,
         'rotate-y': 0,
@@ -3215,8 +3215,14 @@ function webgl_prefab_skybox(args){
     });
 }
 
-// Required args: prefix
 function webgl_prefab_tiles(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'prefix': core_id_count,
+      },
+    });
 }
 
 // Required args: shaders
