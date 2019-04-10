@@ -3226,6 +3226,13 @@ function webgl_prefab_tiles(args){
         'tiles-min': 1,
       },
     });
+
+    let tile_count = core_random_integer({
+      'max': args['tiles-max'] - args['tiles-min'] + 1,
+    }) + args['tiles-min'];
+
+    for(let i = 0; i < tile_count; i++){
+    }
 }
 
 // Required args: shaders
