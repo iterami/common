@@ -3233,9 +3233,9 @@ function webgl_prefab_tiles(args){
     let tile_count = core_random_integer({
       'max': args['tiles-max'] - args['tiles-min'] + 1,
     }) + args['tiles-min'];
-    let tile_offset_x = 0;
-    let tile_offset_y = 0;
-    let tile_offset_z = 0;
+    let tile_offset_x = args['translate-x'];
+    let tile_offset_y = args['translate-y'];
+    let tile_offset_z = args['translate-z'];
     let tiles = args['tiles'].length;
 
     for(let tile = 0; tile < tile_count; tile++){
@@ -3243,9 +3243,37 @@ function webgl_prefab_tiles(args){
           'max': tiles,
         });
 
-        webgl_entity_create({
-          'entities': args['tiles'][selected],
-        });
+        let entities = args['tiles'][selected]['entities'];
+        for(let entity in entities){
+            let properties = {
+              'attach-to': args['character'],
+              'attach-type': 'webgl_characters',
+            };
+
+            Object.assign(
+              properties,
+              entities[entity]
+            );
+
+            if(properties['attach-offset-x'] === void 0){
+                properties['attach-offset-x'] = 0;
+            }
+            properties['attach-offset-x'] += tile_offset_x;
+            if(properties['attach-offset-y'] === void 0){
+                properties['attach-offset-y'] = 0;
+            }
+            properties['attach-offset-y'] += tile_offset_y;
+            if(properties['attach-offset-z'] === void 0){
+                properties['attach-offset-z'] = 0;
+            }
+            properties['attach-offset-z'] += tile_offset_z;
+
+            webgl_entity_create({
+              'entities': [
+                properties,
+              ],
+            });
+        }
 
         tile_offset_x += args['tiles'][selected]['attach-offset-x'];
         tile_offset_y += args['tiles'][selected]['attach-offset-y'];
