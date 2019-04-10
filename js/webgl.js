@@ -3215,6 +3215,10 @@ function webgl_prefab_skybox(args){
     });
 }
 
+// Required args: prefix
+function webgl_prefab_tiles(args){
+}
+
 // Required args: shaders
 function webgl_program_create(args){
     let program = webgl_buffer.createProgram();
