@@ -3215,12 +3215,15 @@ function webgl_prefab_skybox(args){
     });
 }
 
+// Required args: tiles
 function webgl_prefab_tiles(args){
     args = core_args({
       'args': args,
       'defaults': {
         'character': webgl_character_id,
         'prefix': core_id_count,
+        'tiles-max': 5,
+        'tiles-min': 1,
       },
     });
 }
