@@ -3220,7 +3220,6 @@ function webgl_prefab_tiles(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
         'prefix': core_id_count,
         'rotate-x': 0,
         'rotate-y': 0,
@@ -3245,6 +3244,17 @@ function webgl_prefab_tiles(args){
     let tiles = args['tiles'].length;
 
     for(let tile = 0; tile < tile_count; tile++){
+        let character_id = args['prefix'] + '-tile-' + tile;
+        webgl_character_init({
+          'collides': false,
+          'id': character_id,
+          'rotate-x': tile_rotate_x,
+          'rotate-y': tile_rotate_y,
+          'rotate-z': tile_rotate_z,
+          'translate-x': tile_offset_x,
+          'translate-y': tile_offset_y,
+          'translate-z': tile_offset_z,
+        });
         let selected = core_random_integer({
           'max': tiles,
         });
@@ -3252,7 +3262,7 @@ function webgl_prefab_tiles(args){
         let entities = args['tiles'][selected]['entities'];
         for(let entity in entities){
             let properties = {
-              'attach-to': args['character'],
+              'attach-to': character_id,
               'attach-type': 'webgl_characters',
               'id': args['prefix'] + '-' + tile + '-' + entity,
             };
@@ -3261,32 +3271,6 @@ function webgl_prefab_tiles(args){
               properties,
               entities[entity]
             );
-
-            if(properties['attach-offset-x'] === void 0){
-                properties['attach-offset-x'] = 0;
-            }
-            properties['attach-offset-x'] += tile_offset_x;
-            if(properties['attach-offset-y'] === void 0){
-                properties['attach-offset-y'] = 0;
-            }
-            properties['attach-offset-y'] += tile_offset_y;
-            if(properties['attach-offset-z'] === void 0){
-                properties['attach-offset-z'] = 0;
-            }
-            properties['attach-offset-z'] += tile_offset_z;
-
-            if(properties['attach-rotate-x'] === void 0){
-                properties['attach-rotate-x'] = 0;
-            }
-            properties['attach-rotate-x'] += tile_rotate_x;
-            if(properties['attach-rotate-y'] === void 0){
-                properties['attach-rotate-y'] = 0;
-            }
-            properties['attach-rotate-y'] += tile_rotate_y;
-            if(properties['attach-rotate-z'] === void 0){
-                properties['attach-rotate-z'] = 0;
-            }
-            properties['attach-rotate-z'] += tile_rotate_z;
 
             webgl_entity_create({
               'entities': [
