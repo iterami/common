@@ -1657,6 +1657,39 @@ function core_move_3d(args){
     };
 }
 
+// Required args: x, y
+function core_normalize(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'z': 0,
+      },
+    });
+
+    let length = Math.sqrt(
+      Math.pow(
+        args['x'],
+        2
+      ) + Math.pow(
+        args['y'],
+        2
+      ) + Math.pow(
+        args['z'],
+        2
+      )
+    );
+
+    if(length === 0){
+        length = 1;
+    }
+
+    return {
+      'x': args['x'] / length,
+      'y': args['y'] / length,
+      'z': args['z'] / length,
+    };
+}
+
 // Required args: number
 function core_number_format(args){
     args = core_args({
