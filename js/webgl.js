@@ -1124,10 +1124,11 @@ function webgl_get_translation(args){
         };
     }
 
+    let target = window[args['entity']['attach-type']][args['entity']['attach-to']];
     return {
-      'x': window[args['entity']['attach-type']][args['entity']['attach-to']]['translate-x'] + args['entity']['attach-offset-x'],
-      'y': window[args['entity']['attach-type']][args['entity']['attach-to']]['translate-y'] + args['entity']['attach-offset-y'],
-      'z': window[args['entity']['attach-type']][args['entity']['attach-to']]['translate-z'] + args['entity']['attach-offset-z'],
+      'x': target['translate-x'] + args['entity']['attach-offset-x'],
+      'y': target['translate-y'] + args['entity']['attach-offset-y'],
+      'z': target['translate-z'] + args['entity']['attach-offset-z'],
     };
 }
 
@@ -2235,9 +2236,7 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(core_entities[entity]['attach-to'] !== false){
-        let target = core_entities[entity]['attach-type'] === 'webgl_characters'
-          ? webgl_characters[core_entities[entity]['attach-to']]
-          : core_entities[core_entities[entity]['attach-to']];
+        let target = window[core_entities[entity]['attach-type']][core_entities[entity]['attach-to']];
 
         let x = target['translate-x'];
         let y = target['translate-y'];
@@ -2323,29 +2322,15 @@ function webgl_logicloop_handle_entity(entity){
       'id': entity,
     });
     if(core_entities[entity]['attach-to'] !== false){
-        if(core_entities[entity]['attach-type'] === 'webgl_characters'){
-            if(!core_groups['skybox'][entity]){
-                core_matrix_rotate({
-                  'dimensions': [
-                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-x'],
-                    -webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-y'],
-                    webgl_characters[core_entities[entity]['attach-to']]['rotate-radians-z'],
-                  ],
-                  'id': entity,
-                });
-            }
-
-        }else{
-            core_matrix_rotate({
-              'dimensions': [
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-x'],
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-y'],
-                core_entities[core_entities[entity]['attach-to']]['rotate-radians-z'],
-              ],
-              'id': entity,
-            });
-        }
-
+        let target = window[core_entities[entity]['attach-type']][core_entities[entity]['attach-to']];
+        core_matrix_rotate({
+          'dimensions': [
+            target['rotate-radians-x'],
+            target['rotate-radians-y'],
+            target['rotate-radians-z'],
+          ],
+          'id': entity,
+        });
         core_matrix_translate({
           'dimensions': [
             -core_entities[entity]['attach-offset-x'],
