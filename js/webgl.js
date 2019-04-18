@@ -466,10 +466,6 @@ function webgl_clearcolor_set(args){
 
 // Required args: collider, target
 function webgl_collision(args){
-    if(args['collider']['attach-to'] !== void 0){
-        return;
-    }
-
     let collider_position = webgl_get_translation({
       'entity': args['collider'],
     });
@@ -2194,7 +2190,8 @@ function webgl_logicloop_handle_entity(entity){
     if(core_entities[entity]['collides']){
         for(let other_entity in core_entities){
             if(core_entities[other_entity]['collision']
-              && entity !== other_entity){
+              && entity !== other_entity
+              && core_entities[entity]['attach-to'] === false){
                 if(!webgl_collision({
                     'collider': core_entities[entity],
                     'target': core_entities[other_entity],
