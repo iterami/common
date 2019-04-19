@@ -1989,6 +1989,11 @@ function core_round(args){
           0,
           eIndex
         );
+
+        let power = Number(eString.slice(2));
+        if(power === args['decimals']){
+            eString = 'e-' + (power + 1);
+        }
     }
 
     let result = Number(
