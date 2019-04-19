@@ -126,11 +126,8 @@ function webgl_camera_rotate(args){
             axis_value += webgl_characters[webgl_character_id][prefix + axis];
         }
 
-        webgl_characters[webgl_character_id][prefix + axis] = core_clamp({
-          'max': 360,
-          'min': 0,
-          'value': axis_value,
-          'wrap': true,
+        webgl_characters[webgl_character_id][prefix + axis] = core_round({
+          'number': axis_value,
         });
     }
 
@@ -441,6 +438,24 @@ function webgl_character_spawn(args){
     }
 
     webgl_characters[args['character']]['jump-allow'] = false;
+}
+
+// Required args: entity
+function webgl_clamp_rotation(args){
+    let axes = [
+      'x',
+      'y',
+      'z',
+    ];
+
+    for(let axis in axes){
+        args['entity']['rotate-' + axes[axis]] = core_clamp({
+          'max': 360,
+          'min': 0,
+          'value': args['entity']['rotate-' + axes[axis]],
+          'wrap': true,
+        });
+    }
 }
 
 function webgl_clearcolor_set(args){
@@ -1996,6 +2011,10 @@ function webgl_logicloop(){
             webgl_characters[character]['camera-y'] += Math.sin(radians_x) * webgl_characters[character]['camera-zoom'];
             webgl_characters[character]['camera-z'] += Math.cos(radians_y) * webgl_characters[character]['camera-zoom'] * cos;
         }
+
+        webgl_clamp_rotation({
+          'entity': webgl_characters[character],
+        });
     }
 
     if(webgl_character_level() === -1){
@@ -2142,6 +2161,12 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
+    for(let change in core_entities[entity]['change']){
+        core_entities[entity][change] = core_round({
+          'number': core_entities[entity][change] + core_entities[entity]['change'][change],
+        });
+    }
+
     if(core_entities[entity]['attach-to'] !== false){
         let target = window[core_entities[entity]['attach-type']][core_entities[entity]['attach-to']];
 
@@ -2168,12 +2193,6 @@ function webgl_logicloop_handle_entity(entity){
               core_entities[entity]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
-        }
-
-        for(let change in core_entities[entity]['change']){
-            core_entities[entity][change] = core_round({
-              'number': core_entities[entity][change] + core_entities[entity]['change'][change],
-            });
         }
     }
 
@@ -2216,6 +2235,10 @@ function webgl_logicloop_handle_entity(entity){
             });
         }
     }
+
+    webgl_clamp_rotation({
+      'entity': core_entities[entity],
+    });
 
     core_matrix_clone({
       'id': 'camera',
