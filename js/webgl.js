@@ -2284,37 +2284,25 @@ function webgl_normals(args){
       },
     });
 
-    let normal_x = 0;
-    let normal_y = 0;
-    let normal_z = 0;
+    let radians_x = core_degrees_to_radians({
+      'degrees': args['rotate-x'],
+    });
+    let radians_y = core_degrees_to_radians({
+      'degrees': args['rotate-y'],
+    });
+    let radians_z = -core_degrees_to_radians({
+      'degrees': args['rotate-z'],
+    });
 
-    if(args['rotate-x'] !== 0){
-        let radians_x = core_degrees_to_radians({
-          'degrees': args['rotate-x'],
-        });
-
-        normal_z = core_round({
-          'number': Math.sin(radians_x),
-        });
-        normal_y = core_round({
-          'number': Math.cos(radians_x),
-        });
-
-    }else if(args['rotate-z'] !== 0){
-        let radians_z = core_degrees_to_radians({
-          'degrees': args['rotate-z'],
-        });
-
-        normal_x = -core_round({
-          'number': Math.sin(radians_z),
-        });
-        normal_y = core_round({
-          'number': Math.cos(radians_z),
-        });
-
-    }else{
-        normal_y = 1;
-    }
+    let normal_x = core_round({
+      'number': Math.cos(radians_y) * Math.sin(radians_z),
+    });
+    let normal_y = core_round({
+      'number': Math.cos(radians_x) * Math.cos(radians_z),
+    });
+    let normal_z = core_round({
+      'number': Math.sin(radians_x) * Math.cos(radians_y),
+    });
 
     let normals = [];
     for(let i = 0; i < args['vertices-length']; i++){
