@@ -946,10 +946,7 @@ function webgl_entity_todo(entity){
     core_entities[entity]['vertices-length'] = core_entities[entity]['vertices'].length / 4;
 
     core_entities[entity]['normals'] = webgl_normals({
-      'rotate-x': core_entities[entity]['rotate-x'],
-      'rotate-y': core_entities[entity]['rotate-y'],
-      'rotate-z': core_entities[entity]['rotate-z'],
-      'vertices-length': core_entities[entity]['vertices-length'],
+      'entity': core_entities[entity],
     });
 
     let textureData = [
@@ -2273,25 +2270,16 @@ function webgl_logicloop_handle_entity(entity){
     });
 }
 
+// Required args: entity
 function webgl_normals(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'rotate-x': 0,
-        'rotate-y': 0,
-        'rotate-z': 0,
-        'vertices-length': 1,
-      },
-    });
-
     let radians_x = core_degrees_to_radians({
-      'degrees': args['rotate-x'],
+      'degrees': args['entity']['rotate-x'],
     });
     let radians_y = core_degrees_to_radians({
-      'degrees': args['rotate-y'],
+      'degrees': args['entity']['rotate-y'],
     });
     let radians_z = -core_degrees_to_radians({
-      'degrees': args['rotate-z'],
+      'degrees': args['entity']['rotate-z'],
     });
 
     let normal_x = core_round({
@@ -2305,7 +2293,7 @@ function webgl_normals(args){
     });
 
     let normals = [];
-    for(let i = 0; i < args['vertices-length']; i++){
+    for(let i = 0; i < args['entity']['vertices-length']; i++){
         normals.push(
           normal_x,
           normal_y,
