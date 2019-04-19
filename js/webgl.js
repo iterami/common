@@ -2239,6 +2239,9 @@ function webgl_logicloop_handle_entity(entity){
     webgl_clamp_rotation({
       'entity': core_entities[entity],
     });
+    core_entities[entity]['normals'] = webgl_normals({
+      'entity': core_entities[entity],
+    });
 
     core_matrix_clone({
       'id': 'camera',
