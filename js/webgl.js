@@ -3434,7 +3434,7 @@ function webgl_stat_modify(args){
     });
 
     if(args['parent'][args['stat']] === void 0){
-        return;
+        args['parent'][args['stat']] = 0;
     }
 
     args['parent'][args['stat']] = args['set']
