@@ -2268,21 +2268,23 @@ function webgl_logicloop_handle_entity(entity){
       'id': entity,
     });
     if(core_entities[entity]['attach-to'] !== false){
-        let target = window[core_entities[entity]['attach-type']][core_entities[entity]['attach-to']];
-        core_matrix_rotate({
-          'dimensions': [
-            core_degrees_to_radians({
-              'degrees': target['rotate-x'],
-            }),
-            core_degrees_to_radians({
-              'degrees': -target['rotate-y'],
-            }),
-            core_degrees_to_radians({
-              'degrees': target['rotate-z'],
-            }),
-          ],
-          'id': entity,
-        });
+        if(core_groups['skybox'][entity] !== true){
+            let target = window[core_entities[entity]['attach-type']][core_entities[entity]['attach-to']];
+            core_matrix_rotate({
+              'dimensions': [
+                core_degrees_to_radians({
+                  'degrees': target['rotate-x'],
+                }),
+                core_degrees_to_radians({
+                  'degrees': -target['rotate-y'],
+                }),
+                core_degrees_to_radians({
+                  'degrees': target['rotate-z'],
+                }),
+              ],
+              'id': entity,
+            });
+        }
         core_matrix_translate({
           'dimensions': [
             -core_entities[entity]['attach-offset-x'],
