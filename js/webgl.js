@@ -102,7 +102,6 @@ function webgl_camera_rotate(args){
         'character': webgl_character_id,
         'set': false,
         'x': 0,
-        'xlock': true,
         'y': 0,
         'z': 0,
       },
@@ -124,17 +123,6 @@ function webgl_camera_rotate(args){
 
         webgl_characters[args['character']][prefix + axis] = core_round({
           'number': axis_value,
-        });
-    }
-
-    if(args['xlock']){
-        let max = webgl_characters[args['character']][prefix + 'x'] > 180
-          ? 360
-          : 89;
-        webgl_characters[args['character']][prefix + 'x'] = core_clamp({
-          'max': max,
-          'min': max - 89,
-          'value': webgl_characters[args['character']][prefix + 'x'],
         });
     }
 
@@ -449,12 +437,36 @@ function webgl_clamp_rotation(args){
       'z',
     ];
 
+    let character = args['entity']['camera-rotate-x'] !== void 0;
+
     for(let axis in axes){
-        args['entity']['rotate-' + axes[axis]] = core_clamp({
+        let property = 'rotate-' + axes[axis];
+
+        if(character){
+            args['entity']['camera-' + property] = core_clamp({
+              'max': 360,
+              'min': 0,
+              'value': args['entity']['camera-' + property],
+              'wrap': true,
+            });
+        }
+
+        args['entity'][property] = core_clamp({
           'max': 360,
           'min': 0,
-          'value': args['entity']['rotate-' + axes[axis]],
+          'value': args['entity'][property],
           'wrap': true,
+        });
+    }
+
+    if(character){
+        let max = args['entity']['camera-rotate-x'] > 180
+          ? 360
+          : 89;
+        args['entity']['camera-rotate-x'] = core_clamp({
+          'max': max,
+          'min': max - 89,
+          'value': args['entity']['camera-rotate-x'],
         });
     }
 }
