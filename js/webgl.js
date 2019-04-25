@@ -369,7 +369,9 @@ function webgl_character_random(args){
     });
 
     webgl_prefab_cuboid({
-      'all-collision': false,
+      'all': {
+        'collision': false,
+      },
       'character': args['id'],
       'random-colors': true,
       'size-x': horizontal * 2,
@@ -2577,36 +2579,21 @@ function webgl_prefab_cuboid(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'all-alpha': false,
-        'all-collision': true,
-        'all-vertex-colors': false,
-        'back-alpha': 1,
-        'back-collision': false,
-        'back-vertex-colors': false,
-        'bottom-alpha': 1,
-        'bottom-collision': false,
-        'bottom-vertex-colors': false,
+        'all': {},
+        'back': {},
+        'bottom': {},
         'character': webgl_character_id,
         'exclude': {},
-        'front-alpha': 1,
-        'front-collision': false,
-        'front-vertex-colors': false,
+        'front': {},
         'groups': [],
-        'left-alpha': 1,
-        'left-collision': false,
-        'left-vertex-colors': false,
+        'left': {},
         'prefix': core_id_count,
-        'properties': {},
         'random-colors': false,
-        'right-alpha': 1,
-        'right-collision': false,
-        'right-vertex-colors': false,
+        'right': {},
         'size-x': 1,
         'size-y': 1,
         'size-z': 1,
-        'top-alpha': 1,
-        'top-collision': false,
-        'top-vertex-colors': false,
+        'top': {},
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -2620,38 +2607,37 @@ function webgl_prefab_cuboid(args){
     let vertices_size_y = Math.abs(half_size_y);
     let vertices_size_z = Math.abs(half_size_z);
 
-    if(args['all-alpha'] !== false){
-        args['back-alpha'] = args['all-alpha'];
-        args['bottom-alpha'] = args['all-alpha'];
-        args['front-alpha'] = args['all-alpha'];
-        args['left-alpha'] = args['all-alpha'];
-        args['right-alpha'] = args['all-alpha'];
-        args['top-alpha'] = args['all-alpha'];
-    }
-    if(args['all-vertex-colors'] !== false){
-        args['back-vertex-colors'] = args['all-vertex-colors'];
-        args['bottom-vertex-colors'] = args['all-vertex-colors'];
-        args['front-vertex-colors'] = args['all-vertex-colors'];
-        args['left-vertex-colors'] = args['all-vertex-colors'];
-        args['right-vertex-colors'] = args['all-vertex-colors'];
-        args['top-vertex-colors'] = args['all-vertex-colors'];
+    if(args['random-colors']){
+        args['back']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['bottom']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['front']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['left']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['right']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['top']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
     }
 
     // Top.
     if(args['exclude']['top'] !== true){
         let properties = {
-          'alpha': args['top-alpha'],
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'] + half_size_y,
           'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'collision': args['top-collision'] || args['all-collision'],
           'groups': args['groups'],
           'id': args['prefix'] + '-top',
-          'vertex-colors': args['top-vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': args['random-colors'],
-          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z, 1,
             -vertices_size_x, 0, -vertices_size_z, 1,
@@ -2661,7 +2647,11 @@ function webgl_prefab_cuboid(args){
         };
         Object.assign(
           properties,
-          args['properties']
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['top']
         );
         webgl_entity_create({
           'entities': [
@@ -2673,19 +2663,14 @@ function webgl_prefab_cuboid(args){
     // Bottom.
     if(args['exclude']['bottom'] !== true){
         let properties = {
-          'alpha': args['bottom-alpha'],
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'] - half_size_y,
           'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'collision': args['bottom-collision'] || args['all-collision'],
           'groups': args['groups'],
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
-          'vertex-colors': args['bottom-vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': args['random-colors'],
-          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z, 1,
             -vertices_size_x, 0, -vertices_size_z, 1,
@@ -2695,7 +2680,11 @@ function webgl_prefab_cuboid(args){
         };
         Object.assign(
           properties,
-          args['properties']
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['bottom']
         );
         webgl_entity_create({
           'entities': [
@@ -2707,19 +2696,14 @@ function webgl_prefab_cuboid(args){
     // Front.
     if(args['exclude']['front'] !== true){
         let properties = {
-          'alpha': args['front-alpha'],
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'],
           'attach-offset-z': args['translate-z'] + half_size_z,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'collision': args['front-collision'] || args['all-collision'],
           'groups': args['groups'],
           'id': args['prefix'] + '-front',
           'rotate-x': 90,
-          'vertex-colors': args['front-vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': args['random-colors'],
-          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y, 1,
             -vertices_size_x, 0, -vertices_size_y, 1,
@@ -2729,7 +2713,11 @@ function webgl_prefab_cuboid(args){
         };
         Object.assign(
           properties,
-          args['properties']
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['front']
         );
         webgl_entity_create({
           'entities': [
@@ -2741,19 +2729,14 @@ function webgl_prefab_cuboid(args){
     // Back.
     if(args['exclude']['back'] !== true){
         let properties = {
-          'alpha': args['back-alpha'],
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'],
           'attach-offset-z': args['translate-z'] - half_size_z,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'collision': args['back-collision'] || args['all-collision'],
           'groups': args['groups'],
           'id': args['prefix'] + '-back',
           'rotate-x': 270,
-          'vertex-colors': args['back-vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': args['random-colors'],
-          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y, 1,
             -vertices_size_x, 0, -vertices_size_y, 1,
@@ -2763,7 +2746,11 @@ function webgl_prefab_cuboid(args){
         };
         Object.assign(
           properties,
-          args['properties']
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['back']
         );
         webgl_entity_create({
           'entities': [
@@ -2775,19 +2762,14 @@ function webgl_prefab_cuboid(args){
     // Left.
     if(args['exclude']['left'] !== true){
         let properties = {
-          'alpha': args['left-alpha'],
           'attach-offset-x': args['translate-x'] - half_size_x,
           'attach-offset-y': args['translate-y'],
           'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'collision': args['left-collision'] || args['all-collision'],
           'groups': args['groups'],
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
-          'vertex-colors': args['left-vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': args['random-colors'],
-          }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z, 1,
             -vertices_size_y, 0, -vertices_size_z, 1,
@@ -2797,7 +2779,11 @@ function webgl_prefab_cuboid(args){
         };
         Object.assign(
           properties,
-          args['properties']
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['left']
         );
         webgl_entity_create({
           'entities': [
@@ -2809,19 +2795,14 @@ function webgl_prefab_cuboid(args){
     // Right.
     if(args['exclude']['right'] !== true){
         let properties = {
-          'alpha': args['right-alpha'],
           'attach-offset-x': args['translate-x'] + half_size_x,
           'attach-offset-y': args['translate-y'],
           'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'collision': args['right-collision'] || args['all-collision'],
           'groups': args['groups'],
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
-          'vertex-colors': args['right-vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': args['random-colors'],
-          }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z, 1,
             -vertices_size_y, 0, -vertices_size_z, 1,
@@ -2831,7 +2812,11 @@ function webgl_prefab_cuboid(args){
         };
         Object.assign(
           properties,
-          args['properties']
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['right']
         );
         webgl_entity_create({
           'entities': [
@@ -2874,18 +2859,18 @@ function webgl_prefab_cuboid_tree(args){
     });
 
     webgl_prefab_cuboid({
-      'all-collision': args['collision-trunk'],
-      'all-vertex-colors': args['vertex-colors-trunk'],
+      'all': {
+        'collision': args['collision-trunk'],
+        'texture-id': 'wood.png',
+        'texture-repeat-y': 2,
+        'vertex-colors': args['vertex-colors-trunk'],
+      },
       'character': args['character'],
       'exclude': {
         'bottom': true,
         'top': true,
       },
       'prefix': args['prefix'] + '-trunk',
-      'properties': {
-        'texture-id': 'wood.png',
-        'texture-repeat-y': 2,
-      },
       'size-x': args['trunk-size-x'],
       'size-y': args['trunk-size-y'],
       'size-z': args['trunk-size-z'],
@@ -2894,13 +2879,13 @@ function webgl_prefab_cuboid_tree(args){
       'translate-z': args['translate-z'],
     });
     webgl_prefab_cuboid({
-      'all-collision': args['collision-leaves'],
-      'all-vertex-colors': args['vertex-colors-leaves'],
+      'all': {
+        'collision': args['collision-leaves'],
+        'texture-id': 'lavaleaf.png',
+        'vertex-colors': args['vertex-colors-leaves'],
+      },
       'character': args['character'],
       'prefix': args['prefix'] + '-leaves',
-      'properties': {
-        'texture-id': 'lavaleaf.png',
-      },
       'size-x': args['leaves-size-x'],
       'size-y': args['leaves-size-y'],
       'size-z': args['leaves-size-z'],
