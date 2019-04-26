@@ -128,7 +128,8 @@ function webgl_camera_rotate(args){
 
     if(args['camera']){
         if(webgl_properties['camera-zoom-max'] === 0
-          || (webgl_character_level({
+          || (!core_mouse['down-1']
+            && webgl_character_level({
               'character': args['character'],
             }) !== 0
             && webgl_characters[args['character']]['health-current'] > 0)){
