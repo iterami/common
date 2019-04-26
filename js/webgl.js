@@ -3436,6 +3436,17 @@ function webgl_stat_modify(args){
         args['parent'][args['stat']] = 0;
     }
 
+    if(args['stat'].indexOf('rotate-') === 0){
+        let rotate_args = {
+          'character': args['parent']['id'],
+        };
+        rotate_args[args['stat'].slice(7)] = args['amount'];
+
+        webgl_camera_rotate(rotate_args);
+
+        return;
+    }
+
     args['parent'][args['stat']] = args['set']
       ? args['amount']
       : args['parent'][args['stat']] + args['amount'];
