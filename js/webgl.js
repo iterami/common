@@ -261,6 +261,7 @@ function webgl_character_init(args){
       'jump-allow': false,
       'jump-height': args['jump-height'],
       'level': args['level'],
+      'normals': [],
       'path-direction': args['path-direction'],
       'path-end': args['path-end'],
       'path-id': args['path-id'],
@@ -2037,6 +2038,11 @@ function webgl_logicloop(){
         webgl_clamp_rotation({
           'entity': webgl_characters[character],
         });
+        webgl_characters[character]['normals'] = webgl_normals({
+          'rotate-x': webgl_characters[character]['rotate-x'],
+          'rotate-y': webgl_characters[character]['rotate-y'],
+          'rotate-z': webgl_characters[character]['rotate-z'],
+        });
     }
 
     if(webgl_character_level() === -1){
@@ -2330,7 +2336,7 @@ function webgl_normals(args){
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
-        'vertices-length': 0,
+        'vertices-length': 1,
       },
     });
 
