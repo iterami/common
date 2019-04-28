@@ -994,7 +994,6 @@ function webgl_entity_todo(entity){
           core_entities[entity]['texture-align'][i + 1] * core_entities[entity]['texture-repeat-y']
         );
     }
-console.log(textureData);
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
       'colorData': core_entities[entity]['vertex-colors'],
