@@ -2891,10 +2891,26 @@ function webgl_prefab_cuboid_tree(args){
         'texture-repeat-y': 2,
         'vertex-colors': args['vertex-colors-trunk'],
       },
+      'back': {
+        'texture-align': [
+          1, 0,
+          0, 0,
+          0, 1,
+          1, 1,
+        ],
+      },
       'character': args['character'],
       'exclude': {
         'bottom': true,
         'top': true,
+      },
+      'front': {
+        'texture-align': [
+          1, 0,
+          0, 0,
+          0, 1,
+          1, 1,
+        ],
       },
       'prefix': args['prefix'] + '-trunk',
       'size-x': args['trunk-size-x'],
