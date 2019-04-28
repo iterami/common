@@ -987,19 +987,14 @@ function webgl_entity_todo(entity){
       'vertices-length': core_entities[entity]['vertices-length'],
     });
 
-    let textureData = [
-      core_entities[entity]['texture-repeat-x'], core_entities[entity]['texture-repeat-y'],
-      core_entities[entity]['texture-repeat-x'], 0,
-      0, 0,
-      0, core_entities[entity]['texture-repeat-y'],
-    ];
-
-    while(textureData.length < core_entities[entity]['vertices-length'] * 2){
+    let textureData = [];
+    for(let i = 0; i < core_entities[entity]['vertices-length'] * 2; i += 2){
         textureData.push(
-          core_entities[entity]['texture-repeat-x'],
-          core_entities[entity]['texture-repeat-y']
+          core_entities[entity]['texture-align'][i] * core_entities[entity]['texture-repeat-x'],
+          core_entities[entity]['texture-align'][i + 1] * core_entities[entity]['texture-repeat-y']
         );
     }
+console.log(textureData);
 
     core_entities[entity]['buffer'] = webgl_buffer_set({
       'colorData': core_entities[entity]['vertex-colors'],
@@ -1282,6 +1277,12 @@ function webgl_init(args){
         'spawn-interval-current': 0,
         'spawn-interval-max': 100,
         'speed': .2,
+        'texture-align': [
+          1, 1,
+          1, 0,
+          0, 0,
+          0, 1,
+        ],
         'texture-id': 'default.png',
         'texture-repeat-x': 1,
         'texture-repeat-y': 1,
