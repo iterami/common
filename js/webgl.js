@@ -100,6 +100,7 @@ function webgl_camera_rotate(args){
       'defaults': {
         'camera': true,
         'character': webgl_character_id,
+        'mouse': true,
         'set': false,
         'x': 0,
         'y': 0,
@@ -129,7 +130,8 @@ function webgl_camera_rotate(args){
     if(args['camera']){
         let mouse_check = core_mouse['down-2']
           || (!core_mouse['down-0']
-            && !core_mouse['down-2']);
+            && !core_mouse['down-2'])
+          || !args['mouse'];
 
         if(webgl_properties['camera-zoom-max'] === 0
           || (mouse_check
@@ -3480,6 +3482,7 @@ function webgl_stat_modify(args){
     if(args['stat'].indexOf('rotate-') === 0){
         let rotate_args = {
           'character': args['parent']['id'],
+          'mouse': false,
         };
         rotate_args[args['stat'].slice(7)] = args['amount'];
 
