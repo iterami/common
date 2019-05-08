@@ -1625,7 +1625,9 @@ function webgl_level_init(args){
     if(args['json']['characters']
       && args['json']['characters'] !== false){
         for(let character in args['json']['characters']){
-            webgl_character_init(args['json']['characters'][character]);
+            if(!webgl_characters[args['json']['characters'][character]['id']]){
+                webgl_character_init(args['json']['characters'][character]);
+            }
         }
     }
 
@@ -1675,9 +1677,6 @@ function webgl_level_init(args){
         }
     }
 
-    webgl_entity_create({
-      'entities': args['json']['entities'],
-    });
     webgl_entity_create({
       'entities': webgl_character_homebase['entities'],
     });
