@@ -2976,6 +2976,7 @@ function webgl_prefab_lines_tree(args){
       'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
+      'collision': false,
       'vertex-colors': args['vertex-colors-trunk'],
     };
 
