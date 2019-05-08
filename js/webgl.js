@@ -2611,7 +2611,6 @@ function webgl_prefab_cuboid(args){
         'back': {},
         'bottom': {},
         'character': webgl_character_id,
-        'exclude': {},
         'front': {},
         'groups': [],
         'left': {},
@@ -2657,7 +2656,7 @@ function webgl_prefab_cuboid(args){
     }
 
     // Top.
-    if(args['exclude']['top'] !== true){
+    if(args['top']['exclude'] !== true){
         let properties = {
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'] + half_size_y,
@@ -2689,7 +2688,7 @@ function webgl_prefab_cuboid(args){
     }
 
     // Bottom.
-    if(args['exclude']['bottom'] !== true){
+    if(args['bottom']['exclude'] !== true){
         let properties = {
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'] - half_size_y,
@@ -2722,7 +2721,7 @@ function webgl_prefab_cuboid(args){
     }
 
     // Front.
-    if(args['exclude']['front'] !== true){
+    if(args['front']['exclude'] !== true){
         let properties = {
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'],
@@ -2755,7 +2754,7 @@ function webgl_prefab_cuboid(args){
     }
 
     // Back.
-    if(args['exclude']['back'] !== true){
+    if(args['back']['exclude'] !== true){
         let properties = {
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'],
@@ -2788,7 +2787,7 @@ function webgl_prefab_cuboid(args){
     }
 
     // Left.
-    if(args['exclude']['left'] !== true){
+    if(args['left']['exclude'] !== true){
         let properties = {
           'attach-offset-x': args['translate-x'] - half_size_x,
           'attach-offset-y': args['translate-y'],
@@ -2821,7 +2820,7 @@ function webgl_prefab_cuboid(args){
     }
 
     // Right.
-    if(args['exclude']['right'] !== true){
+    if(args['right']['exclude'] !== true){
         let properties = {
           'attach-offset-x': args['translate-x'] + half_size_x,
           'attach-offset-y': args['translate-y'],
@@ -2901,11 +2900,10 @@ function webgl_prefab_cuboid_tree(args){
           1, 1,
         ],
       },
-      'character': args['character'],
-      'exclude': {
-        'bottom': true,
-        'top': true,
+      'bottom': {
+        'exclude': true,
       },
+      'character': args['character'],
       'front': {
         'texture-align': [
           1, 0,
@@ -2918,6 +2916,9 @@ function webgl_prefab_cuboid_tree(args){
       'size-x': args['trunk-size-x'],
       'size-y': args['trunk-size-y'],
       'size-z': args['trunk-size-z'],
+      'top': {
+        'exclude': true,
+      },
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'] + args['trunk-size-y'] / 2,
       'translate-z': args['translate-z'],
