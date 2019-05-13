@@ -210,6 +210,7 @@ function webgl_character_init(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'automove': false,
         'camera-zoom': 50,
         'change': {},
         'collide-range-horizontal': 2,
@@ -241,6 +242,7 @@ function webgl_character_init(args){
     });
 
     webgl_characters[args['id']] = {
+      'automove': args['automove'],
       'camera-rotate-x': 0,
       'camera-rotate-y': 0,
       'camera-rotate-z': 0,
@@ -1781,11 +1783,18 @@ function webgl_logicloop(){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
+                webgl_characters[webgl_character_id]['automove'] = false;
                 forwardback = .5;
                 leftright *= .5;
             }
 
             if(core_keys[core_storage_data['move-↑']]['state']){
+                webgl_characters[webgl_character_id]['automove'] = false;
+                forwardback = forwardback === 0
+                  ? -1
+                  : 0;
+
+            }else if(webgl_characters[webgl_character_id]['automove']){
                 forwardback = forwardback === 0
                   ? -1
                   : 0;
