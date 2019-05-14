@@ -2069,7 +2069,7 @@ function core_sort_property(args){
     });
 }
 
-// Required args, array
+// Required args: array
 function core_sort_strings(args){
     return core_sort_custom({
       'array': args['array'],
