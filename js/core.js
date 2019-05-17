@@ -2168,14 +2168,13 @@ function core_storage_update(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'all': true,
         'keys': false,
       },
     });
 
     let keys = [];
 
-    if(args['all']){
+    if(args['keys'] === false){
         for(let key in core_storage_data){
             keys.push(key);
         }
