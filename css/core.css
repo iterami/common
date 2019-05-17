@@ -75,6 +75,7 @@ ul{
 table{
     border-collapse: collapse;
     margin: auto;
+    vertical-align: top;
 }
 td{
     border: 1px solid #444;
