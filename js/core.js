@@ -2164,13 +2164,32 @@ function core_storage_save(){
     core_keys_rebind();
 }
 
-function core_storage_update(){
-    for(let key in core_storage_data){
-        let element = document.getElementById(key);
+function core_storage_update(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'all': true,
+        'keys': false,
+      },
+    });
+
+    let keys = [];
+
+    if(args['all']){
+        for(let key in core_storage_data){
+            keys.push(key);
+        }
+
+    }else{
+        keys = args['keys'];
+    }
+
+    for(let key in keys){
+        let element = document.getElementById(keys[key]);
         element[core_storage_element_property({
           'element': element,
-          'key': key,
-        })] = core_storage_data[key];
+          'key': keys[key],
+        })] = core_storage_data[keys[key]];
     }
 }
 
