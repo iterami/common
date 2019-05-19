@@ -338,7 +338,7 @@ function core_degrees_to_radians(args){
 
     return core_round({
       'decimals': args['decimals'],
-      'number': args['degrees'] * core_degree,
+      'number': args['degrees'] * .017453292519943295,
     });
 }
 
@@ -1733,7 +1733,7 @@ function core_radians_to_degrees(args){
 
     return core_round({
       'decimals': args['decimals'],
-      'number': args['radians'] * core_radian,
+      'number': args['radians'] * 57.29577951308232,
     });
 }
 
@@ -2518,7 +2518,6 @@ function core_uri(args){
 window.core_audio = {};
 window.core_audio_context = false;
 window.core_audio_sources = {};
-window.core_degree = Math.PI / 180;
 window.core_entities = {};
 window.core_entity_info = {};
 window.core_entity_types_default = [];
@@ -2537,7 +2536,6 @@ window.core_menu_block_events = true;
 window.core_menu_open = false;
 window.core_mode = 0;
 window.core_mouse = {};
-window.core_radian = 180 / Math.PI;
 window.core_repo_title = '';
 window.core_storage_data = {};
 window.core_storage_info = {};
