@@ -2540,7 +2540,7 @@ window.core_repo_title = '';
 window.core_storage_data = {};
 window.core_storage_info = {};
 window.core_tabs = {};
-window.core_tau = Math.PI * 2;
+window.core_tau = 6.283185307179586;
 window.core_ui_values = {};
 
 window.onload = core_init;
