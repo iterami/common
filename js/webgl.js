@@ -1586,6 +1586,8 @@ function webgl_level_init(args){
             return;
         }
 
+        delete webgl_characters[webgl_character_id];
+
     }else if(args['character'] === 0
       && webgl_character_level() < 0){
         return;
