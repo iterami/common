@@ -4,14 +4,17 @@ function tables_init(){
     let tables = document.getElementsByTagName('table');
 
     for(let i = 0; i < tables.length; i++){
-        if(tables[i].classList.contains('nosort')){
+        if(tables[i].classList.contains('tables-nosort')){
             continue;
         }
 
         let headers = Array.from(tables[i].firstElementChild.firstElementChild.children);
 
         for(let header in headers){
-            if(headers[header].classList.contains('main')){
+            if(headers[header].classList.contains('tables-nosort')){
+                continue;
+
+            }else if(headers[header].classList.contains('tables-main')){
                 tables_column_main = header;
             }
 
