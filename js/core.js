@@ -916,6 +916,10 @@ function core_handle_gamepaddisconnected(event){
 }
 
 function core_handle_keydown(event){
+    if(event.ctrlKey){
+        return;
+    }
+
     let key = core_events_keyinfo(event);
 
     if(core_menu_open
