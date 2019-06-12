@@ -30,7 +30,6 @@ input[type=button]{
 ol,
 ul{
     margin: 0;
-    padding-left: 25px;
 }
 table{
     border-collapse: collapse;
