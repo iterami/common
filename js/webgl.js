@@ -1024,6 +1024,11 @@ function webgl_event(args){
         return;
     }
 
+    if(args['parent']['event-key'] !== false
+      && args['target']['inventory'][args['parent']['event-key']]['amount'] <= 0){
+        return;
+    }
+
     for(let stat in args['parent']['event-modify']){
         webgl_stat_modify({
           'amount': args['parent']['event-modify'][stat]['amount'],
@@ -1250,6 +1255,7 @@ function webgl_init(args){
         'collision': true,
         'draw': true,
         'draw-type': 'TRIANGLE_FAN',
+        'event-key': false,
         'event-modify': [],
         'event-range': false,
         'event-target-id': false,
