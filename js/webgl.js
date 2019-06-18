@@ -1093,6 +1093,7 @@ function webgl_init(args){
         'gravity-acceleration': -.05,
         'gravity-axis': 'y',
         'gravity-max': -2,
+        'groups': [],
         'jump-movement': 0,
         'multiplier-jump': 1,
         'multiplier-speed': 1,
@@ -1216,13 +1217,14 @@ function webgl_init(args){
 
     webgl_shader_recreate();
 
+    args['groups'].push(
+      'foreground',
+      'particles',
+      'skybox',
+      'webgl'
+    );
     core_group_create({
-      ids: [
-        'foreground',
-        'particles',
-        'skybox',
-        'webgl',
-      ],
+      ids: args['groups'],
     });
     core_entity_set({
       'default': true,
