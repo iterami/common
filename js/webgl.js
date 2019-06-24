@@ -1024,9 +1024,22 @@ function webgl_event(args){
         return;
     }
 
-    if(args['parent']['event-key'] !== false
-      && args['target']['inventory'][args['parent']['event-key']]['amount'] <= 0){
-        return;
+    if(args['parent']['event-key'] !== false){
+        let item = args['target']['inventory'][args['parent']['event-key']];
+
+        if(item['amount'] < args['parent']['event-key-consume']){
+            return;
+        }
+
+        item['amount'] -= args['parent']['event-key-consume'];
+
+        if(item['amount'] === 0){
+            webgl_item_equip({
+              'character': args['target']['id'],
+              'equip': false,
+              'item': args['parent']['event-key'],
+            });
+        }
     }
 
     for(let stat in args['parent']['event-modify']){
@@ -1256,6 +1269,7 @@ function webgl_init(args){
         'draw': true,
         'draw-type': 'TRIANGLE_FAN',
         'event-key': false,
+        'event-key-consume': 0,
         'event-modify': [],
         'event-range': false,
         'event-target-id': false,
