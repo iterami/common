@@ -342,6 +342,28 @@ function core_degrees_to_radians(args){
     });
 }
 
+// Required args: number
+function core_digits_min(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'digits': 2,
+      },
+    });
+
+    let result = args['number'] < 0
+      ? '-'
+      : '';
+    args['number'] = Math.abs(args['number']);
+    result += args['number'];
+
+    while(String(result).length < args['digits']){
+        result = '0' + result;
+    }
+
+    return result;
+}
+
 function core_distance(args){
     args = core_args({
       'args': args,
@@ -2339,22 +2361,22 @@ function core_time_format(args){
         args['date']['year'] -= 1970;
     }
 
-    return core_two_digits({
+    return core_digits_min({
         'number': args['date']['year'],
       }) + '-'
-      + core_two_digits({
+      + core_digits_min({
         'number': args['date']['month'],
       }) + '-'
-      + core_two_digits({
+      + core_digits_min({
         'number': args['date']['date'],
       }) + ' '
-      + core_two_digits({
+      + core_digits_min({
         'number': args['date']['hour'],
       }) + ':'
-      + core_two_digits({
+      + core_digits_min({
         'number': args['date']['minute'],
       }) + ':'
-      + core_two_digits({
+      + core_digits_min({
         'number': args['date']['second'],
       });
 }
@@ -2410,18 +2432,6 @@ function core_timestamp_to_date(args){
       'timestamp': args['timestamp'],
       'year': date.getUTCFullYear(),
     };
-}
-
-// Required args: number
-function core_two_digits(args){
-    let prefix = args['number'] < 0
-      ? '-'
-      : '';
-    args['number'] = Math.abs(args['number']);
-
-    return prefix + (args['number'].toString().length < 2
-      ? '0' + args['number']
-      : args['number']);
 }
 
 // Required args: var
