@@ -708,6 +708,23 @@ function core_fixed_length_line(args){
     };
 }
 
+// Reqiored args: a, b
+function core_greatest_common_divisor(args){
+    if(args['a'] === 0
+      || isNaN(args['a'])){
+        return args['b'];
+    }
+    if(args['b'] === 0
+      || isNaN(args['b'])){
+        return args['a'];
+    }
+
+    return core_greatest_common_divisor({
+      'a': args['b'],
+      'b': args['a'] % args['b'],
+    });
+}
+
 // Required args: entities, group
 function core_group_add(args){
     if(!(args['group'] in core_groups)){
