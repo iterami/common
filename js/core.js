@@ -42,194 +42,6 @@ function core_args(args){
     return args['args'];
 }
 
-// Required args: audios
-function core_audio_create(args){
-    for(let audio in args['audios']){
-        core_audio[audio] = {
-          'playing': false,
-        };
-
-        for(let property in args['audios'][audio]){
-            core_audio[audio][property] = core_handle_defaults({
-              'default': core_audio[audio],
-              'var': args['audios'][audio][property],
-            });
-        }
-
-        core_audio[audio]['connections'] = args['audios'][audio]['connections'] || [
-          {
-            'frequency': {
-              'value': core_audio[audio]['frequency'] || 100,
-            },
-            'label': 'Oscillator',
-            'type': core_audio[audio]['type'] || 'sine',
-          },
-          {
-            'gain': {
-              'value': args['audios'][audio]['volume'] || core_storage_data['audio-volume'],
-            },
-            'label': 'Gain',
-          },
-        ];
-
-        core_audio[audio]['connections'][0]['id'] = audio;
-        core_audio[audio]['connections'][0]['onended'] = function(){
-            core_audio_onended({
-              'id': this.id,
-            });
-        };
-    }
-}
-
-function core_audio_node_create(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'id': false,
-        'properties': {
-          'label': 'Oscillator',
-        },
-      },
-    });
-
-    if(core_audio_context === false){
-        core_audio_context = new window.AudioContext();
-    }
-
-    let source = core_audio_context['create' + args['properties']['label']](
-      args['properties']['arg0'],
-      args['properties']['arg1'],
-      args['properties']['arg2']
-    );
-
-    for(let property in args['properties']){
-        if(core_type({
-            'type': 'object',
-            'var': args['properties'][property],
-          })){
-            for(let subproperty in args['properties'][property]){
-                source[property][subproperty] = args['properties'][property][subproperty];
-            }
-
-        }else{
-            source[property] = args['properties'][property];
-        }
-    }
-
-    if(args['id'] === false){
-        return source;
-    }
-
-    core_audio_sources[args['id']][args['properties']['label']] = source;
-}
-
-// Required args: id
-function core_audio_onended(args){
-    core_audio[args['id']]['playing'] = false;
-
-    if(core_audio[args['id']]['repeat']){
-        if(core_audio[args['id']]['timeout'] <= 0){
-            core_audio_start({
-              'id': args['id'],
-            });
-
-        }else{
-            window.setTimeout(
-              'core_audio_start({id:"' + args['id'] + '"});',
-              core_audio[args['id']]['duration'] * core_audio[args['id']]['timeout']
-            );
-        }
-    }
-
-    delete core_audio_sources[args['id']];
-}
-
-// Required args: id
-function core_audio_source_create(args){
-    if(core_audio_context === false){
-        core_audio_context = new window.AudioContext();
-    }
-
-    core_audio_sources[args['id']] = {
-      'duration': core_audio[args['id']]['duration'] || 0,
-      'start': core_audio[args['id']]['start'] || 0,
-      'timeout': core_audio[args['id']]['timeout'] || 1000,
-    };
-
-    // Create audio nodes.
-    let connections_length = core_audio[args['id']]['connections'].length;
-    for(let i = 0; i < connections_length; i++){
-        core_audio_node_create({
-          'id': args['id'],
-          'properties': core_audio[args['id']]['connections'][i],
-        });
-
-        if(core_audio[args['id']]['connections'][i]['label'] === 'Gain'){
-            core_audio_sources[args['id']]['Gain']['gain']['value'] =
-              core_audio[args['id']]['volume'] || core_storage_data['audio-volume'];
-        }
-    }
-
-    // Connect audio nodes.
-    for(let i = 0; i < connections_length - 1; i++){
-        core_audio_sources[args['id']][core_audio[args['id']]['connections'][i]['label']].connect(
-          core_audio_sources[args['id']][core_audio[args['id']]['connections'][i + 1]['label']]
-        );
-    }
-    core_audio_sources[args['id']][core_audio[args['id']]['connections'][connections_length - 1]['label']].connect(
-      core_audio_context.destination
-    );
-}
-
-// Required args: id
-function core_audio_start(args){
-    if(core_audio[args['id']]['playing']){
-        core_audio_stop({
-          'id': args['id'],
-        });
-    }
-
-    core_audio_source_create({
-      'id': args['id'],
-    });
-
-    let startTime = core_audio_context.currentTime + core_audio_sources[args['id']]['start'];
-    core_audio[args['id']]['playing'] = true;
-    core_audio_sources[args['id']][core_audio[args['id']]['connections'][0]['label']].start(startTime);
-    core_audio_stop({
-      'id': args['id'],
-      'when': startTime + core_audio_sources[args['id']]['duration'],
-    });
-}
-
-// Required args: id
-function core_audio_stop(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'when': void 0,
-      },
-    });
-
-    core_audio_sources[args['id']][core_audio[args['id']]['connections'][0]['label']].stop(args['when']);
-}
-
-function core_audio_stop_all(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'when': void 0,
-      },
-    });
-
-    for(let id in core_audio_sources){
-        core_audio_stop({
-          'id': id,
-          'when': args['when'],
-        });
-    }
-}
-
 // Required args: todo
 function core_call(args){
     args = core_args({
@@ -1887,7 +1699,6 @@ function core_repo_init(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'audios': {},
         'beforeunload': false,
         'entities': {},
         'events': {},
@@ -1979,10 +1790,6 @@ function core_repo_init(args){
       'elements': args['events'],
       'keybinds': args['keybinds'],
       'mousebinds': args['mousebinds'],
-    });
-
-    core_audio_create({
-      'audios': args['audios'],
     });
 
     for(let image in args['images']){
@@ -2546,9 +2353,6 @@ function core_uri(args){
     );
 }
 
-window.core_audio = {};
-window.core_audio_context = false;
-window.core_audio_sources = {};
 window.core_entities = {};
 window.core_entity_info = {};
 window.core_entity_types_default = [];

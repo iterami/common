@@ -13,7 +13,7 @@ function platform_coin_collide(args){
         platform_players[args['id']]['done'] = true;
     }
 
-    core_audio_start({
+    audio_start({
       'id': 'boop',
     });
 }
