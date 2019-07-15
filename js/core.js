@@ -520,7 +520,7 @@ function core_fixed_length_line(args){
     };
 }
 
-// Reqiored args: a, b
+// Required args: a, b
 function core_greatest_common_divisor(args){
     if(args['a'] === 0
       || isNaN(args['a'])){
