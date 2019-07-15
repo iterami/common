@@ -520,6 +520,47 @@ function core_fixed_length_line(args){
     };
 }
 
+// Required args: numerator
+function core_fraction_reduce(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'denominator': false,
+      },
+    });
+
+    if(args['denominator'] === false){
+        args['denominator'] = Math.pow(
+          10,
+          String(args['numerator']).length
+        );
+    }
+
+    let done = false;
+
+    while(!done){
+        let gcd = core_round({
+          'number': core_greatest_common_divisor({
+            'a': args['numerator'],
+            'b': args['denominator'],
+          }),
+        });
+
+        if(gcd > 1){
+            args['denominator'] /= gcd;
+            args['numerator'] /= gcd;
+
+        }else{
+            done = true;
+        }
+    }
+
+    return {
+      'denominator': args['denominator'],
+      'numerator': args['numerator'],
+    };
+}
+
 // Required args: a, b
 function core_greatest_common_divisor(args){
     if(args['a'] === 0
