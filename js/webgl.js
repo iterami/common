@@ -454,7 +454,7 @@ function webgl_clamp_rotation(args){
         let property = 'rotate-' + axes[axis];
 
         if(character){
-            args['entity']['camera-' + property] = core_clamp({
+            args['entity']['camera-' + property] = math_clamp({
               'max': 360,
               'min': 0,
               'value': args['entity']['camera-' + property],
@@ -462,7 +462,7 @@ function webgl_clamp_rotation(args){
             });
         }
 
-        args['entity'][property] = core_clamp({
+        args['entity'][property] = math_clamp({
           'max': 360,
           'min': 0,
           'value': args['entity'][property],
@@ -474,7 +474,7 @@ function webgl_clamp_rotation(args){
         let max = args['entity']['camera-rotate-x'] > 180
           ? 360
           : 89;
-        args['entity']['camera-rotate-x'] = core_clamp({
+        args['entity']['camera-rotate-x'] = math_clamp({
           'max': max,
           'min': max - 89,
           'value': args['entity']['camera-rotate-x'],
@@ -820,7 +820,7 @@ function webgl_draw_entity(entity){
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_cameraMatrix'],
       false,
-      core_matrices[entity]
+      math_matrices[entity]
     );
 
     webgl_buffer.drawArrays(
@@ -854,7 +854,7 @@ function webgl_entity_create(args){
           'properties': args['entities'][entity],
           'types': args['entities'][entity]['types'],
         });
-        core_matrices[entity_id] = core_matrix_create();
+        math_matrices[entity_id] = math_matrix_create();
 
         for(let group in args['entities'][entity]['groups']){
             core_group_add({
@@ -918,7 +918,7 @@ function webgl_entity_move(args){
             webgl_characters[args['character']]['change']['translate-y'] += dy;
 
         }else{
-            let movement = core_move_3d({
+            let movement = math_move_3d({
               'angle': webgl_characters[args['character']]['rotate-y'],
               'speed': webgl_characters[args['character']]['speed'] * args['multiplier'],
               'strafe': args['strafe'],
@@ -938,7 +938,7 @@ function webgl_entity_move(args){
         core_entities[args['entity']]['change']['translate-y'] = dy;
 
     }else{
-        let movement = core_move_3d({
+        let movement = math_move_3d({
           'angle': core_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis']],
           'speed': core_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
@@ -1213,8 +1213,8 @@ function webgl_init(args){
       'spawn-translate-z': args['spawn-translate-z'],
     };
 
-    core_matrices['camera'] = core_matrix_create();
-    core_matrices['perspective'] = core_matrix_create();
+    math_matrices['camera'] = math_matrix_create();
+    math_matrices['perspective'] = math_matrix_create();
 
     window.onresize = webgl_resize;
     webgl_resize();
@@ -1316,9 +1316,9 @@ function webgl_init(args){
       'type': 'webgl',
     });
 
-    webgl_diagonal = Math.sin(core_degrees_to_radians({
+    webgl_diagonal = Math.sin(math_degrees_to_radians({
       'degrees': 45,
-    })) / Math.sin(core_degrees_to_radians({
+    })) / Math.sin(math_degrees_to_radians({
       'degrees': 90,
     }));
     Object.assign(
@@ -1896,7 +1896,7 @@ function webgl_logicloop(){
         if(character !== webgl_character_id
           && (webgl_characters[character]['talk'] !== false
             || webgl_characters[character]['trade'].length > 0)){
-            if(core_distance({
+            if(math_distance({
                 'x0': webgl_characters[webgl_character_id]['translate-x'],
                 'y0': webgl_characters[webgl_character_id]['translate-y'],
                 'z0': webgl_characters[webgl_character_id]['translate-z'],
@@ -2003,7 +2003,7 @@ function webgl_logicloop(){
                       continue;
                   }
 
-                  if(core_distance({
+                  if(math_distance({
                       'x0': webgl_characters[character]['translate-x'],
                       'y0': webgl_characters[character]['translate-y'],
                       'z0': webgl_characters[character]['translate-z'],
@@ -2050,10 +2050,10 @@ function webgl_logicloop(){
         webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
 
         if(webgl_characters[character]['camera-zoom'] > 0){
-            let radians_x = core_degrees_to_radians({
+            let radians_x = math_degrees_to_radians({
               'degrees': webgl_characters[character]['camera-rotate-x'],
             });
-            let radians_y = core_degrees_to_radians({
+            let radians_y = math_degrees_to_radians({
               'degrees': webgl_characters[character]['camera-rotate-y'],
             });
             let cos = Math.cos(radians_x);
@@ -2090,24 +2090,24 @@ function webgl_logicloop(){
         }
     }
 
-    core_matrix_identity({
+    math_matrix_identity({
       'id': 'camera',
     });
-    core_matrix_rotate({
+    math_matrix_rotate({
       'dimensions': [
-        core_degrees_to_radians({
+        math_degrees_to_radians({
           'degrees': webgl_characters[webgl_character_id]['camera-rotate-x'],
         }),
-        core_degrees_to_radians({
+        math_degrees_to_radians({
           'degrees': webgl_characters[webgl_character_id]['camera-rotate-y'],
         }),
-        core_degrees_to_radians({
+        math_degrees_to_radians({
           'degrees': webgl_characters[webgl_character_id]['camera-rotate-z'],
         }),
       ],
       'id': 'camera',
     });
-    core_matrix_translate({
+    math_matrix_translate({
       'dimensions': [
         webgl_characters[webgl_character_id]['camera-x'],
         webgl_characters[webgl_character_id]['camera-y'],
@@ -2119,7 +2119,7 @@ function webgl_logicloop(){
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_perspectiveMatrix'],
       false,
-      core_matrices['perspective']
+      math_matrices['perspective']
     );
 }
 
@@ -2137,7 +2137,7 @@ function webgl_logicloop_handle_entity(entity){
             if(core_entities[entity]['event-target-id'] !== false){
                 let character = webgl_characters[core_entities[entity]['event-target-id']];
 
-                if(core_distance({
+                if(math_distance({
                     'x0': character['translate-x'],
                     'y0': character['translate-y'],
                     'z0': character['translate-z'],
@@ -2157,7 +2157,7 @@ function webgl_logicloop_handle_entity(entity){
                         continue;
                     }
 
-                    if(core_distance({
+                    if(math_distance({
                         'x0': webgl_characters[character]['translate-x'],
                         'y0': webgl_characters[character]['translate-y'],
                         'z0': webgl_characters[character]['translate-z'],
@@ -2179,7 +2179,7 @@ function webgl_logicloop_handle_entity(entity){
                   'entity': core_entities[core_entities[entity]['event-target-id']],
                 });
 
-                if(core_distance({
+                if(math_distance({
                     'x0': target_position['x'],
                     'y0': target_position['y'],
                     'z0': target_position['z'],
@@ -2199,7 +2199,7 @@ function webgl_logicloop_handle_entity(entity){
                         continue;
                     }
 
-                    if(core_distance({
+                    if(math_distance({
                         'x0': core_entities[target]['translate-x'],
                         'y0': core_entities[target]['translate-y'],
                         'z0': core_entities[target]['translate-z'],
@@ -2302,11 +2302,11 @@ function webgl_logicloop_handle_entity(entity){
       'vertices-length': core_entities[entity]['vertices-length'],
     });
 
-    core_matrix_clone({
+    math_matrix_clone({
       'id': 'camera',
       'to': entity,
     });
-    core_matrix_translate({
+    math_matrix_translate({
       'dimensions': [
         -core_entities[entity]['translate-x'],
         -core_entities[entity]['translate-y'],
@@ -2317,22 +2317,22 @@ function webgl_logicloop_handle_entity(entity){
     if(core_entities[entity]['attach-to'] !== false){
         if(core_groups['skybox'][entity] !== true){
             let target = window[core_entities[entity]['attach-type']][core_entities[entity]['attach-to']];
-            core_matrix_rotate({
+            math_matrix_rotate({
               'dimensions': [
-                core_degrees_to_radians({
+                math_degrees_to_radians({
                   'degrees': target['rotate-x'],
                 }),
-                core_degrees_to_radians({
+                math_degrees_to_radians({
                   'degrees': -target['rotate-y'],
                 }),
-                core_degrees_to_radians({
+                math_degrees_to_radians({
                   'degrees': target['rotate-z'],
                 }),
               ],
               'id': entity,
             });
         }
-        core_matrix_translate({
+        math_matrix_translate({
           'dimensions': [
             -core_entities[entity]['attach-offset-x'],
             -core_entities[entity]['attach-offset-y'],
@@ -2341,15 +2341,15 @@ function webgl_logicloop_handle_entity(entity){
           'id': entity,
         });
     }
-    core_matrix_rotate({
+    math_matrix_rotate({
       'dimensions': [
-        core_degrees_to_radians({
+        math_degrees_to_radians({
           'degrees': core_entities[entity]['rotate-x'],
         }),
-        core_degrees_to_radians({
+        math_degrees_to_radians({
           'degrees': core_entities[entity]['rotate-y'],
         }),
-        core_degrees_to_radians({
+        math_degrees_to_radians({
           'degrees': core_entities[entity]['rotate-z'],
         }),
       ],
@@ -2368,13 +2368,13 @@ function webgl_normals(args){
       },
     });
 
-    let radians_x = core_degrees_to_radians({
+    let radians_x = math_degrees_to_radians({
       'degrees': args['rotate-x'],
     });
-    let radians_y = core_degrees_to_radians({
+    let radians_y = math_degrees_to_radians({
       'degrees': args['rotate-y'],
     });
-    let radians_z = -core_degrees_to_radians({
+    let radians_z = -math_degrees_to_radians({
       'degrees': args['rotate-z'],
     });
 
@@ -2447,7 +2447,7 @@ function webgl_particles_create(args){
             'vertices': [0, 0, 0, 1],
           },
         });
-        core_matrices[id] = core_matrix_create();
+        math_matrices[id] = math_matrix_create();
         core_group_move({
           'entities': [
             id,
@@ -2476,13 +2476,13 @@ function webgl_path_move(args){
       'var': path['points'][args['entity']['path-point']],
     });
 
-    let angle_xz = core_point_angle({
+    let angle_xz = math_point_angle({
       'x0': args['entity']['translate-x'],
       'x1': point['translate-x'],
       'y0': args['entity']['translate-z'],
       'y1': point['translate-z'],
     });
-    let angle_y = core_point_angle({
+    let angle_y = math_point_angle({
       'x0': args['entity']['translate-x'],
       'x1': point['translate-x'],
       'y0': args['entity']['translate-y'],
@@ -2511,7 +2511,7 @@ function webgl_path_move(args){
         args['entity']['change']['translate-z'] *= -1;
     }
 
-    if(core_distance({
+    if(math_distance({
         'x0': args['entity']['translate-x'],
         'y0': args['entity']['translate-y'],
         'z0': args['entity']['translate-z'],
@@ -2605,11 +2605,11 @@ function webgl_path_use(args){
 }
 
 function webgl_perspective(){
-    core_matrices['perspective'][0] = webgl_properties['canvas']['height'] / webgl_properties['canvas']['width'];
-    core_matrices['perspective'][5] = 1;
-    core_matrices['perspective'][10] = -1;
-    core_matrices['perspective'][11] = -1;
-    core_matrices['perspective'][14] = -2;
+    math_matrices['perspective'][0] = webgl_properties['canvas']['height'] / webgl_properties['canvas']['width'];
+    math_matrices['perspective'][5] = 1;
+    math_matrices['perspective'][10] = -1;
+    math_matrices['perspective'][11] = -1;
+    math_matrices['perspective'][14] = -2;
 }
 
 // Required args: x, y

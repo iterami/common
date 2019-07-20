@@ -58,77 +58,6 @@ function core_call(args){
     }
 }
 
-// Required args: max, min, value
-function core_clamp(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-        'wrap': false,
-      },
-    });
-
-    if(args['wrap']){
-        let diff = args['max'] - args['min'];
-        while(args['value'] < args['min']){
-            args['value'] += diff;
-        }
-        while(args['value'] >= args['max']){
-            args['value'] -= diff;
-        }
-
-    }else{
-        args['value'] = Math.max(
-          args['value'],
-          args['min']
-        );
-        args['value'] = Math.min(
-          args['value'],
-          args['max']
-        );
-    }
-
-    return core_round({
-      'decimals': args['decimals'],
-      'number': args['value'],
-    });
-}
-
-// Required args: height-0, height-1, width-0, width-1, x-0, x-1, y-0, y-1
-function core_cuboid_overlap(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'depth-0': 0,
-        'depth-1': 0,
-        'z-0': 0,
-        'z-1': 0,
-      },
-    });
-
-    return args['x-0'] <= args['x-1'] + args['width-1']
-      && args['x-0'] >= args['x-1'] - args['width-0']
-      && args['y-0'] <= args['y-1'] + args['height-1']
-      && args['y-0'] >= args['y-1'] - args['height-0']
-      && args['z-0'] <= args['z-1'] + args['depth-1']
-      && args['z-0'] >= args['z-1'] - args['depth-0'];
-}
-
-// Required args: degrees
-function core_degrees_to_radians(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-      },
-    });
-
-    return core_round({
-      'decimals': args['decimals'],
-      'number': args['degrees'] * .017453292519943295,
-    });
-}
-
 // Required args: number
 function core_digits_min(args){
     args = core_args({
@@ -149,37 +78,6 @@ function core_digits_min(args){
     }
 
     return result;
-}
-
-function core_distance(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-        'x0': 0,
-        'x1': 0,
-        'y0': 0,
-        'y1': 0,
-        'z0': 0,
-        'z1': 0,
-      },
-    });
-
-    return core_round({
-      'decimals': args['decimals'],
-      'number': Math.sqrt(
-        Math.pow(
-          args['x0'] - args['x1'],
-          2
-        ) + Math.pow(
-          args['y0'] - args['y1'],
-          2
-        ) + Math.pow(
-          args['z0'] - args['z1'],
-          2
-        )
-      ),
-    });
 }
 
 function core_entity_create(args){
@@ -302,7 +200,7 @@ function core_entity_remove_all(args){
           ],
         });
 
-        delete core_matrices[entity];
+        delete math_matrices[entity];
     }
 }
 
@@ -446,111 +344,6 @@ function core_file(args){
         args['todo'](event);
     };
     filereader[args['type']](args['file']);
-}
-
-function core_fixed_length_line(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-        'length': 1,
-        'x0': 0,
-        'x1': 0,
-        'y0': 0,
-        'y1': 0,
-        'z0': 0,
-        'z1': 0,
-      },
-    });
-
-    let line_distance = core_distance({
-      'x0': args['x0'],
-      'x1': args['x1'],
-      'y0': args['y0'],
-      'y1': args['y1'],
-      'z0': args['z0'],
-      'z1': args['z1'],
-    });
-
-    args['x1'] /= line_distance;
-    args['x1'] *= args['length'];
-    args['y1'] /= line_distance;
-    args['y1'] *= args['length'];
-    args['z1'] /= line_distance;
-    args['z1'] *= args['length'];
-
-    return {
-      'x': core_round({
-        'decimals': args['decimals'],
-        'number': args['x1'],
-      }),
-      'y': core_round({
-        'decimals': args['decimals'],
-        'number': args['y1'],
-      }),
-      'z': core_round({
-        'decimals': args['decimals'],
-        'number': args['z1'],
-      }),
-    };
-}
-
-// Required args: numerator
-function core_fraction_reduce(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'denominator': false,
-      },
-    });
-
-    if(args['denominator'] === false){
-        args['denominator'] = Math.pow(
-          10,
-          String(args['numerator']).length
-        );
-    }
-
-    let done = false;
-
-    while(!done){
-        let gcd = core_round({
-          'number': core_greatest_common_divisor({
-            'a': args['numerator'],
-            'b': args['denominator'],
-          }),
-        });
-
-        if(gcd > 1){
-            args['denominator'] /= gcd;
-            args['numerator'] /= gcd;
-
-        }else{
-            done = true;
-        }
-    }
-
-    return {
-      'denominator': args['denominator'],
-      'numerator': args['numerator'],
-    };
-}
-
-// Required args: a, b
-function core_greatest_common_divisor(args){
-    if(args['a'] === 0
-      || isNaN(args['a'])){
-        return args['b'];
-    }
-    if(args['b'] === 0
-      || isNaN(args['b'])){
-        return args['a'];
-    }
-
-    return core_greatest_common_divisor({
-      'a': args['b'],
-      'b': args['a'] % args['b'],
-    });
 }
 
 // Required args: entities, group
@@ -1295,134 +1088,6 @@ function core_keys_updatebinds(args){
     }
 }
 
-// Required args: id, to
-function core_matrix_clone(args){
-    core_matrices[args['to']] = core_matrix_create();
-    core_matrix_copy({
-      'id': args['id'],
-      'to': args['to'],
-    });
-}
-
-// Required args: id, to
-function core_matrix_copy(args){
-    Object.assign(
-      core_matrices[args['to']],
-      core_matrices[args['id']]
-    );
-}
-
-function core_matrix_create(){
-    return new Float32Array(16);
-}
-
-// Required args: ids
-function core_matrix_delete(args){
-    for(let id in args['ids']){
-        delete core_matrices[args['ids'][id]];
-    }
-}
-
-// Required args: id
-function core_matrix_identity(args){
-    for(let key in core_matrices[args['id']]){
-        core_matrices[args['id']][key] =
-          key % 5 === 0
-            ? 1
-            : 0;
-    }
-}
-
-// Required args: dimensions, id
-function core_matrix_rotate(args){
-    let cache_id = 'rotate-cache-' + args['id'];
-
-    // Rotate X.
-    core_matrix_clone({
-      'id': args['id'],
-      'to': cache_id,
-    });
-    let cosine = Math.cos(args['dimensions'][0]);
-    let sine = Math.sin(args['dimensions'][0]);
-
-    core_matrices[args['id']][4] = core_matrices[cache_id][4] * cosine + core_matrices[cache_id][8] * sine;
-    core_matrices[args['id']][5] = core_matrices[cache_id][5] * cosine + core_matrices[cache_id][9] * sine;
-    core_matrices[args['id']][6] = core_matrices[cache_id][6] * cosine + core_matrices[cache_id][10] * sine;
-    core_matrices[args['id']][7] = core_matrices[cache_id][7] * cosine + core_matrices[cache_id][11] * sine;
-    core_matrices[args['id']][8] = core_matrices[cache_id][8] * cosine - core_matrices[cache_id][4] * sine;
-    core_matrices[args['id']][9] = core_matrices[cache_id][9] * cosine - core_matrices[cache_id][5] * sine;
-    core_matrices[args['id']][10] = core_matrices[cache_id][10] * cosine - core_matrices[cache_id][6] * sine;
-    core_matrices[args['id']][11] = core_matrices[cache_id][11] * cosine - core_matrices[cache_id][7] * sine;
-
-    // Rotate Y.
-    core_matrix_copy({
-      'id': args['id'],
-      'to': cache_id,
-    });
-    cosine = Math.cos(args['dimensions'][1]);
-    sine = Math.sin(args['dimensions'][1]);
-
-    core_matrices[args['id']][0] = core_matrices[cache_id][0] * cosine - core_matrices[cache_id][8] * sine;
-    core_matrices[args['id']][1] = core_matrices[cache_id][1] * cosine - core_matrices[cache_id][9] * sine;
-    core_matrices[args['id']][2] = core_matrices[cache_id][2] * cosine - core_matrices[cache_id][10] * sine;
-    core_matrices[args['id']][3] = core_matrices[cache_id][3] * cosine - core_matrices[cache_id][11] * sine;
-    core_matrices[args['id']][8] = core_matrices[cache_id][8] * cosine + core_matrices[cache_id][0] * sine;
-    core_matrices[args['id']][9] = core_matrices[cache_id][9] * cosine + core_matrices[cache_id][1] * sine;
-    core_matrices[args['id']][10] = core_matrices[cache_id][10] * cosine + core_matrices[cache_id][2] * sine;
-    core_matrices[args['id']][11] = core_matrices[cache_id][11] * cosine + core_matrices[cache_id][3] * sine;
-
-    // Rotate Z.
-    core_matrix_copy({
-      'id': args['id'],
-      'to': cache_id,
-    });
-    cosine = Math.cos(args['dimensions'][2]);
-    sine = Math.sin(args['dimensions'][2]);
-
-    core_matrices[args['id']][0] = core_matrices[cache_id][0] * cosine + core_matrices[cache_id][4] * sine;
-    core_matrices[args['id']][1] = core_matrices[cache_id][1] * cosine + core_matrices[cache_id][5] * sine;
-    core_matrices[args['id']][2] = core_matrices[cache_id][2] * cosine + core_matrices[cache_id][6] * sine;
-    core_matrices[args['id']][3] = core_matrices[cache_id][3] * cosine + core_matrices[cache_id][7] * sine;
-    core_matrices[args['id']][4] = core_matrices[cache_id][4] * cosine - core_matrices[cache_id][0] * sine;
-    core_matrices[args['id']][5] = core_matrices[cache_id][5] * cosine - core_matrices[cache_id][1] * sine;
-    core_matrices[args['id']][6] = core_matrices[cache_id][6] * cosine - core_matrices[cache_id][2] * sine;
-    core_matrices[args['id']][7] = core_matrices[cache_id][7] * cosine - core_matrices[cache_id][3] * sine;
-
-    core_matrix_delete({
-      'ids': [cache_id],
-    });
-}
-
-// Required args: id
-function core_matrix_round(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-      },
-    });
-
-    for(let key in core_matrices[args['id']]){
-        core_matrices[args['id']][key] = core_round({
-          'decimals': args['decimals'],
-          'number': core_matrices[args['id']][key],
-        });
-    }
-}
-
-// Required args: dimensions, id
-function core_matrix_translate(args){
-    for(let i = 0; i < 4; i++){
-        core_matrices[args['id']][i + 12] -= core_matrices[args['id']][i] * args['dimensions'][0]
-          + core_matrices[args['id']][i + 4] * args['dimensions'][1]
-          + core_matrices[args['id']][i + 8] * args['dimensions'][2];
-    }
-
-    core_matrix_round({
-      'id': args['id'],
-    });
-}
-
 // Required args: mousebinds
 function core_mouse_updatebinds(args){
     args = core_args({
@@ -1445,122 +1110,6 @@ function core_mouse_updatebinds(args){
     }
 }
 
-// Required args: x0, x1, y0, y1
-function core_move_2d(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-        'multiplier': 1,
-      },
-    });
-
-    let angle = core_point_angle({
-      'x0': args['x0'],
-      'x1': args['x1'],
-      'y0': args['y0'],
-      'y1': args['y1'],
-    });
-
-    let dx = core_round({
-      'decimals': args['decimals'],
-      'number': Math.cos(angle) * args['multiplier'],
-    });
-    let dy = core_round({
-      'decimals': args['decimals'],
-      'number': Math.sin(angle) * args['multiplier'],
-    });
-
-    if(args['x0'] > args['x1']){
-        dx = -dx;
-    }
-    if(args['y0'] > args['y1']){
-        dy = -dy;
-    }
-
-    return {
-      'angle': angle,
-      'x': dx,
-      'y': dy,
-    };
-}
-
-// Required args: dx, dy, speed
-function core_move_2d_diagonal(args){
-    let sqrt = Math.sqrt(args['speed']);
-    return {
-      'x': (args['dx'] / args['speed']) * sqrt,
-      'y': args['dy'] > 0
-        ? sqrt
-        : -sqrt,
-    };
-}
-
-// Required args; angle
-function core_move_3d(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-        'multiplier': 1,
-        'speed': 1,
-        'strafe': false,
-      },
-    });
-    args['speed'] *= args['multiplier'];
-
-    let radians = -core_degrees_to_radians({
-      'decimals': args['decimals'],
-      'degrees': args['angle'] - (args['strafe']
-          ? 90
-          : 0
-        ),
-    });
-    return {
-      'x': core_round({
-        'decimals': args['decimals'],
-        'number': Math.sin(radians) * args['speed'],
-      }),
-      'z': core_round({
-        'decimals': args['decimals'],
-        'number': Math.cos(radians) * args['speed'],
-      }),
-    };
-}
-
-// Required args: x, y
-function core_normalize(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'z': 0,
-      },
-    });
-
-    let length = Math.sqrt(
-      Math.pow(
-        args['x'],
-        2
-      ) + Math.pow(
-        args['y'],
-        2
-      ) + Math.pow(
-        args['z'],
-        2
-      )
-    );
-
-    if(length === 0){
-        length = 1;
-    }
-
-    return {
-      'x': args['x'] / length,
-      'y': args['y'] / length,
-      'z': args['z'] / length,
-    };
-}
-
 // Required args: number
 function core_number_format(args){
     args = core_args({
@@ -1576,36 +1125,6 @@ function core_number_format(args){
           'maximumFractionDigits': args['decimals'],
         }
       ).format(args['number']);
-}
-
-// Required args: x0, x1, y0, y1
-function core_point_angle(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-      },
-    });
-
-    return core_round({
-      'decimals': args['decimals'],
-      'number': Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1'])),
-    });
-}
-
-// Required args: radians
-function core_radians_to_degrees(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-      },
-    });
-
-    return core_round({
-      'decimals': args['decimals'],
-      'number': args['radians'] * 57.29577951308232,
-    });
 }
 
 function core_random_boolean(args){
@@ -2262,7 +1781,6 @@ window.core_images = {};
 window.core_intervals = {};
 window.core_key_rebinds = {};
 window.core_keys = {};
-window.core_matrices = {};
 window.core_menu_block_events = true;
 window.core_menu_open = false;
 window.core_mode = 0;
@@ -2271,7 +1789,6 @@ window.core_repo_title = '';
 window.core_storage_data = {};
 window.core_storage_info = {};
 window.core_tabs = {};
-window.core_tau = 6.283185307179586;
 window.core_ui_values = {};
 
 window.onload = core_init;

@@ -479,7 +479,7 @@ function prefabs_webgl_skybox(args){
         });
     }
 
-    let angle = core_degrees_to_radians({
+    let angle = math_degrees_to_radians({
       'degrees': 360 / args['sides'],
     });
 
