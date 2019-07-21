@@ -820,7 +820,8 @@ function core_init(){
           + '<div id=core-menu-info></div><hr>'
           + '<span id=core-menu-tabs></span>'
           + '<div id=core-menu-tabcontent></div>'
-          + '<input id=settings-reset type=button value="Reset Settings">',
+          + '<input id=settings-reset type=button value="Reset All Settings">'
+          + '<input id=settings-save type=button value="Save Settings">',
       },
       'type': 'span',
     });
@@ -900,6 +901,9 @@ function core_init(){
       'elements': {
         'settings-reset': {
           'onclick': core_storage_reset,
+        },
+        'settings-save': {
+          'onclick': core_storage_save,
         },
       },
     });
@@ -1503,7 +1507,7 @@ function core_storage_element_property(args){
 }
 
 function core_storage_reset(){
-    if(!window.confirm('Reset ' + core_repo_title + ' settings?')){
+    if(!window.confirm('Reset all settings?')){
         return false;
     }
 
