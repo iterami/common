@@ -199,8 +199,6 @@ function core_entity_remove_all(args){
             entity,
           ],
         });
-
-        delete math_matrices[entity];
     }
 }
 
