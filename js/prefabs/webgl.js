@@ -674,7 +674,7 @@ function prefabs_webgl_tree_2d(args){
       },
     });
 
-    core_entity_create({
+    entity_create({
       'id': 'webgl-tree_' + args['id'] + '_base',
       'properties': {
         'billboard': args['billboard'],
@@ -692,7 +692,7 @@ function prefabs_webgl_tree_2d(args){
         ],
       },
     });
-    core_entity_create({
+    entity_create({
       'id': 'webgl-tree_' + args['id'] + '_leaf',
       'properties': {
         'billboard': args['billboard'],
@@ -712,7 +712,7 @@ function prefabs_webgl_tree_2d(args){
       },
     });
 
-    core_group_add({
+    entity_group_add({
       'entities': [
         'webgl-tree_' + args['id'] + '_base',
         'webgl-tree_' + args['id'] + '_leaf',

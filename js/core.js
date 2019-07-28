@@ -80,158 +80,6 @@ function core_digits_min(args){
     return result;
 }
 
-function core_entity_create(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'id': core_id_count,
-        'properties': {},
-        'types': [],
-      },
-    });
-
-    core_id_count++;
-
-    let entity = {};
-
-    for(let type in core_entity_types_default){
-        core_entity_handle_defaults({
-          'entity': entity,
-          'id': args['id'],
-          'type': core_entity_types_default[type],
-        });
-    }
-
-    for(let type in args['types']){
-        core_entity_handle_defaults({
-          'entity': entity,
-          'id': args['id'],
-          'type': args['types'][type],
-        });
-    }
-
-    for(let property in args['properties']){
-        entity[property] = core_handle_defaults({
-          'default': entity[property],
-          'var': args['properties'][property],
-        });
-    }
-
-    core_entities[args['id']] = entity;
-
-    for(let type in core_entity_types_default){
-        core_entity_info[core_entity_types_default[type]]['todo'](args['id']);
-    }
-    for(let type in args['types']){
-        core_entity_info[args['types'][type]]['todo'](args['id']);
-    }
-
-    return args['id'];
-}
-
-// Required args: id, type
-function core_entity_handle_defaults(args){
-    for(let property in core_entity_info[args['type']]['default']){
-        args['entity'][property] = core_handle_defaults({
-          'default': args['entity'][property],
-          'var': core_entity_info[args['type']]['default'][property],
-        });
-    }
-
-    if(core_groups[args['type']][args['id']] === void 0){
-        core_group_add({
-          'entities': [
-            args['id'],
-          ],
-          'group': args['type'],
-        });
-
-        core_entity_info[args['type']]['count']++;
-    }
-
-    for(let group in core_entity_info[args['type']]['groups']){
-        core_group_add({
-          'entities': [
-            args['id'],
-          ],
-          'group': core_entity_info[args['type']]['groups'][group],
-        });
-    }
-}
-
-// Required args: entities
-function core_entity_remove(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'delete-empty': false,
-      },
-    });
-
-    core_group_remove_all({
-      'delete-empty': args['delete-empty'],
-      'entities': args['entities'],
-    });
-
-    for(let entity in args['entities']){
-        delete core_entities[args['entities'][entity]];
-    }
-}
-
-function core_entity_remove_all(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'delete-empty': false,
-        'group': false,
-      },
-    });
-
-    for(let entity in core_entities){
-        if(args['group'] !== false
-          && !core_groups[args['group']][entity]){
-            continue;
-        }
-
-        core_entity_remove({
-          'delete-empty': args['delete-empty'],
-          'entities': [
-            entity,
-          ],
-        });
-    }
-}
-
-// Required args: type
-function core_entity_set(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'default': false,
-        'groups': [],
-        'properties': {},
-        'todo': function(){},
-      },
-    });
-
-    core_entity_info[args['type']] = {
-      'count': 0,
-      'default': args['properties'],
-      'groups': args['groups'],
-      'todo': args['todo'],
-    };
-
-    if(args['default']){
-        core_entity_types_default.push(args['type']);
-    }
-
-    core_group_create({
-      'ids': [
-        args['type'],
-      ],
-    });
-}
-
 function core_escape(){
     core_menu_open = !core_menu_open;
 
@@ -342,123 +190,6 @@ function core_file(args){
         args['todo'](event);
     };
     filereader[args['type']](args['file']);
-}
-
-// Required args: entities, group
-function core_group_add(args){
-    if(!(args['group'] in core_groups)){
-        core_group_create({
-          'id': args['group'],
-        });
-    }
-
-    for(let entity in args['entities']){
-        if(core_groups[args['group']][args['entities'][entity]]){
-            return;
-        }
-
-        core_groups[args['group']][args['entities'][entity]] = true;
-
-        core_groups['_length'][args['group']]++;
-    }
-}
-
-// Required args: ids
-function core_group_create(args){
-    for(let id in args['ids']){
-        core_groups[args['ids'][id]] = {};
-        core_groups['_length'][args['ids'][id]] = 0;
-    }
-}
-
-// Required args: groups, todo
-function core_group_modify(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'pretodo': false,
-      },
-    });
-
-    let pretodo = {};
-    if(args['pretodo'] !== false){
-        pretodo = args['pretodo']();
-    }
-    for(let group in args['groups']){
-        for(let entity in core_groups[args['groups'][group]]){
-            args['todo'](
-              entity,
-              pretodo
-            );
-        }
-    }
-}
-
-// Required args: entities, from, to
-function core_group_move(args){
-    core_group_remove({
-      'entities': args['entities'],
-      'group': args['from'],
-    });
-    core_group_add({
-      'entities': args['entities'],
-      'group': args['to'],
-    });
-}
-
-// Required args: entities, group
-function core_group_remove(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'delete-empty': false,
-      },
-    });
-
-    if(core_groups[args['group']] === void 0){
-        return;
-    }
-
-    for(let entity in args['entities']){
-        if(!core_groups[args['group']][args['entities'][entity]]){
-            continue;
-        }
-
-        delete core_groups[args['group']][args['entities'][entity]];
-
-        core_groups['_length'][args['group']]--;
-        if(core_entity_info[args['group']]){
-            core_entity_info[args['group']]['count']--;
-        }
-    }
-
-    if(args['delete-empty']
-      && core_groups['_length'][args['group']] === 0){
-        delete core_groups[args['group']];
-        delete core_groups['_length'][args['group']];
-    }
-}
-
-// Required args: entities
-function core_group_remove_all(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'delete-empty': false,
-      },
-    });
-
-    for(let group in core_groups){
-        if(group === '_length'){
-            continue;
-        }
-
-        core_group_remove({
-          'delete-empty': args['delete-empty'],
-          'entities': args['entities'],
-          'group': group,
-        });
-    }
 }
 
 function core_handle_beforeunload(event){
@@ -1237,7 +968,6 @@ function core_repo_init(args){
       'args': args,
       'defaults': {
         'beforeunload': false,
-        'entities': {},
         'events': {},
         'github': 'iterami',
         'globals': {},
@@ -1261,16 +991,6 @@ function core_repo_init(args){
 
     if(args['menu']){
         core_escape();
-    }
-
-    for(let entity in args['entities']){
-        core_entity_set({
-          'default': args['entities'][entity]['default'],
-          'groups': args['entities'][entity]['groups'],
-          'properties': args['entities'][entity]['properties'],
-          'todo': args['entities'][entity]['todo'],
-          'type': entity,
-        });
     }
 
     core_repo_title = args['title'];
@@ -1770,14 +1490,8 @@ function core_uri(args){
     );
 }
 
-window.core_entities = {};
-window.core_entity_info = {};
-window.core_entity_types_default = [];
 window.core_events = {};
 window.core_gamepads = {};
-window.core_groups = {
-  '_length': {},
-};
 window.core_id_count = 0;
 window.core_images = {};
 window.core_intervals = {};

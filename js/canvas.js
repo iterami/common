@@ -10,7 +10,7 @@ function canvas_attach(args){
       },
     });
 
-    core_entities[args['entity']]['attach'] = {
+    entity_entities[args['entity']]['attach'] = {
       'offset': {
         'x': args['offset-x'],
         'y': args['offset-y'],
@@ -190,7 +190,7 @@ function canvas_init(args){
     window.onresize = canvas_resize;
     canvas_resize();
 
-    core_entity_set({
+    entity_set({
       'default': true,
       'properties': {
         'attach': false,
@@ -225,7 +225,7 @@ function canvas_init(args){
 function canvas_logicloop(){
     logic();
 
-    core_group_modify({
+    entity_group_modify({
       'groups': [
         'canvas',
       ],
@@ -236,10 +236,10 @@ function canvas_logicloop(){
 }
 
 function canvas_logicloop_handle_entity(entity){
-    if(core_entities[entity]['attach'] !== false){
-        let attached = core_entities[core_entities[entity]['attach']['id']];
-        for(let axis in core_entities[entity]['position']){
-            core_entities[entity]['position'][axis] = attached['position'][axis] + core_entities[entity]['attach']['offset'][axis];
+    if(entity_entities[entity]['attach'] !== false){
+        let attached = entity_entities[entity_entities[entity]['attach']['id']];
+        for(let axis in entity_entities[entity]['position']){
+            entity_entities[entity]['position'][axis] = attached['position'][axis] + entity_entities[entity]['attach']['offset'][axis];
         }
     }
 }
@@ -277,7 +277,7 @@ function canvas_setmode(args){
       },
     });
 
-    core_entity_remove_all();
+    entity_remove_all();
     core_storage_save();
 
     core_mode = args['mode'];
