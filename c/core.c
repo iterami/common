@@ -1,31 +1,6 @@
 #include <stdlib.h>
 #include "core.h"
 
-float core_clamp_float(const float value, const float min, const float max, const int wrap){
-    float wrapped_value = value;
-
-    if(wrap == 1){
-        const float diff = max - min;
-
-        while(wrapped_value < min){
-            wrapped_value += diff;
-        }
-        while(wrapped_value >= max){
-            wrapped_value -= diff;
-        }
-
-    }else{
-        if(wrapped_value < min){
-            wrapped_value = min;
-
-        }else if(wrapped_value > max){
-            wrapped_value = max;
-        }
-    }
-
-    return wrapped_value;
-}
-
 int core_is_hexadecimal(const char character){
     return (('0' <= character && character <= '9')
       && ('a' <= character && character <= 'f')

@@ -1,6 +1,27 @@
 #include <math.h>
 #include "math.h"
 
+float math_clamp_float(const float value, const float min, const float max, const int wrap){
+    float wrapped_value = value;
+
+    if(wrap == 1){
+        wrapped_value = fmodf(
+          wrapped_value,
+          max - min
+        );
+
+    }else{
+        if(wrapped_value < min){
+            wrapped_value = min;
+
+        }else if(wrapped_value > max){
+            wrapped_value = max;
+        }
+    }
+
+    return wrapped_value;
+}
+
 float math_degrees_to_radians(const float degrees){
     return degrees * (M_PI / 180);
 }

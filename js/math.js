@@ -11,13 +11,7 @@ function math_clamp(args){
     });
 
     if(args['wrap']){
-        let diff = args['max'] - args['min'];
-        while(args['value'] < args['min']){
-            args['value'] += diff;
-        }
-        while(args['value'] >= args['max']){
-            args['value'] -= diff;
-        }
+        args['value'] = args['value'] % (args['max'] - args['min']);
 
     }else{
         args['value'] = Math.max(
