@@ -439,9 +439,15 @@ function math_normalize(args){
     }
 
     return {
-      'x': args['x'] / length,
-      'y': args['y'] / length,
-      'z': args['z'] / length,
+      'x': core_round({
+        'number': args['x'] / length,
+      }),
+      'y': core_round({
+        'number': args['y'] / length,
+      }),
+      'z': core_round({
+        'number': args['z'] / length,
+      }),
     };
 }
 
