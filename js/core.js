@@ -70,13 +70,17 @@ function core_digits_min(args){
     let sign = args['number'] < 0
       ? '-'
       : '';
-    args['number'] = Math.abs(args['number']);
+    let number = Math.abs(args['number']);
+    let fraction = String(core_round({
+      'number': number % 1,
+    })).substring(1);
+    number = Math.trunc(number);
 
-    while(String(args['number']).length < args['digits']){
-        args['number'] = '0' + args['number'];
+    while(String(number).length < args['digits']){
+        number = '0' + number;
     }
 
-    return sign + args['number'];
+    return sign + number + fraction;
 }
 
 function core_escape(){
