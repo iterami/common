@@ -67,17 +67,16 @@ function core_digits_min(args){
       },
     });
 
-    let result = args['number'] < 0
+    let sign = args['number'] < 0
       ? '-'
       : '';
     args['number'] = Math.abs(args['number']);
-    result += args['number'];
 
-    while(String(result).length < args['digits']){
-        result = '0' + result;
+    while(String(args['number']).length < args['digits']){
+        args['number'] = '0' + args['number'];
     }
 
-    return result;
+    return sign + args['number'];
 }
 
 function core_escape(){
