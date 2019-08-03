@@ -1495,7 +1495,6 @@ function core_uri(args){
 
 window.core_events = {};
 window.core_gamepads = {};
-window.core_id_count = 0;
 window.core_images = {};
 window.core_intervals = {};
 window.core_key_rebinds = {};

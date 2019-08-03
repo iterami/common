@@ -1168,7 +1168,7 @@ function webgl_init(args){
       'label': 'anisotropic',
     });
 
-    core_id_count = 0;
+    entity_id_count = 0;
     webgl_properties = {
       'ambient-blue': args['ambient-blue'],
       'ambient-green': args['ambient-green'],
