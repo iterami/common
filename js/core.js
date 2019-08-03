@@ -74,9 +74,9 @@ function core_digits_min(args){
     let fraction = String(core_round({
       'number': number % 1,
     })).substring(1);
-    number = Math.trunc(number);
+    number = String(Math.trunc(number));
 
-    while(String(number).length < args['digits']){
+    while(number.length < args['digits']){
         number = '0' + number;
     }
 
