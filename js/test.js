@@ -50,21 +50,38 @@ function test_time(args){
       'args': args,
       'defaults': {
         'function-args': void 0,
-        'repeat': 100,
+        'runs': 100,
       },
     });
 
+    let runs_done = 0;
+    let time_max = 0;
+    let time_min = 0;
     let time_total = 0;
-    let repeats = 0;
 
-    while(repeats < args['repeat']){
+    while(runs_done < args['runs']){
         let time_before = new Date();
         args['function'](args['function-args']);
         let time_after = new Date();
 
-        time_total += time_after - time_before;
-        repeats += 1;
+        let diff = time_after - time_before;
+        if(diff < time_min
+          || time_min === 0){
+            time_min = diff;
+        }
+        if(diff > time_max){
+            time_max = diff;
+        }
+
+        time_total += diff;
+        runs_done += 1;
     }
 
-    return time_total;
+    return {
+      'average': time_total / args['runs'],
+      'max': time_max,
+      'min': time_min,
+      'runs': args['runs'],
+      'total': time_total,
+    };
 }
