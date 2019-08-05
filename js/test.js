@@ -44,5 +44,27 @@ function test_function(args){
     };
 }
 
-function test_time(){
+// Required args: function
+function test_time(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'function-args': void 0,
+        'repeat': 100,
+      },
+    });
+
+    let time_total = 0;
+    let repeats = 0;
+
+    while(repeats < args['repeat']){
+        let time_before = new Date();
+        args['function'](args['function-args']);
+        let time_after = new Date();
+
+        time_total += time_after - time_before;
+        repeats += 1;
+    }
+
+    return time_total;
 }
