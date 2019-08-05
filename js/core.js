@@ -530,12 +530,12 @@ function core_image(args){
 
 function core_init(){
     // Core menu init.
-    let core_ui = core_html({
+    core_html({
+      'parent': document.body,
       'properties': {
         'id': 'core-ui',
       },
     })
-    document.body.appendChild(core_ui);
     core_html({
       'parent': 'core-ui',
       'properties': {
