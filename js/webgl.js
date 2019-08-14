@@ -2871,6 +2871,14 @@ function webgl_stat_modify(args){
       : args['parent'][args['stat']] + args['amount'];
 
     if(args['stat'] === 'health-current'){
+        if(webgl_character_level({
+            'character': args['parent']['id'],
+          }) < 0){
+            args['parent']['health-current'] = args['parent']['health-max'];
+
+            return;
+        }
+
         if(args['parent']['health-current'] > args['parent']['health-max']){
             args['parent']['health-current'] = args['parent']['health-max'];
         }
