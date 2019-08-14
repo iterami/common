@@ -2726,7 +2726,11 @@ function webgl_shader_recreate(){
             +     'gl_FragColor = vec_fragmentColor * vec_lighting * texture2D(sampler, vec_textureCoord);'
             +     'if(fog){'
             +         'float distance = length(vec_position.xyz);'
-            +         'gl_FragColor.rgb *= clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0);'
+            +         'gl_FragColor.rgb = vec3(mix('
+            +           'vec_clearColor,'
+            +           'gl_FragColor.rgb,'
+            +           'clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)'
+            +         '));'
             +     '}'
             + '}',
           'type': webgl_buffer.FRAGMENT_SHADER,
