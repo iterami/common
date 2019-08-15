@@ -39,6 +39,10 @@ function audio_create(args){
     }
 }
 
+function audio_init(){
+    audio_context = new window.AudioContext();
+}
+
 function audio_node_create(args){
     args = core_args({
       'args': args,
@@ -51,7 +55,7 @@ function audio_node_create(args){
     });
 
     if(audio_context === false){
-        audio_context = new window.AudioContext();
+        audio_init();
     }
 
     let source = audio_context['create' + args['properties']['label']](
@@ -105,7 +109,7 @@ function audio_onended(args){
 // Required args: id
 function audio_source_create(args){
     if(audio_context === false){
-        audio_context = new window.AudioContext();
+        audio_init();
     }
 
     audio_sources[args['id']] = {
