@@ -11,15 +11,21 @@ function math_clamp(args){
     });
 
     if(args['wrap']){
-        args['value'] = args['value'] % (args['max'] - args['min']);
+        let range = args['max'] - args['min'];
+
+        if(args['value'] < args['min']){
+            args['value'] = args['max'] - (args['min'] - args['value']) % range;
+
+        }else{
+            args['value'] = args['min'] + (args['value'] - args['min']) % range;
+        }
 
     }else{
-        args['value'] = Math.max(
-          args['value'],
-          args['min']
-        );
         args['value'] = Math.min(
-          args['value'],
+          Math.max(
+            args['value'],
+            args['min']
+          ),
           args['max']
         );
     }

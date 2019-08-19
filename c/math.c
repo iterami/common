@@ -5,10 +5,20 @@ float math_clamp_float(const float value, const float min, const float max, cons
     float wrapped_value = value;
 
     if(wrap == 1){
-        wrapped_value = fmodf(
-          wrapped_value,
-          max - min
-        );
+        const float range = max - min;
+
+        if(wrapped_value < min){
+            wrapped_value = fmodf(
+              max - (min - wrapped_value),
+              range
+            );
+
+        }else{
+            wrapped_value = fmodf(
+              min + (wrapped_value - min),
+              range
+            );
+        }
 
     }else{
         if(wrapped_value < min){
