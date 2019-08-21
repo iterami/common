@@ -2120,6 +2120,40 @@ function webgl_logicloop(){
       'id': 'camera',
     });
 
+    webgl_buffer.uniform3f(
+      webgl_properties['shader']['ambient-color'],
+      webgl_properties['ambient-red'],
+      webgl_properties['ambient-green'],
+      webgl_properties['ambient-blue']
+    );
+    webgl_buffer.uniform3f(
+      webgl_properties['shader']['clear-color'],
+      webgl_properties['clearcolor-red'],
+      webgl_properties['clearcolor-green'],
+      webgl_properties['clearcolor-blue']
+    );
+    webgl_buffer.uniform1i(
+      webgl_properties['shader']['directional'],
+      webgl_properties['directional-state']
+    );
+    webgl_buffer.uniform3f(
+      webgl_properties['shader']['directional-color'],
+      webgl_properties['directional-red'],
+      webgl_properties['directional-green'],
+      webgl_properties['directional-blue']
+    );
+    webgl_buffer.uniform3fv(
+      webgl_properties['shader']['directional-vector'],
+      webgl_properties['directional-vector']
+    );
+    webgl_buffer.uniform1f(
+      webgl_properties['shader']['fog-density'],
+      webgl_properties['fog-density']
+    );
+    webgl_buffer.uniform1i(
+      webgl_properties['shader']['fog-state'],
+      webgl_properties['fog-state']
+    );
     webgl_buffer.uniformMatrix4fv(
       webgl_properties['shader']['mat_perspectiveMatrix'],
       false,
@@ -2811,45 +2845,6 @@ void main(void){
           locations[location]
         );
     }
-
-    webgl_shader_update();
-}
-
-function webgl_shader_update(){
-    webgl_buffer.uniform3f(
-      webgl_properties['shader']['ambient-color'],
-      webgl_properties['ambient-red'],
-      webgl_properties['ambient-green'],
-      webgl_properties['ambient-blue']
-    );
-    webgl_buffer.uniform3f(
-      webgl_properties['shader']['clear-color'],
-      webgl_properties['clearcolor-red'],
-      webgl_properties['clearcolor-green'],
-      webgl_properties['clearcolor-blue']
-    );
-    webgl_buffer.uniform1i(
-      webgl_properties['shader']['directional'],
-      webgl_properties['directional-state']
-    );
-    webgl_buffer.uniform3f(
-      webgl_properties['shader']['directional-color'],
-      webgl_properties['directional-red'],
-      webgl_properties['directional-green'],
-      webgl_properties['directional-blue']
-    );
-    webgl_buffer.uniform3fv(
-      webgl_properties['shader']['directional-vector'],
-      webgl_properties['directional-vector']
-    );
-    webgl_buffer.uniform1f(
-      webgl_properties['shader']['fog-density'],
-      webgl_properties['fog-density']
-    );
-    webgl_buffer.uniform1i(
-      webgl_properties['shader']['fog-state'],
-      webgl_properties['fog-state']
-    );
 }
 
 // Required args: parent, stat
