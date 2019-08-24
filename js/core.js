@@ -550,7 +550,7 @@ function core_init(){
       'parent': 'core-ui',
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a href=../index.htm id=core-menu-root></a>/<a class=external id=core-menu-title rel=noopener></a>'
+        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noopener></a>'
           + '<div id=core-menu-info></div><hr>'
           + '<span id=core-menu-tabs></span>'
           + '<div id=core-menu-tabcontent></div>'
@@ -980,6 +980,7 @@ function core_repo_init(args){
         'menu': false,
         'menu-block-events': true,
         'mousebinds': false,
+        'root': '../index.htm',
         'storage': {},
         'storage-menu': '',
         'tabs': {},
@@ -1011,7 +1012,9 @@ function core_repo_init(args){
           'label': core_repo_title,
         });
     }
-    document.getElementById('core-menu-root').innerHTML = args['github'];
+    let repo_root = document.getElementById('core-menu-root');
+    repo_root.href = args['root'];
+    repo_root.innerHTML = args['github'];
     let repo_title = document.getElementById('core-menu-title');
     repo_title.href = 'https://github.com/' + args['github'] + '/' + core_repo_title;
     repo_title.innerHTML = core_repo_title;
