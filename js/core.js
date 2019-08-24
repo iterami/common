@@ -972,14 +972,15 @@ function core_repo_init(args){
       'defaults': {
         'beforeunload': false,
         'events': {},
-        'github': 'iterami',
         'globals': {},
         'images': {},
         'info': '',
         'keybinds': false,
+        'link': false,
         'menu': false,
         'menu-block-events': true,
         'mousebinds': false,
+        'owner': 'iterami',
         'root': '../index.htm',
         'storage': {},
         'storage-menu': '',
@@ -1016,13 +1017,16 @@ function core_repo_init(args){
       'id': 'core-menu-root',
       'properties': {
         'href': args['root'],
-        'innerHTML': args['github'],
+        'innerHTML': args['owner'],
       },
     });
+    if(args['link'] === false){
+        args['link'] = 'https://github.com/' + args['owner'] + '/' + core_repo_title;
+    }
     core_html_modify({
       'id': 'core-menu-title',
       'properties': {
-        'href': 'https://github.com/' + args['github'] + '/' + core_repo_title,
+        'href': args['link'],
         'innerHTML': core_repo_title,
       },
     });
