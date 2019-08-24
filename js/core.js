@@ -1012,12 +1012,20 @@ function core_repo_init(args){
           'label': core_repo_title,
         });
     }
-    let repo_root = document.getElementById('core-menu-root');
-    repo_root.href = args['root'];
-    repo_root.innerHTML = args['github'];
-    let repo_title = document.getElementById('core-menu-title');
-    repo_title.href = 'https://github.com/' + args['github'] + '/' + core_repo_title;
-    repo_title.innerHTML = core_repo_title;
+    core_html_modify({
+      'id': 'core-menu-root',
+      'properties': {
+        'href': args['root'],
+        'innerHTML': args['github'],
+      },
+    });
+    core_html_modify({
+      'id': 'core-menu-title',
+      'properties': {
+        'href': 'https://github.com/' + args['github'] + '/' + core_repo_title,
+        'innerHTML': core_repo_title,
+      },
+    });
     document.getElementById('repo-ui').innerHTML = args['ui'];
 
     let have_default = false;
