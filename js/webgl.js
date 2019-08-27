@@ -2974,22 +2974,16 @@ function webgl_vertexcolorarray(args){
 
     let color = [];
     for(let i = 0; i < args['vertexcount']; i++){
-        if(args['rgbarray'][i] !== void 0){
-            color.push(
-              args['rgbarray'][i]['red'] / 255,
-              args['rgbarray'][i]['green'] / 255,
-              args['rgbarray'][i]['blue'] / 255,
-              1
-            );
+        let index = args['rgbarray'][i] !== void 0
+          ? i
+          : 0;
 
-        }else{
-            color.push(
-              args['rgbarray'][0]['red'] / 255,
-              args['rgbarray'][0]['green'] / 255,
-              args['rgbarray'][0]['blue'] / 255,
-              1
-            );
-        }
+        color.push(
+          args['rgbarray'][index]['red'] / 255,
+          args['rgbarray'][index]['green'] / 255,
+          args['rgbarray'][index]['blue'] / 255,
+          1
+        );
     }
 
     return color;
