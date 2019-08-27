@@ -74,11 +74,10 @@ function core_digits_min(args){
     let fraction = String(core_round({
       'number': number % 1,
     })).substring(1);
-    number = String(Math.trunc(number));
-
-    if(number.length < args['digits']){
-        number = '0'.repeat(args['digits'] - number.length) + number;
-    }
+    number = String(Math.trunc(number)).padStart(
+      args['digits'],
+      '0'
+    );
 
     return sign + number + fraction;
 }
