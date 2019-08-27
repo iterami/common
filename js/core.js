@@ -675,7 +675,7 @@ function core_interval_modify(args){
       'animationFrame': args['animationFrame'],
       'clear': args['clear'],
       'interval': args['interval'],
-      'paused': args['paused'],
+      'paused': true,
       'set': args['set'],
       'todo': args['todo'],
     };
@@ -733,16 +733,13 @@ function core_interval_remove_all(){
 
 // Required args: id
 function core_interval_resume(args){
-    if(!(args['id'] in core_intervals)){
+    if(!(args['id'] in core_intervals)
+      || !core_intervals[args['id']]['paused']){
         return;
     }
 
-    if(!core_intervals[args['id']]['paused']){
-        core_interval_pause({
-          'id': args['id'],
-        });
-    }
     core_intervals[args['id']]['paused'] = false;
+
     if(core_intervals[args['id']]['animationFrame']){
         core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
 
