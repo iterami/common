@@ -76,8 +76,8 @@ function core_digits_min(args){
     })).substring(1);
     number = String(Math.trunc(number));
 
-    while(number.length < args['digits']){
-        number = '0' + number;
+    if(number.length < args['digits']){
+        number = '0'.repeat(args['digits'] - number.length) + number;
     }
 
     return sign + number + fraction;
