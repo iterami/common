@@ -44,6 +44,49 @@ function test_function(args){
     };
 }
 
+// Required args: link, tests
+function test_run(args){
+    let results = '';
+
+    for(let test in args['tests']){
+        let test_args = {};
+        Object.assign(
+          test_args,
+          args['tests'][test]
+        );
+        test_args['args'] = {};
+        Object.assign(
+          test_args['args'],
+          args['tests'][test]['args']
+        );
+        const result = test_function(test_args);
+        const expect = core_type({
+          'var': args['tests'][test]['expect'],
+        })
+          ? args['tests'][test]['expect'].toString()
+          : JSON.stringify(
+            args['tests'][test]['expect'],
+            void 0,
+            1
+          );
+
+        results += '<tr ' + (!result['test'] ? ' style=background:#600' : '') + '>'
+          + '<td><a href=' + args['link'] + args['tests'][test]['function'] + '>' + args['tests'][test]['function'] + '()</a>'
+          + '<td>' + JSON.stringify(
+            args['tests'][test]['args'],
+            null,
+            1
+          ) + '<td>' + expect
+          + '<td>' + JSON.stringify(
+            result['returned'],
+            null,
+            1
+          ) + '<td>' + result['test'];
+    }
+
+    document.getElementById('results').innerHTML = results;
+}
+
 // Required args: function
 function test_time(args){
     args = core_args({
