@@ -46,7 +46,7 @@ function test_function(args){
 
 // Required args: link, tests
 function test_run(args){
-    let results = '';
+    let results = '<tr class=header><td>Function<td>Args<td>Expected<td>Returned<td>Test';
 
     for(let test in args['tests']){
         let test_args = {};
