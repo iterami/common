@@ -1,4 +1,3 @@
-filechooser,
 #grid,
 list,
 menubar,
@@ -9,9 +8,6 @@ window{
     color: #aaa;
     font-family: monospace;
 }
-filechooser.view:selected{
-    color: #fff;
-}
 #map{
     font-size: 2px;
 }
@@ -19,10 +15,6 @@ overshoot.bottom,
 overshoot.top{
     background: none;
 }
-paned,
 textview:selected{
     background-color: #3c3b37;
-}
-placessidebar{
-    border: 0;
 }
