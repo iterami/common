@@ -15,8 +15,8 @@ filechooser.view:selected{
 #map{
     font-size: 2px;
 }
-.overshoot.bottom,
-.overshoot.top{
+overshoot.bottom,
+overshoot.top{
     background: none;
 }
 paned,
