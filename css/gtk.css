@@ -1,23 +1,16 @@
+filechooser,
 #grid,
-GtkFileChooserWidget .view,
-GtkListBox,
-GtkMenuBar,
-GtkNotebook,
-GtkTextView,
-GtkWindow{
+list,
+menubar,
+notebook,
+textview,
+window{
     background-color: #000;
     color: #aaa;
     font-family: monospace;
 }
-GtkFileChooserWidget .view:selected{
+filechooser.view:selected{
     color: #fff;
-}
-GtkPaned,
-GtkTextView:selected{
-    background-color: #3c3b37;
-}
-GtkPlacesSidebar{
-    border: 0;
 }
 #map{
     font-size: 2px;
@@ -25,4 +18,11 @@ GtkPlacesSidebar{
 .overshoot.bottom,
 .overshoot.top{
     background: none;
+}
+paned,
+textview:selected{
+    background-color: #3c3b37;
+}
+placessidebar{
+    border: 0;
 }
