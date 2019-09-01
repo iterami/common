@@ -2,9 +2,11 @@
 list,
 menubar,
 notebook,
+notebook tabs tab,
 textview,
 window{
     background-color: #000;
+    background-image: none;
     color: #aaa;
     font-family: monospace;
 }
