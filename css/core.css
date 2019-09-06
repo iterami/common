@@ -61,9 +61,6 @@ select:not([disabled]){
 .medium{
     font-size: 200%;
 }
-.nounderline a{
-    text-decoration: none;
-}
 pre,
 ul{
     margin: 0;
