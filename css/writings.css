@@ -34,17 +34,17 @@ ul{
 table{
     border-collapse: collapse;
 }
+td{
+    border: 1px solid #444;
+    padding: 5px;
+    vertical-align: top;
+}
 textarea{
     background: #000;
     color: #aaa;
     font-weight: bold;
     height: 150px;
     width: 420px;
-}
-td{
-    border: 1px solid #444;
-    padding: 5px;
-    vertical-align: top;
 }
 
 a:hover{
