@@ -1143,12 +1143,14 @@ function core_sort_custom(args){
       },
     });
 
-    args['array'].sort(args['todo']);
+    let array_clone = [...args['array']];
+
+    array_clone.sort(args['todo']);
     if(args['reverse']){
-        args['array'].reverse();
+        array_clone.reverse();
     }
 
-    return args['array'];
+    return array_clone;
 }
 
 // Required args: array
