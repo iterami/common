@@ -10,6 +10,7 @@ window{
     background-image: none;
     color: #aaa;
     font-family: monospace;
+    font-size: 15px;
 }
 #map{
     font-size: 2px;
