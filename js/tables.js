@@ -45,19 +45,30 @@ function tables_sort(element, column, direction, type){
         column_content.push(rows[row].children[column].innerText);
     }
 
+    let sort_function = 0;
     if(type === 1){
-        column_content.sort(function(a, b){
-            return a - b;
-        });
+        if(direction === 0){
+            sort_function = function(a, b){
+                return b - a;
+            };
+
+        }else{
+            sort_function = function(a, b){
+                return a - b;
+            };
+        }
+
+    }else if(direction === 0){
+        sort_function = function(a, b){
+            return b.localeCompare(a);
+        };
 
     }else{
-        column_content.sort(function(a, b){
+        sort_function = function(a, b){
             return a.localeCompare(b);
-        });
+        };
     }
-    if(direction === 0){
-        column_content.reverse();
-    }
+    column_content.sort(sort_function);
 
     for(let sorted in column_content){
         for(let row in rows){
