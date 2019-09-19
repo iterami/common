@@ -18,13 +18,18 @@ function tables_init(){
                 tables_column_main = header;
             }
 
-            headers[header].innerHTML += '<input onclick="tables_sort(this,' + header + ',1)" type=button value=↑>'
-              + '<input onclick="tables_sort(this,' + header + ',0)" type=button value=↓>';
+            let type = 0;
+            if(headers[header].classList.contains('tables-numbers')){
+                type = 1;
+            }
+
+            headers[header].innerHTML += '<input onclick="tables_sort(this,' + header + ',1,' + type + ')" type=button value=↑>'
+              + '<input onclick="tables_sort(this,' + header + ',0,' + type + ')" type=button value=↓>';
         }
     }
 }
 
-function tables_sort(element, column, direction){
+function tables_sort(element, column, direction, type){
     let table = element.closest('table');
     let rows = Array.from(table.firstElementChild.children);
 
@@ -40,9 +45,16 @@ function tables_sort(element, column, direction){
         column_content.push(rows[row].children[column].innerText);
     }
 
-    column_content.sort(function(a, b){
-        return a.localeCompare(b);
-    });
+    if(type === 1){
+        column_content.sort(function(a, b){
+            return a - b;
+        });
+
+    }else{
+        column_content.sort(function(a, b){
+            return a.localeCompare(b);
+        });
+    }
     if(direction === 0){
         column_content.reverse();
     }
