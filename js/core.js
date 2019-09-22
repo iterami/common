@@ -101,6 +101,8 @@ function core_escape(){
         document.getElementById('core-menu').style.display = 'inline';
     }
 
+    document.getElementById('core-toggle').blur();
+
     core_call({
       'todo': 'repo_escape',
     });
