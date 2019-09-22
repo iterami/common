@@ -464,6 +464,7 @@ function core_html(args){
       'defaults': {
         'parent': false,
         'properties': {},
+        'todo': 'append',
         'type': 'div',
       },
     });
@@ -476,10 +477,10 @@ function core_html(args){
     }
 
     if(typeof args['parent'] === 'string'){
-        document.getElementById(args['parent']).appendChild(element);
+        document.getElementById(args['parent'])[args['todo']](element);
 
     }else if(typeof args['parent'] === 'object'){
-        args['parent'].appendChild(element);
+        args['parent'][args['todo']](element);
     }
 
     return element;
@@ -536,6 +537,7 @@ function core_init(){
       'properties': {
         'id': 'core-ui',
       },
+      'todo': 'prepend',
     })
     core_html({
       'parent': 'core-ui',
