@@ -92,6 +92,7 @@ function core_escape(){
 
         core_storage_save();
         core_interval_resume_all();
+        document.getElementById('core-toggle').blur();
 
     }else{
         core_interval_pause_all();
@@ -100,8 +101,6 @@ function core_escape(){
         document.getElementById('core-ui').style.userSelect = 'auto';
         document.getElementById('core-menu').style.display = 'inline';
     }
-
-    document.getElementById('core-toggle').blur();
 
     core_call({
       'todo': 'repo_escape',
