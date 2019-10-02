@@ -1829,7 +1829,7 @@ function webgl_logicloop(){
             }
 
             if(webgl_character_level() === -1){
-                if(core_keys[32]['state']){
+                if(core_keys[core_storage_data['jump']]['state']){
                     webgl_entity_move({
                       'y': true,
                     });
@@ -1842,7 +1842,7 @@ function webgl_logicloop(){
                     });
                 }
 
-            }else if(core_keys[32]['state']){
+            }else if(core_keys[core_storage_data['jump']]['state']){
                 webgl_character_jump();
             }
 
