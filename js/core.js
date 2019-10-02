@@ -435,7 +435,7 @@ function core_handle_pointerlockchange(event){
     if(!core_mouse['pointerlock-state']){
         core_escape();
     }
-};
+}
 
 // Required args: hex
 function core_hex_to_rgb(args){
