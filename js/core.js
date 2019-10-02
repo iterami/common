@@ -766,6 +766,12 @@ function core_interval_resume_all(){
 
 function core_keys_rebind(){
     let keybinds = {};
+    keybinds[core_storage_data['crouch']] = {};
+    keybinds[core_storage_data['jump']] = {};
+    keybinds[core_storage_data['move-←']] = {};
+    keybinds[core_storage_data['move-↑']] = {};
+    keybinds[core_storage_data['move-→']] = {};
+    keybinds[core_storage_data['move-↓']] = {};
     Object.assign(
       keybinds,
       core_key_rebinds
@@ -774,12 +780,6 @@ function core_keys_rebind(){
       'solo': true,
       'todo': core_escape,
     };
-    keybinds[core_storage_data['crouch']] = {};
-    keybinds[core_storage_data['jump']] = {};
-    keybinds[core_storage_data['move-←']] = {};
-    keybinds[core_storage_data['move-↑']] = {};
-    keybinds[core_storage_data['move-→']] = {};
-    keybinds[core_storage_data['move-↓']] = {};
     core_events_bind({
       'clearkeys': true,
       'keybinds': keybinds,
