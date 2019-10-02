@@ -573,6 +573,7 @@ function core_init(){
       'content': '<table><tr><td><input id=audio-volume><td>Audio Volume'
         + '<tr><td><input id=color-negative type=color><td>Color Negative'
         + '<tr><td><input id=color-positive type=color><td>Color Positive'
+        + '<tr><td><input id=crouch><td>Crouch'
         + '<tr><td><input id=decimals><td>Decimals'
         + '<tr><td><input id=jump><td>Jump'
         + '<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity'
@@ -590,6 +591,7 @@ function core_init(){
         'audio-volume': 1,
         'color-negative': '#663366',
         'color-positive': '#206620',
+        'crouch': 67,
         'decimals': 7,
         'jump': 32,
         'mouse-sensitivity': 1,
@@ -772,6 +774,7 @@ function core_keys_rebind(){
       'solo': true,
       'todo': core_escape,
     };
+    keybinds[core_storage_data['crouch']] = {};
     keybinds[core_storage_data['jump']] = {};
     keybinds[core_storage_data['move-←']] = {};
     keybinds[core_storage_data['move-↑']] = {};

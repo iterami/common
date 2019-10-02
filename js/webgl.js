@@ -1835,7 +1835,7 @@ function webgl_logicloop(){
                     });
                 }
 
-                if(core_keys[67]['state']){
+                if(core_keys[core_storage_data['crouch']]['state']){
                     webgl_entity_move({
                       'strafe': true,
                       'y': true,
