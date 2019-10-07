@@ -273,7 +273,6 @@ function canvas_setmode(args){
       'args': args,
       'defaults': {
         'mode': 0,
-        'newgame': false,
       },
     });
 
@@ -287,7 +286,7 @@ function canvas_setmode(args){
       'todo': 'load_data',
     });
 
-    if(args['newgame']){
+    if(core_menu_open){
         core_escape();
     }
 
