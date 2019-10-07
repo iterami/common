@@ -986,6 +986,7 @@ function core_repo_init(args){
         'menu-block-events': true,
         'mousebinds': false,
         'owner': 'iterami',
+        'reset': false,
         'root': '../index.htm',
         'storage': {},
         'storage-menu': '',
@@ -1077,6 +1078,9 @@ function core_repo_init(args){
           'id': image,
           'src': args['images'][image],
         });
+    }
+
+    if(args['reset'] !== false){
     }
 }
 
