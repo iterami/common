@@ -316,7 +316,7 @@ function core_handle_keydown(event){
 
     if(core_menu_open
       && core_menu_block_events
-      && key['code'] !== 27){
+      && !(key['code'] === 27 || key['code'] === core_storage_data['reset'])){
         return;
     }
 
@@ -774,7 +774,6 @@ function core_keys_rebind(){
     keybinds[core_storage_data['move-↑']] = {};
     keybinds[core_storage_data['move-→']] = {};
     keybinds[core_storage_data['move-↓']] = {};
-    keybinds[core_storage_data['reset']] = {};
     Object.assign(
       keybinds,
       core_key_rebinds
@@ -782,6 +781,10 @@ function core_keys_rebind(){
     keybinds[27] = {// Escape
       'solo': true,
       'todo': core_escape,
+    };
+    keybinds[core_storage_data['reset']] = {
+      'solo': true,
+      'todo': core_reset_todo,
     };
     core_events_bind({
       'clearkeys': true,
@@ -1066,6 +1069,7 @@ function core_repo_init(args){
         core_key_rebinds = args['keybinds'];
     }
     core_menu_block_events = args['menu-block-events'];
+    core_reset = args['reset'];
     core_events_bind({
       'beforeunload': args['beforeunload'],
       'elements': args['events'],
@@ -1078,9 +1082,6 @@ function core_repo_init(args){
           'id': image,
           'src': args['images'][image],
         });
-    }
-
-    if(args['reset'] !== false){
     }
 }
 
@@ -1104,6 +1105,12 @@ function core_requestpointerlock(args){
     element.requestPointerLock();
 
     core_mouse['pointerlock-id'] = args['id'];
+}
+
+function core_reset_todo(){
+    if(core_reset !== false){
+        core_reset();
+    }
 }
 
 // Required args: number
@@ -1486,6 +1493,7 @@ window.core_menu_open = false;
 window.core_mode = 0;
 window.core_mouse = {};
 window.core_repo_title = '';
+window.core_reset = false;
 window.core_storage_data = {};
 window.core_storage_info = {};
 window.core_tabs = {};
