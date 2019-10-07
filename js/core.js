@@ -580,7 +580,8 @@ function core_init(){
         + '<tr><td><input id=move-↑><td>Move ↑'
         + '<tr><td><input id=move-←><td>Move ←'
         + '<tr><td><input id=move-↓><td>Move ↓'
-        + '<tr><td><input id=move-→><td>Move →</table>',
+        + '<tr><td><input id=move-→><td>Move →'
+        + '<tr><td><input id=reset><td>Reset</table>',
       'group': 'core-menu',
       'id': 'iterami',
       'label': 'iterami',
@@ -599,6 +600,7 @@ function core_init(){
         'move-↑': 87,
         'move-→': 68,
         'move-↓': 83,
+        'reset': 72,
       },
     });
     core_storage_update();
@@ -772,6 +774,7 @@ function core_keys_rebind(){
     keybinds[core_storage_data['move-↑']] = {};
     keybinds[core_storage_data['move-→']] = {};
     keybinds[core_storage_data['move-↓']] = {};
+    keybinds[core_storage_data['reset']] = {};
     Object.assign(
       keybinds,
       core_key_rebinds
