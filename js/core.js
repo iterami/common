@@ -1033,6 +1033,21 @@ function core_repo_init(args){
           'id': 'repo',
           'label': core_repo_title,
         });
+        args['events']['settings-reset-repo'] = {
+          'onclick': function(){
+              let keys = {};
+              for(let key in core_storage_info){
+                  if(core_storage_info[key]['prefix'] === core_repo_title + '-'){
+                      keys[key] = true;
+                  }
+              }
+
+              core_storage_reset({
+                'keys': keys,
+                'label': core_repo_title,
+              });
+          },
+        };
     }
     core_html_modify({
       'id': 'core-menu-root',
@@ -1077,21 +1092,6 @@ function core_repo_init(args){
 
     core_storage_update();
 
-    args['events']['settings-reset-repo'] = {
-      'onclick': function(){
-          let keys = {};
-          for(let key in core_storage_info){
-              if(core_storage_info[key]['prefix'] === core_repo_title + '-'){
-                  keys[key] = true;
-              }
-          }
-
-          core_storage_reset({
-            'keys': keys,
-            'label': core_repo_title,
-          });
-      },
-    };
     if(args['keybinds'] !== false){
         core_key_rebinds = args['keybinds'];
     }
