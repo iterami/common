@@ -556,8 +556,7 @@ function core_init(){
           + '<div id=core-menu-info></div><hr>'
           + '<span id=core-menu-tabs></span>'
           + '<div id=core-menu-tabcontent></div>'
-          + '<input id=settings-reset type=button value="Reset All Settings">'
-          + '<input id=settings-save type=button value="Save Settings">',
+          + '<input id=settings-save type=button value="Save All Settings">',
       },
       'type': 'span',
     });
@@ -581,7 +580,8 @@ function core_init(){
         + '<tr><td><input id=move-←><td>Move ←'
         + '<tr><td><input id=move-↓><td>Move ↓'
         + '<tr><td><input id=move-→><td>Move →'
-        + '<tr><td><input id=reset><td>Reset</table>',
+        + '<tr><td><input id=reset><td>Reset</table>'
+        + '<input id=settings-reset type=button value="Reset Global iterami Settings">',
       'group': 'core-menu',
       'id': 'iterami',
       'label': 'iterami',
@@ -640,7 +640,18 @@ function core_init(){
     core_events_bind({
       'elements': {
         'settings-reset': {
-          'onclick': core_storage_reset,
+          'onclick': function(){
+              let keys = {};
+              for(let key in core_storage_info){
+                  if(core_storage_info[key]['prefix'] === 'core-'){
+                      keys[key] = true;
+                  }
+              }
+
+              core_storage_reset({
+                'keys': keys,
+              });
+          },
         },
         'settings-save': {
           'onclick': core_storage_save,
@@ -1016,7 +1027,8 @@ function core_repo_init(args){
     }
     if(args['storage-menu'].length > 0){
         core_tab_create({
-          'content': args['storage-menu'],
+          'content': args['storage-menu']
+            + '<input id=settings-reset-repo type=button value="Reset ' + core_repo_title + ' Settings">',
           'group': 'core-menu',
           'id': 'repo',
           'label': core_repo_title,
@@ -1065,6 +1077,21 @@ function core_repo_init(args){
 
     core_storage_update();
 
+    args['events']['settings-reset-repo'] = {
+      'onclick': function(){
+          let keys = {};
+          for(let key in core_storage_info){
+              if(core_storage_info[key]['prefix'] === core_repo_title + '-'){
+                  keys[key] = true;
+              }
+          }
+
+          core_storage_reset({
+            'keys': keys,
+            'label': core_repo_title,
+          });
+      },
+    };
     if(args['keybinds'] !== false){
         core_key_rebinds = args['keybinds'];
     }
@@ -1262,12 +1289,20 @@ function core_storage_element_property(args){
         : 'value');
 }
 
-function core_storage_reset(){
-    if(!window.confirm('Reset all settings?')){
+function core_storage_reset(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'keys': core_storage_info,
+        'label': 'global iterami',
+      },
+    });
+
+    if(!window.confirm('Reset ' + args['label'] + ' settings?')){
         return false;
     }
 
-    for(let key in core_storage_data){
+    for(let key in args['keys']){
         core_storage_data[key] = core_storage_info[key]['default'];
         window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
     }
