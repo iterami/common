@@ -555,7 +555,7 @@ function core_init(){
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noopener></a>'
           + '<div id=core-menu-info></div><hr>'
           + '<span id=core-menu-tabs></span>'
-          + '<div id=core-menu-tabcontent></div>'
+          + '<div id=core-menu-tabcontent></div><hr>'
           + '<input id=settings-save type=button value="Save All Settings">',
       },
       'type': 'span',
