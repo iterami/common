@@ -42,7 +42,7 @@ select{
 }
 hr{
     border: 4px solid #222;
-    margin: 4px 0;
+    margin: 0;
 }
 input{
     border-color: #aaa;
