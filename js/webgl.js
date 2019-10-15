@@ -1919,7 +1919,7 @@ function webgl_logicloop(){
       'ids': {
         'npc': npc === ''
           ? ''
-          :'[' + npc + ']',
+          :'<hr>[' + npc + ']',
         'npc-talk': npc_talk,
       },
     });
