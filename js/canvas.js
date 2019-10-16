@@ -51,7 +51,7 @@ function canvas_draw(){
       canvas_properties['height']
     );
     canvas_canvas.drawImage(
-      document.getElementById('buffer'),
+      canvas_buffer_element,
       0,
       0
     );
@@ -171,12 +171,12 @@ function canvas_init(args){
             return false;
         };
     }
-    core_html({
+    canvas_canvas_element = core_html({
       'parent': document.body,
       'properties': properties,
       'type': 'canvas',
     });
-    core_html({
+    canvas_buffer_element = core_html({
       'parent': document.body,
       'properties': {
         'id': 'buffer',
@@ -184,8 +184,8 @@ function canvas_init(args){
       'type': 'canvas',
     });
 
-    canvas_buffer = document.getElementById('buffer').getContext('2d');
-    canvas_canvas = document.getElementById('canvas').getContext('2d');
+    canvas_buffer = canvas_buffer_element.getContext('2d');
+    canvas_canvas = canvas_canvas_element.getContext('2d');
 
     window.onresize = canvas_resize;
     canvas_resize();
@@ -245,18 +245,15 @@ function canvas_logicloop_handle_entity(entity){
 }
 
 function canvas_resize(){
-    let buffer = document.getElementById('buffer');
-    let canvas = document.getElementById('canvas');
-
     canvas_properties['height'] = window.innerHeight;
     canvas_properties['height-half'] = canvas_properties['height'] / 2;
-    buffer.height = canvas_properties['height'];
-    canvas.height = canvas_properties['height'];
+    canvas_buffer_element.height = canvas_properties['height'];
+    canvas_canvas_element.height = canvas_properties['height'];
 
     canvas_properties['width'] = window.innerWidth;
     canvas_properties['width-half'] = canvas_properties['width'] / 2;
-    buffer.width = canvas_properties['width'];
-    canvas.width = canvas_properties['width'];
+    canvas_buffer_element.width = canvas_properties['width'];
+    canvas_canvas_element.width = canvas_properties['width'];
 
     Object.assign(
       canvas_buffer,
@@ -306,5 +303,7 @@ function canvas_setproperties(args){
 }
 
 window.canvas_buffer = 0;
+window.canvas_buffer_element = 0;
 window.canvas_canvas = 0;
+window.canvas_canvas_element = 0;
 window.canvas_properties = {};
