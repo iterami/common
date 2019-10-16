@@ -246,7 +246,7 @@ function rpg_item_select(args){
     rpg_characters[args['character']]['selected'] = args['id'];
 
     if(args['character'] === 0){
-        canvas_canvas_element.style.cursor = rpg_characters[0]['inventory'][args['id']]['cursor'] || 'auto';
+        core_elements['canvas'].style.cursor = rpg_characters[0]['inventory'][args['id']]['cursor'] || 'auto';
     }
 }
 

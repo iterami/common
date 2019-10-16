@@ -463,6 +463,7 @@ function core_html(args){
       'defaults': {
         'parent': false,
         'properties': {},
+        'store': false,
         'todo': 'append',
         'type': 'div',
       },
@@ -480,6 +481,10 @@ function core_html(args){
 
     }else if(typeof args['parent'] === 'object'){
         args['parent'][args['todo']](element);
+    }
+
+    if(args['store'] !== false){
+        core_elements[args['store']] = element;
     }
 
     return element;
@@ -1517,6 +1522,7 @@ function core_uri(args){
     );
 }
 
+window.core_elements = {};
 window.core_events = {};
 window.core_gamepads = {};
 window.core_images = {};

@@ -722,7 +722,7 @@ function webgl_draw(){
     });
 
     webgl_canvas.drawImage(
-      webgl_buffer_element,
+      core_elements['buffer'],
       0,
       0
     );
@@ -1130,22 +1130,24 @@ function webgl_init(args){
     webgl_level_unload();
 
     if(webgl_buffer === 0){
-        webgl_canvas_element = core_html({
+        core_html({
           'parent': document.body,
           'properties': {
             'id': 'canvas',
           },
+          'store': 'canvas',
           'type': 'canvas',
         });
-        webgl_buffer_element = core_html({
+        core_html({
           'parent': document.body,
           'properties': {
             'id': 'buffer',
           },
+          'store': 'buffer',
           'type': 'canvas',
         });
 
-        webgl_buffer = webgl_buffer_element.getContext(
+        webgl_buffer = core_elements['buffer'].getContext(
           'webgl2',
           {
             'alpha': false,
@@ -1156,7 +1158,7 @@ function webgl_init(args){
             'stencil': false,
           }
         );
-        webgl_canvas = webgl_canvas_element.getContext(
+        webgl_canvas = core_elements['canvas'].getContext(
           '2d',
           {
             'alpha': false,
@@ -2684,13 +2686,13 @@ function webgl_program_create(args){
 function webgl_resize(){
     webgl_properties['canvas']['height'] = window.innerHeight;
     webgl_properties['canvas']['height-half'] = webgl_properties['canvas']['height'] / 2;
-    webgl_buffer_element.height = webgl_properties['canvas']['height'];
-    webgl_canvas_element.height = webgl_properties['canvas']['height'];
+    core_elements['buffer'].height = webgl_properties['canvas']['height'];
+    core_elements['canvas'].height = webgl_properties['canvas']['height'];
 
     webgl_properties['canvas']['width'] = window.innerWidth;
     webgl_properties['canvas']['width-half'] = webgl_properties['canvas']['width'] / 2;
-    webgl_buffer_element.width = webgl_properties['canvas']['width'];
-    webgl_canvas_element.width = webgl_properties['canvas']['width'];
+    core_elements['buffer'].width = webgl_properties['canvas']['width'];
+    core_elements['canvas'].width = webgl_properties['canvas']['width'];
 
     webgl_buffer.viewportHeight = webgl_properties['canvas']['height'];
     webgl_buffer.viewportWidth = webgl_properties['canvas']['width'];
@@ -2986,9 +2988,7 @@ function webgl_vertexcolorarray(args){
 }
 
 window.webgl_buffer = 0;
-window.webgl_buffer_element = 0;
 window.webgl_canvas = 0;
-window.webgl_canvas_element = 0;
 window.webgl_character_count = 0;
 window.webgl_character_homebase = {};
 window.webgl_character_id = '_me';

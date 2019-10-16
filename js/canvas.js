@@ -51,7 +51,7 @@ function canvas_draw(){
       canvas_properties['height']
     );
     canvas_canvas.drawImage(
-      canvas_buffer_element,
+      core_elements['buffer'],
       0,
       0
     );
@@ -171,21 +171,23 @@ function canvas_init(args){
             return false;
         };
     }
-    canvas_canvas_element = core_html({
+    core_html({
       'parent': document.body,
       'properties': properties,
+      'store': 'canvas',
       'type': 'canvas',
     });
-    canvas_buffer_element = core_html({
+    core_html({
       'parent': document.body,
       'properties': {
         'id': 'buffer',
       },
+      'store': 'buffer',
       'type': 'canvas',
     });
 
-    canvas_buffer = canvas_buffer_element.getContext('2d');
-    canvas_canvas = canvas_canvas_element.getContext('2d');
+    canvas_buffer = core_elements['buffer'].getContext('2d');
+    canvas_canvas = core_elements['canvas'].getContext('2d');
 
     window.onresize = canvas_resize;
     canvas_resize();
@@ -247,13 +249,13 @@ function canvas_logicloop_handle_entity(entity){
 function canvas_resize(){
     canvas_properties['height'] = window.innerHeight;
     canvas_properties['height-half'] = canvas_properties['height'] / 2;
-    canvas_buffer_element.height = canvas_properties['height'];
-    canvas_canvas_element.height = canvas_properties['height'];
+    core_elements['buffer'].height = canvas_properties['height'];
+    core_elements['canvas'].height = canvas_properties['height'];
 
     canvas_properties['width'] = window.innerWidth;
     canvas_properties['width-half'] = canvas_properties['width'] / 2;
-    canvas_buffer_element.width = canvas_properties['width'];
-    canvas_canvas_element.width = canvas_properties['width'];
+    core_elements['buffer'].width = canvas_properties['width'];
+    core_elements['canvas'].width = canvas_properties['width'];
 
     Object.assign(
       canvas_buffer,
@@ -303,7 +305,5 @@ function canvas_setproperties(args){
 }
 
 window.canvas_buffer = 0;
-window.canvas_buffer_element = 0;
 window.canvas_canvas = 0;
-window.canvas_canvas_element = 0;
 window.canvas_properties = {};
