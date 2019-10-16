@@ -1019,10 +1019,6 @@ function core_repo_init(args){
       args['globals']
     );
 
-    if(args['menu']){
-        core_escape();
-    }
-
     core_repo_title = args['title'];
     core_storage_add({
       'storage': args['storage'],
@@ -1114,6 +1110,10 @@ function core_repo_init(args){
           'id': image,
           'src': args['images'][image],
         });
+    }
+
+    if(args['menu']){
+        core_escape();
     }
 }
 
