@@ -1518,7 +1518,6 @@ function webgl_json_export(args){
       'args': args,
       'defaults': {
         'character': true,
-        'target': 'exported',
       },
     });
 
@@ -1590,7 +1589,7 @@ function webgl_json_export(args){
         }
     }
 
-    document.getElementById(args['target']).value = JSON.stringify(json);
+    return JSON.stringify(json);
 }
 
 // Required args: character
