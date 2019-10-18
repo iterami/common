@@ -685,6 +685,7 @@ function core_interval_modify(args){
         'interval': 25,
         'paused': false,
         'set': 'setInterval',
+        'sync': false,
       },
     });
 
@@ -700,6 +701,7 @@ function core_interval_modify(args){
       'interval': args['interval'],
       'paused': true,
       'set': args['set'],
+      'sync': args['sync'],
       'todo': args['todo'],
     };
 
@@ -765,6 +767,19 @@ function core_interval_resume(args){
 
     if(core_intervals[args['id']]['animationFrame']){
         core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
+
+    }else if(core_intervals[args['id']]['sync']){
+        window.setTimeout(
+          function(){
+              core_intervals[args['id']]['var'] = window[core_intervals[args['id']]['set']](
+                core_intervals[args['id']]['todo'],
+                core_intervals[args['id']]['interval']
+              );
+
+              core_intervals[args['id']]['todo']();
+          },
+          1000 - new Date().getMilliseconds()
+        );
 
     }else{
         core_intervals[args['id']]['var'] = window[core_intervals[args['id']]['set']](
