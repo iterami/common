@@ -1024,7 +1024,7 @@ function core_repo_init(args){
         'owner': 'iterami',
         'reset': false,
         'root': '../index.htm',
-        'storage': {},
+        'storage': false,
         'storage-menu': '',
         'tabs': {},
         'ui': '',
@@ -1037,13 +1037,13 @@ function core_repo_init(args){
     );
 
     core_repo_title = args['title'];
-    core_storage_add({
-      'storage': args['storage'],
-    });
     if(args['info'].length > 0){
         document.getElementById('core-menu-info').innerHTML = '<hr>' + args['info'];
     }
-    if(args['storage-menu'].length > 0){
+    if(args['storage'] !== false){
+        core_storage_add({
+          'storage': args['storage'],
+        });
         core_tab_create({
           'content': args['storage-menu']
             + '<input id=settings-reset-repo type=button value="Reset ' + core_repo_title + ' Settings">',
