@@ -769,6 +769,8 @@ function core_interval_resume(args){
         core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
 
     }else if(core_intervals[args['id']]['sync']){
+        core_intervals[args['id']]['todo']();
+
         window.setTimeout(
           function(){
               core_intervals[args['id']]['var'] = window[core_intervals[args['id']]['set']](
