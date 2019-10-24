@@ -484,7 +484,11 @@ function core_html(args){
     }
 
     if(args['store'] !== false){
-        core_elements[args['store']] = element;
+        core_html_store({
+          'ids': [
+            args['store'],
+          ],
+        });
     }
 
     return element;
@@ -516,6 +520,18 @@ function core_html_modify(args){
       element,
       args['properties']
     );
+}
+
+// Required args: ids
+function core_html_store(args){
+    for(let id in args['ids']){
+        let element = document.getElementById(args['ids'][id]);
+        if(!element){
+            continue;
+        }
+
+        core_elements[args['ids'][id]] = element;
+    }
 }
 
 // Required args: id, src
