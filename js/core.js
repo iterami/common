@@ -908,14 +908,16 @@ function core_number_format(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': core_storage_data['decimals'],
+        'decimals-max': core_storage_data['decimals-max'],
+        'decimals-min': 0,
       },
     });
 
     return new Intl.NumberFormat(
         void 0,
         {
-          'maximumFractionDigits': args['decimals'],
+          'maximumFractionDigits': args['decimals-max'],
+          'minimumFractionDigits': args['decimals-min'],
         }
       ).format(args['number']);
 }
