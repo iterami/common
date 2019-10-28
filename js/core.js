@@ -908,8 +908,8 @@ function core_number_format(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals-max': core_storage_data['decimals-max'],
-        'decimals-min': 0,
+        'decimals-max': core_storage_data['decimals'],
+        'decimals-min': core_storage_data['decimals'],
       },
     });
 
