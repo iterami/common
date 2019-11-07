@@ -49,109 +49,6 @@ function entity_create(args){
     return args['id'];
 }
 
-// Required args: id, type
-function entity_handle_defaults(args){
-    for(let property in entity_info[args['type']]['default']){
-        args['entity'][property] = core_handle_defaults({
-          'default': args['entity'][property],
-          'var': entity_info[args['type']]['default'][property],
-        });
-    }
-
-    if(entity_groups[args['type']][args['id']] === void 0){
-        entity_group_add({
-          'entities': [
-            args['id'],
-          ],
-          'group': args['type'],
-        });
-
-        entity_info[args['type']]['count']++;
-    }
-
-    for(let group in entity_info[args['type']]['groups']){
-        entity_group_add({
-          'entities': [
-            args['id'],
-          ],
-          'group': entity_info[args['type']]['groups'][group],
-        });
-    }
-}
-
-// Required args: entities
-function entity_remove(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'delete-empty': false,
-      },
-    });
-
-    entity_group_remove_all({
-      'delete-empty': args['delete-empty'],
-      'entities': args['entities'],
-    });
-
-    for(let entity in args['entities']){
-        delete entity_entities[args['entities'][entity]];
-    }
-}
-
-function entity_remove_all(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'delete-empty': false,
-        'group': false,
-      },
-    });
-
-    for(let entity in entity_entities){
-        if(args['group'] !== false
-          && !entity_groups[args['group']][entity]){
-            continue;
-        }
-
-        entity_remove({
-          'delete-empty': args['delete-empty'],
-          'entities': [
-            entity,
-          ],
-        });
-    }
-}
-
-// Required args: type
-function entity_set(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'default': false,
-        'groups': [],
-        'properties': {},
-        'todo': function(){},
-      },
-    });
-
-    entity_info[args['type']] = {
-      'count': 0,
-      'default': args['properties'],
-      'groups': args['groups'],
-      'todo': args['todo'],
-    };
-
-    if(args['default']){
-        entity_types_default.push(args['type']);
-    }
-
-    entity_group_create({
-      'ids': [
-        args['type'],
-      ],
-    });
-}
-
 // Required args: entities, group
 function entity_group_add(args){
     if(!(args['group'] in entity_groups)){
@@ -267,6 +164,109 @@ function entity_group_remove_all(args){
           'group': group,
         });
     }
+}
+
+// Required args: id, type
+function entity_handle_defaults(args){
+    for(let property in entity_info[args['type']]['default']){
+        args['entity'][property] = core_handle_defaults({
+          'default': args['entity'][property],
+          'var': entity_info[args['type']]['default'][property],
+        });
+    }
+
+    if(entity_groups[args['type']][args['id']] === void 0){
+        entity_group_add({
+          'entities': [
+            args['id'],
+          ],
+          'group': args['type'],
+        });
+
+        entity_info[args['type']]['count']++;
+    }
+
+    for(let group in entity_info[args['type']]['groups']){
+        entity_group_add({
+          'entities': [
+            args['id'],
+          ],
+          'group': entity_info[args['type']]['groups'][group],
+        });
+    }
+}
+
+// Required args: entities
+function entity_remove(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'delete-empty': false,
+      },
+    });
+
+    entity_group_remove_all({
+      'delete-empty': args['delete-empty'],
+      'entities': args['entities'],
+    });
+
+    for(let entity in args['entities']){
+        delete entity_entities[args['entities'][entity]];
+    }
+}
+
+function entity_remove_all(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'delete-empty': false,
+        'group': false,
+      },
+    });
+
+    for(let entity in entity_entities){
+        if(args['group'] !== false
+          && !entity_groups[args['group']][entity]){
+            continue;
+        }
+
+        entity_remove({
+          'delete-empty': args['delete-empty'],
+          'entities': [
+            entity,
+          ],
+        });
+    }
+}
+
+// Required args: type
+function entity_set(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'default': false,
+        'groups': [],
+        'properties': {},
+        'todo': function(){},
+      },
+    });
+
+    entity_info[args['type']] = {
+      'count': 0,
+      'default': args['properties'],
+      'groups': args['groups'],
+      'todo': args['todo'],
+    };
+
+    if(args['default']){
+        entity_types_default.push(args['type']);
+    }
+
+    entity_group_create({
+      'ids': [
+        args['type'],
+      ],
+    });
 }
 
 window.entity_entities = {};
