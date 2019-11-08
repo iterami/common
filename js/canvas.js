@@ -1,24 +1,5 @@
 'use strict';
 
-// Required args: base, entity
-function canvas_attach(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'offset-x': 0,
-        'offset-y': 0,
-      },
-    });
-
-    entity_entities[args['entity']]['attach'] = {
-      'offset': {
-        'x': args['offset-x'],
-        'y': args['offset-y'],
-      },
-      'to': args['base'],
-    };
-}
-
 function canvas_draw(){
     if(canvas_properties['clearColor'] === '#000'){
         canvas_buffer.clearRect(
@@ -195,7 +176,11 @@ function canvas_init(args){
     entity_set({
       'default': true,
       'properties': {
-        'attach': false,
+        'attach-offset-x': 0,
+        'attach-offset-y': 0,
+        'attach-offset-z': 0,
+        'attach-to': false,
+        'attach-type': 'entity_entities',
         'x': 0,
         'y': 0,
       },
@@ -238,10 +223,10 @@ function canvas_logicloop(){
 }
 
 function canvas_logicloop_handle_entity(entity){
-    if(entity_entities[entity]['attach'] !== false){
-        let attached = entity_entities[entity_entities[entity]['attach']['id']];
+    if(entity_entities[entity]['attach-to'] !== false){
+        let attached = entity_entities[entity_entities[entity]['attach-to']];
         for(let axis in entity_entities[entity]['position']){
-            entity_entities[entity]['position'][axis] = attached['position'][axis] + entity_entities[entity]['attach']['offset'][axis];
+            entity_entities[entity]['position'][axis] = attached['position'][axis] + entity_entities[entity]['attach-offset-' + axis];
         }
     }
 }

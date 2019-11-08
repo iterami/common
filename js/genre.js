@@ -1463,26 +1463,6 @@ function rts_unit_handle(){
     }
 }
 
-// Required args: entity, to
-function webgl_attach(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'offset-x': 0,
-        'offset-y': 0,
-        'offset-z': 0,
-        'type': 'entity_entities',
-      },
-    });
-
-    let entity = entity_entities[args['entity']];
-    entity['attach-offset-x'] = args['offset-x'];
-    entity['attach-offset-y'] = args['offset-y'];
-    entity['attach-offset-z'] = args['offset-z'];
-    entity['attach-to'] = args['to'];
-    entity['attach-type'] = args['type'];
-}
-
 // Required args: entity
 function webgl_billboard(args){
     args = core_args({
@@ -1817,7 +1797,7 @@ function webgl_entity_create(args){
         }
 
         if(args['entities'][entity]['attach-to'] !== void 0){
-            webgl_attach({
+            entity_attach({
               'entity': entity_id,
               'offset-x': args['entities'][entity]['attach-offset-x'],
               'offset-y': args['entities'][entity]['attach-offset-y'],

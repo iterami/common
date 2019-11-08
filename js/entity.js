@@ -1,5 +1,25 @@
 'use strict';
 
+// Required args: entity, to
+function entity_attach(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'offset-x': 0,
+        'offset-y': 0,
+        'offset-z': 0,
+        'type': 'entity_entities',
+      },
+    });
+
+    let entity = entity_entities[args['entity']];
+    entity['attach-offset-x'] = args['offset-x'];
+    entity['attach-offset-y'] = args['offset-y'];
+    entity['attach-offset-z'] = args['offset-z'];
+    entity['attach-to'] = args['to'];
+    entity['attach-type'] = args['type'];
+}
+
 function entity_create(args){
     args = core_args({
       'args': args,
