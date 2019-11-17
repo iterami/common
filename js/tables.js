@@ -38,7 +38,7 @@ function tables_sort(element, column, direction, type){
     let used_rows = [];
 
     for(let row in rows){
-        if(row == 0){
+        if(row === '0'){
             continue;
         }
 
@@ -72,7 +72,7 @@ function tables_sort(element, column, direction, type){
 
     for(let sorted in column_content){
         for(let row in rows){
-            if(row == 0){
+            if(row === '0'){
                 continue;
             }
 

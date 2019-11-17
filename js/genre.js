@@ -220,7 +220,7 @@ function rpg_character_handle(){
                 continue;
             }
 
-            if(rpg_characters[character]['selected'] != item){
+            if(rpg_characters[character]['selected'] !== Number(item)){
                 continue;
             }
 
@@ -436,7 +436,7 @@ function rpg_particle_handle(){
 
         // Handle collisions with characters.
         for(let character in rpg_characters){
-            if(rpg_particles[particle]['owner'] == character
+            if(rpg_particles[particle]['owner'] === character
               || rpg_particles[particle]['x'] <= rpg_characters[character]['x'] - rpg_characters[character]['width'] / 2
               || rpg_particles[particle]['x'] >= rpg_characters[character]['x'] + rpg_characters[character]['width'] / 2
               || rpg_particles[particle]['y'] <= rpg_characters[character]['y'] - rpg_characters[character]['height'] / 2
@@ -645,7 +645,7 @@ function rts_building_build(args){
 
     rts_players[args['player']]['buildings'].push(building);
 
-    if(building['income'] != 0){
+    if(building['income'] !== 0){
         rts_players[args['player']]['income'] += building['income'];
     }
 
@@ -863,12 +863,12 @@ function rts_bullet_handle(){
         });
 
         // Move bullet x.
-        if(rts_bullets[bullet]['x'] != rts_bullets[bullet]['destination-x']){
+        if(rts_bullets[bullet]['x'] !== rts_bullets[bullet]['destination-x']){
             rts_bullets[bullet]['x'] += speeds['x'];
         }
 
         // Move bullet y.
-        if(rts_bullets[bullet]['y'] != rts_bullets[bullet]['destination-y']){
+        if(rts_bullets[bullet]['y'] !== rts_bullets[bullet]['destination-y']){
             rts_bullets[bullet]['y'] += speeds['y'];
         }
 
@@ -1275,8 +1275,8 @@ function rts_unit_handle(){
         }
 
         // Movement "AI", pick new destination once destination is reached.
-        if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']
-          || rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
+        if(rts_players[1]['units'][unit]['x'] !== rts_players[1]['units'][unit]['destination-x']
+          || rts_players[1]['units'][unit]['y'] !== rts_players[1]['units'][unit]['destination-y']){
             let speeds = math_move_2d({
               'multiplier': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[1]['units'][unit]['x'],
@@ -1285,11 +1285,11 @@ function rts_unit_handle(){
               'y1': rts_players[1]['units'][unit]['destination-y'],
             });
 
-            if(rts_players[1]['units'][unit]['x'] != rts_players[1]['units'][unit]['destination-x']){
+            if(rts_players[1]['units'][unit]['x'] !== rts_players[1]['units'][unit]['destination-x']){
                 rts_players[1]['units'][unit]['x'] += speeds['x'];
             }
 
-            if(rts_players[1]['units'][unit]['y'] != rts_players[1]['units'][unit]['destination-y']){
+            if(rts_players[1]['units'][unit]['y'] !== rts_players[1]['units'][unit]['destination-y']){
                 rts_players[1]['units'][unit]['y'] += speeds['y'];
             }
 
@@ -1325,11 +1325,11 @@ function rts_unit_handle(){
               'y1': rts_players[0]['units'][unit]['destination-y'],
             });
 
-            if(rts_players[0]['units'][unit]['x'] != rts_players[0]['units'][unit]['destination-x']){
+            if(rts_players[0]['units'][unit]['x'] !== rts_players[0]['units'][unit]['destination-x']){
                 rts_players[0]['units'][unit]['x'] += speeds['x'];
             }
 
-            if(rts_players[0]['units'][unit]['y'] != rts_players[0]['units'][unit]['destination-y']){
+            if(rts_players[0]['units'][unit]['y'] !== rts_players[0]['units'][unit]['destination-y']){
                 rts_players[0]['units'][unit]['y'] += speeds['y'];
             }
 

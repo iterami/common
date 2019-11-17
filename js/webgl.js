@@ -993,7 +993,7 @@ function webgl_level_init(args){
         );
 
         for(let character in args['json']['characters']){
-            if(character == 0){
+            if(character === 0){
                 continue;
             }
 
