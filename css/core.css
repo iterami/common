@@ -47,12 +47,12 @@ hr{
 input{
     border-color: #aaa;
 }
-input[type=button]:not([disabled]),
-input[type=checkbox]:not([disabled]),
-input[type=color]:not([disabled]),
-input[type=range]:not([disabled]),
+input[type=button]:enabled,
+input[type=checkbox]:enabled,
+input[type=color]:enabled,
+input[type=range]:enabled,
 label,
-select:not([disabled]){
+select:enabled{
     cursor: pointer;
 }
 .left{
