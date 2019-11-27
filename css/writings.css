@@ -4,7 +4,7 @@ a{
 body,
 input[type=button]{
     background: #000;
-    color: #aaa;
+    color: #ccc;
     font: bold 14px monospace;
 }
 .center{
@@ -17,12 +17,12 @@ input[type=button]{
     background: #650;
 }
 .header{
-    background: #333;
+    background: #444;
     font-size: 15px;
     text-align: center;
 }
 hr{
-    border: 2px solid #333;
+    border: 2px solid #444;
 }
 input[type=button]{
     cursor: pointer;
@@ -40,8 +40,8 @@ td{
     vertical-align: top;
 }
 textarea{
-    background: #000;
-    color: #aaa;
+    background: inherit;
+    color: inherit;
     font: inherit;
     height: 150px;
     width: 420px;
@@ -54,8 +54,8 @@ textarea:focus{
     outline: thin solid #4c4;
 }
 a:hover{
-    color: #777;
+    color: #888;
 }
 tr:hover{
-    background: #111;
+    background: #222;
 }
