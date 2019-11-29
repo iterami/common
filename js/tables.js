@@ -58,15 +58,17 @@ function tables_sort(element, column, direction, type){
             };
         }
 
-    }else if(direction === 0){
-        sort_function = function(a, b){
-            return b.localeCompare(a);
-        };
-
     }else{
-        sort_function = function(a, b){
-            return a.localeCompare(b);
-        };
+        const collator = new Intl.Collator();
+
+        if(direction === 0){
+            sort_function = function(a, b){
+                return collator.compare(b, a);
+            };
+
+        }else{
+            sort_function = collator.compare;
+        }
     }
     column_content.sort(sort_function);
 

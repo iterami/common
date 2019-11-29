@@ -1281,12 +1281,12 @@ function core_sort_property(args){
 
 // Required args: array
 function core_sort_strings(args){
+    const collator = new Intl.Collator();
+
     return core_sort_custom({
       'array': args['array'],
       'reverse': args['reverse'],
-      'todo': function(a, b){
-          return a.localeCompare(b);
-      },
+      'todo': collator.compare,
     });
 }
 
