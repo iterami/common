@@ -1366,7 +1366,7 @@ function core_storage_save(){
         core_storage_data[key] = data;
 
         if(data !== void 0
-          && !isNaN(data)
+          && data !== NaN
           && String(data).length > 0
           && data !== core_storage_info[key]['default']){
             window.localStorage.setItem(
