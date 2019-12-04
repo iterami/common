@@ -8,6 +8,7 @@ function core_ajax(args){
         'catch': function(){},
         'method': 'GET',
         'redirect': 'follow',
+        'response': 'json',
       },
     });
 
@@ -23,7 +24,7 @@ function core_ajax(args){
             throw Error(response.statusText);
         }
 
-        return response.json();
+        return response[args['response']]();
 
     }).then(function(data){
         args['todo'](data);
