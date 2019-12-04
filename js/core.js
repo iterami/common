@@ -5,26 +5,32 @@ function core_ajax(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'data': null,
-        'readyState': 4,
-        'status': 200,
-        'type': 'GET',
+        'catch': function(){},
+        'method': 'GET',
+        'redirect': 'follow',
       },
     });
 
-    let ajax = new XMLHttpRequest();
-    ajax.onreadystatechange = function(){
-        if(this.readyState === args['readyState']
-          && this.status === args['status']){
-            args['todo'](this.responseText);
-        }
-    };
+    window.fetch(
+      args['url'],
+      {
+        'method': args['method'],
+        'redirect': args['redirect'],
+      }
 
-    ajax.open(
-      args['type'],
-      args['url']
-    );
-    ajax.send(args['data']);
+    ).then(function(response){
+        if(!response.ok){
+            throw Error(response.statusText);
+        }
+
+        return response.json();
+
+    }).then(function(data){
+        args['todo'](data);
+
+    }).catch(function(error){
+        args['catch'](error);
+    });
 }
 
 // Required args: args, defaults
