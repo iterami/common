@@ -920,6 +920,10 @@ function core_number_format(args){
       },
     });
 
+    if(args['decimals-max'] < args['decimals-min']){
+        args['decimals-min'] = args['decimals-max'];
+    }
+
     return new Intl.NumberFormat(
         void 0,
         {
