@@ -1,3 +1,6 @@
+body{
+    overscroll-behavior: none;
+}
 #buffer{
     display: none;
 }
