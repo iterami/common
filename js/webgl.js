@@ -1034,7 +1034,7 @@ function webgl_level_load(args){
       },
     });
 
-    if(typeof args['json'] === 'object'){
+    if(args['json'] instanceof File){
         core_file({
           'file': args['json'],
           'todo': function(event){
