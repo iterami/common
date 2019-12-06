@@ -1051,7 +1051,7 @@ function webgl_level_load(args){
 
     webgl_level_init({
       'character': args['character'],
-      'json': JSON.parse(args['json']),
+      'json': args['json'],
     });
 
     if(args['cache'] !== false){
