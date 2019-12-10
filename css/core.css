@@ -47,6 +47,9 @@ hr{
 input{
     border-color: #aaa;
 }
+input[type=button]{
+    padding: 2px 7px;
+}
 input[type=button]:enabled,
 input[type=checkbox]:enabled,
 input[type=color]:enabled,

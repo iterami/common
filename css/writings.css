@@ -27,6 +27,7 @@ hr{
 }
 input[type=button]{
     cursor: pointer;
+    padding: 2px 7px;
 }
 ol,
 ul{
