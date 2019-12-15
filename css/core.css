@@ -83,7 +83,7 @@ td{
     vertical-align: top;
 }
 textarea{
-    background: inherit;
+    background: #000;
     color: inherit;
     font: inherit;
     height: 150px;
