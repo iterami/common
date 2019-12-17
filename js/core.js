@@ -21,7 +21,7 @@ function core_ajax(args){
 
     ).then(function(response){
         if(!response.ok){
-            throw Error(response.statusText);
+            throw response;
         }
 
         return response[args['response']]();
