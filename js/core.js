@@ -669,10 +669,10 @@ function core_init(){
       'elements': {
         'settings-reset': {
           'onclick': function(){
-              let keys = {};
+              let keys = [];
               for(let key in core_storage_info){
                   if(core_storage_info[key]['prefix'] === 'core-'){
-                      keys[key] = true;
+                      keys.push(key);
                   }
               }
 
@@ -1082,10 +1082,10 @@ function core_repo_init(args){
         });
         args['events']['settings-reset-repo'] = {
           'onclick': function(){
-              let keys = {};
+              let keys = [];
               for(let key in core_storage_info){
                   if(core_storage_info[key]['prefix'] === core_repo_title + '-'){
-                      keys[key] = true;
+                      keys.push(key);
                   }
               }
 
@@ -1344,7 +1344,7 @@ function core_storage_reset(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'keys': core_storage_info,
+        'keys': false,
         'label': 'global iterami',
       },
     });
@@ -1353,7 +1353,14 @@ function core_storage_reset(args){
         return false;
     }
 
-    for(let key in args['keys']){
+    let keys = args['keys'];
+    if(keys === false){
+        keys = Object.keys(core_storage_data);
+    }
+
+    for(let keyid in keys){
+        const key = keys[keyid];
+
         core_storage_data[key] = core_storage_info[key]['default'];
         window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
     }
@@ -1362,8 +1369,22 @@ function core_storage_reset(args){
     return true;
 }
 
-function core_storage_save(){
-    for(let key in core_storage_data){
+function core_storage_save(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'keys': false,
+      },
+    });
+
+    let keys = args['keys'];
+    if(keys === false){
+        keys = Object.keys(core_storage_data);
+    }
+
+    for(let keyid in keys){
+        const key = keys[keyid];
+
         let element = document.getElementById(key);
         core_storage_data[key] = element[core_storage_element_property({
           'element': element,
@@ -1406,12 +1427,14 @@ function core_storage_update(args){
         keys = Object.keys(core_storage_data);
     }
 
-    for(let key in keys){
-        let element = document.getElementById(keys[key]);
+    for(let keyid in keys){
+        const key = keys[keyid];
+
+        let element = document.getElementById(key);
         element[core_storage_element_property({
           'element': element,
-          'key': keys[key],
-        })] = core_storage_data[keys[key]];
+          'key': key,
+        })] = core_storage_data[key];
     }
 }
 
