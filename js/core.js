@@ -1401,15 +1401,9 @@ function core_storage_update(args){
       },
     });
 
-    let keys = [];
-
-    if(args['keys'] === false){
-        for(let key in core_storage_data){
-            keys.push(key);
-        }
-
-    }else{
-        keys = args['keys'];
+    let keys = args['keys'];
+    if(keys === false){
+        keys = Object.keys(core_storage_data);
     }
 
     for(let key in keys){
