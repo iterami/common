@@ -944,6 +944,22 @@ function core_random_boolean(args){
     return Math.random() < args['chance'];
 }
 
+function core_random_crypto(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'length': 1,
+        'type': 'Uint8Array',
+      },
+    });
+
+    const array = new window[args['type']](args['length']);
+
+    window.crypto.getRandomValues(array);
+
+    return array;
+}
+
 function core_random_hex(){
     let color = core_random_rgb();
 
