@@ -1100,7 +1100,7 @@ function core_repo_init(args){
       'id': 'core-menu-root',
       'properties': {
         'href': args['root'],
-        'innerHTML': args['owner'],
+        'textContent': args['owner'],
       },
     });
     if(args['link'] === false){
@@ -1110,7 +1110,7 @@ function core_repo_init(args){
       'id': 'core-menu-title',
       'properties': {
         'href': args['link'],
-        'innerHTML': core_repo_title,
+        'textContent': core_repo_title,
       },
     });
     document.getElementById('repo-ui').innerHTML = args['ui'];
