@@ -337,6 +337,122 @@ function prefabs_webgl_cuboid_tree(args){
     });
 }
 
+function prefabs_webgl_ellipsoid(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'prefix': entity_id_count,
+        'radius-x': 5,
+        'radius-y': 5,
+        'radius-z': 5,
+        'slices-latitude': 10,
+        'slices-longitude': 10,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
+    });
+
+    let latitude_angles = math_degrees_to_radians({
+      'degrees': 360 / args['slices-latitude'],
+    });
+    let longitude_angles = math_degrees_to_radians({
+      'degrees': 360 / args['slices-longitude'],
+    });
+
+    // Quads.
+    let properties = {
+      'attach-to': args['character'],
+      'attach-type': 'webgl_characters',
+      'collision': false,
+      'draw-type': 'QUAD_STRIP',
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'],
+      'translate-z': args['translate-z'],
+      'vertex-colors': [
+        1,
+        1,
+        1,
+        1,
+      ],
+      'vertices': [
+        0, args['radius-y'], 0, 1,
+      ],
+    };
+    for(let longitude = 0; longitude <= args['slices-longitude']; longitude++){
+        for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
+        }
+    }
+
+    // North pole.
+    properties['draw-type'] = 'TRIANGLE_FAN';
+    properties['id'] = args['prefix'] + '-pole-north';
+    properties['vertex-colors'] = [
+      1,
+      1,
+      1,
+      1,
+    ];
+    properties['vertices'] = [
+      0, args['radius-y'], 0, 1,
+    ];
+    for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
+        let rotation = latitude * latitude_angles;
+        let x = Math.sin(rotation) * Math.cos(latitude_angles);
+        let y = args['radius-y'] - Math.sin(longitude_angles);
+        let z = Math.cos(rotation) * Math.cos(latitude_angles);
+
+        properties['vertex-colors'].push(
+          0,
+          1,
+          0,
+          1
+        );
+        properties['vertices'].push(
+          x, y, z, 1
+        );
+    }
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+
+    // South pole.
+    properties['id'] = args['prefix'] + '-pole-south';
+    properties['vertex-colors'] = [
+      1,
+      1,
+      1,
+      1,
+    ];
+    properties['vertices'] = [
+      0, -args['radius-y'], 0, 1,
+    ];
+    for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
+        let rotation = -latitude * latitude_angles;
+        let x = Math.sin(rotation) * Math.cos(latitude_angles);
+        let y = -args['radius-y'] + Math.sin(latitude_angles);
+        let z = Math.cos(rotation) * Math.cos(latitude_angles)
+
+        properties['vertex-colors'].push(
+          0,
+          1,
+          0,
+          1
+        );
+        properties['vertices'].push(
+          x, y, z, 1
+        );
+    }
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+}
+
 function prefabs_webgl_lines_tree(args){
     args = core_args({
       'args': args,
