@@ -342,6 +342,8 @@ function prefabs_webgl_ellipsoid(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
+        'color0': [1, 1, 1, 1,],
+        'color1': [0, 1, 0, 1,],
         'prefix': entity_id_count,
         'radius-x': 5,
         'radius-y': 5,
@@ -399,9 +401,16 @@ function prefabs_webgl_ellipsoid(args){
         let longitude_top = longitude_start + (longitude + 1) * longitude_angles;
 
         if(pole !== 0){
-            properties['vertex-colors'].push(
-              1, 1, 1, 1,
-            );
+            if(pole === 1){
+                properties['vertex-colors'].push(
+                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
+                );
+
+            }else{
+                properties['vertex-colors'].push(
+                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3],
+                );
+            }
             properties['vertices'].push(
               0, args['radius-y'] * pole, 0, 1,
             );
@@ -423,16 +432,19 @@ function prefabs_webgl_ellipsoid(args){
             let ztop = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_top);
 
             if(pole !== 0){
-                properties['vertex-colors'].push(
-                  0, 1, 0, 1,
-                );
 
                 if(pole === 1){
+                    properties['vertex-colors'].push(
+                      args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3],
+                    );
                     properties['vertices'].push(
                       xtop, -ytop, ztop, 1,
                     );
 
                 }else if(pole === -1){
+                    properties['vertex-colors'].push(
+                      args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
+                    );
                     properties['vertices'].splice(
                       4,
                       0,
@@ -444,8 +456,8 @@ function prefabs_webgl_ellipsoid(args){
             }
 
             properties['vertex-colors'].push(
-              1, 1, 1, 1,
-              0, 1, 0, 1,
+              args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
+              args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3],
             );
             properties['vertices'].push(
               xtop, ytop, ztop, 1,
