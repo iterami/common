@@ -366,7 +366,7 @@ function prefabs_webgl_ellipsoid(args){
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'collision': false,
-      'draw-type': 'QUAD_STRIP',
+      'draw-type': 'TRIANGLE_STRIP',
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
@@ -380,9 +380,40 @@ function prefabs_webgl_ellipsoid(args){
         0, args['radius-y'], 0, 1,
       ],
     };
-    for(let longitude = 0; longitude <= args['slices-longitude']; longitude++){
+    for(let longitude = 1; longitude < args['slices-longitude']; longitude++){
+        properties['id'] = args['prefix'] + '-quad-' + longitude;
+        properties['vertex-colors'] = [];
+        properties['vertices'] = [];
+
+        let longitude_bottom = (longitude + 1) * longitude_angles;
+        let longitude_top = longitude * longitude_angles;
+
         for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
+            let rotation = latitude * latitude_angles;
+
+            let xbottom = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_bottom);
+            let ybottom = args['radius-y'] * Math.sin(longitude_bottom);
+            let zbottom = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_bottom);
+
+            let xtop = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_top);
+            let ytop = args['radius-y'] * Math.sin(longitude_top);
+            let ztop = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_top);
+
+            properties['vertex-colors'].push(
+              1, 1, 1, 1,
+              0, 1, 0, 1,
+            );
+            properties['vertices'].push(
+              xtop, ytop, ztop, 1,
+              xbottom, ybottom, zbottom, 1,
+            );
         }
+
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
     }
 
     // North pole.
@@ -410,7 +441,7 @@ function prefabs_webgl_ellipsoid(args){
           1
         );
         properties['vertices'].push(
-          x, y, z, 1
+          x, y, z, 1,
         );
     }
     webgl_entity_create({
@@ -443,7 +474,7 @@ function prefabs_webgl_ellipsoid(args){
           1
         );
         properties['vertices'].push(
-          x, y, z, 1
+          x, y, z, 1,
         );
     }
     webgl_entity_create({
