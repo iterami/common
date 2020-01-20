@@ -358,7 +358,10 @@ function prefabs_webgl_ellipsoid(args){
       'degrees': 360 / args['slices-latitude'],
     });
     let longitude_angles = math_degrees_to_radians({
-      'degrees': 360 / args['slices-longitude'],
+      'degrees': 180 / args['slices-longitude'],
+    });
+    let longitude_start = math_degrees_to_radians({
+      'degrees': -90,
     });
 
     // Quads.
@@ -366,7 +369,6 @@ function prefabs_webgl_ellipsoid(args){
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'collision': false,
-      'draw-type': 'TRIANGLE_STRIP',
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
@@ -380,13 +382,32 @@ function prefabs_webgl_ellipsoid(args){
         0, args['radius-y'], 0, 1,
       ],
     };
-    for(let longitude = 1; longitude < args['slices-longitude']; longitude++){
+    for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
+        let pole = 0;
+        if(longitude === 0){
+            pole = 1;
+
+        }else if(longitude === args['slices-longitude'] - 1){
+            pole = -1;
+        }
+
         properties['id'] = args['prefix'] + '-quad-' + longitude;
         properties['vertex-colors'] = [];
         properties['vertices'] = [];
 
-        let longitude_bottom = (longitude + 1) * longitude_angles;
-        let longitude_top = longitude * longitude_angles;
+        let longitude_bottom = longitude_start + longitude * longitude_angles;
+        let longitude_top = longitude_start + (longitude + 1) * longitude_angles;
+
+        if(pole !== 0){
+            continue;
+            properties['vertices'].push(
+              0, args['radius-y'] * pole, 0, 1,
+            );
+            properties['draw-type'] = 'TRIANGLE_FAN';
+
+        }else{
+            properties['draw-type'] = 'TRIANGLE_STRIP';
+        }
 
         for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
             let rotation = latitude * latitude_angles;
@@ -415,73 +436,6 @@ function prefabs_webgl_ellipsoid(args){
           ],
         });
     }
-
-    // North pole.
-    properties['draw-type'] = 'TRIANGLE_FAN';
-    properties['id'] = args['prefix'] + '-pole-north';
-    properties['vertex-colors'] = [
-      1,
-      1,
-      1,
-      1,
-    ];
-    properties['vertices'] = [
-      0, args['radius-y'], 0, 1,
-    ];
-    for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
-        let rotation = latitude * latitude_angles;
-        let x = Math.sin(rotation) * Math.cos(latitude_angles);
-        let y = args['radius-y'] - Math.sin(longitude_angles);
-        let z = Math.cos(rotation) * Math.cos(latitude_angles);
-
-        properties['vertex-colors'].push(
-          0,
-          1,
-          0,
-          1
-        );
-        properties['vertices'].push(
-          x, y, z, 1,
-        );
-    }
-    webgl_entity_create({
-      'entities': [
-        properties,
-      ],
-    });
-
-    // South pole.
-    properties['id'] = args['prefix'] + '-pole-south';
-    properties['vertex-colors'] = [
-      1,
-      1,
-      1,
-      1,
-    ];
-    properties['vertices'] = [
-      0, -args['radius-y'], 0, 1,
-    ];
-    for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
-        let rotation = -latitude * latitude_angles;
-        let x = Math.sin(rotation) * Math.cos(latitude_angles);
-        let y = -args['radius-y'] + Math.sin(latitude_angles);
-        let z = Math.cos(rotation) * Math.cos(latitude_angles)
-
-        properties['vertex-colors'].push(
-          0,
-          1,
-          0,
-          1
-        );
-        properties['vertices'].push(
-          x, y, z, 1,
-        );
-    }
-    webgl_entity_create({
-      'entities': [
-        properties,
-      ],
-    });
 }
 
 function prefabs_webgl_lines_tree(args){
