@@ -342,8 +342,12 @@ function prefabs_webgl_ellipsoid(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
-        'color0': [1, 1, 1, 1,],
-        'color1': [0, 1, 0, 1,],
+        'color0': [
+          1, 1, 1, 1,
+        ],
+        'color1': [
+          0, 1, 0, 1,
+        ],
         'prefix': entity_id_count,
         'radius-x': 5,
         'radius-y': 5,
@@ -375,10 +379,7 @@ function prefabs_webgl_ellipsoid(args){
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
       'vertex-colors': [
-        1,
-        1,
-        1,
-        1,
+        1, 1, 1, 1,
       ],
       'vertices': [
         0, args['radius-y'], 0, 1,
@@ -403,16 +404,16 @@ function prefabs_webgl_ellipsoid(args){
         if(pole !== 0){
             if(pole === 1){
                 properties['vertex-colors'].push(
-                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
+                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
                 );
 
             }else{
                 properties['vertex-colors'].push(
-                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3],
+                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
                 );
             }
             properties['vertices'].push(
-              0, args['radius-y'] * pole, 0, 1,
+              0, args['radius-y'] * pole, 0, 1
             );
             properties['draw-type'] = 'TRIANGLE_FAN';
 
@@ -435,15 +436,15 @@ function prefabs_webgl_ellipsoid(args){
 
                 if(pole === 1){
                     properties['vertex-colors'].push(
-                      args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3],
+                      args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
                     );
                     properties['vertices'].push(
-                      xtop, -ytop, ztop, 1,
+                      xtop, -ytop, ztop, 1
                     );
 
                 }else if(pole === -1){
                     properties['vertex-colors'].push(
-                      args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
+                      args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
                     );
                     properties['vertices'].splice(
                       4,
@@ -457,11 +458,11 @@ function prefabs_webgl_ellipsoid(args){
 
             properties['vertex-colors'].push(
               args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
-              args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3],
+              args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
             );
             properties['vertices'].push(
               xtop, ytop, ztop, 1,
-              xbottom, ybottom, zbottom, 1,
+              xbottom, ybottom, zbottom, 1
             );
         }
 
@@ -631,10 +632,7 @@ function prefabs_webgl_skybox(args){
       'rotate-y': args['rotate-y'],
       'rotate-z': args['rotate-z'],
       'vertex-colors': [
-        args['top-color-top'][0],
-        args['top-color-top'][1],
-        args['top-color-top'][2],
-        args['top-color-top'][3],
+        args['top-color-top'][0], args['top-color-top'][1], args['top-color-top'][2], args['top-color-top'][3],
       ],
       'vertices': [
         0, args['size'], 0, 1,
@@ -646,16 +644,10 @@ function prefabs_webgl_skybox(args){
         let z = Math.sin(rotation) * args['size'];
 
         properties['vertex-colors'].push(
-          args['top-color-bottom'][0],
-          args['top-color-bottom'][1],
-          args['top-color-bottom'][2],
-          args['top-color-bottom'][3]
+          args['top-color-bottom'][0], args['top-color-bottom'][1], args['top-color-bottom'][2], args['top-color-bottom'][3]
         );
         properties['vertices'].push(
-          x,
-          0,
-          z,
-          1
+          x, 0, z, 1
         );
     }
     webgl_entity_create({
@@ -667,10 +659,7 @@ function prefabs_webgl_skybox(args){
     // Bottom half.
     properties['id'] = args['prefix'] + '-bottom';
     properties['vertex-colors'] = [
-      args['bottom-color-bottom'][0],
-      args['bottom-color-bottom'][1],
-      args['bottom-color-bottom'][2],
-      args['bottom-color-bottom'][3],
+      args['bottom-color-bottom'][0], args['bottom-color-bottom'][1], args['bottom-color-bottom'][2], args['bottom-color-bottom'][3],
     ];
     properties['vertices'] = [
       0, -args['size'], 0, 1,
@@ -681,16 +670,10 @@ function prefabs_webgl_skybox(args){
         let z = Math.sin(rotation) * args['size'];
 
         properties['vertex-colors'].push(
-          args['bottom-color-top'][0],
-          args['bottom-color-top'][1],
-          args['bottom-color-top'][2],
-          args['bottom-color-top'][3]
+          args['bottom-color-top'][0], args['bottom-color-top'][1], args['bottom-color-top'][2],args['bottom-color-top'][3]
         );
         properties['vertices'].push(
-          x,
-          0,
-          z,
-          1
+          x, 0, z, 1
         );
     }
     webgl_entity_create({
