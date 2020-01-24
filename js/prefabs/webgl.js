@@ -396,7 +396,10 @@ function prefabs_webgl_ellipsoid(args){
         let longitude_bottom = longitude_start + longitude * longitude_angles;
         let longitude_top = longitude_start + (longitude + 1) * longitude_angles;
 
-        if(pole !== 0){
+        if(pole === 0){
+            properties['draw-type'] = 'TRIANGLE_STRIP';
+
+        }else{
             if(pole === 1){
                 properties['vertex-colors'].push(
                   args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
@@ -407,13 +410,11 @@ function prefabs_webgl_ellipsoid(args){
                   args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
                 );
             }
+
             properties['vertices'].push(
               0, args['radius-y'] * pole, 0, 1
             );
             properties['draw-type'] = 'TRIANGLE_FAN';
-
-        }else{
-            properties['draw-type'] = 'TRIANGLE_STRIP';
         }
 
         for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
@@ -427,38 +428,34 @@ function prefabs_webgl_ellipsoid(args){
             let ytop = args['radius-y'] * Math.sin(longitude_top);
             let ztop = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_top);
 
-            if(pole !== 0){
+            if(pole === 1){
+                properties['vertex-colors'].push(
+                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
+                );
+                properties['vertices'].push(
+                  xtop, -ytop, ztop, 1
+                );
 
-                if(pole === 1){
-                    properties['vertex-colors'].push(
-                      args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
-                    );
-                    properties['vertices'].push(
-                      xtop, -ytop, ztop, 1
-                    );
+            }else if(pole === -1){
+                properties['vertex-colors'].push(
+                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
+                );
+                properties['vertices'].splice(
+                  4,
+                  0,
+                  xbottom, -ybottom, zbottom, 1
+                );
 
-                }else if(pole === -1){
-                    properties['vertex-colors'].push(
-                      args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
-                    );
-                    properties['vertices'].splice(
-                      4,
-                      0,
-                      xbottom, -ybottom, zbottom, 1
-                    );
-                }
-
-                continue;
+            }else{
+                properties['vertex-colors'].push(
+                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
+                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
+                );
+                properties['vertices'].push(
+                  xtop, ytop, ztop, 1,
+                  xbottom, ybottom, zbottom, 1
+                );
             }
-
-            properties['vertex-colors'].push(
-              args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
-              args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
-            );
-            properties['vertices'].push(
-              xtop, ytop, ztop, 1,
-              xbottom, ybottom, zbottom, 1
-            );
         }
 
         webgl_entity_create({
