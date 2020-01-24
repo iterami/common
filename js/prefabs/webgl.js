@@ -348,6 +348,7 @@ function prefabs_webgl_ellipsoid(args){
         'color1': [
           0, 1, 0, 1,
         ],
+        'groups': [],
         'prefix': entity_id_count,
         'radius-x': 5,
         'radius-y': 5,
@@ -370,20 +371,14 @@ function prefabs_webgl_ellipsoid(args){
       'degrees': -90,
     });
 
-    // Quads.
     let properties = {
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'collision': false,
+      'groups': args['groups'],
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
-      'vertex-colors': [
-        1, 1, 1, 1,
-      ],
-      'vertices': [
-        0, args['radius-y'], 0, 1,
-      ],
     };
     for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
         let pole = 0;
