@@ -381,6 +381,20 @@ function prefabs_webgl_ellipsoid(args){
       'translate-z': args['translate-z'],
     };
     for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
+        if(longitude === args['slices-longitude'] / 2){
+            let temp_blue = args['color0'][2];
+            let temp_green = args['color0'][1];
+            let temp_red = args['color0'][0];
+
+            args['color0'][0] = args['color1'][0];
+            args['color0'][1] = args['color1'][1];
+            args['color0'][2] = args['color1'][2];
+
+            args['color1'][0] = temp_red;
+            args['color1'][1] = temp_green;
+            args['color1'][2] = temp_blue;
+        }
+
         let pole = 0;
         if(longitude === 0){
             pole = 1;
@@ -566,113 +580,6 @@ function prefabs_webgl_lines_tree(args){
     }
 
     // Create leaves.
-}
-
-function prefabs_webgl_skybox(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'bottom-color-bottom': false,
-        'bottom-color-top': false,
-        'character': webgl_character_id,
-        'prefix': entity_id_count,
-        'random-colors': false,
-        'rotate-x': 0,
-        'rotate-y': 0,
-        'rotate-z': 0,
-        'sides': 3,
-        'size': 99,
-        'top-color-bottom': false,
-        'top-color-top': false,
-      },
-    });
-
-    if(args['bottom-color-bottom'] === false){
-        args['bottom-color-bottom'] = webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-    }
-    if(args['bottom-color-top'] === false){
-        args['bottom-color-top'] = webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-    }
-    if(args['top-color-bottom'] === false){
-        args['top-color-bottom'] = webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-    }
-    if(args['top-color-top'] === false){
-        args['top-color-top'] = webgl_vertexcolorarray({
-          'random-colors': args['random-colors'],
-        });
-    }
-
-    let angle = math_degrees_to_radians({
-      'degrees': 360 / args['sides'],
-    });
-
-    // Top half.
-    let properties = {
-      'collision': false,
-      'draw-type': 'TRIANGLE_FAN',
-      'groups': [
-        'skybox',
-      ],
-      'id': args['prefix'] + '-top',
-      'rotate-x': args['rotate-x'],
-      'rotate-y': args['rotate-y'],
-      'rotate-z': args['rotate-z'],
-      'vertex-colors': [
-        args['top-color-top'][0], args['top-color-top'][1], args['top-color-top'][2], args['top-color-top'][3],
-      ],
-      'vertices': [
-        0, args['size'], 0, 1,
-      ],
-    };
-    for(let side = 0; side <= args['sides']; side++){
-        let rotation = angle * side;
-        let x = Math.cos(rotation) * args['size'];
-        let z = Math.sin(rotation) * args['size'];
-
-        properties['vertex-colors'].push(
-          args['top-color-bottom'][0], args['top-color-bottom'][1], args['top-color-bottom'][2], args['top-color-bottom'][3]
-        );
-        properties['vertices'].push(
-          x, 0, z, 1
-        );
-    }
-    webgl_entity_create({
-      'entities': [
-        properties,
-      ],
-    });
-
-    // Bottom half.
-    properties['id'] = args['prefix'] + '-bottom';
-    properties['vertex-colors'] = [
-      args['bottom-color-bottom'][0], args['bottom-color-bottom'][1], args['bottom-color-bottom'][2], args['bottom-color-bottom'][3],
-    ];
-    properties['vertices'] = [
-      0, -args['size'], 0, 1,
-    ];
-    for(let side = 0; side <= args['sides']; side++){
-        let rotation = -angle * side;
-        let x = Math.cos(rotation) * args['size'];
-        let z = Math.sin(rotation) * args['size'];
-
-        properties['vertex-colors'].push(
-          args['bottom-color-top'][0], args['bottom-color-top'][1], args['bottom-color-top'][2],args['bottom-color-top'][3]
-        );
-        properties['vertices'].push(
-          x, 0, z, 1
-        );
-    }
-    webgl_entity_create({
-      'entities': [
-        properties,
-      ],
-    });
 }
 
 // Required args: tiles
