@@ -279,7 +279,7 @@ function core_handle_event(args){
       },
     });
 
-    if(args['object'].hasOwnProperty(args['key'])){
+    if(Reflect.has(args['object'], args['key'])){
         if(args['object'][args['key']]['preventDefault']
           && !core_menu_open){
             args['event'].preventDefault();
@@ -358,7 +358,7 @@ function core_handle_keyup(event){
         return;
     }
 
-    if(core_keys.hasOwnProperty('all')){
+    if(Reflect.has(core_keys, 'all')){
         let all = false;
         for(let key in core_keys){
             if(key !== 'all'
