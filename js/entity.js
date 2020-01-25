@@ -149,7 +149,10 @@ function entity_group_remove(args){
             continue;
         }
 
-        delete entity_groups[args['group']][args['entities'][entity]];
+        Reflect.deleteProperty(
+          entity_groups[args['group']],
+          args['entities'][entity]
+        );
 
         entity_groups['_length'][args['group']]--;
         if(entity_info[args['group']]){
@@ -159,8 +162,14 @@ function entity_group_remove(args){
 
     if(args['delete-empty']
       && entity_groups['_length'][args['group']] === 0){
-        delete entity_groups[args['group']];
-        delete entity_groups['_length'][args['group']];
+        Reflect.deleteProperty(
+          entity_groups,
+          args['group']
+        );
+        Reflect.deleteProperty(
+          entity_groups['_length'],
+          args['group']
+        );
     }
 }
 
@@ -231,7 +240,10 @@ function entity_remove(args){
     });
 
     for(let entity in args['entities']){
-        delete entity_entities[args['entities'][entity]];
+        Reflect.deleteProperty(
+          entity_entities,
+          args['entities'][entity]
+        );
     }
 }
 

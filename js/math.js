@@ -231,7 +231,10 @@ function math_matrix_create(){
 // Required args: ids
 function math_matrix_delete(args){
     for(let id in args['ids']){
-        delete math_matrices[args['ids'][id]];
+        Reflect.deleteProperty(
+          math_matrices,
+          args['ids'][id]
+        );
     }
 }
 

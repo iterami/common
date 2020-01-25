@@ -1778,7 +1778,10 @@ function webgl_entity_create(args){
               'group': args['entities'][entity]['groups'][group],
             });
         }
-        delete entity_entities[entity_id]['groups'];
+        Reflect.deleteProperty(
+          entity_entities[entity_id],
+          'groups'
+        );
 
         if(entity_groups['skybox']
           && entity_groups['skybox'][entity_id] === true){
@@ -2129,10 +2132,16 @@ function webgl_item_trade(args){
     inventory_1[args['item-0-id']]['amount'] += args['item-0-amount'];
 
     if(inventory_0[args['item-0-id']]['amount'] === 0){
-        delete inventory_0[args['item-0-id']];
+        Reflect.deleteProperty(
+          inventory_0,
+          args['item-0-id']
+        );
     }
     if(inventory_1[args['item-1-id']]['amount'] === 0){
-        delete inventory_1[args['item-1-id']];
+        Reflect.deleteProperty(
+          inventory_1,
+          args['item-1-id']
+        );
     }
 }
 

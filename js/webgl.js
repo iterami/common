@@ -920,7 +920,10 @@ function webgl_level_init(args){
             return;
         }
 
-        delete webgl_characters[webgl_character_id];
+        Reflect.deleteProperty(
+          webgl_characters,
+          webgl_character_id
+        );
 
     }else if(args['character'] === 0
       && webgl_character_level() < 0){
@@ -1071,7 +1074,10 @@ function webgl_level_unload(){
     webgl_character_home_entityupdate();
     for(let character in webgl_characters){
         if(character !== webgl_character_id){
-            delete webgl_characters[character];
+            Reflect.deleteProperty(
+              webgl_characters,
+              character
+            );
         }
     }
     webgl_character_count = 0;
