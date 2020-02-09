@@ -405,12 +405,10 @@ function math_move_3d(args){
       'args': args,
       'defaults': {
         'decimals': core_storage_data['decimals'],
-        'multiplier': 1,
         'speed': 1,
         'strafe': false,
       },
     });
-    args['speed'] *= args['multiplier'];
 
     let radians = -math_degrees_to_radians({
       'decimals': args['decimals'],
