@@ -344,7 +344,7 @@ function math_move_2d(args){
       'args': args,
       'defaults': {
         'decimals': core_storage_data['decimals'],
-        'multiplier': 1,
+        'speed': 1,
       },
     });
 
@@ -357,11 +357,11 @@ function math_move_2d(args){
 
     let dx = core_round({
       'decimals': args['decimals'],
-      'number': Math.cos(angle) * args['multiplier'],
+      'number': Math.cos(angle) * args['speed'],
     });
     let dy = core_round({
       'decimals': args['decimals'],
-      'number': Math.sin(angle) * args['multiplier'],
+      'number': Math.sin(angle) * args['speed'],
     });
 
     if(args['x0'] > args['x1']){

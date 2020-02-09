@@ -855,7 +855,7 @@ function rts_bullet_handle(){
     for(let bullet in rts_bullets){
         // Calculate bullet movement.
         let speeds = math_move_2d({
-          'multiplier': rts_bullets[bullet]['speed'],
+          'speed': rts_bullets[bullet]['speed'],
           'x0': rts_bullets[bullet]['x'],
           'x1': rts_bullets[bullet]['destination-x'],
           'y0': rts_bullets[bullet]['y'],
@@ -1278,7 +1278,7 @@ function rts_unit_handle(){
         if(rts_players[1]['units'][unit]['x'] !== rts_players[1]['units'][unit]['destination-x']
           || rts_players[1]['units'][unit]['y'] !== rts_players[1]['units'][unit]['destination-y']){
             let speeds = math_move_2d({
-              'multiplier': rts_players[1]['units'][unit]['speed'],
+              'speed': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[1]['units'][unit]['x'],
               'x1': rts_players[1]['units'][unit]['destination-x'],
               'y0': rts_players[1]['units'][unit]['y'],
@@ -1318,7 +1318,7 @@ function rts_unit_handle(){
         if(Math.abs(rts_players[0]['units'][unit]['x'] - rts_players[0]['units'][unit]['destination-x']) > 1
           && Math.abs(rts_players[0]['units'][unit]['y'] - rts_players[0]['units'][unit]['destination-y']) > 1){
             let speeds = math_move_2d({
-              'multiplier': rts_players[1]['units'][unit]['speed'],
+              'speed': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[0]['units'][unit]['destination-x'],
               'y0': rts_players[0]['units'][unit]['y'],
