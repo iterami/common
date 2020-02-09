@@ -380,7 +380,17 @@ function math_move_2d(args){
 
 // Required args: dx, dy, speed
 function math_move_2d_diagonal(args){
-    let sqrt = Math.sqrt(args['speed']);
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'decimals': core_storage_data['decimals'],
+      },
+    });
+
+    let sqrt = core_round({
+      'decimals': args['decimals'],
+      'number': Math.sqrt(args['speed']),
+    });
     return {
       'x': (args['dx'] / args['speed']) * sqrt,
       'y': args['dy'] > 0
