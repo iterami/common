@@ -1820,6 +1820,29 @@ function webgl_resize(){
     webgl_perspective();
 }
 
+// Required args: todo, x, y
+function webgl_scissor(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'height': 1,
+        'width': 1,
+      },
+    });
+
+    webgl_buffer.enable(webgl_buffer.SCISSOR_TEST);
+    webgl_buffer.scissor(
+      args['x'],
+      args['y'],
+      args['width'],
+      args['height']
+    );
+
+    args['todo']();
+
+    webgl_buffer.disable(webgl_buffer.SCISSOR_TEST);
+}
+
 function webgl_settings_init(){
     core_tab_create({
       'content': '<table><tr><td><input id=anisotropic><td>Anisotropic Filtering</table>',
