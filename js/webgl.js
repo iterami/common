@@ -1833,14 +1833,16 @@ function webgl_scissor(args){
     webgl_buffer.enable(webgl_buffer.SCISSOR_TEST);
     webgl_buffer.scissor(
       args['x'],
-      args['y'],
+      window.innerHeight - args['y'],
       args['width'],
       args['height']
     );
 
-    args['todo']();
+    let result = args['todo']();
 
     webgl_buffer.disable(webgl_buffer.SCISSOR_TEST);
+
+    return result;
 }
 
 function webgl_settings_init(){
