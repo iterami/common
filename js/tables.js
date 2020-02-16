@@ -1,16 +1,16 @@
 'use strict';
 
 function tables_init(){
-    let tables = document.getElementsByTagName('table');
+    const tables = document.getElementsByTagName('table');
 
     for(let i = 0; i < tables.length; i++){
         if(tables[i].classList.contains('tables-nosort')){
             continue;
         }
 
-        let headers = Array.from(tables[i].firstElementChild.firstElementChild.children);
+        const headers = Array.from(tables[i].firstElementChild.firstElementChild.children);
 
-        for(let header in headers){
+        for(const header in headers){
             if(headers[header].classList.contains('tables-nosort')){
                 continue;
 
@@ -30,14 +30,14 @@ function tables_init(){
 }
 
 function tables_sort(element, column, direction, type){
-    let table = element.closest('table');
-    let rows = Array.from(table.firstElementChild.children);
+    const table = element.closest('table');
+    const rows = Array.from(table.firstElementChild.children);
 
-    let column_content = [];
+    const column_content = [];
     let sorted_html = '';
-    let used_rows = [];
+    const used_rows = [];
 
-    for(let row in rows){
+    for(const row in rows){
         if(row === '0'){
             continue;
         }
@@ -72,13 +72,13 @@ function tables_sort(element, column, direction, type){
     }
     column_content.sort(sort_function);
 
-    for(let sorted in column_content){
-        for(let row in rows){
+    for(const sorted in column_content){
+        for(const row in rows){
             if(row === '0'){
                 continue;
             }
 
-            let parent = rows[row].children;
+            const parent = rows[row].children;
 
             if(parent[column].innerText === column_content[sorted]
               && !used_rows.includes(parent[tables_column_main].innerText)){

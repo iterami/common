@@ -12,7 +12,7 @@ function entity_attach(args){
       },
     });
 
-    let entity = entity_entities[args['entity']];
+    const entity = entity_entities[args['entity']];
     entity['attach-offset-x'] = args['offset-x'];
     entity['attach-offset-y'] = args['offset-y'];
     entity['attach-offset-z'] = args['offset-z'];
@@ -32,9 +32,9 @@ function entity_create(args){
 
     entity_id_count++;
 
-    let entity = {};
+    const entity = {};
 
-    for(let type in entity_types_default){
+    for(const type in entity_types_default){
         entity_handle_defaults({
           'entity': entity,
           'id': args['id'],
@@ -42,7 +42,7 @@ function entity_create(args){
         });
     }
 
-    for(let type in args['types']){
+    for(const type in args['types']){
         entity_handle_defaults({
           'entity': entity,
           'id': args['id'],
@@ -50,7 +50,7 @@ function entity_create(args){
         });
     }
 
-    for(let property in args['properties']){
+    for(const property in args['properties']){
         entity[property] = core_handle_defaults({
           'default': entity[property],
           'var': args['properties'][property],
@@ -59,10 +59,10 @@ function entity_create(args){
 
     entity_entities[args['id']] = entity;
 
-    for(let type in entity_types_default){
+    for(const type in entity_types_default){
         entity_info[entity_types_default[type]]['todo'](args['id']);
     }
-    for(let type in args['types']){
+    for(const type in args['types']){
         entity_info[args['types'][type]]['todo'](args['id']);
     }
 
@@ -77,7 +77,7 @@ function entity_group_add(args){
         });
     }
 
-    for(let entity in args['entities']){
+    for(const entity in args['entities']){
         if(entity_groups[args['group']][args['entities'][entity]]){
             return;
         }
@@ -90,7 +90,7 @@ function entity_group_add(args){
 
 // Required args: ids
 function entity_group_create(args){
-    for(let id in args['ids']){
+    for(const id in args['ids']){
         entity_groups[args['ids'][id]] = {};
         entity_groups['_length'][args['ids'][id]] = 0;
     }
@@ -105,12 +105,12 @@ function entity_group_modify(args){
       },
     });
 
-    let pretodo = {};
+    const pretodo = {};
     if(args['pretodo'] !== false){
         pretodo = args['pretodo']();
     }
-    for(let group in args['groups']){
-        for(let entity in entity_groups[args['groups'][group]]){
+    for(const group in args['groups']){
+        for(const entity in entity_groups[args['groups'][group]]){
             args['todo'](
               entity,
               pretodo
@@ -144,7 +144,7 @@ function entity_group_remove(args){
         return;
     }
 
-    for(let entity in args['entities']){
+    for(const entity in args['entities']){
         if(!entity_groups[args['group']][args['entities'][entity]]){
             continue;
         }
@@ -182,7 +182,7 @@ function entity_group_remove_all(args){
       },
     });
 
-    for(let group in entity_groups){
+    for(const group in entity_groups){
         if(group === '_length'){
             continue;
         }
@@ -197,7 +197,7 @@ function entity_group_remove_all(args){
 
 // Required args: id, type
 function entity_handle_defaults(args){
-    for(let property in entity_info[args['type']]['default']){
+    for(const property in entity_info[args['type']]['default']){
         args['entity'][property] = core_handle_defaults({
           'default': args['entity'][property],
           'var': entity_info[args['type']]['default'][property],
@@ -215,7 +215,7 @@ function entity_handle_defaults(args){
         entity_info[args['type']]['count']++;
     }
 
-    for(let group in entity_info[args['type']]['groups']){
+    for(const group in entity_info[args['type']]['groups']){
         entity_group_add({
           'entities': [
             args['id'],
@@ -239,7 +239,7 @@ function entity_remove(args){
       'entities': args['entities'],
     });
 
-    for(let entity in args['entities']){
+    for(const entity in args['entities']){
         Reflect.deleteProperty(
           entity_entities,
           args['entities'][entity]
@@ -256,7 +256,7 @@ function entity_remove_all(args){
       },
     });
 
-    for(let entity in entity_entities){
+    for(const entity in entity_entities){
         if(args['group'] !== false
           && !entity_groups[args['group']][entity]){
             continue;

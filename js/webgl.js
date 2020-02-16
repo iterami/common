@@ -27,7 +27,7 @@ function webgl_buffer_set_type(args){
       },
     });
 
-    let buffer = webgl_buffer.createBuffer();
+    const buffer = webgl_buffer.createBuffer();
     webgl_buffer.bindBuffer(
       webgl_buffer.ARRAY_BUFFER,
       buffer
@@ -70,15 +70,15 @@ function webgl_camera_rotate(args){
       },
     });
 
-    let axes = {
+    const axes = {
       'x': args['x'],
       'y': args['y'],
       'z': args['z'],
     };
-    let prefix = args['camera']
+    const prefix = args['camera']
       ? 'camera-rotate-'
       : 'rotate-';
-    for(let axis in axes){
+    for(const axis in axes){
         let axis_value = axes[axis];
         if(!args['set']){
             axis_value += webgl_characters[args['character']][prefix + axis];
@@ -90,7 +90,7 @@ function webgl_camera_rotate(args){
     }
 
     if(args['camera']){
-        let mouse_check = core_mouse['down-2']
+        const mouse_check = core_mouse['down-2']
           || (!core_mouse['down-0']
             && !core_mouse['down-2'])
           || !args['mouse'];
@@ -115,7 +115,7 @@ function webgl_camera_zoom(event){
         return;
     }
 
-    let character = webgl_characters[webgl_character_id];
+    const character = webgl_characters[webgl_character_id];
     if(event.deltaY > 0){
         character['camera-zoom'] = Math.min(
           character['camera-zoom'] + 1,
@@ -132,16 +132,16 @@ function webgl_camera_zoom(event){
 
 // Required args: entity
 function webgl_clamp_rotation(args){
-    let axes = [
+    const axes = [
       'x',
       'y',
       'z',
     ];
 
-    let character = args['entity']['camera-rotate-x'] !== void 0;
+    const character = args['entity']['camera-rotate-x'] !== void 0;
 
-    for(let axis in axes){
-        let property = 'rotate-' + axes[axis];
+    for(const axis in axes){
+        const property = 'rotate-' + axes[axis];
 
         if(character){
             args['entity']['camera-' + property] = math_clamp({
@@ -161,7 +161,7 @@ function webgl_clamp_rotation(args){
     }
 
     if(character){
-        let max = args['entity']['camera-rotate-x'] > 180
+        const max = args['entity']['camera-rotate-x'] > 180
           ? 360
           : 89;
         args['entity']['camera-rotate-x'] = math_clamp({
@@ -195,17 +195,17 @@ function webgl_clearcolor_set(args){
 
 // Required args: collider, target
 function webgl_collision(args){
-    let collider_position = webgl_get_translation({
+    const collider_position = webgl_get_translation({
       'entity': args['collider'],
     });
     let collision = false;
     let collision_sign = 1;
-    let range = {
+    const range = {
       'x': args['collider']['collide-range-horizontal'] + Math.abs(args['collider']['change']['translate-x']),
       'y': args['collider']['collide-range-vertical'] + Math.abs(args['collider']['change']['translate-y']),
       'z': args['collider']['collide-range-horizontal'] + Math.abs(args['collider']['change']['translate-z']),
     };
-    let target_position = webgl_get_translation({
+    const target_position = webgl_get_translation({
       'entity': args['target'],
     });
 
@@ -294,7 +294,7 @@ function webgl_collision(args){
     if(collision !== false){
         if(!entity_groups['particles'][args['collider']['id']]
           && Math.abs(target_position[collision] - collider_position[collision]) < range[collision]){
-            let range_axis = collision === 'y'
+            const range_axis = collision === 'y'
               ? 'vertical'
               : 'horizontal';
 
@@ -316,11 +316,11 @@ function webgl_collision(args){
                     axis_second = 'translate-y';
                 }
 
-                let axis_first_change = webgl_characters[args['target']['attach-to']]['change'][axis_first];
+                const axis_first_change = webgl_characters[args['target']['attach-to']]['change'][axis_first];
                 if(axis_first_change !== 0){
                     args['collider'][axis_first] += axis_first_change;
                 }
-                let axis_second_change = webgl_characters[args['target']['attach-to']]['change'][axis_second];
+                const axis_second_change = webgl_characters[args['target']['attach-to']]['change'][axis_second];
                 if(axis_second_change !== 0){
                     args['collider'][axis_second] += axis_second_change;
                 }
@@ -417,7 +417,7 @@ function webgl_draw(){
       0
     );
 
-    for(let text in webgl_text){
+    for(const text in webgl_text){
         Object.assign(
           webgl_canvas,
           webgl_text[text]['properties']
@@ -538,8 +538,8 @@ function webgl_extension(args){
       },
     });
 
-    let extension = webgl_buffer.getExtension(args['id']);
-    let result = extension !== null;
+    const extension = webgl_buffer.getExtension(args['id']);
+    const result = extension !== null;
 
     if(result){
         webgl_extensions[args['label']] = extension;
@@ -559,7 +559,7 @@ function webgl_get_translation(args){
         };
     }
 
-    let target = window[args['entity']['attach-type']][args['entity']['attach-to']];
+    const target = window[args['entity']['attach-type']][args['entity']['attach-to']];
     return {
       'x': target['translate-x'] + args['entity']['attach-offset-x'],
       'y': target['translate-y'] + args['entity']['attach-offset-y'],
@@ -830,7 +830,7 @@ function webgl_json_export(args){
       },
     });
 
-    let json = {};
+    const json = {};
 
     Object.assign(
       json,
@@ -861,8 +861,8 @@ function webgl_json_export(args){
         delete json['character']['translate-z'];
 
         json['entities'] = [];
-        for(let entity in webgl_character_homebase['entities']){
-            let entity_json = {};
+        for(const entity in webgl_character_homebase['entities']){
+            const entity_json = {};
             entity_json['id'] = webgl_character_homebase['entities'][entity]['id'];
 
             Object.assign(
@@ -880,8 +880,8 @@ function webgl_json_export(args){
 
     }else{
         json['entities'] = [];
-        for(let entity in entity_entities){
-            let entity_json = {};
+        for(const entity in entity_entities){
+            const entity_json = {};
             entity_json['id'] = entity_entities[entity]['id'];
 
             Object.assign(
@@ -931,17 +931,17 @@ function webgl_level_init(args){
     }
 
     if(args['json']['randomized']){
-        for(let i in args['json']['randomized']){
-            let randomized = core_random_number({
+        for(const i in args['json']['randomized']){
+            const randomized = core_random_number({
               'multiplier': args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min'],
             }) + args['json']['randomized'][i]['min'];
 
-            for(let id in args['json']['randomized'][i]['ids']){
-                let targets = args['json'][args['json']['randomized'][i]['character'] === true
+            for(const id in args['json']['randomized'][i]['ids']){
+                const targets = args['json'][args['json']['randomized'][i]['character'] === true
                   ? 'characters'
                   : 'entities'];
 
-                for(let target in targets){
+                for(const target in targets){
                     if(targets[target]['id'] === args['json']['randomized'][i]['ids'][id]){
                         if(!targets[target][args['json']['randomized'][i]['property']]){
                             targets[target][args['json']['randomized'][i]['property']] = 0;
@@ -959,7 +959,7 @@ function webgl_level_init(args){
 
     if(args['json']['characters']
       && args['json']['characters'] !== false){
-        for(let character in args['json']['characters']){
+        for(const character in args['json']['characters']){
             if(!webgl_characters[args['json']['characters'][character]['id']]){
                 webgl_character_init(args['json']['characters'][character]);
             }
@@ -995,14 +995,14 @@ function webgl_level_init(args){
           webgl_characters
         );
 
-        for(let character in args['json']['characters']){
+        for(const character in args['json']['characters']){
             if(character === 0){
                 continue;
             }
 
-            let entities = args['json']['characters'][character]['entities'];
-            for(let entity in entities){
-                let properties = {};
+            const entities = args['json']['characters'][character]['entities'];
+            for(const entity in entities){
+                const properties = {};
                 Object.assign(
                   properties,
                   entities[entity]
@@ -1015,7 +1015,7 @@ function webgl_level_init(args){
     webgl_entity_create({
       'entities': webgl_character_homebase['entities'],
     });
-    for(let prefab in args['json']['prefabs']){
+    for(const prefab in args['json']['prefabs']){
         window[args['json']['prefabs'][prefab]['type']](args['json']['prefabs'][prefab]['properties']);
     }
 
@@ -1072,7 +1072,7 @@ function webgl_level_unload(){
     }
 
     webgl_character_home_entityupdate();
-    for(let character in webgl_characters){
+    for(const character in webgl_characters){
         if(character !== webgl_character_id){
             Reflect.deleteProperty(
               webgl_characters,
@@ -1190,7 +1190,7 @@ function webgl_logicloop(){
 
     let npc = '';
     let npc_talk = '';
-    for(let character in webgl_characters){
+    for(const character in webgl_characters){
         if(webgl_character_level({
             'character': character,
           }) > 0){
@@ -1201,7 +1201,7 @@ function webgl_logicloop(){
         }
 
         if(webgl_characters[character]['collides']){
-            for(let entity in entity_entities){
+            for(const entity in entity_entities){
                 if(entity_entities[entity]['collision']){
                     webgl_collision({
                       'collider': webgl_characters[character],
@@ -1248,11 +1248,11 @@ function webgl_logicloop(){
 
     }else if(npc !== webgl_character_trading){
         webgl_character_trading = npc;
-        let npc_trades = webgl_characters[npc]['trade'];
+        const npc_trades = webgl_characters[npc]['trade'];
 
-        let elements = {};
+        const elements = {};
         let npc_trade = '<table>';
-        for(let trade in npc_trades){
+        for(const trade in npc_trades){
             if(webgl_characters[webgl_character_trading]['inventory'][npc_trades[trade]['give-id']]['amount'] < npc_trades[trade]['give-amount']){
                 continue;
             }
@@ -1313,7 +1313,7 @@ function webgl_logicloop(){
               remove = true;
 
           }else{
-              for(let character in webgl_characters){
+              for(const character in webgl_characters){
                   if(entity_entities[entity]['parent'] === character
                     || webgl_character_level({
                       'character': character,
@@ -1352,12 +1352,12 @@ function webgl_logicloop(){
       },
     });
 
-    for(let character in webgl_characters){
+    for(const character in webgl_characters){
         webgl_path_move({
           'entity': webgl_characters[character],
         });
 
-        for(let change in webgl_characters[character]['change']){
+        for(const change in webgl_characters[character]['change']){
             webgl_characters[character][change] = core_round({
               'number': webgl_characters[character][change] + webgl_characters[character]['change'][change],
             });
@@ -1368,13 +1368,13 @@ function webgl_logicloop(){
         webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
 
         if(webgl_characters[character]['camera-zoom'] > 0){
-            let radians_x = math_degrees_to_radians({
+            const radians_x = math_degrees_to_radians({
               'degrees': webgl_characters[character]['camera-rotate-x'],
             });
-            let radians_y = math_degrees_to_radians({
+            const radians_y = math_degrees_to_radians({
               'degrees': webgl_characters[character]['camera-rotate-y'],
             });
-            let cos = Math.cos(radians_x);
+            const cos = Math.cos(radians_x);
 
             webgl_characters[character]['camera-x'] += Math.sin(-radians_y) * webgl_characters[character]['camera-zoom'] * cos;
             webgl_characters[character]['camera-y'] += Math.sin(radians_x) * webgl_characters[character]['camera-zoom'];
@@ -1481,13 +1481,13 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(entity_entities[entity]['event-range'] > 0){
-        let event_position = webgl_get_translation({
+        const event_position = webgl_get_translation({
           'entity': entity_entities[entity],
         });
 
         if(entity_entities[entity]['event-target-type'] === 'character'){
             if(entity_entities[entity]['event-target-id'] !== false){
-                let character = webgl_characters[entity_entities[entity]['event-target-id']];
+                const character = webgl_characters[entity_entities[entity]['event-target-id']];
 
                 if(math_distance({
                     'x0': character['translate-x'],
@@ -1504,7 +1504,7 @@ function webgl_logicloop_handle_entity(entity){
                 }
 
             }else{
-                for(let character in webgl_characters){
+                for(const character in webgl_characters){
                     if(character === entity_entities[entity]['attach-to']){
                         continue;
                     }
@@ -1527,7 +1527,7 @@ function webgl_logicloop_handle_entity(entity){
 
         }else{
             if(entity_entities[entity]['event-target-id'] !== false){
-                let target_position = webgl_get_translation({
+                const target_position = webgl_get_translation({
                   'entity': entity_entities[entity_entities[entity]['event-target-id']],
                 });
 
@@ -1546,7 +1546,7 @@ function webgl_logicloop_handle_entity(entity){
                 }
 
             }else{
-                for(let target in entity_entities){
+                for(const target in entity_entities){
                     if(target === entity){
                         continue;
                     }
@@ -1569,14 +1569,14 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
-    for(let change in entity_entities[entity]['change']){
+    for(const change in entity_entities[entity]['change']){
         entity_entities[entity][change] = core_round({
           'number': entity_entities[entity][change] + entity_entities[entity]['change'][change],
         });
     }
 
     if(entity_entities[entity]['attach-to'] !== false){
-        let target = window[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
+        const target = window[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
 
         let x = target['translate-x'];
         let y = target['translate-y'];
@@ -1612,7 +1612,7 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(entity_entities[entity]['collides']){
-        for(let other_entity in entity_entities){
+        for(const other_entity in entity_entities){
             if(entity_entities[other_entity]['collision']
               && entity !== other_entity
               && entity_entities[entity]['attach-to'] === false){
@@ -1668,7 +1668,7 @@ function webgl_logicloop_handle_entity(entity){
     });
     if(entity_entities[entity]['attach-to'] !== false){
         if(entity_groups['skybox'][entity] !== true){
-            let target = window[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
+            const target = window[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
             math_matrix_rotate({
               'dimensions': [
                 math_degrees_to_radians({
@@ -1720,27 +1720,27 @@ function webgl_normals(args){
       },
     });
 
-    let radians_x = math_degrees_to_radians({
+    const radians_x = math_degrees_to_radians({
       'degrees': args['rotate-x'],
     });
-    let radians_y = math_degrees_to_radians({
+    const radians_y = math_degrees_to_radians({
       'degrees': args['rotate-y'],
     });
-    let radians_z = -math_degrees_to_radians({
+    const radians_z = -math_degrees_to_radians({
       'degrees': args['rotate-z'],
     });
 
-    let normal_x = core_round({
+    const normal_x = core_round({
       'number': Math.cos(radians_y) * Math.sin(radians_z),
     });
-    let normal_y = core_round({
+    const normal_y = core_round({
       'number': Math.cos(radians_x) * Math.cos(radians_z),
     });
-    let normal_z = core_round({
+    const normal_z = core_round({
       'number': Math.sin(radians_x) * Math.cos(radians_y),
     });
 
-    let normals = [];
+    const normals = [];
     for(let i = 0; i < args['vertices-length']; i++){
         normals.push(
           normal_x,
@@ -1762,7 +1762,7 @@ function webgl_perspective(){
 
 // Required args: x, y
 function webgl_pick_color(args){
-    let pixelarray = new Uint8Array(4);
+    const pixelarray = new Uint8Array(4);
 
     webgl_buffer.readPixels(
       args['x'],
@@ -1779,8 +1779,8 @@ function webgl_pick_color(args){
 
 // Required args: shaders
 function webgl_program_create(args){
-    let program = webgl_buffer.createProgram();
-    for(let shader in args['shaders']){
+    const program = webgl_buffer.createProgram();
+    for(const shader in args['shaders']){
         webgl_buffer.attachShader(
           program,
           args['shaders'][shader]
@@ -1838,7 +1838,7 @@ function webgl_scissor(args){
       args['height']
     );
 
-    let result = args['todo']();
+    const result = args['todo']();
 
     webgl_buffer.disable(webgl_buffer.SCISSOR_TEST);
 
@@ -1864,7 +1864,7 @@ function webgl_settings_init(){
 
 // Required args: source, type
 function webgl_shader_create(args){
-    let shader = webgl_buffer.createShader(args['type']);
+    const shader = webgl_buffer.createShader(args['type']);
     webgl_buffer.shaderSource(
       shader,
       args['source']
@@ -1958,7 +1958,7 @@ void main(void){
       'program': webgl_properties['shader']['program'],
     });
 
-    let locations = {
+    const locations = {
       'alpha': 'alpha',
       'ambient-color': 'vec_ambientColor',
       'clear-color': 'vec_clearColor',
@@ -1971,7 +1971,7 @@ void main(void){
       'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
       'sampler': 'sampler',
     };
-    for(let location in locations){
+    for(const location in locations){
         webgl_properties['shader'][location] = webgl_buffer.getUniformLocation(
           webgl_properties['shader']['program'],
           locations[location]
@@ -2019,7 +2019,7 @@ function webgl_texture_set(args){
 
 // Required args: attributes, program
 function webgl_vertexattribarray_set(args){
-    for(let attribute in args['attributes']){
+    for(const attribute in args['attributes']){
         webgl_properties['attributes'][args['attributes'][attribute]] = webgl_buffer.getAttribLocation(
           args['program'],
           args['attributes'][attribute]
@@ -2049,9 +2049,9 @@ function webgl_vertexcolorarray(args){
         );
     }
 
-    let color = [];
+    const color = [];
     for(let i = 0; i < args['vertexcount']; i++){
-        let index = args['rgbarray'][i] !== void 0
+        const index = args['rgbarray'][i] !== void 0
           ? i
           : 0;
 

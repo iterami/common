@@ -26,7 +26,7 @@ function test_function(args){
         'var': args['expect'],
       })){
         test = true;
-        for(let item in returned){
+        for(const item in returned){
             if(args['expect'][item] === void 0
               || returned[item] !== args['expect'][item]){
                 test = false;
@@ -48,8 +48,8 @@ function test_function(args){
 function test_run(args){
     let results = '<tr class=header><td>Function<td>Args<td>Expected<td>Returned<td>Test';
 
-    for(let test in args['tests']){
-        let test_args = {};
+    for(const test in args['tests']){
+        const test_args = {};
         Object.assign(
           test_args,
           args['tests'][test]
@@ -103,11 +103,11 @@ function test_time(args){
     let time_total = 0;
 
     while(runs_done < args['runs']){
-        let time_before = new Date();
+        const time_before = new Date();
         args['function'](args['function-args']);
-        let time_after = new Date();
+        const time_after = new Date();
 
-        let diff = time_after - time_before;
+        const diff = time_after - time_before;
         if(diff < time_min
           || time_min === 0){
             time_min = diff;

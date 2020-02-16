@@ -93,7 +93,7 @@ function time_format(args){
 }
 
 function time_from_inputs(){
-    let date = {
+    const date = {
       'date': 0,
       'hour': 0,
       'millisecond': 0,
@@ -102,8 +102,8 @@ function time_from_inputs(){
       'second': 0,
       'year': 0,
     };
-    for(let value in date){
-        let element = document.getElementById(value);
+    for(const value in date){
+        const element = document.getElementById(value);
         if(!element){
             continue;
         }
@@ -131,7 +131,7 @@ function timestamp_to_date(args){
       ? new Date(args['timestamp']).getTime()
       : new Date().getTime();
 
-    let date = new Date(args['timestamp']);
+    const date = new Date(args['timestamp']);
     return {
       'date': date.getUTCDate(),
       'day': date.getUTCDay(),

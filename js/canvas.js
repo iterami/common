@@ -70,7 +70,7 @@ function canvas_draw_path(args){
     }
 
     canvas_buffer.beginPath();
-    for(let vertex in args['vertices']){
+    for(const vertex in args['vertices']){
         canvas_buffer[args['vertices'][vertex]['type'] || args['type']](
           args['vertices'][vertex]['x'] || 0,
           args['vertices'][vertex]['y'] || 0,
@@ -105,13 +105,13 @@ function canvas_gradient(args){
       },
     });
 
-    let gradient = canvas_buffer.createLinearGradient(
+    const gradient = canvas_buffer.createLinearGradient(
       args['x'],
       args['y'],
       args['width'],
       args['height']
     );
-    for(let step in args['stops']){
+    for(const step in args['stops']){
         gradient.addColorStop(
           args['stops'][step]['offset'] || 0,
           args['stops'][step]['color'] || '#000'
@@ -144,7 +144,7 @@ function canvas_init(args){
       },
     });
 
-    let properties = {
+    const properties = {
       'id': 'canvas',
     };
     if(!args['contextmenu']){
@@ -224,8 +224,8 @@ function canvas_logicloop(){
 
 function canvas_logicloop_handle_entity(entity){
     if(entity_entities[entity]['attach-to'] !== false){
-        let attached = entity_entities[entity_entities[entity]['attach-to']];
-        for(let axis in entity_entities[entity]['position']){
+        const attached = entity_entities[entity_entities[entity]['attach-to']];
+        for(const axis in entity_entities[entity]['position']){
             entity_entities[entity]['position'][axis] = attached['position'][axis] + entity_entities[entity]['attach-offset-' + axis];
         }
     }

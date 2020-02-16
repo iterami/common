@@ -11,7 +11,7 @@ function math_clamp(args){
     });
 
     if(args['wrap']){
-        let range = args['max'] - args['min'];
+        const range = args['max'] - args['min'];
 
         if(args['value'] < args['min']){
             args['value'] = args['max'] - (args['min'] - args['value']) % range;
@@ -117,7 +117,7 @@ function math_fixed_length_line(args){
       },
     });
 
-    let line_distance = math_distance({
+    const line_distance = math_distance({
       'x0': args['x0'],
       'x1': args['x1'],
       'y0': args['y0'],
@@ -168,7 +168,7 @@ function math_fraction_reduce(args){
     let done = false;
 
     while(!done){
-        let gcd = core_round({
+        const gcd = core_round({
           'number': math_greatest_common_divisor({
             'a': args['numerator'],
             'b': args['denominator'],
@@ -230,7 +230,7 @@ function math_matrix_create(){
 
 // Required args: ids
 function math_matrix_delete(args){
-    for(let id in args['ids']){
+    for(const id in args['ids']){
         Reflect.deleteProperty(
           math_matrices,
           args['ids'][id]
@@ -240,7 +240,7 @@ function math_matrix_delete(args){
 
 // Required args: id
 function math_matrix_identity(args){
-    for(let key in math_matrices[args['id']]){
+    for(const key in math_matrices[args['id']]){
         math_matrices[args['id']][key] =
           key % 5 === 0
             ? 1
@@ -250,7 +250,7 @@ function math_matrix_identity(args){
 
 // Required args: dimensions, id
 function math_matrix_rotate(args){
-    let cache_id = 'rotate-cache-' + args['id'];
+    const cache_id = 'rotate-cache-' + args['id'];
 
     // Rotate X.
     math_matrix_clone({
@@ -317,7 +317,7 @@ function math_matrix_round(args){
       },
     });
 
-    for(let key in math_matrices[args['id']]){
+    for(const key in math_matrices[args['id']]){
         math_matrices[args['id']][key] = core_round({
           'decimals': args['decimals'],
           'number': math_matrices[args['id']][key],
@@ -348,7 +348,7 @@ function math_move_2d(args){
       },
     });
 
-    let angle = math_point_angle({
+    const angle = math_point_angle({
       'x0': args['x0'],
       'x1': args['x1'],
       'y0': args['y0'],
@@ -387,7 +387,7 @@ function math_move_2d_diagonal(args){
       },
     });
 
-    let sqrt = core_round({
+    const sqrt = core_round({
       'decimals': args['decimals'],
       'number': Math.sqrt(args['speed']),
     });
@@ -410,7 +410,7 @@ function math_move_3d(args){
       },
     });
 
-    let radians = -math_degrees_to_radians({
+    const radians = -math_degrees_to_radians({
       'decimals': args['decimals'],
       'degrees': args['angle'] - (args['strafe']
           ? 90

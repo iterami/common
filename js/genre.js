@@ -182,13 +182,13 @@ function rpg_character_create(args){
 }
 
 function rpg_character_handle(){
-    for(let character in rpg_characters){
+    for(const character in rpg_characters){
         if(rpg_characters[character]['dead']){
             continue;
         }
 
         // Regenerate character stats.
-        for(let stat in rpg_characters[character]['stats']){
+        for(const stat in rpg_characters[character]['stats']){
             if(rpg_characters[character]['stats'][stat]['regeneration'] === void 0
               || rpg_characters[character]['stats'][stat]['current'] >= rpg_characters[character]['stats'][stat]['max']){
                 continue;
@@ -212,8 +212,8 @@ function rpg_character_handle(){
         }
 
         // Handle character inventory item spells.
-        for(let item in rpg_characters[character]['inventory']){
-            let selected = rpg_characters[character]['inventory'][item]['spell'];
+        for(const item in rpg_characters[character]['inventory']){
+            const selected = rpg_characters[character]['inventory'][item]['spell'];
 
             if(selected['reload-current'] < selected['reload']){
                 selected['reload-current'] += 1;
@@ -234,7 +234,7 @@ function rpg_character_handle(){
                 continue;
             }
 
-            let speeds = math_move_2d({
+            const speeds = math_move_2d({
               'x0': rpg_characters[character]['x'],
               'x1': rpg_characters[character]['target-x'],
               'y0': rpg_characters[character]['y'],
@@ -250,7 +250,7 @@ function rpg_character_handle(){
 
             // Handle particle-creating spells.
             if(selected['type'] === 'particle'){
-                let particle = Object.assign(
+                const particle = Object.assign(
                   {},
                   selected
                 );
@@ -338,7 +338,7 @@ function rpg_item_select(args){
       },
     });
 
-    let length = rpg_characters[args['character']]['inventory'].length - 1;
+    const length = rpg_characters[args['character']]['inventory'].length - 1;
     if(args['id'] < 0){
         args['id'] = length;
 
@@ -405,7 +405,7 @@ function rpg_particle_create(args){
 
 function rpg_particle_handle(){
     particleloop:
-    for(let particle in rpg_particles){
+    for(const particle in rpg_particles){
         rpg_particles[particle]['x'] += rpg_particles[particle]['dx'] * rpg_particles[particle]['speed-x'];
         rpg_particles[particle]['y'] += rpg_particles[particle]['dy'] * rpg_particles[particle]['speed-y'];
 
@@ -418,7 +418,7 @@ function rpg_particle_handle(){
         }
         rpg_particles[particle]['lifespan'] -= 1;
 
-        for(let object in rpg_world_dynamic){
+        for(const object in rpg_world_dynamic){
             if(!rpg_world_dynamic[object]['collision']
               || rpg_particles[particle]['x'] <= rpg_world_dynamic[object]['x']
               || rpg_particles[particle]['x'] >= rpg_world_dynamic[object]['x'] + rpg_world_dynamic[object]['width']
@@ -435,7 +435,7 @@ function rpg_particle_handle(){
         }
 
         // Handle collisions with characters.
-        for(let character in rpg_characters){
+        for(const character in rpg_characters){
             if(rpg_particles[particle]['owner'] === character
               || rpg_particles[particle]['x'] <= rpg_characters[character]['x'] - rpg_characters[character]['width'] / 2
               || rpg_particles[particle]['x'] >= rpg_characters[character]['x'] + rpg_characters[character]['width'] / 2
@@ -482,7 +482,7 @@ function rpg_spawner_create(args){
 }
 
 function rpg_spawner_handle(){
-    for(let spawner in rpg_spawners){
+    for(const spawner in rpg_spawners){
         if(rpg_spawners[spawner]['characters'] < rpg_spawners[spawner]['max']){
             rpg_character_create({
               'properties': rpg_spawners[spawner]['character'],
@@ -574,7 +574,7 @@ function rts_building_build(args){
     // Don't allow building too far from another building.
     if(rts_players[args['player']]['buildings'].length > 0){
         let build = false;
-        for(let building in rts_players[args['player']]['buildings']){
+        for(const building in rts_players[args['player']]['buildings']){
             if(math_distance({
               'x0': args['x'],
               'x1': rts_players[args['player']]['buildings'][building]['x'],
@@ -591,7 +591,7 @@ function rts_building_build(args){
     }
 
     // Don't allow building on other buildings.
-    for(let building in rts_players[args['player']]['buildings']){
+    for(const building in rts_players[args['player']]['buildings']){
         if(math_cuboid_overlap({
           'height-0': rts_buildings[args['type']]['height'],
           'height-1': rts_players[args['player']]['buildings'][building]['height'],
@@ -607,7 +607,7 @@ function rts_building_build(args){
     }
 
     // Don't allow building on dynamic world elements.
-    for(let element in rts_world_dynamic){
+    for(const element in rts_world_dynamic){
         if(math_cuboid_overlap({
           'height-0': rts_buildings[args['type']]['height'],
           'height-1': rts_world_dynamic[element]['height'],
@@ -623,7 +623,7 @@ function rts_building_build(args){
     }
 
     rts_players[args['player']]['money'] -= rts_buildings[args['type']]['cost'];
-    let building = {
+    const building = {
       'damage': 0,
       'destination-x': args['x'] + rts_buildings[args['type']]['width'] / 2,
       'destination-y': args['y'] + rts_buildings[args['type']]['height'] / 2,
@@ -675,7 +675,7 @@ function rts_building_destroy(args){
 }
 
 function rts_building_fog(){
-    for(let building in rts_players[0]['buildings']){
+    for(const building in rts_players[0]['buildings']){
         // Check if fog is within fog disance of a building.
         let loop_counter = rts_fog.length - 1;
         do{
@@ -702,7 +702,7 @@ function rts_building_fog(){
 }
 
 function rts_building_handle(){
-    for(let building in rts_players[1]['buildings']){
+    for(const building in rts_players[1]['buildings']){
         if(rts_players[1]['buildings'][building]['range'] <= 0){
             continue;
         }
@@ -714,7 +714,7 @@ function rts_building_handle(){
         // ...else look for nearby p0 units to fire at.
         }else{
             let check_for_buildings = true;
-            for(let p0_unit in rts_players[0]['units']){
+            for(const p0_unit in rts_players[0]['units']){
                 if(math_distance({
                   'x0': rts_players[1]['buildings'][building]['x'],
                   'x1': rts_players[0]['units'][p0_unit]['x'],
@@ -743,7 +743,7 @@ function rts_building_handle(){
 
             // If no units in range, look for buildings to fire at.
             if(check_for_buildings){
-                for(let p0_building in rts_players[0]['buildings']){
+                for(const p0_building in rts_players[0]['buildings']){
                     if(math_distance({
                       'x0': rts_players[1]['buildings'][building]['x'],
                       'x1': rts_players[0]['buildings'][p0_building]['x']
@@ -776,7 +776,7 @@ function rts_building_handle(){
         }
     }
 
-    for(let building in rts_players[0]['buildings']){
+    for(const building in rts_players[0]['buildings']){
         if(rts_players[0]['buildings'][building]['range'] <= 0){
             continue;
         }
@@ -788,7 +788,7 @@ function rts_building_handle(){
         // ...else look for nearby p0 units to fire at.
         }else{
             let check_for_buildings = true;
-            for(let p1_unit in rts_players[1]['units']){
+            for(const p1_unit in rts_players[1]['units']){
                 if(math_distance({
                   'x0': rts_players[0]['buildings'][building]['x'],
                   'x1': rts_players[1]['units'][p1_unit]['x'],
@@ -817,7 +817,7 @@ function rts_building_handle(){
 
             // If no units in range, look for buildings to fire at.
             if(check_for_buildings){
-                for(let p1_building in rts_players[1]['buildings']){
+                for(const p1_building in rts_players[1]['buildings']){
                     if(math_distance({
                       'x0': rts_players[0]['buildings'][building]['x'],
                       'x1': rts_players[1]['buildings'][p1_building]['x']
@@ -852,9 +852,9 @@ function rts_building_handle(){
 }
 
 function rts_bullet_handle(){
-    for(let bullet in rts_bullets){
+    for(const bullet in rts_bullets){
         // Calculate bullet movement.
-        let speeds = math_move_2d({
+        const speeds = math_move_2d({
           'speed': rts_bullets[bullet]['speed'],
           'x0': rts_bullets[bullet]['x'],
           'x1': rts_bullets[bullet]['destination-x'],
@@ -883,7 +883,7 @@ function rts_bullet_handle(){
         }
 
         if(rts_bullets[bullet]['player'] === 1){
-            for(let unit in rts_players[0]['units']){
+            for(const unit in rts_players[0]['units']){
                 if(math_distance({
                   'x0': rts_bullets[bullet]['x'],
                   'x1': rts_players[0]['units'][unit]['x'],
@@ -904,7 +904,7 @@ function rts_bullet_handle(){
                 break;
             }
 
-            for(let building in rts_players[0]['buildings']){
+            for(const building in rts_players[0]['buildings']){
                 if(rts_bullets[bullet]['x'] <= rts_players[0]['buildings'][building]['x']
                   || rts_bullets[bullet]['x'] >= rts_players[0]['buildings'][building]['x'] + 100
                   || rts_bullets[bullet]['y'] <= rts_players[0]['buildings'][building]['y']
@@ -924,7 +924,7 @@ function rts_bullet_handle(){
             }
 
         }else{
-            for(let unit in rts_players[1]['units']){
+            for(const unit in rts_players[1]['units']){
                 if(math_distance({
                   'x0': rts_bullets[bullet]['x'],
                   'x1': rts_players[1]['units'][unit]['x'],
@@ -945,7 +945,7 @@ function rts_bullet_handle(){
                 break;
             }
 
-            for(let building in rts_players[1]['buildings']){
+            for(const building in rts_players[1]['buildings']){
                 if(rts_bullets[bullet]['x'] <= rts_players[1]['buildings'][building]['x']
                   || rts_bullets[bullet]['x'] >= rts_players[1]['buildings'][building]['x'] + 100
                   || rts_bullets[bullet]['y'] <= rts_players[1]['buildings'][building]['y']
@@ -998,7 +998,7 @@ function rts_destionation_set(args){
     });
 
     if(rts_selected_type === 'unit'){
-        for(let unit in rts_players[0]['units']){
+        for(const unit in rts_players[0]['units']){
             if(!rts_players[0]['units'][unit]['selected']){
                 continue;
             }
@@ -1020,7 +1020,7 @@ function rts_destionation_set(args){
         return;
     }
 
-    for(let building in rts_players[0]['buildings']){
+    for(const building in rts_players[0]['buildings']){
         if(!rts_players[0]['buildings'][building]['selected']){
             continue;
         }
@@ -1061,7 +1061,7 @@ function rts_players_handle(){
         rts_money_timer = -1;
     }
 
-    for(let player in rts_players){
+    for(const player in rts_players){
         if(rts_money_timer === -1){
             rts_players[player]['money'] += rts_players[player]['income'];
         }
@@ -1092,7 +1092,7 @@ function rts_select(){
     rts_selected_id = -1;
     rts_selected_type = '';
 
-    for(let unit in rts_players[0]['units']){
+    for(const unit in rts_players[0]['units']){
         rts_players[0]['units'][unit]['selected'] = (
             (core_mouse['down-x'] < canvas_properties['width-half'] + rts_players[0]['units'][unit]['x'] + camera_x + 15
               && core_mouse['x'] > canvas_properties['width-half'] + rts_players[0]['units'][unit]['x'] + camera_x - 15)
@@ -1111,7 +1111,7 @@ function rts_select(){
         }
     }
 
-    for(let building in rts_players[0]['buildings']){
+    for(const building in rts_players[0]['buildings']){
         if(rts_selected_type !== ''){
             rts_players[0]['buildings'][building]['selected'] = 0;
             continue;
@@ -1158,10 +1158,10 @@ function rts_unit_build(args){
     }
 
     rts_players[args['player']]['money'] -= rts_units[args['type']]['cost'];
-    let temp_selected_id = args['player'] > 0
+    const temp_selected_id = args['player'] > 0
       ? 1
       : rts_selected_id;
-    let unit = {
+    const unit = {
       'bullet-speed': 10,
       'damage': 25,
       'destination-x': args['player'] > 0
@@ -1209,7 +1209,7 @@ function rts_unit_destroy(args){
 }
 
 function rts_unit_handle(){
-    for(let unit in rts_players[1]['units']){
+    for(const unit in rts_players[1]['units']){
         // If reloading, decrease reload,...
         if(rts_players[1]['units'][unit]['reload-current'] > 0){
             rts_players[1]['units'][unit]['reload-current'] -= 1;
@@ -1217,7 +1217,7 @@ function rts_unit_handle(){
         // ...else look for nearby p0 units to fire at.
         }else{
             let check_for_buildings = true;
-            for(let p0_unit in rts_players[0]['units']){
+            for(const p0_unit in rts_players[0]['units']){
                 if(math_distance({
                   'x0': rts_players[1]['units'][unit]['x'],
                   'x1': rts_players[0]['units'][p0_unit]['x'],
@@ -1244,7 +1244,7 @@ function rts_unit_handle(){
 
             // If no units in range, look for buildings to fire at.
             if(check_for_buildings){
-                for(let building in rts_players[0]['buildings']){
+                for(const building in rts_players[0]['buildings']){
                     if(math_distance({
                       'x0': rts_players[1]['units'][unit]['x'],
                       'x1': rts_players[0]['buildings'][building]['x']
@@ -1277,7 +1277,7 @@ function rts_unit_handle(){
         // Movement "AI", pick new destination once destination is reached.
         if(rts_players[1]['units'][unit]['x'] !== rts_players[1]['units'][unit]['destination-x']
           || rts_players[1]['units'][unit]['y'] !== rts_players[1]['units'][unit]['destination-y']){
-            let speeds = math_move_2d({
+            const speeds = math_move_2d({
               'speed': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[1]['units'][unit]['x'],
               'x1': rts_players[1]['units'][unit]['destination-x'],
@@ -1311,13 +1311,13 @@ function rts_unit_handle(){
         }
     }
 
-    for(let unit in rts_players[0]['units']){
+    for(const unit in rts_players[0]['units']){
         let update_fog = false;
 
         // If not yet reached destination, move unit.
         if(Math.abs(rts_players[0]['units'][unit]['x'] - rts_players[0]['units'][unit]['destination-x']) > 1
           && Math.abs(rts_players[0]['units'][unit]['y'] - rts_players[0]['units'][unit]['destination-y']) > 1){
-            let speeds = math_move_2d({
+            const speeds = math_move_2d({
               'speed': rts_players[1]['units'][unit]['speed'],
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[0]['units'][unit]['destination-x'],
@@ -1340,7 +1340,7 @@ function rts_unit_handle(){
             rts_players[0]['units'][unit]['destination-x'] = rts_players[0]['units'][unit]['x'];
             rts_players[0]['units'][unit]['destination-y'] = rts_players[0]['units'][unit]['y'];
 
-            for(let other_unit in rts_players[0]['units']){
+            for(const other_unit in rts_players[0]['units']){
                 if(unit === other_unit){
                     continue;
                 }
@@ -1403,7 +1403,7 @@ function rts_unit_handle(){
         }
 
         let check_for_buildings = true;
-        for(let p1_unit in rts_players[1]['units']){
+        for(const p1_unit in rts_players[1]['units']){
             if(math_distance({
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[1]['units'][p1_unit]['x'],
@@ -1433,7 +1433,7 @@ function rts_unit_handle(){
             continue;
         }
 
-        for(let building in rts_players[1]['buildings']){
+        for(const building in rts_players[1]['buildings']){
             if(math_distance({
               'x0': rts_players[0]['units'][unit]['x'],
               'x1': rts_players[1]['buildings'][building]['x']
@@ -1475,7 +1475,7 @@ function webgl_billboard(args){
       },
     });
 
-    for(let axis in args['axes']){
+    for(const axis in args['axes']){
         entity_entities[args['entity']]['rotate-' + args['axes'][axis]]
           = 360 - webgl_characters[args['character']]['camera-rotate-' + args['axes'][axis]];
     }
@@ -1487,7 +1487,7 @@ function webgl_character_home(){
     }
 
     webgl_init(webgl_character_homebase['properties']);
-    for(let character in webgl_character_homebase['characters']){
+    for(const character in webgl_character_homebase['characters']){
         webgl_character_init(webgl_character_homebase['characters'][character]);
     }
     webgl_entity_create({
@@ -1508,7 +1508,7 @@ function webgl_character_home_entityupdate(){
       'todo': function(entity){
           if(entity_entities[entity]['attach-to'] === webgl_character_id
             && entity_groups['skybox'][entity] !== true){
-              let properties = {};
+              const properties = {};
               Object.assign(
                 properties,
                 entity_entities[entity]
@@ -1677,10 +1677,10 @@ function webgl_character_origin(args){
 
 // Required args: id
 function webgl_character_random(args){
-    let horizontal = core_random_number({
+    const horizontal = core_random_number({
       'multiplier': 2,
     }) + 2;
-    let vertical = core_random_number({
+    const vertical = core_random_number({
       'multiplier': 5,
     }) + 2;
 
@@ -1762,15 +1762,15 @@ function webgl_entity_create(args){
       },
     });
 
-    for(let entity in args['entities']){
-        let entity_id = entity_create({
+    for(const entity in args['entities']){
+        const entity_id = entity_create({
           'id': args['entities'][entity]['id'],
           'properties': args['entities'][entity],
           'types': args['entities'][entity]['types'],
         });
         math_matrices[entity_id] = math_matrix_create();
 
-        for(let group in args['entities'][entity]['groups']){
+        for(const group in args['entities'][entity]['groups']){
             entity_group_add({
               'entities': [
                 entity_id,
@@ -1835,7 +1835,7 @@ function webgl_entity_move(args){
             webgl_characters[args['character']]['change']['translate-y'] += dy;
 
         }else{
-            let movement = math_move_3d({
+            const movement = math_move_3d({
               'angle': webgl_characters[args['character']]['rotate-y'],
               'speed': webgl_characters[args['character']]['speed'] * args['multiplier'],
               'strafe': args['strafe'],
@@ -1855,7 +1855,7 @@ function webgl_entity_move(args){
         entity_entities[args['entity']]['change']['translate-y'] = dy;
 
     }else{
-        let movement = math_move_3d({
+        const movement = math_move_3d({
           'angle': entity_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis']],
           'speed': entity_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
@@ -1902,7 +1902,7 @@ function webgl_entity_todo(entity){
       'vertices-length': entity_entities[entity]['vertices-length'],
     });
 
-    let textureData = [];
+    const textureData = [];
     for(let i = 0; i < entity_entities[entity]['vertices-length'] * 2; i += 2){
         textureData.push(
           entity_entities[entity]['texture-align'][i] * entity_entities[entity]['texture-repeat-x'],
@@ -1942,7 +1942,7 @@ function webgl_event(args){
     }
 
     if(args['parent']['event-key'] !== false){
-        let item = args['target']['inventory'][args['parent']['event-key']];
+        const item = args['target']['inventory'][args['parent']['event-key']];
 
         if(item['amount'] < args['parent']['event-key-consume']){
             return;
@@ -1959,7 +1959,7 @@ function webgl_event(args){
         }
     }
 
-    for(let stat in args['parent']['event-modify']){
+    for(const stat in args['parent']['event-modify']){
         webgl_stat_modify({
           'amount': args['parent']['event-modify'][stat]['amount'],
           'parent': args['target'],
@@ -1983,7 +1983,7 @@ function webgl_item_equip(args){
         return;
     }
 
-    let item = webgl_characters[args['character']]['inventory'][args['item']];
+    const item = webgl_characters[args['character']]['inventory'][args['item']];
 
     if(!item
       || item['equipped'] === args['equip']){
@@ -1992,8 +1992,8 @@ function webgl_item_equip(args){
 
     item['equipped'] = args['equip'];
 
-    let stats = item['stats'];
-    for(let stat in stats){
+    const stats = item['stats'];
+    for(const stat in stats){
         let dstat = stats[stat];
         if(!args['equip']){
             dstat *= -1;
@@ -2002,11 +2002,11 @@ function webgl_item_equip(args){
         webgl_characters[args['character']][stat] += dstat;
     }
 
-    for(let entity in item['entities']){
-        let entity_id = '_item-' + args['character'] + '-' + args['item'] + '-' + entity;
+    for(const entity in item['entities']){
+        const entity_id = '_item-' + args['character'] + '-' + args['item'] + '-' + entity;
 
         if(args['equip']){
-            let properties = {};
+            const properties = {};
             Object.assign(
               properties,
               item['entities'][entity]
@@ -2029,7 +2029,7 @@ function webgl_item_equip(args){
           ],
         });
 
-        for(let character_entity in webgl_characters[args['character']]['entities']){
+        for(const character_entity in webgl_characters[args['character']]['entities']){
             if(webgl_characters[args['character']]['entities'][character_entity]['id'] === entity_id){
                 webgl_characters[args['character']]['entities'].splice(
                   character_entity,
@@ -2055,7 +2055,7 @@ function webgl_item_reset(args){
       },
     });
 
-    let properties = {
+    const properties = {
       'amount': 0,
       'entities': args['entities'].slice(),
       'equipped': false,
@@ -2078,8 +2078,8 @@ function webgl_item_reset(args){
 
 // Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
 function webgl_item_trade(args){
-    let inventory_0 = webgl_characters[args['character-0']]['inventory'];
-    let inventory_1 = webgl_characters[args['character-1']]['inventory'];
+    const inventory_0 = webgl_characters[args['character-0']]['inventory'];
+    const inventory_1 = webgl_characters[args['character-1']]['inventory'];
 
     if(webgl_characters[args['character-0']] === void 0
       || webgl_characters[args['character-1']] === void 0
@@ -2167,11 +2167,11 @@ function webgl_particles_create(args){
     });
 
     for(let i = 0; i < args['count']; i++){
-        let position = webgl_get_translation({
+        const position = webgl_get_translation({
           'entity': args['parent'],
         });
 
-        let id = entity_create({
+        const id = entity_create({
           'properties': {
             'collide-range-horizontal': args['collide-range'],
             'collide-range-vertical': args['collide-range'],
@@ -2210,8 +2210,8 @@ function webgl_path_move(args){
         return;
     }
 
-    let path = webgl_paths[args['entity']['path-id']];
-    let point = core_handle_defaults({
+    const path = webgl_paths[args['entity']['path-id']];
+    const point = core_handle_defaults({
       'default': {
         'speed': 1,
         'translate-x': args['entity']['translate-x'],
@@ -2221,20 +2221,20 @@ function webgl_path_move(args){
       'var': path['points'][args['entity']['path-point']],
     });
 
-    let angle_xz = math_point_angle({
+    const angle_xz = math_point_angle({
       'x0': args['entity']['translate-x'],
       'x1': point['translate-x'],
       'y0': args['entity']['translate-z'],
       'y1': point['translate-z'],
     });
-    let angle_y = math_point_angle({
+    const angle_y = math_point_angle({
       'x0': args['entity']['translate-x'],
       'x1': point['translate-x'],
       'y0': args['entity']['translate-y'],
       'y1': point['translate-y'],
     });
 
-    let speed = args['entity']['speed'] * point['speed'];
+    const speed = args['entity']['speed'] * point['speed'];
 
     args['entity']['change']['translate-x'] = core_round({
       'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
@@ -2276,7 +2276,7 @@ function webgl_path_move(args){
 
         if(args['entity']['path-direction'] > 0){
             if(args['entity']['path-point'] >= path['points'].length - 1){
-                let end = args['entity']['path-end'] !== false
+                const end = args['entity']['path-end'] !== false
                   ? args['entity']['path-end']
                   : path['end'];
 
@@ -2303,7 +2303,7 @@ function webgl_path_move(args){
             }
 
         }else if(args['entity']['path-point'] <= 0){
-            let end = args['entity']['path-end'] !== false
+            const end = args['entity']['path-end'] !== false
               ? args['entity']['path-end']
               : path['end'];
 
@@ -2364,7 +2364,7 @@ function webgl_stat_modify(args){
     }
 
     if(args['stat'].indexOf('rotate-') === 0){
-        let rotate_args = {
+        const rotate_args = {
           'character': args['parent']['id'],
           'mouse': false,
         };
@@ -2395,7 +2395,7 @@ function webgl_stat_modify(args){
         if(args['parent']['health-current'] <= 0){
             args['parent']['health-current'] = 0;
 
-            for(let entity in entity_entities){
+            for(const entity in entity_entities){
                 if(entity_entities[entity]['attach-to'] === args['character']){
                    entity_entities[entity]['attach-to'] = false;
                 }

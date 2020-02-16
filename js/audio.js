@@ -2,12 +2,12 @@
 
 // Required args: audios
 function audio_create(args){
-    for(let audio in args['audios']){
+    for(const audio in args['audios']){
         audio_audios[audio] = {
           'playing': false,
         };
 
-        for(let property in args['audios'][audio]){
+        for(const property in args['audios'][audio]){
             audio_audios[audio][property] = core_handle_defaults({
               'default': audio_audios[audio],
               'var': args['audios'][audio][property],
@@ -58,18 +58,18 @@ function audio_node_create(args){
         audio_init();
     }
 
-    let source = audio_context['create' + args['properties']['label']](
+    const source = audio_context['create' + args['properties']['label']](
       args['properties']['arg0'],
       args['properties']['arg1'],
       args['properties']['arg2']
     );
 
-    for(let property in args['properties']){
+    for(const property in args['properties']){
         if(core_type({
             'type': 'object',
             'var': args['properties'][property],
           })){
-            for(let subproperty in args['properties'][property]){
+            for(const subproperty in args['properties'][property]){
                 source[property][subproperty] = args['properties'][property][subproperty];
             }
 
@@ -122,7 +122,7 @@ function audio_source_create(args){
     };
 
     // Create audio nodes.
-    let connections_length = audio_audios[args['id']]['connections'].length;
+    const connections_length = audio_audios[args['id']]['connections'].length;
     for(let i = 0; i < connections_length; i++){
         audio_node_create({
           'id': args['id'],
@@ -158,7 +158,7 @@ function audio_start(args){
       'id': args['id'],
     });
 
-    let startTime = audio_context.currentTime + audio_sources[args['id']]['start'];
+    const startTime = audio_context.currentTime + audio_sources[args['id']]['start'];
     audio_audios[args['id']]['playing'] = true;
     audio_sources[args['id']][audio_audios[args['id']]['connections'][0]['label']].start(startTime);
     audio_stop({
@@ -187,7 +187,7 @@ function audio_stop_all(args){
       },
     });
 
-    for(let id in audio_sources){
+    for(const id in audio_sources){
         audio_stop({
           'id': id,
           'when': args['when'],

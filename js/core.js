@@ -74,11 +74,11 @@ function core_digits_min(args){
       },
     });
 
-    let sign = args['number'] < 0
+    const sign = args['number'] < 0
       ? '-'
       : '';
     let number = Math.abs(args['number']);
-    let fraction = String(core_round({
+    const fraction = String(core_round({
       'number': number % 1,
     })).substring(1);
     number = String(Math.trunc(number)).padStart(
@@ -155,9 +155,9 @@ function core_events_bind(args){
     }
 
     if(args['elements'] !== false){
-        for(let element in args['elements']){
-            let domelement = document.getElementById(element);
-            for(let event in args['elements'][element]){
+        for(const element in args['elements']){
+            const domelement = document.getElementById(element);
+            for(const event in args['elements'][element]){
                 domelement[event] = args['elements'][element][event];
             }
         }
@@ -165,7 +165,7 @@ function core_events_bind(args){
 }
 
 function core_events_keyinfo(event){
-    let code = event.keyCode || event.which;
+    const code = event.keyCode || event.which;
     return {
       'code': code,
       'key': String.fromCharCode(code),
@@ -173,13 +173,13 @@ function core_events_keyinfo(event){
 }
 
 function core_events_todoloop(){
-    for(let key in core_keys){
+    for(const key in core_keys){
         if(core_keys[key]['state']
           && core_keys[key]['loop']){
             core_keys[key]['todo']();
         }
     }
-    for(let mousebind in core_mouse['todo']){
+    for(const mousebind in core_mouse['todo']){
         if(core_mouse['todo'][mousebind]['loop']){
             core_mouse['todo'][mousebind]['todo']();
         }
@@ -195,7 +195,7 @@ function core_file(args){
       },
     });
 
-    let filereader = new FileReader();
+    const filereader = new FileReader();
     filereader.onload = function(event){
         args['todo'](event);
     };
@@ -215,7 +215,7 @@ function core_float_compare(args){
 }
 
 function core_handle_beforeunload(event){
-    let result = core_handle_event({
+    const result = core_handle_event({
       'event': event,
       'key': 'beforeunload',
       'object': core_events,
@@ -233,7 +233,7 @@ function core_handle_beforeunload(event){
 }
 
 function core_handle_blur(event){
-    for(let key in core_keys){
+    for(const key in core_keys){
         core_keys[key]['state'] = false;
     }
     core_mouse['down-0'] = false;
@@ -244,7 +244,7 @@ function core_handle_blur(event){
 }
 
 function core_handle_contextmenu(event){
-    let result = core_handle_event({
+    const result = core_handle_event({
       'event': event,
       'key': 'contextmenu',
       'object': core_mouse['todo'],
@@ -272,8 +272,8 @@ function core_handle_defaults(args){
         return args['var'];
     }
 
-    let object = args['default'];
-    for(let property in args['var']){
+    const object = args['default'];
+    for(const property in args['var']){
         object[property] = core_handle_defaults({
           'var': args['var'][property],
         });
@@ -318,7 +318,7 @@ function core_handle_event(args){
 }
 
 function core_handle_gamepadconnected(event){
-    let gamepad = event.gamepad;
+    const gamepad = event.gamepad;
     core_gamepads[gamepad.index] = gamepad;
 }
 
@@ -334,7 +334,7 @@ function core_handle_keydown(event){
         return;
     }
 
-    let key = core_events_keyinfo(event);
+    const key = core_events_keyinfo(event);
 
     if(core_menu_open
       && core_menu_block_events
@@ -362,7 +362,7 @@ function core_handle_keydown(event){
 }
 
 function core_handle_keyup(event){
-    let key = core_events_keyinfo(event);
+    const key = core_events_keyinfo(event);
 
     if(core_handle_event({
         'event': event,
@@ -375,7 +375,7 @@ function core_handle_keyup(event){
 
     if(Reflect.has(core_keys, 'all')){
         let all = false;
-        for(let key in core_keys){
+        for(const key in core_keys){
             if(key !== 'all'
               && core_keys[key]['state']){
                 all = true;
@@ -447,7 +447,7 @@ function core_handle_mousewheel(event){
 }
 
 function core_handle_pointerlockchange(event){
-    let element = document.getElementById(core_mouse['pointerlock-id']);
+    const element = document.getElementById(core_mouse['pointerlock-id']);
     if(!element){
         return;
     }
@@ -470,7 +470,7 @@ function core_hex_to_rgb(args){
           + args['hex'][2] + args['hex'][2];
     }
 
-    let rgb = {
+    const rgb = {
       'blue': '0x' + args['hex'][4] + args['hex'][5] | 0,
       'green': '0x' + args['hex'][2] + args['hex'][3] | 0,
       'red': '0x' + args['hex'][0] + args['hex'][1] | 0,
@@ -491,8 +491,8 @@ function core_html(args){
       },
     });
 
-    let element = document.createElement(args['type']);
-    for(let property in args['properties']){
+    const element = document.createElement(args['type']);
+    for(const property in args['properties']){
         element[property] = core_handle_defaults({
           'var': args['properties'][property],
         });
@@ -533,7 +533,7 @@ function core_html_format(args){
 
 // Required args: id, properties
 function core_html_modify(args){
-    let element = document.getElementById(args['id']);
+    const element = document.getElementById(args['id']);
     if(!element){
         return;
     }
@@ -546,8 +546,8 @@ function core_html_modify(args){
 
 // Required args: ids
 function core_html_store(args){
-    for(let id in args['ids']){
-        let element = document.getElementById(args['ids'][id]);
+    for(const id in args['ids']){
+        const element = document.getElementById(args['ids'][id]);
         if(!element){
             continue;
         }
@@ -565,7 +565,7 @@ function core_image(args){
       },
     });
 
-    let image = new Image();
+    const image = new Image();
     image.onload = args['todo'];
     image.src = args['src'];
     core_images[args['id']] = image;
@@ -684,8 +684,8 @@ function core_init(){
       'elements': {
         'settings-reset': {
           'onclick': function(){
-              let keys = [];
-              for(let key in core_storage_info){
+              const keys = [];
+              for(const key in core_storage_info){
                   if(core_storage_info[key]['prefix'] === 'core-'){
                       keys.push(key);
                   }
@@ -764,7 +764,7 @@ function core_interval_pause(args){
 }
 
 function core_interval_pause_all(){
-    for(let interval in core_intervals){
+    for(const interval in core_intervals){
         if(!core_intervals[interval]['paused']){
             core_interval_pause({
               'id': interval,
@@ -790,7 +790,7 @@ function core_interval_remove(args){
 }
 
 function core_interval_remove_all(){
-    for(let interval in core_intervals){
+    for(const interval in core_intervals){
         core_interval_remove({
           'id': interval,
         });
@@ -833,7 +833,7 @@ function core_interval_resume(args){
 }
 
 function core_interval_resume_all(){
-    for(let interval in core_intervals){
+    for(const interval in core_intervals){
         core_interval_resume({
           'id': interval,
         });
@@ -841,7 +841,7 @@ function core_interval_resume_all(){
 }
 
 function core_keys_rebind(){
-    let keybinds = {};
+    const keybinds = {};
     keybinds[core_storage_data['crouch']] = {};
     keybinds[core_storage_data['jump']] = {};
     keybinds[core_storage_data['move-←']] = {};
@@ -879,7 +879,7 @@ function core_keys_updatebinds(args){
         core_keys = {};
     }
 
-    for(let keybind in args['keybinds']){
+    for(const keybind in args['keybinds']){
         let key = keybind;
 
         if(keybind !== 'all'){
@@ -919,7 +919,7 @@ function core_mouse_updatebinds(args){
         core_mouse['todo'] = {};
     }
 
-    for(let mousebind in args['mousebinds']){
+    for(const mousebind in args['mousebinds']){
         core_mouse['todo'][mousebind] = {
           'loop': args['mousebinds'][mousebind]['loop'] || false,
           'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
@@ -979,11 +979,11 @@ function core_random_crypto(args){
 }
 
 function core_random_hex(){
-    let color = core_random_rgb();
+    const color = core_random_rgb();
 
-    let blue = '0' + color['blue'].toString(16);
-    let green = '0' + color['green'].toString(16);
-    let red = '0' + color['red'].toString(16);
+    const blue = '0' + color['blue'].toString(16);
+    const green = '0' + color['green'].toString(16);
+    const red = '0' + color['red'].toString(16);
 
     return red.slice(-2) + green.slice(-2) + blue.slice(-2);
 }
@@ -1004,7 +1004,7 @@ function core_random_integer(args){
 
 // Required args: object
 function core_random_key(args){
-    let keys = Object.keys(args['object']);
+    const keys = Object.keys(args['object']);
 
     return keys[core_random_integer({
       'max': keys.length,
@@ -1056,7 +1056,7 @@ function core_random_string(args){
 
 // Required args: patterns, string
 function core_replace_multiple(args){
-    for(let pattern in args['patterns']){
+    for(const pattern in args['patterns']){
         args['string'] = args['string'].replace(
           new RegExp(
             pattern,
@@ -1116,8 +1116,8 @@ function core_repo_init(args){
         });
         args['events']['settings-reset-repo'] = {
           'onclick': function(){
-              let keys = [];
-              for(let key in core_storage_info){
+              const keys = [];
+              for(const key in core_storage_info){
                   if(core_storage_info[key]['prefix'] === core_repo_title + '-'){
                       keys.push(key);
                   }
@@ -1150,7 +1150,7 @@ function core_repo_init(args){
     document.getElementById('repo-ui').innerHTML = args['ui'];
 
     let have_default = false;
-    for(let tab in args['tabs']){
+    for(const tab in args['tabs']){
         core_tab_create({
           'content': args['tabs'][tab]['content'],
           'group': args['tabs'][tab]['group'],
@@ -1185,7 +1185,7 @@ function core_repo_init(args){
       'mousebinds': args['mousebinds'],
     });
 
-    for(let image in args['images']){
+    for(const image in args['images']){
         core_image({
           'id': image,
           'src': args['images'][image],
@@ -1215,7 +1215,7 @@ function core_requestpointerlock(args){
       },
     });
 
-    let element = document.getElementById(args['id']);
+    const element = document.getElementById(args['id']);
     if(!element){
         return;
     }
@@ -1234,7 +1234,7 @@ function core_round(args){
       },
     });
 
-    let eIndex = String(args['number']).indexOf('e');
+    const eIndex = String(args['number']).indexOf('e');
     let eString = '';
     if(eIndex >= 0){
         eString = String(args['number']).slice(eIndex);
@@ -1243,7 +1243,7 @@ function core_round(args){
           eIndex
         );
 
-        let power = Number(eString.slice(2));
+        const power = Number(eString.slice(2));
         if(power === args['decimals']){
             eString = 'e-' + (power + 1);
         }
@@ -1275,7 +1275,7 @@ function core_sort_custom(args){
       },
     });
 
-    let array_clone = [...args['array']];
+    const array_clone = [...args['array']];
 
     array_clone.sort(args['todo']);
     if(args['reverse']){
@@ -1344,7 +1344,7 @@ function core_storage_add(args){
       },
     });
 
-    for(let key in args['storage']){
+    for(const key in args['storage']){
         core_storage_info[key] = {
           'default': args['storage'][key],
           'prefix': args['prefix'],
@@ -1392,7 +1392,7 @@ function core_storage_reset(args){
         keys = Object.keys(core_storage_data);
     }
 
-    for(let keyid in keys){
+    for(const keyid in keys){
         const key = keys[keyid];
 
         core_storage_data[key] = core_storage_info[key]['default'];
@@ -1416,16 +1416,16 @@ function core_storage_save(args){
         keys = Object.keys(core_storage_data);
     }
 
-    for(let keyid in keys){
+    for(const keyid in keys){
         const key = keys[keyid];
 
-        let element = document.getElementById(key);
+        const element = document.getElementById(key);
         core_storage_data[key] = element[core_storage_element_property({
           'element': element,
           'key': key,
         })];
 
-        let data = core_type_convert({
+        const data = core_type_convert({
           'template': core_storage_info[key]['default'],
           'value': core_storage_data[key],
         });
@@ -1461,10 +1461,10 @@ function core_storage_update(args){
         keys = Object.keys(core_storage_data);
     }
 
-    for(let keyid in keys){
+    for(const keyid in keys){
         const key = keys[keyid];
 
-        let element = document.getElementById(key);
+        const element = document.getElementById(key);
         element[core_storage_element_property({
           'element': element,
           'key': key,
@@ -1505,14 +1505,14 @@ function core_tab_create(args){
 
 // Required args: id
 function core_tab_switch(args){
-    let info = args['id'].split('_');
+    const info = args['id'].split('_');
 
-    let element = document.getElementById('tabcontent-' + info[2]);
+    const element = document.getElementById('tabcontent-' + info[2]);
     if(!element){
         return;
     }
 
-    for(let tab in core_tabs){
+    for(const tab in core_tabs){
         if(core_tabs[tab]['group'] === info[1]
           && tab !== info[2]){
             document.getElementById('tabcontent-' + tab).style.display = 'none';
@@ -1581,21 +1581,21 @@ function core_ui_update(args){
       },
     });
 
-    for(let id in args['ids']){
+    for(const id in args['ids']){
         if(core_ui_values[id] === args['ids'][id]){
             continue;
         }
 
         core_ui_values[id] = args['ids'][id];
 
-        let element = document.getElementById(id);
+        const element = document.getElementById(id);
         element[element.tagName !== 'INPUT'
           ? 'innerHTML'
           : 'value'] = args['ids'][id];
 
-        let elements = document.getElementsByClassName(id);
+        const elements = document.getElementsByClassName(id);
         for(let i = 0; i < elements.length; i++){
-             let item = elements.item(i);
+             const item = elements.item(i);
              item[item.tagName !== 'INPUT'
                ? 'innerHTML'
                : 'value'] = args['ids'][id];
