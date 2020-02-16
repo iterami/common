@@ -202,6 +202,18 @@ function core_file(args){
     filereader[args['type']](args['file']);
 }
 
+// Required args: a, b
+function core_float_compare(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'precision': Math.EPSILON,
+      },
+    });
+
+    return Math.abs(args['a'] - args['b']) <= args['precision'];
+}
+
 function core_handle_beforeunload(event){
     let result = core_handle_event({
       'event': event,
