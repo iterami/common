@@ -14,7 +14,7 @@ window.uris = {
   'wood.png': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAnElEQVQ4T52SwQ3AIAwDyxR82IL9B2IKqqAGucYBtX2hhB6OnVRr7a21K+d82cdnq1nP6uqcHBBdPIGPAASzEutNgL+kxuCeQyUAZ3UY/sD9RQGaOFx7jFUevRScZo2S+mwiKxqAyDjOHiN1xamU0j0ezvwEGB4wINo4VZ8m7kaINtHri4kIc+d3uyH3QEWK24iPbBfptwIVV2TuDVc2ABZubQwmAAAAAElFTkSuQmCC',
 };
 
-for(let uri in uris){
+for(const uri in uris){
     core_image({
       'id': uri,
       'src': uris[uri],

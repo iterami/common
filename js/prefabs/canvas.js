@@ -80,8 +80,8 @@ function prefabs_canvas_tree_2d(args){
       },
     });
 
-    let half_base = args['width-base'] / 2;
-    let half_leaf = args['width-leaf'] / 2;
+    const half_base = args['width-base'] / 2;
+    const half_leaf = args['width-leaf'] / 2;
 
     scenery.push({
       'color': args['color-base'],

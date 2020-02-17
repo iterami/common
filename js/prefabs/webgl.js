@@ -24,12 +24,12 @@ function prefabs_webgl_cuboid(args){
       },
     });
 
-    let half_size_x = args['size-x'] / 2;
-    let half_size_y = args['size-y'] / 2;
-    let half_size_z = args['size-z'] / 2;
-    let vertices_size_x = Math.abs(half_size_x);
-    let vertices_size_y = Math.abs(half_size_y);
-    let vertices_size_z = Math.abs(half_size_z);
+    const half_size_x = args['size-x'] / 2;
+    const half_size_y = args['size-y'] / 2;
+    const half_size_z = args['size-z'] / 2;
+    const vertices_size_x = Math.abs(half_size_x);
+    const vertices_size_y = Math.abs(half_size_y);
+    const vertices_size_z = Math.abs(half_size_z);
 
     if(args['random-colors']){
         args['back']['vertex-colors'] = webgl_vertexcolorarray({
@@ -54,7 +54,7 @@ function prefabs_webgl_cuboid(args){
 
     // Top.
     if(args['top']['exclude'] !== true){
-        let properties = {
+        const properties = {
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'] + half_size_y,
           'attach-offset-z': args['translate-z'],
@@ -86,7 +86,7 @@ function prefabs_webgl_cuboid(args){
 
     // Bottom.
     if(args['bottom']['exclude'] !== true){
-        let properties = {
+        const properties = {
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'] - half_size_y,
           'attach-offset-z': args['translate-z'],
@@ -119,7 +119,7 @@ function prefabs_webgl_cuboid(args){
 
     // Front.
     if(args['front']['exclude'] !== true){
-        let properties = {
+        const properties = {
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'],
           'attach-offset-z': args['translate-z'] + half_size_z,
@@ -152,7 +152,7 @@ function prefabs_webgl_cuboid(args){
 
     // Back.
     if(args['back']['exclude'] !== true){
-        let properties = {
+        const properties = {
           'attach-offset-x': args['translate-x'],
           'attach-offset-y': args['translate-y'],
           'attach-offset-z': args['translate-z'] - half_size_z,
@@ -185,7 +185,7 @@ function prefabs_webgl_cuboid(args){
 
     // Left.
     if(args['left']['exclude'] !== true){
-        let properties = {
+        const properties = {
           'attach-offset-x': args['translate-x'] - half_size_x,
           'attach-offset-y': args['translate-y'],
           'attach-offset-z': args['translate-z'],
@@ -218,7 +218,7 @@ function prefabs_webgl_cuboid(args){
 
     // Right.
     if(args['right']['exclude'] !== true){
-        let properties = {
+        const properties = {
           'attach-offset-x': args['translate-x'] + half_size_x,
           'attach-offset-y': args['translate-y'],
           'attach-offset-z': args['translate-z'],
@@ -361,17 +361,17 @@ function prefabs_webgl_ellipsoid(args){
       },
     });
 
-    let latitude_angles = math_degrees_to_radians({
+    const latitude_angles = math_degrees_to_radians({
       'degrees': 360 / args['slices-latitude'],
     });
-    let longitude_angles = math_degrees_to_radians({
+    const longitude_angles = math_degrees_to_radians({
       'degrees': 180 / args['slices-longitude'],
     });
-    let longitude_start = math_degrees_to_radians({
+    const longitude_start = math_degrees_to_radians({
       'degrees': -90,
     });
 
-    let properties = {
+    const properties = {
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'collision': false,
@@ -382,9 +382,9 @@ function prefabs_webgl_ellipsoid(args){
     };
     for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
         if(longitude === args['slices-longitude'] / 2){
-            let temp_blue = args['color0'][2];
-            let temp_green = args['color0'][1];
-            let temp_red = args['color0'][0];
+            const temp_blue = args['color0'][2];
+            const temp_green = args['color0'][1];
+            const temp_red = args['color0'][0];
 
             args['color0'][0] = args['color1'][0];
             args['color0'][1] = args['color1'][1];
@@ -407,8 +407,8 @@ function prefabs_webgl_ellipsoid(args){
         properties['vertex-colors'] = [];
         properties['vertices'] = [];
 
-        let longitude_bottom = longitude_start + longitude * longitude_angles;
-        let longitude_top = longitude_start + (longitude + 1) * longitude_angles;
+        const longitude_bottom = longitude_start + longitude * longitude_angles;
+        const longitude_top = longitude_start + (longitude + 1) * longitude_angles;
 
         if(pole === 0){
             properties['draw-type'] = 'TRIANGLE_STRIP';
@@ -432,15 +432,15 @@ function prefabs_webgl_ellipsoid(args){
         }
 
         for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
-            let rotation = latitude * latitude_angles;
+            const rotation = latitude * latitude_angles;
 
-            let xbottom = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_bottom);
-            let ybottom = args['radius-y'] * Math.sin(longitude_bottom);
-            let zbottom = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_bottom);
+            const xbottom = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_bottom);
+            const ybottom = args['radius-y'] * Math.sin(longitude_bottom);
+            const zbottom = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_bottom);
 
-            let xtop = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_top);
-            let ytop = args['radius-y'] * Math.sin(longitude_top);
-            let ztop = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_top);
+            const xtop = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_top);
+            const ytop = args['radius-y'] * Math.sin(longitude_top);
+            const ztop = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_top);
 
             if(pole === 1){
                 properties['vertex-colors'].push(
@@ -511,7 +511,7 @@ function prefabs_webgl_lines_tree(args){
       },
     });
 
-    let properties = {
+    const properties = {
       'attach-offset-x': args['translate-x'],
       'attach-offset-y': args['translate-y'],
       'attach-offset-z': args['translate-z'],
@@ -522,11 +522,11 @@ function prefabs_webgl_lines_tree(args){
     };
 
     // Create trunk section.
-    let trunk_count = core_random_integer({
+    const trunk_count = core_random_integer({
       'max': args['trunk-count-max'] - args['trunk-count-min'] + 1,
     }) + args['trunk-count-min'];
     let trunk_width = args['trunk-width-max'] / 2;
-    let trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
+    const trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
     for(let trunk = 0; trunk < trunk_count; trunk++){
         properties['id'] = args['prefix'] + '-trunk-' + trunk;
         properties['billboard'] = [
@@ -550,11 +550,11 @@ function prefabs_webgl_lines_tree(args){
         trunk_width -= trunk_width_decrease;
 
         // Add branches.
-        let branch_count = core_random_integer({
+        const branch_count = core_random_integer({
           'max': args['trunk-branch-max'] - args['trunk-branch-min'] + 1,
         }) + args['trunk-branch-min'];
-        let branch_length = args['trunk-length'] / 2;
-        let branch_width = trunk_width / 2;
+        const branch_length = args['trunk-length'] / 2;
+        const branch_width = trunk_width / 2;
         for(let branch = 0; branch < branch_count; branch++){
             properties['id'] = args['prefix'] + '-trunk-' + trunk + '-branch-' + branch;
             properties['billboard'] = false;
@@ -599,7 +599,7 @@ function prefabs_webgl_tiles(args){
       },
     });
 
-    let tile_count = core_random_integer({
+    const tile_count = core_random_integer({
       'max': args['tiles-max'] - args['tiles-min'] + 1,
     }) + args['tiles-min'];
     let tile_offset_x = args['translate-x'];
@@ -608,10 +608,10 @@ function prefabs_webgl_tiles(args){
     let tile_rotate_x = args['rotate-x'];
     let tile_rotate_y = args['rotate-y'];
     let tile_rotate_z = args['rotate-z'];
-    let tiles = args['tiles'].length;
+    const tiles = args['tiles'].length;
 
     for(let tile = 0; tile < tile_count; tile++){
-        let character_id = args['prefix'] + '-tile-' + tile;
+        const character_id = args['prefix'] + '-tile-' + tile;
         webgl_character_init({
           'collides': false,
           'id': character_id,
@@ -622,13 +622,13 @@ function prefabs_webgl_tiles(args){
           'translate-y': tile_offset_y,
           'translate-z': tile_offset_z,
         });
-        let selected = core_random_integer({
+        const selected = core_random_integer({
           'max': tiles,
         });
 
-        let entities = args['tiles'][selected]['entities'];
-        for(let entity in entities){
-            let properties = {
+        const entities = args['tiles'][selected]['entities'];
+        for(const entity in entities){
+            const properties = {
               'attach-to': character_id,
               'attach-type': 'webgl_characters',
               'id': args['prefix'] + '-' + tile + '-' + entity,
