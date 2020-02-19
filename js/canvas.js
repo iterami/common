@@ -170,7 +170,7 @@ function canvas_init(args){
     canvas_buffer = core_elements['buffer'].getContext('2d');
     canvas_canvas = core_elements['canvas'].getContext('2d');
 
-    window.onresize = canvas_resize;
+    globalThis.onresize = canvas_resize;
     canvas_resize();
 
     entity_set({
@@ -232,12 +232,12 @@ function canvas_logicloop_handle_entity(entity){
 }
 
 function canvas_resize(){
-    canvas_properties['height'] = window.innerHeight;
+    canvas_properties['height'] = globalThis.innerHeight;
     canvas_properties['height-half'] = canvas_properties['height'] / 2;
     core_elements['buffer'].height = canvas_properties['height'];
     core_elements['canvas'].height = canvas_properties['height'];
 
-    canvas_properties['width'] = window.innerWidth;
+    canvas_properties['width'] = globalThis.innerWidth;
     canvas_properties['width-half'] = canvas_properties['width'] / 2;
     core_elements['buffer'].width = canvas_properties['width'];
     core_elements['canvas'].width = canvas_properties['width'];
@@ -289,6 +289,6 @@ function canvas_setproperties(args){
     );
 }
 
-window.canvas_buffer = 0;
-window.canvas_canvas = 0;
-window.canvas_properties = {};
+globalThis.canvas_buffer = 0;
+globalThis.canvas_canvas = 0;
+globalThis.canvas_properties = {};

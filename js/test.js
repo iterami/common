@@ -10,7 +10,7 @@ function test_function(args){
     });
 
     let test = false;
-    let returned = window[args['function']](args['args']);
+    let returned = globalThis[args['function']](args['args']);
 
     if(core_type({
         'type': 'function',

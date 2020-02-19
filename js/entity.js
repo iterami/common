@@ -301,10 +301,10 @@ function entity_set(args){
     });
 }
 
-window.entity_entities = {};
-window.entity_groups = {
+globalThis.entity_entities = {};
+globalThis.entity_groups = {
   '_length': {},
 };
-window.entity_id_count = 0;
-window.entity_info = {};
-window.entity_types_default = [];
+globalThis.entity_id_count = 0;
+globalThis.entity_info = {};
+globalThis.entity_types_default = [];

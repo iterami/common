@@ -34,7 +34,7 @@ function webgl_buffer_set_type(args){
     );
     webgl_buffer.bufferData(
       webgl_buffer.ARRAY_BUFFER,
-      new window[args['type']](args['data']),
+      new globalThis[args['type']](args['data']),
       webgl_buffer.STATIC_DRAW
     );
 
@@ -559,7 +559,7 @@ function webgl_get_translation(args){
         };
     }
 
-    const target = window[args['entity']['attach-type']][args['entity']['attach-to']];
+    const target = globalThis[args['entity']['attach-type']][args['entity']['attach-to']];
     return {
       'x': target['translate-x'] + args['entity']['attach-offset-x'],
       'y': target['translate-y'] + args['entity']['attach-offset-y'],
@@ -699,7 +699,7 @@ function webgl_init(args){
     math_matrices['camera'] = math_matrix_create();
     math_matrices['perspective'] = math_matrix_create();
 
-    window.onresize = webgl_resize;
+    globalThis.onresize = webgl_resize;
     webgl_resize();
 
     webgl_clearcolor_set({
@@ -1016,7 +1016,7 @@ function webgl_level_init(args){
       'entities': webgl_character_homebase['entities'],
     });
     for(const prefab in args['json']['prefabs']){
-        window[args['json']['prefabs'][prefab]['type']](args['json']['prefabs'][prefab]['properties']);
+        globalThis[args['json']['prefabs'][prefab]['type']](args['json']['prefabs'][prefab]['properties']);
     }
 
     webgl_character_home_entityupdate();
@@ -1576,7 +1576,7 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     if(entity_entities[entity]['attach-to'] !== false){
-        const target = window[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
+        const target = globalThis[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
 
         let x = target['translate-x'];
         let y = target['translate-y'];
@@ -1668,7 +1668,7 @@ function webgl_logicloop_handle_entity(entity){
     });
     if(entity_entities[entity]['attach-to'] !== false){
         if(entity_groups['skybox'][entity] !== true){
-            const target = window[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
+            const target = globalThis[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
             math_matrix_rotate({
               'dimensions': [
                 math_degrees_to_radians({
@@ -1766,7 +1766,7 @@ function webgl_pick_color(args){
 
     webgl_buffer.readPixels(
       args['x'],
-      window.innerHeight - args['y'],
+      globalThis.innerHeight - args['y'],
       1,
       1,
       webgl_buffer.RGBA,
@@ -1793,12 +1793,12 @@ function webgl_program_create(args){
 }
 
 function webgl_resize(){
-    webgl_properties['canvas']['height'] = window.innerHeight;
+    webgl_properties['canvas']['height'] = globalThis.innerHeight;
     webgl_properties['canvas']['height-half'] = webgl_properties['canvas']['height'] / 2;
     core_elements['buffer'].height = webgl_properties['canvas']['height'];
     core_elements['canvas'].height = webgl_properties['canvas']['height'];
 
-    webgl_properties['canvas']['width'] = window.innerWidth;
+    webgl_properties['canvas']['width'] = globalThis.innerWidth;
     webgl_properties['canvas']['width-half'] = webgl_properties['canvas']['width'] / 2;
     core_elements['buffer'].width = webgl_properties['canvas']['width'];
     core_elements['canvas'].width = webgl_properties['canvas']['width'];
@@ -1833,7 +1833,7 @@ function webgl_scissor(args){
     webgl_buffer.enable(webgl_buffer.SCISSOR_TEST);
     webgl_buffer.scissor(
       args['x'],
-      window.innerHeight - args['y'],
+      globalThis.innerHeight - args['y'],
       args['width'],
       args['height']
     );
@@ -2066,11 +2066,11 @@ function webgl_vertexcolorarray(args){
     return color;
 }
 
-window.webgl_buffer = 0;
-window.webgl_canvas = 0;
-window.webgl_diagonal = 0;
-window.webgl_extensions = {};
-window.webgl_levelcache = {};
-window.webgl_properties = {};
-window.webgl_shaders = false;
-window.webgl_text = {};
+globalThis.webgl_buffer = 0;
+globalThis.webgl_canvas = 0;
+globalThis.webgl_diagonal = 0;
+globalThis.webgl_extensions = {};
+globalThis.webgl_levelcache = {};
+globalThis.webgl_properties = {};
+globalThis.webgl_shaders = false;
+globalThis.webgl_text = {};

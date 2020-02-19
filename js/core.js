@@ -12,7 +12,7 @@ function core_ajax(args){
       },
     });
 
-    window.fetch(
+    globalThis.fetch(
       args['url'],
       {
         'method': args['method'],
@@ -61,7 +61,7 @@ function core_call(args){
     if(core_type({
         'var': args['todo'],
       })){
-        window[args['todo']](args['args']);
+        globalThis[args['todo']](args['args']);
     }
 }
 
@@ -666,20 +666,20 @@ function core_init(){
       'y': 0,
     };
     document.onpointerlockchange = core_handle_pointerlockchange;
-    window.onbeforeunload = core_handle_beforeunload;
-    window.onblur = core_handle_blur;
-    window.oncontextmenu = core_handle_contextmenu;
-    window.ongamepadconnected = core_handle_gamepadconnected;
-    window.ongamepaddisconnected = core_handle_gamepaddisconnected;
-    window.onkeydown = core_handle_keydown;
-    window.onkeyup = core_handle_keyup;
-    window.onmousedown = core_handle_mousedown;
-    window.onmousemove = core_handle_mousemove;
-    window.onmouseup = core_handle_mouseup;
-    window.ontouchend = core_handle_mouseup;
-    window.ontouchmove = core_handle_mousemove;
-    window.ontouchstart = core_handle_mousedown;
-    window.onwheel = core_handle_mousewheel;
+    globalThis.onbeforeunload = core_handle_beforeunload;
+    globalThis.onblur = core_handle_blur;
+    globalThis.oncontextmenu = core_handle_contextmenu;
+    globalThis.ongamepadconnected = core_handle_gamepadconnected;
+    globalThis.ongamepaddisconnected = core_handle_gamepaddisconnected;
+    globalThis.onkeydown = core_handle_keydown;
+    globalThis.onkeyup = core_handle_keyup;
+    globalThis.onmousedown = core_handle_mousedown;
+    globalThis.onmousemove = core_handle_mousemove;
+    globalThis.onmouseup = core_handle_mouseup;
+    globalThis.ontouchend = core_handle_mouseup;
+    globalThis.ontouchmove = core_handle_mousemove;
+    globalThis.ontouchstart = core_handle_mousedown;
+    globalThis.onwheel = core_handle_mousewheel;
     core_events_bind({
       'elements': {
         'settings-reset': {
@@ -710,7 +710,7 @@ function core_init(){
 
 // Required args: id
 function core_interval_animationFrame(args){
-    core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
+    core_intervals[args['id']]['var'] = globalThis.requestAnimationFrame(core_intervals[args['id']]['todo']);
 }
 
 // Required args: id, todo
@@ -756,7 +756,7 @@ function core_interval_pause(args){
         return;
     }
 
-    window[core_intervals[args['id']]['animationFrame']
+    globalThis[core_intervals[args['id']]['animationFrame']
       ? 'cancelAnimationFrame'
       : core_intervals[args['id']]['clear']](core_intervals[args['id']]['var']);
 
@@ -807,14 +807,14 @@ function core_interval_resume(args){
     core_intervals[args['id']]['paused'] = false;
 
     if(core_intervals[args['id']]['animationFrame']){
-        core_intervals[args['id']]['var'] = window.requestAnimationFrame(core_intervals[args['id']]['todo']);
+        core_intervals[args['id']]['var'] = globalThis.requestAnimationFrame(core_intervals[args['id']]['todo']);
 
     }else if(core_intervals[args['id']]['sync']){
         core_intervals[args['id']]['todo']();
 
-        window.setTimeout(
+        globalThis.setTimeout(
           function(){
-              core_intervals[args['id']]['var'] = window[core_intervals[args['id']]['set']](
+              core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
                 core_intervals[args['id']]['todo'],
                 core_intervals[args['id']]['interval']
               );
@@ -825,7 +825,7 @@ function core_interval_resume(args){
         );
 
     }else{
-        core_intervals[args['id']]['var'] = window[core_intervals[args['id']]['set']](
+        core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
           core_intervals[args['id']]['todo'],
           core_intervals[args['id']]['interval']
         );
@@ -971,9 +971,9 @@ function core_random_crypto(args){
       },
     });
 
-    const array = new window[args['type']](args['length']);
+    const array = new globalThis[args['type']](args['length']);
 
-    window.crypto.getRandomValues(array);
+    globalThis.crypto.getRandomValues(array);
 
     return array;
 }
@@ -1095,7 +1095,7 @@ function core_repo_init(args){
     });
 
     Object.assign(
-      window,
+      globalThis,
       args['globals']
     );
 
@@ -1349,7 +1349,7 @@ function core_storage_add(args){
           'default': args['storage'][key],
           'prefix': args['prefix'],
         };
-        core_storage_data[key] = window.localStorage.getItem(args['prefix'] + key);
+        core_storage_data[key] = globalThis.localStorage.getItem(args['prefix'] + key);
 
         if(core_storage_data[key] === null){
             core_storage_data[key] = core_storage_info[key]['default'];
@@ -1383,7 +1383,7 @@ function core_storage_reset(args){
       },
     });
 
-    if(!window.confirm('Reset ' + args['label'] + ' settings?')){
+    if(!globalThis.confirm('Reset ' + args['label'] + ' settings?')){
         return false;
     }
 
@@ -1396,7 +1396,7 @@ function core_storage_reset(args){
         const key = keys[keyid];
 
         core_storage_data[key] = core_storage_info[key]['default'];
-        window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
+        globalThis.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
     }
 
     core_storage_update();
@@ -1435,13 +1435,13 @@ function core_storage_save(args){
           && data !== NaN
           && String(data).length > 0
           && data !== core_storage_info[key]['default']){
-            window.localStorage.setItem(
+            globalThis.localStorage.setItem(
               core_storage_info[key]['prefix'] + key,
               data
             );
 
         }else{
-            window.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
+            globalThis.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
         }
     }
 
@@ -1535,7 +1535,7 @@ function core_type(args){
 
     if(args['type'] === 'function'){
         return typeof args['var'] === 'function'
-          || typeof window[args['var']] === 'function';
+          || typeof globalThis[args['var']] === 'function';
 
     }else if(args['type'] === 'array'){
         return args['var'] instanceof Array;
@@ -1619,22 +1619,22 @@ function core_uri(args){
     );
 }
 
-window.core_elements = {};
-window.core_events = {};
-window.core_gamepads = {};
-window.core_images = {};
-window.core_intervals = {};
-window.core_key_rebinds = {};
-window.core_keys = {};
-window.core_menu_block_events = true;
-window.core_menu_open = false;
-window.core_mode = 0;
-window.core_mouse = {};
-window.core_repo_title = '';
-window.core_reset_todo = false;
-window.core_storage_data = {};
-window.core_storage_info = {};
-window.core_tabs = {};
-window.core_ui_values = {};
+globalThis.core_elements = {};
+globalThis.core_events = {};
+globalThis.core_gamepads = {};
+globalThis.core_images = {};
+globalThis.core_intervals = {};
+globalThis.core_key_rebinds = {};
+globalThis.core_keys = {};
+globalThis.core_menu_block_events = true;
+globalThis.core_menu_open = false;
+globalThis.core_mode = 0;
+globalThis.core_mouse = {};
+globalThis.core_repo_title = '';
+globalThis.core_reset_todo = false;
+globalThis.core_storage_data = {};
+globalThis.core_storage_info = {};
+globalThis.core_tabs = {};
+globalThis.core_ui_values = {};
 
-window.onload = core_init;
+globalThis.onload = core_init;

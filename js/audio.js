@@ -40,7 +40,7 @@ function audio_create(args){
 }
 
 function audio_init(){
-    audio_context = new window.AudioContext();
+    audio_context = new globalThis.AudioContext();
 }
 
 function audio_node_create(args){
@@ -96,7 +96,7 @@ function audio_onended(args){
             });
 
         }else{
-            window.setTimeout(
+            globalThis.setTimeout(
               'audio_start({id:"' + args['id'] + '"});',
               audio_audios[args['id']]['duration'] * audio_audios[args['id']]['timeout']
             );
@@ -195,6 +195,6 @@ function audio_stop_all(args){
     }
 }
 
-window.audio_audios = {};
-window.audio_context = false;
-window.audio_sources = {};
+globalThis.audio_audios = {};
+globalThis.audio_context = false;
+globalThis.audio_sources = {};

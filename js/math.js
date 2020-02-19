@@ -498,5 +498,5 @@ function math_radians_to_degrees(args){
     });
 }
 
-window.math_matrices = {};
-window.math_tau = 6.283185307179586;
+globalThis.math_matrices = {};
+globalThis.math_tau = 6.283185307179586;
