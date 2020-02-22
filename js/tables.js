@@ -93,6 +93,6 @@ function tables_sort(element, column, direction, type){
     table.firstElementChild.innerHTML = rows[0].outerHTML + sorted_html;
 }
 
-let tables_column_main = 0;
+globalThis.tables_column_main = 0;
 
 tables_init();
