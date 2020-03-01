@@ -812,11 +812,13 @@ function core_interval_resume(args){
     }else if(core_intervals[args['id']]['sync']){
         core_intervals[args['id']]['todo']();
 
-        globalThis.setTimeout(
+        core_intervals[args['id']]['var'] = globalThis.setTimeout(
           function(){
               if(core_intervals[args['id']]['paused']){
                   return;
               }
+
+              globalThis.clearTimeout(core_intervals[args['id']]['var']);
 
               core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
                 core_intervals[args['id']]['todo'],
