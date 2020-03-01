@@ -814,6 +814,10 @@ function core_interval_resume(args){
 
         globalThis.setTimeout(
           function(){
+              if(core_intervals[args['id']]['paused']){
+                  return;
+              }
+
               core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
                 core_intervals[args['id']]['todo'],
                 core_intervals[args['id']]['interval']
