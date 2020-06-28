@@ -1,5 +1,5 @@
 iterami/common
 --------------
 
-* Contributing: https://iterami.com/Docs.htm/standards/contributing.htm
-* Docs: https://iterami.com/Docs.htm/index.htm
+* Contributing: https://iterami.github.io/Docs.htm/standards/contributing.htm
+* Docs: https://iterami.github.io/Docs.htm/index.htm
