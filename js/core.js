@@ -196,7 +196,7 @@ function core_file(args){
     });
 
     const filereader = new FileReader();
-    filereader.onload = function(event){
+    filereader.onloadend = function(event){
         args['todo'](event);
     };
     filereader[args['type']](args['file']);
