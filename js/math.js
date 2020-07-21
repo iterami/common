@@ -483,6 +483,59 @@ function math_point_angle(args){
     });
 }
 
+function math_quaternion_from_euler(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    const x_cosine = Math.cos(x / 2);
+    const x_sine = Math.sin(x / 2);
+    const y_cosine = Math.cos(y / 2);
+    const y_sine = Math.sin(y / 2);
+    const z_cosine = Math.cos(z / 2);
+    const z_sine = Math.sin(z / 2);
+
+    return {
+      'w': x_cosine * y_cosine * z_cosine + x_sine * y_sine * z_sine,
+      'x': x_sine * y_cosine * z_cosine - x_cosine * y_sine * z_sine,
+      'y': x_cosine * y_sine * z_cosine + x_sine * y_cosine * z_sine,
+      'z': x_cosine * y_cosine * z_sine + x_sine * y_sine * z_cosine,
+    };
+}
+
+function math_quaternion_to_euler(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'w': 0,
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    const y_sine = (args['w'] * args['y'] - args['z'] * args['x']) * 2;
+
+    return {
+      'x': Math.atan2(
+        (args['w'] * args['x'] + args['y'] * args['z']) * 2,
+        1 - (args['x'] * args['x'] + args['y'] * args['y']) * 2
+      ),
+      'y': y_sine >= 1
+        ? (Math.PI / 2) * Math.sign(y_sine)
+        : Math.asin(y_sine),
+      'z': Math.atan2(
+        (args['w'] * args['z'] + args['x'] * args['y']) * 2,
+        1 - (args['y'] * args['y'] + args['z'] * args['z']) * 2
+      ),
+    };
+}
+
 // Required args: radians
 function math_radians_to_degrees(args){
     args = core_args({
