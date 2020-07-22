@@ -1740,7 +1740,7 @@ function webgl_character_spawn(args){
     webgl_entity_move_to({
       'entity': webgl_characters[args['character']],
       'x': webgl_properties['spawn-translate-x'],
-      'y': webgl_properties['spawn-translate-y'],
+      'y': webgl_properties['spawn-translate-y'] + webgl_characters[args['character']]['collide-range-vertical'] + 1,
       'z': webgl_properties['spawn-translate-z'],
     });
     webgl_camera_rotate({
