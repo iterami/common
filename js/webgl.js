@@ -1024,7 +1024,11 @@ function webgl_level_init(args){
     core_call({
       'todo': 'repo_level_load',
     });
-    core_escape();
+    if(core_menu_open){
+        core_escape();
+    }else{
+        core_interval_resume_all();
+    }
 }
 
 function webgl_level_load(args){
