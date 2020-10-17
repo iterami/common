@@ -1058,7 +1058,10 @@ function webgl_level_load(args){
 
     if(args['cache'] !== false){
         webgl_levelcache['id'] = args['cache'];
-        webgl_levelcache['json'] = args['json'];
+        webgl_levelcache['json'] = Object.assign(
+          {},
+          args['json']
+        );
     }
 
     webgl_level_init({
