@@ -1,10 +1,23 @@
-.wow-artifact {
-    color: #e6cc80;
-}
-
+.hs-common,
 .wow-common,
 .wow-priest {
     color: #fff;
+}
+
+.hs-epic {
+    color: #641fa4;
+}
+
+.hs-legendary {
+    color: #ffa500;
+}
+
+.hs-rare {
+    color: #4169e1;
+}
+
+.wow-artifact {
+    color: #e6cc80;
 }
 
 .wow-death-knight {
