@@ -20,7 +20,7 @@ select{
     position: absolute;
     text-align: left;
     top: 0;
-    z-index: 9999;
+    z-index: 9;
 }
 #core-ui table{
     margin: 0;
