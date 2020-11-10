@@ -429,8 +429,9 @@ function webgl_draw(){
         );
     }
 
-    if(webgl_characters[webgl_character_id]['camera-zoom'] === 0){
-        webgl_canvas.fillStyle = '#fff';
+    if(webgl_characters[webgl_character_id]['reticle'] !== false
+      && webgl_characters[webgl_character_id]['camera-zoom'] === 0){
+        webgl_canvas.fillStyle = webgl_characters[webgl_character_id]['reticle'];
         webgl_canvas.fillRect(
           webgl_properties['canvas']['width-half'] - 1,
           webgl_properties['canvas']['height-half'] - 1,
