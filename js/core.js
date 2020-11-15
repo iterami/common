@@ -1044,9 +1044,12 @@ function core_random_rgb(){
 
 // Required args: array
 function core_random_splice(args){
-    return args['array'].splice(core_random_integer({
-      'max': args['array'].length,
-    }))[0];
+    return args['array'].splice(
+      core_random_integer({
+        'max': args['array'].length,
+      }),
+      1
+    )[0];
 }
 
 function core_random_string(args){
