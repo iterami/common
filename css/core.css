@@ -64,6 +64,9 @@ select:enabled{
 .medium{
     font-size: 200%;
 }
+.mini{
+    width: 40px;
+}
 pre,
 ul{
     margin: 0;
