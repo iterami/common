@@ -19,8 +19,11 @@ textarea{
 }
 .header{
     background: #444;
-    font-size: 15px;
     text-align: center;
+}
+.header td{
+    border: 1px solid #222;
+    vertical-align: middle;
 }
 hr{
     border: 2px solid #444;

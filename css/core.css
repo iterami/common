@@ -40,6 +40,10 @@ select{
 .header{
     background: #444;
 }
+.header td{
+    border: 1px solid #222;
+    vertical-align: middle;
+}
 hr{
     border: 4px solid #444;
     margin: 0;
