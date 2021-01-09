@@ -1,89 +1,133 @@
+.eve-00{
+    color: #f30202;
+}
+
+.eve-01{
+    color: #dc3201;
+}
+
+.eve-02{
+    color: #eb4903;
+}
+
+.eve-03{
+    color: #f66301;
+}
+
+.eve-04{
+    color: #e58000;
+}
+
+.eve-05{
+    color: #f5f501;
+}
+
+.eve-06{
+    color: #96f933;
+}
+
+.eve-07{
+    color: #0f0;
+}
+
+.eve-08{
+    color: #02f34b;
+}
+
+.eve-09{
+    color: #4bc3c3;
+}
+
+.eve-10{
+    color: #33f9f9;
+}
+
 .hs-common,
 .wow-common,
-.wow-priest {
+.wow-priest{
     color: #fff;
 }
 
-.hs-epic {
+.hs-epic{
     color: #641fa4;
 }
 
-.hs-legendary {
+.hs-legendary{
     color: #ffa500;
 }
 
-.hs-rare {
+.hs-rare{
     color: #4169e1;
 }
 
-.wow-artifact {
+.wow-artifact{
     color: #e6cc80;
 }
 
-.wow-death-knight {
+.wow-death-knight{
     color: #c41f3b;
 }
 
-.wow-demon-hunter {
+.wow-demon-hunter{
     color: #a330c9;
 }
 
-.wow-druid {
+.wow-druid{
     color: #ff7d0a;
 }
 
-.wow-epic {
+.wow-epic{
     color: #a335ee;
 }
 
-.wow-heirloom {
+.wow-heirloom{
     color: #00ccff;
 }
 
-.wow-hunter {
+.wow-hunter{
     color: #a9d271;
 }
 
-.wow-legendary {
+.wow-legendary{
     color: #ff8000;
 }
 
-.wow-mage {
+.wow-mage{
     color: #40c7eb;
 }
 
-.wow-monk {
+.wow-monk{
     color: #00ff96;
 }
 
-.wow-paladin {
+.wow-paladin{
     color: #f58cba;
 }
 
-.wow-poor {
+.wow-poor{
     color: #9d9d9d;
 }
 
-.wow-rare {
+.wow-rare{
     color: #0070dd;
 }
 
-.wow-rogue {
+.wow-rogue{
     color: #fff569;
 }
 
-.wow-shaman {
+.wow-shaman{
     color: #0070de;
 }
 
-.wow-uncommon {
+.wow-uncommon{
     color: #1eff00;
 }
 
-.wow-warlock {
+.wow-warlock{
     color: #8787ed;
 }
 
-.wow-warrior {
+.wow-warrior{
     color: #c79c6e;
 }
