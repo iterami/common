@@ -396,6 +396,8 @@ function core_handle_mousedown(event){
     core_mouse['down-' + event.button] = true;
     core_mouse['down-x'] = core_mouse['x'];
     core_mouse['down-y'] = core_mouse['y'];
+    core_mouse['movement-x'] = 0;
+    core_mouse['movement-y'] = 0;
     core_handle_event({
       'event': event,
       'key': 'mousedown',
