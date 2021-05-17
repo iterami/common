@@ -38,10 +38,9 @@ select{
     color: #f99;
 }
 .header{
-    background: #444;
+    background: #333;
 }
 .header td{
-    border: 1px solid #222;
     vertical-align: middle;
 }
 hr{

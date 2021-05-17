@@ -18,11 +18,10 @@ textarea{
     background: #650;
 }
 .header{
-    background: #444;
+    background: #333;
     text-align: center;
 }
 .header td{
-    border: 1px solid #222;
     vertical-align: middle;
 }
 hr{
