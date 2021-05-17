@@ -9,6 +9,7 @@
 
 GtkWidget *window;
 
+void gtk_activate(GtkApplication* app, gpointer data);
 void gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelgroup, const guint key, GdkModifierType modifier, GCallback callback, gpointer data);
 void gtk_begin_frameclock(GtkWidget *_glarea);
 void gtk_init_gtk(GtkApplication* app, const gchar *title);

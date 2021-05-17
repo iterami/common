@@ -1,6 +1,10 @@
 #include <gtk/gtk.h>
 #include "gtk.h"
 
+void gtk_activate(GtkApplication* app, gpointer data){
+    gtk_window_present(GTK_WINDOW(window));
+}
+
 void gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelgroup, const guint key, GdkModifierType modifier, GCallback callback, gpointer data){
     GtkWidget *menuitem;
 
