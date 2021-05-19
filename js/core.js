@@ -614,18 +614,18 @@ function core_init(){
 
     // Global storage.
     core_tab_create({
-      'content': '<table><tr><td><input id=audio-volume><td>Audio Volume'
-        + '<tr><td><input id=color-negative type=color><td>Color Negative'
+      'content': '<table><tr><td><input class=mini id=audio-volume><td>Audio Volume'
+        + '<tr><td><input class=mini id=color-negative type=color><td>Color Negative'
         + '<tr><td><input id=color-positive type=color><td>Color Positive'
-        + '<tr><td><input id=crouch><td>Crouch'
-        + '<tr><td><input id=decimals><td>Decimals'
-        + '<tr><td><input id=jump><td>Jump'
-        + '<tr><td><input id=mouse-sensitivity><td>Mouse Sensitivity'
-        + '<tr><td><input id=move-↑><td>Move ↑'
-        + '<tr><td><input id=move-←><td>Move ←'
-        + '<tr><td><input id=move-↓><td>Move ↓'
-        + '<tr><td><input id=move-→><td>Move →'
-        + '<tr><td><input id=reset><td>Reset</table>'
+        + '<tr><td><input class=mini id=crouch><td>Crouch'
+        + '<tr><td><input class=mini id=decimals><td>Decimals'
+        + '<tr><td><input class=mini id=jump><td>Jump'
+        + '<tr><td><input class=mini id=mouse-sensitivity><td>Mouse Sensitivity'
+        + '<tr><td><input class=mini id=move-↑><td>Move ↑'
+        + '<tr><td><input class=mini id=move-←><td>Move ←'
+        + '<tr><td><input class=mini id=move-↓><td>Move ↓'
+        + '<tr><td><input class=mini id=move-→><td>Move →'
+        + '<tr><td><input class=mini id=reset><td>Reset</table>'
         + '<input id=settings-reset type=button value="Reset Global iterami Settings">',
       'group': 'core-menu',
       'id': 'iterami',

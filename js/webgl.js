@@ -1862,7 +1862,7 @@ function webgl_scissor(args){
 
 function webgl_settings_init(){
     core_tab_create({
-      'content': '<table><tr><td><input id=anisotropic><td>Anisotropic Filtering</table>',
+      'content': '<table><tr><td><input class=mini id=anisotropic><td>Anisotropic Filtering</table>',
       'group': 'core-menu',
       'id': 'webgl',
       'label': 'WebGL',
