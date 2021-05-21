@@ -372,13 +372,13 @@ function prefabs_webgl_ellipsoid(args){
     });
 
     const properties = {
+      'attach-offset-x': args['translate-x'],
+      'attach-offset-y': args['translate-y'],
+      'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'collision': false,
       'groups': args['groups'],
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'],
-      'translate-z': args['translate-z'],
     };
     for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
         if(longitude === args['slices-longitude'] / 2){
