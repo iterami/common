@@ -2212,7 +2212,12 @@ function webgl_path_move(args){
         return;
     }
 
-    const path = webgl_paths[args['entity']['path-id']];
+    const path = core_handle_defaults({
+      'default': {
+        'speed': 1,
+      },
+      'var': webgl_paths[args['entity']['path-id']],
+    });
     const point = core_handle_defaults({
       'default': {
         'speed': 1,
@@ -2236,7 +2241,7 @@ function webgl_path_move(args){
       'y1': point['translate-y'],
     });
 
-    const speed = args['entity']['speed'] * point['speed'] * webgl_properties['multiplier-speed'];
+    const speed = args['entity']['speed'] * webgl_properties['multiplier-speed'] * point['speed'] * path['speed'];
 
     args['entity']['change']['translate-x'] = core_round({
       'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
