@@ -2236,7 +2236,7 @@ function webgl_path_move(args){
       'y1': point['translate-y'],
     });
 
-    const speed = args['entity']['speed'] * point['speed'];
+    const speed = args['entity']['speed'] * point['speed'] * webgl_properties['multiplier-speed'];
 
     args['entity']['change']['translate-x'] = core_round({
       'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
