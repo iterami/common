@@ -779,7 +779,7 @@ function webgl_init(args){
         'spawn-entity': false,
         'spawn-interval-current': 0,
         'spawn-interval-max': 100,
-        'speed': .2,
+        'speed': 0,
         'texture-align': [
           1, 1,
           1, 0,
