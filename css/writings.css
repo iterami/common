@@ -27,9 +27,17 @@ textarea{
 hr{
     border: 2px solid #444;
 }
+input{
+    border-color: #aaa;
+}
+input:disabled{
+    border-color: #777;
+}
 input[type=button]{
-    cursor: pointer;
     padding: 2px 7px;
+}
+input[type=button]:enabled{
+    cursor: pointer;
 }
 ol,
 ul{

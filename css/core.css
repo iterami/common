@@ -50,6 +50,9 @@ hr{
 input{
     border-color: #aaa;
 }
+input:disabled{
+    border-color: #777;
+}
 input[type=button]{
     padding: 2px 7px;
 }
