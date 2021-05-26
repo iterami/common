@@ -1881,16 +1881,9 @@ function webgl_settings_init(){
       'elements': {
         'settings-reset-webgl': {
           'onclick': function(){
-              const keys = [];
-              for(const key in core_storage_info){
-                  if(core_storage_info[key]['prefix'] === 'webgl-'){
-                      keys.push(key);
-                  }
-              }
-
               core_storage_reset({
-                'keys': keys,
                 'label': 'WebGL',
+                'prefix': 'webgl-',
               });
           },
         },

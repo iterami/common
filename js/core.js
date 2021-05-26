@@ -1134,16 +1134,9 @@ function core_repo_init(args){
         });
         args['events']['settings-reset-repo'] = {
           'onclick': function(){
-              const keys = [];
-              for(const key in core_storage_info){
-                  if(core_storage_info[key]['prefix'] === core_repo_title + '-'){
-                      keys.push(key);
-                  }
-              }
-
               core_storage_reset({
-                'keys': keys,
                 'label': core_repo_title,
+                'prefix': core_repo_title + '-',
               });
           },
         };
@@ -1398,6 +1391,7 @@ function core_storage_reset(args){
       'defaults': {
         'keys': false,
         'label': 'global iterami',
+        'prefix': false,
       },
     });
 
@@ -1405,9 +1399,19 @@ function core_storage_reset(args){
         return false;
     }
 
-    let keys = args['keys'];
-    if(keys === false){
-        keys = Object.keys(core_storage_data);
+    let keys = [];
+
+    if(args['prefix'] !== false){
+        for(const key in core_storage_info){
+            if(core_storage_info[key]['prefix'] === args['prefix']){
+                keys.push(key);
+            }
+        }
+
+    }else{
+        keys = args['keys'] === false
+          ? Object.keys(core_storage_data)
+          : args['keys'];
     }
 
     for(const keyid in keys){
