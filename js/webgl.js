@@ -1862,7 +1862,8 @@ function webgl_scissor(args){
 
 function webgl_settings_init(){
     core_tab_create({
-      'content': '<table><tr><td><input class=mini id=anisotropic><td>Anisotropic Filtering</table>',
+      'content': '<table><tr><td><input class=mini id=anisotropic><td>Anisotropic Filtering</table>'
+        + '<input id=settings-reset-webgl type=button value="Reset WebGL Settings">',
       'group': 'core-menu',
       'id': 'webgl',
       'label': 'WebGL',
@@ -1875,6 +1876,26 @@ function webgl_settings_init(){
       },
     });
     core_storage_update();
+
+    core_events_bind({
+      'elements': {
+        'settings-reset-webgl': {
+          'onclick': function(){
+              const keys = [];
+              for(const key in core_storage_info){
+                  if(core_storage_info[key]['prefix'] === 'webgl-'){
+                      keys.push(key);
+                  }
+              }
+
+              core_storage_reset({
+                'keys': keys,
+                'label': 'WebGL',
+              });
+          },
+        },
+      },
+    });
 }
 
 // Required args: source, type
