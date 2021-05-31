@@ -480,6 +480,94 @@ function prefabs_webgl_ellipsoid(args){
     }
 }
 
+function prefabs_webgl_lines_shrub(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'color': [
+          1, 1, 1,
+        ],
+        'id': entity_id_count,
+        'points': 10,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+        'type': 'range',
+        'x-max': 0,
+        'x-min': 0,
+        'y-max': 0,
+        'y-min': 0,
+        'z-max': 0,
+        'z-min': 0,
+      },
+    });
+
+    const colors = [
+      args['color'][0],
+      args['color'][1],
+      args['color'][2],
+      1,
+    ];
+    const points = [
+      0, 0, 0, 1,
+    ];
+    let x = 0;
+    let y = 0;
+    let z = 0;
+
+    for(let i = 1; i < args['points']; i++){
+        const random_x = core_random_number({
+          'multiplier': args['x-max'] - args['x-min'],
+        }) + args['x-min'];
+        const random_y = core_random_number({
+          'multiplier': args['y-max'] - args['y-min'],
+        }) + args['y-min'];
+        const random_z = core_random_number({
+          'multiplier': args['z-max'] - args['z-min'],
+        }) + args['z-min'];
+
+        if(args['type'] === 'range'){
+            x = random_x;
+            y = random_y;
+            z = random_z;
+
+        }else{
+            x += random_x;
+            y += random_y;
+            z += random_z;
+        }
+
+        points.push(
+          x, y, z, 1
+        );
+        colors.push(
+          args['color'][0],
+          args['color'][1],
+          args['color'][2],
+          1,
+        );
+    }
+    const properties = {
+      'attach-offset-x': args['translate-x'],
+      'attach-offset-y': args['translate-y'],
+      'attach-offset-z': args['translate-z'],
+      'attach-to': args['character'],
+      'attach-type': 'webgl_characters',
+      'draw-type': 'LINE_STRIP',
+      'collision': false,
+      'id': args['id'],
+      'vertex-colors': colors,
+      'vertices': points,
+    };
+
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+}
+
 function prefabs_webgl_lines_tree(args){
     args = core_args({
       'args': args,
