@@ -485,28 +485,32 @@ function prefabs_webgl_lines_shrub(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
-        'color': [
+        'color-base': [
+          0, 0, 0,
+        ],
+        'color-leaf': [
           1, 1, 1,
         ],
         'id': entity_id_count,
+        'leaf-distance': .5,
         'points': 10,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
         'type': 'range',
-        'x-max': 0,
-        'x-min': 0,
-        'y-max': 0,
-        'y-min': 0,
-        'z-max': 0,
-        'z-min': 0,
+        'x-max': 1,
+        'x-min': -1,
+        'y-max': 1,
+        'y-min': -1,
+        'z-max': 1,
+        'z-min': -1,
       },
     });
 
     const colors = [
-      args['color'][0],
-      args['color'][1],
-      args['color'][2],
+      args['color-base'][0],
+      args['color-base'][1],
+      args['color-base'][2],
       1,
     ];
     const points = [
@@ -541,12 +545,26 @@ function prefabs_webgl_lines_shrub(args){
         points.push(
           x, y, z, 1
         );
-        colors.push(
-          args['color'][0],
-          args['color'][1],
-          args['color'][2],
-          1,
-        );
+        if(math_distance({
+            'x1': x,
+            'y1': y,
+            'z1': z,
+          }) < args['leaf-distance']){
+            colors.push(
+              args['color-base'][0],
+              args['color-base'][1],
+              args['color-base'][2],
+              1,
+            );
+
+        }else{
+            colors.push(
+              args['color-leaf'][0],
+              args['color-leaf'][1],
+              args['color-leaf'][2],
+              1,
+            );
+        }
     }
     const properties = {
       'attach-offset-x': args['translate-x'],
