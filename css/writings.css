@@ -11,6 +11,12 @@ textarea{
 .center{
     text-align: center;
 }
+code{
+    border: 1px solid #444;
+    display: block;
+    padding: 5px;
+    white-space: pre;
+}
 .external{
     color: #f99;
 }
