@@ -52,6 +52,9 @@ ul{
 table{
     border-collapse: collapse;
 }
+td{
+    max-width: 700px;
+}
 td,
 textarea{
     border: 1px solid #444;
