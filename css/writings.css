@@ -28,7 +28,7 @@ code{
     text-align: center;
 }
 .header td{
-    vertical-align: middle;
+    vertical-align: bottom;
 }
 hr{
     border: 2px solid #444;

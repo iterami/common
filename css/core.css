@@ -41,7 +41,7 @@ select{
     background: #333;
 }
 .header td{
-    vertical-align: middle;
+    vertical-align: bottom;
 }
 hr{
     border: 4px solid #444;
