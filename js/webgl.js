@@ -2679,6 +2679,10 @@ function webgl_pick_color(args){
 
 // Required args: x, y
 function webgl_pick_entity(args){
+    if(core_menu_open){
+        return;
+    }
+
     webgl_properties['picking'] = true;
     webgl_uniform_update();
     webgl_draw();
