@@ -472,13 +472,11 @@ function core_hex_to_rgb(args){
           + args['hex'][2] + args['hex'][2];
     }
 
-    const rgb = {
+    return {
       'blue': '0x' + args['hex'][4] + args['hex'][5] | 0,
       'green': '0x' + args['hex'][2] + args['hex'][3] | 0,
       'red': '0x' + args['hex'][0] + args['hex'][1] | 0,
     };
-
-    return 'rgb(' + rgb['red'] + ', ' + rgb['green'] + ', ' + rgb['blue'] + ')';
 }
 
 function core_html(args){
