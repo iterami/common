@@ -1307,7 +1307,6 @@ function webgl_init(args){
         'path-id': false,
         'path-point': 0,
         'pick-color': [0, 0, 0,],
-        'pick-todo': false,
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
@@ -2696,9 +2695,9 @@ function webgl_pick_entity(args){
     webgl_uniform_update();
     webgl_draw();
 
-    const color_blue = color[2];
-    const color_green = color[1];
-    const color_red = color[0];
+    const color_blue = color[2] / 255;
+    const color_green = color[1] / 255;
+    const color_red = color[0] / 255;
 
     if(color_blue === 0
       && color_green === 0
@@ -2707,7 +2706,7 @@ function webgl_pick_entity(args){
     }
 
     for(const entity in entity_entities){
-        if(entity_entities[entity]['pick-todo'] === false){
+        if(entity_entities[entity]['event-modify'].length === 0){
             continue;
         }
 
@@ -2716,7 +2715,10 @@ function webgl_pick_entity(args){
         if(color_blue === entity_color[2]
           && color_green === entity_color[1]
           && color_red === entity_color[0]){
-            entity_entities[entity]['pick-todo']();
+            webgl_event({
+              'parent': entity_entities[entity],
+              'target': webgl_characters[webgl_character_id],
+            });
             break;
         }
     }
