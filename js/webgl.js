@@ -18,7 +18,7 @@ function webgl_billboard(args){
     }
 }
 
-// Required args: colorData, normalData, textureData, vertexData
+// Required args: colorData, normalData, pickData, textureData, vertexData
 function webgl_buffer_set(args){
     return {
       'color': webgl_buffer_set_type({
