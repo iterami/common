@@ -64,7 +64,8 @@ label,
 select:enabled{
     cursor: pointer;
 }
-.left{
+.left,
+select{
     text-align: left;
 }
 .medium{
