@@ -68,7 +68,6 @@ textarea{
 
 a:focus,
 input:focus,
-select:focus,
 textarea:focus{
     outline: thin solid #4c4;
 }
