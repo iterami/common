@@ -2965,10 +2965,11 @@ function webgl_stat_modify(args){
       },
     });
 
-    if(args['stat'].startsWith('rotate-') === 0){
+    if(args['stat'].startsWith('rotate-')){
         const rotate_args = {
           'character': args['target']['id'],
           'mouse': false,
+          'set': args['set'],
         };
         rotate_args[args['stat'].slice(7)] = args['value'];
         webgl_camera_rotate(rotate_args);
