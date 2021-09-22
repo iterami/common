@@ -1057,10 +1057,12 @@ function webgl_event(args){
 
     for(const stat in args['parent']['event-modify']){
         webgl_stat_modify({
-          'amount': args['parent']['event-modify'][stat]['amount'],
-          'parent': args['target'],
           'set': args['parent']['event-modify'][stat]['set'],
           'stat': args['parent']['event-modify'][stat]['stat'],
+          'target': args['parent']['event-modify'][stat]['self']
+            ? args['parent']
+            : args['target'],
+          'value': args['parent']['event-modify'][stat]['value'],
         });
     }
 }
@@ -2953,51 +2955,55 @@ void main(void){
     }
 }
 
-// Required args: parent, stat
+// Required args: stat, target
 function webgl_stat_modify(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'amount': 1,
         'set': false,
+        'value': 1,
       },
     });
 
-    if(args['parent'][args['stat']] === void 0){
-        args['parent'][args['stat']] = 0;
-    }
-
-    if(args['stat'].indexOf('rotate-') === 0){
+    if(args['stat'].startsWith('rotate-') === 0){
         const rotate_args = {
-          'character': args['parent']['id'],
+          'character': args['target']['id'],
           'mouse': false,
         };
-        rotate_args[args['stat'].slice(7)] = args['amount'];
-
+        rotate_args[args['stat'].slice(7)] = args['value'];
         webgl_camera_rotate(rotate_args);
-
         return;
+
+    }else if(args['stat'] === 'vertex-colors'){
+        args['target']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        webgl_entity_todo(args['target']['id']);
+        return;
+
+    }else if(args['target'][args['stat']] === void 0){
+        args['target'][args['stat']] = 0;
     }
 
-    args['parent'][args['stat']] = args['set']
-      ? args['amount']
-      : args['parent'][args['stat']] + args['amount'];
+    args['target'][args['stat']] = args['set']
+      ? args['value']
+      : args['target'][args['stat']] + args['value'];
 
     if(args['stat'] === 'health-current'){
         if(webgl_character_level({
-            'character': args['parent']['id'],
+            'character': args['target']['id'],
           }) < 0){
-            args['parent']['health-current'] = args['parent']['health-max'];
+            args['target']['health-current'] = args['target']['health-max'];
 
             return;
         }
 
-        if(args['parent']['health-current'] > args['parent']['health-max']){
-            args['parent']['health-current'] = args['parent']['health-max'];
+        if(args['target']['health-current'] > args['target']['health-max']){
+            args['target']['health-current'] = args['target']['health-max'];
         }
 
-        if(args['parent']['health-current'] <= 0){
-            args['parent']['health-current'] = 0;
+        if(args['target']['health-current'] <= 0){
+            args['target']['health-current'] = 0;
 
             for(const entity in entity_entities){
                 if(entity_entities[entity]['attach-to'] === args['character']){
