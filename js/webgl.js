@@ -2702,9 +2702,18 @@ function webgl_pick_entity(args){
     webgl_uniform_update();
     webgl_draw();
 
-    const color_blue = color[2] / 255;
-    const color_green = color[1] / 255;
-    const color_red = color[0] / 255;
+    const color_blue = core_round({
+      'decimals': 1,
+      'number': color[2] / 255,
+    });
+    const color_green = core_round({
+      'decimals': 1,
+      'number': color[1] / 255,
+    });
+    const color_red = core_round({
+      'decimals': 1,
+      'number': color[0] / 255,
+    });
 
     if(color_blue === 0
       && color_green === 0
