@@ -3000,7 +3000,7 @@ function webgl_stat_modify(args){
         args['target'][args['stat']] = 0;
     }
 
-    args['target'][args['stat']] = args['set']
+    args['target'][args['stat']] = (args['set'] || typeof args['value'] === 'string')
       ? args['value']
       : args['target'][args['stat']] + args['value'];
 
