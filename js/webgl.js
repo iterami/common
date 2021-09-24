@@ -1056,13 +1056,18 @@ function webgl_event(args){
     }
 
     for(const stat in args['parent']['event-modify']){
-        webgl_stat_modify({
-          'set': args['parent']['event-modify'][stat]['set'],
-          'stat': args['parent']['event-modify'][stat]['stat'],
-          'target': args['parent']['event-modify'][stat]['self']
+        const event_modify = args['parent']['event-modify'][stat];
+        const target = event_modify['target'] !== void 0
+          ? entity_entities[event_modify['target']]
+          : event_modify['self']
             ? args['parent']
-            : args['target'],
-          'value': args['parent']['event-modify'][stat]['value'],
+            : args['target'];
+
+        webgl_stat_modify({
+          'set': event_modify['set'],
+          'stat': event_modify['stat'],
+          'target': target,
+          'value': event_modify['value'],
         });
     }
 }
