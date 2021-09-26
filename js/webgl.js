@@ -2974,6 +2974,7 @@ function webgl_stat_modify(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'has': true,
         'set': false,
         'value': 1,
       },
@@ -2997,6 +2998,10 @@ function webgl_stat_modify(args){
         return;
 
     }else if(args['target'][args['stat']] === void 0){
+        if(args['has']){
+            return;
+        }
+
         args['target'][args['stat']] = 0;
     }
 
