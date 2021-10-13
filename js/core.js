@@ -896,7 +896,7 @@ function core_keys_updatebinds(args){
               10
             );
 
-            if(Number.isNaN(key)){
+            if(globalThis.isNaN(key)){
                 key = keybind.charCodeAt(0);
             }
         }
@@ -1269,7 +1269,7 @@ function core_round(args){
         result = Number(result + eString);
     }
 
-    if(Number.isNaN(result)
+    if(globalThis.isNaN(result)
       || Math.abs(result) < Number('1e-' + args['decimals'])){
         result = 0;
     }
@@ -1579,7 +1579,7 @@ function core_type_convert(args){
       })){
         return args['value'];
 
-    }else if(!Number.isNaN(Number.parseFloat(args['template']))){
+    }else if(!globalThis.isNaN(Number.parseFloat(args['template']))){
         return Number.parseFloat(args['value']);
 
     }else if(core_type({
