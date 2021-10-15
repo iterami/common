@@ -823,7 +823,7 @@ function webgl_draw_entity(entity){
     );
 
     webgl_buffer.drawArrays(
-      webgl_buffer[entity_entities[entity]['draw-type']],
+      webgl_buffer[webgl_properties['draw-type'] || entity_entities[entity]['draw-type']],
       0,
       entity_entities[entity]['vertices-length']
     );
@@ -1220,6 +1220,7 @@ function webgl_init(args){
       'directional-red': args['directional-red'],
       'directional-state': args['directional-state'],
       'directional-vector': args['directional-vector'],
+      'draw-type': false,
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
