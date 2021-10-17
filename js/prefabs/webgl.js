@@ -491,6 +491,7 @@ function prefabs_webgl_lines_shrub(args){
         'color-leaf': [
           1, 1, 1,
         ],
+        'draw-type': 'LINE_STRIP',
         'id': entity_id_count,
         'leaf-distance': .5,
         'points': 10,
@@ -572,7 +573,7 @@ function prefabs_webgl_lines_shrub(args){
       'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
-      'draw-type': 'LINE_STRIP',
+      'draw-type': args['draw-type'],
       'collision': false,
       'id': args['id'],
       'vertex-colors': colors,
