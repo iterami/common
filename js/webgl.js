@@ -1239,6 +1239,7 @@ function webgl_init(args){
       'spawn-translate-x': args['spawn-translate-x'],
       'spawn-translate-y': args['spawn-translate-y'],
       'spawn-translate-z': args['spawn-translate-z'],
+      'textures': true,
     };
 
     math_matrices['camera'] = math_matrix_create();
@@ -2861,6 +2862,7 @@ function webgl_shader_recreate(){
 precision lowp float;
 uniform bool fog;
 uniform bool picking;
+uniform bool textures;
 uniform float float_fogDensity;
 uniform sampler2D sampler;
 uniform vec3 vec_clearColor;
@@ -2872,7 +2874,10 @@ void main(void){
     if(picking){
         gl_FragColor = vec_fragmentColor;
     }else{
-        gl_FragColor = vec_fragmentColor * vec_lighting * texture2D(sampler, vec_textureCoord);
+        gl_FragColor = vec_fragmentColor * vec_lighting;
+        if(textures){
+            gl_FragColor *= texture2D(sampler, vec_textureCoord);
+        }
         if(fog){
             float distance = length(vec_position.xyz);
             gl_FragColor.rgb = vec3(mix(
@@ -2892,6 +2897,7 @@ attribute vec4 vec_vertexColor;
 attribute vec4 vec_vertexPosition;
 uniform bool directional;
 uniform bool picking;
+uniform bool textures;
 uniform float alpha;
 uniform mat4 mat_cameraMatrix;
 uniform mat4 mat_perspectiveMatrix;
@@ -2963,6 +2969,7 @@ void main(void){
       'mat_cameraMatrix': 'mat_cameraMatrix',
       'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
       'sampler': 'sampler',
+      'textures': 'textures',
     };
     for(const location in locations){
         webgl_properties['shader'][location] = webgl_buffer.getUniformLocation(
@@ -3118,6 +3125,10 @@ function webgl_uniform_update(){
     webgl_buffer.uniform1i(
       webgl_properties['shader']['picking'],
       webgl_properties['picking']
+    );
+    webgl_buffer.uniform1i(
+      webgl_properties['shader']['textures'],
+      webgl_properties['textures']
     );
 }
 
