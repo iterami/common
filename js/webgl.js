@@ -1764,6 +1764,26 @@ function webgl_logicloop(){
             }
         }
 
+        if(webgl_character_level({
+            'character': character,
+          }) > 0){
+            webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] = Math.max(
+              webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+              webgl_properties['gravity-max']
+            );
+        }
+
+        if(webgl_characters[character]['collides']){
+            for(const entity in entity_entities){
+                if(entity_entities[entity]['collision']){
+                    webgl_collision({
+                      'collider': webgl_characters[character],
+                      'target': entity_entities[entity],
+                    });
+                }
+            }
+        }
+
         webgl_path_move({
           'entity': webgl_characters[character],
         });
