@@ -219,9 +219,6 @@ function webgl_character_init(args){
         'rotate-y': 0,
         'rotate-z': 0,
         'speed': .1,
-        'talk': false,
-        'talk-range': 15,
-        'trade': [],
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -262,9 +259,6 @@ function webgl_character_init(args){
       'rotate-y': args['rotate-y'],
       'rotate-z': args['rotate-z'],
       'speed': args['speed'],
-      'talk': args['talk'],
-      'talk-range': args['talk-range'],
-      'trade': args['trade'],
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
@@ -630,32 +624,6 @@ function webgl_collision(args){
               'parent': args['target'],
               'target': args['collider'],
             });
-        }
-
-        if(webgl_character_level({
-            'character': args['collider']['id'],
-          }) > -1){
-            if(args['target']['item-id'] !== false){
-                if(!(args['target']['item-id'] in args['collider']['inventory'])){
-                    webgl_item_reset({
-                      'character': args['collider']['id'],
-                      'entities': args['target']['item-entities'],
-                      'item': args['target']['item-id'],
-                      'spell': args['target']['item-spellproperties'],
-                      'stats': args['target']['item-stats'],
-                    });
-                }
-
-                args['collider']['inventory'][args['target']['item-id']]['amount'] += args['target']['item-amount'];
-
-                entity_remove({
-                  'entities': [
-                    args['target']['id'],
-                  ],
-                });
-
-                return false;
-            }
         }
 
         if(entity_groups['particles'][args['collider']['id']]){
@@ -1040,24 +1008,6 @@ function webgl_event(args){
         return;
     }
 
-    if(args['parent']['event-key'] !== false){
-        const item = args['target']['inventory'][args['parent']['event-key']];
-
-        if(item['amount'] < args['parent']['event-key-consume']){
-            return;
-        }
-
-        item['amount'] -= args['parent']['event-key-consume'];
-
-        if(item['amount'] === 0){
-            webgl_item_equip({
-              'character': args['target']['id'],
-              'equip': false,
-              'item': args['parent']['event-key'],
-            });
-        }
-    }
-
     for(const stat in args['parent']['event-modify']){
         const event_modify = args['parent']['event-modify'][stat];
         const target = event_modify['target'] !== void 0
@@ -1302,19 +1252,11 @@ function webgl_init(args){
         'collision': true,
         'draw': true,
         'draw-type': 'TRIANGLE_FAN',
-        'event-key': false,
-        'event-key-consume': 0,
         'event-modify': [],
         'event-range': false,
         'event-target-id': false,
         'event-target-type': 'character',
         'gravity': false,
-        'item-amount': 1,
-        'item-entities': [],
-        'item-id': false,
-        'item-spell': false,
-        'item-spellproperties': {},
-        'item-stats': {},
         'normals': [],
         'path-direction': 1,
         'path-end': false,
@@ -1372,182 +1314,6 @@ function webgl_init(args){
       'paused': true,
       'todo': webgl_drawloop,
     });
-}
-
-// Required args: item
-function webgl_item_equip(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'character': webgl_character_id,
-        'equip': true,
-      },
-    });
-
-    if(webgl_characters[args['character']]['health-current'] <= 0){
-        return;
-    }
-
-    const item = webgl_characters[args['character']]['inventory'][args['item']];
-
-    if(!item
-      || item['equipped'] === args['equip']){
-        return;
-    }
-
-    item['equipped'] = args['equip'];
-
-    const stats = item['stats'];
-    for(const stat in stats){
-        let dstat = stats[stat];
-        if(!args['equip']){
-            dstat *= -1;
-        }
-
-        webgl_characters[args['character']][stat] += dstat;
-    }
-
-    for(const entity in item['entities']){
-        const entity_id = '_item-' + args['character'] + '-' + args['item'] + '-' + entity;
-
-        if(args['equip']){
-            const properties = {};
-            Object.assign(
-              properties,
-              item['entities'][entity]
-            );
-            properties['id'] = entity_id;
-
-            webgl_entity_create({
-              'character': args['character'],
-              'entities': [
-                properties,
-              ],
-            });
-
-            continue;
-        }
-
-        entity_remove({
-          'entities': [
-            entity_id,
-          ],
-        });
-
-        for(const character_entity in webgl_characters[args['character']]['entities']){
-            if(webgl_characters[args['character']]['entities'][character_entity]['id'] === entity_id){
-                webgl_characters[args['character']]['entities'].splice(
-                  character_entity,
-                  1
-                );
-
-                break;
-            }
-        }
-    }
-}
-
-// Required args: item
-function webgl_item_reset(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'character': webgl_character_id,
-        'entities': [],
-        'spell': false,
-        'spellproperties': {},
-        'stats': {},
-      },
-    });
-
-    const properties = {
-      'amount': 0,
-      'entities': args['entities'].slice(),
-      'equipped': false,
-      'spell': args['spell'],
-      'spellproperties': {},
-      'stats': {},
-    };
-
-    Object.assign(
-      properties['spellproperties'],
-      args['spellproperties']
-    );
-    Object.assign(
-      properties['stats'],
-      args['stats']
-    );
-
-    webgl_characters[args['character']]['inventory'][args['item']] = properties;
-}
-
-// Required args: character-0, character-1, item-0-amount, item-0-id, item-1-amount, item-1-id
-function webgl_item_trade(args){
-    const inventory_0 = webgl_characters[args['character-0']]['inventory'];
-    const inventory_1 = webgl_characters[args['character-1']]['inventory'];
-
-    if(webgl_characters[args['character-0']] === void 0
-      || webgl_characters[args['character-1']] === void 0
-      || webgl_characters[args['character-0']]['health-current'] <= 0
-      || webgl_characters[args['character-1']]['health-current'] <= 0
-      || !inventory_0[args['item-0-id']]
-      || !inventory_1[args['item-1-id']]
-      || inventory_0[args['item-0-id']]['amount'] < args['item-0-amount']
-      || inventory_1[args['item-1-id']]['amount'] < args['item-1-amount']){
-        return;
-    }
-
-    if(inventory_0[args['item-0-id']]['equipped']){
-        webgl_item_equip({
-          'character': args['character-0'],
-          'equip': false,
-          'item': args['item-0-id'],
-        });
-    }
-    if(inventory_1[args['item-1-id']]['equipped']){
-        webgl_item_equip({
-          'character': args['character-1'],
-          'equip': false,
-          'item': args['item-1-id'],
-        });
-    }
-
-    inventory_0[args['item-0-id']]['amount'] -= args['item-0-amount'];
-    inventory_1[args['item-1-id']]['amount'] -= args['item-1-amount'];
-
-    if(!inventory_0[args['item-1-id']]){
-        webgl_item_reset({
-          'character': args['character-0'],
-          'entities': inventory_1[args['item-1-id']]['entities'],
-          'item': args['item-1-id'],
-          'spell': inventory_1[args['item-1-id']]['spell'],
-          'stats': inventory_1[args['item-1-id']]['stats'],
-        });
-    }
-    if(!inventory_1[args['item-0-id']]){
-        webgl_item_reset({
-          'character': args['character-1'],
-          'entities': inventory_0[args['item-0-id']]['entities'],
-          'item': args['item-0-id'],
-          'spell': inventory_0[args['item-0-id']]['spell'],
-          'stats': inventory_0[args['item-0-id']]['stats'],
-        });
-    }
-    inventory_0[args['item-1-id']]['amount'] += args['item-1-amount'];
-    inventory_1[args['item-0-id']]['amount'] += args['item-0-amount'];
-
-    if(inventory_0[args['item-0-id']]['amount'] === 0){
-        Reflect.deleteProperty(
-          inventory_0,
-          args['item-0-id']
-        );
-    }
-    if(inventory_1[args['item-1-id']]['amount'] === 0){
-        Reflect.deleteProperty(
-          inventory_1,
-          args['item-1-id']
-        );
-    }
 }
 
 function webgl_json_export(args){
@@ -1930,105 +1696,6 @@ function webgl_logicloop(){
     }
 
     repo_logic();
-
-    let npc = '';
-    let npc_talk = '';
-    for(const character in webgl_characters){
-        if(webgl_character_level({
-            'character': character,
-          }) > 0){
-            webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] = Math.max(
-              webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
-              webgl_properties['gravity-max']
-            );
-        }
-
-        if(webgl_characters[character]['collides']){
-            for(const entity in entity_entities){
-                if(entity_entities[entity]['collision']){
-                    webgl_collision({
-                      'collider': webgl_characters[character],
-                      'target': entity_entities[entity],
-                    });
-                }
-            }
-        }
-
-        if(character !== webgl_character_id
-          && (webgl_characters[character]['talk'] !== false
-            || webgl_characters[character]['trade'].length > 0)){
-            if(math_distance({
-                'x0': webgl_characters[webgl_character_id]['translate-x'],
-                'y0': webgl_characters[webgl_character_id]['translate-y'],
-                'z0': webgl_characters[webgl_character_id]['translate-z'],
-                'x1': webgl_characters[character]['translate-x'],
-                'y1': webgl_characters[character]['translate-y'],
-                'z1': webgl_characters[character]['translate-z'],
-              }) < webgl_characters[character]['talk-range']){
-                npc = character;
-                if(webgl_characters[character]['talk'] !== false){
-                    npc_talk = webgl_characters[character]['talk'];
-                }
-            }
-        }
-    }
-    core_ui_update({
-      'ids': {
-        'npc': npc === ''
-          ? ''
-          :'<hr>[' + npc + ']',
-        'npc-talk': npc_talk,
-      },
-    });
-
-    if(npc === ''){
-        webgl_character_trading = '';
-        core_ui_update({
-          'ids': {
-            'npc-trade': '',
-          },
-        });
-
-    }else if(npc !== webgl_character_trading){
-        webgl_character_trading = npc;
-        const npc_trades = webgl_characters[npc]['trade'];
-
-        const elements = {};
-        let npc_trade = '<table>';
-        for(const trade in npc_trades){
-            if(webgl_characters[webgl_character_trading]['inventory'][npc_trades[trade]['give-id']]['amount'] < npc_trades[trade]['give-amount']){
-                continue;
-            }
-
-            npc_trade += '<tr><td><input id=npc-trade-' + trade + ' type=button value=Trade>'
-              + '<td>[' + npc_trades[trade]['get-amount'] + ' ' + npc_trades[trade]['get-id']
-                + '] for [' + npc_trades[trade]['give-amount'] + ' ' + npc_trades[trade]['give-id'] + ']';
-
-            elements['npc-trade-' + trade] = {
-              'onclick': function(){
-                  webgl_item_trade({
-                    'character-0': webgl_character_id,
-                    'character-1': webgl_character_trading,
-                    'item-0-amount': npc_trades[trade]['get-amount'],
-                    'item-0-id': npc_trades[trade]['get-id'],
-                    'item-1-amount': npc_trades[trade]['give-amount'],
-                    'item-1-id': npc_trades[trade]['give-id'],
-                  });
-              },
-            }
-        }
-        npc_trade += '</table>';
-
-        core_ui_update({
-          'ids': {
-            'npc-trade': npc_trade,
-          },
-        });
-
-        core_events_bind({
-          'elements': elements,
-        });
-    }
 
     entity_group_modify({
       'groups': [
