@@ -207,7 +207,6 @@ function webgl_character_init(args){
         'health-current': 1,
         'health-max': 1,
         'id': webgl_character_id,
-        'inventory': false,
         'jump-height': .1,
         'level': 0,
         'path-direction': 1,
@@ -245,7 +244,6 @@ function webgl_character_init(args){
       ),
       'health-max': args['health-max'],
       'id': args['id'],
-      'inventory': {},
       'jump-allow': false,
       'jump-height': args['jump-height'],
       'level': args['level'],
@@ -266,12 +264,6 @@ function webgl_character_init(args){
     webgl_characters[args['id']]['change']['translate-x'] = args['change']['translate-x'] || 0;
     webgl_characters[args['id']]['change']['translate-y'] = args['change']['translate-y'] || 0;
     webgl_characters[args['id']]['change']['translate-z'] = args['change']['translate-z'] || 0;
-    if(args['inventory'] !== false){
-        Object.assign(
-          webgl_characters[args['id']]['inventory'],
-          args['inventory']
-        );
-    }
     webgl_character_count++;
 
     webgl_entity_create({
@@ -2869,7 +2861,6 @@ globalThis.webgl_canvas = 0;
 globalThis.webgl_character_count = 0;
 globalThis.webgl_character_homebase = {};
 globalThis.webgl_character_id = '_me';
-globalThis.webgl_character_trading = '';
 globalThis.webgl_characters = {};
 globalThis.webgl_diagonal = 0;
 globalThis.webgl_extensions = {};
