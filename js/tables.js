@@ -1,5 +1,12 @@
 'use strict';
 
+function tables_format_number(value){
+    return Number(value.replace(
+      /,/g,
+      ''
+    ));
+}
+
 function tables_init(){
     const tables = document.getElementsByTagName('table');
 
@@ -49,12 +56,12 @@ function tables_sort(element, column, direction, type){
     if(type === 1){
         if(direction === 0){
             sort_function = function(a, b){
-                return b - a;
+                return tables_format_number(b) - tables_format_number(a);
             };
 
         }else{
             sort_function = function(a, b){
-                return a - b;
+                return tables_format_number(a) - tables_format_number(b);
             };
         }
 
