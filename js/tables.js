@@ -1,5 +1,30 @@
 'use strict';
 
+function tables_add(table){
+    if(table.classList.contains('tables-nosort')){
+        return;
+    }
+
+    const headers = Array.from(table.firstElementChild.firstElementChild.children);
+
+    for(const header in headers){
+        if(headers[header].classList.contains('tables-nosort')){
+            continue;
+
+        }else if(headers[header].classList.contains('tables-main')){
+            tables_column_main = header;
+        }
+
+        let type = 0;
+        if(headers[header].classList.contains('tables-numbers')){
+            type = 1;
+        }
+
+        headers[header].innerHTML += '<div><input onclick="tables_sort(this,' + header + ',1,' + type + ')" type=button value=↑>'
+          + '<input onclick="tables_sort(this,' + header + ',0,' + type + ')" type=button value=↓></div>';
+    }
+}
+
 function tables_format_number(value){
     return Number(value.replace(
       /,/g,
@@ -11,28 +36,7 @@ function tables_init(){
     const tables = document.getElementsByTagName('table');
 
     for(let i = 0; i < tables.length; i++){
-        if(tables[i].classList.contains('tables-nosort')){
-            continue;
-        }
-
-        const headers = Array.from(tables[i].firstElementChild.firstElementChild.children);
-
-        for(const header in headers){
-            if(headers[header].classList.contains('tables-nosort')){
-                continue;
-
-            }else if(headers[header].classList.contains('tables-main')){
-                tables_column_main = header;
-            }
-
-            let type = 0;
-            if(headers[header].classList.contains('tables-numbers')){
-                type = 1;
-            }
-
-            headers[header].innerHTML += '<div><input onclick="tables_sort(this,' + header + ',1,' + type + ')" type=button value=↑>'
-              + '<input onclick="tables_sort(this,' + header + ',0,' + type + ')" type=button value=↓></div>';
-        }
+        tables_add(tables[i]);
     }
 }
 
