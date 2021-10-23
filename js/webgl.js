@@ -1757,20 +1757,27 @@ function webgl_logicloop(){
     }
 
     for(const character in webgl_characters){
+        const character_level = webgl_character_level({
+          'character': character,
+        });
+
         if(webgl_properties['paused']){
-            if(level !== -1
+            if(character_level !== -1
               || character !== webgl_character_id){
                 continue;
             }
         }
 
-        if(webgl_character_level({
-            'character': character,
-          }) > 0){
+        if(character_level > 0){
             webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] = Math.max(
               webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
+
+        }else if(character_level === -1){
+            webgl_characters[character]['rotate-x'] = webgl_characters[character]['camera-rotate-x'];
+            webgl_characters[character]['rotate-y'] = webgl_characters[character]['camera-rotate-y'];
+            webgl_characters[character]['rotate-z'] = webgl_characters[character]['camera-rotate-z'];
         }
 
         if(webgl_characters[character]['collides']){
