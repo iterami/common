@@ -23,7 +23,9 @@ function canvas_draw(){
         );
     }
 
-    draw_logic();
+    core_call({
+      'todo': 'repo_drawlogic',
+    });
 
     canvas_canvas.clearRect(
       0,
@@ -188,7 +190,7 @@ function canvas_init(args){
     });
 
     if(core_type({
-        'var': 'logic',
+        'var': 'repo_logic',
         'type': 'function',
       })){
         core_interval_modify({
@@ -210,7 +212,9 @@ function canvas_init(args){
 }
 
 function canvas_logicloop(){
-    logic();
+    core_call({
+      'todo': 'repo_logic',
+    });
 
     entity_group_modify({
       'groups': [
@@ -248,7 +252,7 @@ function canvas_resize(){
     );
 
     core_call({
-      'todo': 'resize_logic',
+      'todo': 'repo_resizelogic',
     });
 }
 
