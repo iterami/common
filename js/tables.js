@@ -1,10 +1,6 @@
 'use strict';
 
 function tables_add(table){
-    if(table.classList.contains('tables-nosort')){
-        return;
-    }
-
     const headers = Array.from(table.firstElementChild.firstElementChild.children);
 
     for(const header in headers){
@@ -36,6 +32,10 @@ function tables_init(){
     const tables = document.getElementsByTagName('table');
 
     for(let i = 0; i < tables.length; i++){
+        if(tables[i].classList.contains('tables-nosort')){
+            return;
+        }
+
         tables_add(tables[i]);
     }
 }
