@@ -95,7 +95,7 @@ function core_escape(){
     if(!core_menu_open){
         document.getElementById('core-menu').style.display = 'none';
         document.getElementById('core-ui').style.userSelect = 'none';
-        document.getElementById('repo-ui').style.display = 'block';
+        document.getElementById('repo-ui').style.display = 'inline';
 
         core_storage_save();
         core_interval_resume_all();
@@ -610,6 +610,7 @@ function core_init(){
       'properties': {
         'id': 'repo-ui',
       },
+      'type': 'span',
     });
 
     // Global storage.
