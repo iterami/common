@@ -480,6 +480,90 @@ function prefabs_webgl_ellipsoid(args){
     }
 }
 
+function prefabs_webgl_humanoid(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'prefix': entity_id_count,
+        'scale': 1,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
+    });
+
+    const bodyparts = {
+      'head': [
+        0, 21, 1, 1,
+        0, 18, 1, 1,
+        0, 17, 0, 1,
+      ],
+      'torso': [
+        -3, 17, 0, 1,
+        3, 17, 0, 1,
+        0, 17, 0, 1,
+        0, 14, 0, 1,
+        0, 11, 0, 1,
+        -2, 11, 0, 1,
+        2, 11, 0, 1,
+      ],
+      'arm-left': [
+        -3, 17, 0, 1,
+        -3, 14, 1, 1,
+        -3, 13, 3, 1,
+        -3, 12, 4, 1,
+      ],
+      'arm-right': [
+        3, 17, 0, 1,
+        3, 14, 1, 1,
+        3, 13, 3, 1,
+        3, 12, 4, 1,
+      ],
+      'leg-left': [
+        -2, 11, 0, 1,
+        -2, 6, 1, 1,
+        -2, 0, 0, 1,
+        -2, 0, 1, 1,
+      ],
+      'leg-right': [
+        2, 11, 0, 1,
+        2, 6, 1, 1,
+        2, 0, 0, 1,
+        2, 0, 1, 1,
+      ],
+    };
+    for(const part in bodyparts){
+        for(let vertex = 0; vertex < bodyparts[part].length; vertex++){
+            if(vertex === 0 || (vertex + 1) % 4 !== 0){
+                bodyparts[part][vertex] *= args['scale'];
+            }
+        }
+
+        const properties = {
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'draw-type': 'LINE_STRIP',
+          'collision': false,
+          'id': args['prefix'] + '-' + part,
+          'vertex-colors': webgl_vertexcolorarray({
+            'random-colors': true,
+            'vertexcount': bodyparts[part].length / 4,
+          }),
+          'vertices': bodyparts[part],
+        };
+
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+}
+
 function prefabs_webgl_lines_shrub(args){
     args = core_args({
       'args': args,
