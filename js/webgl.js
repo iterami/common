@@ -2694,13 +2694,15 @@ function webgl_stat_modify(args){
       },
     });
 
-    if(args['stat'].startsWith('rotate-')){
+    if(args['stat'].startsWith('rotate-')
+      || args['stat'].startsWith('camera-rotate-')){
         const rotate_args = {
+          'camera': args['stat'].startsWith('camera-rotate-'),
           'character': args['target']['id'],
           'mouse': false,
           'set': args['set'],
         };
-        rotate_args[args['stat'].slice(7)] = args['value'];
+        rotate_args[args['stat'].slice(args['stat'].length - 1)] = args['value'];
         webgl_camera_rotate(rotate_args);
         return;
 
@@ -2726,14 +2728,10 @@ function webgl_stat_modify(args){
     if(args['stat'] === 'health-current'){
         if(webgl_character_level({
             'character': args['target']['id'],
-          }) < 0){
+          }) === -1){
             args['target']['health-current'] = args['target']['health-max'];
 
             return;
-        }
-
-        if(args['target']['health-current'] > args['target']['health-max']){
-            args['target']['health-current'] = args['target']['health-max'];
         }
 
         if(args['target']['health-current'] <= 0){
@@ -2744,6 +2742,10 @@ function webgl_stat_modify(args){
                    entity_entities[entity]['attach-to'] = false;
                 }
             }
+
+        }else if(args['target']['health-current'] > args['target']['health-max']){
+            args['target']['health-current'] = args['target']['health-max'];
+
         }
     }
 }
