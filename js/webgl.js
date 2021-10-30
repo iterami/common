@@ -1502,7 +1502,10 @@ function webgl_level_init(args){
       'entities': webgl_character_homebase['entities'],
     });
     for(const prefab in args['json']['prefabs']){
-        globalThis[args['json']['prefabs'][prefab]['type']](args['json']['prefabs'][prefab]['properties']);
+        core_call({
+          'args': args['json']['prefabs'][prefab]['properties'],
+          'todo': args['json']['prefabs'][prefab]['type'],
+        });
     }
 
     webgl_character_home_entityupdate();
