@@ -214,8 +214,8 @@ function webgl_character_init(args){
         'jump-height': .1,
         'level': 0,
         'path-direction': 1,
-        'path-end': false,
-        'path-id': false,
+        'path-end': 0,
+        'path-id': '',
         'path-point': 0,
         'reticle': '#fff',
         'rotate-x': 0,
@@ -1255,8 +1255,8 @@ function webgl_init(args){
         'gravity': false,
         'normals': [],
         'path-direction': 1,
-        'path-end': false,
-        'path-id': false,
+        'path-end': 0,
+        'path-id': '',
         'path-point': 0,
         'pick-color': [0, 0, 0,],
         'rotate-x': 0,
@@ -1592,7 +1592,7 @@ function webgl_logicloop(){
     if(level !== 0
       && (level === -1 || !webgl_properties['paused'])
       && webgl_characters[webgl_character_id]['health-current'] > 0
-      && webgl_characters[webgl_character_id]['path-id'] === false){
+      && webgl_characters[webgl_character_id]['path-id'].length === 0){
         let leftright = 0;
 
         if(core_keys[core_storage_data['move-←']]['state']){
@@ -2221,8 +2221,7 @@ function webgl_particles_create(args){
 
 // Required args: entity
 function webgl_path_move(args){
-    if(args['entity']['path-id'] === false
-      || webgl_paths[args['entity']['path-id']] === void 0){
+    if(webgl_paths[args['entity']['path-id']] === void 0){
         return;
     }
 
@@ -2294,7 +2293,7 @@ function webgl_path_move(args){
 
         if(args['entity']['path-direction'] > 0){
             if(args['entity']['path-point'] >= path['points'].length - 1){
-                const end = args['entity']['path-end'] !== false
+                const end = args['entity']['path-end'] !== 0
                   ? args['entity']['path-end']
                   : path['end'];
 
@@ -2312,7 +2311,7 @@ function webgl_path_move(args){
                     args['entity']['path-point'] -= 1;
 
                 }else{
-                    args['entity']['path-id'] = false;
+                    args['entity']['path-id'] = '';
                     args['entity']['path-point'] = 0;
                 }
 
@@ -2321,7 +2320,7 @@ function webgl_path_move(args){
             }
 
         }else if(args['entity']['path-point'] <= 0){
-            const end = args['entity']['path-end'] !== false
+            const end = args['entity']['path-end'] !== 0
               ? args['entity']['path-end']
               : path['end'];
 
@@ -2339,7 +2338,7 @@ function webgl_path_move(args){
                 args['entity']['path-point'] += 1;
 
             }else{
-                args['entity']['path-id'] = false;
+                args['entity']['path-id'] = '';
                 args['entity']['path-point'] = 0;
             }
 
@@ -2355,8 +2354,8 @@ function webgl_path_use(args){
       'args': args,
       'defaults': {
         'path-direction': 1,
-        'path-end': false,
-        'path-id': false,
+        'path-end': 0,
+        'path-id': '',
         'path-point': 0,
       },
     });
