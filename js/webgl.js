@@ -88,9 +88,9 @@ function webgl_camera_rotate(args){
         'character': webgl_character_id,
         'mouse': true,
         'set': false,
-        'x': 0,
-        'y': 0,
-        'z': 0,
+        'x': false,
+        'y': false,
+        'z': false,
       },
     });
 
@@ -104,6 +104,10 @@ function webgl_camera_rotate(args){
       : 'rotate-';
     for(const axis in axes){
         let axis_value = axes[axis];
+        if(axis_value === false){
+            continue;
+        }
+
         if(!args['set']){
             axis_value += webgl_characters[args['character']][prefix + axis];
         }
