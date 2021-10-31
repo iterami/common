@@ -2280,10 +2280,7 @@ function webgl_path_move(args){
         'x1': point['translate-x'],
         'y1': point['translate-y'],
         'z1': point['translate-z'],
-      }) < Math.max(
-         args['entity']['collide-range-horizontal'],
-         args['entity']['collide-range-vertical']
-      )){
+      }) < speed){
         args['entity']['change']['translate-x'] = 0;
         args['entity']['change']['translate-y'] = 0;
         args['entity']['change']['translate-z'] = 0;
