@@ -1170,7 +1170,7 @@ function webgl_init(args){
       'directional-red': args['directional-red'],
       'directional-state': args['directional-state'],
       'directional-vector': args['directional-vector'],
-      'draw-type': false,
+      'draw-type': '',
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
