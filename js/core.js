@@ -1119,7 +1119,7 @@ function core_repo_init(args){
     );
 
     core_repo_title = args['title'];
-    if(args['info'].length > 0){
+    if(args['info'].length){
         document.getElementById('core-menu-info').innerHTML = '<hr>' + args['info'];
     }
     if(args['storage'] !== false){
@@ -1266,7 +1266,7 @@ function core_round(args){
         + 'e-' + args['decimals']
     );
 
-    if(eString.length > 0){
+    if(eString.length){
         result = Number(result + eString);
     }
 
@@ -1456,7 +1456,7 @@ function core_storage_save(args){
 
         if(data !== void 0
           && data !== NaN
-          && String(data).length > 0
+          && String(data).length
           && data !== core_storage_info[key]['default']){
             globalThis.localStorage.setItem(
               core_storage_info[key]['prefix'] + key,
