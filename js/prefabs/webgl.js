@@ -883,49 +883,41 @@ function prefabs_webgl_tree_2d(args){
       },
     });
 
-    entity_create({
-      'id': 'webgl-tree_' + args['id'] + '_base',
-      'properties': {
-        'billboard': args['billboard'],
-        'dx': args['dx'],
-        'dy': args['dy'],
-        'dz': args['dz'],
-        'translate-x': args['x'],
-        'translate-y': args['y'],
-        'translate-z': args['z'],
-        'vertex-colors': args['color-base'],
-        'vertices': [
-          1, 0, -.01, 1,
-          0, 4, -.01, 1,
-          -1, 0, -.01, 1,
-        ],
-      },
-    });
-    entity_create({
-      'id': 'webgl-tree_' + args['id'] + '_leaf',
-      'properties': {
-        'billboard': args['billboard'],
-        'draw-type': 'TRIANGLES',
-        'dx': args['dx'],
-        'dy': args['dy'],
-        'dz': args['dz'],
-        'translate-x': args['x'],
-        'translate-y': args['y'],
-        'translate-z': args['z'],
-        'vertex-colors': args['color-leaf'],
-        'vertices': [
-          3, 1, 0, 1,
-          0, 5, 0, 1,
-          -3, 1, 0, 1,
-        ],
-      },
-    });
-
-    entity_group_add({
+    webgl_entity_create({
       'entities': [
-        'webgl-tree_' + args['id'] + '_base',
-        'webgl-tree_' + args['id'] + '_leaf',
+        {
+          'billboard': args['billboard'],
+          'dx': args['dx'],
+          'dy': args['dy'],
+          'dz': args['dz'],
+          'id': 'webgl-tree_' + args['id'] + '_base',
+          'translate-x': args['x'],
+          'translate-y': args['y'],
+          'translate-z': args['z'],
+          'vertex-colors': args['color-base'],
+          'vertices': [
+            1, 0, -.01, 1,
+            0, 4, -.01, 1,
+            -1, 0, -.01, 1,
+          ],
+        },
+        {
+          'billboard': args['billboard'],
+          'draw-type': 'TRIANGLES',
+          'dx': args['dx'],
+          'dy': args['dy'],
+          'dz': args['dz'],
+          'id': 'webgl-tree_' + args['id'] + '_leaf',
+          'translate-x': args['x'],
+          'translate-y': args['y'],
+          'translate-z': args['z'],
+          'vertex-colors': args['color-leaf'],
+          'vertices': [
+            3, 1, 0, 1,
+            0, 5, 0, 1,
+            -3, 1, 0, 1,
+          ],
+        },
       ],
-      'group': args['id'],
     });
 }
