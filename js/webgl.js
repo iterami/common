@@ -356,15 +356,18 @@ function webgl_character_random(args){
       'level': 1,
     });
 
-    prefabs_webgl_cuboid({
-      'all': {
-        'collision': false,
+    core_call({
+      'args': {
+        'all': {
+          'collision': false,
+        },
+        'character': args['id'],
+        'random-colors': true,
+        'size-x': horizontal * 2,
+        'size-y': vertical * 2,
+        'size-z': horizontal * 2,
       },
-      'character': args['id'],
-      'random-colors': true,
-      'size-x': horizontal * 2,
-      'size-y': vertical * 2,
-      'size-z': horizontal * 2,
+      'todo': 'prefabs_webgl_cuboid',
     });
 }
 
