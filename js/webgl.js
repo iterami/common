@@ -2328,11 +2328,11 @@ function webgl_path_move(args){
               : path['end'];
 
             if(end === 2){
-                const point = path['points'].length - 2;
-                args['entity']['path-point'] = point;
-                args['entity']['translate-x'] = path['points'][point]['translate-x'];
-                args['entity']['translate-y'] = path['points'][point]['translate-y'];
-                args['entity']['translate-z'] = path['points'][point]['translate-z'];
+                const last = path['points'].length - 1;
+                args['entity']['path-point'] = last - 1;
+                args['entity']['translate-x'] = path['points'][last]['translate-x'];
+                args['entity']['translate-y'] = path['points'][last]['translate-y'];
+                args['entity']['translate-z'] = path['points'][last]['translate-z'];
 
             }else if(end === 1){
                 args['entity']['path-point'] = path['points'].length - 1;
