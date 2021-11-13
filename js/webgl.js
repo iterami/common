@@ -2322,23 +2322,24 @@ function webgl_path_move(args){
                 args['entity']['path-point'] += 1;
             }
 
-        }else if(args['entity']['path-point'] <= 0){
+        }else if(args['entity']['path-point'] === 0){
             const end = args['entity']['path-end'] !== 0
               ? args['entity']['path-end']
               : path['end'];
 
             if(end === 2){
-                args['entity']['path-point'] = path['points'].length - 2;
-                args['entity']['translate-x'] = path['points'][args['entity']['path-point']]['translate-x'];
-                args['entity']['translate-y'] = path['points'][args['entity']['path-point']]['translate-y'];
-                args['entity']['translate-z'] = path['points'][args['entity']['path-point']]['translate-z'];
+                const point = path['points'].length - 2;
+                args['entity']['path-point'] = point;
+                args['entity']['translate-x'] = path['points'][point]['translate-x'];
+                args['entity']['translate-y'] = path['points'][point]['translate-y'];
+                args['entity']['translate-z'] = path['points'][point]['translate-z'];
 
             }else if(end === 1){
                 args['entity']['path-point'] = path['points'].length - 1;
 
             }else if(end === -1){
                 args['entity']['path-direction'] = 1;
-                args['entity']['path-point'] += 1;
+                args['entity']['path-point'] = 1;
 
             }else{
                 args['entity']['path-id'] = '';
