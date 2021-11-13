@@ -2357,17 +2357,20 @@ function webgl_path_use(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'path-direction': 1,
-        'path-end': 0,
         'path-id': '',
         'path-point': 0,
+        'use-path-properties': true,
       },
     });
 
-    args['entity']['path-direction'] = args['path-direction'];
-    args['entity']['path-end'] = args['path-end'];
     args['entity']['path-id'] = args['path-id'];
     args['entity']['path-point'] = args['path-point'];
+
+    if(args['use-path-properties']
+      && webgl_paths[args['path-id']]){
+        args['entity']['path-direction'] = webgl_paths[args['path-id']]['path-direction'];
+        args['entity']['path-end'] = webgl_paths[args['path-id']]['path-end'];
+    }
 }
 
 function webgl_perspective(){
