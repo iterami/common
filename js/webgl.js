@@ -367,7 +367,7 @@ function webgl_character_random(args){
         'size-y': vertical * 2,
         'size-z': horizontal * 2,
       },
-      'todo': 'prefabs_webgl_cuboid',
+      'todo': 'webgl_primitive_cuboid',
     });
 }
 
@@ -2446,6 +2446,399 @@ function webgl_pick_entity(args){
             });
             break;
         }
+    }
+}
+
+function webgl_primitive_cuboid(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'all': {},
+        'back': {},
+        'bottom': {},
+        'character': webgl_character_id,
+        'front': {},
+        'groups': [],
+        'left': {},
+        'prefix': entity_id_count,
+        'random-colors': false,
+        'right': {},
+        'size-x': 1,
+        'size-y': 1,
+        'size-z': 1,
+        'top': {},
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
+    });
+
+    const half_size_x = args['size-x'] / 2;
+    const half_size_y = args['size-y'] / 2;
+    const half_size_z = args['size-z'] / 2;
+    const vertices_size_x = Math.abs(half_size_x);
+    const vertices_size_y = Math.abs(half_size_y);
+    const vertices_size_z = Math.abs(half_size_z);
+
+    if(args['random-colors']){
+        args['back']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['bottom']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['front']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['left']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['right']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+        args['top']['vertex-colors'] = webgl_vertexcolorarray({
+          'random-colors': true,
+        });
+    }
+
+    // Top.
+    if(args['top']['exclude'] !== true){
+        const properties = {
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'] + half_size_y,
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'groups': args['groups'],
+          'id': args['prefix'] + '-top',
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_z, 1,
+            -vertices_size_x, 0, -vertices_size_z, 1,
+            -vertices_size_x, 0, vertices_size_z, 1,
+            vertices_size_x, 0, vertices_size_z, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['top']
+        );
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Bottom.
+    if(args['bottom']['exclude'] !== true){
+        const properties = {
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'] - half_size_y,
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'groups': args['groups'],
+          'id': args['prefix'] + '-bottom',
+          'rotate-x': 180,
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_z, 1,
+            -vertices_size_x, 0, -vertices_size_z, 1,
+            -vertices_size_x, 0, vertices_size_z, 1,
+            vertices_size_x, 0, vertices_size_z, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['bottom']
+        );
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Front.
+    if(args['front']['exclude'] !== true){
+        const properties = {
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'] + half_size_z,
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'groups': args['groups'],
+          'id': args['prefix'] + '-front',
+          'rotate-x': 90,
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_y, 1,
+            -vertices_size_x, 0, -vertices_size_y, 1,
+            -vertices_size_x, 0, vertices_size_y, 1,
+            vertices_size_x, 0, vertices_size_y, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['front']
+        );
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Back.
+    if(args['back']['exclude'] !== true){
+        const properties = {
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'] - half_size_z,
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'groups': args['groups'],
+          'id': args['prefix'] + '-back',
+          'rotate-x': 270,
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_y, 1,
+            -vertices_size_x, 0, -vertices_size_y, 1,
+            -vertices_size_x, 0, vertices_size_y, 1,
+            vertices_size_x, 0, vertices_size_y, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['back']
+        );
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Left.
+    if(args['left']['exclude'] !== true){
+        const properties = {
+          'attach-offset-x': args['translate-x'] - half_size_x,
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'groups': args['groups'],
+          'id': args['prefix'] + '-left',
+          'rotate-z': 90,
+          'vertices': [
+            vertices_size_y, 0, -vertices_size_z, 1,
+            -vertices_size_y, 0, -vertices_size_z, 1,
+            -vertices_size_y, 0, vertices_size_z, 1,
+            vertices_size_y, 0, vertices_size_z, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['left']
+        );
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+
+    // Right.
+    if(args['right']['exclude'] !== true){
+        const properties = {
+          'attach-offset-x': args['translate-x'] + half_size_x,
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'groups': args['groups'],
+          'id': args['prefix'] + '-right',
+          'rotate-z': 270,
+          'vertices': [
+            vertices_size_y, 0, -vertices_size_z, 1,
+            -vertices_size_y, 0, -vertices_size_z, 1,
+            -vertices_size_y, 0, vertices_size_z, 1,
+            vertices_size_y, 0, vertices_size_z, 1
+          ],
+        };
+        Object.assign(
+          properties,
+          args['all']
+        );
+        Object.assign(
+          properties,
+          args['right']
+        );
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+}
+
+function webgl_primitive_ellipsoid(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'color0': [
+          1, 1, 1, 1,
+        ],
+        'color1': [
+          0, 1, 0, 1,
+        ],
+        'groups': [],
+        'prefix': entity_id_count,
+        'radius-x': 5,
+        'radius-y': 5,
+        'radius-z': 5,
+        'slices-latitude': 10,
+        'slices-longitude': 10,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
+    });
+
+    const latitude_angles = math_degrees_to_radians({
+      'degrees': 360 / args['slices-latitude'],
+    });
+    const longitude_angles = math_degrees_to_radians({
+      'degrees': 180 / args['slices-longitude'],
+    });
+    const longitude_start = math_degrees_to_radians({
+      'degrees': -90,
+    });
+
+    const properties = {
+      'attach-offset-x': args['translate-x'],
+      'attach-offset-y': args['translate-y'],
+      'attach-offset-z': args['translate-z'],
+      'attach-to': args['character'],
+      'attach-type': 'webgl_characters',
+      'collision': false,
+      'groups': args['groups'],
+    };
+    for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
+        if(longitude === args['slices-longitude'] / 2){
+            const temp_blue = args['color0'][2];
+            const temp_green = args['color0'][1];
+            const temp_red = args['color0'][0];
+
+            args['color0'][0] = args['color1'][0];
+            args['color0'][1] = args['color1'][1];
+            args['color0'][2] = args['color1'][2];
+
+            args['color1'][0] = temp_red;
+            args['color1'][1] = temp_green;
+            args['color1'][2] = temp_blue;
+        }
+
+        let pole = 0;
+        if(longitude === 0){
+            pole = 1;
+
+        }else if(longitude === args['slices-longitude'] - 1){
+            pole = -1;
+        }
+
+        properties['id'] = args['prefix'] + '-quad-' + longitude;
+        properties['vertex-colors'] = [];
+        properties['vertices'] = [];
+
+        const longitude_bottom = longitude_start + longitude * longitude_angles;
+        const longitude_top = longitude_start + (longitude + 1) * longitude_angles;
+
+        if(pole === 0){
+            properties['draw-type'] = 'TRIANGLE_STRIP';
+
+        }else{
+            if(pole === 1){
+                properties['vertex-colors'].push(
+                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
+                );
+
+            }else{
+                properties['vertex-colors'].push(
+                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
+                );
+            }
+
+            properties['vertices'].push(
+              0, args['radius-y'] * pole, 0, 1
+            );
+            properties['draw-type'] = 'TRIANGLE_FAN';
+        }
+
+        for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
+            const rotation = latitude * latitude_angles;
+
+            const xbottom = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_bottom);
+            const ybottom = args['radius-y'] * Math.sin(longitude_bottom);
+            const zbottom = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_bottom);
+
+            const xtop = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_top);
+            const ytop = args['radius-y'] * Math.sin(longitude_top);
+            const ztop = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_top);
+
+            if(pole === 1){
+                properties['vertex-colors'].push(
+                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
+                );
+                properties['vertices'].push(
+                  xtop, -ytop, ztop, 1
+                );
+
+            }else if(pole === -1){
+                properties['vertex-colors'].push(
+                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
+                );
+                properties['vertices'].splice(
+                  4,
+                  0,
+                  xbottom, -ybottom, zbottom, 1
+                );
+
+            }else{
+                properties['vertex-colors'].push(
+                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
+                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
+                );
+                properties['vertices'].push(
+                  xtop, ytop, ztop, 1,
+                  xbottom, ybottom, zbottom, 1
+                );
+            }
+        }
+
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
     }
 }
 
