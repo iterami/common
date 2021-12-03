@@ -49,6 +49,9 @@ ol,
 ul{
     margin: 0;
 }
+.right{
+    text-align: right;
+}
 table{
     border-collapse: collapse;
 }
