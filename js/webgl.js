@@ -1139,7 +1139,6 @@ function webgl_init(args){
         );
     }
 
-    // Init extensions.
     webgl_extension({
       'id': 'EXT_texture_filter_anisotropic',
       'label': 'anisotropic',
@@ -2501,7 +2500,6 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    // Top.
     if(args['top']['exclude'] !== true){
         const properties = {
           'attach-offset-x': args['translate-x'],
@@ -2533,7 +2531,6 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    // Bottom.
     if(args['bottom']['exclude'] !== true){
         const properties = {
           'attach-offset-x': args['translate-x'],
@@ -2566,7 +2563,6 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    // Front.
     if(args['front']['exclude'] !== true){
         const properties = {
           'attach-offset-x': args['translate-x'],
@@ -2599,7 +2595,6 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    // Back.
     if(args['back']['exclude'] !== true){
         const properties = {
           'attach-offset-x': args['translate-x'],
@@ -2632,7 +2627,6 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    // Left.
     if(args['left']['exclude'] !== true){
         const properties = {
           'attach-offset-x': args['translate-x'] - half_size_x,
@@ -2665,7 +2659,6 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    // Right.
     if(args['right']['exclude'] !== true){
         const properties = {
           'attach-offset-x': args['translate-x'] + half_size_x,
@@ -2912,7 +2905,7 @@ function webgl_scissor(args){
 
 function webgl_settings_init(){
     core_tab_create({
-      'content': '<table><tr><td><input class=mini id=anisotropic><td>Anisotropic Filtering</table>'
+      'content': '<table><tr><td><input class=mini id=anisotropic min=0 type=number><td>Anisotropic Filtering</table>'
         + '<input id=settings-reset-webgl type=button value="Reset WebGL Settings">',
       'group': 'core-menu',
       'id': 'webgl',

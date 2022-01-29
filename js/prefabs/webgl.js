@@ -319,7 +319,6 @@ function prefabs_webgl_lines_tree(args){
       'vertex-colors': args['vertex-colors-trunk'],
     };
 
-    // Create trunk section.
     const trunk_count = core_random_integer({
       'max': args['trunk-count-max'] - args['trunk-count-min'] + 1,
     }) + args['trunk-count-min'];
@@ -347,7 +346,6 @@ function prefabs_webgl_lines_tree(args){
         properties['attach-offset-y'] += 10;
         trunk_width -= trunk_width_decrease;
 
-        // Add branches.
         const branch_count = core_random_integer({
           'max': args['trunk-branch-max'] - args['trunk-branch-min'] + 1,
         }) + args['trunk-branch-min'];
@@ -376,8 +374,6 @@ function prefabs_webgl_lines_tree(args){
             });
         }
     }
-
-    // Create leaves.
 }
 
 // Required args: tiles

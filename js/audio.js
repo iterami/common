@@ -121,7 +121,6 @@ function audio_source_create(args){
       'timeout': audio_audios[args['id']]['timeout'] || 1000,
     };
 
-    // Create audio nodes.
     const connections_length = audio_audios[args['id']]['connections'].length;
     for(let i = 0; i < connections_length; i++){
         audio_node_create({
@@ -135,7 +134,6 @@ function audio_source_create(args){
         }
     }
 
-    // Connect audio nodes.
     for(let i = 0; i < connections_length - 1; i++){
         audio_sources[args['id']][audio_audios[args['id']]['connections'][i]['label']].connect(
           audio_sources[args['id']][audio_audios[args['id']]['connections'][i + 1]['label']]
