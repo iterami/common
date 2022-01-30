@@ -49,12 +49,18 @@ hr{
 }
 input{
     border-color: #aaa;
+    width: 200px;
 }
 input:disabled{
     border-color: #777;
 }
 input[type=button]{
     padding: 2px 7px;
+}
+input[type=button],
+input[type=checkbox],
+input[type=file]{
+    width: auto;
 }
 input[type=button]:enabled,
 input[type=checkbox]:enabled,
@@ -64,15 +70,16 @@ label,
 select:enabled{
     cursor: pointer;
 }
+input[type=color],
+.mini{
+    width: 5em;
+}
 .left,
 select{
     text-align: left;
 }
 .medium{
     font-size: 200%;
-}
-.mini{
-    width: 5em;
 }
 pre,
 ul{
