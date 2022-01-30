@@ -1,18 +1,18 @@
-.box{
+div.box{
     background: #000;
     border: 1px solid #aaa;
     height: 6em;
     margin: auto;
     width: 250px;
 }
-.gridbutton{
+input.gridbutton{
     border-width: 0;
     height: 25px;
     margin: 1px;
     vertical-align: top;
     width: 25px;
 }
-.gridbuttonclickable{
+input.gridbuttonclickable{
     border-width: 0;
     color: #000;
     font-size: 300%;
