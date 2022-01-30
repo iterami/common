@@ -2905,7 +2905,7 @@ function webgl_scissor(args){
 
 function webgl_settings_init(){
     core_tab_create({
-      'content': '<table><tr><td><input class=mini id=anisotropic min=0 type=number><td>Anisotropic Filtering</table>'
+      'content': '<table><tr><td><input class=mini id=anisotropic min=0 step=any type=number><td>Anisotropic Filtering</table>'
         + '<input id=settings-reset-webgl type=button value="Reset WebGL Settings">',
       'group': 'core-menu',
       'id': 'webgl',

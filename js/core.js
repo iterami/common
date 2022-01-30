@@ -613,18 +613,18 @@ function core_init(){
     });
 
     core_tab_create({
-      'content': '<table><tr><td><input class=mini id=audio-volume max=1 min=0 type=number><td>Audio Volume'
+      'content': '<table><tr><td><input class=mini id=audio-volume max=1 min=0 step=any type=number><td>Audio Volume'
         + '<tr><td><input id=color-negative type=color><td>Color Negative'
         + '<tr><td><input id=color-positive type=color><td>Color Positive'
-        + '<tr><td><input class=mini id=crouch min=0 type=number><td>Crouch'
-        + '<tr><td><input class=mini id=decimals min=0 type=number><td>Decimals'
-        + '<tr><td><input class=mini id=jump min=0 type=number><td>Jump'
-        + '<tr><td><input class=mini id=mouse-sensitivity min=0 type=number><td>Mouse Sensitivity'
-        + '<tr><td><input class=mini id=move-↑ min=0 type=number><td>Move ↑'
-        + '<tr><td><input class=mini id=move-← min=0 type=number><td>Move ←'
-        + '<tr><td><input class=mini id=move-↓ min=0 type=number><td>Move ↓'
-        + '<tr><td><input class=mini id=move-→ min=0 type=number><td>Move →'
-        + '<tr><td><input class=mini id=reset min=0 type=number><td>Reset</table>'
+        + '<tr><td><input class=mini id=crouch min=0 step=any type=number><td>Crouch'
+        + '<tr><td><input class=mini id=decimals min=0 step=any type=number><td>Decimals'
+        + '<tr><td><input class=mini id=jump min=0 step=any type=number><td>Jump'
+        + '<tr><td><input class=mini id=mouse-sensitivity min=0 step=any type=number><td>Mouse Sensitivity'
+        + '<tr><td><input class=mini id=move-↑ min=0 step=any type=number><td>Move ↑'
+        + '<tr><td><input class=mini id=move-← min=0 step=any type=number><td>Move ←'
+        + '<tr><td><input class=mini id=move-↓ min=0 step=any type=number><td>Move ↓'
+        + '<tr><td><input class=mini id=move-→ min=0 step=any type=number><td>Move →'
+        + '<tr><td><input class=mini id=reset min=0 step=any type=number><td>Reset</table>'
         + '<input id=settings-reset type=button value="Reset Global iterami Settings">',
       'group': 'core-menu',
       'id': 'iterami',
