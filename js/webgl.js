@@ -2903,37 +2903,6 @@ function webgl_scissor(args){
     return result;
 }
 
-function webgl_settings_init(){
-    core_tab_create({
-      'content': '<table><tr><td><input class=mini id=anisotropic min=0 step=any type=number><td>Anisotropic Filtering</table>'
-        + '<input id=settings-reset-webgl type=button value="Reset WebGL Settings">',
-      'group': 'core-menu',
-      'id': 'webgl',
-      'label': 'WebGL',
-    });
-
-    core_storage_add({
-      'prefix': 'webgl-',
-      'storage': {
-        'anisotropic': 16,
-      },
-    });
-    core_storage_update();
-
-    core_events_bind({
-      'elements': {
-        'settings-reset-webgl': {
-          'onclick': function(){
-              core_storage_reset({
-                'label': 'WebGL',
-                'prefix': 'webgl-',
-              });
-          },
-        },
-      },
-    });
-}
-
 // Required args: source, type
 function webgl_shader_create(args){
     const shader = webgl_buffer.createShader(args['type']);
@@ -3135,6 +3104,37 @@ function webgl_stat_modify(args){
 
         }
     }
+}
+
+function webgl_storage_init(){
+    core_tab_create({
+      'content': '<table><tr><td><input class=mini id=anisotropic min=0 step=any type=number><td>Anisotropic Filtering</table>'
+        + '<input id=storage-reset-webgl type=button value="Reset WebGL localStorage">',
+      'group': 'core-menu',
+      'id': 'webgl',
+      'label': 'WebGL',
+    });
+
+    core_storage_add({
+      'prefix': 'webgl-',
+      'storage': {
+        'anisotropic': 16,
+      },
+    });
+    core_storage_update();
+
+    core_events_bind({
+      'elements': {
+        'storage-reset-webgl': {
+          'onclick': function(){
+              core_storage_reset({
+                'label': 'WebGL',
+                'prefix': 'webgl-',
+              });
+          },
+        },
+      },
+    });
 }
 
 // Required args: entity

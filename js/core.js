@@ -600,7 +600,7 @@ function core_init(){
           + '<div id=core-menu-info></div><hr>'
           + '<span id=core-menu-tabs></span>'
           + '<div id=core-menu-tabcontent></div><hr>'
-          + '<input id=settings-save type=button value="Save All Settings">',
+          + '<input id=storage-save type=button value="Save All to localStorage">',
       },
       'type': 'span',
     });
@@ -625,7 +625,7 @@ function core_init(){
         + '<tr><td><input class=mini id=move-↓ min=0 step=any type=number><td>Move ↓'
         + '<tr><td><input class=mini id=move-→ min=0 step=any type=number><td>Move →'
         + '<tr><td><input class=mini id=reset min=0 step=any type=number><td>Reset</table>'
-        + '<input id=settings-reset type=button value="Reset Global iterami Settings">',
+        + '<input id=storage-reset type=button value="Reset Global iterami localStorage">',
       'group': 'core-menu',
       'id': 'iterami',
       'label': 'iterami',
@@ -682,7 +682,7 @@ function core_init(){
     globalThis.onwheel = core_handle_mousewheel;
     core_events_bind({
       'elements': {
-        'settings-reset': {
+        'storage-reset': {
           'onclick': function(){
               const keys = [];
               for(const key in core_storage_info){
@@ -696,7 +696,7 @@ function core_init(){
               });
           },
         },
-        'settings-save': {
+        'storage-save': {
           'onclick': core_storage_save,
         },
       },
@@ -1125,12 +1125,12 @@ function core_repo_init(args){
         });
         core_tab_create({
           'content': args['storage-menu']
-            + '<input id=settings-reset-repo type=button value="Reset ' + core_repo_title + ' Settings">',
+            + '<input id=storage-reset-repo type=button value="Reset ' + core_repo_title + ' localStorage">',
           'group': 'core-menu',
           'id': 'repo',
           'label': core_repo_title,
         });
-        args['events']['settings-reset-repo'] = {
+        args['events']['storage-reset-repo'] = {
           'onclick': function(){
               core_storage_reset({
                 'label': core_repo_title,
@@ -1393,7 +1393,7 @@ function core_storage_reset(args){
       },
     });
 
-    if(!globalThis.confirm('Reset ' + args['label'] + ' settings?')){
+    if(!globalThis.confirm('Reset ' + args['label'] + ' localStorage?')){
         return false;
     }
 
