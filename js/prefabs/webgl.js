@@ -478,11 +478,13 @@ function prefabs_webgl_tree_2d(args){
           .1, .3, .1, 1,
         ],
         'height': 5,
+        'leaf-bottom': 1,
         'prefix': entity_id_count,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
-        'width': 6,
+        'width-base': 1,
+        'width-leaf': 6,
       },
     });
 
@@ -499,9 +501,9 @@ function prefabs_webgl_tree_2d(args){
           'id': args['prefix'] + '_base',
           'vertex-colors': args['color-base'],
           'vertices': [
-            1, 0, -.01, 1,
+            args['width-base'] / 2, 0, -.01, 1,
             0, args['height'] * .9, -.01, 1,
-            -1, 0, -.01, 1,
+            -args['width-base'] / 2, 0, -.01, 1,
           ],
         },
         {
@@ -516,9 +518,9 @@ function prefabs_webgl_tree_2d(args){
           'id': args['prefix'] + '_leaf',
           'vertex-colors': args['color-leaf'],
           'vertices': [
-            args['width'] / 2, 1, 0, 1,
+            args['width-leaf'] / 2, args['leaf-bottom'], 0, 1,
             0, args['height'], 0, 1,
-            -args['width'] / 2, 1, 0, 1,
+            -args['width-leaf'] / 2, args['leaf-bottom'], 0, 1,
           ],
         },
       ],
