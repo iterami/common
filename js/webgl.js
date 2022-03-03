@@ -2835,6 +2835,173 @@ function webgl_primitive_ellipsoid(args){
     }
 }
 
+function webgl_primitive_frustum(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'color-bottom': [
+          1, 1, 1, 1,
+        ],
+        'color-top': [
+          1, 1, 1, 1,
+        ],
+        'length': 2,
+        'points': 8,
+        'prefix': entity_id_count,
+        'size-bottom': 2,
+        'size-top': 1,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
+    });
+
+    const rotation = math_degrees_to_radians({
+      'degrees': 360 / args['points'],
+    });
+    const properties = {
+      'attach-offset-x': args['translate-x'],
+      'attach-offset-y': args['translate-y'],
+      'attach-offset-z': args['translate-z'],
+      'attach-to': args['character'],
+      'attach-type': 'webgl_characters',
+      'collision': false,
+      'draw-type': 'TRIANGLE_FAN',
+    };
+
+    if(args['points'] === 1
+      || (args['size-bottom'] === 0 && args['size-top'] === 0)){
+        properties['draw-type'] = 'LINES';
+        properties['id'] = args['prefix'];
+        properties['vertex-colors'] = [
+          args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
+          args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1,
+        ];
+        properties['vertices'] = [
+          0, args['length'], 0, 1,
+          0, 0, 0, 1,
+        ];
+
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+        return;
+    }
+
+    properties['id'] = args['prefix'] + '-bottom';
+    properties['vertex-colors'] = [
+      args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1,
+    ];
+    properties['vertices'] = [
+      0, 0, 0, 1,
+    ];
+    for(let i = 0; i <= args['points']; i++){
+        const point_rotation = -i * rotation;
+
+        properties['vertex-colors'].push(
+          args['color-bottom'][0], args['color-bottom'][1], args['color-top'][2], 1
+        );
+        if(args['size-bottom'] === 0){
+            properties['vertices'].push(
+              args['size-top'] * Math.sin(point_rotation),
+              args['length'],
+              args['size-top'] * Math.cos(point_rotation),
+              1
+            );
+
+        }else{
+            properties['vertices'].push(
+              args['size-bottom'] * Math.sin(point_rotation),
+              0,
+              args['size-bottom'] * Math.cos(point_rotation),
+              1
+            );
+        }
+    }
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+
+    properties['id'] = args['prefix'] + '-top';
+    properties['vertex-colors'] = [
+      args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
+    ];
+    properties['vertices'] = [
+      0, args['length'], 0, 1,
+    ];
+    for(let i = 0; i <= args['points']; i++){
+        const point_rotation = i * rotation;
+
+        properties['vertex-colors'].push(
+          args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
+        );
+        if(args['size-top'] === 0){
+            properties['vertices'].push(
+              args['size-bottom'] * Math.sin(point_rotation),
+              0,
+              args['size-bottom'] * Math.cos(point_rotation),
+              1
+            );
+
+        }else{
+            properties['vertices'].push(
+              args['size-top'] * Math.sin(point_rotation),
+              args['length'],
+              args['size-top'] * Math.cos(point_rotation),
+              1
+            );
+        }
+    }
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
+
+    if(args['size-bottom'] !== 0 && args['size-top'] !== 0){
+        properties['draw-type'] = 'TRIANGLE_STRIP';
+        properties['id'] = args['prefix'] + '-middle';
+        properties['vertex-colors'] = [
+          args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
+        ];
+        properties['vertices'] = [
+          args['size-top'] * Math.sin(rotation),
+          args['length'],
+          args['size-top'] * Math.cos(rotation),
+          1,
+        ];
+        for(let i = 0; i <= args['points']; i++){
+            const point_rotation = i * rotation;
+            const next_rotation = (i + 1) * rotation;
+
+            properties['vertex-colors'].push(
+              args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1,
+              args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
+            );
+            properties['vertices'].push(
+              args['size-bottom'] * Math.sin(point_rotation),
+              0,
+              args['size-bottom'] * Math.cos(point_rotation),
+              1,
+              args['size-top'] * Math.sin(next_rotation),
+              args['length'],
+              args['size-top'] * Math.cos(next_rotation),
+              1
+            );
+        }
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
+    }
+}
+
 // Required args: shaders
 function webgl_program_create(args){
     const program = webgl_buffer.createProgram();
