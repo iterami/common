@@ -2839,18 +2839,21 @@ function webgl_primitive_frustum(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'bottom': true,
         'character': webgl_character_id,
         'color-bottom': [
           1, 1, 1, 1,
         ],
         'color-top': [
-          1, 1, 1, 1,
+          0, 1, 0, 1,
         ],
         'length': 2,
+        'middle': true,
         'points': 8,
         'prefix': entity_id_count,
         'size-bottom': 2,
         'size-top': 1,
+        'top': true,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -2891,79 +2894,85 @@ function webgl_primitive_frustum(args){
         return;
     }
 
-    properties['id'] = args['prefix'] + '-bottom';
-    properties['vertex-colors'] = [
-      args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1,
-    ];
-    properties['vertices'] = [
-      0, 0, 0, 1,
-    ];
-    for(let i = 0; i <= args['points']; i++){
-        const point_rotation = -i * rotation;
+    if(args['bottom']){
+        properties['id'] = args['prefix'] + '-bottom';
+        properties['vertex-colors'] = [
+          args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1,
+        ];
+        properties['vertices'] = [
+          0, 0, 0, 1,
+        ];
+        for(let i = 0; i <= args['points']; i++){
+            const point_rotation = -i * rotation;
 
-        properties['vertex-colors'].push(
-          args['color-bottom'][0], args['color-bottom'][1], args['color-top'][2], 1
-        );
-        if(args['size-bottom'] === 0){
-            properties['vertices'].push(
-              args['size-top'] * Math.sin(point_rotation),
-              args['length'],
-              args['size-top'] * Math.cos(point_rotation),
-              1
+            properties['vertex-colors'].push(
+              args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1
             );
+            if(args['size-bottom'] === 0){
+                properties['vertices'].push(
+                  args['size-top'] * Math.sin(point_rotation),
+                  args['length'],
+                  args['size-top'] * Math.cos(point_rotation),
+                  1
+                );
 
-        }else{
-            properties['vertices'].push(
-              args['size-bottom'] * Math.sin(point_rotation),
-              0,
-              args['size-bottom'] * Math.cos(point_rotation),
-              1
-            );
+            }else{
+                properties['vertices'].push(
+                  args['size-bottom'] * Math.sin(point_rotation),
+                  0,
+                  args['size-bottom'] * Math.cos(point_rotation),
+                  1
+                );
+            }
         }
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
     }
-    webgl_entity_create({
-      'entities': [
-        properties,
-      ],
-    });
 
-    properties['id'] = args['prefix'] + '-top';
-    properties['vertex-colors'] = [
-      args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
-    ];
-    properties['vertices'] = [
-      0, args['length'], 0, 1,
-    ];
-    for(let i = 0; i <= args['points']; i++){
-        const point_rotation = i * rotation;
+    if(args['top']){
+        properties['id'] = args['prefix'] + '-top';
+        properties['vertex-colors'] = [
+          args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
+        ];
+        properties['vertices'] = [
+          0, args['length'], 0, 1,
+        ];
+        for(let i = 0; i <= args['points']; i++){
+            const point_rotation = i * rotation;
 
-        properties['vertex-colors'].push(
-          args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
-        );
-        if(args['size-top'] === 0){
-            properties['vertices'].push(
-              args['size-bottom'] * Math.sin(point_rotation),
-              0,
-              args['size-bottom'] * Math.cos(point_rotation),
-              1
+            properties['vertex-colors'].push(
+              args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
             );
+            if(args['size-top'] === 0){
+                properties['vertices'].push(
+                  args['size-bottom'] * Math.sin(point_rotation),
+                  0,
+                  args['size-bottom'] * Math.cos(point_rotation),
+                  1
+                );
 
-        }else{
-            properties['vertices'].push(
-              args['size-top'] * Math.sin(point_rotation),
-              args['length'],
-              args['size-top'] * Math.cos(point_rotation),
-              1
-            );
+            }else{
+                properties['vertices'].push(
+                  args['size-top'] * Math.sin(point_rotation),
+                  args['length'],
+                  args['size-top'] * Math.cos(point_rotation),
+                  1
+                );
+            }
         }
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+        });
     }
-    webgl_entity_create({
-      'entities': [
-        properties,
-      ],
-    });
 
-    if(args['size-bottom'] !== 0 && args['size-top'] !== 0){
+    if(args['middle']
+      && args['size-bottom'] !== 0
+      && args['size-top'] !== 0){
         properties['draw-type'] = 'TRIANGLE_STRIP';
         properties['id'] = args['prefix'] + '-middle';
         properties['vertex-colors'] = [
