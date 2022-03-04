@@ -2905,10 +2905,10 @@ function webgl_primitive_frustum(args){
         for(let i = 0; i <= args['points']; i++){
             const point_rotation = -i * rotation;
 
-            properties['vertex-colors'].push(
-              args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1
-            );
             if(args['size-bottom'] === 0){
+                properties['vertex-colors'].push(
+                  args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
+                );
                 properties['vertices'].push(
                   args['size-top'] * Math.sin(point_rotation),
                   args['length'],
@@ -2917,6 +2917,9 @@ function webgl_primitive_frustum(args){
                 );
 
             }else{
+                properties['vertex-colors'].push(
+                  args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1
+                );
                 properties['vertices'].push(
                   args['size-bottom'] * Math.sin(point_rotation),
                   0,
@@ -2943,10 +2946,10 @@ function webgl_primitive_frustum(args){
         for(let i = 0; i <= args['points']; i++){
             const point_rotation = i * rotation;
 
-            properties['vertex-colors'].push(
-              args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
-            );
             if(args['size-top'] === 0){
+                properties['vertex-colors'].push(
+                  args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1
+                );
                 properties['vertices'].push(
                   args['size-bottom'] * Math.sin(point_rotation),
                   0,
@@ -2955,6 +2958,9 @@ function webgl_primitive_frustum(args){
                 );
 
             }else{
+                properties['vertex-colors'].push(
+                  args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
+                );
                 properties['vertices'].push(
                   args['size-top'] * Math.sin(point_rotation),
                   args['length'],
