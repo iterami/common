@@ -793,7 +793,7 @@ function webgl_draw_entity(entity){
     );
 
     webgl_buffer.drawArrays(
-      webgl_buffer[webgl_properties['draw-type'] || entity_entities[entity]['draw-type']],
+      webgl_buffer[webgl_properties['draw-mode'] || entity_entities[entity]['draw-mode']],
       0,
       entity_entities[entity]['vertices-length']
     );
@@ -1172,7 +1172,7 @@ function webgl_init(args){
       'directional-red': args['directional-red'],
       'directional-state': args['directional-state'],
       'directional-vector': args['directional-vector'],
-      'draw-type': '',
+      'draw-mode': '',
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
@@ -1249,7 +1249,7 @@ function webgl_init(args){
         'collides': false,
         'collision': true,
         'draw': true,
-        'draw-type': 'TRIANGLE_FAN',
+        'draw-mode': 'TRIANGLE_FAN',
         'event-modify': [],
         'event-range': false,
         'event-target-id': false,
@@ -2194,7 +2194,7 @@ function webgl_particles_create(args){
             'collide-range-horizontal': args['collide-range'],
             'collide-range-vertical': args['collide-range'],
             'collides': args['collides'],
-            'draw-type': 'POINTS',
+            'draw-mode': 'POINTS',
             'gravity': args['gravity'],
             'lifespan': args['lifespan'],
             'normals': [0, 1, 0],
@@ -2766,7 +2766,7 @@ function webgl_primitive_ellipsoid(args){
         const longitude_top = longitude_start + (longitude + 1) * longitude_angles;
 
         if(pole === 0){
-            properties['draw-type'] = 'TRIANGLE_STRIP';
+            properties['draw-mode'] = 'TRIANGLE_STRIP';
 
         }else{
             if(pole === 1){
@@ -2783,7 +2783,7 @@ function webgl_primitive_ellipsoid(args){
             properties['vertices'].push(
               0, args['radius-y'] * pole, 0, 1
             );
-            properties['draw-type'] = 'TRIANGLE_FAN';
+            properties['draw-mode'] = 'TRIANGLE_FAN';
         }
 
         for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
@@ -2870,12 +2870,12 @@ function webgl_primitive_frustum(args){
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'collision': false,
-      'draw-type': 'TRIANGLE_FAN',
+      'draw-mode': 'TRIANGLE_FAN',
     };
 
     if(args['points'] === 1
       || (args['size-bottom'] === 0 && args['size-top'] === 0)){
-        properties['draw-type'] = 'LINES';
+        properties['draw-mode'] = 'LINES';
         properties['id'] = args['prefix'];
         properties['vertex-colors'] = [
           args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
@@ -2979,7 +2979,7 @@ function webgl_primitive_frustum(args){
     if(args['middle']
       && args['size-bottom'] !== 0
       && args['size-top'] !== 0){
-        properties['draw-type'] = 'TRIANGLE_STRIP';
+        properties['draw-mode'] = 'TRIANGLE_STRIP';
         properties['id'] = args['prefix'] + '-middle';
         properties['vertex-colors'] = [
           args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,

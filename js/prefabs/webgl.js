@@ -153,7 +153,7 @@ function prefabs_webgl_humanoid(args){
           'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'draw-type': 'LINE_STRIP',
+          'draw-mode': 'LINE_STRIP',
           'collision': false,
           'id': args['prefix'] + '-' + part,
           'vertex-colors': webgl_vertexcolorarray({
@@ -182,7 +182,7 @@ function prefabs_webgl_lines_shrub(args){
         'color-leaf': [
           1, 1, 1,
         ],
-        'draw-type': 'LINE_STRIP',
+        'draw-mode': 'LINE_STRIP',
         'leaf-distance': .5,
         'points': 10,
         'prefix': entity_id_count,
@@ -264,7 +264,7 @@ function prefabs_webgl_lines_shrub(args){
       'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
-      'draw-type': args['draw-type'],
+      'draw-mode': args['draw-mode'],
       'collision': false,
       'id': args['prefix'],
       'vertex-colors': colors,
@@ -514,7 +514,7 @@ function prefabs_webgl_tree_2d(args){
           'attach-type': 'webgl_characters',
           'billboard': args['billboard'],
           'collision': false,
-          'draw-type': 'TRIANGLES',
+          'draw-mode': 'TRIANGLES',
           'id': args['prefix'] + '_leaf',
           'vertex-colors': args['color-leaf'],
           'vertices': [
