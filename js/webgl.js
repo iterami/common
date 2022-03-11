@@ -2878,8 +2878,8 @@ function webgl_primitive_frustum(args){
         properties['draw-mode'] = 'LINES';
         properties['id'] = args['prefix'];
         properties['vertex-colors'] = [
-          args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
-          args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1,
+          args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3],
+          args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3],
         ];
         properties['vertices'] = [
           0, args['length'], 0, 1,
@@ -2897,7 +2897,7 @@ function webgl_primitive_frustum(args){
     if(args['bottom']){
         properties['id'] = args['prefix'] + '-bottom';
         properties['vertex-colors'] = [
-          args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1,
+          args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3],
         ];
         properties['vertices'] = [
           0, 0, 0, 1,
@@ -2907,7 +2907,7 @@ function webgl_primitive_frustum(args){
 
             if(args['size-bottom'] === 0){
                 properties['vertex-colors'].push(
-                  args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
+                  args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3]
                 );
                 properties['vertices'].push(
                   args['size-top'] * Math.sin(point_rotation),
@@ -2918,7 +2918,7 @@ function webgl_primitive_frustum(args){
 
             }else{
                 properties['vertex-colors'].push(
-                  args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1
+                  args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3]
                 );
                 properties['vertices'].push(
                   args['size-bottom'] * Math.sin(point_rotation),
@@ -2938,7 +2938,7 @@ function webgl_primitive_frustum(args){
     if(args['top']){
         properties['id'] = args['prefix'] + '-top';
         properties['vertex-colors'] = [
-          args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
+          args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3],
         ];
         properties['vertices'] = [
           0, args['length'], 0, 1,
@@ -2948,7 +2948,7 @@ function webgl_primitive_frustum(args){
 
             if(args['size-top'] === 0){
                 properties['vertex-colors'].push(
-                  args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1
+                  args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3]
                 );
                 properties['vertices'].push(
                   args['size-bottom'] * Math.sin(point_rotation),
@@ -2959,7 +2959,7 @@ function webgl_primitive_frustum(args){
 
             }else{
                 properties['vertex-colors'].push(
-                  args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
+                  args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3]
                 );
                 properties['vertices'].push(
                   args['size-top'] * Math.sin(point_rotation),
@@ -2982,7 +2982,7 @@ function webgl_primitive_frustum(args){
         properties['draw-mode'] = 'TRIANGLE_STRIP';
         properties['id'] = args['prefix'] + '-middle';
         properties['vertex-colors'] = [
-          args['color-top'][0], args['color-top'][1], args['color-top'][2], 1,
+          args['color-top'][0], args['color-top'][1], args['color-top'][2],args['color-top'][3],
         ];
         properties['vertices'] = [
           args['size-top'] * Math.sin(rotation),
@@ -2995,8 +2995,8 @@ function webgl_primitive_frustum(args){
             const next_rotation = (i + 1) * rotation;
 
             properties['vertex-colors'].push(
-              args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], 1,
-              args['color-top'][0], args['color-top'][1], args['color-top'][2], 1
+              args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3],
+              args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3]
             );
             properties['vertices'].push(
               args['size-bottom'] * Math.sin(point_rotation),
