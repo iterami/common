@@ -102,42 +102,42 @@ function prefabs_webgl_humanoid(args){
 
     const bodyparts = {
       'head': [
-        0, 21, 1, 1,
-        0, 18, 1, 1,
-        0, 17, 0, 1,
+        0, 21, 1,
+        0, 18, 1,
+        0, 17, 0,
       ],
       'torso': [
-        -3, 17, 0, 1,
-        3, 17, 0, 1,
-        0, 17, 0, 1,
-        0, 14, 0, 1,
-        0, 11, 0, 1,
-        -2, 11, 0, 1,
-        2, 11, 0, 1,
+        -3, 17, 0,
+        3, 17, 0,
+        0, 17, 0,
+        0, 14, 0,
+        0, 11, 0,
+        -2, 11, 0,
+        2, 11, 0,
       ],
       'arm-left': [
-        -3, 17, 0, 1,
-        -3, 14, 1, 1,
-        -3, 13, 3, 1,
-        -3, 12, 4, 1,
+        -3, 17, 0,
+        -3, 14, 1,
+        -3, 13, 3,
+        -3, 12, 4,
       ],
       'arm-right': [
-        3, 17, 0, 1,
-        3, 14, 1, 1,
-        3, 13, 3, 1,
-        3, 12, 4, 1,
+        3, 17, 0,
+        3, 14, 1,
+        3, 13, 3,
+        3, 12, 4,
       ],
       'leg-left': [
-        -2, 11, 0, 1,
-        -2, 6, 1, 1,
-        -2, 0, 0, 1,
-        -2, 0, 1, 1,
+        -2, 11, 0,
+        -2, 6, 1,
+        -2, 0, 0,
+        -2, 0, 1,
       ],
       'leg-right': [
-        2, 11, 0, 1,
-        2, 6, 1, 1,
-        2, 0, 0, 1,
-        2, 0, 1, 1,
+        2, 11, 0,
+        2, 6, 1,
+        2, 0, 0,
+        2, 0, 1,
       ],
     };
     for(const part in bodyparts){
@@ -206,7 +206,7 @@ function prefabs_webgl_lines_shrub(args){
       1,
     ];
     const points = [
-      0, 0, 0, 1,
+      0, 0, 0,
     ];
     let x = 0;
     let y = 0;
@@ -332,10 +332,10 @@ function prefabs_webgl_lines_tree(args){
         properties['rotate-x'] = 0;
         properties['rotate-z'] = 0;
         properties['vertices'] = [
-          trunk_width, args['trunk-length'], 0, 1,
-          -trunk_width, args['trunk-length'], 0, 1,
-          -trunk_width, 0, 0, 1,
-          trunk_width, 0, 0, 1
+          trunk_width, args['trunk-length'], 0,
+          -trunk_width, args['trunk-length'], 0,
+          -trunk_width, 0, 0,
+          trunk_width, 0, 0,
         ];
         webgl_entity_create({
           'entities': [
@@ -361,10 +361,10 @@ function prefabs_webgl_lines_tree(args){
               'multiplier': 360,
             });
             properties['vertices'] = [
-              branch_width, branch_length, 0, 1,
-              -branch_width, branch_length, 0, 1,
-              -branch_width, 0, 0, 1,
-              branch_width, 0, 0, 1
+              branch_width, branch_length, 0,
+              -branch_width, branch_length, 0,
+              -branch_width, 0, 0,
+              branch_width, 0, 0,
             ];
 
             webgl_entity_create({
@@ -501,9 +501,9 @@ function prefabs_webgl_tree_2d(args){
           'id': args['prefix'] + '_base',
           'vertex-colors': args['color-base'],
           'vertices': [
-            args['width-base'] / 2, 0, -.01, 1,
-            0, args['height'] * .9, -.01, 1,
-            -args['width-base'] / 2, 0, -.01, 1,
+            args['width-base'] / 2, 0, -.01,
+            0, args['height'] * .9, -.01,
+            -args['width-base'] / 2, 0, -.01,
           ],
         },
         {
@@ -518,9 +518,9 @@ function prefabs_webgl_tree_2d(args){
           'id': args['prefix'] + '_leaf',
           'vertex-colors': args['color-leaf'],
           'vertices': [
-            args['width-leaf'] / 2, args['leaf-bottom'], 0, 1,
-            0, args['height'], 0, 1,
-            -args['width-leaf'] / 2, args['leaf-bottom'], 0, 1,
+            args['width-leaf'] / 2, args['leaf-bottom'], 0,
+            0, args['height'], 0,
+            -args['width-leaf'] / 2, args['leaf-bottom'], 0,
           ],
         },
       ],

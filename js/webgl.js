@@ -506,10 +506,10 @@ function webgl_collision(args){
             || args['target']['change']['translate-x'] > 0)){
             if(collider_position['x'] > target_position['x']
               && collider_position['x'] < target_position['x'] + range['x']
-              && collider_position['y'] > target_position['y'] + args['target']['vertices'][4] - range['y']
+              && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y']
               && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y']
               && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
-              && collider_position['z'] < target_position['z'] + args['target']['vertices'][10] + range['z']){
+              && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
                 collision = 'x';
             }
 
@@ -518,10 +518,10 @@ function webgl_collision(args){
             || args['target']['change']['translate-x'] < 0)){
             if(collider_position['x'] > target_position['x'] - range['x']
               && collider_position['x'] < target_position['x']
-              && collider_position['y'] > target_position['y'] + args['target']['vertices'][4] - range['y']
+              && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y']
               && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y']
               && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
-              && collider_position['z'] < target_position['z'] + args['target']['vertices'][10] + range['z']){
+              && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
                 collision = 'x';
                 collision_sign = -1;
             }
@@ -531,24 +531,24 @@ function webgl_collision(args){
         if(args['target']['normals'][1] === 1
           && (args['collider']['change']['translate-y'] < 0
             || args['target']['change']['translate-y'] > 0)){
-            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][4] - range['x']
+            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
               && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
               && collider_position['y'] > target_position['y']
               && collider_position['y'] < target_position['y'] + range['y']
               && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
-              && collider_position['z'] < target_position['z'] + args['target']['vertices'][10] + range['z']){
+              && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
                 collision = 'y';
             }
 
         }else if(args['target']['normals'][1] === -1
           && (args['collider']['change']['translate-y'] > 0
             || args['target']['change']['translate-y'] < 0)){
-            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][4] - range['x']
+            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
               && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
               && collider_position['y'] > target_position['y'] - range['y']
               && collider_position['y'] < target_position['y']
               && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
-              && collider_position['z'] < target_position['z'] + args['target']['vertices'][10] + range['z']){
+              && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
                 collision = 'y';
                 collision_sign = -1;
             }
@@ -558,10 +558,10 @@ function webgl_collision(args){
         if(args['target']['normals'][2] === 1
           && (args['collider']['change']['translate-z'] < 0
             || args['target']['change']['translate-z'] > 0)){
-            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][4] - range['x']
+            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
               && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
               && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
-              && collider_position['y'] < target_position['y'] + args['target']['vertices'][10] + range['y']
+              && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y']
               && collider_position['z'] > target_position['z']
               && collider_position['z'] < target_position['z'] + range['z']){
                 collision = 'z';
@@ -570,10 +570,10 @@ function webgl_collision(args){
         }else if(args['target']['normals'][2] === -1
           && (args['collider']['change']['translate-z'] > 0
             || args['target']['change']['translate-z'] < 0)){
-            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][4] - range['x']
+            if(collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
               && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
               && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
-              && collider_position['y'] < target_position['y'] + args['target']['vertices'][10] + range['y']
+              && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y']
               && collider_position['z'] > target_position['z'] - range['z']
               && collider_position['z'] < target_position['z']){
                 collision = 'z';
@@ -756,7 +756,7 @@ function webgl_draw_entity(entity){
     );
     webgl_buffer.vertexAttribPointer(
       webgl_properties['attributes']['vec_vertexPosition'],
-      4,
+      3,
       webgl_buffer.FLOAT,
       false,
       0,
@@ -948,7 +948,7 @@ function webgl_entity_move_to(args){
 
 function webgl_entity_todo(entity){
     entity_entities[entity]['id'] = entity;
-    entity_entities[entity]['vertices-length'] = entity_entities[entity]['vertices'].length / 4;
+    entity_entities[entity]['vertices-length'] = entity_entities[entity]['vertices'].length / 3;
 
     entity_entities[entity]['normals'] = webgl_normals({
       'rotate-x': entity_entities[entity]['rotate-x'],
@@ -2207,7 +2207,7 @@ function webgl_particles_create(args){
             'translate-y': position['y'],
             'translate-z': position['z'],
             'vertex-colors': args['color'],
-            'vertices': [0, 0, 0, 1],
+            'vertices': [0, 0, 0],
           },
         });
         math_matrices[id] = math_matrix_create();
@@ -2510,10 +2510,10 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-top',
           'vertices': [
-            vertices_size_x, 0, -vertices_size_z, 1,
-            -vertices_size_x, 0, -vertices_size_z, 1,
-            -vertices_size_x, 0, vertices_size_z, 1,
-            vertices_size_x, 0, vertices_size_z, 1
+            vertices_size_x, 0, -vertices_size_z,
+            -vertices_size_x, 0, -vertices_size_z,
+            -vertices_size_x, 0, vertices_size_z,
+            vertices_size_x, 0, vertices_size_z,
           ],
         };
         Object.assign(
@@ -2542,10 +2542,10 @@ function webgl_primitive_cuboid(args){
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
           'vertices': [
-            vertices_size_x, 0, -vertices_size_z, 1,
-            -vertices_size_x, 0, -vertices_size_z, 1,
-            -vertices_size_x, 0, vertices_size_z, 1,
-            vertices_size_x, 0, vertices_size_z, 1
+            vertices_size_x, 0, -vertices_size_z,
+            -vertices_size_x, 0, -vertices_size_z,
+            -vertices_size_x, 0, vertices_size_z,
+            vertices_size_x, 0, vertices_size_z,
           ],
         };
         Object.assign(
@@ -2574,10 +2574,10 @@ function webgl_primitive_cuboid(args){
           'id': args['prefix'] + '-front',
           'rotate-x': 90,
           'vertices': [
-            vertices_size_x, 0, -vertices_size_y, 1,
-            -vertices_size_x, 0, -vertices_size_y, 1,
-            -vertices_size_x, 0, vertices_size_y, 1,
-            vertices_size_x, 0, vertices_size_y, 1
+            vertices_size_x, 0, -vertices_size_y,
+            -vertices_size_x, 0, -vertices_size_y,
+            -vertices_size_x, 0, vertices_size_y,
+            vertices_size_x, 0, vertices_size_y,
           ],
         };
         Object.assign(
@@ -2606,10 +2606,10 @@ function webgl_primitive_cuboid(args){
           'id': args['prefix'] + '-back',
           'rotate-x': 270,
           'vertices': [
-            vertices_size_x, 0, -vertices_size_y, 1,
-            -vertices_size_x, 0, -vertices_size_y, 1,
-            -vertices_size_x, 0, vertices_size_y, 1,
-            vertices_size_x, 0, vertices_size_y, 1
+            vertices_size_x, 0, -vertices_size_y,
+            -vertices_size_x, 0, -vertices_size_y,
+            -vertices_size_x, 0, vertices_size_y,
+            vertices_size_x, 0, vertices_size_y,
           ],
         };
         Object.assign(
@@ -2638,10 +2638,10 @@ function webgl_primitive_cuboid(args){
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
           'vertices': [
-            vertices_size_y, 0, -vertices_size_z, 1,
-            -vertices_size_y, 0, -vertices_size_z, 1,
-            -vertices_size_y, 0, vertices_size_z, 1,
-            vertices_size_y, 0, vertices_size_z, 1
+            vertices_size_y, 0, -vertices_size_z,
+            -vertices_size_y, 0, -vertices_size_z,
+            -vertices_size_y, 0, vertices_size_z,
+            vertices_size_y, 0, vertices_size_z,
           ],
         };
         Object.assign(
@@ -2670,10 +2670,10 @@ function webgl_primitive_cuboid(args){
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
           'vertices': [
-            vertices_size_y, 0, -vertices_size_z, 1,
-            -vertices_size_y, 0, -vertices_size_z, 1,
-            -vertices_size_y, 0, vertices_size_z, 1,
-            vertices_size_y, 0, vertices_size_z, 1
+            vertices_size_y, 0, -vertices_size_z,
+            -vertices_size_y, 0, -vertices_size_z,
+            -vertices_size_y, 0, vertices_size_z,
+            vertices_size_y, 0, vertices_size_z,
           ],
         };
         Object.assign(
@@ -2781,7 +2781,7 @@ function webgl_primitive_ellipsoid(args){
             }
 
             properties['vertices'].push(
-              0, args['radius-y'] * pole, 0, 1
+              0, args['radius-y'] * pole, 0
             );
             properties['draw-mode'] = 'TRIANGLE_FAN';
         }
@@ -2802,7 +2802,7 @@ function webgl_primitive_ellipsoid(args){
                   args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
                 );
                 properties['vertices'].push(
-                  xtop, -ytop, ztop, 1
+                  xtop, -ytop, ztop
                 );
 
             }else if(pole === -1){
@@ -2810,9 +2810,9 @@ function webgl_primitive_ellipsoid(args){
                   args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
                 );
                 properties['vertices'].splice(
-                  4,
+                  3,
                   0,
-                  xbottom, -ybottom, zbottom, 1
+                  xbottom, -ybottom, zbottom
                 );
 
             }else{
@@ -2821,8 +2821,8 @@ function webgl_primitive_ellipsoid(args){
                   args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
                 );
                 properties['vertices'].push(
-                  xtop, ytop, ztop, 1,
-                  xbottom, ybottom, zbottom, 1
+                  xtop, ytop, ztop,
+                  xbottom, ybottom, zbottom
                 );
             }
         }
@@ -2882,8 +2882,8 @@ function webgl_primitive_frustum(args){
           args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3],
         ];
         properties['vertices'] = [
-          0, args['length'], 0, 1,
-          0, 0, 0, 1,
+          0, args['length'], 0,
+          0, 0, 0,
         ];
 
         webgl_entity_create({
@@ -2900,7 +2900,7 @@ function webgl_primitive_frustum(args){
           args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3],
         ];
         properties['vertices'] = [
-          0, 0, 0, 1,
+          0, 0, 0,
         ];
         for(let i = 0; i <= args['points']; i++){
             const point_rotation = -i * rotation;
@@ -2912,8 +2912,7 @@ function webgl_primitive_frustum(args){
                 properties['vertices'].push(
                   args['size-top'] * Math.sin(point_rotation),
                   args['length'],
-                  args['size-top'] * Math.cos(point_rotation),
-                  1
+                  args['size-top'] * Math.cos(point_rotation)
                 );
 
             }else{
@@ -2923,8 +2922,7 @@ function webgl_primitive_frustum(args){
                 properties['vertices'].push(
                   args['size-bottom'] * Math.sin(point_rotation),
                   0,
-                  args['size-bottom'] * Math.cos(point_rotation),
-                  1
+                  args['size-bottom'] * Math.cos(point_rotation)
                 );
             }
         }
@@ -2941,7 +2939,7 @@ function webgl_primitive_frustum(args){
           args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3],
         ];
         properties['vertices'] = [
-          0, args['length'], 0, 1,
+          0, args['length'], 0,
         ];
         for(let i = 0; i <= args['points']; i++){
             const point_rotation = i * rotation;
@@ -2953,8 +2951,7 @@ function webgl_primitive_frustum(args){
                 properties['vertices'].push(
                   args['size-bottom'] * Math.sin(point_rotation),
                   0,
-                  args['size-bottom'] * Math.cos(point_rotation),
-                  1
+                  args['size-bottom'] * Math.cos(point_rotation)
                 );
 
             }else{
@@ -2964,8 +2961,7 @@ function webgl_primitive_frustum(args){
                 properties['vertices'].push(
                   args['size-top'] * Math.sin(point_rotation),
                   args['length'],
-                  args['size-top'] * Math.cos(point_rotation),
-                  1
+                  args['size-top'] * Math.cos(point_rotation)
                 );
             }
         }
@@ -2988,7 +2984,6 @@ function webgl_primitive_frustum(args){
           args['size-top'] * Math.sin(rotation),
           args['length'],
           args['size-top'] * Math.cos(rotation),
-          1,
         ];
         for(let i = 0; i <= args['points']; i++){
             const point_rotation = i * rotation;
@@ -3002,11 +2997,9 @@ function webgl_primitive_frustum(args){
               args['size-bottom'] * Math.sin(point_rotation),
               0,
               args['size-bottom'] * Math.cos(point_rotation),
-              1,
               args['size-top'] * Math.sin(next_rotation),
               args['length'],
-              args['size-top'] * Math.cos(next_rotation),
-              1
+              args['size-top'] * Math.cos(next_rotation)
             );
         }
         webgl_entity_create({
@@ -3136,7 +3129,7 @@ attribute vec2 vec_texturePosition;
 attribute vec3 vec_vertexNormal;
 attribute vec4 vec_pickColor;
 attribute vec4 vec_vertexColor;
-attribute vec4 vec_vertexPosition;
+attribute vec3 vec_vertexPosition;
 uniform bool directional;
 uniform bool picking;
 uniform bool textures;
@@ -3151,7 +3144,7 @@ varying vec4 vec_fragmentColor;
 varying vec4 vec_lighting;
 varying vec4 vec_position;
 void main(void){
-    vec_position = mat_cameraMatrix * vec_vertexPosition;
+    vec_position = mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);
     gl_Position = mat_perspectiveMatrix * vec_position;
     gl_PointSize = 500. / length(vec_position.xyz);
     vec_textureCoord = vec_texturePosition;
