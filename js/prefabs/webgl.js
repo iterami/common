@@ -142,7 +142,7 @@ function prefabs_webgl_humanoid(args){
     };
     for(const part in bodyparts){
         for(let vertex = 0; vertex < bodyparts[part].length; vertex++){
-            if(vertex === 0 || (vertex + 1) % 4 !== 0){
+            if(vertex === 0 || (vertex + 1) % 3 !== 0){
                 bodyparts[part][vertex] *= args['scale'];
             }
         }
@@ -158,7 +158,7 @@ function prefabs_webgl_humanoid(args){
           'id': args['prefix'] + '-' + part,
           'vertex-colors': webgl_vertexcolorarray({
             'random-colors': true,
-            'vertexcount': bodyparts[part].length / 4,
+            'vertexcount': bodyparts[part].length / 3,
           }),
           'vertices': bodyparts[part],
         };
@@ -235,7 +235,7 @@ function prefabs_webgl_lines_shrub(args){
         }
 
         points.push(
-          x, y, z, 1
+          x, y, z
         );
         if(math_distance({
             'x1': x,
