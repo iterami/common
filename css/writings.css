@@ -6,7 +6,7 @@ input[type=button],
 textarea{
     background: #000;
     color: #ccc;
-    font: bold 14px monospace;
+    font: 700 14px monospace;
 }
 .center{
     text-align: center;
@@ -72,7 +72,7 @@ textarea{
 a:focus,
 input:focus,
 textarea:focus{
-    outline: thin solid #4c4;
+    outline: 2px solid #4c4;
 }
 a:hover{
     color: #07f;

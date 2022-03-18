@@ -11,7 +11,7 @@ input,
 select{
     background: #000;
     color: #ccc;
-    font: bold 14px monospace;
+    font: 700 14px monospace;
     text-align: center;
 }
 #core-ui{
@@ -112,7 +112,7 @@ a:focus,
 input:focus,
 select:focus,
 textarea:focus{
-    outline: thin solid #4c4;
+    outline: 2px solid #4c4;
 }
 a:hover{
     color: #07f;
