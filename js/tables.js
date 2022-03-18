@@ -32,11 +32,9 @@ function tables_init(){
     const tables = document.getElementsByTagName('table');
 
     for(let i = 0; i < tables.length; i++){
-        if(tables[i].classList.contains('tables-nosort')){
-            return;
+        if(!tables[i].classList.contains('tables-nosort')){
+            tables_add(tables[i]);
         }
-
-        tables_add(tables[i]);
     }
 }
 
