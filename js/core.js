@@ -1524,6 +1524,15 @@ function core_tab_create(args){
 }
 
 // Required args: id
+function core_tab_reset_group(args){
+    for(const tab in core_tabs){
+        if(core_tabs[tab]['group'] === args['id']){
+            document.getElementById('tabcontent-' + tab).style.display = 'none';
+        }
+    }
+}
+
+// Required args: id
 function core_tab_switch(args){
     const info = args['id'].split('_');
 
@@ -1532,14 +1541,11 @@ function core_tab_switch(args){
         return;
     }
 
-    for(const tab in core_tabs){
-        if(core_tabs[tab]['group'] === info[1]
-          && tab !== info[2]){
-            document.getElementById('tabcontent-' + tab).style.display = 'none';
-        }
-    }
-
-    element.style.display = element.style.display === 'block'
+    const state = element.style.display === 'block';
+    core_tab_reset_group({
+      'id': info[1],
+    });
+    element.style.display = state
       ? 'none'
       : 'block';
 }
