@@ -1273,9 +1273,9 @@ function webgl_init(args){
         'speed': 0,
         'texture-align': [
           1, 1,
-          1, 0,
-          0, 0,
           0, 1,
+          0, 0,
+          1, 0,
         ],
         'texture-id': 'default.png',
         'texture-repeat-x': 1,
