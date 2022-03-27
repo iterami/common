@@ -2293,22 +2293,26 @@ function webgl_path_move(args){
         args['entity']['translate-y'] = point['translate-y'];
         args['entity']['translate-z'] = point['translate-z'];
 
+        let entity_path_end = args['entity']['path-end'];
+        if(entity_path_end === 0){
+            entity_path_end = path['end'];
+        }
         if(args['entity']['path-direction'] > 0){
             if(args['entity']['path-point'] >= path['points'].length - 1){
-                if(args['entity']['path-end'] === 2){
+                if(entity_path_end === 2){
                     args['entity']['path-point'] = 1;
                     args['entity']['translate-x'] = path['points'][0]['translate-x'];
                     args['entity']['translate-y'] = path['points'][0]['translate-y'];
                     args['entity']['translate-z'] = path['points'][0]['translate-z'];
 
-                }else if(args['entity']['path-end'] === 1){
+                }else if(entity_path_end === 1){
                     args['entity']['path-point'] = 0;
 
-                }else if(args['entity']['path-end'] === -1){
+                }else if(entity_path_end === -1){
                     args['entity']['path-direction'] = -1;
                     args['entity']['path-point'] -= 1;
 
-                }else{
+                }else if(entity_path_end === -2){
                     args['entity']['path-id'] = '';
                     args['entity']['path-point'] = 0;
                 }
@@ -2318,21 +2322,21 @@ function webgl_path_move(args){
             }
 
         }else if(args['entity']['path-point'] === 0){
-            if(args['entity']['path-end'] === 2){
+            if(entity_path_end === 2){
                 const last = path['points'].length - 1;
                 args['entity']['path-point'] = last - 1;
                 args['entity']['translate-x'] = path['points'][last]['translate-x'];
                 args['entity']['translate-y'] = path['points'][last]['translate-y'];
                 args['entity']['translate-z'] = path['points'][last]['translate-z'];
 
-            }else if(args['entity']['path-end'] === 1){
+            }else if(entity_path_end === 1){
                 args['entity']['path-point'] = path['points'].length - 1;
 
-            }else if(args['entity']['path-end'] === -1){
+            }else if(entity_path_end === -1){
                 args['entity']['path-direction'] = 1;
                 args['entity']['path-point'] = 1;
 
-            }else{
+            }else if(entity_path_end === -2){
                 args['entity']['path-id'] = '';
                 args['entity']['path-point'] = 0;
             }
