@@ -39,27 +39,27 @@ function prefabs_webgl_cuboid_tree(args){
         'texture-repeat-y': 2,
         'vertex-colors': args['vertex-colors-trunk'],
       },
-      'back': {
-        'texture-align': [
-          1, 0,
-          0, 0,
-          0, 1,
-          1, 1,
-        ],
-      },
       'bottom': {
         'exclude': true,
       },
       'character': args['character'],
-      'front': {
+      'left': {
         'texture-align': [
           1, 0,
-          0, 0,
-          0, 1,
           1, 1,
+          0, 1,
+          0, 0,
         ],
       },
       'prefix': args['prefix'] + '-trunk',
+      'right': {
+        'texture-align': [
+          1, 0,
+          1, 1,
+          0, 1,
+          0, 0,
+        ],
+      },
       'size-x': args['trunk-size-x'],
       'size-y': args['trunk-size-y'],
       'size-z': args['trunk-size-z'],
