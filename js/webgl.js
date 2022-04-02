@@ -1073,6 +1073,7 @@ function webgl_init(args){
         'clearcolor-blue': 0,
         'clearcolor-green': 0,
         'clearcolor-red': 0,
+        'cursor': 'default',
         'directional-blue': 1,
         'directional-green': 1,
         'directional-red': 1,
@@ -1119,6 +1120,7 @@ function webgl_init(args){
           'store': 'buffer',
           'type': 'canvas',
         });
+        core_elements['canvas'].style.cursor = args['cursor'];
 
         webgl_buffer = core_elements['buffer'].getContext(
           'webgl2',

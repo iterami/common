@@ -127,6 +127,7 @@ function canvas_init(args){
       'args': args,
       'defaults': {
         'contextmenu': true,
+        'cursor': 'default',
       },
     });
 
@@ -168,6 +169,7 @@ function canvas_init(args){
       'store': 'buffer',
       'type': 'canvas',
     });
+    core_elements['canvas'].style.cursor = args['cursor'];
 
     canvas_buffer = core_elements['buffer'].getContext('2d');
     canvas_canvas = core_elements['canvas'].getContext('2d');
