@@ -694,9 +694,11 @@ function webgl_draw(){
         );
     }
 
-    if(webgl_characters[webgl_character_id]['reticle'] !== false
-      && webgl_characters[webgl_character_id]['camera-zoom'] === 0){
-        webgl_canvas.fillStyle = webgl_characters[webgl_character_id]['reticle'];
+    const character = webgl_characters[webgl_character_id];
+    if(character
+      && character['reticle'] !== false
+      && character['camera-zoom'] === 0){
+        webgl_canvas.fillStyle = character['reticle'];
         webgl_canvas.fillRect(
           webgl_properties['canvas']['width-half'] - 1,
           webgl_properties['canvas']['height-half'] - 1,
@@ -3057,6 +3059,8 @@ function webgl_resize(){
     );
 
     webgl_perspective();
+    webgl_uniform_update();
+    webgl_draw();
 }
 
 // Required args: todo, x, y
