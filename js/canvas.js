@@ -256,7 +256,9 @@ function canvas_resize(){
     core_call({
       'todo': 'repo_resizelogic',
     });
-    canvas_draw();
+    if(core_menu_open){
+        canvas_draw();
+    }
 }
 
 function canvas_setmode(args){
