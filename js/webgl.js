@@ -3059,8 +3059,8 @@ function webgl_resize(){
     );
 
     webgl_perspective();
+    webgl_uniform_update();
     if(core_menu_open){
-        webgl_uniform_update();
         webgl_draw();
     }
 }
