@@ -1523,6 +1523,8 @@ function webgl_level_init(args){
     core_call({
       'todo': 'repo_level_load',
     });
+    webgl_uniform_update();
+
     if(core_menu_open){
         core_escape();
     }else{
@@ -1886,8 +1888,6 @@ function webgl_logicloop(){
       ],
       'id': 'camera',
     });
-
-    webgl_uniform_update();
 }
 
 function webgl_logicloop_handle_entity(entity){
