@@ -1459,6 +1459,7 @@ function webgl_level_init(args){
           'entities': [],
           'id': webgl_character_id,
           'level': -1,
+          'speed': 1,
         });
         webgl_character_homebase = {};
 
