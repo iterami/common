@@ -2384,9 +2384,10 @@ function webgl_pick_color(args){
 
 // Required args: x, y
 function webgl_pick_entity(args){
+    const level = webgl_character_level();
     if(core_menu_open
-      || webgl_properties['paused']
-      || webgl_character_level() < -1
+      || level < -1
+      || (level !== -1 && webgl_properties['paused'])
       || webgl_characters[webgl_character_id]['health-current'] <= 0){
         return;
     }
