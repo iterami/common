@@ -123,7 +123,7 @@ function webgl_camera_rotate(args){
             && !core_mouse['down-2'])
           || !args['mouse'];
 
-        if(webgl_properties['camera-zoom-max'] === 0
+        if(webgl_characters[args['character']]['camera-zoom'] === 0
           || (mouse_check
             && webgl_character_level({
               'character': args['character'],
@@ -326,10 +326,6 @@ function webgl_character_origin(args){
     webgl_characters[args['character']]['camera-rotate-x'] = 0;
     webgl_characters[args['character']]['camera-rotate-y'] = 0;
     webgl_characters[args['character']]['camera-rotate-z'] = 0;
-    webgl_characters[args['character']]['camera-zoom'] = Math.min(
-      webgl_characters[args['character']]['camera-zoom'],
-      webgl_properties['camera-zoom-max']
-    );
     webgl_characters[args['character']]['change'] = {
       'translate-x': 0,
       'translate-y': 0,
@@ -374,11 +370,6 @@ function webgl_character_random(args){
 // Required args: id
 function webgl_character_set(args){
     webgl_character_id = args['id'];
-
-    webgl_characters[webgl_character_id]['camera-zoom'] = Math.min(
-      webgl_characters[webgl_character_id]['camera-zoom'],
-      webgl_properties['camera-zoom-max']
-    );
 
     entity_group_modify({
       'groups': [
@@ -1470,7 +1461,6 @@ function webgl_level_init(args){
           'level': -1,
         });
         webgl_character_homebase = {};
-        webgl_properties['camera-zoom-max'] = 0;
 
     }else if(webgl_characters[webgl_character_id] === void 0){
         webgl_character_init({
@@ -1603,7 +1593,7 @@ function webgl_logicloop(){
         let leftright = 0;
 
         if(core_keys[core_storage_data['move-←']]['state']){
-            if(webgl_properties['camera-zoom-max'] === 0
+            if(webgl_characters[webgl_character_id]['camera-zoom'] === 0
               || core_mouse['down-2']){
                 leftright -= 1;
 
@@ -1616,7 +1606,7 @@ function webgl_logicloop(){
         }
 
         if(core_keys[core_storage_data['move-→']]['state']){
-            if(webgl_properties['camera-zoom-max'] === 0
+            if(webgl_characters[webgl_character_id]['camera-zoom'] === 0
               || core_mouse['down-2']){
                 leftright += 1;
 
