@@ -588,7 +588,7 @@ function core_init(){
         'id': 'core-toggle',
         'onclick': core_escape,
         'type': 'button',
-        'value': 'ESC',
+        'value': '☰',
       },
       'type': 'input',
     });
