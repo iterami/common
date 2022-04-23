@@ -1781,11 +1781,6 @@ function webgl_logicloop(){
               webgl_characters[character]['change']['translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
-
-        }else if(character_level === -1){
-            webgl_characters[character]['rotate-x'] = webgl_characters[character]['camera-rotate-x'];
-            webgl_characters[character]['rotate-y'] = webgl_characters[character]['camera-rotate-y'];
-            webgl_characters[character]['rotate-z'] = webgl_characters[character]['camera-rotate-z'];
         }
 
         if(webgl_characters[character]['collides']){
