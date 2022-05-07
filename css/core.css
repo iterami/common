@@ -81,8 +81,8 @@ select{
 .medium{
     font-size: 200%;
 }
-pre,
 ol,
+pre,
 ul{
     margin: 0;
     text-align: left;
