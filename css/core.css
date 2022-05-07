@@ -82,6 +82,7 @@ select{
     font-size: 200%;
 }
 pre,
+ol,
 ul{
     margin: 0;
     text-align: left;
