@@ -1603,6 +1603,7 @@ function core_ui_update(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'class': false,
         'ids': {},
       },
     });
@@ -1618,6 +1619,10 @@ function core_ui_update(args){
         element[element.tagName !== 'INPUT'
           ? 'innerHTML'
           : 'value'] = args['ids'][id];
+
+        if(!args['class']){
+            continue;
+        }
 
         const elements = document.getElementsByClassName(id);
         for(let i = 0; i < elements.length; i++){
