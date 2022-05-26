@@ -65,6 +65,7 @@ input[type=file]{
 input[type=button]:enabled,
 input[type=checkbox]:enabled,
 input[type=color]:enabled,
+input[type=file]:enabled,
 input[type=range]:enabled,
 label,
 select:enabled{
