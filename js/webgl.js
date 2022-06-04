@@ -445,10 +445,10 @@ function webgl_clamp_rotation(args){
     if(character){
         const max = args['entity']['camera-rotate-x'] > 180
           ? 360
-          : 89;
+          : 90;
         args['entity']['camera-rotate-x'] = math_clamp({
           'max': max,
-          'min': max - 89,
+          'min': max - 90,
           'value': args['entity']['camera-rotate-x'],
         });
     }
