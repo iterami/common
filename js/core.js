@@ -1157,12 +1157,6 @@ function core_repo_init(args){
       },
     });
     document.getElementById('repo-ui').innerHTML = args['ui'];
-    core_html_modify({
-      'id': 'tab_core-menu_global',
-      'properties': {
-        'value': args['owner'],
-      },
-    });
 
     let have_default = false;
     for(const tab in args['tabs']){
