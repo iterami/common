@@ -625,10 +625,10 @@ function core_init(){
         + '<tr><td><input class=mini id=move-↓ min=0 step=any type=number><td>Move ↓'
         + '<tr><td><input class=mini id=move-→ min=0 step=any type=number><td>Move →'
         + '<tr><td><input class=mini id=reset min=0 step=any type=number><td>Reset</table>'
-        + '<input id=storage-reset type=button value="Reset Global iterami localStorage">',
+        + '<input id=storage-reset type=button value="Reset Global localStorage">',
       'group': 'core-menu',
-      'id': 'iterami',
-      'label': 'iterami',
+      'id': 'global',
+      'label': 'Global',
     });
     core_storage_add({
       'prefix': 'core-',
@@ -1157,6 +1157,12 @@ function core_repo_init(args){
       },
     });
     document.getElementById('repo-ui').innerHTML = args['ui'];
+    core_html_modify({
+      'id': 'tab_core-menu_global',
+      'properties': {
+        'value': args['owner'],
+      },
+    });
 
     let have_default = false;
     for(const tab in args['tabs']){
@@ -1388,7 +1394,7 @@ function core_storage_reset(args){
       'args': args,
       'defaults': {
         'keys': false,
-        'label': 'global iterami',
+        'label': 'global',
         'prefix': false,
       },
     });
