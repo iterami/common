@@ -40,18 +40,6 @@ void gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelg
     }
 }
 
-void gtk_begin_frameclock(GtkWidget *_glarea){
-    // Setup update loop.
-    GdkFrameClock *frameclock = gdk_window_get_frame_clock(gdk_gl_context_get_window(gtk_gl_area_get_context(GTK_GL_AREA(_glarea))));
-    g_signal_connect_swapped(
-      frameclock,
-      "update",
-      G_CALLBACK(gtk_gl_area_queue_render),
-      _glarea
-    );
-    gdk_frame_clock_begin_updating(frameclock);
-}
-
 void gtk_init_gtk(GtkApplication* app, const gchar *title){
     GtkCssProvider *provider;
 
