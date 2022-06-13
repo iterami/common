@@ -3362,7 +3362,16 @@ function webgl_texture_set(args){
           'id': args['texture'],
           'src': uris[args['texture']],
           'todo': function(){
-              webgl_entity_todo(args['entity']);
+              entity_group_modify({
+                'groups': [
+                  'webgl',
+                ],
+                'todo': function(entity){
+                    if(entity_entities[entity]['texture-id'] === args['texture']){
+                        webgl_entity_todo(entity);
+                    }
+                },
+              });
           },
         });
     }
