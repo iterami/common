@@ -1272,7 +1272,7 @@ function webgl_init(args){
           0, 0,
           1, 0,
         ],
-        'texture-id': 'default.png',
+        'texture-id': webgl_default_texture,
         'texture-repeat-x': 1,
         'texture-repeat-y': 1,
         'translate-x': 0,
@@ -3316,15 +3316,17 @@ function webgl_texture_set(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'texture': 'default.png',
+        'texture': webgl_default_texture,
       },
     });
 
-    if(!core_images[args['texture']]){
-        core_image({
-          'id': args['texture'],
-          'src': uris[args['texture']],
-        });
+    let texture = '';
+    if(core_images[args['texture']]
+      && core_images[args['texture']].complete){
+        texture = core_images[args['texture']];
+
+    }else{
+        texture = core_images[webgl_default_texture];
     }
 
     entity_entities[args['entity']]['texture-gl'] = webgl_buffer.createTexture();
@@ -3339,7 +3341,7 @@ function webgl_texture_set(args){
       webgl_buffer.RGBA,
       webgl_buffer.RGBA,
       webgl_buffer.UNSIGNED_BYTE,
-      core_images[args['texture']]
+      texture
     );
 
     webgl_buffer.texParameterf(
@@ -3354,6 +3356,16 @@ function webgl_texture_set(args){
       webgl_buffer.TEXTURE_2D,
       void 0
     );
+
+    if(!core_images[args['texture']]){
+        core_image({
+          'id': args['texture'],
+          'src': uris[args['texture']],
+          'todo': function(){
+              webgl_entity_todo(args['entity']);
+          },
+        });
+    }
 }
 
 function webgl_uniform_update(){
@@ -3462,9 +3474,15 @@ globalThis.webgl_character_homebase = {};
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_diagonal = 0;
+globalThis.webgl_default_texture = 'default.png';
 globalThis.webgl_extensions = {};
 globalThis.webgl_levelcache = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_shaders = false;
 globalThis.webgl_text = {};
+
+core_image({
+  'id': webgl_default_texture,
+  'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
+});
