@@ -3320,6 +3320,13 @@ function webgl_texture_set(args){
       },
     });
 
+    if(!core_images[args['texture']]){
+        core_image({
+          'id': args['texture'],
+          'src': uris[args['texture']],
+        });
+    }
+
     entity_entities[args['entity']]['texture-gl'] = webgl_buffer.createTexture();
 
     webgl_buffer.bindTexture(
