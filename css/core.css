@@ -4,7 +4,7 @@ a{
     text-decoration: underline;
 }
 .big{
-    font-size: 300%;
+    font-size: 225%;
 }
 body,
 input,
@@ -80,7 +80,7 @@ select{
     text-align: left;
 }
 .medium{
-    font-size: 200%;
+    font-size: 150%;
 }
 ol,
 pre,
