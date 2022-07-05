@@ -171,6 +171,60 @@ function prefabs_webgl_humanoid(args){
     }
 }
 
+// Required args: path
+function prefabs_webgl_lines_path(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'prefix': entity_id_count,
+      },
+    });
+
+    if(!webgl_paths[args['path']]){
+        return;
+    }
+
+    let x = 0;
+    let y = 0;
+    let z = 0;
+    const vertices = [];
+
+    for(const point in webgl_paths[args['path']]['points']){
+        const point_x = webgl_paths[args['path']]['points'][point]['translate-x'];
+        if(point_x !== void 0){
+            x = point_x;
+        }
+        const point_y = webgl_paths[args['path']]['points'][point]['translate-y'];
+        if(point_y !== void 0){
+            y = point_y;
+        }
+        const point_z = webgl_paths[args['path']]['points'][point]['translate-z'];
+        if(point_z !== void 0){
+            z = point_z;
+        }
+
+        vertices.push(x, y, z);
+    }
+
+    webgl_entity_create({
+      'entities': [
+        {
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'draw-mode': 'LINE_LOOP',
+          'collision': false,
+          'id': args['prefix'],
+          'vertex-colors': webgl_vertexcolorarray({
+            'random-colors': true,
+            'vertexcount': vertices.length / 3,
+          }),
+          'vertices': vertices,
+        },
+      ],
+    });
+}
+
 function prefabs_webgl_lines_shrub(args){
     args = core_args({
       'args': args,
