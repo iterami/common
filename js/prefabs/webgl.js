@@ -177,6 +177,7 @@ function prefabs_webgl_lines_path(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
+        'color': [1, 1, 1],
         'prefix': entity_id_count,
       },
     });
@@ -189,6 +190,7 @@ function prefabs_webgl_lines_path(args){
     let y = 0;
     let z = 0;
     const vertices = [];
+    const vertex_colors = [];
 
     for(const point in webgl_paths[args['path']]['points']){
         const point_x = webgl_paths[args['path']]['points'][point]['translate-x'];
@@ -205,6 +207,12 @@ function prefabs_webgl_lines_path(args){
         }
 
         vertices.push(x, y, z);
+        vertex_colors.push(
+          args['color'][0],
+          args['color'][1],
+          args['color'][2],
+          1
+        );
     }
 
     webgl_entity_create({
@@ -215,10 +223,7 @@ function prefabs_webgl_lines_path(args){
           'draw-mode': 'LINE_LOOP',
           'collision': false,
           'id': args['prefix'],
-          'vertex-colors': webgl_vertexcolorarray({
-            'random-colors': true,
-            'vertexcount': vertices.length / 3,
-          }),
+          'vertex-colors': vertex_colors,
           'vertices': vertices,
         },
       ],
