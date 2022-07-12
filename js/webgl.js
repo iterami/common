@@ -598,13 +598,16 @@ function webgl_collision(args){
                     axis_second = 'translate-y';
                 }
 
-                const axis_first_change = webgl_characters[args['target']['attach-to']]['change'][axis_first];
-                if(axis_first_change !== 0){
-                    args['collider'][axis_first] += axis_first_change;
-                }
-                const axis_second_change = webgl_characters[args['target']['attach-to']]['change'][axis_second];
-                if(axis_second_change !== 0){
-                    args['collider'][axis_second] += axis_second_change;
+                const attached = args['target']['attach-to'];
+                if(attached){
+                    const axis_first_change = webgl_characters[attached]['change'][axis_first];
+                    if(axis_first_change !== 0){
+                        args['collider'][axis_first] += axis_first_change;
+                    }
+                    const axis_second_change = webgl_characters[attached]['change'][axis_second];
+                    if(axis_second_change !== 0){
+                        args['collider'][axis_second] += axis_second_change;
+                    }
                 }
             }
         }
@@ -847,7 +850,7 @@ function webgl_entity_create(args){
             args['entities'][entity]['attach-type'] = 'webgl_characters';
         }
 
-        if(args['entities'][entity]['attach-to'] !== void 0){
+        if(args['entities'][entity]['attach-to'] !== false){
             entity_attach({
               'entity': entity_id,
               'offset-x': args['entities'][entity]['attach-offset-x'],
@@ -1979,18 +1982,23 @@ function webgl_logicloop_handle_entity(entity){
     if(entity_entities[entity]['attach-to'] !== false){
         const target = globalThis[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
 
-        let x = target['translate-x'];
-        let y = target['translate-y'];
-        let z = target['translate-z'];
-        if(entity_groups['skybox'][entity] === true){
-            x = target['camera-x'];
-            y = target['camera-y'];
-            z = target['camera-z'];
-        }
+        if(target){
+            let x = target['translate-x'];
+            let y = target['translate-y'];
+            let z = target['translate-z'];
+            if(entity_groups['skybox'][entity] === true){
+                x = target['camera-x'];
+                y = target['camera-y'];
+                z = target['camera-z'];
+            }
 
-        entity_entities[entity]['translate-x'] = x;
-        entity_entities[entity]['translate-y'] = y;
-        entity_entities[entity]['translate-z'] = z;
+            entity_entities[entity]['translate-x'] = x;
+            entity_entities[entity]['translate-y'] = y;
+            entity_entities[entity]['translate-z'] = z;
+
+        }else{
+            entity_entities[entity]['attach-to'] = false;
+        }
 
     }else{
         webgl_path_move({
