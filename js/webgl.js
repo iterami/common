@@ -393,13 +393,20 @@ function webgl_character_spawn(args){
         return;
     }
 
+    let spawn_y = webgl_properties['spawn-translate-y'];
+    if(webgl_character_level({
+        'character': args['character'],
+      }) > -1){
+        spawn_y += webgl_characters[args['character']]['collide-range-vertical'] + 1;
+    }
+
     webgl_character_origin({
       'character': args['character'],
     });
     webgl_entity_move_to({
       'entity': webgl_characters[args['character']],
       'x': webgl_properties['spawn-translate-x'],
-      'y': webgl_properties['spawn-translate-y'],
+      'y': spawn_y,
       'z': webgl_properties['spawn-translate-z'],
     });
     webgl_camera_rotate({
