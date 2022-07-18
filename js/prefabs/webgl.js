@@ -557,7 +557,7 @@ function prefabs_webgl_tree_2d(args){
           'attach-type': 'webgl_characters',
           'billboard': args['billboard'],
           'collision': false,
-          'id': args['prefix'] + '_base',
+          'id': args['prefix'] + '-base',
           'vertex-colors': args['color-base'],
           'vertices': [
             args['width-base'] / 2, 0, -.01,
@@ -574,7 +574,7 @@ function prefabs_webgl_tree_2d(args){
           'billboard': args['billboard'],
           'collision': false,
           'draw-mode': 'TRIANGLES',
-          'id': args['prefix'] + '_leaf',
+          'id': args['prefix'] + '-leaf',
           'vertex-colors': args['color-leaf'],
           'vertices': [
             args['width-leaf'] / 2, args['leaf-bottom'], 0,
