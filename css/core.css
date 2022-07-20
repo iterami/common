@@ -94,7 +94,6 @@ ul{
 table{
     border-collapse: collapse;
     margin: auto;
-    vertical-align: top;
 }
 td,
 textarea{
