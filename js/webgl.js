@@ -1101,6 +1101,7 @@ function webgl_init(args){
         'spawn-translate-y': 0,
         'spawn-translate-z': 0,
         'textures': true,
+        'title': false,
       },
     });
 
@@ -1198,6 +1199,7 @@ function webgl_init(args){
       'spawn-translate-y': args['spawn-translate-y'],
       'spawn-translate-z': args['spawn-translate-z'],
       'textures': args['textures'],
+      'title': args['title'],
     };
 
     math_matrices['camera'] = math_matrix_create();
