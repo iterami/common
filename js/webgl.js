@@ -1539,7 +1539,6 @@ function webgl_level_load(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'cache': false,
         'character': 0,
         'json': false,
       },
@@ -1558,14 +1557,6 @@ function webgl_level_load(args){
         });
 
         return;
-    }
-
-    if(args['cache'] !== false){
-        webgl_levelcache['id'] = args['cache'];
-        webgl_levelcache['json'] = Object.assign(
-          {},
-          args['json']
-        );
     }
 
     webgl_level_init({
@@ -3502,7 +3493,6 @@ globalThis.webgl_characters = {};
 globalThis.webgl_diagonal = 0;
 globalThis.webgl_default_texture = 'default.png';
 globalThis.webgl_extensions = {};
-globalThis.webgl_levelcache = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_shaders = false;
