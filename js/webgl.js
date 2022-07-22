@@ -1549,7 +1549,7 @@ function webgl_level_load(args){
         core_file({
           'file': args['json'],
           'todo': function(event){
-              webgl_level_init({
+              webgl_level_load({
                 'character': args['character'],
                 'json': JSON.parse(event.target.result),
               });
