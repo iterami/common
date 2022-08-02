@@ -40,7 +40,7 @@ void gtk_add_menuitem(GtkWidget *menu, const gchar *label, GtkAccelGroup *accelg
     }
 }
 
-void gtk_init_gtk(GtkApplication* app, const gchar *title){
+void gtk_init_gtk(GtkApplication* app, const gchar *title, const gchar *icon){
     GtkCssProvider *provider;
 
     // Setup CSS.
@@ -71,4 +71,11 @@ void gtk_init_gtk(GtkApplication* app, const gchar *title){
       GTK_WINDOW(window),
       title
     );
+    if(icon != NULL){
+        gtk_window_set_icon_from_file(
+          GTK_WINDOW(window),
+          core_iterami_path(icon),
+          NULL
+        );
+    }
 }
