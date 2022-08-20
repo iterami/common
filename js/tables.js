@@ -16,8 +16,8 @@ function tables_add(table){
             type = 1;
         }
 
-        headers[header].innerHTML += '<div><input onclick="tables_sort(this,' + header + ',1,' + type + ')" type=button value=↑>'
-          + '<input onclick="tables_sort(this,' + header + ',0,' + type + ')" type=button value=↓></div>';
+        headers[header].innerHTML += '<div><input onclick="tables_sort(this,' + header + ',1,' + type + ')" type=button value=▲>'
+          + '<input onclick="tables_sort(this,' + header + ',0,' + type + ')" type=button value=▼></div>';
     }
 }
 
