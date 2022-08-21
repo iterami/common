@@ -1440,14 +1440,12 @@ function core_storage_save(args){
         const key = keys[keyid];
 
         const element = document.getElementById(key);
-        core_storage_data[key] = element[core_storage_element_property({
-          'element': element,
-          'key': key,
-        })];
-
         const data = core_type_convert({
           'template': core_storage_info[key]['default'],
-          'value': core_storage_data[key],
+          'value': element[core_storage_element_property({
+            'element': element,
+            'key': key,
+          })],
         });
         core_storage_data[key] = data;
 
