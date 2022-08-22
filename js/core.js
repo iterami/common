@@ -1,39 +1,5 @@
 'use strict';
 
-// Required args: todo, url
-function core_ajax(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'catch': function(){},
-        'method': 'GET',
-        'redirect': 'follow',
-        'response': 'json',
-      },
-    });
-
-    globalThis.fetch(
-      args['url'],
-      {
-        'method': args['method'],
-        'redirect': args['redirect'],
-      }
-
-    ).then(function(response){
-        if(!response.ok){
-            throw response;
-        }
-
-        return response[args['response']]();
-
-    }).then(function(data){
-        args['todo'](data);
-
-    }).catch(function(error){
-        args['catch'](error);
-    });
-}
-
 // Required args: args, defaults
 function core_args(args){
     if(args['args'] === void 0){
