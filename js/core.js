@@ -562,7 +562,7 @@ function core_init(){
       'parent': 'core-ui',
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noopener></a>'
+        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>'
           + '<div id=core-menu-info></div><hr>'
           + '<span id=core-menu-tabs></span>'
           + '<div id=core-menu-tabcontent></div><hr>'
