@@ -30,6 +30,7 @@ function chess_new(args){
         [chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0],],
         [chess_pieces[0][3], chess_pieces[0][1], chess_pieces[0][2], chess_pieces[0][4], chess_pieces[0][5], chess_pieces[0][2], chess_pieces[0][1], chess_pieces[0][3],],
       ],
+      'moves': '',
       'player': 0,
     };
 }
@@ -39,7 +40,7 @@ function chess_validate(args){
     const player = chess_games[args['id']]['player'];
     let valid_move = true;
 
-    if(piece.length === 0 || !chess_pieces[player].includes(piece)){
+    if(args['piece'].length === 0 || !chess_pieces[player].includes(args['piece'])){
         valid_move = false;
 
     }else{
