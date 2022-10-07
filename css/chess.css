@@ -1,0 +1,15 @@
+.chess td{
+    border: 0;
+    color: #000;
+    font-size: 50px;
+    height: 50px;
+    width: 50px;
+}
+.chess tr:nth-child(even) td:nth-child(even),
+.chess tr:nth-child(odd) td:nth-child(odd){
+    background-color: #fff;
+}
+.chess tr:nth-child(even) td:nth-child(odd),
+.chess tr:nth-child(odd) td:nth-child(even){
+    background-color: #aaa;
+}
