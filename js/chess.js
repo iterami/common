@@ -2,24 +2,16 @@
 
 // Required args: id, piece_x, piece_y, target_x, target_y
 function chess_move(args){
-    const player = chess_games[args['id']]['player'];
-    let valid_move = true;
-
     const piece = chess_games[args['id']]['board'][args['piece_y']][args['piece_x']];
-    if(piece.length === 0 || !chess_pieces[player].includes(piece)){
-        valid_move = false;
-
-    }else{
-        valid_move = chess_validate({
-          ...args,
-          'piece': piece,
-        });
-    }
+    const valid_move = chess_validate({
+      ...args,
+      'piece': piece,
+    });
 
     if(valid_move){
         chess_games[args['id']]['board'][args['piece_y']][args['piece_x']] = '';
         chess_games[args['id']]['board'][args['target_y']][args['target_x']] = piece;
-        chess_games[args['id']]['player'] = 1 - player;
+        chess_games[args['id']]['player'] = 1 - chess_games[args['id']]['player'];
     }
 
     return valid_move;
@@ -44,7 +36,36 @@ function chess_new(args){
 
 // Required args: id, piece, piece_x, piece_y, target_x, target_y
 function chess_validate(args){
+    const player = chess_games[args['id']]['player'];
     let valid_move = true;
+
+    if(piece.length === 0 || !chess_pieces[player].includes(piece)){
+        valid_move = false;
+
+    }else{
+        switch(args['piece']){
+            case chess_pieces[player][0]:
+                console.log('pawn');
+                break;
+            case chess_pieces[player][1]:
+                console.log('knight');
+                break;
+            case chess_pieces[player][2]:
+                console.log('bishop');
+                break;
+            case chess_pieces[player][3]:
+                console.log('rook');
+                break;
+            case chess_pieces[player][4]:
+                console.log('queen');
+                break;
+            case chess_pieces[player][5]:
+                console.log('king');
+                break;
+            default:
+                valid_move = false;
+        }
+    }
 
     return valid_move;
 }
