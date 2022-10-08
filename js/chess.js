@@ -8,13 +8,11 @@ function chess_move(args){
 
     const piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
     const valid_move = chess_validate(args);
-
     if(valid_move){
         chess_games[args['id']]['board'][args['piece-y']][args['piece-x']] = '';
         chess_games[args['id']]['board'][args['target-y']][args['target-x']] = piece;
         chess_games[args['id']]['player'] = 1 - chess_games[args['id']]['player'];
     }
-
     return valid_move;
 }
 
@@ -37,24 +35,21 @@ function chess_new(args){
 
 // Required args: id, piece-x, piece-y, target-x, target-y
 function chess_validate(args){
-    if(!chess_games[args['id']]){
+    if(!chess_games[args['id']]
+      || args['piece-x'] < 0 || args['piece-x'] > 7
+      || args['piece-y'] < 0 || args['piece-y'] > 7
+      || args['target-x'] < 0 || args['target-x'] > 7
+      || args['target-y'] < 0 || args['target-y'] > 7){
         return false;
     }
 
     const player = chess_games[args['id']]['player'];
     const piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
-
-    if(piece.length === 0
-      || args['piece-x'] < 0 || args['piece-x'] > 7
-      || args['piece-y'] < 0 || args['piece-y'] > 7
-      || args['target-x'] < 0 || args['target-x'] > 7
-      || args['target-y'] < 0 || args['target-y'] > 7
-      || !chess_pieces[player].includes(piece)){
+    if(piece.length === 0 || !chess_pieces[player].includes(piece)){
         return false;
     }
 
     let valid_move = true;
-
     switch(piece){
         case chess_pieces[player][0]:
             console.log('pawn');
@@ -77,7 +72,6 @@ function chess_validate(args){
         default:
             valid_move = false;
     }
-
     return valid_move;
 }
 
