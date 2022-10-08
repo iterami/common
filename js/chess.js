@@ -68,7 +68,8 @@ function chess_validate(args){
 
             }else if(target_piece.length === 0){
                 if(args['piece-y'] === 6 - (player * 5)){
-                    if(movement_y < 1 || movement_y > 2){
+                    if(args['target-y'] !== args['piece-y'] + direction
+                      && args['target-y'] !== args['piece-y'] + direction * 2){
                         return false;
                     }
 
