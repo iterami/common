@@ -54,7 +54,6 @@ function chess_validate(args){
         return false;
     }
 
-    let valid_move = true;
     switch(piece){
         // pawn
         case chess_pieces[player][0]: {
@@ -64,11 +63,11 @@ function chess_validate(args){
 
             }else if(target_piece.length === 0){
                 if(args['target-y'] !== args['piece-y'] + direction){
-                    valid_move = false;
+                    return false;
                 }
 
             }else{
-                valid_move = false;
+                return false;
             }
 
             break;
@@ -80,11 +79,11 @@ function chess_validate(args){
             const movement_y = Math.abs(args['piece-y'] - args['target-y']);
 
             if(movement_x < 1 || movement_x > 2 || movement_y < 1 || movement_y > 2){
-                valid_move = false;
+                return false;
 
             }else if((movement_x === 1 && movement_y !== 2)
               || (movement_x === 2 && movement_y !== 1)){
-                valid_move = false;
+                return false;
             }
 
             break;
@@ -95,7 +94,7 @@ function chess_validate(args){
             const movement_x = Math.abs(args['piece-x'] - args['target-x']);
             const movement_y = Math.abs(args['piece-y'] - args['target-y']);
             if(movement_x !== movement_y){
-                valid_move = false;
+                return false;
             }
 
             break;
@@ -104,7 +103,7 @@ function chess_validate(args){
         // rook
         case chess_pieces[player][3]: {
             if(args['target-x'] !== args['piece-x'] && args['target-y'] !== args['piece-y']){
-                valid_move = false;
+                return false;
             }
 
             break;
@@ -117,7 +116,7 @@ function chess_validate(args){
 
             if(movement_x !== movement_y){
                 if(args['target-x'] !== args['piece-x'] && args['target-y'] !== args['piece-y']){
-                    valid_move = false;
+                    return false;
                 }
             }
 
@@ -129,16 +128,16 @@ function chess_validate(args){
             const movement_x = Math.abs(args['piece-x'] - args['target-x']);
             const movement_y = Math.abs(args['piece-y'] - args['target-y']);
             if(movement_x > 1 || movement_y > 1){
-                valid_move = false;
+                return false;
             }
 
             break;
         }
 
         default:
-            valid_move = false;
+            return false;
     }
-    return valid_move;
+    return true;
 }
 
 globalThis.chess_games = {};
