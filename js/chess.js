@@ -49,26 +49,62 @@ function chess_validate(args){
         return false;
     }
 
+    const target_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']]
     let valid_move = true;
     switch(piece){
-        case chess_pieces[player][0]:
-            console.log('pawn');
+        // pawn
+        case chess_pieces[player][0]: {
+            const direction = player === 0 ? -1 : 1;
+
+            if(args['target-x'] !== args['piece-x']){
+
+            }else if(target_piece.length === 0){
+                if(args['target-y'] !== args['piece-y'] + direction){
+                    valid_move = false;
+                }
+
+            }else{
+                valid_move = false;
+            }
+
             break;
-        case chess_pieces[player][1]:
-            console.log('knight');
+        }
+
+        // knight
+        case chess_pieces[player][1]: {
             break;
-        case chess_pieces[player][2]:
-            console.log('bishop');
+        }
+
+        // bishop
+        case chess_pieces[player][2]: {
             break;
-        case chess_pieces[player][3]:
-            console.log('rook');
+        }
+
+        // rook
+        case chess_pieces[player][3]: {
+            if(args['target-x'] !== args['piece-x'] && args['target-y'] !== args['piece-y']){
+                valid_move = false;
+            }
+
             break;
-        case chess_pieces[player][4]:
-            console.log('queen');
+        }
+
+        // queen
+        case chess_pieces[player][4]: {
             break;
-        case chess_pieces[player][5]:
-            console.log('king');
+        }
+
+        // king
+        case chess_pieces[player][5]: {
+            const movement_x = Math.abs(args['piece-x'] - args['target-x']);
+            const movement_y = Math.abs(args['piece-y'] - args['target-y'])
+            if(movement_x > 1 || movement_y > 1 || chess_pieces[player].includes(target_piece)){
+                valid_move = false;
+            }
+
             break;
+        }
+
         default:
             valid_move = false;
     }
