@@ -62,6 +62,9 @@ function chess_validate(args){
             const direction = player === 0 ? -1 : 1;
 
             if(args['target-x'] !== args['piece-x']){
+                if(movement_x !== 1 || movement_y !== 1 || !chess_pieces[1 - player].includes(target_piece)){
+                    valid_move = false;
+                }
 
             }else if(target_piece.length === 0){
                 if(args['piece-y'] === 6 - (player * 5)){
