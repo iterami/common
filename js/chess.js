@@ -77,6 +77,12 @@ function chess_validate(args){
 
         // bishop
         case chess_pieces[player][2]: {
+            const movement_x = Math.abs(args['piece-x'] - args['target-x']);
+            const movement_y = Math.abs(args['piece-y'] - args['target-y']);
+            if(movement_x !== movement_y){
+                valid_move = false;
+            }
+
             break;
         }
 
@@ -91,13 +97,22 @@ function chess_validate(args){
 
         // queen
         case chess_pieces[player][4]: {
+            const movement_x = Math.abs(args['piece-x'] - args['target-x']);
+            const movement_y = Math.abs(args['piece-y'] - args['target-y']);
+
+            if(movement_x !== movement_y){
+                if(args['target-x'] !== args['piece-x'] && args['target-y'] !== args['piece-y']){
+                    valid_move = false;
+                }
+            }
+
             break;
         }
 
         // king
         case chess_pieces[player][5]: {
             const movement_x = Math.abs(args['piece-x'] - args['target-x']);
-            const movement_y = Math.abs(args['piece-y'] - args['target-y'])
+            const movement_y = Math.abs(args['piece-y'] - args['target-y']);
             if(movement_x > 1 || movement_y > 1 || chess_pieces[player].includes(target_piece)){
                 valid_move = false;
             }
