@@ -1,16 +1,16 @@
 'use strict';
 
-// Required args: id, piece_x, piece_y, target_x, target_y
+// Required args: id, piece-x, piece-y, target-x, target-y
 function chess_move(args){
-    const piece = chess_games[args['id']]['board'][args['piece_y']][args['piece_x']];
+    const piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
     const valid_move = chess_validate({
       ...args,
       'piece': piece,
     });
 
     if(valid_move){
-        chess_games[args['id']]['board'][args['piece_y']][args['piece_x']] = '';
-        chess_games[args['id']]['board'][args['target_y']][args['target_x']] = piece;
+        chess_games[args['id']]['board'][args['piece-y']][args['piece-x']] = '';
+        chess_games[args['id']]['board'][args['target-y']][args['target-x']] = piece;
         chess_games[args['id']]['player'] = 1 - chess_games[args['id']]['player'];
     }
 
@@ -35,12 +35,17 @@ function chess_new(args){
     };
 }
 
-// Required args: id, piece, piece_x, piece_y, target_x, target_y
+// Required args: id, piece, piece-x, piece-y, target-x, target-y
 function chess_validate(args){
     const player = chess_games[args['id']]['player'];
     let valid_move = true;
 
-    if(args['piece'].length === 0 || !chess_pieces[player].includes(args['piece'])){
+    if(args['piece'].length === 0
+      || args['piece-x'] < 0 || args['piece-x'] > 7
+      || args['piece-y'] < 0 || args['piece-y'] > 7
+      || args['target-x'] < 0 || args['target-x'] > 7
+      || args['target-y'] < 0 || args['target-y'] > 7
+      || !chess_pieces[player].includes(args['piece'])){
         valid_move = false;
 
     }else{
