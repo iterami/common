@@ -6,11 +6,10 @@ function chess_move(args){
         return false;
     }
 
-    const piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
     const valid_move = chess_validate(args);
     if(valid_move){
         chess_games[args['id']]['board'][args['piece-y']][args['piece-x']] = '';
-        chess_games[args['id']]['board'][args['target-y']][args['target-x']] = piece;
+        chess_games[args['id']]['board'][args['target-y']][args['target-x']] = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
         chess_games[args['id']]['player'] = 1 - chess_games[args['id']]['player'];
     }
     return valid_move;
