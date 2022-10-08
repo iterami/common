@@ -1,5 +1,42 @@
 'use strict';
 
+// Required args: id, column, loopend, loopstart
+function chess_check_column(args){
+    if(args['loopstart'] > args['loopend']){
+        const temp = args['loopstart'];
+        args['loopstart'] = args['loopend'];
+        args['loopend'] = temp;
+    }
+
+    for(let i = args['loopstart'] + 1; i < args['loopend']; i++){
+        if(chess_games[args['id']]['board'][i][args['column']].length === 1){
+            return true;
+        }
+    }
+    return false;
+}
+
+// Required args: id, dx, dy, start-x, start-y
+function chess_check_diagonal(args){
+    return false;
+}
+
+// Required args: id, loopend, loopstart, row
+function chess_check_row(args){
+    if(args['loopstart'] > args['loopend']){
+        const temp = args['loopstart'];
+        args['loopstart'] = args['loopend'];
+        args['loopend'] = temp;
+    }
+
+    for(let i = args['loopstart'] + 1; i < args['loopend']; i++){
+        if(chess_games[args['id']]['board'][args['row']][i].length === 1){
+            return true;
+        }
+    }
+    return false;
+}
+
 // Required args: id, piece-x, piece-y, target-x, target-y
 function chess_move(args){
     if(!chess_games[args['id']]){
@@ -101,7 +138,10 @@ function chess_validate(args){
 
         // bishop
         case chess_pieces[player][2]: {
-            if(movement_x !== movement_y){
+            if(movement_x === movement_y){
+                // check diagonal
+
+            }else{
                 return false;
             }
 
@@ -110,7 +150,27 @@ function chess_validate(args){
 
         // rook
         case chess_pieces[player][3]: {
-            if(args['target-x'] !== args['piece-x'] && args['target-y'] !== args['piece-y']){
+            if(args['target-x'] === args['piece-x']){
+                if(chess_check_column({
+                    'column': args['piece-x'],
+                    'id': args['id'],
+                    'loopend': args['target-y'],
+                    'loopstart': args['piece-y'],
+                  })){
+                    return false;
+                }
+
+            }else if(args['target-y'] === args['piece-y']){
+                if(chess_check_row({
+                    'id': args['id'],
+                    'loopend': args['target-x'],
+                    'loopstart': args['piece-x'],
+                    'row': args['piece-y'],
+                  })){
+                    return false;
+                }
+
+            }else{
                 return false;
             }
 
@@ -119,8 +179,31 @@ function chess_validate(args){
 
         // queen
         case chess_pieces[player][4]: {
-            if(movement_x !== movement_y){
-                if(args['target-x'] !== args['piece-x'] && args['target-y'] !== args['piece-y']){
+            if(movement_x === movement_y){
+                // check diagonal
+
+            }else{
+                if(args['target-x'] === args['piece-x']){
+                    if(chess_check_column({
+                        'column': args['piece-x'],
+                        'id': args['id'],
+                        'loopend': args['target-y'],
+                        'loopstart': args['piece-y'],
+                      })){
+                        return false;
+                    }
+
+                }else if(args['target-y'] === args['piece-y']){
+                    if(chess_check_row({
+                        'id': args['id'],
+                        'loopend': args['target-x'],
+                        'loopstart': args['piece-x'],
+                        'row': args['piece-y'],
+                      })){
+                        return false;
+                    }
+
+                }else{
                     return false;
                 }
             }
