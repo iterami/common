@@ -49,7 +49,11 @@ function chess_validate(args){
         return false;
     }
 
-    const target_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']]
+    const target_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']];
+    if(chess_pieces[player].includes(target_piece)){
+        return false;
+    }
+
     let valid_move = true;
     switch(piece){
         // pawn
@@ -72,6 +76,17 @@ function chess_validate(args){
 
         // knight
         case chess_pieces[player][1]: {
+            const movement_x = Math.abs(args['piece-x'] - args['target-x']);
+            const movement_y = Math.abs(args['piece-y'] - args['target-y']);
+
+            if(movement_x < 1 || movement_x > 2 || movement_y < 1 || movement_y > 2){
+                valid_move = false;
+
+            }else if((movement_x === 1 && movement_y !== 2)
+              || (movement_x === 2 && movement_y !== 1)){
+                valid_move = false;
+            }
+
             break;
         }
 
@@ -113,7 +128,7 @@ function chess_validate(args){
         case chess_pieces[player][5]: {
             const movement_x = Math.abs(args['piece-x'] - args['target-x']);
             const movement_y = Math.abs(args['piece-y'] - args['target-y']);
-            if(movement_x > 1 || movement_y > 1 || chess_pieces[player].includes(target_piece)){
+            if(movement_x > 1 || movement_y > 1){
                 valid_move = false;
             }
 
