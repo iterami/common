@@ -16,8 +16,27 @@ function chess_check_column(args){
     return false;
 }
 
-// Required args: id, dx, dy, start-x, start-y
+// Required args: id, column, dx, dy, loopstart, loopend, row
 function chess_check_diagonal(args){
+    if(args['loopstart'] > args['loopend']){
+        const temp = args['loopstart'];
+        args['loopstart'] = args['loopend'];
+        args['loopend'] = temp;
+    }
+
+    let x = args['column'];
+    let y = args['row'];
+
+    for(let i = args['loopstart'] + 1; i < args['loopend']; i++){
+        x += args['dx'];
+        y += args['dy'];
+
+        if(chess_games[args['id']]['board'][y][x].length === 1){
+console.log(chess_games[args['id']]['board'][y][x]);
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -139,7 +158,21 @@ function chess_validate(args){
         // bishop
         case chess_pieces[player][2]: {
             if(movement_x === movement_y){
-                // check diagonal
+                if(chess_check_diagonal({
+                    'column': args['piece-x'],
+                    'dx': args['piece-x'] < args['target-x']
+                      ? 1
+                      : -1,
+                    'dy': args['piece-y'] < args['target-y']
+                      ? 1
+                      : -1,
+                    'id': args['id'],
+                    'loopend': args['target-x'],
+                    'loopstart': args['piece-x'],
+                    'row': args['piece-y'],
+                  })){
+                    return false;
+                }
 
             }else{
                 return false;
@@ -180,7 +213,21 @@ function chess_validate(args){
         // queen
         case chess_pieces[player][4]: {
             if(movement_x === movement_y){
-                // check diagonal
+                if(chess_check_diagonal({
+                    'column': args['piece-x'],
+                    'dx': args['piece-x'] < args['target-x']
+                      ? 1
+                      : -1,
+                    'dy': args['piece-y'] < args['target-y']
+                      ? 1
+                      : -1,
+                    'id': args['id'],
+                    'loopend': args['target-x'],
+                    'loopstart': args['piece-x'],
+                    'row': args['piece-y'],
+                  })){
+                    return false;
+                }
 
             }else{
                 if(args['target-x'] === args['piece-x']){
