@@ -229,30 +229,28 @@ function chess_validate(args){
                     return false;
                 }
 
-            }else{
-                if(args['target-x'] === args['piece-x']){
-                    if(chess_check_column({
-                        'column': args['piece-x'],
-                        'id': args['id'],
-                        'loopend': args['target-y'],
-                        'loopstart': args['piece-y'],
-                      })){
-                        return false;
-                    }
-
-                }else if(args['target-y'] === args['piece-y']){
-                    if(chess_check_row({
-                        'id': args['id'],
-                        'loopend': args['target-x'],
-                        'loopstart': args['piece-x'],
-                        'row': args['piece-y'],
-                      })){
-                        return false;
-                    }
-
-                }else{
+            }else if(args['target-x'] === args['piece-x']){
+                if(chess_check_column({
+                    'column': args['piece-x'],
+                    'id': args['id'],
+                    'loopend': args['target-y'],
+                    'loopstart': args['piece-y'],
+                  })){
                     return false;
                 }
+
+            }else if(args['target-y'] === args['piece-y']){
+                if(chess_check_row({
+                    'id': args['id'],
+                    'loopend': args['target-x'],
+                    'loopstart': args['piece-x'],
+                    'row': args['piece-y'],
+                  })){
+                    return false;
+                }
+
+            }else{
+                return false;
             }
 
             break;
