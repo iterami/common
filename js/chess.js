@@ -158,7 +158,7 @@ function chess_validate(args){
         // bishop
         case chess_pieces[player][2]: {
             if(movement_x === movement_y){
-                if(chess_check_diagonal({
+                if(movement_y > 1 && chess_check_diagonal({
                     'column': args['piece-x'],
                     'dx': args['piece-x'] < args['target-x']
                       ? 1
@@ -184,7 +184,7 @@ function chess_validate(args){
         // rook
         case chess_pieces[player][3]: {
             if(args['target-x'] === args['piece-x']){
-                if(chess_check_column({
+                if(movement_y > 1 && chess_check_column({
                     'column': args['piece-x'],
                     'id': args['id'],
                     'loopend': args['target-y'],
@@ -194,7 +194,7 @@ function chess_validate(args){
                 }
 
             }else if(args['target-y'] === args['piece-y']){
-                if(chess_check_row({
+                if(movement_x > 1 && chess_check_row({
                     'id': args['id'],
                     'loopend': args['target-x'],
                     'loopstart': args['piece-x'],
@@ -213,7 +213,7 @@ function chess_validate(args){
         // queen
         case chess_pieces[player][4]: {
             if(movement_x === movement_y){
-                if(chess_check_diagonal({
+                if(movement_y > 1 && chess_check_diagonal({
                     'column': args['piece-x'],
                     'dx': args['piece-x'] < args['target-x']
                       ? 1
@@ -230,7 +230,7 @@ function chess_validate(args){
                 }
 
             }else if(args['target-x'] === args['piece-x']){
-                if(chess_check_column({
+                if(movement_y > 1 && chess_check_column({
                     'column': args['piece-x'],
                     'id': args['id'],
                     'loopend': args['target-y'],
@@ -240,7 +240,7 @@ function chess_validate(args){
                 }
 
             }else if(args['target-y'] === args['piece-y']){
-                if(chess_check_row({
+                if(movement_x > 1 && chess_check_row({
                     'id': args['id'],
                     'loopend': args['target-x'],
                     'loopstart': args['piece-x'],
