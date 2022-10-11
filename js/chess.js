@@ -32,7 +32,6 @@ function chess_check_diagonal(args){
         y += args['dy'];
 
         if(chess_games[args['id']]['board'][y][x].length === 1){
-console.log(chess_games[args['id']]['board'][y][x]);
             return true;
         }
     }
