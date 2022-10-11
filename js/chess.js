@@ -120,7 +120,7 @@ function chess_validate(args){
     const movement_y = Math.abs(piece_y - target_y);
 
     switch(piece){
-        // pawn
+        // Pawn
         case chess_pieces[player][0]: {
             const direction = player === 0 ? -1 : 1;
 
@@ -149,7 +149,7 @@ function chess_validate(args){
             break;
         }
 
-        // knight
+        // Knight
         case chess_pieces[player][1]: {
             if(movement_x < 1 || movement_x > 2 || movement_y < 1 || movement_y > 2){
                 return false;
@@ -162,7 +162,7 @@ function chess_validate(args){
             break;
         }
 
-        // bishop
+        // Bishop
         case chess_pieces[player][2]: {
             if(movement_x === movement_y){
                 if(movement_y > 1 && chess_check_diagonal({
@@ -188,7 +188,7 @@ function chess_validate(args){
             break;
         }
 
-        // rook
+        // Rook
         case chess_pieces[player][3]: {
             if(target_x === piece_x){
                 if(movement_y > 1 && chess_check_column({
@@ -217,7 +217,7 @@ function chess_validate(args){
             break;
         }
 
-        // queen
+        // Queen
         case chess_pieces[player][4]: {
             if(movement_x === movement_y){
                 if(movement_y > 1 && chess_check_diagonal({
@@ -263,7 +263,7 @@ function chess_validate(args){
             break;
         }
 
-        // king
+        // King
         case chess_pieces[player][5]: {
             if(movement_x > 1 || movement_y > 1){
                 return false;
