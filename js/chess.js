@@ -140,7 +140,7 @@ function chess_validate(args){
 
                             }else if(chess_games[args['id']]['en-passant'] > -1){
                                 if(target_x !== chess_games[args['id']]['en-passant'] - 1
-                                  || target_y !== 2 + (player * 4)){
+                                  || target_y !== 2 + (player * 3)){
                                     valid_move = false;
 
                                 }else{
