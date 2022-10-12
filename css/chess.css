@@ -2,9 +2,9 @@
     border: 0;
     color: #000;
     cursor: pointer;
-    font-size: 50px;
-    height: 50px;
-    width: 50px;
+    font-size: 64px;
+    line-height: 64px;
+    width: 64px;
 }
 .chess tr:nth-child(even) td:nth-child(even),
 .chess tr:nth-child(odd) td:nth-child(odd){
