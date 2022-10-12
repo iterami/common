@@ -139,14 +139,9 @@ function chess_validate(args){
                                 valid_move = false;
 
                             }else if(chess_games[args['id']]['en-passant'] > -1
-                              && piece_y === 3 + player){
-                                if(target_x !== chess_games[args['id']]['en-passant'] - 1
-                                  || target_y !== 2 + (player * 3)){
-                                    valid_move = false;
-
-                                }else{
-                                    en_passant_taken = true;
-                                }
+                              && target_x === chess_games[args['id']]['en-passant'] - 1
+                              && target_y === 2 + (player * 3)){
+                                en_passant_taken = true;
 
                             }else if(!chess_pieces[1 - player].includes(target_piece)){
                                 valid_move = false;
