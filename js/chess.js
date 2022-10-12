@@ -138,8 +138,7 @@ function chess_validate(args){
                               || target_y - piece_y !== direction){
                                 valid_move = false;
 
-                            }else if(chess_games[args['id']]['en-passant'] > -1
-                              && target_x === chess_games[args['id']]['en-passant'] - 1
+                            }else if(target_x === chess_games[args['id']]['en-passant'] - 1
                               && target_y === 2 + (player * 3)){
                                 en_passant_taken = true;
 
