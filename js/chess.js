@@ -69,6 +69,9 @@ function chess_move(args){
 
         chess_games[args['id']]['board'][piece_y][piece_x] = '';
         chess_games[args['id']]['en-passant'] = validation['en-passant'];
+        if(validation['en-passant-taken']){
+            chess_games[args['id']]['board'][piece_y][args['target-x'] - 1] = '';
+        }
         chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1] = piece;
         chess_games[args['id']]['player'] = 1 - chess_games[args['id']]['player'];
     }
@@ -89,6 +92,7 @@ function chess_new(args){
         [chess_pieces[0][3], chess_pieces[0][1], chess_pieces[0][2], chess_pieces[0][4], chess_pieces[0][5], chess_pieces[0][2], chess_pieces[0][1], chess_pieces[0][3],],
       ],
       'en-passant': -1,
+      'en-passant-taken': false,
       'player': 0,
     };
 }
@@ -96,6 +100,7 @@ function chess_new(args){
 // Required args: id, piece-x, piece-y, target-x, target-y
 function chess_validate(args){
     let en_passant = -1;
+    let en_passant_taken = false;
     let valid_move = true;
     const piece_x = args['piece-x'] - 1;
     const piece_y = args['piece-y'] - 1;
@@ -130,8 +135,19 @@ function chess_validate(args){
 
                         if(target_x !== piece_x){
                             if(movement_x !== 1
-                              || target_y - piece_y !== direction
-                              || !chess_pieces[1 - player].includes(target_piece)){
+                              || target_y - piece_y !== direction){
+                                valid_move = false;
+
+                            }else if(chess_games[args['id']]['en-passant'] > -1){
+                                if(target_x !== chess_games[args['id']]['en-passant'] - 1
+                                  || target_y !== 2 + (player * 4)){
+                                    valid_move = false;
+
+                                }else{
+                                    en_passant_taken = true;
+                                }
+
+                            }else if(!chess_pieces[1 - player].includes(target_piece)){
                                 valid_move = false;
                             }
 
@@ -288,6 +304,7 @@ function chess_validate(args){
 
     return {
       'en-passant': en_passant,
+      'en-passant-taken': en_passant_taken,
       'valid': valid_move,
     };
 }
