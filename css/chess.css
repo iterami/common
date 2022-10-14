@@ -4,6 +4,7 @@
     cursor: pointer;
     font-size: 64px;
     line-height: 64px;
+    user-select: none;
     width: 64px;
 }
 .chess tr:nth-child(even) td:nth-child(even),
