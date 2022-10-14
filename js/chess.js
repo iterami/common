@@ -63,16 +63,20 @@ function chess_move(args){
 
     const validation = chess_validate(args);
     if(validation['valid']){
+        chess_games[args['id']]['en-passant'] = validation['en-passant'];
         const piece_x = args['piece-x'] - 1;
         const piece_y = args['piece-y'] - 1;
         const piece = chess_games[args['id']]['board'][piece_y][piece_x];
 
         chess_games[args['id']]['board'][piece_y][piece_x] = '';
-        chess_games[args['id']]['en-passant'] = validation['en-passant'];
+        let taken_piece = chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1];
         if(validation['en-passant-taken']){
+            taken_piece = chess_games[args['id']]['board'][piece_y][args['target-x'] - 1];
             chess_games[args['id']]['board'][piece_y][args['target-x'] - 1] = '';
         }
+        chess_games[args['id']]['players'][chess_games[args['id']]['player']]['pieces-taken'] += taken_piece;
         chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1] = piece;
+
         chess_games[args['id']]['player'] = 1 - chess_games[args['id']]['player'];
     }
     return validation['valid'];
@@ -94,6 +98,14 @@ function chess_new(args){
       'en-passant': -1,
       'en-passant-taken': false,
       'player': 0,
+      'players': [
+        {
+          'pieces-taken': '',
+        },
+        {
+          'pieces-taken': '',
+        },
+      ],
     };
 }
 
