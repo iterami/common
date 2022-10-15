@@ -74,9 +74,11 @@ function chess_move(args){
             taken_piece = chess_games[args['id']]['board'][piece_y][args['target-x'] - 1];
             chess_games[args['id']]['board'][piece_y][args['target-x'] - 1] = '';
         }
+        if(validation['king-moved']){
+            chess_games[args['id']]['players'][chess_games[args['id']]['player']]['king-moved'] = true;
+        }
         chess_games[args['id']]['players'][chess_games[args['id']]['player']]['pieces-taken'] += taken_piece;
         chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1] = piece;
-
         chess_games[args['id']]['player'] = 1 - chess_games[args['id']]['player'];
     }
     return validation['valid'];
@@ -100,9 +102,11 @@ function chess_new(args){
       'player': 0,
       'players': [
         {
+          'king-moved': false,
           'pieces-taken': '',
         },
         {
+          'king-moved': false,
           'pieces-taken': '',
         },
       ],
@@ -113,12 +117,13 @@ function chess_new(args){
 function chess_validate(args){
     let en_passant = -1;
     let en_passant_taken = false;
+    let king_moved = false;
     let valid_move = true;
+
     const piece_x = args['piece-x'] - 1;
     const piece_y = args['piece-y'] - 1;
     const target_x = args['target-x'] - 1;
     const target_y = args['target-y'] - 1;
-
     if(!chess_games[args['id']]
       || piece_x < 0 || piece_x > 7
       || piece_y < 0 || piece_y > 7
@@ -297,6 +302,9 @@ function chess_validate(args){
                     case chess_pieces[player][5]: {
                         if(movement_x > 1 || movement_y > 1){
                             valid_move = false;
+
+                        }else{
+                            king_moved = true;
                         }
 
                         break;
@@ -312,6 +320,7 @@ function chess_validate(args){
     return {
       'en-passant': en_passant,
       'en-passant-taken': en_passant_taken,
+      'king-moved': king_moved,
       'valid': valid_move,
     };
 }
