@@ -66,7 +66,8 @@ function chess_move(args){
         chess_games[args['id']]['en-passant'] = validation['en-passant'];
         const piece_x = args['piece-x'] - 1;
         const piece_y = args['piece-y'] - 1;
-        const piece = chess_games[args['id']]['board'][piece_y][piece_x];
+        const player = chess_games[args['id']]['player'];
+        let piece = chess_games[args['id']]['board'][piece_y][piece_x];
 
         chess_games[args['id']]['board'][piece_y][piece_x] = '';
         let taken_piece = chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1];
@@ -75,11 +76,14 @@ function chess_move(args){
             chess_games[args['id']]['board'][piece_y][args['target-x'] - 1] = '';
         }
         if(validation['king-moved']){
-            chess_games[args['id']]['players'][chess_games[args['id']]['player']]['king-moved'] = true;
+            chess_games[args['id']]['players'][player]['king-moved'] = true;
         }
-        chess_games[args['id']]['players'][chess_games[args['id']]['player']]['pieces-taken'] += taken_piece;
+        if(validation['pawn-promote']){
+            piece = chess_pieces[player][chess_games[args['id']]['players'][player]['pawn-promote']];
+        }
+        chess_games[args['id']]['players'][player]['pieces-taken'] += taken_piece;
         chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1] = piece;
-        chess_games[args['id']]['player'] = 1 - chess_games[args['id']]['player'];
+        chess_games[args['id']]['player'] = 1 - player;
     }
     return validation['valid'];
 }
@@ -103,10 +107,12 @@ function chess_new(args){
       'players': [
         {
           'king-moved': false,
+          'pawn-promote': 4,
           'pieces-taken': '',
         },
         {
           'king-moved': false,
+          'pawn-promote': 4,
           'pieces-taken': '',
         },
       ],
@@ -118,6 +124,7 @@ function chess_validate(args){
     let en_passant = -1;
     let en_passant_taken = false;
     let king_moved = false;
+    let pawn_promote = false;
     let valid_move = true;
 
     const piece_x = args['piece-x'] - 1;
@@ -179,6 +186,10 @@ function chess_validate(args){
 
                         }else{
                             valid_move = false;
+                        }
+
+                        if(valid_move && target_y === player * 7){
+                            pawn_promote = true;
                         }
 
                         break;
@@ -321,6 +332,7 @@ function chess_validate(args){
       'en-passant': en_passant,
       'en-passant-taken': en_passant_taken,
       'king-moved': king_moved,
+      'pawn-promote': pawn_promote,
       'valid': valid_move,
     };
 }
