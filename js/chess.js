@@ -140,6 +140,8 @@ function chess_validate(args){
 
     }else{
         const player = chess_games[args['id']]['player'];
+        king_moved = chess_games[args['id']]['players'][player]['king-moved'];
+
         const piece = chess_games[args['id']]['board'][piece_y][piece_x];
         if(piece.length === 0 || !chess_pieces[player].includes(piece)){
             valid_move = false;
