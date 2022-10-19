@@ -85,7 +85,7 @@ function chess_move(args){
         chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1] = piece;
         chess_games[args['id']]['player'] = 1 - player;
     }
-    return validation['valid'];
+    return validation;
 }
 
 // Required args: id
