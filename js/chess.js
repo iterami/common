@@ -71,13 +71,24 @@ function chess_move(args){
 
         chess_games[args['id']]['board'][piece_y][piece_x] = '';
         let taken_piece = chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1];
-        if(validation['en-passant-taken']){
+        if(validation['castling']){
+            if(validation['rook-long-moved']){
+                chess_games[args['id']]['board'][piece_y][7] = '';
+                chess_games[args['id']]['board'][piece_y][5] = chess_pieces[player][3];
+
+            }else if(validation['rook-short-moved']){
+                chess_games[args['id']]['board'][piece_y][0] = '';
+                chess_games[args['id']]['board'][piece_y][3] = chess_pieces[player][3];
+            }
+
+        }else if(validation['en-passant-taken']){
             taken_piece = chess_games[args['id']]['board'][piece_y][args['target-x'] - 1];
             chess_games[args['id']]['board'][piece_y][args['target-x'] - 1] = '';
-        }
-        if(validation['pawn-promote']){
+
+        }else if(validation['pawn-promote']){
             piece = chess_pieces[player][chess_games[args['id']]['players'][player]['pawn-promote']];
         }
+
         chess_games[args['id']]['players'][player]['king-moved'] = validation['king-moved'];
         chess_games[args['id']]['players'][player]['pieces-taken'] += taken_piece;
         chess_games[args['id']]['players'][player]['rook-long-moved'] = validation['rook-long-moved'];
@@ -125,6 +136,7 @@ function chess_new(args){
 
 // Required args: id, piece-x, piece-y, target-x, target-y
 function chess_validate(args){
+    let castling = false;
     let en_passant = -1;
     let en_passant_taken = false;
     let king_moved = false;
@@ -330,7 +342,24 @@ function chess_validate(args){
 
                     // King
                     case chess_pieces[player][5]: {
-                        if(movement_x > 1 || movement_y > 1){
+                        if(!king_moved
+                          && movement_x === 2 && movement_y === 0
+                          && target_y === (1 - player) * 7){
+                            if(!rook_long_moved && target_x === 6){
+                                king_moved = true;
+                                castling = true;
+                                rook_long_moved = true;
+
+                            }else if(!rook_short_moved && target_x === 2){
+                                king_moved = true;
+                                castling = true;
+                                rook_short_moved = true;
+
+                            }else{
+                                valid_move = false;
+                            }
+
+                        }else if(movement_x > 1 || movement_y > 1){
                             valid_move = false;
 
                         }else{
@@ -348,6 +377,7 @@ function chess_validate(args){
     }
 
     return {
+      'castling': castling,
       'en-passant': en_passant,
       'en-passant-taken': en_passant_taken,
       'king-moved': king_moved,
