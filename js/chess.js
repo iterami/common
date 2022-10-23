@@ -73,12 +73,12 @@ function chess_move(args){
         let taken_piece = chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1];
         if(validation['castling']){
             if(validation['rook-long-moved']){
-                chess_games[args['id']]['board'][piece_y][7] = '';
-                chess_games[args['id']]['board'][piece_y][5] = chess_pieces[player][3];
-
-            }else if(validation['rook-short-moved']){
                 chess_games[args['id']]['board'][piece_y][0] = '';
                 chess_games[args['id']]['board'][piece_y][3] = chess_pieces[player][3];
+
+            }else if(validation['rook-short-moved']){
+                chess_games[args['id']]['board'][piece_y][7] = '';
+                chess_games[args['id']]['board'][piece_y][5] = chess_pieces[player][3];
             }
 
         }else if(validation['en-passant-taken']){
@@ -345,15 +345,35 @@ function chess_validate(args){
                         if(!king_moved
                           && movement_x === 2 && movement_y === 0
                           && target_y === (1 - player) * 7){
-                            if(!rook_long_moved && target_x === 6){
-                                king_moved = true;
-                                castling = true;
-                                rook_long_moved = true;
+                            if(!rook_long_moved && target_x === 2){
+                                if(!chess_check_row({
+                                    'id': args['id'],
+                                    'loopend': piece_x,
+                                    'loopstart': 0,
+                                    'row': piece_y,
+                                  })){
+                                    king_moved = true;
+                                    castling = true;
+                                    rook_long_moved = true;
 
-                            }else if(!rook_short_moved && target_x === 2){
-                                king_moved = true;
-                                castling = true;
-                                rook_short_moved = true;
+                                }else{
+                                    valid_move = false;
+                                }
+
+                            }else if(!rook_short_moved && target_x === 6){
+                                if(!chess_check_row({
+                                    'id': args['id'],
+                                    'loopend': 7,
+                                    'loopstart': piece_x,
+                                    'row': piece_y,
+                                  })){
+                                    king_moved = true;
+                                    castling = true;
+                                    rook_short_moved = true;
+
+                                }else{
+                                    valid_move = false;
+                                }
 
                             }else{
                                 valid_move = false;
