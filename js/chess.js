@@ -134,8 +134,25 @@ function chess_new(args){
     };
 }
 
-// Required args: id, piece-x, piece-y
+// Required args: id, piece-x, piece-y, player
 function chess_threat(args){
+    for(let y = 0; y < 8; y++){
+        for(let x = 0; x < 8; x++){
+            const piece = chess_games[args['id']]['board'][y][x];
+            if(chess_pieces[args['player']].includes(piece)){
+                if(chess_validate({
+                    'id': args['id'],
+                    'piece-x': x + 1,
+                    'piece-y': y + 1,
+                    'target-x': args['piece-x'],
+                    'target-y': args['piece-y'],
+                  })['valid']){
+                    return true;
+                }
+            }
+        }
+    }
+
     return false;
 }
 
