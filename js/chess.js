@@ -134,6 +134,11 @@ function chess_new(args){
     };
 }
 
+// Required args: id, piece-x, piece-y
+function chess_threat(args){
+    return false;
+}
+
 // Required args: id, piece-x, piece-y, target-x, target-y
 function chess_validate(args){
     let castling = false;
