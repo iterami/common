@@ -90,6 +90,8 @@ function chess_move(args){
         }
 
         chess_games[args['id']]['players'][player]['king-moved'] = validation['king-moved'];
+        chess_games[args['id']]['players'][player]['king-x'] = validation['king-x'];
+        chess_games[args['id']]['players'][player]['king-y'] = validation['king-y'];
         chess_games[args['id']]['players'][player]['pieces-taken'] += taken_piece;
         chess_games[args['id']]['players'][player]['rook-long-moved'] = validation['rook-long-moved'];
         chess_games[args['id']]['players'][player]['rook-short-moved'] = validation['rook-short-moved'];
@@ -118,6 +120,8 @@ function chess_new(args){
       'players': [
         {
           'king-moved': false,
+          'king-x': 4,
+          'king-y': 7,
           'pawn-promote': 4,
           'pieces-taken': '',
           'rook-long-moved': false,
@@ -125,6 +129,8 @@ function chess_new(args){
         },
         {
           'king-moved': false,
+          'king-x': 4,
+          'king-y': 0,
           'pawn-promote': 4,
           'pieces-taken': '',
           'rook-long-moved': false,
@@ -162,6 +168,8 @@ function chess_validate(args){
     let en_passant = -1;
     let en_passant_taken = false;
     let king_moved = false;
+    let king_x = -1;
+    let king_y = -1;
     let rook_long_moved = false;
     let rook_short_moved = false;
     let pawn_promote = false;
@@ -181,6 +189,8 @@ function chess_validate(args){
     }else{
         const player = chess_games[args['id']]['player'];
         king_moved = chess_games[args['id']]['players'][player]['king-moved'];
+        king_x = chess_games[args['id']]['players'][player]['king-x'];
+        king_y = chess_games[args['id']]['players'][player]['king-y'];
         rook_long_moved = chess_games[args['id']]['players'][player]['rook-long-moved'];
         rook_short_moved = chess_games[args['id']]['players'][player]['rook-short-moved'];
 
@@ -406,6 +416,8 @@ function chess_validate(args){
 
                         }else{
                             king_moved = true;
+                            king_x = target_x;
+                            king_y = target_y;
                         }
 
                         break;
@@ -423,6 +435,8 @@ function chess_validate(args){
       'en-passant': en_passant,
       'en-passant-taken': en_passant_taken,
       'king-moved': king_moved,
+      'king-x': king_x,
+      'king-y': king_y,
       'pawn-promote': pawn_promote,
       'rook-long-moved': rook_long_moved,
       'rook-short-moved': rook_short_moved,
