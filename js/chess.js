@@ -167,6 +167,7 @@ function chess_validate(args){
     let castling = false;
     let en_passant = -1;
     let en_passant_taken = false;
+    let king_checked = false;
     let king_moved = false;
     let king_x = -1;
     let king_y = -1;
@@ -416,6 +417,9 @@ function chess_validate(args){
 
                         }else{
                             king_moved = true;
+                        }
+
+                        if(valid_move){
                             king_x = target_x;
                             king_y = target_y;
                         }
@@ -430,10 +434,15 @@ function chess_validate(args){
         }
     }
 
+    if(king_checked){
+        move_valid = false;
+    }
+
     return {
       'castling': castling,
       'en-passant': en_passant,
       'en-passant-taken': en_passant_taken,
+      'king-checked': king_checked,
       'king-moved': king_moved,
       'king-x': king_x,
       'king-y': king_y,
