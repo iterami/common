@@ -64,26 +64,24 @@ function chess_move(args){
     const validation = chess_validate(args);
     if(validation['valid']){
         chess_games[args['id']]['en-passant'] = validation['en-passant'];
-        const piece_x = args['piece-x'] - 1;
-        const piece_y = args['piece-y'] - 1;
         const player = chess_games[args['id']]['player'];
-        let piece = chess_games[args['id']]['board'][piece_y][piece_x];
+        let piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
 
-        chess_games[args['id']]['board'][piece_y][piece_x] = '';
-        let taken_piece = chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1];
+        chess_games[args['id']]['board'][args['piece-y']][args['piece-x']] = '';
+        let taken_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']];
         if(validation['castling']){
             if(validation['rook-long-moved']){
-                chess_games[args['id']]['board'][piece_y][0] = '';
-                chess_games[args['id']]['board'][piece_y][3] = chess_pieces[player][3];
+                chess_games[args['id']]['board'][args['piece-y']][0] = '';
+                chess_games[args['id']]['board'][args['piece-y']][3] = chess_pieces[player][3];
 
             }else if(validation['rook-short-moved']){
-                chess_games[args['id']]['board'][piece_y][7] = '';
-                chess_games[args['id']]['board'][piece_y][5] = chess_pieces[player][3];
+                chess_games[args['id']]['board'][args['piece-y']][7] = '';
+                chess_games[args['id']]['board'][args['piece-y']][5] = chess_pieces[player][3];
             }
 
         }else if(validation['en-passant-taken']){
-            taken_piece = chess_games[args['id']]['board'][piece_y][args['target-x'] - 1];
-            chess_games[args['id']]['board'][piece_y][args['target-x'] - 1] = '';
+            taken_piece = chess_games[args['id']]['board'][args['piece-y']][args['target-x']];
+            chess_games[args['id']]['board'][args['piece-y']][args['target-x']] = '';
 
         }else if(validation['pawn-promote']){
             piece = chess_pieces[player][chess_games[args['id']]['players'][player]['pawn-promote']];
@@ -95,7 +93,7 @@ function chess_move(args){
         chess_games[args['id']]['players'][player]['pieces-taken'] += taken_piece;
         chess_games[args['id']]['players'][player]['rook-long-moved'] = validation['rook-long-moved'];
         chess_games[args['id']]['players'][player]['rook-short-moved'] = validation['rook-short-moved'];
-        chess_games[args['id']]['board'][args['target-y'] - 1][args['target-x'] - 1] = piece;
+        chess_games[args['id']]['board'][args['target-y']][args['target-x']] = piece;
         chess_games[args['id']]['player'] = 1 - player;
     }
     return validation;
@@ -148,8 +146,8 @@ function chess_threat(args){
             if(chess_pieces[args['player']].includes(piece)){
                 if(chess_validate({
                     'id': args['id'],
-                    'piece-x': x + 1,
-                    'piece-y': y + 1,
+                    'piece-x': x,
+                    'piece-y': y,
                     'target-x': args['piece-x'],
                     'target-y': args['piece-y'],
                   })['valid']){
@@ -176,15 +174,11 @@ function chess_validate(args){
     let pawn_promote = false;
     let valid_move = true;
 
-    const piece_x = args['piece-x'] - 1;
-    const piece_y = args['piece-y'] - 1;
-    const target_x = args['target-x'] - 1;
-    const target_y = args['target-y'] - 1;
     if(!chess_games[args['id']]
-      || piece_x < 0 || piece_x > 7
-      || piece_y < 0 || piece_y > 7
-      || target_x < 0 || target_x > 7
-      || target_y < 0 || target_y > 7){
+      || args['piece-x'] < 0 || args['piece-x'] > 7
+      || args['piece-y'] < 0 || args['piece-y'] > 7
+      || args['target-x'] < 0 || args['target-x'] > 7
+      || args['target-y'] < 0 || args['target-y'] > 7){
         valid_move = false;
 
     }else{
@@ -195,30 +189,30 @@ function chess_validate(args){
         rook_long_moved = chess_games[args['id']]['players'][player]['rook-long-moved'];
         rook_short_moved = chess_games[args['id']]['players'][player]['rook-short-moved'];
 
-        const piece = chess_games[args['id']]['board'][piece_y][piece_x];
+        const piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
         if(piece.length === 0 || !chess_pieces[player].includes(piece)){
             valid_move = false;
 
         }else{
-            const target_piece = chess_games[args['id']]['board'][target_y][target_x];
+            const target_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']];
             if(chess_pieces[player].includes(target_piece)){
                 valid_move = false;
 
             }else{
-                const movement_x = Math.abs(piece_x - target_x);
-                const movement_y = Math.abs(piece_y - target_y);
+                const movement_x = Math.abs(args['piece-x'] - args['target-x']);
+                const movement_y = Math.abs(args['piece-y'] - args['target-y']);
                 switch(piece){
                     // Pawn
                     case chess_pieces[player][0]: {
                         const direction = player === 0 ? -1 : 1;
 
-                        if(target_x !== piece_x){
+                        if(args['target-x'] !== args['piece-x']){
                             if(movement_x !== 1
-                              || target_y - piece_y !== direction){
+                              || args['target-y'] - args['piece-y'] !== direction){
                                 valid_move = false;
 
-                            }else if(target_x === chess_games[args['id']]['en-passant'] - 1
-                              && target_y === 2 + (player * 3)){
+                            }else if(args['target-x'] === chess_games[args['id']]['en-passant'] - 1
+                              && args['target-y'] === 2 + (player * 3)){
                                 en_passant_taken = true;
 
                             }else if(!chess_pieces[1 - player].includes(target_piece)){
@@ -226,16 +220,16 @@ function chess_validate(args){
                             }
 
                         }else if(target_piece.length === 0){
-                            if(piece_y === 6 - (player * 5)){
-                                if(target_y !== piece_y + direction
-                                  && target_y !== piece_y + direction * 2){
+                            if(args['piece-y'] === 6 - (player * 5)){
+                                if(args['target-y'] !== args['piece-y'] + direction
+                                  && args['target-y'] !== args['piece-y'] + direction * 2){
                                     valid_move = false;
 
-                                }else if(target_y === piece_y + direction * 2){
-                                    en_passant = piece_x + 1;
+                                }else if(args['target-y'] === args['piece-y'] + direction * 2){
+                                    en_passant = args['piece-x'] + 1;
                                 }
 
-                            }else if(target_y !== piece_y + direction){
+                            }else if(args['target-y'] !== args['piece-y'] + direction){
                                 valid_move = false;
                             }
 
@@ -243,7 +237,7 @@ function chess_validate(args){
                             valid_move = false;
                         }
 
-                        if(valid_move && target_y === player * 7){
+                        if(valid_move && args['target-y'] === player * 7){
                             pawn_promote = true;
                         }
 
@@ -267,17 +261,17 @@ function chess_validate(args){
                     case chess_pieces[player][2]: {
                         if(movement_x === movement_y){
                             if(movement_y > 1 && chess_check_diagonal({
-                                'column': piece_x,
-                                'dx': piece_x < target_x
+                                'column': args['piece-x'],
+                                'dx': args['piece-x'] < args['target-x']
                                   ? 1
                                   : -1,
-                                'dy': piece_y < target_y
+                                'dy': args['piece-y'] < args['target-y']
                                   ? 1
                                   : -1,
                                 'id': args['id'],
-                                'loopend': target_x,
-                                'loopstart': piece_x,
-                                'row': piece_y,
+                                'loopend': args['target-x'],
+                                'loopstart': args['piece-x'],
+                                'row': args['piece-y'],
                               })){
                                 valid_move = false;
                             }
@@ -291,22 +285,22 @@ function chess_validate(args){
 
                     // Rook
                     case chess_pieces[player][3]: {
-                        if(target_x === piece_x){
+                        if(args['target-x'] === args['piece-x']){
                             if(movement_y > 1 && chess_check_column({
-                                'column': piece_x,
+                                'column': args['piece-x'],
                                 'id': args['id'],
-                                'loopend': target_y,
-                                'loopstart': piece_y,
+                                'loopend': args['target-y'],
+                                'loopstart': args['piece-y'],
                               })){
                                 valid_move = false;
                             }
 
-                        }else if(target_y === piece_y){
+                        }else if(args['target-y'] === args['piece-y']){
                             if(movement_x > 1 && chess_check_row({
                                 'id': args['id'],
-                                'loopend': target_x,
-                                'loopstart': piece_x,
-                                'row': piece_y,
+                                'loopend': args['target-x'],
+                                'loopstart': args['piece-x'],
+                                'row': args['piece-y'],
                               })){
                                 valid_move = false;
                             }
@@ -315,11 +309,11 @@ function chess_validate(args){
                             valid_move = false;
                         }
 
-                        if(valid_move && piece_y === (1 - player) * 7){
-                            if(!rook_long_moved && piece_x === 0){
+                        if(valid_move && args['piece-y'] === (1 - player) * 7){
+                            if(!rook_long_moved && args['piece-x'] === 0){
                                 rook_long_moved = true;
 
-                            }else if(!rook_short_moved && piece_x === 7){
+                            }else if(!rook_short_moved && args['piece-x'] === 7){
                                 rook_short_moved = true;
                             }
                         }
@@ -331,37 +325,37 @@ function chess_validate(args){
                     case chess_pieces[player][4]: {
                         if(movement_x === movement_y){
                             if(movement_y > 1 && chess_check_diagonal({
-                                'column': piece_x,
-                                'dx': piece_x < target_x
+                                'column': args['piece-x'],
+                                'dx': args['piece-x'] < args['target-x']
                                   ? 1
                                   : -1,
-                                'dy': piece_y < target_y
+                                'dy': args['piece-y'] < args['target-y']
                                   ? 1
                                   : -1,
                                 'id': args['id'],
-                                'loopend': target_x,
-                                'loopstart': piece_x,
-                                'row': piece_y,
+                                'loopend': args['target-x'],
+                                'loopstart': args['piece-x'],
+                                'row': args['piece-y'],
                               })){
                                 valid_move = false;
                             }
 
-                        }else if(target_x === piece_x){
+                        }else if(args['target-x'] === args['piece-x']){
                             if(movement_y > 1 && chess_check_column({
-                                'column': piece_x,
+                                'column': args['piece-x'],
                                 'id': args['id'],
-                                'loopend': target_y,
-                                'loopstart': piece_y,
+                                'loopend': args['target-y'],
+                                'loopstart': args['piece-y'],
                               })){
                                 valid_move = false;
                             }
 
-                        }else if(target_y === piece_y){
+                        }else if(args['target-y'] === args['piece-y']){
                             if(movement_x > 1 && chess_check_row({
                                 'id': args['id'],
-                                'loopend': target_x,
-                                'loopstart': piece_x,
-                                'row': piece_y,
+                                'loopend': args['target-x'],
+                                'loopstart': args['piece-x'],
+                                'row': args['piece-y'],
                               })){
                                 valid_move = false;
                             }
@@ -377,13 +371,13 @@ function chess_validate(args){
                     case chess_pieces[player][5]: {
                         if(!king_moved
                           && movement_x === 2 && movement_y === 0
-                          && target_y === (1 - player) * 7){
-                            if(!rook_long_moved && target_x === 2){
+                          && args['target-y'] === (1 - player) * 7){
+                            if(!rook_long_moved && args['target-x'] === 2){
                                 if(!chess_check_row({
                                     'id': args['id'],
-                                    'loopend': piece_x,
+                                    'loopend': args['piece-x'],
                                     'loopstart': 0,
-                                    'row': piece_y,
+                                    'row': args['piece-y'],
                                   })){
                                     king_moved = true;
                                     castling = true;
@@ -393,12 +387,12 @@ function chess_validate(args){
                                     valid_move = false;
                                 }
 
-                            }else if(!rook_short_moved && target_x === 6){
+                            }else if(!rook_short_moved && args['target-x'] === 6){
                                 if(!chess_check_row({
                                     'id': args['id'],
                                     'loopend': 7,
-                                    'loopstart': piece_x,
-                                    'row': piece_y,
+                                    'loopstart': args['piece-x'],
+                                    'row': args['piece-y'],
                                   })){
                                     king_moved = true;
                                     castling = true;
@@ -420,8 +414,8 @@ function chess_validate(args){
                         }
 
                         if(valid_move){
-                            king_x = target_x;
-                            king_y = target_y;
+                            king_x = args['target-x'];
+                            king_y = args['target-y'];
                         }
 
                         break;
