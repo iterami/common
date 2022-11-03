@@ -9,9 +9,9 @@
 }
 .chess tr:nth-child(even) td:nth-child(even),
 .chess tr:nth-child(odd) td:nth-child(odd){
-    background-color: #fff;
+    background-color: #aaa;
 }
 .chess tr:nth-child(even) td:nth-child(odd),
 .chess tr:nth-child(odd) td:nth-child(even){
-    background-color: #aaa;
+    background-color: #fff;
 }
