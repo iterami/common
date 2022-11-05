@@ -225,6 +225,9 @@ function chess_validate(args){
                                   && args['target-y'] !== args['piece-y'] + direction * 2){
                                     valid_move = false;
 
+                                }else if(chess_games[args['id']]['board'][args['piece-y'] + direction][args['piece-x']].length){
+                                    valid_move = false;
+
                                 }else if(args['target-y'] === args['piece-y'] + direction * 2){
                                     en_passant = args['piece-x'] + 1;
                                 }
