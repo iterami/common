@@ -61,10 +61,18 @@ function chess_move(args){
         return false;
     }
 
-    const validation = chess_validate(args);
+    const player = chess_games[args['id']]['player'];
+    const validation = chess_validate({
+      'id': args['id'],
+      'piece-x': args['piece-x'],
+      'piece-y': args['piece-y'],
+      'player': player,
+      'target-x': args['target-x'],
+      'target-y': args['target-y'],
+      'threat': false,
+    });
     if(validation['valid']){
         chess_games[args['id']]['en-passant'] = validation['en-passant'];
-        const player = chess_games[args['id']]['player'];
         let piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
 
         chess_games[args['id']]['board'][args['piece-y']][args['piece-x']] = '';
@@ -87,6 +95,7 @@ function chess_move(args){
             piece = chess_pieces[player][chess_games[args['id']]['players'][player]['pawn-promote']];
         }
 
+        chess_games[args['id']]['players'][player]['king-checked'] = validation['king-checked'];
         chess_games[args['id']]['players'][player]['king-moved'] = validation['king-moved'];
         chess_games[args['id']]['players'][player]['king-x'] = validation['king-x'];
         chess_games[args['id']]['players'][player]['king-y'] = validation['king-y'];
@@ -117,6 +126,7 @@ function chess_new(args){
       'player': 0,
       'players': [
         {
+          'king-checked': false,
           'king-moved': false,
           'king-x': 4,
           'king-y': 7,
@@ -126,6 +136,7 @@ function chess_new(args){
           'rook-short-moved': false,
         },
         {
+          'king-checked': false,
           'king-moved': false,
           'king-x': 4,
           'king-y': 0,
@@ -148,6 +159,7 @@ function chess_threat(args){
                     'id': args['id'],
                     'piece-x': x,
                     'piece-y': y,
+                    'player': args['player'],
                     'target-x': args['piece-x'],
                     'target-y': args['piece-y'],
                     'threat': true,
@@ -161,7 +173,7 @@ function chess_threat(args){
     return false;
 }
 
-// Required args: id, piece-x, piece-y, target-x, target-y
+// Required args: id, piece-x, piece-y, player, target-x, target-y
 // Optional args: threat
 function chess_validate(args){
     let castling = false;
@@ -184,7 +196,7 @@ function chess_validate(args){
         valid_move = false;
 
     }else{
-        const player = chess_games[args['id']]['player'];
+        const player = args['player'];
         king_moved = chess_games[args['id']]['players'][player]['king-moved'];
         king_x = chess_games[args['id']]['players'][player]['king-x'];
         king_y = chess_games[args['id']]['players'][player]['king-y'];
@@ -444,7 +456,7 @@ function chess_validate(args){
     }
 
     if(king_checked){
-        valid_move = false;
+        //valid_move = false;
     }
 
     return {
