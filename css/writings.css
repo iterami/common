@@ -45,9 +45,9 @@ input[type=button]{
 input[type=button]:enabled{
     cursor: pointer;
 }
-ol,
-ul{
+ol{
     margin: 0;
+    padding-left: 30px;
 }
 .right{
     text-align: right;
@@ -67,6 +67,10 @@ textarea{
 textarea{
     height: 190px;
     width: 490px;
+}
+ul{
+    margin: 0;
+    padding-left: 20px;
 }
 
 a:focus,

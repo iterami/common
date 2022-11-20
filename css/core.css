@@ -88,6 +88,9 @@ ul{
     margin: 0;
     text-align: left;
 }
+ol{
+    padding-left: 30px;
+}
 .right{
     text-align: right;
 }
@@ -107,6 +110,9 @@ textarea{
     font: inherit;
     height: 190px;
     width: 490px;
+}
+ul{
+    padding-left: 20px;
 }
 
 a:focus,
