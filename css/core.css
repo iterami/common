@@ -48,11 +48,12 @@ hr{
     margin: 0;
 }
 input{
-    border-color: #aaa;
+    border: 2px solid #999;
     width: 200px;
 }
-input:disabled{
-    border-color: #777;
+input:disabled,
+textarea:read-only{
+    border-color: #555;
 }
 input[type=button]{
     padding: 2px 7px;
@@ -93,6 +94,9 @@ ol{
 .right{
     text-align: right;
 }
+select{
+    border: 2px solid #999;
+}
 table{
     border-collapse: collapse;
     margin: auto;
@@ -105,6 +109,7 @@ textarea{
 }
 textarea{
     background: #000;
+    border-color: #999;
     color: inherit;
     font: inherit;
     height: 190px;

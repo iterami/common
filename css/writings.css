@@ -34,10 +34,11 @@ hr{
     border: 2px solid #444;
 }
 input{
-    border-color: #aaa;
+    border: 2px solid #999;
 }
-input:disabled{
-    border-color: #777;
+input:disabled,
+textarea:read-only{
+    border-color: #555;
 }
 input[type=button]{
     padding: 2px 7px;
@@ -65,6 +66,7 @@ textarea{
     vertical-align: top;
 }
 textarea{
+    border-color: #999;
     height: 190px;
     width: 490px;
 }
