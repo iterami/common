@@ -2,7 +2,6 @@ div.box{
     background: #000;
     border: 1px solid #aaa;
     height: 6em;
-    margin: auto;
     width: 250px;
 }
 input.gridbutton{

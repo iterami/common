@@ -6,23 +6,29 @@ a{
 .big{
     font-size: 225%;
 }
+body{
+    margin-top: 30px;
+}
 body,
 input,
 select{
     background: #000;
     color: #ccc;
     font: 700 14px monospace;
+}
+.center{
     text-align: center;
 }
 #core-ui{
     background: #111;
     left: 0;
     position: absolute;
-    text-align: left;
     top: 0;
     z-index: 9;
 }
-#core-ui table{
+#core-ui table,
+ol,
+ul{
     margin: 0;
 }
 #core-menu,
@@ -39,6 +45,7 @@ select{
 }
 .header{
     background: #333;
+    text-align: center;
 }
 .header td{
     vertical-align: bottom;
@@ -49,6 +56,7 @@ hr{
 }
 input{
     border: 2px solid #999;
+    text-align: center;
     width: 200px;
 }
 input:disabled,
@@ -76,17 +84,11 @@ input[type=color],
 .mini{
     width: 5em;
 }
-.left,
-select{
+.left{
     text-align: left;
 }
 .medium{
     font-size: 150%;
-}
-ol,
-ul{
-    margin: 0;
-    text-align: left;
 }
 ol{
     padding-left: 30px;
@@ -99,7 +101,6 @@ select{
 }
 table{
     border-collapse: collapse;
-    margin: auto;
 }
 td,
 textarea{
