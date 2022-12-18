@@ -4,7 +4,7 @@ a{
 body,
 input[type=button],
 textarea{
-    background: #000;
+    background-color: #000;
     color: #ccc;
     font: 700 14px monospace;
 }
@@ -21,10 +21,10 @@ code{
     color: #f99;
 }
 .gold{
-    background: #650;
+    background-color: #650;
 }
 .header{
-    background: #333;
+    background-color: #333;
     text-align: center;
 }
 .header td{
@@ -84,5 +84,5 @@ a:hover{
     color: #07f;
 }
 tr:hover{
-    background: #222;
+    background-color: #222;
 }

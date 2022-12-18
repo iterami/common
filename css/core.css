@@ -12,7 +12,7 @@ body{
 body,
 input,
 select{
-    background: #000;
+    background-color: #000;
     color: #ccc;
     font: 700 14px monospace;
 }
@@ -20,7 +20,7 @@ select{
     text-align: center;
 }
 #core-ui{
-    background: #111;
+    background-color: #111;
     left: 0;
     position: absolute;
     top: 0;
@@ -39,7 +39,7 @@ select{
     color: #f99;
 }
 .header{
-    background: #333;
+    background-color: #333;
     text-align: center;
 }
 .header td{
@@ -105,7 +105,7 @@ textarea{
     vertical-align: top;
 }
 textarea{
-    background: #000;
+    background-color: #000;
     border-color: #999;
     color: inherit;
     font: inherit;
@@ -127,5 +127,5 @@ a:hover{
     color: #07f;
 }
 tr:hover{
-    background: #222;
+    background-color: #222;
 }
