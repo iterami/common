@@ -70,7 +70,7 @@ function test_run(args){
             1
           );
 
-        results += '<tr ' + (!result['test'] ? ' style=background:#600' : '') + '>'
+        results += '<tr ' + (!result['test'] ? ' style=background-color:#600' : '') + '>'
           + '<td><a href=' + args['link'] + args['tests'][test]['function'] + '>' + args['tests'][test]['function'] + '()</a>'
           + '<td>' + JSON.stringify(
             args['tests'][test]['args'],
