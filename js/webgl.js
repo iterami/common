@@ -1408,7 +1408,7 @@ function webgl_level_init(args){
       },
     });
 
-    if(args['json'] === false){
+    if(!args['json']){
         args['json'] = {};
     }
 
@@ -1543,6 +1543,10 @@ function webgl_level_load(args){
       },
     });
 
+    if(args['json'] === null){
+        return false;
+    }
+
     if(args['json'] instanceof File){
         core_file({
           'file': args['json'],
@@ -1554,14 +1558,14 @@ function webgl_level_load(args){
           },
           'type': 'readAsText',
         });
-
-        return;
+        return true;
     }
 
     webgl_level_init({
       'character': args['character'],
       'json': args['json'],
     });
+    return true;
 }
 
 function webgl_level_unload(){
