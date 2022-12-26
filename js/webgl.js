@@ -1205,9 +1205,6 @@ function webgl_init(args){
     math_matrices['camera'] = math_matrix_create();
     math_matrices['perspective'] = math_matrix_create();
 
-    globalThis.onresize = webgl_resize;
-    webgl_resize();
-
     webgl_clearcolor_set({
       'blue': webgl_properties['clearcolor-blue'],
       'green': webgl_properties['clearcolor-green'],
@@ -1223,6 +1220,8 @@ function webgl_init(args){
     );
 
     webgl_shader_recreate();
+    globalThis.onresize = webgl_resize;
+    webgl_resize();
 
     args['groups'].push(
       'foreground',
