@@ -11,6 +11,7 @@ body{
 }
 body,
 input,
+input::file-selector-button,
 select{
     background-color: #000;
     color: #ccc;
@@ -49,7 +50,8 @@ hr{
     border: 4px solid #444;
     margin: 0;
 }
-input{
+input,
+input::file-selector-button{
     border: 2px solid #999;
     text-align: center;
     width: 200px;
@@ -58,12 +60,14 @@ input:disabled,
 textarea:read-only{
     border-color: #555;
 }
-input[type=button]{
+input[type=button],
+input::file-selector-button{
     padding: 2px 7px;
 }
 input[type=button],
 input[type=checkbox],
-input[type=file]{
+input[type=file],
+input::file-selector-button{
     width: auto;
 }
 input[type=button]:enabled,
@@ -71,6 +75,7 @@ input[type=checkbox]:enabled,
 input[type=color]:enabled,
 input[type=file]:enabled,
 input[type=range]:enabled,
+input::file-selector-button,
 label,
 select:enabled{
     cursor: pointer;
@@ -119,6 +124,7 @@ ul{
 
 a:focus,
 input:focus,
+input::file-selector-button:focus,
 select:focus,
 textarea:focus{
     outline: 2px solid #4c4;
