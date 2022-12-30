@@ -358,7 +358,6 @@ function webgl_character_random(args){
           'collision': false,
         },
         'character': args['id'],
-        'random-colors': true,
         'size-x': horizontal * 2,
         'size-y': vertical * 2,
         'size-z': horizontal * 2,
@@ -2466,7 +2465,6 @@ function webgl_primitive_cuboid(args){
         'groups': [],
         'left': {},
         'prefix': entity_id_count,
-        'random-colors': false,
         'right': {},
         'size-x': 1,
         'size-y': 1,
@@ -2485,27 +2483,6 @@ function webgl_primitive_cuboid(args){
     const vertices_size_y = Math.abs(half_size_y);
     const vertices_size_z = Math.abs(half_size_z);
 
-    if(args['random-colors']){
-        args['back']['vertex-colors'] = webgl_vertexcolorarray({
-          'random-colors': true,
-        });
-        args['bottom']['vertex-colors'] = webgl_vertexcolorarray({
-          'random-colors': true,
-        });
-        args['front']['vertex-colors'] = webgl_vertexcolorarray({
-          'random-colors': true,
-        });
-        args['left']['vertex-colors'] = webgl_vertexcolorarray({
-          'random-colors': true,
-        });
-        args['right']['vertex-colors'] = webgl_vertexcolorarray({
-          'random-colors': true,
-        });
-        args['top']['vertex-colors'] = webgl_vertexcolorarray({
-          'random-colors': true,
-        });
-    }
-
     if(args['top']['exclude'] !== true){
         const properties = {
           'attach-offset-x': args['translate-x'],
@@ -2515,6 +2492,9 @@ function webgl_primitive_cuboid(args){
           'attach-type': 'webgl_characters',
           'groups': args['groups'],
           'id': args['prefix'] + '-top',
+          'vertex-colors': args['top']['vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': true,
+          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
             -vertices_size_x, 0, -vertices_size_z,
@@ -2547,6 +2527,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
+          'vertex-colors': args['bottom']['vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': true,
+          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
             -vertices_size_x, 0, -vertices_size_z,
@@ -2579,6 +2562,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-front',
           'rotate-x': 90,
+          'vertex-colors': args['front']['vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': true,
+          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
             -vertices_size_x, 0, -vertices_size_y,
@@ -2611,6 +2597,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-back',
           'rotate-x': 270,
+          'vertex-colors': args['back']['vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': true,
+          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
             -vertices_size_x, 0, -vertices_size_y,
@@ -2643,6 +2632,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
+          'vertex-colors': args['left']['vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': true,
+          }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
             -vertices_size_y, 0, -vertices_size_z,
@@ -2675,6 +2667,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
+          'vertex-colors': args['right']['vertex-colors'] || webgl_vertexcolorarray({
+            'random-colors': true,
+          }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
             -vertices_size_y, 0, -vertices_size_z,
