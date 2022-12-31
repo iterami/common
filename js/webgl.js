@@ -3439,21 +3439,20 @@ function webgl_vertexcolorarray(args){
       },
     });
 
-    const rgbarray = [];
     if(args['colors'].length === 0){
-        rgbarray.push(core_random_rgb());
+        args['colors'].push(core_random_rgb());
     }
 
     const color = [];
     for(let i = 0; i < args['vertexcount']; i++){
-        const index = rgbarray[i] !== void 0
+        const index = args['colors'][i] !== void 0
           ? i
           : 0;
 
         color.push(
-          rgbarray[index]['red'] / 255,
-          rgbarray[index]['green'] / 255,
-          rgbarray[index]['blue'] / 255,
+          args['colors'][index]['red'] / 255,
+          args['colors'][index]['green'] / 255,
+          args['colors'][index]['blue'] / 255,
           1
         );
     }
