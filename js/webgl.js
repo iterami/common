@@ -978,7 +978,9 @@ function webgl_entity_todo(entity){
     }
 
     entity_entities[entity]['buffer'] = webgl_buffer_set({
-      'colorData': entity_entities[entity]['vertex-colors'],
+      'colorData': entity_entities[entity]['vertex-colors'] || webgl_vertexcolorarray({
+        'random-colors': true,
+      }),
       'normalData': entity_entities[entity]['normals'],
       'pickData': pickData,
       'textureData': textureData,
