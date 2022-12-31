@@ -978,9 +978,7 @@ function webgl_entity_todo(entity){
     }
 
     entity_entities[entity]['buffer'] = webgl_buffer_set({
-      'colorData': entity_entities[entity]['vertex-colors'] || webgl_vertexcolorarray({
-        'random-colors': true,
-      }),
+      'colorData': entity_entities[entity]['vertex-colors'] || webgl_vertexcolorarray(),
       'normalData': entity_entities[entity]['normals'],
       'pickData': pickData,
       'textureData': textureData,
@@ -2494,9 +2492,7 @@ function webgl_primitive_cuboid(args){
           'attach-type': 'webgl_characters',
           'groups': args['groups'],
           'id': args['prefix'] + '-top',
-          'vertex-colors': args['top']['vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': true,
-          }),
+          'vertex-colors': args['top']['vertex-colors'] || webgl_vertexcolorarray(),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
             -vertices_size_x, 0, -vertices_size_z,
@@ -2529,9 +2525,7 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
-          'vertex-colors': args['bottom']['vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': true,
-          }),
+          'vertex-colors': args['bottom']['vertex-colors'] || webgl_vertexcolorarray(),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
             -vertices_size_x, 0, -vertices_size_z,
@@ -2564,9 +2558,7 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-front',
           'rotate-x': 90,
-          'vertex-colors': args['front']['vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': true,
-          }),
+          'vertex-colors': args['front']['vertex-colors'] || webgl_vertexcolorarray(),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
             -vertices_size_x, 0, -vertices_size_y,
@@ -2599,9 +2591,7 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-back',
           'rotate-x': 270,
-          'vertex-colors': args['back']['vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': true,
-          }),
+          'vertex-colors': args['back']['vertex-colors'] || webgl_vertexcolorarray(),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
             -vertices_size_x, 0, -vertices_size_y,
@@ -2634,9 +2624,7 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
-          'vertex-colors': args['left']['vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': true,
-          }),
+          'vertex-colors': args['left']['vertex-colors'] || webgl_vertexcolorarray(),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
             -vertices_size_y, 0, -vertices_size_z,
@@ -2669,9 +2657,7 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
-          'vertex-colors': args['right']['vertex-colors'] || webgl_vertexcolorarray({
-            'random-colors': true,
-          }),
+          'vertex-colors': args['right']['vertex-colors'] || webgl_vertexcolorarray(),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
             -vertices_size_y, 0, -vertices_size_z,
@@ -3245,9 +3231,7 @@ function webgl_stat_modify(args){
         return;
 
     }else if(args['stat'] === 'vertex-colors'){
-        args['target']['vertex-colors'] = webgl_vertexcolorarray({
-          'random-colors': true,
-        });
+        args['target']['vertex-colors'] = webgl_vertexcolorarray();
         webgl_entity_todo(args['target']['id']);
         return;
 
@@ -3450,33 +3434,26 @@ function webgl_vertexcolorarray(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'random-colors': false,
-        'rgbarray': [],
+        'colors': [],
         'vertexcount': 4,
       },
     });
 
-    if(args['rgbarray'].length === 0){
-        args['rgbarray'].push(args['random-colors']
-          ? core_random_rgb()
-          : {
-              'blue': 255,
-              'green': 255,
-              'red': 255,
-            }
-        );
+    const rgbarray = [];
+    if(args['colors'].length === 0){
+        rgbarray.push(core_random_rgb());
     }
 
     const color = [];
     for(let i = 0; i < args['vertexcount']; i++){
-        const index = args['rgbarray'][i] !== void 0
+        const index = rgbarray[i] !== void 0
           ? i
           : 0;
 
         color.push(
-          args['rgbarray'][index]['red'] / 255,
-          args['rgbarray'][index]['green'] / 255,
-          args['rgbarray'][index]['blue'] / 255,
+          rgbarray[index]['red'] / 255,
+          rgbarray[index]['green'] / 255,
+          rgbarray[index]['blue'] / 255,
           1
         );
     }

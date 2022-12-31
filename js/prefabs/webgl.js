@@ -157,7 +157,6 @@ function prefabs_webgl_humanoid(args){
           'collision': false,
           'id': args['prefix'] + '-' + part,
           'vertex-colors': webgl_vertexcolorarray({
-            'random-colors': true,
             'vertexcount': bodyparts[part].length / 3,
           }),
           'vertices': bodyparts[part],
