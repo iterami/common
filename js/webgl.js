@@ -235,7 +235,10 @@ function webgl_character_init(args){
       'camera-x': 0,
       'camera-y': 0,
       'camera-z': 0,
-      'camera-zoom': args['camera-zoom'],
+      'camera-zoom': Math.min(
+        args['camera-zoom'],
+        webgl_properties['camera-zoom-max']
+      ),
       'change': {
         'translate-x': 0,
         'translate-y': 0,
