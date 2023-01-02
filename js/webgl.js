@@ -202,7 +202,6 @@ function webgl_character_init(args){
       'defaults': {
         'automove': false,
         'camera-zoom': 50,
-        'change': {},
         'collide-range-horizontal': 2,
         'collide-range-vertical': 3,
         'collides': true,
@@ -237,10 +236,14 @@ function webgl_character_init(args){
       'camera-y': 0,
       'camera-z': 0,
       'camera-zoom': args['camera-zoom'],
+      'change': {
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
       'collide-range-horizontal': args['collide-range-horizontal'],
       'collide-range-vertical': args['collide-range-vertical'],
       'collides': args['collides'],
-      'change': args['change'],
       'experience': args['experience'],
       'health-current': Math.max(
         args['health-current'],
@@ -265,9 +268,6 @@ function webgl_character_init(args){
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
     };
-    webgl_characters[args['id']]['change']['translate-x'] = args['change']['translate-x'] || 0;
-    webgl_characters[args['id']]['change']['translate-y'] = args['change']['translate-y'] || 0;
-    webgl_characters[args['id']]['change']['translate-z'] = args['change']['translate-z'] || 0;
     webgl_character_count++;
 
     webgl_entity_create({
