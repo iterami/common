@@ -1,6 +1,10 @@
 'use strict';
 
 function tables_add(table){
+    if(table.classList.contains('tables-added')){
+        return;
+    }
+
     const headers = Array.from(table.firstElementChild.firstElementChild.children);
 
     for(const header in headers){
@@ -21,6 +25,8 @@ function tables_add(table){
         headers[header].innerHTML += '<div><input onclick="tables_sort(this,' + header + ',1,' + type + ')" type=button value=▲>'
           + '<input onclick="tables_sort(this,' + header + ',0,' + type + ')" type=button value=▼></div>';
     }
+
+    table.classList.add('tables-added');
 }
 
 function tables_format_number(value){
