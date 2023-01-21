@@ -47,11 +47,10 @@ function tables_sort(element, column, direction, type){
     let sorted_html = '';
     const used_rows = [];
 
-    for(const row in rows){
-        if(row === '0'){
-            continue;
-        }
+    const header = rows[0].classList.contains('header');
+    const header_row = header ? rows.shift() : '';
 
+    for(const row in rows){
         column_content.push(rows[row].children[column].innerText);
     }
 
@@ -84,10 +83,6 @@ function tables_sort(element, column, direction, type){
 
     for(const sorted in column_content){
         for(const row in rows){
-            if(row === '0'){
-                continue;
-            }
-
             const parent = rows[row].children;
 
             if(parent[column].innerText === column_content[sorted]
@@ -100,7 +95,7 @@ function tables_sort(element, column, direction, type){
         }
     }
 
-    tbody.innerHTML = rows[0].outerHTML + sorted_html;
+    tbody.innerHTML = (header ? header_row.outerHTML : '') + sorted_html;
 }
 
 globalThis.tables_column_main = 0;
