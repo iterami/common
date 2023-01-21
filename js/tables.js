@@ -4,15 +4,17 @@ function tables_add(table){
     const headers = Array.from(table.firstElementChild.firstElementChild.children);
 
     for(const header in headers){
-        if(headers[header].classList.contains('tables-nosort')){
+        const classList = headers[header].classList;
+
+        if(classList.contains('tables-nosort')){
             continue;
 
-        }else if(headers[header].classList.contains('tables-main')){
+        }else if(classList.contains('tables-main')){
             tables_column_main = header;
         }
 
         let type = 0;
-        if(headers[header].classList.contains('tables-numbers')){
+        if(classList.contains('tables-numbers')){
             type = 1;
         }
 
