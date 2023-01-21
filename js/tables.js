@@ -40,7 +40,8 @@ function tables_init(){
 
 function tables_sort(element, column, direction, type){
     const table = element.closest('table');
-    const rows = Array.from(table.firstElementChild.children);
+    const tbody = table.getElementsByTagName('tbody')[0];
+    const rows = Array.from(tbody.children);
 
     const column_content = [];
     let sorted_html = '';
@@ -99,7 +100,7 @@ function tables_sort(element, column, direction, type){
         }
     }
 
-    table.firstElementChild.innerHTML = rows[0].outerHTML + sorted_html;
+    tbody.innerHTML = rows[0].outerHTML + sorted_html;
 }
 
 globalThis.tables_column_main = 0;
