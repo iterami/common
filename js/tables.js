@@ -7,6 +7,7 @@ function tables_add(table){
     }
 
     const headers = Array.from(table.firstElementChild.firstElementChild.children);
+    let main_column = 0;
 
     for(const header in headers){
         const classList = headers[header].classList;
@@ -15,7 +16,7 @@ function tables_add(table){
             continue;
 
         }else if(classList.contains('tables-main')){
-            tables_column_main = header;
+            main_column = header;
         }
 
         let type = 0;
@@ -27,7 +28,10 @@ function tables_add(table){
           + '<input onclick="tables_sort(this,' + header + ',0,' + type + ')" type=button value=▼></div>';
     }
 
-    table.classList.add('tables-added');
+    table.classList.add(
+      'tables-added',
+      'tables-main-' + main_column
+    );
 }
 
 function tables_format_number(value){
@@ -62,6 +66,13 @@ function tables_sort(element, column, direction, type){
     }
 
     const column_content = [];
+    let main_column = 0;
+    for(const cssClass of table.classList){
+        if(cssClass.startsWith('tables-main-')){
+            main_column = Number(cssClass.substring(12));
+            break;
+        }
+    }
     let sorted_html = '';
     const used_rows = [];
 
@@ -101,9 +112,9 @@ function tables_sort(element, column, direction, type){
             const parent = rows[row].children;
 
             if(parent[column].innerText === column_content[sorted]
-              && !used_rows.includes(parent[tables_column_main].innerText)){
+              && !used_rows.includes(parent[main_column].innerText)){
                 sorted_html += rows[row].outerHTML;
-                used_rows.push(parent[tables_column_main].innerText);
+                used_rows.push(parent[main_column].innerText);
 
                 break;
             }
@@ -112,7 +123,5 @@ function tables_sort(element, column, direction, type){
 
     tbody.innerHTML = (header ? header_row.outerHTML : '') + sorted_html;
 }
-
-globalThis.tables_column_main = 0;
 
 tables_init();
