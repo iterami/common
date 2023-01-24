@@ -1,7 +1,8 @@
 'use strict';
 
 function tables_add(table){
-    if(table.classList.contains('tables-added')){
+    if(table.classList.contains('tables-added')
+      || !table.firstElementChild){
         return;
     }
 
@@ -49,14 +50,20 @@ function tables_init(){
 function tables_sort(element, column, direction, type){
     const table = element.closest('table');
     const tbody = table.getElementsByTagName('tbody')[0];
+    if(!tbody){
+        return;
+    }
+
     const rows = Array.from(tbody.children);
+    const header = rows[0].classList.contains('header');
+    const header_row = header ? rows.shift() : '';
+    if(rows.length === 0){
+        return;
+    }
 
     const column_content = [];
     let sorted_html = '';
     const used_rows = [];
-
-    const header = rows[0].classList.contains('header');
-    const header_row = header ? rows.shift() : '';
 
     for(const row in rows){
         column_content.push(rows[row].children[column].innerText);
