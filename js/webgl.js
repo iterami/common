@@ -210,7 +210,7 @@ function webgl_character_init(args){
         'health-current': 1,
         'health-max': 1,
         'id': webgl_character_id,
-        'jump-height': .1,
+        'jump-height': 1,
         'level': 0,
         'path-direction': 1,
         'path-end': 'default',
@@ -220,7 +220,7 @@ function webgl_character_init(args){
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
-        'speed': .1,
+        'speed': 1,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
@@ -293,7 +293,7 @@ function webgl_character_jump(args){
     }
 
     webgl_characters[args['character']]['jump-allow'] = false;
-    webgl_characters[args['character']]['change']['translate-' + webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'] * webgl_properties['multiplier-jump'];
+    webgl_characters[args['character']]['change']['translate-' + webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'];
 }
 
 function webgl_character_level(args){
@@ -884,8 +884,6 @@ function webgl_entity_move(args){
       },
     });
 
-    args['multiplier'] *= webgl_properties['multiplier-speed'];
-
     if(args['entity'] === false){
         if(args['y']){
             let dy = webgl_characters[args['character']]['speed'] * args['multiplier'];
@@ -1090,9 +1088,6 @@ function webgl_init(args){
         'gravity-axis': 'y',
         'gravity-max': -2,
         'groups': [],
-        'jump-movement': 0,
-        'multiplier-jump': 1,
-        'multiplier-speed': 1,
         'paths': {},
         'shader-fragment': 'fragment-0',
         'shader-vertex': 'vertex-0',
@@ -1186,9 +1181,6 @@ function webgl_init(args){
       'gravity-acceleration': args['gravity-acceleration'],
       'gravity-axis': args['gravity-axis'],
       'gravity-max': args['gravity-max'],
-      'jump-movement': args['jump-movement'],
-      'multiplier-jump': args['multiplier-jump'],
-      'multiplier-speed': args['multiplier-speed'],
       'paused': false,
       'picking': false,
       'shader': {},
@@ -1630,8 +1622,7 @@ function webgl_logicloop(){
         if(webgl_characters[webgl_character_id]['path-id'].length === 0 &&
           ((webgl_characters[webgl_character_id]['jump-allow']
             && webgl_characters[webgl_character_id]['change']['translate-' + webgl_properties['gravity-axis']] === 0)
-          || level === -1
-          || webgl_properties['jump-movement'] > 0)){
+          || level === -1)){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
@@ -1679,12 +1670,6 @@ function webgl_logicloop(){
               && leftright !== 0){
                 forwardback *= webgl_diagonal;
                 leftright *= webgl_diagonal;
-            }
-
-            if(!webgl_characters[webgl_character_id]['jump-allow']
-              && webgl_properties['jump-movement'] > 0){
-                forwardback *= webgl_properties['jump-movement'];
-                leftright *= webgl_properties['jump-movement'];
             }
 
             if(forwardback !== 0){
@@ -1850,8 +1835,7 @@ function webgl_logicloop(){
             webgl_characters[webgl_character_id]['jump-allow'] = false;
         }
 
-        if(webgl_characters[webgl_character_id]['jump-allow']
-          || webgl_properties['jump-movement'] > 0){
+        if(webgl_characters[webgl_character_id]['jump-allow']){
             webgl_characters[webgl_character_id]['change']['translate-x'] = 0;
             webgl_characters[webgl_character_id]['change']['translate-z'] = 0;
         }
@@ -2259,7 +2243,7 @@ function webgl_path_move(args){
       'y1': point['translate-y'],
     });
 
-    const speed = args['entity']['speed'] * webgl_properties['multiplier-speed'] * point['speed'] * path['speed'];
+    const speed = args['entity']['speed'] * point['speed'] * path['speed'];
 
     args['entity']['change']['translate-x'] = core_round({
       'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
