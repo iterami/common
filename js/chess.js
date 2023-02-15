@@ -71,7 +71,7 @@ function chess_move(args){
       'target-y': args['target-y'],
       'threat': false,
     });
-    if(validation['valid']){
+    if(validation['valid'] || args['override'] === true){
         chess_games[args['id']]['en-passant'] = validation['en-passant'];
         let piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
 
