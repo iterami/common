@@ -1314,13 +1314,10 @@ function webgl_init(args){
     });
 }
 
-function webgl_json_export(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'character': true,
-      },
-    });
+function webgl_level_export(){
+    if(webgl_character_level() < -1){
+        return;
+    }
 
     const json = {};
     Object.assign(
@@ -1342,6 +1339,10 @@ function webgl_json_export(args){
     json['paths'] = {};
 
     for(const character in webgl_characters){
+        if(character === webgl_character_id){
+            continue;
+        }
+
         json['characters'][character] = webgl_characters[character];
         json['characters'][character]['entities'] = [];
     }
