@@ -1323,7 +1323,6 @@ function webgl_json_export(args){
     });
 
     const json = {};
-
     Object.assign(
       json,
       webgl_properties
@@ -1331,63 +1330,40 @@ function webgl_json_export(args){
 
     delete json['attributes'];
     delete json['canvas'];
+    delete json['draw-mode'];
+    delete json['paused'];
+    delete json['picking'];
     delete json['shader'];
+    delete json['shader-fragment'];
+    delete json['shader-vertex'];
+    delete json['textures'];
 
-    if(args['character']
-      && webgl_character_level() > -1){
-        json['character'] = {};
+    json['characters'] = {};
+    json['paths'] = {};
+
+    for(const character in webgl_characters){
+        json['characters'][character] = webgl_characters[character];
+        json['characters'][character]['entities'] = [];
+    }
+    for(const path in webgl_paths){
+        json['paths'][path] = webgl_paths[path];
+    }
+
+    for(const entity in entity_entities){
+        const entity_json = {};
+        entity_json['id'] = entity_entities[entity]['id'];
+
         Object.assign(
-          json['character'],
-          webgl_characters[webgl_character_id]
+          entity_json,
+          entity_entities[entity]
         );
 
-        delete json['character']['camera-rotate-x'];
-        delete json['character']['camera-rotate-y'];
-        delete json['character']['camera-rotate-z'];
-        delete json['character']['jump-allow'];
-        delete json['character']['rotate-x'];
-        delete json['character']['rotate-y'];
-        delete json['character']['rotate-z'];
-        delete json['character']['translate-x'];
-        delete json['character']['translate-y'];
-        delete json['character']['translate-z'];
+        delete entity_json['buffer'];
+        delete entity_json['normals'];
+        delete entity_json['texture-gl'];
+        delete entity_json['vertices-length'];
 
-        json['entities'] = [];
-        for(const entity in webgl_character_homebase['entities']){
-            const entity_json = {};
-            entity_json['id'] = webgl_character_homebase['entities'][entity]['id'];
-
-            Object.assign(
-              entity_json,
-              webgl_character_homebase['entities'][entity]
-            );
-
-            delete entity_json['buffer'];
-            delete entity_json['normals'];
-            delete entity_json['texture-gl'];
-            delete entity_json['vertices-length'];
-
-            json['entities'].push(entity_json);
-        }
-
-    }else{
-        json['entities'] = [];
-        for(const entity in entity_entities){
-            const entity_json = {};
-            entity_json['id'] = entity_entities[entity]['id'];
-
-            Object.assign(
-              entity_json,
-              entity_entities[entity]
-            );
-
-            delete entity_json['buffer'];
-            delete entity_json['normals'];
-            delete entity_json['texture-gl'];
-            delete entity_json['vertices-length'];
-
-            json['entities'].push(entity_json);
-        }
+        json['characters'][entity_json['attach-to']]['entities'].push(entity_json);
     }
 
     return JSON.stringify(json);
