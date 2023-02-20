@@ -3073,7 +3073,7 @@ function webgl_shader_create(args){
 function webgl_shader_recreate(){
     if(webgl_shaders === false){
         webgl_shaders = {
-          'fragment-0': `
+          'fragment-0': `#version 300 es
 precision lowp float;
 uniform bool fog;
 uniform bool picking;
@@ -3081,35 +3081,36 @@ uniform bool textures;
 uniform float float_fogDensity;
 uniform sampler2D sampler;
 uniform vec3 vec_clearColor;
-varying vec2 vec_textureCoord;
-varying vec4 vec_fragmentColor;
-varying vec4 vec_lighting;
-varying vec4 vec_position;
+in vec2 vec_textureCoord;
+in vec4 vec_fragmentColor;
+in vec4 vec_lighting;
+in vec4 vec_position;
+out vec4 fragColor;
 void main(void){
     if(picking){
-        gl_FragColor = vec_fragmentColor;
+        fragColor = vec_fragmentColor;
     }else{
-        gl_FragColor = vec_fragmentColor * vec_lighting;
+        fragColor = vec_fragmentColor * vec_lighting;
         if(textures){
-            gl_FragColor *= texture2D(sampler, vec_textureCoord);
+            fragColor *= texture(sampler, vec_textureCoord);
         }
         if(fog){
             float distance = length(vec_position.xyz);
-            gl_FragColor.rgb = vec3(mix(
+            fragColor.rgb = vec3(mix(
               vec_clearColor,
-              gl_FragColor.rgb,
+              fragColor.rgb,
               clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)
             ));
         }
     }
 }`,
 
-          'vertex-0': `
-attribute vec2 vec_texturePosition;
-attribute vec3 vec_vertexNormal;
-attribute vec4 vec_pickColor;
-attribute vec4 vec_vertexColor;
-attribute vec3 vec_vertexPosition;
+          'vertex-0': `#version 300 es
+in vec2 vec_texturePosition;
+in vec3 vec_vertexNormal;
+in vec4 vec_pickColor;
+in vec4 vec_vertexColor;
+in vec3 vec_vertexPosition;
 uniform bool directional;
 uniform bool picking;
 uniform bool textures;
@@ -3119,10 +3120,10 @@ uniform mat4 mat_perspectiveMatrix;
 uniform vec3 vec_ambientColor;
 uniform vec3 vec_directionalColor;
 uniform vec3 vec_directionalVector;
-varying vec2 vec_textureCoord;
-varying vec4 vec_fragmentColor;
-varying vec4 vec_lighting;
-varying vec4 vec_position;
+out vec2 vec_textureCoord;
+out vec4 vec_fragmentColor;
+out vec4 vec_lighting;
+out vec4 vec_position;
 void main(void){
     vec_position = mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);
     gl_Position = mat_perspectiveMatrix * vec_position;
