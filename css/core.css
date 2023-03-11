@@ -39,6 +39,9 @@ select{
 .external{
     color: #f99;
 }
+.external:after{
+    content: "↗";
+}
 .header{
     background-color: #333;
     text-align: center;

@@ -20,6 +20,9 @@ code{
 .external{
     color: #f99;
 }
+.external:after{
+    content: "↗";
+}
 .gold{
     background-color: #650;
 }
