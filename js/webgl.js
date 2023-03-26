@@ -1772,6 +1772,7 @@ function webgl_logicloop(){
           || webgl_characters[character]['change-rotate-y'] !== 0
           || webgl_characters[character]['change-rotate-z'] !== 0){
             webgl_camera_rotate({
+              'character': character,
               'x': webgl_characters[character]['change-rotate-x'],
               'y': webgl_characters[character]['change-rotate-y'],
               'z': webgl_characters[character]['change-rotate-z'],
