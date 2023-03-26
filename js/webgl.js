@@ -239,6 +239,9 @@ function webgl_character_init(args){
         args['camera-zoom'],
         webgl_properties['camera-zoom-max']
       ),
+      'change-rotate-x': 0,
+      'change-rotate-y': 0,
+      'change-rotate-z': 0,
       'change-translate-x': 0,
       'change-translate-y': 0,
       'change-translate-z': 0,
@@ -1235,6 +1238,9 @@ function webgl_init(args){
         'attach-to': false,
         'attach-type': 'entity_entities',
         'billboard': false,
+        'change-rotate-x': 0,
+        'change-rotate-y': 0,
+        'change-rotate-z': 0,
         'change-translate-x': 0,
         'change-translate-y': 0,
         'change-translate-z': 0,
@@ -1762,15 +1768,27 @@ function webgl_logicloop(){
           'entity': webgl_characters[character],
         });
 
-        webgl_characters[character]['translate-x'] = core_round({
-          'number': webgl_characters[character]['translate-x'] + webgl_characters[character]['change-translate-x'],
-        });
-        webgl_characters[character]['translate-y'] = core_round({
-          'number': webgl_characters[character]['translate-y'] + webgl_characters[character]['change-translate-y'],
-        });
-        webgl_characters[character]['translate-z'] = core_round({
-          'number': webgl_characters[character]['translate-z'] + webgl_characters[character]['change-translate-z'],
-        });
+        if(webgl_characters[character]['change-rotate-x'] !== 0
+          || webgl_characters[character]['change-rotate-y'] !== 0
+          || webgl_characters[character]['change-rotate-z'] !== 0){
+            webgl_camera_rotate({
+              'x': webgl_characters[character]['change-rotate-x'],
+              'y': webgl_characters[character]['change-rotate-y'],
+              'z': webgl_characters[character]['change-rotate-z'],
+            });
+        }
+        const axes = [
+          'x',
+          'y',
+          'z',
+        ];
+        for(const axis in axes){
+            if(webgl_characters[character]['change-translate-' + axes[axis]] !== 0){
+                webgl_characters[character]['translate-' + axes[axis]] = core_round({
+                  'number': webgl_characters[character]['translate-' + axes[axis]] + webgl_characters[character]['change-translate-' + axes[axis]],
+                });
+            }
+        }
 
         webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
         webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
@@ -1937,15 +1955,23 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
-    entity_entities[entity]['translate-x'] = core_round({
-      'number': entity_entities[entity]['translate-x'] + entity_entities[entity]['change-translate-x'],
-    });
-    entity_entities[entity]['translate-y'] = core_round({
-      'number': entity_entities[entity]['translate-y'] + entity_entities[entity]['change-translate-y'],
-    });
-    entity_entities[entity]['translate-z'] = core_round({
-      'number': entity_entities[entity]['translate-z'] + entity_entities[entity]['change-translate-z'],
-    });
+    const axes = [
+      'x',
+      'y',
+      'z',
+    ];
+    for(const axis in axes){
+        if(entity_entities[entity]['change-rotate-' + axes[axis]] !== 0){
+            entity_entities[entity]['rotate-' + axes[axis]] = core_round({
+              'number': entity_entities[entity]['rotate-' + axes[axis]] + entity_entities[entity]['change-rotate-' + axes[axis]],
+            });
+        }
+        if(entity_entities[entity]['change-translate-' + axes[axis]] !== 0){
+            entity_entities[entity]['translate-' + axes[axis]] = core_round({
+              'number': entity_entities[entity]['translate-' + axes[axis]] + entity_entities[entity]['change-translate-' + axes[axis]],
+            });
+        }
+    }
 
     if(entity_entities[entity]['attach-to'] !== false){
         const target = globalThis[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
