@@ -52,7 +52,7 @@ char* core_iterami_path(const char *filename){
         length_name++;
     }
 
-    char *path = malloc(length_name + length_file + 17);
+    char *path = malloc(length_name + length_file + 16);
 
     path[0] = '/';
     path[1] = 'h';
@@ -66,21 +66,20 @@ char* core_iterami_path(const char *filename){
         i++;
     }
     path[length_name + 6] = '/';
-    path[length_name + 7] = '.';
-    path[length_name + 8] = 'i';
-    path[length_name + 9] = 't';
-    path[length_name + 10] = 'e';
-    path[length_name + 11] = 'r';
-    path[length_name + 12] = 'a';
-    path[length_name + 13] = 'm';
-    path[length_name + 14] = 'i';
-    path[length_name + 15] = '/';
+    path[length_name + 7] = 'i';
+    path[length_name + 8] = 't';
+    path[length_name + 9] = 'e';
+    path[length_name + 10] = 'r';
+    path[length_name + 11] = 'a';
+    path[length_name + 12] = 'm';
+    path[length_name + 13] = 'i';
+    path[length_name + 14] = '/';
     i = 0;
     while(i < length_file){
-        path[i + length_name + 16] = filename[i];
+        path[i + length_name + 15] = filename[i];
         i++;
     }
-    path[length_name + length_file + 16] = '\0';
+    path[length_name + length_file + 15] = '\0';
 
     return path;
 }
