@@ -1,5 +1,4 @@
 entry,
-#grid,
 list,
 menubar,
 notebook,
@@ -22,7 +21,4 @@ overshoot.top{
 }
 paned separator{
     border-width: 2px;
-}
-textview:selected{
-    background-color: #3c3b37;
 }
