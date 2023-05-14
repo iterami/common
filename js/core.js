@@ -799,7 +799,7 @@ function core_interval_resume_all(){
     }
 }
 
-// Required args: id
+// Required args: id, interval
 function core_interval_sync(args){
     return globalThis.setTimeout(
       function(){
