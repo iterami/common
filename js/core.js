@@ -780,6 +780,7 @@ function core_interval_resume(args){
 
         core_intervals[args['id']]['var'] = core_interval_sync({
           'id': args['id'],
+          'interval': 1000 - new Date().getMilliseconds(),
         });
 
     }else{
@@ -806,17 +807,15 @@ function core_interval_sync(args){
               return;
           }
 
-          globalThis.clearTimeout(core_intervals[args['id']]['var']);
           core_intervals[args['id']]['todo']();
 
-          core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
-            core_interval_sync({
-              'id': args['id'],
-            }),
-            1000 - new Date().getMilliseconds()
-          );
+          globalThis.clearTimeout(core_intervals[args['id']]['var']);
+          core_intervals[args['id']]['var'] = core_interval_sync({
+            'id': args['id'],
+            'interval': core_intervals[args['id']]['interval'] - (new Date().getMilliseconds() % core_intervals[args['id']]['interval']),
+          });
       },
-      1000 - new Date().getMilliseconds()
+      args['interval']
     );
 }
 
