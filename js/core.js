@@ -778,23 +778,9 @@ function core_interval_resume(args){
     }else if(core_intervals[args['id']]['sync']){
         core_intervals[args['id']]['todo']();
 
-        core_intervals[args['id']]['var'] = globalThis.setTimeout(
-          function(){
-              if(core_intervals[args['id']]['paused']){
-                  return;
-              }
-
-              globalThis.clearTimeout(core_intervals[args['id']]['var']);
-
-              core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
-                core_intervals[args['id']]['todo'],
-                core_intervals[args['id']]['interval']
-              );
-
-              core_intervals[args['id']]['todo']();
-          },
-          1000 - new Date().getMilliseconds()
-        );
+        core_intervals[args['id']]['var'] = core_interval_sync({
+          'id': args['id'],
+        });
 
     }else{
         core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
@@ -810,6 +796,28 @@ function core_interval_resume_all(){
           'id': interval,
         });
     }
+}
+
+// Required args: id
+function core_interval_sync(args){
+    return globalThis.setTimeout(
+      function(){
+          if(core_intervals[args['id']]['paused']){
+              return;
+          }
+
+          globalThis.clearTimeout(core_intervals[args['id']]['var']);
+          core_intervals[args['id']]['todo']();
+
+          core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
+            core_interval_sync({
+              'id': args['id'],
+            }),
+            1000 - new Date().getMilliseconds()
+          );
+      },
+      1000 - new Date().getMilliseconds()
+    );
 }
 
 function core_keys_rebind(){
