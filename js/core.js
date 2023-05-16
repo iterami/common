@@ -685,7 +685,6 @@ function core_interval_modify(args){
       'args': args,
       'defaults': {
         'animationFrame': false,
-        'clear': 'clearInterval',
         'interval': 25,
         'paused': false,
         'set': 'setInterval',
@@ -701,7 +700,6 @@ function core_interval_modify(args){
 
     core_intervals[args['id']] = {
       'animationFrame': args['animationFrame'],
-      'clear': args['clear'],
       'interval': args['interval'],
       'paused': true,
       'set': args['set'],
@@ -724,7 +722,8 @@ function core_interval_pause(args){
 
     globalThis[core_intervals[args['id']]['animationFrame']
       ? 'cancelAnimationFrame'
-      : core_intervals[args['id']]['clear']](core_intervals[args['id']]['var']);
+      : 'clearInterval'](core_intervals[args['id']]['var']);
+
 
     core_intervals[args['id']]['paused'] = true;
 }
@@ -809,7 +808,6 @@ function core_interval_sync(args){
 
           core_intervals[args['id']]['todo']();
 
-          globalThis.clearTimeout(core_intervals[args['id']]['var']);
           core_intervals[args['id']]['var'] = core_interval_sync({
             'id': args['id'],
             'interval': core_intervals[args['id']]['interval'] - (new Date().getMilliseconds() % core_intervals[args['id']]['interval']),
