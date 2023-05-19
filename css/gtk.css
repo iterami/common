@@ -1,10 +1,10 @@
 entry,
 menubar,
 notebook,
+notebook stack,
 notebook tabs arrow,
 notebook tabs tab,
-text,
-window{
+text{
     background-color: #000;
     background-image: none;
     color: #aaa;
