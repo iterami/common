@@ -70,6 +70,7 @@ input::file-selector-button{
 }
 input[type=button],
 input[type=checkbox],
+input[type=datetime-local],
 input[type=file],
 input::file-selector-button{
     width: auto;
@@ -77,6 +78,7 @@ input::file-selector-button{
 input[type=button]:enabled,
 input[type=checkbox]:enabled,
 input[type=color]:enabled,
+input[type=datetime-local]:enabled,
 input[type=file]:enabled,
 input[type=range]:enabled,
 input::file-selector-button,
