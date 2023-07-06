@@ -62,14 +62,14 @@ input:disabled,
 textarea:read-only{
     border-color: #555;
 }
+input.mini,
+input[type=color],
+.mini{
+    width: 5em;
+}
 input[type=button],
 input::file-selector-button{
     padding: 2px 7px;
-}
-input[type=number],
-input[type=range],
-input[type=text]{
-    width: 200px;
 }
 input[type=button]:enabled,
 input[type=checkbox]:enabled,
@@ -81,10 +81,10 @@ label,
 select:enabled{
     cursor: pointer;
 }
-input[type=color],
-input[type=text].mini,
-.mini{
-    width: 5em;
+input[type=number],
+input[type=range],
+input[type=text]{
+    width: 200px;
 }
 .left{
     text-align: left;
