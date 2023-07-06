@@ -57,6 +57,7 @@ input,
 input::file-selector-button{
     border: 2px solid #999;
     text-align: center;
+    vertical-align: middle;
     width: 200px;
 }
 input:disabled,
