@@ -59,15 +59,6 @@ input{
     text-align: center;
     vertical-align: middle;
 }
-input:disabled,
-textarea:read-only{
-    border-color: #555;
-}
-input.mini,
-input[type=color],
-.mini{
-    width: 5em;
-}
 input[type=button],
 input::file-selector-button{
     padding: 2px 7px;
@@ -86,6 +77,15 @@ input[type=number],
 input[type=range],
 input[type=text]{
     width: 200px;
+}
+input:disabled,
+textarea:read-only{
+    border-color: #555;
+}
+input.mini,
+input[type=color],
+.mini{
+    width: 5em;
 }
 .left{
     text-align: left;
