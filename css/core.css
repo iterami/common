@@ -12,7 +12,8 @@ body{
 body,
 input,
 input::file-selector-button,
-select{
+select,
+textarea{
     background-color: #000;
     color: #ccc;
     font: 700 14px monospace;
@@ -112,10 +113,7 @@ textarea{
     vertical-align: top;
 }
 textarea{
-    background-color: #000;
     border-color: #999;
-    color: inherit;
-    font: inherit;
     height: 190px;
     width: 490px;
 }
