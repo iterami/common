@@ -1011,11 +1011,13 @@ function webgl_event(args){
 
     for(const stat in args['parent']['event-modify']){
         const event_modify = args['parent']['event-modify'][stat];
-        const target = event_modify['target'] !== void 0
-          ? entity_entities[event_modify['target']]
-          : event_modify['self']
-            ? args['parent']
-            : args['target'];
+        const target = event_modify['webgl'] === true
+          ? webgl_properties
+          : event_modify['target'] !== void 0
+            ? entity_entities[event_modify['target']]
+            : event_modify['self']
+              ? args['parent']
+              : args['target'];
 
         webgl_stat_modify({
           'set': event_modify['set'],
