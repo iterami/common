@@ -2448,6 +2448,24 @@ function webgl_pick_entity(args){
     }
 }
 
+// Required args: prefab, prefix
+function webgl_prefab_remake(args){
+    for(const entity in entity_entities){
+        if(entity_entities[entity]['id'].startsWith(args['prefix'])){
+            entity_remove({
+              'entities': [
+                entity,
+              ],
+            });
+        }
+    }
+
+    core_call({
+      'args': prefab['properties'],
+      'todo': prefab['type'],
+    });
+}
+
 function webgl_primitive_cuboid(args){
     args = core_args({
       'args': args,
