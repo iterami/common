@@ -37,6 +37,12 @@ textarea{
 .inline{
     display: inline-block;
 }
+div.box{
+    background-color: #000;
+    border: 1px solid #aaa;
+    height: 6em;
+    width: 250px;
+}
 .external{
     color: #f99;
 }
@@ -81,6 +87,21 @@ input[type=text]{
 input:disabled,
 textarea:read-only{
     border-color: #555;
+}
+input.gridbutton{
+    border-width: 0;
+    height: 25px;
+    margin: 1px;
+    vertical-align: top;
+    width: 25px;
+}
+input.gridbuttonclickable{
+    border-width: 0;
+    color: #000;
+    font-size: 300%;
+    height: 50px;
+    margin: 1px;
+    width: 50px;
 }
 input.mini,
 input[type=color],
