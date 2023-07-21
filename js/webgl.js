@@ -1214,7 +1214,7 @@ function webgl_init(args){
       webgl_buffer.ONE_MINUS_SRC_ALPHA
     );
 
-    webgl_shader_recreate();
+    webgl_shader_remake();
     globalThis.onresize = webgl_resize;
     webgl_resize();
 
@@ -3096,7 +3096,7 @@ function webgl_shader_create(args){
     return shader;
 }
 
-function webgl_shader_recreate(){
+function webgl_shader_remake(){
     if(webgl_shaders === false){
         webgl_shaders = {
           'fragment-0': `#version 300 es
