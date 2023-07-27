@@ -1047,6 +1047,31 @@ function webgl_extension(args){
     return result;
 }
 
+// Required args: id
+function webgl_getContext_2d(args){
+    return core_elements[args['id']].getContext(
+      '2d',
+      {
+        'alpha': false,
+      }
+    );
+}
+
+// Required args: id
+function webgl_getContext_webgl(args){
+    return core_elements[args['id']].getContext(
+      'webgl2',
+      {
+        'alpha': false,
+        'antialias': true,
+        'depth': true,
+        'premultipliedAlpha': false,
+        'preserveDrawingBuffer': false,
+        'stencil': false,
+      }
+    );
+}
+
 // Required args: entity
 function webgl_get_translation(args){
     if(args['entity']['attach-to'] === void 0
@@ -1123,23 +1148,12 @@ function webgl_init(args){
           'type': 'canvas',
         });
 
-        webgl_buffer = core_elements['buffer'].getContext(
-          'webgl2',
-          {
-            'alpha': false,
-            'antialias': true,
-            'depth': true,
-            'premultipliedAlpha': false,
-            'preserveDrawingBuffer': false,
-            'stencil': false,
-          }
-        );
-        webgl_canvas = core_elements['canvas'].getContext(
-          '2d',
-          {
-            'alpha': false,
-          }
-        );
+        webgl_buffer = webgl_getContext_webgl({
+          'id': 'buffer',
+        });
+        webgl_canvas = webgl_getContext_2d({
+          'id': 'canvas',
+        });
     }
     core_elements['canvas'].style.cursor = args['cursor'];
 

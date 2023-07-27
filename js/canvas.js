@@ -95,6 +95,16 @@ function canvas_draw_path(args){
     }
 }
 
+// Required args: id
+function canvas_getContext(args){
+    return core_elements[args['id']].getContext(
+      '2d',
+      {
+        'alpha': false,
+      }
+    );
+}
+
 // Required args: stops
 function canvas_gradient(args){
     args = core_args({
@@ -171,8 +181,12 @@ function canvas_init(args){
     });
     core_elements['canvas'].style.cursor = args['cursor'];
 
-    canvas_buffer = core_elements['buffer'].getContext('2d');
-    canvas_canvas = core_elements['canvas'].getContext('2d');
+    canvas_buffer = canvas_getContext({
+      'id': 'buffer',
+    });
+    canvas_canvas = canvas_getContext({
+      'id': 'canvas',
+    });
 
     globalThis.onresize = canvas_resize;
     canvas_resize();
