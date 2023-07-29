@@ -1,12 +1,6 @@
 #include <stdlib.h>
 #include "core.h"
 
-int core_is_hexadecimal(const char character){
-    return (('0' <= character && character <= '9')
-      && ('a' <= character && character <= 'f')
-      && ('A' <= character && character <= 'F'));
-}
-
 size_t core_get_int_length(const int integer){
     if(integer > 999999999){
         return 10;
@@ -37,6 +31,12 @@ size_t core_get_int_length(const int integer){
     }
 
     return 1;
+}
+
+int core_is_hexadecimal(const char character){
+    return (('0' <= character && character <= '9')
+      && ('a' <= character && character <= 'f')
+      && ('A' <= character && character <= 'F'));
 }
 
 char* core_iterami_path(const char *filename){
