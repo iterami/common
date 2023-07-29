@@ -71,7 +71,7 @@ function test_run(args){
           );
 
         results += '<tr ' + (!result['test'] ? ' style=background-color:#600' : '') + '>'
-          + '<td><a href=' + args['link'] + args['tests'][test]['function'] + '>' + args['tests'][test]['function'] + '()</a>'
+          + '<td><a href=' + args['link'] + args['tests'][test]['function'] + '.htm>' + args['tests'][test]['function'] + '()</a>'
           + '<td>' + JSON.stringify(
             args['tests'][test]['args'],
             null,
