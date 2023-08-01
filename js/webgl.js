@@ -747,7 +747,7 @@ function webgl_draw_entity(entity){
     );
     webgl_buffer.vertexAttribPointer(
       webgl_properties['attributes']['vec_pickColor'],
-      4,
+      3,
       webgl_buffer.FLOAT,
       false,
       0,
@@ -968,12 +968,11 @@ function webgl_entity_todo(entity){
     }
 
     const pickData = [];
-    for(let i = 0; i < entity_entities[entity]['vertices-length'] * 4; i += 4){
+    for(let i = 0; i < entity_entities[entity]['vertices-length'] * 3; i += 3){
         pickData.push(
           entity_entities[entity]['pick-color'][0],
           entity_entities[entity]['pick-color'][1],
           entity_entities[entity]['pick-color'][2],
-          1,
         );
     }
 
