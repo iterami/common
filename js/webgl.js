@@ -959,20 +959,17 @@ function webgl_entity_todo(entity){
       'vertices-length': entity_entities[entity]['vertices-length'],
     });
 
-    const textureData = [];
-    for(let i = 0; i < entity_entities[entity]['vertices-length'] * 2; i += 2){
-        textureData.push(
-          entity_entities[entity]['texture-align'][i] * entity_entities[entity]['texture-repeat-x'],
-          entity_entities[entity]['texture-align'][i + 1] * entity_entities[entity]['texture-repeat-y']
-        );
-    }
-
     const pickData = [];
-    for(let i = 0; i < entity_entities[entity]['vertices-length'] * 3; i += 3){
+    const textureData = [];
+    for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
         pickData.push(
           entity_entities[entity]['pick-color'][0],
           entity_entities[entity]['pick-color'][1],
           entity_entities[entity]['pick-color'][2],
+        );
+        textureData.push(
+          entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-repeat-x'],
+          entity_entities[entity]['texture-align'][i * 2 + 1] * entity_entities[entity]['texture-repeat-y']
         );
     }
 
