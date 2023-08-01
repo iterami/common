@@ -177,7 +177,7 @@ function core_float_compare(args){
       },
     });
 
-    return Math.abs(args['a'] - args['b']) <= args['precision'];
+    return Math.abs(args['a'] - args['b']) < args['precision'];
 }
 
 function core_handle_beforeunload(event){
