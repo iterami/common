@@ -173,7 +173,7 @@ function core_float_compare(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'precision': Math.EPSILON,
+        'precision': Number.EPSILON,
       },
     });
 
