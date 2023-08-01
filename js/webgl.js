@@ -597,15 +597,8 @@ function webgl_collision(args){
                     args['collider']['jump-allow'] = true;
                 }
 
-                let axis_first = 'translate-x';
-                let axis_second = 'translate-z';
-                if(collision === 'x'){
-                    axis_first = 'translate-y';
-
-                }else if(collision === 'z'){
-                    axis_second = 'translate-y';
-                }
-
+                const axis_first = collision === 'x' ? 'translate-y' : 'translate-x';
+                const axis_second = collision === 'z' ? 'translate-y': 'translate-z';
                 const attached = args['target']['attach-to'];
                 if(attached){
                     const axis_first_change = webgl_characters[attached]['change-' + axis_first];
