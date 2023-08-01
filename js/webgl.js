@@ -911,17 +911,8 @@ function webgl_entity_move(args){
           'strafe': args['strafe'],
         });
 
-        let axis_first = 'translate-x';
-        let axis_second = 'translate-z';
-        if(webgl_properties['gravity-axis'] === 'x'){
-            axis_first = 'translate-y';
-
-        }else if(webgl_properties['gravity-axis'] === 'z'){
-            axis_second = 'translate-y';
-        }
-
-        entity_entities[args['entity']]['change-' + axis_first] = movement['x'];
-        entity_entities[args['entity']]['change-' + axis_second] = movement['z'];
+        entity_entities[args['entity']]['change-' + (webgl_properties['gravity-axis'] === 'x' ? 'translate-y' : 'translate-x')] = movement['x'];
+        entity_entities[args['entity']]['change-' + (webgl_properties['gravity-axis'] === 'z' ? 'translate-y' : 'translate-z')] = movement['z'];
     }
 }
 
