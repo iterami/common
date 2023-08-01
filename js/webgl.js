@@ -598,7 +598,7 @@ function webgl_collision(args){
                 }
 
                 const axis_first = collision === 'x' ? 'translate-y' : 'translate-x';
-                const axis_second = collision === 'z' ? 'translate-y': 'translate-z';
+                const axis_second = collision === 'z' ? 'translate-y' : 'translate-z';
                 const attached = args['target']['attach-to'];
                 if(attached){
                     const axis_first_change = webgl_characters[attached]['change-' + axis_first];
@@ -1028,11 +1028,9 @@ function webgl_extension(args){
 
     const extension = webgl_buffer.getExtension(args['id']);
     const result = extension !== null;
-
     if(result){
         webgl_extensions[args['label']] = extension;
     }
-
     return result;
 }
 
@@ -2157,7 +2155,6 @@ function webgl_normals(args){
           normal_z
         );
     }
-
     return normals;
 }
 
@@ -2376,7 +2373,6 @@ function webgl_perspective(){
 // Required args: x, y
 function webgl_pick_color(args){
     const pixelarray = new Uint8Array(4);
-
     webgl_buffer.readPixels(
       args['x'],
       globalThis.innerHeight - args['y'],
@@ -2386,7 +2382,6 @@ function webgl_pick_color(args){
       webgl_buffer.UNSIGNED_BYTE,
       pixelarray
     );
-
     return pixelarray;
 }
 
@@ -3026,7 +3021,6 @@ function webgl_program_create(args){
     }
     webgl_buffer.linkProgram(program);
     webgl_buffer.useProgram(program);
-
     return program;
 }
 
@@ -3081,9 +3075,7 @@ function webgl_scissor(args){
     );
 
     const result = args['todo']();
-
     webgl_buffer.disable(webgl_buffer.SCISSOR_TEST);
-
     return result;
 }
 
@@ -3095,7 +3087,6 @@ function webgl_shader_create(args){
       args['source']
     );
     webgl_buffer.compileShader(shader);
-
     return shader;
 }
 
@@ -3473,7 +3464,6 @@ function webgl_vertexcolorarray(args){
           1
         );
     }
-
     return color;
 }
 
