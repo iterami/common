@@ -1421,7 +1421,7 @@ function core_storage_save(args){
         core_storage_data[key] = data;
 
         if(data !== void 0
-          && data !== NaN
+          && data !== Number.NaN
           && String(data).length
           && data !== core_storage_info[key]['default']){
             globalThis.localStorage.setItem(
