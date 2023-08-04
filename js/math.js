@@ -193,11 +193,11 @@ function math_fraction_reduce(args){
 // Required args: a, b
 function math_greatest_common_divisor(args){
     if(args['a'] === 0
-      || isNaN(args['a'])){
+      || Number.isNaN(args['a'])){
         return args['b'];
     }
     if(args['b'] === 0
-      || isNaN(args['b'])){
+      || Number.isNaN(args['b'])){
         return args['a'];
     }
 

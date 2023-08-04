@@ -123,7 +123,7 @@ function time_from_inputs(){
           10
         );
 
-        if(globalThis.isNaN(date[value])){
+        if(Number.isNaN(date[value])){
             date[value] = 0;
         }
     }

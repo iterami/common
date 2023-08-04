@@ -865,7 +865,7 @@ function core_keys_updatebinds(args){
               10
             );
 
-            if(globalThis.isNaN(key)){
+            if(Number.isNaN(key)){
                 key = keybind.charCodeAt(0);
             }
         }
@@ -1238,7 +1238,7 @@ function core_round(args){
         result = Number(result + eString);
     }
 
-    if(globalThis.isNaN(result)
+    if(Number.isNaN(result)
       || Math.abs(result) < Number('1e-' + args['decimals'])){
         result = 0;
     }
@@ -1421,7 +1421,7 @@ function core_storage_save(args){
         core_storage_data[key] = data;
 
         if(data !== void 0
-          && data !== Number.NaN
+          && !Number.isNaN(data)
           && String(data).length
           && data !== core_storage_info[key]['default']){
             globalThis.localStorage.setItem(
@@ -1552,7 +1552,7 @@ function core_type_convert(args){
       })){
         return args['value'];
 
-    }else if(!globalThis.isNaN(Number.parseFloat(args['template']))){
+    }else if(!Number.isNaN(Number.parseFloat(args['template']))){
         return Number.parseFloat(args['value']);
 
     }else if(core_type({
