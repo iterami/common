@@ -5,7 +5,6 @@ function math_clamp(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': core_storage_data['decimals'],
         'wrap': false,
       },
     });
@@ -30,10 +29,7 @@ function math_clamp(args){
         );
     }
 
-    return core_round({
-      'decimals': args['decimals'],
-      'number': args['value'],
-    });
+    return args['value'];
 }
 
 // Required args: height-0, height-1, width-0, width-1, x-0, x-1, y-0, y-1
@@ -58,24 +54,13 @@ function math_cuboid_overlap(args){
 
 // Required args: degrees
 function math_degrees_to_radians(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-      },
-    });
-
-    return core_round({
-      'decimals': args['decimals'],
-      'number': args['degrees'] * .017453292519943295,
-    });
+    return args['degrees'] * .017453292519943295;
 }
 
 function math_distance(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': core_storage_data['decimals'],
         'x0': 0,
         'x1': 0,
         'y0': 0,
@@ -85,28 +70,24 @@ function math_distance(args){
       },
     });
 
-    return core_round({
-      'decimals': args['decimals'],
-      'number': Math.sqrt(
-        Math.pow(
-          args['x0'] - args['x1'],
-          2
-        ) + Math.pow(
-          args['y0'] - args['y1'],
-          2
-        ) + Math.pow(
-          args['z0'] - args['z1'],
-          2
-        )
-      ),
-    });
+    return Math.sqrt(
+      Math.pow(
+        args['x0'] - args['x1'],
+        2
+      ) + Math.pow(
+        args['y0'] - args['y1'],
+        2
+      ) + Math.pow(
+        args['z0'] - args['z1'],
+        2
+      )
+    );
 }
 
 function math_fixed_length_line(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': core_storage_data['decimals'],
         'length': 1,
         'x0': 0,
         'x1': 0,
@@ -134,18 +115,9 @@ function math_fixed_length_line(args){
     args['z1'] *= args['length'];
 
     return {
-      'x': core_round({
-        'decimals': args['decimals'],
-        'number': args['x1'],
-      }),
-      'y': core_round({
-        'decimals': args['decimals'],
-        'number': args['y1'],
-      }),
-      'z': core_round({
-        'decimals': args['decimals'],
-        'number': args['z1'],
-      }),
+      'x': args['x1'],
+      'y': args['y1'],
+      'z': args['z1'],
     };
 }
 
@@ -168,11 +140,9 @@ function math_fraction_reduce(args){
     let done = false;
 
     while(!done){
-        const gcd = core_round({
-          'number': math_greatest_common_divisor({
-            'a': args['numerator'],
-            'b': args['denominator'],
-          }),
+        const gcd = math_greatest_common_divisor({
+          'a': args['numerator'],
+          'b': args['denominator'],
         });
 
         if(gcd > 1){
@@ -332,10 +302,6 @@ function math_matrix_translate(args){
           + math_matrices[args['id']][i + 4] * args['dimensions'][1]
           + math_matrices[args['id']][i + 8] * args['dimensions'][2];
     }
-
-    math_matrix_round({
-      'id': args['id'],
-    });
 }
 
 // Required args: x0, x1, y0, y1
@@ -343,7 +309,6 @@ function math_move_2d(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': core_storage_data['decimals'],
         'speed': 1,
       },
     });
@@ -355,22 +320,14 @@ function math_move_2d(args){
       'y1': args['y1'],
     });
 
-    let dx = core_round({
-      'decimals': args['decimals'],
-      'number': Math.cos(angle) * args['speed'],
-    });
-    let dy = core_round({
-      'decimals': args['decimals'],
-      'number': Math.sin(angle) * args['speed'],
-    });
-
+    let dx = Math.cos(angle) * args['speed'];
+    let dy = Math.sin(angle) * args['speed'];
     if(args['x0'] > args['x1']){
         dx = -dx;
     }
     if(args['y0'] > args['y1']){
         dy = -dy;
     }
-
     return {
       'angle': angle,
       'x': dx,
@@ -380,17 +337,7 @@ function math_move_2d(args){
 
 // Required args: dx, dy, speed
 function math_move_2d_diagonal(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-      },
-    });
-
-    const sqrt = core_round({
-      'decimals': args['decimals'],
-      'number': Math.sqrt(args['speed']),
-    });
+    const sqrt = Math.sqrt(args['speed']);
     return {
       'x': (args['dx'] / args['speed']) * sqrt,
       'y': args['dy'] > 0
@@ -404,28 +351,20 @@ function math_move_3d(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': core_storage_data['decimals'],
         'speed': 1,
         'strafe': false,
       },
     });
 
     const radians = -math_degrees_to_radians({
-      'decimals': args['decimals'],
       'degrees': args['angle'] - (args['strafe']
-          ? 90
-          : 0
-        ),
+        ? 90
+        : 0
+      ),
     });
     return {
-      'x': core_round({
-        'decimals': args['decimals'],
-        'number': Math.sin(radians) * args['speed'],
-      }),
-      'z': core_round({
-        'decimals': args['decimals'],
-        'number': Math.cos(radians) * args['speed'],
-      }),
+      'x': Math.sin(radians) * args['speed'],
+      'z': Math.cos(radians) * args['speed'],
     };
 }
 
@@ -456,31 +395,15 @@ function math_normalize(args){
     }
 
     return {
-      'x': core_round({
-        'number': args['x'] / length,
-      }),
-      'y': core_round({
-        'number': args['y'] / length,
-      }),
-      'z': core_round({
-        'number': args['z'] / length,
-      }),
+      'x': args['x'] / length,
+      'y': args['y'] / length,
+      'z': args['z'] / length,
     };
 }
 
 // Required args: x0, x1, y0, y1
 function math_point_angle(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-      },
-    });
-
-    return core_round({
-      'decimals': args['decimals'],
-      'number': Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1'])),
-    });
+    return Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
 }
 
 function math_quaternion_from_euler(args){
@@ -538,17 +461,7 @@ function math_quaternion_to_euler(args){
 
 // Required args: radians
 function math_radians_to_degrees(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': core_storage_data['decimals'],
-      },
-    });
-
-    return core_round({
-      'decimals': args['decimals'],
-      'number': args['radians'] * 57.29577951308232,
-    });
+    return args['radians'] * 57.29577951308232;
 }
 
 globalThis.math_matrices = {};
