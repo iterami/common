@@ -9,27 +9,28 @@ function math_clamp(args){
       },
     });
 
+    let value = args['value'];
     if(args['wrap']){
         const range = args['max'] - args['min'];
 
-        if(args['value'] < args['min']){
-            args['value'] = args['max'] - (args['min'] - args['value']) % range;
+        if(value < args['min']){
+            value = args['max'] - (args['min'] - value) % range;
 
         }else{
-            args['value'] = args['min'] + (args['value'] - args['min']) % range;
+            value = args['min'] + (value - args['min']) % range;
         }
 
     }else{
-        args['value'] = Math.min(
+        value = Math.min(
           Math.max(
-            args['value'],
+            value,
             args['min']
           ),
           args['max']
         );
     }
 
-    return args['value'];
+    return value;
 }
 
 // Required args: height-0, height-1, width-0, width-1, x-0, x-1, y-0, y-1

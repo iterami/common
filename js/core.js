@@ -1043,8 +1043,9 @@ function core_random_string(args){
 
 // Required args: patterns, string
 function core_replace_multiple(args){
+    let string_value = args['string'];
     for(const pattern in args['patterns']){
-        args['string'] = args['string'].replace(
+        string_value = string_value.replace(
           new RegExp(
             pattern,
             'g'
@@ -1053,7 +1054,7 @@ function core_replace_multiple(args){
         );
     }
 
-    return args['string'];
+    return string_value;
 }
 
 // Required args: title
