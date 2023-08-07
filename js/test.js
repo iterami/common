@@ -4,10 +4,16 @@
 function test_consts(args){
     let results = '<tr class=header><td>Const<td>Value<td>Test';
     for(const id in args['consts']){
-        const result = args['consts'][id] !== void 0;
+        const label = args['consts'][id];
+        let result = false;
+        let value = '';
+        try{
+            value = eval(label);
+            result = value !== void 0;
+        }catch{}
         results += '<tr ' + (!result ? ' style=background-color:#600' : '') + '>'
-          + '<td>' + id
-          + '<td>' + args['consts'][id]
+          + '<td>' + label
+          + '<td>' + value
           + '<td>' + result;
     }
     return results;
