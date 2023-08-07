@@ -112,9 +112,7 @@ function webgl_camera_rotate(args){
             axis_value += webgl_characters[args['character']][prefix + axis];
         }
 
-        webgl_characters[args['character']][prefix + axis] = core_round({
-          'number': axis_value,
-        });
+        webgl_characters[args['character']][prefix + axis] = axis_value;
     }
 
     if(args['camera']){
@@ -1779,9 +1777,7 @@ function webgl_logicloop(){
         ];
         for(const axis in axes){
             if(webgl_characters[character]['change-translate-' + axes[axis]] !== 0){
-                webgl_characters[character]['translate-' + axes[axis]] = core_round({
-                  'number': webgl_characters[character]['translate-' + axes[axis]] + webgl_characters[character]['change-translate-' + axes[axis]],
-                });
+                webgl_characters[character]['translate-' + axes[axis]] = webgl_characters[character]['translate-' + axes[axis]] + webgl_characters[character]['change-translate-' + axes[axis]];
             }
         }
 
@@ -1957,14 +1953,10 @@ function webgl_logicloop_handle_entity(entity){
     ];
     for(const axis in axes){
         if(entity_entities[entity]['change-rotate-' + axes[axis]] !== 0){
-            entity_entities[entity]['rotate-' + axes[axis]] = core_round({
-              'number': entity_entities[entity]['rotate-' + axes[axis]] + entity_entities[entity]['change-rotate-' + axes[axis]],
-            });
+            entity_entities[entity]['rotate-' + axes[axis]] = entity_entities[entity]['rotate-' + axes[axis]] + entity_entities[entity]['change-rotate-' + axes[axis]];
         }
         if(entity_entities[entity]['change-translate-' + axes[axis]] !== 0){
-            entity_entities[entity]['translate-' + axes[axis]] = core_round({
-              'number': entity_entities[entity]['translate-' + axes[axis]] + entity_entities[entity]['change-translate-' + axes[axis]],
-            });
+            entity_entities[entity]['translate-' + axes[axis]] = entity_entities[entity]['translate-' + axes[axis]] + entity_entities[entity]['change-translate-' + axes[axis]];
         }
     }
 
@@ -2128,15 +2120,9 @@ function webgl_normals(args){
       'degrees': args['rotate-z'],
     });
 
-    const normal_x = core_round({
-      'number': Math.cos(radians_y) * Math.sin(radians_z),
-    });
-    const normal_y = core_round({
-      'number': Math.cos(radians_x) * Math.cos(radians_z),
-    });
-    const normal_z = core_round({
-      'number': Math.sin(radians_x) * Math.cos(radians_y),
-    });
+    const normal_x = Math.cos(radians_y) * Math.sin(radians_z);
+    const normal_y = Math.cos(radians_x) * Math.cos(radians_z);
+    const normal_z = Math.sin(radians_x) * Math.cos(radians_y);
 
     const normals = [];
     for(let i = 0; i < args['vertices-length']; i++){
@@ -2244,15 +2230,9 @@ function webgl_path_move(args){
 
     const speed = args['entity']['speed'] * point['speed'] * path['speed'];
 
-    args['entity']['change-translate-x'] = core_round({
-      'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
-    });
-    args['entity']['change-translate-y'] = core_round({
-      'number': Math.sin(angle_y) * speed,
-    });
-    args['entity']['change-translate-z'] = core_round({
-      'number': Math.sin(angle_xz) * Math.cos(angle_y) * speed,
-    });
+    args['entity']['change-translate-x'] = Math.cos(angle_xz) * Math.cos(angle_y) * speed;
+    args['entity']['change-translate-y'] = Math.sin(angle_y) * speed;
+    args['entity']['change-translate-z'] = Math.sin(angle_xz) * Math.cos(angle_y) * speed;
 
     if(args['entity']['translate-x'] > point['translate-x']){
         args['entity']['change-translate-x'] *= -1;
