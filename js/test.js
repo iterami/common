@@ -1,5 +1,18 @@
 'use strict';
 
+// Required args: consts
+function test_consts(args){
+    let results = '<tr class=header><td>Const<td>Value<td>Test';
+    for(const id in args['consts']){
+        const result = args['consts'][id] !== void 0;
+        results += '<tr ' + (!result ? ' style=background-color:#600' : '') + '>'
+          + '<td>' + id
+          + '<td>' + args['consts'][id]
+          + '<td>' + result;
+    }
+    return results;
+}
+
 // Required args: expect, function
 function test_function(args){
     args = core_args({
@@ -84,7 +97,7 @@ function test_run(args){
           ) + '<td>' + result['test'];
     }
 
-    document.getElementById('results').innerHTML = results;
+    return results;
 }
 
 // Required args: function
