@@ -2230,9 +2230,15 @@ function webgl_path_move(args){
 
     const speed = args['entity']['speed'] * point['speed'] * path['speed'];
 
-    args['entity']['change-translate-x'] = Math.cos(angle_xz) * Math.cos(angle_y) * speed;
-    args['entity']['change-translate-y'] = Math.sin(angle_y) * speed;
-    args['entity']['change-translate-z'] = Math.sin(angle_xz) * Math.cos(angle_y) * speed;
+    args['entity']['change-translate-x'] = core_round({
+      'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
+    });
+    args['entity']['change-translate-y'] = core_round({
+      'number': Math.sin(angle_y) * speed,
+    });
+    args['entity']['change-translate-z'] = core_round({
+      'number': Math.sin(angle_xz) * Math.cos(angle_y) * speed,
+    });
 
     if(args['entity']['translate-x'] > point['translate-x']){
         args['entity']['change-translate-x'] *= -1;
