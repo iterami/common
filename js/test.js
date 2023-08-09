@@ -29,13 +29,13 @@ function test_function(args){
     });
 
     let test = false;
-    let returned = globalThis[args['function']](args['args']);
+    let result = globalThis[args['function']](args['args']);
 
     if(core_type({
         'type': 'function',
         'var': args['expect'],
       })){
-        test = args['expect'](returned);
+        test = args['expect'](result);
 
     }else if(core_type({
         'type': 'array',
@@ -45,27 +45,27 @@ function test_function(args){
         'var': args['expect'],
       })){
         test = true;
-        for(const item in returned){
+        for(const item in result){
             if(args['expect'][item] === void 0
-              || returned[item] !== args['expect'][item]){
+              || result[item] !== args['expect'][item]){
                 test = false;
                 break;
             }
         }
 
     }else{
-        test = returned === args['expect'];
+        test = result === args['expect'];
     }
 
     return {
-      'returned': returned,
+      'result': result,
       'test': test,
     };
 }
 
 // Required args: link, tests
 function test_run(args){
-    let results = '<tr class=header><td>Function<td>Args<td>Expected<td>Returned<td>Test';
+    let results = '<tr class=header><td>Function<td>Args<td>Expected<td>Result<td>Test';
 
     for(const test in args['tests']){
         const test_args = {};
@@ -97,7 +97,7 @@ function test_run(args){
             1
           ) + '<td>' + expect
           + '<td>' + JSON.stringify(
-            result['returned'],
+            result['result'],
             null,
             1
           ) + '<td>' + result['test'];
