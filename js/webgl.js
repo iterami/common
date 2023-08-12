@@ -364,6 +364,7 @@ function webgl_character_random(args){
       },
       'todo': 'webgl_primitive_cuboid',
     });
+    webgl_character_spawn();
 }
 
 // Required args: id
