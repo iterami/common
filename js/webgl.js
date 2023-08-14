@@ -2143,7 +2143,7 @@ function webgl_particles_create(args){
       'defaults': {
         'collide-range': 1,
         'collides': true,
-        'color': [1, 1, 1, 1],
+        'color': [],
         'count': 1,
         'gravity': true,
         'lifespan': 100,
@@ -2156,6 +2156,11 @@ function webgl_particles_create(args){
         'translate-z': webgl_characters[webgl_character_id]['translate-z'],
       },
     });
+    if(args['color'].length === 0){
+        args['color'] = webgl_vertexcolorarray({
+          'vertexcount': 1,
+        });
+    }
 
     for(let i = 0; i < args['count']; i++){
         const position = webgl_get_translation({
@@ -2675,12 +2680,8 @@ function webgl_primitive_ellipsoid(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
-        'color0': [
-          1, 1, 1, 1,
-        ],
-        'color1': [
-          0, 1, 0, 1,
-        ],
+        'color0': [],
+        'color1': [],
         'groups': [],
         'prefix': entity_id_count,
         'radius-x': 5,
@@ -2693,6 +2694,16 @@ function webgl_primitive_ellipsoid(args){
         'translate-z': 0,
       },
     });
+    if(args['color0'].length === 0){
+        args['color0'] = webgl_vertexcolorarray({
+          'vertexcount': 1,
+        });
+    }
+    if(args['color1'].length === 0){
+        args['color1'] = webgl_vertexcolorarray({
+          'vertexcount': 1,
+        });
+    }
 
     const latitude_angles = math_degrees_to_radians({
       'degrees': 360 / args['slices-latitude'],
@@ -2819,12 +2830,8 @@ function webgl_primitive_frustum(args){
       'defaults': {
         'bottom': true,
         'character': webgl_character_id,
-        'color-bottom': [
-          1, 1, 1, 1,
-        ],
-        'color-top': [
-          0, 1, 0, 1,
-        ],
+        'color-bottom': [],
+        'color-top': [],
         'length': 2,
         'middle': true,
         'points': 8,
@@ -2837,6 +2844,16 @@ function webgl_primitive_frustum(args){
         'translate-z': 0,
       },
     });
+    if(args['color-bottom'].length === 0){
+        args['color-bottom'] = webgl_vertexcolorarray({
+          'vertexcount': 1,
+        });
+    }
+    if(args['color-top'].length === 0){
+        args['color-top'] = webgl_vertexcolorarray({
+          'vertexcount': 1,
+        });
+    }
 
     const rotation = math_degrees_to_radians({
       'degrees': 360 / args['points'],
