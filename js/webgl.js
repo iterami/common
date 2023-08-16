@@ -5,9 +5,7 @@ function webgl_billboard(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'axes': [
-          'y',
-        ],
+        'axes': 'y',
         'character': webgl_character_id,
       },
     });

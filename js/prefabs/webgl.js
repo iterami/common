@@ -384,9 +384,7 @@ function prefabs_webgl_lines_tree(args){
     const trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
     for(let trunk = 0; trunk < trunk_count; trunk++){
         properties['id'] = args['prefix'] + '-trunk-' + trunk;
-        properties['billboard'] = [
-          'y',
-        ];
+        properties['billboard'] = 'y';
         properties['rotate-x'] = 0;
         properties['rotate-z'] = 0;
         properties['vertices'] = [
