@@ -86,21 +86,25 @@ function test_run(args){
           : JSON.stringify(
             args['tests'][test]['expect'],
             void 0,
-            1
+            2
           );
+        const args_json = JSON.stringify(
+          args['tests'][test]['args'],
+          void 0,
+          2
+        );
+        const result_json = JSON.stringify(
+          result['result'],
+          void 0,
+          2
+        );
 
         results += '<tr ' + (!result['test'] ? ' style=background-color:#600' : '') + '>'
           + '<td><a href=' + args['link'] + args['tests'][test]['function'] + '.htm>' + args['tests'][test]['function'] + '()</a>'
-          + '<td>' + JSON.stringify(
-            args['tests'][test]['args'],
-            null,
-            1
-          ) + '<td>' + expect
-          + '<td>' + JSON.stringify(
-            result['result'],
-            null,
-            1
-          ) + '<td>' + result['test'];
+          + '<td><pre>' + args_json
+          + '</pre><td><pre>' + expect
+          + '</pre><td><pre>' + result_json
+          + '</pre><td>' + result['test'];
     }
 
     return results;
