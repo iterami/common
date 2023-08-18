@@ -419,12 +419,7 @@ function webgl_character_spawn(args){
 
 // Required args: entity
 function webgl_clamp_rotation(args){
-    const axes = [
-      'x',
-      'y',
-      'z',
-    ];
-
+    const axes = 'xyz';
     const character = args['entity']['camera-rotate-x'] !== void 0;
 
     for(const axis in axes){
@@ -1769,11 +1764,7 @@ function webgl_logicloop(){
               'z': webgl_characters[character]['change-rotate-z'],
             });
         }
-        const axes = [
-          'x',
-          'y',
-          'z',
-        ];
+        const axes = 'xyz';
         for(const axis in axes){
             if(webgl_characters[character]['change-translate-' + axes[axis]] !== 0){
                 webgl_characters[character]['translate-' + axes[axis]] = webgl_characters[character]['translate-' + axes[axis]] + webgl_characters[character]['change-translate-' + axes[axis]];
@@ -1945,11 +1936,7 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
-    const axes = [
-      'x',
-      'y',
-      'z',
-    ];
+    const axes = 'xyz';
     for(const axis in axes){
         if(entity_entities[entity]['change-rotate-' + axes[axis]] !== 0){
             entity_entities[entity]['rotate-' + axes[axis]] = entity_entities[entity]['rotate-' + axes[axis]] + entity_entities[entity]['change-rotate-' + axes[axis]];
