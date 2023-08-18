@@ -594,17 +594,17 @@ function webgl_collision(args){
                     args['collider']['jump-allow'] = true;
                 }
 
-                const axis_first = collision === 'x' ? 'translate-y' : 'translate-x';
-                const axis_second = collision === 'z' ? 'translate-y' : 'translate-z';
+                const axis_1st = collision === 'x' ? 'translate-y' : 'translate-x';
+                const axis_2nd = collision === 'z' ? 'translate-y' : 'translate-z';
                 const attached = args['target']['attach-to'];
                 if(attached){
-                    const axis_first_change = webgl_characters[attached]['change-' + axis_first];
-                    if(axis_first_change !== 0){
-                        args['collider'][axis_first] += axis_first_change;
+                    const axis_1st_change = webgl_characters[attached]['change-' + axis_1st];
+                    if(axis_1st_change !== 0){
+                        args['collider'][axis_1st] += axis_1st_change;
                     }
-                    const axis_second_change = webgl_characters[attached]['change-' + axis_second];
-                    if(axis_second_change !== 0){
-                        args['collider'][axis_second] += axis_second_change;
+                    const axis_2nd_change = webgl_characters[attached]['change-' + axis_2nd];
+                    if(axis_2nd_change !== 0){
+                        args['collider'][axis_2nd] += axis_2nd_change;
                     }
                 }
             }
