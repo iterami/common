@@ -66,7 +66,7 @@ function webgl_camera_handle(){
       || core_mouse['down-2']){
         const level = webgl_character_level();
 
-        if(level < -1
+        if(level === -2
           || (level !== -1 && webgl_properties['paused'])){
             return;
         }
@@ -123,7 +123,7 @@ function webgl_camera_rotate(args){
           || (mouse_check
             && webgl_character_level({
               'character': args['character'],
-            }) !== 0
+            }) > -2
             && webgl_characters[args['character']]['health-current'] > 0)){
             webgl_characters[args['character']]['rotate-y'] = core_mouse['down-2']
               ? webgl_characters[args['character']]['camera-rotate-y']
@@ -207,7 +207,7 @@ function webgl_character_init(args){
         'health-max': 1,
         'id': webgl_character_id,
         'jump-height': 1,
-        'level': 0,
+        'level': -1,
         'path-direction': 1,
         'path-end': 'default',
         'path-id': '',
@@ -347,7 +347,7 @@ function webgl_character_random(args){
       'collide-range-horizontal': horizontal,
       'collide-range-vertical': vertical,
       'id': args['id'],
-      'level': 1,
+      'level': 0,
     });
 
     core_call({
@@ -394,7 +394,7 @@ function webgl_character_spawn(args){
     let spawn_y = webgl_properties['spawn-translate-y'];
     if(webgl_character_level({
         'character': args['character'],
-      }) > -1){
+      }) >= 0){
         spawn_y += webgl_characters[args['character']]['collide-range-vertical'] + 1;
     }
 
@@ -1551,8 +1551,7 @@ function webgl_level_unload(){
 function webgl_logicloop(){
     const level = webgl_character_level();
 
-    if(level !== 0
-      && (level === -1 || !webgl_properties['paused'])
+    if((level === -1 || !webgl_properties['paused'])
       && webgl_characters[webgl_character_id]['health-current'] > 0){
         let leftright = 0;
 
@@ -1732,7 +1731,7 @@ function webgl_logicloop(){
             }
         }
 
-        if(character_level > 0){
+        if(character_level >= 0){
             webgl_characters[character]['change-translate-' + webgl_properties['gravity-axis']] = Math.max(
               webgl_characters[character]['change-translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
@@ -2358,7 +2357,7 @@ function webgl_pick_entity(args){
     const level = webgl_character_level();
     if(core_menu_open
       || level < -1
-      || (level !== -1 && webgl_properties['paused'])
+      || (level >= 0 && webgl_properties['paused'])
       || webgl_characters[webgl_character_id]['health-current'] <= 0){
         return;
     }
