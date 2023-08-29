@@ -998,6 +998,10 @@ function webgl_event(args){
           'value': event_modify['value'],
         });
     }
+
+    if(args['parent']['event-todo'] !== false){
+        globalThis[args['parent']['event-todo']](args['parent']['event-todo-args']);
+    }
 }
 
 // Required args: id
@@ -1240,6 +1244,8 @@ function webgl_init(args){
         'event-range': false,
         'event-target-id': false,
         'event-target-type': 'character',
+        'event-todo': false,
+        'event-todo-args': void 0,
         'gravity': false,
         'normals': [],
         'pick-color': [0, 0, 0,],
@@ -2386,7 +2392,7 @@ function webgl_pick_entity(args){
     }
 
     for(const entity in entity_entities){
-        if(entity_entities[entity]['event-modify'].length === 0){
+        if(entity_entities[entity]['event-range'] !== false){
             continue;
         }
 
