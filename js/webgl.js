@@ -2392,7 +2392,7 @@ function webgl_pick_entity(args){
     }
 
     for(const entity in entity_entities){
-        if(entity_entities[entity]['event-range'] !== false){
+        if(entity_entities[entity]['event-range'] === false){
             continue;
         }
 
