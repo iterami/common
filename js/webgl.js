@@ -2101,9 +2101,15 @@ function webgl_normals(args){
       'degrees': args['rotate-z'],
     });
 
-    const normal_x = Math.cos(radians_y) * Math.sin(radians_z);
-    const normal_y = Math.cos(radians_x) * Math.cos(radians_z);
-    const normal_z = Math.sin(radians_x) * Math.cos(radians_y);
+    const normal_x = core_round({
+      'number': Math.cos(radians_y) * Math.sin(radians_z),
+    });
+    const normal_y = core_round({
+      'number': Math.cos(radians_x) * Math.cos(radians_z),
+    });
+    const normal_z = core_round({
+      'number': Math.sin(radians_x) * Math.cos(radians_y),
+    });
 
     const normals = [];
     for(let i = 0; i < args['vertices-length']; i++){
