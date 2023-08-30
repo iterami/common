@@ -1000,7 +1000,14 @@ function webgl_event(args){
     }
 
     if(args['parent']['event-todo'] !== false){
-        globalThis[args['parent']['event-todo']](args['parent']['event-todo-args']);
+        if(core_type({
+            'var': args['parent']['event-todo'],
+          })){
+            globalThis[args['parent']['event-todo']](args['parent']['event-todo-args']);
+
+        }else{
+            globalThis[args['parent']['event-todo']] = args['parent']['event-todo-args'];
+        }
     }
 }
 
