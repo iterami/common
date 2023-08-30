@@ -2221,12 +2221,17 @@ function webgl_path_move(args){
       'y0': character['translate-z'],
       'y1': point['translate-z'],
     });
-    const angle_y = math_point_angle({
-      'x0': character['translate-x'],
-      'x1': point['translate-x'],
-      'y0': character['translate-y'],
-      'y1': point['translate-y'],
-    });
+    const angle_y = Math.asin(
+      Math.abs(character['translate-y'] - point['translate-y'])
+      / math_distance({
+        'x0': character['translate-x'],
+        'y0': character['translate-y'],
+        'z0': character['translate-z'],
+        'x1': point['translate-x'],
+        'y1': point['translate-y'],
+        'z1': point['translate-z'],
+      })
+    );
 
     const speed = character['speed'] * point['speed'] * path['speed'];
 
