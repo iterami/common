@@ -2214,6 +2214,14 @@ function webgl_path_move(args){
       },
       'var': path['points'][character['path-point']],
     });
+    const distance = math_distance({
+      'x0': character['translate-x'],
+      'y0': character['translate-y'],
+      'z0': character['translate-z'],
+      'x1': point['translate-x'],
+      'y1': point['translate-y'],
+      'z1': point['translate-z'],
+    });
 
     const angle_xz = math_point_angle({
       'x0': character['translate-x'],
@@ -2221,18 +2229,7 @@ function webgl_path_move(args){
       'y0': character['translate-z'],
       'y1': point['translate-z'],
     });
-    const angle_y = Math.asin(
-      Math.abs(character['translate-y'] - point['translate-y'])
-      / math_distance({
-        'x0': character['translate-x'],
-        'y0': character['translate-y'],
-        'z0': character['translate-z'],
-        'x1': point['translate-x'],
-        'y1': point['translate-y'],
-        'z1': point['translate-z'],
-      })
-    );
-
+    const angle_y = Math.asin(Math.abs(character['translate-y'] - point['translate-y']) / distance);
     const speed = character['speed'] * point['speed'] * path['speed'];
 
     character['change-translate-x'] = core_round({
@@ -2255,14 +2252,7 @@ function webgl_path_move(args){
         character['change-translate-z'] *= -1;
     }
 
-    if(math_distance({
-        'x0': character['translate-x'],
-        'y0': character['translate-y'],
-        'z0': character['translate-z'],
-        'x1': point['translate-x'],
-        'y1': point['translate-y'],
-        'z1': point['translate-z'],
-      }) < speed){
+    if(distance < speed){
         character['change-translate-x'] = 0;
         character['change-translate-y'] = 0;
         character['change-translate-z'] = 0;
