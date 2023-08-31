@@ -2224,32 +2224,6 @@ function webgl_path_move(args){
     });
     const speed = character['speed'] * point['speed'] * path['speed'];
 
-    const angle_xz = math_point_angle({
-      'x0': character['translate-x'],
-      'x1': point['translate-x'],
-      'y0': character['translate-z'],
-      'y1': point['translate-z'],
-    });
-    const angle_y = Math.asin(Math.abs(character['translate-y'] - point['translate-y']) / distance);
-    character['change-translate-x'] = core_round({
-      'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
-    });
-    character['change-translate-y'] = core_round({
-      'number': Math.sin(angle_y) * speed,
-    });
-    character['change-translate-z'] = core_round({
-      'number': Math.sin(angle_xz) * Math.cos(angle_y) * speed,
-    });
-    if(character['translate-x'] > point['translate-x']){
-        character['change-translate-x'] *= -1;
-    }
-    if(character['translate-y'] > point['translate-y']){
-        character['change-translate-y'] *= -1;
-    }
-    if(character['translate-z'] > point['translate-z']){
-        character['change-translate-z'] *= -1;
-    }
-
     if(distance < speed){
         character['change-translate-x'] = 0;
         character['change-translate-y'] = 0;
@@ -2308,6 +2282,34 @@ function webgl_path_move(args){
         }else{
             character['path-point'] -= 1;
         }
+
+        return;
+    }
+
+    const angle_xz = math_point_angle({
+      'x0': character['translate-x'],
+      'x1': point['translate-x'],
+      'y0': character['translate-z'],
+      'y1': point['translate-z'],
+    });
+    const angle_y = Math.asin(Math.abs(character['translate-y'] - point['translate-y']) / distance);
+    character['change-translate-x'] = core_round({
+      'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
+    });
+    character['change-translate-y'] = core_round({
+      'number': Math.sin(angle_y) * speed,
+    });
+    character['change-translate-z'] = core_round({
+      'number': Math.sin(angle_xz) * Math.cos(angle_y) * speed,
+    });
+    if(character['translate-x'] > point['translate-x']){
+        character['change-translate-x'] *= -1;
+    }
+    if(character['translate-y'] > point['translate-y']){
+        character['change-translate-y'] *= -1;
+    }
+    if(character['translate-z'] > point['translate-z']){
+        character['change-translate-z'] *= -1;
     }
 }
 
