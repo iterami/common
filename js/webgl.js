@@ -1561,7 +1561,8 @@ function webgl_logicloop(){
     const level = webgl_character_level();
 
     if((level === -1 || !webgl_properties['paused'])
-      && webgl_characters[webgl_character_id]['health-current'] > 0){
+      && webgl_characters[webgl_character_id]['health-current'] > 0
+      && webgl_characters[webgl_character_id]['path-id'].length === 0){
         let leftright = 0;
 
         if(core_keys[core_storage_data['move-←']]['state']){
@@ -1590,10 +1591,9 @@ function webgl_logicloop(){
             }
         }
 
-        if(webgl_characters[webgl_character_id]['path-id'].length === 0 &&
-          ((webgl_characters[webgl_character_id]['jump-allow']
-            && webgl_characters[webgl_character_id]['change-translate-' + webgl_properties['gravity-axis']] === 0)
-          || level === -1)){
+        if(level === -1
+          || (webgl_characters[webgl_character_id]['jump-allow']
+            && webgl_characters[webgl_character_id]['change-translate-' + webgl_properties['gravity-axis']] === 0)){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
@@ -2222,6 +2222,7 @@ function webgl_path_move(args){
       'y1': point['translate-y'],
       'z1': point['translate-z'],
     });
+    const speed = character['speed'] * point['speed'] * path['speed'];
 
     const angle_xz = math_point_angle({
       'x0': character['translate-x'],
@@ -2230,8 +2231,6 @@ function webgl_path_move(args){
       'y1': point['translate-z'],
     });
     const angle_y = Math.asin(Math.abs(character['translate-y'] - point['translate-y']) / distance);
-    const speed = character['speed'] * point['speed'] * path['speed'];
-
     character['change-translate-x'] = core_round({
       'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
     });
@@ -2241,7 +2240,6 @@ function webgl_path_move(args){
     character['change-translate-z'] = core_round({
       'number': Math.sin(angle_xz) * Math.cos(angle_y) * speed,
     });
-
     if(character['translate-x'] > point['translate-x']){
         character['change-translate-x'] *= -1;
     }
