@@ -3024,13 +3024,13 @@ function webgl_primitive_stars(args){
           'multiplier': Math.PI,
         });
         const sin_phi = Math.sin(phi);
-        const position = args['radius'] - core_random_number({
+        const radius = args['radius'] - core_random_number({
           'multiplier': args['range'],
         });
         star_points.push(
-          position * sin_phi * Math.cos(theta),
-          position * sin_phi * Math.sin(theta),
-          position * Math.cos(phi),
+          radius * sin_phi * Math.cos(theta),
+          radius * sin_phi * Math.sin(theta),
+          radius * Math.cos(phi),
         );
         star_colors.push(1, 1, 1, 1);
     }
