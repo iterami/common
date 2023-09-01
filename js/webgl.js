@@ -3002,6 +3002,7 @@ function webgl_primitive_stars(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
+        'color': [1, 1, 1, 1],
         'groups': [],
         'half': false,
         'prefix': entity_id_count,
@@ -3017,6 +3018,7 @@ function webgl_primitive_stars(args){
     const star_colors = [];
     const star_points = [];
     for(let i = 0; i < args['stars']; i++){
+        const color = args['color'] || webgl_vertexcolorarray();
         const theta = core_random_number({
           'multiplier': Math.PI * (args['half'] ? 1 : 2),
         });
@@ -3032,7 +3034,12 @@ function webgl_primitive_stars(args){
           radius * sin_phi * Math.sin(theta),
           radius * Math.cos(phi),
         );
-        star_colors.push(1, 1, 1, 1);
+        star_colors.push(
+          color[0],
+          color[1],
+          color[2],
+          color[3]
+        );
     }
     webgl_entity_create({
       'entities': [
