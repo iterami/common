@@ -2821,6 +2821,7 @@ function webgl_primitive_frustum(args){
         'character': webgl_character_id,
         'color-bottom': [],
         'color-top': [],
+        'groups': [],
         'length': 2,
         'middle': true,
         'points': 8,
@@ -2855,6 +2856,7 @@ function webgl_primitive_frustum(args){
       'attach-type': 'webgl_characters',
       'collision': false,
       'draw-mode': 'TRIANGLE_FAN',
+      'groups': args['groups'],
     };
 
     if(args['points'] === 1
@@ -2992,6 +2994,58 @@ function webgl_primitive_frustum(args){
           ],
         });
     }
+}
+
+// Required args:
+function webgl_primitive_stars(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'groups': [],
+        'prefix': entity_id_count,
+        'radius': 100,
+        'stars': 100,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
+    });
+
+    const star_colors = [];
+    const star_points = [];
+    for(let i = 0; i < args['stars']; i++){
+        const theta = core_random_number({
+          'multiplier': Math.PI * 2,
+        });
+        const phi = core_random_number({
+          'multiplier': Math.PI,
+        });
+        const sin_phi = Math.sin(phi);
+        star_points.push(
+          args['radius'] * sin_phi * Math.cos(theta),
+          args['radius'] * sin_phi * Math.sin(theta),
+          args['radius'] * Math.cos(phi),
+        );
+        star_colors.push(1, 1, 1, 1);
+    }
+    webgl_entity_create({
+      'entities': [
+        {
+          'attach-offset-x': args['translate-x'],
+          'attach-offset-y': args['translate-y'],
+          'attach-offset-z': args['translate-z'],
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'collision': false,
+          'draw-mode': 'POINTS',
+          'groups': args['groups'],
+          'id': args['prefix'],
+          'vertex-colors': star_colors,
+          'vertices': star_points,
+        },
+      ],
+    });
 }
 
 // Required args: shaders
