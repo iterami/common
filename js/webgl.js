@@ -3005,7 +3005,8 @@ function webgl_primitive_stars(args){
         'groups': [],
         'half': false,
         'prefix': entity_id_count,
-        'radius': 200,
+        'radius': 250,
+        'range': 100,
         'stars': 100,
         'translate-x': 0,
         'translate-y': 0,
@@ -3023,10 +3024,13 @@ function webgl_primitive_stars(args){
           'multiplier': Math.PI,
         });
         const sin_phi = Math.sin(phi);
+        const position = args['radius'] - core_random_number({
+          'multiplier': args['range'],
+        });
         star_points.push(
-          args['radius'] * sin_phi * Math.cos(theta),
-          args['radius'] * sin_phi * Math.sin(theta),
-          args['radius'] * Math.cos(phi),
+          position * sin_phi * Math.cos(theta),
+          position * sin_phi * Math.sin(theta),
+          position * Math.cos(phi),
         );
         star_colors.push(1, 1, 1, 1);
     }
