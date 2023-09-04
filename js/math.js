@@ -314,21 +314,12 @@ function math_move_2d(args){
       },
     });
 
-    const angle = math_point_angle({
-      'x0': args['x0'],
-      'x1': args['x1'],
-      'y0': args['y0'],
-      'y1': args['y1'],
-    });
-
+    const angle = Math.atan2(
+      args['y1'] - args['y0'],
+      args['x1'] - args['x0']
+    );
     let dx = Math.cos(angle) * args['speed'];
     let dy = Math.sin(angle) * args['speed'];
-    if(args['x0'] > args['x1']){
-        dx = -dx;
-    }
-    if(args['y0'] > args['y1']){
-        dy = -dy;
-    }
     return {
       'angle': angle,
       'x': dx,
@@ -400,11 +391,6 @@ function math_normalize(args){
       'y': args['y'] / length,
       'z': args['z'] / length,
     };
-}
-
-// Required args: x0, x1, y0, y1
-function math_point_angle(args){
-    return Math.atan(Math.abs(args['y0'] - args['y1']) / Math.abs(args['x0'] - args['x1']));
 }
 
 function math_quaternion_from_euler(args){
