@@ -154,44 +154,6 @@ function webgl_camera_zoom(event){
     }
 }
 
-function webgl_character_home(){
-    if(webgl_character_homebase['properties'] === void 0){
-        return;
-    }
-
-    webgl_init(webgl_character_homebase['properties']);
-    for(const character in webgl_character_homebase['characters']){
-        webgl_character_init(webgl_character_homebase['characters'][character]);
-    }
-    webgl_entity_create({
-      'entities': webgl_character_homebase['world'],
-    });
-    webgl_character_spawn();
-    webgl_entity_create({
-      'entities': webgl_character_homebase['entities'],
-    });
-}
-
-function webgl_character_home_entityupdate(){
-    webgl_character_homebase['entities'] = [];
-    entity_group_modify({
-      'groups': [
-        'webgl',
-      ],
-      'todo': function(entity){
-          if(entity_entities[entity]['attach-to'] === webgl_character_id
-            && entity_groups['skybox'][entity] !== true){
-              const properties = {};
-              Object.assign(
-                properties,
-                entity_entities[entity]
-              );
-              webgl_character_homebase['entities'].push(properties);
-          }
-      },
-    });
-}
-
 function webgl_character_init(args){
     args = core_args({
       'args': args,
@@ -1431,6 +1393,8 @@ function webgl_level_init(args){
     }
 
     if(args['character'] === -1){
+        webgl_character_base_entities = [];
+        webgl_character_base_properties = {};
         webgl_character_init({
           'camera-zoom': 0,
           'entities': [],
@@ -1438,47 +1402,14 @@ function webgl_level_init(args){
           'level': -1,
           'speed': 1,
         });
-        webgl_character_homebase = {};
-
-    }else if(webgl_characters[webgl_character_id] === void 0){
-        webgl_character_init({
-          'level': args['character'],
-        });
 
     }else{
-        webgl_character_init(webgl_characters[webgl_character_id]);
+        webgl_character_init(webgl_character_base_properties);
+        webgl_entity_create({
+          'entities': webgl_character_base_entities,
+        });
     }
 
-    if(args['character'] === 1){
-        webgl_character_homebase['characters'] = {};
-        webgl_character_homebase['properties'] = webgl_properties;
-        webgl_character_homebase['world'] = [];
-
-        Object.assign(
-          webgl_character_homebase['characters'],
-          webgl_characters
-        );
-
-        for(const character in args['json']['characters']){
-            if(character === 0){
-                continue;
-            }
-
-            const entities = args['json']['characters'][character]['entities'];
-            for(const entity in entities){
-                const properties = {};
-                Object.assign(
-                  properties,
-                  entities[entity]
-                );
-                webgl_character_homebase['world'].push(properties);
-            }
-        }
-    }
-
-    webgl_entity_create({
-      'entities': webgl_character_homebase['entities'],
-    });
     for(const prefab in args['json']['prefabs']){
         core_call({
           'args': args['json']['prefabs'][prefab]['properties'],
@@ -1486,7 +1417,6 @@ function webgl_level_init(args){
         });
     }
 
-    webgl_character_home_entityupdate();
     webgl_character_spawn();
     core_call({
       'todo': 'repo_level_load',
@@ -1535,21 +1465,33 @@ function webgl_level_load(args){
 }
 
 function webgl_level_unload(){
-    if(webgl_character_homebase['properties'] !== void 0){
-        Object.assign(
-          webgl_character_homebase['characters'][webgl_character_id],
-          webgl_characters[webgl_character_id]
-        );
-    }
+    Object.assign(
+      webgl_character_base_properties,
+      webgl_characters[webgl_character_id]
+    );
+    webgl_character_base_entities = [];
+    entity_group_modify({
+      'groups': [
+        'webgl',
+      ],
+      'todo': function(entity){
+          if(entity_entities[entity]['attach-to'] === webgl_character_id
+            && entity_groups['skybox'][entity] !== true){
+              const properties = {};
+              Object.assign(
+                properties,
+                entity_entities[entity]
+              );
+              webgl_character_base_entities.push(properties);
+          }
+      },
+    });
 
-    webgl_character_home_entityupdate();
     for(const character in webgl_characters){
-        if(character !== webgl_character_id){
-            Reflect.deleteProperty(
-              webgl_characters,
-              character
-            );
-        }
+        Reflect.deleteProperty(
+          webgl_characters,
+          character
+        );
     }
     webgl_character_count = 0;
     entity_remove_all();
@@ -3511,8 +3453,9 @@ function webgl_vertexcolorarray(args){
 
 globalThis.webgl_buffer = 0;
 globalThis.webgl_canvas = 0;
+globalThis.webgl_character_base_entities = [];
+globalThis.webgl_character_base_properties = {};
 globalThis.webgl_character_count = 0;
-globalThis.webgl_character_homebase = {};
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_default_texture = 'default.png';
