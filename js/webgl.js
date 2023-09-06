@@ -16,36 +16,8 @@ function webgl_billboard(args){
     }
 }
 
-// Required args: colorData, normalData, pickData, textureData, vertexData
-function webgl_buffer_set(args){
-    return {
-      'color': webgl_buffer_set_type({
-        'data': args['colorData'],
-      }),
-      'normal': webgl_buffer_set_type({
-        'data': args['normalData'],
-      }),
-      'pick': webgl_buffer_set_type({
-        'data': args['pickData'],
-      }),
-      'texture': webgl_buffer_set_type({
-        'data': args['textureData'],
-      }),
-      'vertex': webgl_buffer_set_type({
-        'data': args['vertexData'],
-      }),
-    };
-}
-
 // Required args: data
-function webgl_buffer_set_type(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'type': 'Float32Array',
-      },
-    });
-
+function webgl_buffer_set(args){
     const buffer = webgl_buffer.createBuffer();
     webgl_buffer.bindBuffer(
       webgl_buffer.ARRAY_BUFFER,
@@ -53,11 +25,31 @@ function webgl_buffer_set_type(args){
     );
     webgl_buffer.bufferData(
       webgl_buffer.ARRAY_BUFFER,
-      new globalThis[args['type']](args['data']),
+      new Float32Array(args['data']),
       webgl_buffer.STATIC_DRAW
     );
-
     return buffer;
+}
+
+// Required args: colorData, normalData, pickData, textureData, vertexData
+function webgl_buffer_set_all(args){
+    return {
+      'color': webgl_buffer_set({
+        'data': args['colorData'],
+      }),
+      'normal': webgl_buffer_set({
+        'data': args['normalData'],
+      }),
+      'pick': webgl_buffer_set({
+        'data': args['pickData'],
+      }),
+      'texture': webgl_buffer_set({
+        'data': args['textureData'],
+      }),
+      'vertex': webgl_buffer_set({
+        'data': args['vertexData'],
+      }),
+    };
 }
 
 function webgl_camera_handle(){
@@ -911,7 +903,7 @@ function webgl_entity_todo(entity){
         );
     }
 
-    entity_entities[entity]['buffer'] = webgl_buffer_set({
+    entity_entities[entity]['buffer'] = webgl_buffer_set_all({
       'colorData': entity_entities[entity]['vertex-colors'] || webgl_vertexcolorarray(),
       'normalData': entity_entities[entity]['normals'],
       'pickData': pickData,
