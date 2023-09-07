@@ -16,7 +16,7 @@ function webgl_billboard(args){
     }
 }
 
-// Required args: data
+// Required args: attribute, data, size
 function webgl_buffer_set(args){
     const buffer = webgl_buffer.createBuffer();
     webgl_buffer.bindBuffer(
@@ -28,28 +28,16 @@ function webgl_buffer_set(args){
       new Float32Array(args['data']),
       webgl_buffer.STATIC_DRAW
     );
+    webgl_buffer.vertexAttribPointer(
+      webgl_properties['attributes'][args['attribute']],
+      args['size'],
+      webgl_buffer.FLOAT,
+      false,
+      0,
+      0
+    );
+    webgl_buffer.enableVertexAttribArray(webgl_properties['attributes'][args['attribute']]);
     return buffer;
-}
-
-// Required args: colorData, normalData, pickData, textureData, vertexData
-function webgl_buffer_set_all(args){
-    return {
-      'color': webgl_buffer_set({
-        'data': args['colorData'],
-      }),
-      'normal': webgl_buffer_set({
-        'data': args['normalData'],
-      }),
-      'pick': webgl_buffer_set({
-        'data': args['pickData'],
-      }),
-      'texture': webgl_buffer_set({
-        'data': args['textureData'],
-      }),
-      'vertex': webgl_buffer_set({
-        'data': args['vertexData'],
-      }),
-    };
 }
 
 function webgl_camera_handle(){
@@ -654,77 +642,12 @@ function webgl_draw_entity(entity){
         return;
     }
 
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      entity_entities[entity]['buffer']['normal']
-    );
-    webgl_buffer.vertexAttribPointer(
-      webgl_properties['attributes']['vec_vertexNormal'],
-      3,
-      webgl_buffer.FLOAT,
-      false,
-      0,
-      0
-    );
+    webgl_buffer.bindVertexArray(entity_entities[entity]['vao']);
 
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      entity_entities[entity]['buffer']['color']
-    );
-    webgl_buffer.vertexAttribPointer(
-      webgl_properties['attributes']['vec_vertexColor'],
-      4,
-      webgl_buffer.FLOAT,
-      false,
-      0,
-      0
-    );
-
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      entity_entities[entity]['buffer']['pick']
-    );
-    webgl_buffer.vertexAttribPointer(
-      webgl_properties['attributes']['vec_pickColor'],
-      3,
-      webgl_buffer.FLOAT,
-      false,
-      0,
-      0
-    );
-
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      entity_entities[entity]['buffer']['vertex']
-    );
-    webgl_buffer.vertexAttribPointer(
-      webgl_properties['attributes']['vec_vertexPosition'],
-      3,
-      webgl_buffer.FLOAT,
-      false,
-      0,
-      0
-    );
-
-    webgl_buffer.bindBuffer(
-      webgl_buffer.ARRAY_BUFFER,
-      entity_entities[entity]['buffer']['texture']
-    );
-    webgl_buffer.vertexAttribPointer(
-      webgl_properties['attributes']['vec_texturePosition'],
-      2,
-      webgl_buffer.FLOAT,
-      false,
-      0,
-      0
-    );
-
-    webgl_buffer.activeTexture(webgl_buffer.TEXTURE0);
     webgl_buffer.bindTexture(
       webgl_buffer.TEXTURE_2D,
       entity_entities[entity]['texture-gl']
     );
-
     webgl_buffer.uniform1f(
       webgl_properties['shader']['alpha'],
       entity_entities[entity]['alpha']
@@ -903,18 +826,40 @@ function webgl_entity_todo(entity){
         );
     }
 
-    entity_entities[entity]['buffer'] = webgl_buffer_set_all({
-      'colorData': entity_entities[entity]['vertex-colors'] || webgl_vertexcolorarray(),
-      'normalData': entity_entities[entity]['normals'],
-      'pickData': pickData,
-      'textureData': textureData,
-      'vertexData': entity_entities[entity]['vertices'],
-    });
+    const vertexArray = webgl_buffer.createVertexArray();
+    webgl_buffer.bindVertexArray(vertexArray);
 
+    webgl_buffer_set({
+      'attribute': 'vec_vertexColor',
+      'data': entity_entities[entity]['vertex-colors'] || webgl_vertexcolorarray(),
+      'size': 4,
+    });
+    webgl_buffer_set({
+      'attribute': 'vec_vertexNormal',
+      'data': entity_entities[entity]['normals'],
+      'size': 3,
+    });
+    webgl_buffer_set({
+      'attribute': 'vec_pickColor',
+      'data': pickData,
+      'size': 3,
+    });
+    webgl_buffer_set({
+      'attribute': 'vec_texturePosition',
+      'data': textureData,
+      'size': 2,
+    });
+    webgl_buffer_set({
+      'attribute': 'vec_vertexPosition',
+      'data': entity_entities[entity]['vertices'],
+      'size': 3,
+    });
     webgl_texture_set({
       'entity': entity,
       'texture': entity_entities[entity]['texture-id'],
     });
+
+    entity_entities[entity]['vao'] = vertexArray;
 }
 
 // Required args: parent, target
@@ -3327,11 +3272,6 @@ function webgl_texture_set(args){
     );
 
     webgl_buffer.generateMipmap(webgl_buffer.TEXTURE_2D);
-
-    webgl_buffer.bindTexture(
-      webgl_buffer.TEXTURE_2D,
-      void 0
-    );
 
     if(!core_images[args['texture']]){
         core_image({
