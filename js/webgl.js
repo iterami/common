@@ -291,7 +291,6 @@ function webgl_character_random(args){
       'id': args['id'],
       'level': 0,
     });
-
     core_call({
       'args': {
         'all': {
@@ -3264,13 +3263,11 @@ function webgl_texture_set(args){
       webgl_buffer.UNSIGNED_BYTE,
       texture
     );
-
     webgl_buffer.texParameterf(
       webgl_buffer.TEXTURE_2D,
       webgl_extensions['anisotropic'].TEXTURE_MAX_ANISOTROPY_EXT,
       core_storage_data['anisotropic']
     );
-
     webgl_buffer.generateMipmap(webgl_buffer.TEXTURE_2D);
 
     if(!core_images[args['texture']]){
