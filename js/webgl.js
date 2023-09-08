@@ -1253,9 +1253,9 @@ function webgl_level_export(){
           entity_entities[entity]
         );
 
-        delete entity_json['buffer'];
         delete entity_json['normals'];
         delete entity_json['texture-gl'];
+        delete entity_json['vao'];
         delete entity_json['vertices-length'];
 
         json['characters'][entity_json['attach-to']]['entities'].push(entity_json);
