@@ -2955,8 +2955,6 @@ function webgl_resize(){
     core_elements['buffer'].width = webgl_properties['canvas']['width'];
     core_elements['canvas'].width = webgl_properties['canvas']['width'];
 
-    webgl_buffer.viewportHeight = webgl_properties['canvas']['height'];
-    webgl_buffer.viewportWidth = webgl_properties['canvas']['width'];
     webgl_buffer.viewport(
       0,
       0,
