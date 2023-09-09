@@ -628,8 +628,8 @@ function webgl_draw(){
       && character['camera-zoom'] === 0){
         webgl_canvas.fillStyle = character['reticle'];
         webgl_canvas.fillRect(
-          webgl_properties['canvas']['width-half'] - 1,
-          webgl_properties['canvas']['height-half'] - 1,
+          webgl_buffer.drawingBufferWidth / 2 - 1,
+          webgl_buffer.drawingBufferHeight / 2 - 1,
           2,
           2
         );
@@ -1051,13 +1051,11 @@ function webgl_init(args){
       'canvas': {
         'fillStyle': '#fff',
         'font': '200% monospace',
-        'height-half': 0,
         'lineJoin': 'miter',
         'lineWidth': 1,
         'strokeStyle': '#fff',
         'textAlign': 'start',
         'textBaseline': 'alphabetic',
-        'width-half': 0,
       },
       'clearcolor-blue': args['clearcolor-blue'],
       'clearcolor-green': args['clearcolor-green'],
@@ -2944,12 +2942,10 @@ function webgl_program_create(args){
 
 function webgl_resize(){
     const height = globalThis.innerHeight;
-    webgl_properties['canvas']['height-half'] = height / 2;
     core_elements['buffer'].height = height;
     core_elements['canvas'].height = height;
 
     const width = globalThis.innerWidth;
-    webgl_properties['canvas']['width-half'] = width / 2;
     core_elements['buffer'].width = width;
     core_elements['canvas'].width = width;
 
