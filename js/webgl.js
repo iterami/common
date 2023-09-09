@@ -2213,7 +2213,7 @@ function webgl_pick_color(args){
     const pixelarray = new Uint8Array(4);
     webgl_buffer.readPixels(
       args['x'],
-      globalThis.innerHeight - args['y'],
+      webgl_buffer.drawingBufferHeight - args['y'],
       1,
       1,
       webgl_buffer.RGBA,
@@ -2981,7 +2981,7 @@ function webgl_scissor(args){
     webgl_buffer.enable(webgl_buffer.SCISSOR_TEST);
     webgl_buffer.scissor(
       args['x'],
-      globalThis.innerHeight - args['y'],
+      webgl_buffer.drawingBufferHeight - args['y'],
       args['width'],
       args['height']
     );
