@@ -1051,14 +1051,12 @@ function webgl_init(args){
       'canvas': {
         'fillStyle': '#fff',
         'font': '200% monospace',
-        'height': 0,
         'height-half': 0,
         'lineJoin': 'miter',
         'lineWidth': 1,
         'strokeStyle': '#fff',
         'textAlign': 'start',
         'textBaseline': 'alphabetic',
-        'width': 0,
         'width-half': 0,
       },
       'clearcolor-blue': args['clearcolor-blue'],
@@ -2205,7 +2203,7 @@ function webgl_path_use(args){
 }
 
 function webgl_perspective(){
-    math_matrices['perspective'][0] = webgl_properties['canvas']['height'] / webgl_properties['canvas']['width'];
+    math_matrices['perspective'][0] = webgl_buffer.drawingBufferHeight / webgl_buffer.drawingBufferWidth;
     math_matrices['perspective'][5] = 1;
     math_matrices['perspective'][10] = -1;
     math_matrices['perspective'][11] = -1;
@@ -2945,25 +2943,25 @@ function webgl_program_create(args){
 }
 
 function webgl_resize(){
-    webgl_properties['canvas']['height'] = globalThis.innerHeight;
-    webgl_properties['canvas']['height-half'] = webgl_properties['canvas']['height'] / 2;
-    core_elements['buffer'].height = webgl_properties['canvas']['height'];
-    core_elements['canvas'].height = webgl_properties['canvas']['height'];
+    const height = globalThis.innerHeight;
+    webgl_properties['canvas']['height-half'] = height / 2;
+    core_elements['buffer'].height = height;
+    core_elements['canvas'].height = height;
 
-    webgl_properties['canvas']['width'] = globalThis.innerWidth;
-    webgl_properties['canvas']['width-half'] = webgl_properties['canvas']['width'] / 2;
-    core_elements['buffer'].width = webgl_properties['canvas']['width'];
-    core_elements['canvas'].width = webgl_properties['canvas']['width'];
+    const width = globalThis.innerWidth;
+    webgl_properties['canvas']['width-half'] = width / 2;
+    core_elements['buffer'].width = width;
+    core_elements['canvas'].width = width;
 
     webgl_buffer.viewport(
       0,
       0,
-      webgl_properties['canvas']['width'],
-      webgl_properties['canvas']['height']
+      width,
+      height
     );
 
     Object.assign(
-      webgl_buffer,
+      webgl_canvas,
       webgl_properties['canvas']
     );
 
