@@ -291,17 +291,14 @@ function webgl_character_random(args){
       'id': args['id'],
       'level': 0,
     });
-    core_call({
-      'args': {
-        'all': {
-          'collision': false,
-        },
-        'character': args['id'],
-        'size-x': horizontal * 2,
-        'size-y': vertical * 2,
-        'size-z': horizontal * 2,
+    webgl_primitive_cuboid({
+      'all': {
+        'collision': false,
       },
-      'todo': 'webgl_primitive_cuboid',
+      'character': args['id'],
+      'size-x': horizontal * 2,
+      'size-y': vertical * 2,
+      'size-z': horizontal * 2,
     });
     webgl_character_spawn();
 }
