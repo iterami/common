@@ -268,9 +268,6 @@ function webgl_character_origin(args){
         return;
     }
 
-    webgl_entity_move_to({
-      'entity': webgl_characters[args['character']],
-    });
     webgl_characters[args['character']]['camera-rotate-x'] = 0;
     webgl_characters[args['character']]['camera-rotate-y'] = 0;
     webgl_characters[args['character']]['camera-rotate-z'] = 0;
@@ -283,6 +280,10 @@ function webgl_character_origin(args){
     webgl_characters[args['character']]['rotate-x'] = 0;
     webgl_characters[args['character']]['rotate-y'] = 0;
     webgl_characters[args['character']]['rotate-z'] = 0;
+
+    webgl_entity_move_to({
+      'entity': webgl_characters[args['character']],
+    });
 }
 
 // Required args: id
