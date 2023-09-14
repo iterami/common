@@ -677,9 +677,7 @@ function webgl_draw_entity(entity){
 }
 
 function webgl_drawloop(){
-    if(!core_menu_open){
-        webgl_draw();
-    }
+    webgl_draw();
     core_interval_animationFrame({
       'id': 'webgl-animationFrame',
     });
