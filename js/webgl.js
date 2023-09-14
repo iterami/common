@@ -3138,7 +3138,7 @@ function webgl_stat_modify(args){
           'mouse': false,
           'set': args['set'],
         };
-        rotate_args[args['stat'].slice(-1)] = args['value'];
+        rotate_args[args['stat'].at(-1)] = args['value'];
         webgl_camera_rotate(rotate_args);
         return;
 
