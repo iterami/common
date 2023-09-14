@@ -1655,9 +1655,8 @@ function webgl_logicloop(){
         }
         const axes = 'xyz';
         for(const axis in axes){
-            if(webgl_characters[character]['change-translate-' + axes[axis]] !== 0){
-                webgl_characters[character]['translate-' + axes[axis]] = webgl_characters[character]['translate-' + axes[axis]] + webgl_characters[character]['change-translate-' + axes[axis]];
-            }
+            const translate_axis = 'translate-' + axes[axis];
+            webgl_characters[character][translate_axis] += webgl_characters[character]['change-' + translate_axis];
         }
 
         webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
