@@ -1683,11 +1683,6 @@ function webgl_logicloop(){
         webgl_clamp_rotation({
           'entity': webgl_characters[character],
         });
-        webgl_characters[character]['normals'] = webgl_normals({
-          'rotate-x': webgl_characters[character]['rotate-x'],
-          'rotate-y': webgl_characters[character]['rotate-y'],
-          'rotate-z': webgl_characters[character]['rotate-z'],
-        });
     }
 
     if(level === -1){
@@ -1734,10 +1729,6 @@ function webgl_logicloop(){
 }
 
 function webgl_logicloop_handle_entity(entity){
-    if(entity_entities[entity]['logic']){
-        entity_entities[entity]['logic']();
-    }
-
     if(entity_entities[entity]['event-range'] > 0){
         const event_position = webgl_get_translation({
           'entity': entity_entities[entity],
@@ -1783,45 +1774,43 @@ function webgl_logicloop_handle_entity(entity){
                 }
             }
 
-        }else{
-            if(entity_entities[entity]['event-target-id'] !== false){
-                const target_position = webgl_get_translation({
-                  'entity': entity_entities[entity_entities[entity]['event-target-id']],
+        }else if(entity_entities[entity]['event-target-id'] !== false){
+            const target_position = webgl_get_translation({
+              'entity': entity_entities[entity_entities[entity]['event-target-id']],
+            });
+
+            if(math_distance({
+                'x0': target_position['x'],
+                'y0': target_position['y'],
+                'z0': target_position['z'],
+                'x1': event_position['x'],
+                'y1': event_position['y'],
+                'z1': event_position['z'],
+              }) < entity_entities[entity]['event-range']){
+                webgl_event({
+                  'parent': entity_entities[entity],
+                  'target': entity_entities[entity_entities[entity]['event-target-id']],
                 });
+            }
+
+        }else{
+            for(const target in entity_entities){
+                if(target === entity){
+                    continue;
+                }
 
                 if(math_distance({
-                    'x0': target_position['x'],
-                    'y0': target_position['y'],
-                    'z0': target_position['z'],
+                    'x0': entity_entities[target]['translate-x'],
+                    'y0': entity_entities[target]['translate-y'],
+                    'z0': entity_entities[target]['translate-z'],
                     'x1': event_position['x'],
                     'y1': event_position['y'],
                     'z1': event_position['z'],
                   }) < entity_entities[entity]['event-range']){
                     webgl_event({
                       'parent': entity_entities[entity],
-                      'target': entity_entities[entity_entities[entity]['event-target-id']],
+                      'target': entity_entities[target],
                     });
-                }
-
-            }else{
-                for(const target in entity_entities){
-                    if(target === entity){
-                        continue;
-                    }
-
-                    if(math_distance({
-                        'x0': entity_entities[target]['translate-x'],
-                        'y0': entity_entities[target]['translate-y'],
-                        'z0': entity_entities[target]['translate-z'],
-                        'x1': event_position['x'],
-                        'y1': event_position['y'],
-                        'z1': event_position['z'],
-                      }) < entity_entities[entity]['event-range']){
-                        webgl_event({
-                          'parent': entity_entities[entity],
-                          'target': entity_entities[target],
-                        });
-                    }
                 }
             }
         }
@@ -1907,12 +1896,6 @@ function webgl_logicloop_handle_entity(entity){
 
     webgl_clamp_rotation({
       'entity': entity_entities[entity],
-    });
-    entity_entities[entity]['normals'] = webgl_normals({
-      'rotate-x': entity_entities[entity]['rotate-x'],
-      'rotate-y': entity_entities[entity]['rotate-y'],
-      'rotate-z': entity_entities[entity]['rotate-z'],
-      'vertices-length': entity_entities[entity]['vertices-length'],
     });
 
     math_matrix_clone({
