@@ -41,9 +41,7 @@ function canvas_draw(){
 }
 
 function canvas_drawloop(){
-    if(!core_menu_open){
-        canvas_draw();
-    }
+    canvas_draw();
     core_interval_animationFrame({
       'id': 'canvas-animationFrame',
     });
