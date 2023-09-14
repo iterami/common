@@ -1815,15 +1815,6 @@ function webgl_logicloop_handle_entity(entity){
     }
 
     const axes = 'xyz';
-    for(const axis in axes){
-        if(entity_entities[entity]['change-rotate-' + axes[axis]] !== 0){
-            entity_entities[entity]['rotate-' + axes[axis]] = entity_entities[entity]['rotate-' + axes[axis]] + entity_entities[entity]['change-rotate-' + axes[axis]];
-        }
-        if(entity_entities[entity]['change-translate-' + axes[axis]] !== 0){
-            entity_entities[entity]['translate-' + axes[axis]] = entity_entities[entity]['translate-' + axes[axis]] + entity_entities[entity]['change-translate-' + axes[axis]];
-        }
-    }
-
     if(entity_entities[entity]['attach-to'] !== false){
         const target = globalThis[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
 
@@ -1845,11 +1836,18 @@ function webgl_logicloop_handle_entity(entity){
             entity_entities[entity]['attach-to'] = false;
         }
 
-    }else if(entity_entities[entity]['gravity']){
-        entity_entities[entity]['change-translate-' + webgl_properties['gravity-axis']] = Math.max(
-          entity_entities[entity]['change-translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
-          webgl_properties['gravity-max']
-        );
+    }else{
+        if(entity_entities[entity]['gravity']){
+            entity_entities[entity]['change-translate-' + webgl_properties['gravity-axis']] = Math.max(
+              entity_entities[entity]['change-translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+              webgl_properties['gravity-max']
+            );
+        }
+
+        for(const axis in axes){
+            const translate_axis = 'translate-' + axes[axis];
+            entity_entities[entity][translate_axis] += entity_entities[entity]['change-' + translate_axis];
+        }
     }
 
     if(entity_entities[entity]['billboard'] !== false){
@@ -1857,6 +1855,12 @@ function webgl_logicloop_handle_entity(entity){
           'axes': entity_entities[entity]['billboard'],
           'entity': entity,
         });
+
+    }else{
+        for(const axis in axes){
+            const rotate_axis = 'rotate-' + axes[axis];
+            entity_entities[entity][rotate_axis] += entity_entities[entity]['change-' + rotate_axis];
+        }
     }
 
     if(entity_entities[entity]['collides']){
