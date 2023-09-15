@@ -1670,11 +1670,11 @@ function webgl_logicloop(){
             const radians_y = math_degrees_to_radians({
               'degrees': webgl_characters[character]['camera-rotate-y'],
             });
-            const cos = Math.cos(radians_x);
+            const cos_x = Math.cos(radians_x);
 
-            webgl_characters[character]['camera-x'] += Math.sin(-radians_y) * webgl_characters[character]['camera-zoom'] * cos;
+            webgl_characters[character]['camera-x'] += Math.sin(-radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
             webgl_characters[character]['camera-y'] += Math.sin(radians_x) * webgl_characters[character]['camera-zoom'];
-            webgl_characters[character]['camera-z'] += Math.cos(radians_y) * webgl_characters[character]['camera-zoom'] * cos;
+            webgl_characters[character]['camera-z'] += Math.cos(radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
         }
 
         webgl_clamp_rotation({
@@ -1974,15 +1974,16 @@ function webgl_normals(args){
     const radians_z = -math_degrees_to_radians({
       'degrees': args['rotate-z'],
     });
+    const cos_y = Math.cos(radians_y);
 
     const normal_x = core_round({
-      'number': Math.cos(radians_y) * Math.sin(radians_z),
+      'number': cos_y * Math.sin(radians_z),
     });
     const normal_y = core_round({
       'number': Math.cos(radians_x) * Math.cos(radians_z),
     });
     const normal_z = core_round({
-      'number': Math.sin(radians_x) * Math.cos(radians_y),
+      'number': Math.sin(radians_x) * cos_y,
     });
 
     const normals = [];
@@ -2158,14 +2159,15 @@ function webgl_path_move(args){
       point['translate-x'] - character['translate-x']
     );
     const angle_y = Math.asin(Math.abs(character['translate-y'] - point['translate-y']) / distance);
+    const cos_y = Math.cos(angle_y);
     character['change-translate-x'] = core_round({
-      'number': Math.cos(angle_xz) * Math.cos(angle_y) * speed,
+      'number': Math.cos(angle_xz) * cos_y * speed,
     });
     character['change-translate-y'] = core_round({
       'number': Math.sin(angle_y) * speed,
     });
     character['change-translate-z'] = core_round({
-      'number': Math.sin(angle_xz) * Math.cos(angle_y) * speed,
+      'number': Math.sin(angle_xz) * cos_y * speed,
     });
     if(character['translate-y'] > point['translate-y']){
         character['change-translate-y'] *= -1;
@@ -2625,14 +2627,18 @@ function webgl_primitive_ellipsoid(args){
 
         for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
             const rotation = latitude * latitude_angles;
+            const cos_bottom = Math.cos(longitude_bottom);
+            const cos_rotation = Math.cos(rotation);
+            const cos_top = Math.cos(longitude_top);
+            const sin_rotation = Math.sin(rotation);
 
-            const xbottom = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_bottom);
+            const xbottom = args['radius-x'] * sin_rotation * cos_bottom;
             const ybottom = args['radius-y'] * Math.sin(longitude_bottom);
-            const zbottom = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_bottom);
+            const zbottom = args['radius-z'] * cos_rotation * cos_bottom;
 
-            const xtop = args['radius-x'] * Math.sin(rotation) * Math.cos(longitude_top);
+            const xtop = args['radius-x'] * sin_rotation * cos_top;
             const ytop = args['radius-y'] * Math.sin(longitude_top);
-            const ztop = args['radius-z'] * Math.cos(rotation) * Math.cos(longitude_top);
+            const ztop = args['radius-z'] * cos_rotation * cos_top;
 
             if(pole === 1){
                 properties['vertex-colors'].push(
@@ -2749,15 +2755,17 @@ function webgl_primitive_frustum(args){
         ];
         for(let i = 0; i <= args['points']; i++){
             const point_rotation = -i * rotation;
+            const cos_rotation = Math.cos(point_rotation);
+            const sin_rotation = Math.sin(point_rotation);
 
             if(args['size-bottom'] === 0){
                 properties['vertex-colors'].push(
                   args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3]
                 );
                 properties['vertices'].push(
-                  args['size-top'] * Math.sin(point_rotation),
+                  args['size-top'] * sin_rotation,
                   args['length'],
-                  args['size-top'] * Math.cos(point_rotation)
+                  args['size-top'] * cos_rotation
                 );
 
             }else{
@@ -2765,9 +2773,9 @@ function webgl_primitive_frustum(args){
                   args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3]
                 );
                 properties['vertices'].push(
-                  args['size-bottom'] * Math.sin(point_rotation),
+                  args['size-bottom'] * sin_rotation,
                   0,
-                  args['size-bottom'] * Math.cos(point_rotation)
+                  args['size-bottom'] * cos_rotation
                 );
             }
         }
@@ -2788,15 +2796,17 @@ function webgl_primitive_frustum(args){
         ];
         for(let i = 0; i <= args['points']; i++){
             const point_rotation = i * rotation;
+            const cos_rotation = Math.cos(point_rotation);
+            const sin_rotation = Math.sin(point_rotation);
 
             if(args['size-top'] === 0){
                 properties['vertex-colors'].push(
                   args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3]
                 );
                 properties['vertices'].push(
-                  args['size-bottom'] * Math.sin(point_rotation),
+                  args['size-bottom'] * sin_rotation,
                   0,
-                  args['size-bottom'] * Math.cos(point_rotation)
+                  args['size-bottom'] * cos_rotation
                 );
 
             }else{
@@ -2804,9 +2814,9 @@ function webgl_primitive_frustum(args){
                   args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3]
                 );
                 properties['vertices'].push(
-                  args['size-top'] * Math.sin(point_rotation),
+                  args['size-top'] * sin_rotation,
                   args['length'],
-                  args['size-top'] * Math.cos(point_rotation)
+                  args['size-top'] * cos_rotation
                 );
             }
         }
