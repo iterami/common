@@ -1903,14 +1903,6 @@ function webgl_logicloop_handle_entity(entity){
       'id': 'camera',
       'to': entity,
     });
-    math_matrix_translate({
-      'dimensions': [
-        -entity_entities[entity]['translate-x'],
-        -entity_entities[entity]['translate-y'],
-        -entity_entities[entity]['translate-z'],
-      ],
-      'id': entity,
-    });
     if(entity_entities[entity]['attach-to'] !== false){
         if(entity_groups['skybox'][entity] !== true){
             const target = globalThis[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
@@ -1931,9 +1923,19 @@ function webgl_logicloop_handle_entity(entity){
         }
         math_matrix_translate({
           'dimensions': [
-            -entity_entities[entity]['attach-offset-x'],
-            -entity_entities[entity]['attach-offset-y'],
-            -entity_entities[entity]['attach-offset-z'],
+            -entity_entities[entity]['translate-x'] - entity_entities[entity]['attach-offset-x'],
+            -entity_entities[entity]['translate-y'] - entity_entities[entity]['attach-offset-y'],
+            -entity_entities[entity]['translate-z'] - entity_entities[entity]['attach-offset-z'],
+          ],
+          'id': entity,
+        });
+
+    }else{
+        math_matrix_translate({
+          'dimensions': [
+            -entity_entities[entity]['translate-x'],
+            -entity_entities[entity]['translate-y'],
+            -entity_entities[entity]['translate-z'],
           ],
           'id': entity,
         });
