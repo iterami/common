@@ -72,25 +72,21 @@ function webgl_camera_rotate(args){
       },
     });
 
-    const axes = {
-      'x': args['x'],
-      'y': args['y'],
-      'z': args['z'],
-    };
+    const axes = 'xyz';
     const prefix = args['camera']
       ? 'camera-rotate-'
       : 'rotate-';
     for(const axis in axes){
-        let axis_value = axes[axis];
+        let axis_value = args[axes[axis]];
         if(axis_value === false){
             continue;
         }
 
         if(!args['set']){
-            axis_value += webgl_characters[args['character']][prefix + axis];
+            axis_value += webgl_characters[args['character']][prefix + axes[axis]];
         }
 
-        webgl_characters[args['character']][prefix + axis] = axis_value;
+        webgl_characters[args['character']][prefix + axes[axis]] = axis_value;
     }
 
     if(args['camera']){
@@ -1647,6 +1643,7 @@ function webgl_logicloop(){
           || webgl_characters[character]['change-rotate-y'] !== 0
           || webgl_characters[character]['change-rotate-z'] !== 0){
             webgl_camera_rotate({
+              'camera': false,
               'character': character,
               'x': webgl_characters[character]['change-rotate-x'],
               'y': webgl_characters[character]['change-rotate-y'],
