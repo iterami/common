@@ -356,6 +356,7 @@ function webgl_character_spawn(args){
       'z': webgl_properties['spawn-translate-z'],
     });
     webgl_camera_rotate({
+      'camera': false,
       'character': args['character'],
       'set': true,
       'x': webgl_properties['spawn-rotate-x'],
