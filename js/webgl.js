@@ -272,6 +272,7 @@ function webgl_character_origin(args){
     webgl_characters[args['character']]['change-translate-x'] = 0;
     webgl_characters[args['character']]['change-translate-y'] = 0;
     webgl_characters[args['character']]['change-translate-z'] = 0;
+    webgl_characters[args['character']]['jump-allow'] = false;
     webgl_characters[args['character']]['rotate-x'] = 0;
     webgl_characters[args['character']]['rotate-y'] = 0;
     webgl_characters[args['character']]['rotate-z'] = 0;
@@ -356,8 +357,6 @@ function webgl_character_spawn(args){
       'y': webgl_properties['spawn-rotate-y'],
       'z': webgl_properties['spawn-rotate-z'],
     });
-
-    webgl_characters[args['character']]['jump-allow'] = false;
 }
 
 // Required args: entity
