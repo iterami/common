@@ -2210,8 +2210,15 @@ function webgl_pick_color(args){
     return pixelarray;
 }
 
-// Required args: x, y
 function webgl_pick_entity(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'x': core_mouse['x'],
+        'y': core_mouse['y'],
+      },
+    });
+
     const level = webgl_character_level();
     if(core_menu_open
       || level < -1
