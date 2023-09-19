@@ -3223,8 +3223,13 @@ function webgl_texture_set(args){
     );
     webgl_buffer.texParameterf(
       webgl_buffer.TEXTURE_2D,
+      webgl_buffer.TEXTURE_MAG_FILTER,
+      webgl_buffer.LINEAR
+    );
+    webgl_buffer.texParameterf(
+      webgl_buffer.TEXTURE_2D,
       webgl_buffer.TEXTURE_MIN_FILTER,
-      webgl_buffer.NEAREST
+      webgl_buffer.NEAREST_MIPMAP_LINEAR
     );
     webgl_buffer.generateMipmap(webgl_buffer.TEXTURE_2D);
 
