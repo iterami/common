@@ -46,8 +46,7 @@ function webgl_camera_handle(){
       || core_mouse['down-2']){
         const level = webgl_character_level();
 
-        if(level === -2
-          || (level !== -1 && webgl_properties['paused'])){
+        if(level !== -1 && webgl_properties['paused']){
             return;
         }
 
@@ -228,8 +227,8 @@ function webgl_character_jump(args){
       },
     });
 
-    if(webgl_characters[args['character']]['health-current'] <= 0
-      || !webgl_characters[args['character']]['jump-allow']){
+    if(!webgl_characters[args['character']]['jump-allow']
+      || webgl_characters[args['character']]['health-current'] <= 0){
         return;
     }
 
@@ -1458,9 +1457,7 @@ function webgl_logicloop(){
             }
         }
 
-        if(level === -1
-          || (webgl_characters[webgl_character_id]['jump-allow']
-            && webgl_characters[webgl_character_id]['change-translate-' + webgl_properties['gravity-axis']] === 0)){
+        if(level === -1 || webgl_characters[webgl_character_id]['jump-allow']){
             let forwardback = 0;
 
             if(core_keys[core_storage_data['move-↓']]['state']){
@@ -1476,14 +1473,10 @@ function webgl_logicloop(){
 
             if(core_keys[core_storage_data['move-↑']]['state']){
                 webgl_characters[webgl_character_id]['automove'] = false;
-                forwardback = forwardback === 0
-                  ? -1
-                  : 0;
+                forwardback -= 1;
 
             }else if(webgl_characters[webgl_character_id]['automove']){
-                forwardback = forwardback === 0
-                  ? -1
-                  : 0;
+                forwardback -= 1;
             }
 
             if(level === -1){
