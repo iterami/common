@@ -1037,11 +1037,6 @@ function webgl_init(args){
     }
     core_elements['canvas'].style.cursor = args['cursor'];
 
-    webgl_extension({
-      'id': 'EXT_texture_filter_anisotropic',
-      'label': 'anisotropic',
-    });
-
     entity_id_count = 0;
     webgl_properties = {
       'ambient-blue': args['ambient-blue'],
@@ -3194,37 +3189,6 @@ function webgl_stat_modify(args){
     }
 }
 
-function webgl_storage_init(){
-    core_tab_create({
-      'content': '<table><tr><td><input class=mini id=anisotropic min=0 step=any type=number><td>Anisotropic Filtering</table>'
-        + '<input id=storage-reset-webgl type=button value="Reset WebGL localStorage">',
-      'group': 'core-menu',
-      'id': 'webgl',
-      'label': 'WebGL',
-    });
-
-    core_storage_add({
-      'prefix': 'webgl-',
-      'storage': {
-        'anisotropic': 16,
-      },
-    });
-    core_storage_update();
-
-    core_events_bind({
-      'elements': {
-        'storage-reset-webgl': {
-          'onclick': function(){
-              core_storage_reset({
-                'label': 'WebGL',
-                'prefix': 'webgl-',
-              });
-          },
-        },
-      },
-    });
-}
-
 // Required args: entity
 function webgl_texture_set(args){
     args = core_args({
@@ -3259,8 +3223,8 @@ function webgl_texture_set(args){
     );
     webgl_buffer.texParameterf(
       webgl_buffer.TEXTURE_2D,
-      webgl_extensions['anisotropic'].TEXTURE_MAX_ANISOTROPY_EXT,
-      core_storage_data['anisotropic']
+      webgl_buffer.TEXTURE_MIN_FILTER,
+      webgl_buffer.NEAREST
     );
     webgl_buffer.generateMipmap(webgl_buffer.TEXTURE_2D);
 
