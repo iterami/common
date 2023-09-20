@@ -2095,9 +2095,9 @@ function webgl_path_move(args){
 
                 }else if(path_end === 'warp'){
                     character['path-point'] = 1;
-                    character['translate-x'] = path['points'][0]['translate-x'];
-                    character['translate-y'] = path['points'][0]['translate-y'];
-                    character['translate-z'] = path['points'][0]['translate-z'];
+                    character['translate-x'] = path['points'][0]['translate-x'] || 0;
+                    character['translate-y'] = path['points'][0]['translate-y'] || 0;
+                    character['translate-z'] = path['points'][0]['translate-z'] || 0;
                 }
 
             }else{
@@ -2119,9 +2119,9 @@ function webgl_path_move(args){
             }else if(path_end === 'warp'){
                 const last = path['points'].length - 1;
                 character['path-point'] = last - 1;
-                character['translate-x'] = path['points'][last]['translate-x'];
-                character['translate-y'] = path['points'][last]['translate-y'];
-                character['translate-z'] = path['points'][last]['translate-z'];
+                character['translate-x'] = path['points'][last]['translate-x'] || 0;
+                character['translate-y'] = path['points'][last]['translate-y'] || 0;
+                character['translate-z'] = path['points'][last]['translate-z'] || 0;
             }
 
         }else{
