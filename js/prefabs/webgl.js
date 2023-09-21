@@ -19,18 +19,21 @@ function prefabs_webgl_cuboid_tree(args){
         'trunk-size-z': 2,
         'vertex-colors-leaves': [
           0, 1, 0, 1,
-          0, 1, 0, 1,
-          0, 1, 0, 1,
-          0, 1, 0, 1,
         ],
         'vertex-colors-trunk': [
-          1, .5, 0, 1,
-          1, .5, 0, 1,
-          1, .5, 0, 1,
           1, .5, 0, 1,
         ],
       },
     });
+
+    if(args['vertex-colors-leaves'].length === 4){
+        args['vertex-colors-leaves'] = args['vertex-colors-leaves'].concat(args['vertex-colors-leaves']);
+        args['vertex-colors-leaves'] = args['vertex-colors-leaves'].concat(args['vertex-colors-leaves']);
+    }
+    if(args['vertex-colors-trunk'].length === 4){
+        args['vertex-colors-trunk'] = args['vertex-colors-trunk'].concat(args['vertex-colors-trunk']);
+        args['vertex-colors-trunk'] = args['vertex-colors-trunk'].concat(args['vertex-colors-trunk']);
+    }
 
     webgl_primitive_cuboid({
       'all': {
@@ -354,18 +357,21 @@ function prefabs_webgl_lines_tree(args){
         'trunk-width-min': 1,
         'vertex-colors-leaves': [
           0, .5, 0, 1,
-          0, .5, 0, 1,
-          0, .5, 0, 1,
-          0, .5, 0, 1,
         ],
         'vertex-colors-trunk': [
-          .4, .2, 0, 1,
-          .4, .2, 0, 1,
-          .4, .2, 0, 1,
           .4, .2, 0, 1,
         ],
       },
     });
+
+    if(args['vertex-colors-leaves'].length === 4){
+        args['vertex-colors-leaves'] = args['vertex-colors-leaves'].concat(args['vertex-colors-leaves']);
+        args['vertex-colors-leaves'] = args['vertex-colors-leaves'].concat(args['vertex-colors-leaves']);
+    }
+    if(args['vertex-colors-trunk'].length === 4){
+        args['vertex-colors-trunk'] = args['vertex-colors-trunk'].concat(args['vertex-colors-trunk']);
+        args['vertex-colors-trunk'] = args['vertex-colors-trunk'].concat(args['vertex-colors-trunk']);
+    }
 
     const properties = {
       'attach-offset-x': args['translate-x'],
@@ -525,12 +531,8 @@ function prefabs_webgl_tree_2d(args){
         'character': webgl_character_id,
         'color-base': [
           .4, .2, 0, 1,
-          .4, .2, 0, 1,
-          .4, .2, 0, 1,
         ],
         'color-leaf': [
-          .1, .3, .1, 1,
-          .1, .3, .1, 1,
           .1, .3, .1, 1,
         ],
         'height': 5,
@@ -543,6 +545,15 @@ function prefabs_webgl_tree_2d(args){
         'width-leaf': 6,
       },
     });
+
+    if(args['color-base'].length === 4){
+        args['color-base'] = args['color-base'].concat(args['color-base']);
+        args['color-base'] = args['color-base'].concat(args['color-base']);
+    }
+    if(args['color-leaf'].length === 4){
+        args['color-leaf'] = args['color-leaf'].concat(args['color-leaf']);
+        args['color-leaf'] = args['color-leaf'].concat(args['color-leaf']);
+    }
 
     webgl_entity_create({
       'entities': [
