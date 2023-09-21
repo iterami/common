@@ -2095,9 +2095,17 @@ function webgl_path_move(args){
 
                 }else if(path_end === 'warp'){
                     character['path-point'] = 1;
-                    character['translate-x'] = path['points'][0]['translate-x'] || character['translate-x'];
-                    character['translate-y'] = path['points'][0]['translate-y'] || character['translate-y'];
-                    character['translate-z'] = path['points'][0]['translate-z'] || character['translate-z'];
+                    const warp_point = core_handle_defaults({
+                      'default': {
+                        'translate-x': character['translate-x'],
+                        'translate-y': character['translate-y'],
+                        'translate-z': character['translate-z'],
+                      },
+                      'var': path['points'][0],
+                    });
+                    character['translate-x'] = warp_point['translate-x'];
+                    character['translate-y'] = warp_point['translate-y'];
+                    character['translate-z'] = warp_point['translate-z'];
                 }
 
             }else{
@@ -2119,9 +2127,17 @@ function webgl_path_move(args){
             }else if(path_end === 'warp'){
                 const last = path['points'].length - 1;
                 character['path-point'] = last - 1;
-                character['translate-x'] = path['points'][last]['translate-x'] || character['translate-x'];
-                character['translate-y'] = path['points'][last]['translate-y'] || character['translate-y'];
-                character['translate-z'] = path['points'][last]['translate-z'] || character['translate-z'];
+                const warp_point = core_handle_defaults({
+                  'default': {
+                    'translate-x': character['translate-x'],
+                    'translate-y': character['translate-y'],
+                    'translate-z': character['translate-z'],
+                  },
+                  'var': path['points'][last],
+                });
+                character['translate-x'] = warp_point['translate-x'];
+                character['translate-y'] = warp_point['translate-y'];
+                character['translate-z'] = warp_point['translate-z'];
             }
 
         }else{
