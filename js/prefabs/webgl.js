@@ -343,6 +343,7 @@ function prefabs_webgl_lines_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'billboard': 'y',
         'character': webgl_character_id,
         'prefix': entity_id_count,
         'translate-x': 0,
@@ -390,7 +391,7 @@ function prefabs_webgl_lines_tree(args){
     const trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
     for(let trunk = 0; trunk < trunk_count; trunk++){
         properties['id'] = args['prefix'] + '-trunk-' + trunk;
-        properties['billboard'] = 'y';
+        properties['billboard'] = args['billboard'];
         properties['rotate-x'] = 0;
         properties['rotate-z'] = 0;
         properties['vertices'] = [
