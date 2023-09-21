@@ -2292,9 +2292,43 @@ function webgl_prefab_remake(args){
     }
 
     core_call({
-      'args': prefab['properties'],
-      'todo': prefab['type'],
+      'args': args['prefab']['properties'],
+      'todo': args['prefab']['type'],
     });
+}
+
+// Required args: properties, type
+function webgl_prefab_repeat(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'count': 1,
+        'x-max': 0,
+        'x-min': 0,
+        'y-max': 0,
+        'y-min': 0,
+        'z-max': 0,
+        'z-min': 0,
+      },
+    });
+
+    for(let i = 0; i < args['count']; i++){
+        args['properties']['prefix'] = args['prefix'] + '-' + i;
+        args['properties']['translate-x'] = core_random_number({
+          'multiplier': args['x-max'] - args['x-min'],
+        }) + args['x-min'];
+        args['properties']['translate-y'] = core_random_number({
+          'multiplier': args['y-max'] - args['y-min'],
+        }) + args['y-min'];
+        args['properties']['translate-z'] = core_random_number({
+          'multiplier': args['z-max'] - args['z-min'],
+        }) + args['z-min'];
+
+        core_call({
+          'args': args['properties'],
+          'todo': args['type'],
+        });
+    }
 }
 
 function webgl_primitive_cuboid(args){
