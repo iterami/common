@@ -1275,7 +1275,7 @@ function webgl_level_init(args){
         );
 
     }else if(args['character'] === 0
-      && webgl_character_level() < 0){
+      && webgl_character_level() < -1){
         return;
     }
 
