@@ -2922,8 +2922,8 @@ function webgl_primitive_stars(args){
         'character': webgl_character_id,
         'color': [1, 1, 1, 1],
         'groups': [],
-        'half': false,
         'prefix': entity_id_count,
+        'radian': 2,
         'radius': 250,
         'range': 100,
         'stars': 100,
@@ -2936,8 +2936,8 @@ function webgl_primitive_stars(args){
     const star_colors = [];
     const star_points = [];
     for(let i = 0; i < args['stars']; i++){
-        const theta = core_random_number({
-          'multiplier': Math.PI * (args['half'] ? 1 : 2),
+        let theta = core_random_number({
+          'multiplier': Math.PI * args['radian'],
         });
         const phi = core_random_number({
           'multiplier': Math.PI,
