@@ -829,7 +829,10 @@ function webgl_entity_todo(entity){
 
     webgl_buffer_set({
       'attribute': 'vec_vertexColor',
-      'data': entity_entities[entity]['vertex-colors'] || webgl_vertexcolorarray(),
+      'data': webgl_vertexcolorarray({
+        'colors': entity_entities[entity]['vertex-colors'],
+        'vertexcount': entity_entities[entity]['vertices-length'],
+      }),
       'size': 4,
     });
     webgl_buffer_set({
@@ -2370,7 +2373,9 @@ function webgl_primitive_cuboid(args){
           'attach-type': 'webgl_characters',
           'groups': args['groups'],
           'id': args['prefix'] + '-top',
-          'vertex-colors': args['top']['vertex-colors'] || webgl_vertexcolorarray(),
+          'vertex-colors': webgl_vertexcolorarray({
+            'colors': args['top']['vertex-colors'],
+          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
             -vertices_size_x, 0, -vertices_size_z,
@@ -2403,7 +2408,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
-          'vertex-colors': args['bottom']['vertex-colors'] || webgl_vertexcolorarray(),
+          'vertex-colors': webgl_vertexcolorarray({
+            'colors': args['bottom']['vertex-colors'],
+          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
             -vertices_size_x, 0, -vertices_size_z,
@@ -2436,7 +2443,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-front',
           'rotate-x': 90,
-          'vertex-colors': args['front']['vertex-colors'] || webgl_vertexcolorarray(),
+          'vertex-colors': webgl_vertexcolorarray({
+            'colors': args['front']['vertex-colors'],
+          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
             -vertices_size_x, 0, -vertices_size_y,
@@ -2469,7 +2478,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-back',
           'rotate-x': 270,
-          'vertex-colors': args['back']['vertex-colors'] || webgl_vertexcolorarray(),
+          'vertex-colors': webgl_vertexcolorarray({
+            'colors': args['back']['vertex-colors'],
+          }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
             -vertices_size_x, 0, -vertices_size_y,
@@ -2502,7 +2513,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
-          'vertex-colors': args['left']['vertex-colors'] || webgl_vertexcolorarray(),
+          'vertex-colors': webgl_vertexcolorarray({
+            'colors': args['left']['vertex-colors'],
+          }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
             -vertices_size_y, 0, -vertices_size_z,
@@ -2535,7 +2548,9 @@ function webgl_primitive_cuboid(args){
           'groups': args['groups'],
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
-          'vertex-colors': args['right']['vertex-colors'] || webgl_vertexcolorarray(),
+          'vertex-colors': webgl_vertexcolorarray({
+            'colors': args['right']['vertex-colors'],
+          }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
             -vertices_size_y, 0, -vertices_size_z,
@@ -2921,7 +2936,6 @@ function webgl_primitive_stars(args){
     const star_colors = [];
     const star_points = [];
     for(let i = 0; i < args['stars']; i++){
-        const color = args['color'] || webgl_vertexcolorarray();
         const theta = core_random_number({
           'multiplier': Math.PI * (args['half'] ? 1 : 2),
         });
@@ -2938,10 +2952,10 @@ function webgl_primitive_stars(args){
           radius * Math.cos(phi),
         );
         star_colors.push(
-          color[0],
-          color[1],
-          color[2],
-          color[3]
+          args['color'][0],
+          args['color'][1],
+          args['color'][2],
+          args['color'][3]
         );
     }
     webgl_entity_create({
@@ -3364,20 +3378,25 @@ function webgl_vertexcolorarray(args){
     });
 
     if(args['colors'].length === 0){
-        args['colors'].push(core_random_rgb());
+        args['colors'].push(
+          Math.random(),
+          Math.random(),
+          Math.random(),
+          1
+        );
     }
 
     const color = [];
     for(let i = 0; i < args['vertexcount']; i++){
-        const index = args['colors'][i] !== void 0
-          ? i
+        const index = args['colors'][i * 4] !== void 0
+          ? i * 4
           : 0;
 
         color.push(
-          args['colors'][index]['red'] / 255,
-          args['colors'][index]['green'] / 255,
-          args['colors'][index]['blue'] / 255,
-          1
+          args['colors'][index],
+          args['colors'][index + 1],
+          args['colors'][index + 2],
+          args['colors'][index + 3]
         );
     }
     return color;
