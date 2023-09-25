@@ -537,6 +537,7 @@ function prefabs_webgl_tree_2d(args){
           .1, .3, .1, 1,
         ],
         'height': 5,
+        'height-range': 0,
         'leaf-bottom': 1,
         'prefix': entity_id_count,
         'translate-x': 0,
@@ -555,6 +556,9 @@ function prefabs_webgl_tree_2d(args){
         args['color-leaf'] = args['color-leaf'].concat(args['color-leaf']);
         args['color-leaf'] = args['color-leaf'].concat(args['color-leaf']);
     }
+    const height = args['height'] + core_random_number({
+      'multiplier': args['height-range'],
+    });
 
     webgl_entity_create({
       'entities': [
@@ -570,7 +574,7 @@ function prefabs_webgl_tree_2d(args){
           'vertex-colors': args['color-base'],
           'vertices': [
             args['width-base'] / 2, 0, -.01,
-            0, args['height'] * .9, -.01,
+            0, height * .9, -.01,
             -args['width-base'] / 2, 0, -.01,
           ],
         },
@@ -587,7 +591,7 @@ function prefabs_webgl_tree_2d(args){
           'vertex-colors': args['color-leaf'],
           'vertices': [
             args['width-leaf'] / 2, args['leaf-bottom'], 0,
-            0, args['height'], 0,
+            0, height, 0,
             -args['width-leaf'] / 2, args['leaf-bottom'], 0,
           ],
         },
