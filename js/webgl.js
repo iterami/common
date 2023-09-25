@@ -1143,7 +1143,7 @@ function webgl_init(args){
         'event-target-id': false,
         'event-target-type': 'character',
         'event-todo': false,
-        'event-todo-args': null,
+        'event-todo-args': void 0,
         'gravity': false,
         'normals': [],
         'pick-color': [0, 0, 0,],
