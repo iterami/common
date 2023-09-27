@@ -2,7 +2,7 @@
 
 function canvas_draw(){
     if(canvas_properties['clearColor'] === '#000'){
-        canvas_buffer.clearRect(
+        canvas.clearRect(
           0,
           0,
           canvas_properties['width'],
@@ -15,7 +15,7 @@ function canvas_draw(){
             'fillStyle': canvas_properties['clearColor'],
           },
         });
-        canvas_buffer.fillRect(
+        canvas.fillRect(
           0,
           0,
           canvas_properties['width'],
@@ -26,18 +26,6 @@ function canvas_draw(){
     core_call({
       'todo': 'repo_drawlogic',
     });
-
-    canvas_canvas.clearRect(
-      0,
-      0,
-      canvas_properties['width'],
-      canvas_properties['height']
-    );
-    canvas_canvas.drawImage(
-      core_elements['buffer'],
-      0,
-      0
-    );
 }
 
 function canvas_drawloop(){
@@ -62,16 +50,16 @@ function canvas_draw_path(args){
     });
 
     if(args['translate']){
-        canvas_buffer.save();
-        canvas_buffer.translate(
+        canvas.save();
+        canvas.translate(
           args['x'],
           args['y']
         );
     }
 
-    canvas_buffer.beginPath();
+    canvas.beginPath();
     for(const vertex in args['vertices']){
-        canvas_buffer[args['vertices'][vertex]['type'] || args['type']](
+        canvas[args['vertices'][vertex]['type'] || args['type']](
           args['vertices'][vertex]['x'] || 0,
           args['vertices'][vertex]['y'] || 0,
           args['vertices'][vertex]['radius'],
@@ -80,16 +68,16 @@ function canvas_draw_path(args){
           args['vertices'][vertex]['antiClockwise']
         );
     }
-    canvas_buffer.closePath();
+    canvas.closePath();
 
     canvas_setproperties({
       'properties': args['properties'],
     });
 
-    canvas_buffer[args['style']]();
+    canvas[args['style']]();
 
     if(args['translate']){
-        canvas_buffer.restore();
+        canvas.restore();
     }
 }
 
@@ -115,7 +103,7 @@ function canvas_gradient(args){
       },
     });
 
-    const gradient = canvas_buffer.createLinearGradient(
+    const gradient = canvas.createLinearGradient(
       args['x'],
       args['y'],
       args['width'],
@@ -169,20 +157,9 @@ function canvas_init(args){
       'store': 'canvas',
       'type': 'canvas',
     });
-    core_html({
-      'parent': document.body,
-      'properties': {
-        'id': 'buffer',
-      },
-      'store': 'buffer',
-      'type': 'canvas',
-    });
     core_elements['canvas'].style.cursor = args['cursor'];
 
-    canvas_buffer = canvas_getContext({
-      'id': 'buffer',
-    });
-    canvas_canvas = canvas_getContext({
+    canvas = canvas_getContext({
       'id': 'canvas',
     });
 
@@ -252,16 +229,14 @@ function canvas_logicloop_handle_entity(entity){
 function canvas_resize(){
     canvas_properties['height'] = globalThis.innerHeight;
     canvas_properties['height-half'] = canvas_properties['height'] / 2;
-    core_elements['buffer'].height = canvas_properties['height'];
     core_elements['canvas'].height = canvas_properties['height'];
 
     canvas_properties['width'] = globalThis.innerWidth;
     canvas_properties['width-half'] = canvas_properties['width'] / 2;
-    core_elements['buffer'].width = canvas_properties['width'];
     core_elements['canvas'].width = canvas_properties['width'];
 
     Object.assign(
-      canvas_buffer,
+      canvas,
       canvas_properties
     );
 
@@ -305,11 +280,10 @@ function canvas_setproperties(args){
       args['properties']
     );
     Object.assign(
-      canvas_buffer,
+      canvas,
       args['properties']
     );
 }
 
-globalThis.canvas_buffer = 0;
-globalThis.canvas_canvas = 0;
+globalThis.canvas = 0;
 globalThis.canvas_properties = {};
