@@ -8,6 +8,7 @@ a{
 }
 body{
     margin-top: 30px;
+    overscroll-behavior: none;
 }
 body,
 input,
@@ -17,6 +18,11 @@ textarea{
     background-color: #000;
     color: #ccc;
     font: 700 14px monospace;
+}
+#canvas{
+    left: 0;
+    position: fixed;
+    top: 0;
 }
 .center{
     text-align: center;
