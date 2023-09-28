@@ -1776,21 +1776,6 @@ function webgl_logicloop_handle_entity(entity){
         });
     }
 
-    if(entity_entities[entity]['collides']){
-        for(const other_entity in entity_entities){
-            if(entity_entities[other_entity]['collision']
-              && entity !== other_entity
-              && entity_entities[entity]['attach-to'] === false){
-                if(!webgl_collision({
-                    'collider': entity_entities[entity],
-                    'target': entity_entities[other_entity],
-                  })){
-                    return;
-                }
-            }
-        }
-    }
-
     if(entity_entities[entity]['spawn-entity'] !== false){
         entity_entities[entity]['spawn-interval-current']++;
 
@@ -3146,10 +3131,7 @@ function webgl_stat_modify(args){
           }) === -1){
             args['target']['health-current'] = args['target']['health-max'];
 
-            return;
-        }
-
-        if(args['target']['health-current'] <= 0){
+        }else if(args['target']['health-current'] <= 0){
             args['target']['health-current'] = 0;
 
             for(const entity in entity_entities){
