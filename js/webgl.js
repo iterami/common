@@ -336,18 +336,10 @@ function webgl_character_spawn(args){
     }
 
     webgl_character_origin(args);
-
-    let spawn_y = webgl_properties['spawn-translate-y'];
-    if(webgl_character_level({
-        'character': args['character'],
-      }) >= 0){
-        spawn_y += webgl_characters[args['character']]['collide-range-vertical'] + 1;
-    }
-
     webgl_entity_move_to({
       'entity': webgl_characters[args['character']],
       'x': webgl_properties['spawn-translate-x'],
-      'y': spawn_y,
+      'y': webgl_properties['spawn-translate-y'] + webgl_characters[args['character']]['collide-range-vertical'] + 1,
       'z': webgl_properties['spawn-translate-z'],
     });
     webgl_camera_rotate({
