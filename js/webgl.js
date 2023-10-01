@@ -197,7 +197,6 @@ function webgl_character_init(args){
       'jump-allow': false,
       'jump-height': args['jump-height'],
       'level': args['level'],
-      'normals': [],
       'path-direction': args['path-direction'],
       'path-end': args['path-end'],
       'path-id': args['path-id'],
@@ -947,8 +946,6 @@ function webgl_init(args){
         'gravity-max': -2,
         'groups': [],
         'paths': {},
-        'shader-fragment': 'fragment-0',
-        'shader-vertex': 'vertex-0',
         'spawn-rotate-x': 0,
         'spawn-rotate-y': 0,
         'spawn-rotate-z': 0,
@@ -1002,8 +999,6 @@ function webgl_init(args){
       'paused': false,
       'picking': false,
       'shader': {},
-      'shader-fragment': args['shader-fragment'],
-      'shader-vertex': args['shader-vertex'],
       'spawn-rotate-x': args['spawn-rotate-x'],
       'spawn-rotate-y': args['spawn-rotate-y'],
       'spawn-rotate-z': args['spawn-rotate-z'],
@@ -1144,8 +1139,6 @@ function webgl_level_export(){
     delete json['paused'];
     delete json['picking'];
     delete json['shader'];
-    delete json['shader-fragment'];
-    delete json['shader-vertex'];
     delete json['textures'];
 
     json['characters'] = {};
@@ -2963,7 +2956,7 @@ function webgl_shader_create(args){
 function webgl_shader_remake(){
     if(webgl_shaders === false){
         webgl_shaders = {
-          'fragment-0': `#version 300 es
+          'fragment': `#version 300 es
 precision lowp float;
 uniform bool fog;
 uniform bool picking;
@@ -2995,7 +2988,7 @@ void main(void){
     }
 }`,
 
-          'vertex-0': `#version 300 es
+          'vertex': `#version 300 es
 in vec2 vec_texturePosition;
 in vec3 vec_vertexNormal;
 in vec4 vec_pickColor;
@@ -3041,11 +3034,11 @@ void main(void){
     webgl_properties['shader']['program'] = webgl_program_create({
       'shaders': [
         webgl_shader_create({
-          'source': webgl_shaders[webgl_properties['shader-fragment']],
+          'source': webgl_shaders['fragment'],
           'type': webgl.FRAGMENT_SHADER,
         }),
         webgl_shader_create({
-          'source': webgl_shaders[webgl_properties['shader-vertex']],
+          'source': webgl_shaders['vertex'],
           'type': webgl.VERTEX_SHADER,
         }),
       ],
