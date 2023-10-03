@@ -19,7 +19,7 @@ function prefabs_webgl_cuboid_tree(args){
         'translate-z': 0,
         'trunk-collision': true,
         'trunk-color': [
-          1, .5, 0, 1,
+          .8, .4, 0, 1,
         ],
         'trunk-size-x': 2,
         'trunk-size-y': 10,
@@ -90,6 +90,72 @@ function prefabs_webgl_cuboid_tree(args){
       'translate-y': args['translate-y'] + args['trunk-size-y'] + args['leaf-size-y'] / 2,
       'translate-z': args['translate-z'],
     });
+}
+
+function prefabs_webgl_frustum_tree(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'height': 20,
+        'height-range': 0,
+        'leaf-color-bottom': [
+          .05, .15, .05, 1,
+        ],
+        'leaf-color-top': [
+          .1, .3, .1, 1,
+        ],
+        'leaf-count': 3,
+        'leaf-points': 8,
+        'leaf-size': 4,
+        'prefix': entity_id_count,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+        'trunk-color': [
+          .4, .2, 0, 1,
+        ],
+        'trunk-points': 4,
+        'trunk-size': 2,
+      },
+    });
+
+    const height = args['height'] + core_random_number({
+      'multiplier': args['height-range'],
+    });
+
+    webgl_primitive_frustum({
+      'character': args['character'],
+      'color-bottom': args['trunk-color'],
+      'color-top': args['trunk-color'],
+      'length': height,
+      'points': args['trunk-points'],
+      'prefix': args['prefix'] + '-trunk',
+      'size-bottom': args['trunk-size'],
+      'size-top': 0,
+      'translate-x': args['translate-x'],
+      'translate-y': args['translate-y'],
+      'translate-z': args['translate-z'],
+    });
+
+    const leaf_height = height / args['leaf-count'];
+    const leaf_separation = leaf_height  / 2;
+    for(let i = 0; i < args['leaf-count']; i++){
+        webgl_primitive_frustum({
+          'bottom': false,
+          'character': args['character'],
+          'color-bottom': args['leaf-color-bottom'],
+          'color-top': args['leaf-color-top'],
+          'length': leaf_height,
+          'points': args['leaf-points'],
+          'prefix': args['prefix'] + '-leaf-' + i,
+          'size-bottom': args['leaf-size'],
+          'size-top': 0,
+          'translate-x': args['translate-x'],
+          'translate-y': args['translate-y'] + height - leaf_separation - (leaf_separation * (i + 1)),
+          'translate-z': args['translate-z'],
+        });
+    }
 }
 
 function prefabs_webgl_humanoid(args){
