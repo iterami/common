@@ -869,6 +869,14 @@ function webgl_event(args){
             globalThis[args['parent']['event-todo']] = args['parent']['event-todo-args'];
         }
     }
+
+    if(args['parent']['event-limit'] !== false){
+        args['parent']['event-limit']--;
+
+        if(args['parent']['event-limit'] <= 0){
+            args['parent']['event-range'] = false;
+        }
+    }
 }
 
 // Required args: id
@@ -1067,6 +1075,7 @@ function webgl_init(args){
         'collision': true,
         'draw': true,
         'draw-mode': 'TRIANGLE_FAN',
+        'event-limit': false,
         'event-modify': [],
         'event-range': false,
         'event-target-id': false,
