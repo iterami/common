@@ -13,9 +13,9 @@ function entity_attach(args){
     });
 
     const entity = entity_entities[args['entity']];
-    entity['attach-offset-x'] = args['offset-x'];
-    entity['attach-offset-y'] = args['offset-y'];
-    entity['attach-offset-z'] = args['offset-z'];
+    entity['attach-x'] = args['offset-x'];
+    entity['attach-y'] = args['offset-y'];
+    entity['attach-z'] = args['offset-z'];
     entity['attach-to'] = args['to'];
     entity['attach-type'] = args['type'];
 }

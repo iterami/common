@@ -681,9 +681,9 @@ function webgl_entity_create(args){
         if(args['entities'][entity]['attach-to'] !== false){
             entity_attach({
               'entity': entity_id,
-              'offset-x': args['entities'][entity]['attach-offset-x'],
-              'offset-y': args['entities'][entity]['attach-offset-y'],
-              'offset-z': args['entities'][entity]['attach-offset-z'],
+              'offset-x': args['entities'][entity]['attach-x'],
+              'offset-y': args['entities'][entity]['attach-y'],
+              'offset-z': args['entities'][entity]['attach-z'],
               'to': args['entities'][entity]['attach-to'],
               'type': args['entities'][entity]['attach-type'],
             });
@@ -927,9 +927,9 @@ function webgl_get_translation(args){
 
     const target = globalThis[args['entity']['attach-type']][args['entity']['attach-to']];
     return {
-      'x': target['translate-x'] + args['entity']['attach-offset-x'],
-      'y': target['translate-y'] + args['entity']['attach-offset-y'],
-      'z': target['translate-z'] + args['entity']['attach-offset-z'],
+      'x': target['translate-x'] + args['entity']['attach-x'],
+      'y': target['translate-y'] + args['entity']['attach-y'],
+      'z': target['translate-z'] + args['entity']['attach-z'],
     };
 }
 
@@ -1057,11 +1057,11 @@ function webgl_init(args){
       ],
       'properties': {
         'alpha': 1,
-        'attach-offset-x': 0,
-        'attach-offset-y': 0,
-        'attach-offset-z': 0,
         'attach-to': false,
         'attach-type': 'entity_entities',
+        'attach-x': 0,
+        'attach-y': 0,
+        'attach-z': 0,
         'billboard': false,
         'change-rotate-x': 0,
         'change-rotate-y': 0,
@@ -1831,9 +1831,9 @@ function webgl_logicloop_handle_entity(entity){
         }
         math_matrix_translate({
           'dimensions': [
-            -entity_entities[entity]['attach-offset-x'],
-            -entity_entities[entity]['attach-offset-y'],
-            -entity_entities[entity]['attach-offset-z'],
+            -entity_entities[entity]['attach-x'],
+            -entity_entities[entity]['attach-y'],
+            -entity_entities[entity]['attach-z'],
           ],
           'id': entity,
         });
@@ -2286,11 +2286,11 @@ function webgl_primitive_cuboid(args){
 
     if(args['top']['exclude'] !== true){
         const properties = {
-          'attach-offset-x': args['translate-x'],
-          'attach-offset-y': args['translate-y'] + half_size_y,
-          'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'] + half_size_y,
+          'attach-z': args['translate-z'],
           'groups': args['groups'],
           'id': args['prefix'] + '-top',
           'vertex-colors': webgl_vertexcolorarray({
@@ -2320,11 +2320,11 @@ function webgl_primitive_cuboid(args){
 
     if(args['bottom']['exclude'] !== true){
         const properties = {
-          'attach-offset-x': args['translate-x'],
-          'attach-offset-y': args['translate-y'] - half_size_y,
-          'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'] - half_size_y,
+          'attach-z': args['translate-z'],
           'groups': args['groups'],
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
@@ -2355,11 +2355,11 @@ function webgl_primitive_cuboid(args){
 
     if(args['front']['exclude'] !== true){
         const properties = {
-          'attach-offset-x': args['translate-x'],
-          'attach-offset-y': args['translate-y'],
-          'attach-offset-z': args['translate-z'] + half_size_z,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'] + half_size_z,
           'groups': args['groups'],
           'id': args['prefix'] + '-front',
           'rotate-x': 90,
@@ -2390,11 +2390,11 @@ function webgl_primitive_cuboid(args){
 
     if(args['back']['exclude'] !== true){
         const properties = {
-          'attach-offset-x': args['translate-x'],
-          'attach-offset-y': args['translate-y'],
-          'attach-offset-z': args['translate-z'] - half_size_z,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'] - half_size_z,
           'groups': args['groups'],
           'id': args['prefix'] + '-back',
           'rotate-x': 270,
@@ -2425,11 +2425,11 @@ function webgl_primitive_cuboid(args){
 
     if(args['left']['exclude'] !== true){
         const properties = {
-          'attach-offset-x': args['translate-x'] - half_size_x,
-          'attach-offset-y': args['translate-y'],
-          'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'] - half_size_x,
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'],
           'groups': args['groups'],
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
@@ -2460,11 +2460,11 @@ function webgl_primitive_cuboid(args){
 
     if(args['right']['exclude'] !== true){
         const properties = {
-          'attach-offset-x': args['translate-x'] + half_size_x,
-          'attach-offset-y': args['translate-y'],
-          'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'] + half_size_x,
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'],
           'groups': args['groups'],
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
@@ -2535,11 +2535,11 @@ function webgl_primitive_ellipsoid(args){
     });
 
     const properties = {
-      'attach-offset-x': args['translate-x'],
-      'attach-offset-y': args['translate-y'],
-      'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
+      'attach-x': args['translate-x'],
+      'attach-y': args['translate-y'],
+      'attach-z': args['translate-z'],
       'collision': false,
       'groups': args['groups'],
     };
@@ -2683,11 +2683,11 @@ function webgl_primitive_frustum(args){
       'degrees': 360 / args['points'],
     });
     const properties = {
-      'attach-offset-x': args['translate-x'],
-      'attach-offset-y': args['translate-y'],
-      'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
+      'attach-x': args['translate-x'],
+      'attach-y': args['translate-y'],
+      'attach-z': args['translate-z'],
       'collision': false,
       'draw-mode': 'TRIANGLE_FAN',
       'groups': args['groups'],
@@ -2881,11 +2881,11 @@ function webgl_primitive_stars(args){
     webgl_entity_create({
       'entities': [
         {
-          'attach-offset-x': args['translate-x'],
-          'attach-offset-y': args['translate-y'],
-          'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'],
           'collision': false,
           'draw-mode': 'POINTS',
           'groups': args['groups'],

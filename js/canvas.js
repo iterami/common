@@ -169,11 +169,11 @@ function canvas_init(args){
     entity_set({
       'default': true,
       'properties': {
-        'attach-offset-x': 0,
-        'attach-offset-y': 0,
-        'attach-offset-z': 0,
         'attach-to': false,
         'attach-type': 'entity_entities',
+        'attach-x': 0,
+        'attach-y': 0,
+        'attach-z': 0,
         'x': 0,
         'y': 0,
       },
@@ -221,7 +221,7 @@ function canvas_logicloop_handle_entity(entity){
     if(entity_entities[entity]['attach-to'] !== false){
         const attached = entity_entities[entity_entities[entity]['attach-to']];
         for(const axis in entity_entities[entity]['position']){
-            entity_entities[entity]['position'][axis] = attached['position'][axis] + entity_entities[entity]['attach-offset-' + axis];
+            entity_entities[entity]['position'][axis] = attached['position'][axis] + entity_entities[entity]['attach-' + axis];
         }
     }
 }

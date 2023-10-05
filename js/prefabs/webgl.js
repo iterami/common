@@ -220,11 +220,11 @@ function prefabs_webgl_humanoid(args){
         }
 
         const properties = {
-          'attach-offset-x': args['translate-x'],
-          'attach-offset-y': args['translate-y'],
-          'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'],
           'draw-mode': 'LINE_STRIP',
           'collision': false,
           'id': args['prefix'] + '-' + part,
@@ -389,11 +389,11 @@ function prefabs_webgl_lines_shrub(args){
         }
     }
     const properties = {
-      'attach-offset-x': args['translate-x'],
-      'attach-offset-y': args['translate-y'],
-      'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
+      'attach-x': args['translate-x'],
+      'attach-y': args['translate-y'],
+      'attach-z': args['translate-z'],
       'draw-mode': args['draw-mode'],
       'collision': false,
       'id': args['prefix'],
@@ -444,11 +444,11 @@ function prefabs_webgl_lines_tree(args){
     }
 
     const properties = {
-      'attach-offset-x': args['translate-x'],
-      'attach-offset-y': args['translate-y'],
-      'attach-offset-z': args['translate-z'],
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
+      'attach-x': args['translate-x'],
+      'attach-y': args['translate-y'],
+      'attach-z': args['translate-z'],
       'collision': false,
       'vertex-colors': args['trunk-color'],
     };
@@ -475,7 +475,7 @@ function prefabs_webgl_lines_tree(args){
           ],
         });
 
-        properties['attach-offset-y'] += 10;
+        properties['attach-y'] += 10;
         trunk_width -= trunk_width_decrease;
 
         const branch_count = core_random_integer({
@@ -572,14 +572,14 @@ function prefabs_webgl_tiles(args){
             });
         }
 
-        if(args['tiles'][selected]['attach-offset-x'] !== void 0){
-            tile_offset_x += args['tiles'][selected]['attach-offset-x'];
+        if(args['tiles'][selected]['attach-x'] !== void 0){
+            tile_offset_x += args['tiles'][selected]['attach-x'];
         }
-        if(args['tiles'][selected]['attach-offset-y'] !== void 0){
-            tile_offset_y += args['tiles'][selected]['attach-offset-y'];
+        if(args['tiles'][selected]['attach-y'] !== void 0){
+            tile_offset_y += args['tiles'][selected]['attach-y'];
         }
-        if(args['tiles'][selected]['attach-offset-z'] !== void 0){
-            tile_offset_z += args['tiles'][selected]['attach-offset-z'];
+        if(args['tiles'][selected]['attach-z'] !== void 0){
+            tile_offset_z += args['tiles'][selected]['attach-z'];
         }
         if(args['tiles'][selected]['attach-rotate-x'] !== void 0){
             tile_rotate_x += args['tiles'][selected]['attach-rotate-x'];
@@ -631,11 +631,11 @@ function prefabs_webgl_tree_2d(args){
     webgl_entity_create({
       'entities': [
         {
-          'attach-offset-x': args['translate-x'],
-          'attach-offset-y': args['translate-y'],
-          'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'],
           'billboard': args['billboard'],
           'collision': false,
           'id': args['prefix'] + '-base',
@@ -647,11 +647,11 @@ function prefabs_webgl_tree_2d(args){
           ],
         },
         {
-          'attach-offset-x': args['translate-x'],
-          'attach-offset-y': args['translate-y'],
-          'attach-offset-z': args['translate-z'],
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'],
           'billboard': args['billboard'],
           'collision': false,
           'draw-mode': 'TRIANGLES',
