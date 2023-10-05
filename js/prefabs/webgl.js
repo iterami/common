@@ -96,6 +96,7 @@ function prefabs_webgl_frustum_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'bottom': false,
         'character': webgl_character_id,
         'height': 20,
         'height-range': 0,
@@ -106,7 +107,8 @@ function prefabs_webgl_frustum_tree(args){
           .1, .3, .1, 1,
         ],
         'leaf-count': 3,
-        'leaf-points': 8,
+        'leaf-points': 3,
+        'leaf-separate': 4,
         'leaf-size': 4,
         'prefix': entity_id_count,
         'translate-x': 0,
@@ -116,7 +118,7 @@ function prefabs_webgl_frustum_tree(args){
           .4, .2, 0, 1,
         ],
         'trunk-points': 4,
-        'trunk-size': 2,
+        'trunk-size': 1,
       },
     });
 
@@ -139,10 +141,9 @@ function prefabs_webgl_frustum_tree(args){
     });
 
     const leaf_height = height / args['leaf-count'];
-    const leaf_separation = leaf_height  / 2;
     for(let i = 0; i < args['leaf-count']; i++){
         webgl_primitive_frustum({
-          'bottom': false,
+          'bottom': args['bottom'],
           'character': args['character'],
           'color-bottom': args['leaf-color-bottom'],
           'color-top': args['leaf-color-top'],
@@ -152,7 +153,7 @@ function prefabs_webgl_frustum_tree(args){
           'size-bottom': args['leaf-size'],
           'size-top': 0,
           'translate-x': args['translate-x'],
-          'translate-y': args['translate-y'] + height - leaf_separation - (leaf_separation * (i + 1)),
+          'translate-y': args['translate-y'] + height - leaf_height - (args['leaf-separate'] * i),
           'translate-z': args['translate-z'],
         });
     }
