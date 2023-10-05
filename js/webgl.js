@@ -619,7 +619,7 @@ function webgl_draw_entity(entity){
     );
 
     webgl.drawArrays(
-      webgl[webgl_properties['draw-mode'] || entity_entities[entity]['draw-mode']],
+      webgl[entity_entities[entity]['draw-mode']],
       0,
       entity_entities[entity]['vertices-length']
     );
@@ -962,7 +962,6 @@ function webgl_init(args){
         'spawn-translate-x': 0,
         'spawn-translate-y': 0,
         'spawn-translate-z': 0,
-        'textures': true,
         'title': false,
       },
     });
@@ -1000,7 +999,6 @@ function webgl_init(args){
       'directional-red': args['directional-red'],
       'directional-state': args['directional-state'],
       'directional-vector': args['directional-vector'],
-      'draw-mode': '',
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
@@ -1014,7 +1012,6 @@ function webgl_init(args){
       'spawn-translate-x': args['spawn-translate-x'],
       'spawn-translate-y': args['spawn-translate-y'],
       'spawn-translate-z': args['spawn-translate-z'],
-      'textures': args['textures'],
       'title': args['title'],
     };
 
@@ -1145,11 +1142,9 @@ function webgl_level_export(){
     );
 
     delete json['attributes'];
-    delete json['draw-mode'];
     delete json['paused'];
     delete json['picking'];
     delete json['shader'];
-    delete json['textures'];
 
     json['characters'] = {};
     json['paths'] = {};
@@ -2970,7 +2965,6 @@ function webgl_shader_remake(){
 precision lowp float;
 uniform bool fog;
 uniform bool picking;
-uniform bool textures;
 uniform float float_fogDensity;
 uniform sampler2D sampler;
 uniform vec3 vec_clearColor;
@@ -2983,10 +2977,7 @@ void main(void){
     if(picking){
         fragColor = vec_fragmentColor;
     }else{
-        fragColor = vec_fragmentColor * vec_lighting;
-        if(textures){
-            fragColor *= texture(sampler, vec_textureCoord);
-        }
+        fragColor = vec_fragmentColor * vec_lighting * texture(sampler, vec_textureCoord);
         if(fog){
             float distance = length(vec_position.xyz);
             fragColor.rgb = vec3(mix(
@@ -3006,7 +2997,6 @@ in vec4 vec_vertexColor;
 in vec3 vec_vertexPosition;
 uniform bool directional;
 uniform bool picking;
-uniform bool textures;
 uniform float alpha;
 uniform mat4 mat_cameraMatrix;
 uniform mat4 mat_perspectiveMatrix;
@@ -3078,7 +3068,6 @@ void main(void){
       'mat_cameraMatrix': 'mat_cameraMatrix',
       'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
       'sampler': 'sampler',
-      'textures': 'textures',
     };
     for(const location in locations){
         webgl_properties['shader'][location] = webgl.getUniformLocation(
@@ -3257,10 +3246,6 @@ function webgl_uniform_update(){
     webgl.uniform1i(
       webgl_properties['shader']['picking'],
       webgl_properties['picking']
-    );
-    webgl.uniform1i(
-      webgl_properties['shader']['textures'],
-      webgl_properties['textures']
     );
 }
 
