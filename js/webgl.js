@@ -509,7 +509,11 @@ function webgl_collision(args){
     if(collision !== false){
         if(!entity_groups['particles'][args['collider']['id']]
           && Math.abs(target_position[collision] - collider_position[collision]) < range[collision]){
-            args['collider']['translate-' + collision] = target_position[collision] + args['collider']['collide-range-vertical'] * collision_sign;
+            const range_axis = collision === 'y'
+              ? 'vertical'
+              : 'horizontal';
+
+            args['collider']['translate-' + collision] = target_position[collision] + args['collider']['collide-range-' + range_axis] * collision_sign;
             args['collider']['change-translate-' + collision] = args['target']['change-translate-' + collision];
 
             if(collision === 'y'){
