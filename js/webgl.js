@@ -681,11 +681,11 @@ function webgl_entity_create(args){
         if(args['entities'][entity]['attach-to'] !== false){
             entity_attach({
               'entity': entity_id,
-              'offset-x': args['entities'][entity]['attach-x'],
-              'offset-y': args['entities'][entity]['attach-y'],
-              'offset-z': args['entities'][entity]['attach-z'],
               'to': args['entities'][entity]['attach-to'],
               'type': args['entities'][entity]['attach-type'],
+              'x': args['entities'][entity]['attach-x'],
+              'y': args['entities'][entity]['attach-y'],
+              'z': args['entities'][entity]['attach-z'],
             });
         }
     }

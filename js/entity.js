@@ -5,17 +5,17 @@ function entity_attach(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'offset-x': 0,
-        'offset-y': 0,
-        'offset-z': 0,
         'type': 'entity_entities',
+        'x': 0,
+        'y': 0,
+        'z': 0,
       },
     });
 
     const entity = entity_entities[args['entity']];
-    entity['attach-x'] = args['offset-x'];
-    entity['attach-y'] = args['offset-y'];
-    entity['attach-z'] = args['offset-z'];
+    entity['attach-x'] = args['x'];
+    entity['attach-y'] = args['y'];
+    entity['attach-z'] = args['z'];
     entity['attach-to'] = args['to'];
     entity['attach-type'] = args['type'];
 }
