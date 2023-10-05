@@ -232,7 +232,7 @@ function webgl_character_jump(args){
     }
 
     webgl_characters[args['character']]['jump-allow'] = false;
-    webgl_characters[args['character']]['change-translate-' + webgl_properties['gravity-axis']] = webgl_characters[args['character']]['jump-height'];
+    webgl_characters[args['character']]['change-translate-y'] = webgl_characters[args['character']]['jump-height'];
 }
 
 function webgl_character_level(args){
@@ -509,14 +509,10 @@ function webgl_collision(args){
     if(collision !== false){
         if(!entity_groups['particles'][args['collider']['id']]
           && Math.abs(target_position[collision] - collider_position[collision]) < range[collision]){
-            const range_axis = collision === 'y'
-              ? 'vertical'
-              : 'horizontal';
-
-            args['collider']['translate-' + collision] = target_position[collision] + args['collider']['collide-range-' + range_axis] * collision_sign;
+            args['collider']['translate-' + collision] = target_position[collision] + args['collider']['collide-range-vertical'] * collision_sign;
             args['collider']['change-translate-' + collision] = args['target']['change-translate-' + collision];
 
-            if(collision === webgl_properties['gravity-axis']){
+            if(collision === 'y'){
                 if(args['collider']['jump-allow'] === false
                   && webgl_properties['gravity-max'] / webgl_properties['gravity-max'] === collision_sign){
                     args['collider']['jump-allow'] = true;
@@ -733,13 +729,13 @@ function webgl_entity_move(args){
 
     }else{
         const movement = math_move_3d({
-          'angle': entity_entities[args['entity']]['rotate-' + webgl_properties['gravity-axis']],
+          'angle': entity_entities[args['entity']]['rotate-y'],
           'speed': entity_entities[args['entity']]['speed'] * args['multiplier'],
           'strafe': args['strafe'],
         });
 
-        entity_entities[args['entity']]['change-' + (webgl_properties['gravity-axis'] === 'x' ? 'translate-y' : 'translate-x')] = movement['x'];
-        entity_entities[args['entity']]['change-' + (webgl_properties['gravity-axis'] === 'z' ? 'translate-y' : 'translate-z')] = movement['z'];
+        entity_entities[args['entity']]['change-translate-x'] = movement['x'];
+        entity_entities[args['entity']]['change-translate-z'] = movement['z'];
     }
 }
 
@@ -953,7 +949,6 @@ function webgl_init(args){
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
-        'gravity-axis': 'y',
         'gravity-max': -2,
         'groups': [],
         'paths': {},
@@ -1005,7 +1000,6 @@ function webgl_init(args){
       'fog-density': args['fog-density'],
       'fog-state': args['fog-state'],
       'gravity-acceleration': args['gravity-acceleration'],
-      'gravity-axis': args['gravity-axis'],
       'gravity-max': args['gravity-max'],
       'paused': false,
       'picking': false,
@@ -1536,8 +1530,8 @@ function webgl_logicloop(){
         }
 
         if(character_level >= 0){
-            webgl_characters[character]['change-translate-' + webgl_properties['gravity-axis']] = Math.max(
-              webgl_characters[character]['change-translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+            webgl_characters[character]['change-translate-y'] = Math.max(
+              webgl_characters[character]['change-translate-y'] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
         }
@@ -1603,7 +1597,7 @@ function webgl_logicloop(){
         webgl_characters[webgl_character_id]['change-translate-z'] = 0;
 
     }else{
-        if(webgl_characters[webgl_character_id]['change-translate-' + webgl_properties['gravity-axis']] !== 0){
+        if(webgl_characters[webgl_character_id]['change-translate-y'] !== 0){
             webgl_characters[webgl_character_id]['jump-allow'] = false;
         }
 
@@ -1752,8 +1746,8 @@ function webgl_logicloop_handle_entity(entity){
 
     }else{
         if(entity_entities[entity]['gravity']){
-            entity_entities[entity]['change-translate-' + webgl_properties['gravity-axis']] = Math.max(
-              entity_entities[entity]['change-translate-' + webgl_properties['gravity-axis']] + webgl_properties['gravity-acceleration'],
+            entity_entities[entity]['change-translate-y'] = Math.max(
+              entity_entities[entity]['change-translate-y'] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
         }
