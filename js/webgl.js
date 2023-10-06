@@ -1571,10 +1571,6 @@ function webgl_logicloop(){
             webgl_characters[character][translate_axis] += webgl_characters[character]['change-' + translate_axis];
         }
 
-        webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
-        webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
-        webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
-
         if(webgl_characters[character]['camera-zoom'] > 0){
             const radians_x = math_degrees_to_radians({
               'degrees': webgl_characters[character]['camera-rotate-x'],
@@ -1584,9 +1580,17 @@ function webgl_logicloop(){
             });
             const cos_x = Math.cos(radians_x);
 
-            webgl_characters[character]['camera-x'] += Math.sin(-radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
-            webgl_characters[character]['camera-y'] += Math.sin(radians_x) * webgl_characters[character]['camera-zoom'];
-            webgl_characters[character]['camera-z'] += Math.cos(radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
+            webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x']
+              + Math.sin(-radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
+            webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y']
+              + Math.sin(radians_x) * webgl_characters[character]['camera-zoom'];
+            webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z']
+              + Math.cos(radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
+
+        }else{
+            webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
+            webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
+            webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
         }
     }
 
