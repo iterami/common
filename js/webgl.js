@@ -509,8 +509,7 @@ function webgl_collision(args){
     }
 
     if(collision !== false){
-        if(!entity_groups['particles'][args['collider']['id']]
-          && Math.abs(target_position[collision] - collider_position[collision]) < range[collision]){
+        if(Math.abs(target_position[collision] - collider_position[collision]) < range[collision]){
             const range_axis = collision === 'y'
               ? 'vertical'
               : 'horizontal';
@@ -546,16 +545,6 @@ function webgl_collision(args){
               'target': args['collider'],
             });
         }
-
-        if(entity_groups['particles'][args['collider']['id']]){
-            entity_remove({
-              'entities': [
-                args['collider']['id'],
-              ],
-            });
-
-            return false;
-        }
     }
 
     return true;
@@ -577,7 +566,6 @@ function webgl_draw(){
 
     entity_group_modify({
       'groups': [
-        'particles',
         'foreground',
       ],
       'todo': function(entity){
@@ -588,7 +576,6 @@ function webgl_draw(){
     });
     entity_group_modify({
       'groups': [
-        'particles',
         'foreground',
       ],
       'todo': function(entity){
@@ -1040,7 +1027,6 @@ function webgl_init(args){
 
     args['groups'].push(
       'foreground',
-      'particles',
       'skybox',
       'webgl'
     );
@@ -1085,9 +1071,6 @@ function webgl_init(args){
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
-        'spawn-entity': false,
-        'spawn-interval-current': 0,
-        'spawn-interval-max': 100,
         'speed': 0,
         'texture-align': [
           1, 1,
@@ -1462,64 +1445,6 @@ function webgl_logicloop(){
       },
     });
 
-    if(!webgl_properties['paused']){
-        entity_group_modify({
-          'groups': [
-            'particles',
-          ],
-          'todo': function(entity){
-              webgl_entity_move({
-                'entity': entity,
-                'multiplier': -1,
-              });
-
-              let remove = false;
-
-              entity_entities[entity]['lifespan'] -= 1;
-              if(entity_entities[entity]['lifespan'] <= 0){
-                  remove = true;
-
-              }else{
-                  for(const character in webgl_characters){
-                      if(entity_entities[entity]['parent'] === character
-                        || webgl_character_level({
-                          'character': character,
-                        }) < 0){
-                          continue;
-                      }
-
-                      if(math_distance({
-                          'x0': webgl_characters[character]['translate-x'],
-                          'y0': webgl_characters[character]['translate-y'],
-                          'z0': webgl_characters[character]['translate-z'],
-                          'x1': entity_entities[entity]['translate-x'],
-                          'y1': entity_entities[entity]['translate-y'],
-                          'z1': entity_entities[entity]['translate-z'],
-                        }) < Math.max(
-                          webgl_characters[character]['collide-range-horizontal'],
-                          webgl_characters[character]['collide-range-vertical']
-                        )){
-                          webgl_event({
-                            'parent': entity_entities[entity],
-                            'target': webgl_characters[character],
-                          });
-                          remove = true;
-                          break;
-                      }
-                  }
-              }
-
-              if(remove){
-                  entity_remove({
-                    'entities': [
-                      entity,
-                    ],
-                  });
-              }
-          },
-        });
-    }
-
     for(const character in webgl_characters){
         const character_level = webgl_character_level({
           'character': character,
@@ -1780,24 +1705,6 @@ function webgl_logicloop_handle_entity(entity){
         });
     }
 
-    if(entity_entities[entity]['spawn-entity'] !== false){
-        entity_entities[entity]['spawn-interval-current']++;
-
-        if(entity_entities[entity]['spawn-interval-current'] >= entity_entities[entity]['spawn-interval-max']){
-            entity_entities[entity]['spawn-interval-current'] = 0;
-
-            webgl_particles_create({
-              'parent': entity_entities[entity],
-              'rotate-x': entity_entities[entity]['rotate-x'],
-              'rotate-y': entity_entities[entity]['rotate-y'],
-              'rotate-z': entity_entities[entity]['rotate-z'],
-              'translate-x': entity_entities[entity]['translate-x'],
-              'translate-y': entity_entities[entity]['translate-y'],
-              'translate-z': entity_entities[entity]['translate-z'],
-            });
-        }
-    }
-
     math_matrix_clone({
       'id': 'camera',
       'to': entity,
@@ -1894,69 +1801,6 @@ function webgl_normals(args){
         );
     }
     return normals;
-}
-
-// Required args: parent
-function webgl_particles_create(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'collide-range': 1,
-        'collides': true,
-        'color': [],
-        'count': 1,
-        'gravity': true,
-        'lifespan': 100,
-        'rotate-x': webgl_characters[webgl_character_id]['rotate-x'],
-        'rotate-y': webgl_characters[webgl_character_id]['rotate-y'],
-        'rotate-z': webgl_characters[webgl_character_id]['rotate-z'],
-        'speed': 1,
-        'translate-x': webgl_characters[webgl_character_id]['translate-x'],
-        'translate-y': webgl_characters[webgl_character_id]['translate-y'],
-        'translate-z': webgl_characters[webgl_character_id]['translate-z'],
-      },
-    });
-    if(args['color'].length === 0){
-        args['color'] = webgl_vertexcolorarray({
-          'vertexcount': 1,
-        });
-    }
-
-    for(let i = 0; i < args['count']; i++){
-        const position = webgl_get_translation({
-          'entity': args['parent'],
-        });
-
-        const id = entity_create({
-          'properties': {
-            'collide-range-horizontal': args['collide-range'],
-            'collide-range-vertical': args['collide-range'],
-            'collides': args['collides'],
-            'draw-mode': 'POINTS',
-            'gravity': args['gravity'],
-            'lifespan': args['lifespan'],
-            'normals': [0, 1, 0],
-            'parent': args['parent']['id'],
-            'rotate-x': args['rotate-x'],
-            'rotate-y': args['rotate-y'],
-            'rotate-z': args['rotate-z'],
-            'speed': args['speed'],
-            'translate-x': position['x'],
-            'translate-y': position['y'],
-            'translate-z': position['z'],
-            'vertex-colors': args['color'],
-            'vertices': [0, 0, 0],
-          },
-        });
-        math_matrices[id] = math_matrix_create();
-        entity_group_move({
-          'entities': [
-            id,
-          ],
-          'from': 'foreground',
-          'to': 'particles',
-        });
-    }
 }
 
 // Required args: id
