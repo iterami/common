@@ -2809,9 +2809,7 @@ function webgl_shader_create(args){
 }
 
 function webgl_shader_remake(){
-    if(webgl_shaders === false){
-        webgl_shaders = {
-          'fragment': `#version 300 es
+    const fragment_shader = `#version 300 es
 precision lowp float;
 uniform bool fog;
 uniform bool picking;
@@ -2837,9 +2835,8 @@ void main(void){
             ));
         }
     }
-}`,
-
-          'vertex': `#version 300 es
+}`;
+    const vertex_shader = `#version 300 es
 in vec2 vec_texturePosition;
 in vec3 vec_vertexNormal;
 in vec4 vec_pickColor;
@@ -2873,9 +2870,7 @@ void main(void){
     }else{
         vec_fragmentColor = vec_vertexColor;
     }
-}`,
-        };
-    }
+}`;
 
     if(webgl_properties['shader']['program'] !== 0){
         webgl.deleteProgram(webgl_properties['shader']['program']);
@@ -2884,11 +2879,11 @@ void main(void){
     webgl_properties['shader']['program'] = webgl_program_create({
       'shaders': [
         webgl_shader_create({
-          'source': webgl_shaders['fragment'],
+          'source': fragment_shader,
           'type': webgl.FRAGMENT_SHADER,
         }),
         webgl_shader_create({
-          'source': webgl_shaders['vertex'],
+          'source': vertex_shader,
           'type': webgl.VERTEX_SHADER,
         }),
       ],
@@ -3157,7 +3152,6 @@ globalThis.webgl_diagonal = 0;
 globalThis.webgl_extensions = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
-globalThis.webgl_shaders = false;
 
 core_image({
   'id': webgl_default_texture,
