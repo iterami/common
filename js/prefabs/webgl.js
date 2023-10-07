@@ -642,7 +642,7 @@ function prefabs_webgl_tree_2d(args){
           'vertex-colors': args['base-color'],
           'vertices': [
             args['width-base'] / 2, 0, -.01,
-            0, height * .9, -.01,
+            0, height * .9, -.1,
             -args['width-base'] / 2, 0, -.01,
           ],
         },
