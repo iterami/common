@@ -334,6 +334,8 @@ function webgl_character_spawn(args){
         return;
     }
 
+    webgl_characters[args['character']]['health-current'] = webgl_characters[args['character']]['health-max'];
+
     webgl_character_origin(args);
     webgl_entity_move_to({
       'entity': webgl_characters[args['character']],
@@ -3136,9 +3138,11 @@ function webgl_stat_modify(args){
                 }
             }
 
-        }else if(args['target']['health-current'] > args['target']['health-max']){
-            args['target']['health-current'] = args['target']['health-max'];
-
+        }else{
+            args['target']['health-current'] = Math.min(
+              args['target']['health-current'],
+              args['target']['health-max']
+            );
         }
     }
 }
