@@ -836,9 +836,7 @@ function webgl_event(args){
           ? webgl_properties
           : event_modify['target'] !== void 0
             ? entity_entities[event_modify['target']]
-            : event_modify['self']
-              ? args['parent']
-              : args['target'];
+            : args['target'];
 
         webgl_stat_modify({
           'set': event_modify['set'],
