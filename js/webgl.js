@@ -2792,6 +2792,28 @@ function webgl_scissor(args){
     return result;
 }
 
+function webgl_screenshot(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'quality': 1,
+        'type': 'image/png',
+      },
+    });
+
+    webgl_draw();
+    core_elements['canvas'].toBlob(
+      function(blob){
+          globalThis.open(
+            URL.createObjectURL(blob),
+            '_blank'
+          );
+      },
+      args['type'],
+      args['quality']
+    );
+}
+
 // Required args: source, type
 function webgl_shader_create(args){
     const shader = webgl.createShader(args['type']);
