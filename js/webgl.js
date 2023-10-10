@@ -819,15 +819,12 @@ function webgl_event(args){
         return;
     }
 
-    let type = 'entity';
-    if(webgl_character_level({
-        'character': args['target']['id'],
-      }) > -2){
-        type = 'character';
-    }
-
-    if(args['parent']['event-target-type'] !== type){
-        return;
+    if(args['parent']['event-target-type'] === 'character'){
+        if(webgl_character_level({
+            'character': args['target']['id'],
+          }) === -2){
+            return;
+        }
     }
 
     for(const stat in args['parent']['event-modify']){
