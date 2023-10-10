@@ -1608,7 +1608,7 @@ function core_uri(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'id': 'buffer',
+        'id': 'canvas',
         'quality': 1,
         'type': 'image/png',
       },
