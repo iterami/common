@@ -2793,6 +2793,10 @@ function webgl_scissor(args){
 }
 
 function webgl_screenshot(args){
+    if(webgl === 0){
+        return;
+    }
+
     args = core_args({
       'args': args,
       'defaults': {
