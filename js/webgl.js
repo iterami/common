@@ -1973,14 +1973,6 @@ function webgl_pick_color(args){
 }
 
 function webgl_pick_entity(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'x': core_mouse['x'],
-        'y': core_mouse['y'],
-      },
-    });
-
     const level = webgl_character_level();
     if(core_menu_open
       || level < -1
@@ -1988,6 +1980,14 @@ function webgl_pick_entity(args){
       || webgl_characters[webgl_character_id]['health-current'] <= 0){
         return;
     }
+
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'x': core_mouse['x'],
+        'y': core_mouse['y'],
+      },
+    });
 
     webgl_properties['picking'] = true;
     webgl_uniform_update();
