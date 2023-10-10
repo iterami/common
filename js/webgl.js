@@ -814,6 +814,11 @@ function webgl_entity_todo(entity){
 
 // Required args: parent, target
 function webgl_event(args){
+    if(args['parent']['event-target-id'] !== false
+      && args['parent']['event-target-id'] !== args['target']['id']){
+        return;
+    }
+
     let type = 'entity';
     if(webgl_character_level({
         'character': args['target']['id'],
@@ -825,18 +830,13 @@ function webgl_event(args){
         return;
     }
 
-    if(args['parent']['event-target-id'] !== false
-      && args['parent']['event-target-id'] !== args['target']['id']){
-        return;
-    }
-
     for(const stat in args['parent']['event-modify']){
         const event_modify = args['parent']['event-modify'][stat];
-        const target = event_modify['webgl'] === true
-          ? webgl_properties
-          : event_modify['target'] !== void 0
-            ? entity_entities[event_modify['target']]
-            : args['target'];
+        const event_type = event_modify['type'] || 'entity_entities';
+
+        const target = event_modify['target'] !== void 0
+          ? globalThis[event_type][event_modify['target']]
+          : args['target'];
 
         webgl_stat_modify({
           'set': event_modify['set'],
