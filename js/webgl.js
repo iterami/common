@@ -827,6 +827,14 @@ function webgl_event(args){
         }
     }
 
+    if(args['parent']['event-limit'] !== false){
+        args['parent']['event-limit']--;
+
+        if(args['parent']['event-limit'] <= 0){
+            args['parent']['event-range'] = false;
+        }
+    }
+
     for(const stat in args['parent']['event-modify']){
         const event_modify = args['parent']['event-modify'][stat];
         const event_type = event_modify['type'] || 'entity_entities';
@@ -851,14 +859,6 @@ function webgl_event(args){
 
         }else{
             globalThis[args['parent']['event-todo']] = args['parent']['event-todo-args'];
-        }
-    }
-
-    if(args['parent']['event-limit'] !== false){
-        args['parent']['event-limit']--;
-
-        if(args['parent']['event-limit'] <= 0){
-            args['parent']['event-range'] = false;
         }
     }
 }
