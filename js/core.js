@@ -199,6 +199,7 @@ function core_handle_beforeunload(event){
 }
 
 function core_handle_blur(event){
+    core_key_shift = false;
     for(const key in core_keys){
         core_keys[key]['state'] = false;
     }
@@ -300,6 +301,7 @@ function core_handle_keydown(event){
         return;
     }
 
+    core_key_shift = event.shiftKey;
     const key = core_events_keyinfo(event);
 
     if(core_menu_open
@@ -328,6 +330,7 @@ function core_handle_keydown(event){
 }
 
 function core_handle_keyup(event){
+    core_key_shift = event.shiftKey;
     const key = core_events_keyinfo(event);
 
     if(core_handle_event({
@@ -1626,6 +1629,7 @@ globalThis.core_gamepads = {};
 globalThis.core_images = {};
 globalThis.core_intervals = {};
 globalThis.core_key_rebinds = {};
+globalThis.core_key_shift = false;
 globalThis.core_keys = {};
 globalThis.core_menu_block_events = true;
 globalThis.core_menu_open = false;
