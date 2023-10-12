@@ -733,11 +733,9 @@ function core_interval_pause(args){
 
 function core_interval_pause_all(){
     for(const interval in core_intervals){
-        if(!core_intervals[interval]['paused']){
-            core_interval_pause({
-              'id': interval,
-            });
-        }
+        core_interval_pause({
+          'id': interval,
+        });
     }
 }
 
