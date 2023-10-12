@@ -801,12 +801,12 @@ function core_interval_resume_all(){
 
 // Required args: id, interval
 function core_interval_sync(args){
+    if(core_intervals[args['id']]['paused']){
+        return;
+    }
+
     return globalThis.setTimeout(
       function(){
-          if(core_intervals[args['id']]['paused']){
-              return;
-          }
-
           core_intervals[args['id']]['todo']();
 
           core_intervals[args['id']]['var'] = core_interval_sync({
