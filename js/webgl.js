@@ -41,11 +41,14 @@ function webgl_buffer_set(args){
 }
 
 function webgl_camera_handle(){
+    const level = webgl_character_level();
+    if(level < -1){
+        return;
+    }
+
     if(core_mouse['pointerlock-state']
       || core_mouse['down-0']
       || core_mouse['down-2']){
-        const level = webgl_character_level();
-
         if(level !== -1 && webgl_properties['paused']){
             return;
         }
@@ -822,7 +825,7 @@ function webgl_event(args){
     if(args['parent']['event-target-type'] === 'character'){
         if(webgl_character_level({
             'character': args['target']['id'],
-          }) === -2){
+          }) < -1){
             return;
         }
     }
