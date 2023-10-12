@@ -55,7 +55,12 @@ function core_digits_min(args){
     return sign + number + fraction;
 }
 
-function core_escape(){
+function core_escape(force){
+    if(core_menu_lock
+      && force !== true){
+        return;
+    }
+
     core_menu_open = !core_menu_open;
 
     if(!core_menu_open){
@@ -1072,6 +1077,7 @@ function core_repo_init(args){
         'link': false,
         'menu': false,
         'menu-block-events': true,
+        'menu-lock': false,
         'mousebinds': false,
         'owner': 'iterami',
         'reset': false,
@@ -1159,6 +1165,7 @@ function core_repo_init(args){
         core_key_rebinds = args['keybinds'];
     }
     core_menu_block_events = args['menu-block-events'];
+    core_menu_lock = args['menu-lock'];
     core_reset_todo = args['reset'];
     core_events_bind({
       'beforeunload': args['beforeunload'],
@@ -1175,7 +1182,7 @@ function core_repo_init(args){
     }
 
     if(args['menu']){
-        core_escape();
+        core_escape(true);
     }
 }
 
@@ -1630,6 +1637,7 @@ globalThis.core_key_rebinds = {};
 globalThis.core_key_shift = false;
 globalThis.core_keys = {};
 globalThis.core_menu_block_events = true;
+globalThis.core_menu_lock = false;
 globalThis.core_menu_open = false;
 globalThis.core_mode = 0;
 globalThis.core_mouse = {};
