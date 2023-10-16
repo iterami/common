@@ -284,20 +284,37 @@ function webgl_character_origin(args){
     });
 }
 
-// Required args: id
 function webgl_character_random(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'height-base': 2,
+        'height-random': 5,
+        'id': webgl_character_count,
+        'jump-height': 1,
+        'level': 0,
+        'lives': -1,
+        'speed': 1,
+        'width-base': 2,
+        'width-random': 2,
+      },
+    });
+
     const horizontal = core_random_number({
-      'multiplier': 2,
-    }) + 2;
+      'multiplier': args['width-random'],
+    }) + args['width-base'];
     const vertical = core_random_number({
-      'multiplier': 5,
-    }) + 2;
+      'multiplier': args['height-random'],
+    }) + args['height-base'];
 
     webgl_character_init({
       'collide-range-horizontal': horizontal,
       'collide-range-vertical': vertical,
       'id': args['id'],
-      'level': 0,
+      'jump-height': args['jump-height'],
+      'level': args['level'],
+      'lives': args['lives'],
+      'speed': args['speed'],
     });
     webgl_primitive_cuboid({
       'all': {
