@@ -412,7 +412,7 @@ function prefabs_webgl_lines_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'billboard': 'y',
+        'billboard': true,
         'character': webgl_character_id,
         'leaf-color': [
           0, .5, 0, 1,
@@ -600,7 +600,7 @@ function prefabs_webgl_tree_2d(args){
         'base-color': [
           .4, .2, 0, 1,
         ],
-        'billboard': 'y',
+        'billboard': true,
         'character': webgl_character_id,
         'height': 5,
         'height-range': 0,
@@ -641,9 +641,9 @@ function prefabs_webgl_tree_2d(args){
           'id': args['prefix'] + '-base',
           'vertex-colors': args['base-color'],
           'vertices': [
-            args['width-base'] / 2, 0, -.01,
-            0, height * .9, -.01,
-            -args['width-base'] / 2, 0, -.01,
+            args['width-base'] / 2, 0, -.1,
+            0, height * .9, -.1,
+            -args['width-base'] / 2, 0, -.1,
           ],
         },
         {

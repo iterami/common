@@ -2,18 +2,16 @@
 
 // Required args: entity
 function webgl_billboard(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'axes': 'y',
-        'character': webgl_character_id,
-      },
+    const translation = webgl_get_translation({
+      'entity': entity_entities[args['entity']],
     });
 
-    for(const axis in args['axes']){
-        entity_entities[args['entity']]['rotate-' + args['axes'][axis]]
-          = 360 - webgl_characters[args['character']]['camera-rotate-' + args['axes'][axis]];
-    }
+    entity_entities[args['entity']]['rotate-y'] = 360 - math_radians_to_degrees({
+      'radians': Math.PI / 2 + Math.atan2(
+        translation['z'] - webgl_characters[webgl_character_id]['camera-z'],
+        translation['x'] - webgl_characters[webgl_character_id]['camera-x'],
+      ),
+    });
 }
 
 // Required args: attribute, data, size
