@@ -152,6 +152,7 @@ function webgl_character_init(args){
         'id': webgl_character_id,
         'jump-height': 1,
         'level': -1,
+        'lives': -1,
         'path-direction': 1,
         'path-end': 'default',
         'path-id': '',
@@ -198,6 +199,7 @@ function webgl_character_init(args){
       'jump-allow': false,
       'jump-height': args['jump-height'],
       'level': args['level'],
+      'lives': args['lives'],
       'path-direction': args['path-direction'],
       'path-end': args['path-end'],
       'path-id': args['path-id'],
@@ -331,7 +333,8 @@ function webgl_character_spawn(args){
       },
     });
 
-    if(webgl_characters[args['character']] === void 0){
+    if(webgl_characters[args['character']] === void 0
+      || webgl_characters[args['character']]['lives'] === 0){
         return;
     }
 
@@ -2999,9 +3002,15 @@ function webgl_stat_modify(args){
         }else if(args['target']['health-current'] <= 0){
             args['target']['health-current'] = 0;
 
-            for(const entity in entity_entities){
-                if(entity_entities[entity]['attach-to'] === args['character']){
-                   entity_entities[entity]['attach-to'] = false;
+            if(args['target']['lives'] > 0){
+                args['target']['lives']--;
+            }
+
+            if(args['target']['lives'] === 0){
+                for(const entity in entity_entities){
+                    if(entity_entities[entity]['attach-to'] === args['character']){
+                       entity_entities[entity]['attach-to'] = false;
+                    }
                 }
             }
 
