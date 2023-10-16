@@ -401,7 +401,18 @@ function core_handle_mousemove(event){
 }
 
 function core_handle_mouseup(event){
-    core_mouse['down-' + event.button] = false;
+    if(event.pageX < 0 || event.pageY < 0
+      || event.pageX > globalThis.innerWidth
+      || event.pageY > globalThis.innerHeight){
+        core_mouse['down-0'] = false;
+        core_mouse['down-1'] = false;
+        core_mouse['down-2'] = false;
+        core_mouse['down-3'] = false;
+        core_mouse['down-4'] = false;
+
+    }else{
+        core_mouse['down-' + event.button] = false;
+    }
     core_handle_event({
       'event': event,
       'key': 'mouseup',
