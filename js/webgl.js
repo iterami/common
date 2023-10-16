@@ -1690,9 +1690,8 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
-    if(entity_entities[entity]['billboard'] !== false){
+    if(entity_entities[entity]['billboard']){
         webgl_billboard({
-          'axes': entity_entities[entity]['billboard'],
           'entity': entity,
         });
 
@@ -1701,11 +1700,11 @@ function webgl_logicloop_handle_entity(entity){
             const rotate_axis = 'rotate-' + axes[axis];
             entity_entities[entity][rotate_axis] += entity_entities[entity]['change-' + rotate_axis];
         }
-
-        webgl_clamp_rotation({
-          'entity': entity_entities[entity],
-        });
     }
+
+    webgl_clamp_rotation({
+      'entity': entity_entities[entity],
+    });
 
     math_matrix_clone({
       'id': 'camera',
