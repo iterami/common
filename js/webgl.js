@@ -1382,7 +1382,8 @@ function webgl_logicloop(){
                 }
             }
 
-            if(core_keys[core_storage_data['move-↑']]['state']){
+            if(core_keys[core_storage_data['move-↑']]['state']
+              || (core_mouse['down-0'] && core_mouse['down-2'])){
                 webgl_characters[webgl_character_id]['automove'] = false;
                 forwardback -= 1;
 
