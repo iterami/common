@@ -1022,6 +1022,10 @@ function webgl_init(args){
 
     math_matrices['camera'] = math_matrix_create();
     math_matrices['perspective'] = math_matrix_create();
+    math_matrices['perspective'][5] = 1;
+    math_matrices['perspective'][10] = -1;
+    math_matrices['perspective'][11] = -1;
+    math_matrices['perspective'][14] = -2;
 
     webgl_clearcolor_set({
       'blue': webgl_properties['clearcolor-blue'],
@@ -1976,14 +1980,6 @@ function webgl_path_use(args){
     }
 }
 
-function webgl_perspective(){
-    math_matrices['perspective'][0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
-    math_matrices['perspective'][5] = 1;
-    math_matrices['perspective'][10] = -1;
-    math_matrices['perspective'][11] = -1;
-    math_matrices['perspective'][14] = -2;
-}
-
 // Required args: x, y
 function webgl_pick_color(args){
     const pixelarray = new Uint8Array(4);
@@ -2789,7 +2785,7 @@ function webgl_resize(){
       height
     );
 
-    webgl_perspective();
+    math_matrices['perspective'][0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
     webgl_uniform_update();
     if(core_menu_open){
         webgl_draw();
