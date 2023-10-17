@@ -83,7 +83,7 @@ function canvas_draw_path(args){
 
 // Required args: id
 function canvas_getContext(args){
-    return core_elements[args['id']].getContext(
+    return document.getElementById(args['id']).getContext(
       '2d',
       {
         'alpha': false,
@@ -154,14 +154,12 @@ function canvas_init(args){
     core_html({
       'parent': document.body,
       'properties': properties,
-      'store': 'canvas',
       'type': 'canvas',
     });
-    core_elements['canvas'].style.cursor = args['cursor'];
-
     canvas = canvas_getContext({
       'id': 'canvas',
     });
+    canvas.canvas.style.cursor = args['cursor'];
 
     globalThis.onresize = canvas_resize;
     canvas_resize();
@@ -229,11 +227,11 @@ function canvas_logicloop_handle_entity(entity){
 function canvas_resize(){
     canvas_properties['height'] = globalThis.innerHeight;
     canvas_properties['height-half'] = canvas_properties['height'] / 2;
-    core_elements['canvas'].height = canvas_properties['height'];
+    canvas.canvas.height = canvas_properties['height'];
 
     canvas_properties['width'] = globalThis.innerWidth;
     canvas_properties['width-half'] = canvas_properties['width'] / 2;
-    core_elements['canvas'].width = canvas_properties['width'];
+    canvas.canvas.width = canvas_properties['width'];
 
     Object.assign(
       canvas,

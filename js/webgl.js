@@ -903,7 +903,7 @@ function webgl_extension(args){
 
 // Required args: id
 function webgl_getContext(args){
-    return core_elements[args['id']].getContext(
+    return document.getElementById(args['id']).getContext(
       'webgl2',
       {
         'alpha': false,
@@ -979,7 +979,6 @@ function webgl_init(args){
           'properties': {
             'id': 'canvas',
           },
-          'store': 'canvas',
           'type': 'canvas',
         });
 
@@ -987,7 +986,7 @@ function webgl_init(args){
           'id': 'canvas',
         });
     }
-    core_elements['canvas'].style.cursor = args['cursor'];
+    webgl.canvas.style.cursor = args['cursor'];
 
     entity_id_count = 0;
     webgl_properties = {
@@ -2775,8 +2774,8 @@ function webgl_program_create(args){
 function webgl_resize(){
     const height = globalThis.innerHeight;
     const width = globalThis.innerWidth;
-    core_elements['canvas'].height = height;
-    core_elements['canvas'].width = width;
+    webgl.canvas.height = height;
+    webgl.canvas.width = width;
 
     webgl.viewport(
       0,
@@ -2829,7 +2828,7 @@ function webgl_screenshot(args){
     });
 
     webgl_draw();
-    core_elements['canvas'].toBlob(
+    webgl.canvas.toBlob(
       function(blob){
           globalThis.open(
             URL.createObjectURL(blob),
