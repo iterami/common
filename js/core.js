@@ -133,14 +133,6 @@ function core_events_bind(args){
     }
 }
 
-function core_events_keyinfo(event){
-    const code = event.keyCode || event.which;
-    return {
-      'code': code,
-      'key': String.fromCharCode(code),
-    };
-}
-
 function core_events_todoloop(){
     for(const key in core_keys){
         if(core_keys[key]['state']
@@ -307,17 +299,16 @@ function core_handle_keydown(event){
     }
 
     core_key_shift = event.shiftKey;
-    const key = core_events_keyinfo(event);
 
     if(core_menu_open
       && core_menu_block_events
-      && !(key['code'] === 27 || key['code'] === core_storage_data['reset'])){
+      && !(event.code === 'Escape' || event.code === core_storage_data['reset'])){
         return;
     }
 
     if(core_handle_event({
         'event': event,
-        'key': key['code'],
+        'key': event.code,
         'object': core_keys,
         'state': true,
         'todo': true,
@@ -336,11 +327,10 @@ function core_handle_keydown(event){
 
 function core_handle_keyup(event){
     core_key_shift = event.shiftKey;
-    const key = core_events_keyinfo(event);
 
     if(core_handle_event({
         'event': event,
-        'key': key['code'],
+        'key': event.code,
         'object': core_keys,
         'state': false,
       })){
@@ -601,15 +591,15 @@ function core_init(){
       'content': '<table><tr><td><input class=mini id=audio-volume max=1 min=0 step=any type=number><td>Audio Volume'
         + '<tr><td><input id=color-negative type=color><td>Color Negative'
         + '<tr><td><input id=color-positive type=color><td>Color Positive'
-        + '<tr><td><input class=mini id=crouch min=0 step=any type=number><td>Crouch'
+        + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
         + '<tr><td><input class=mini id=decimals min=0 step=any type=number><td>Decimals'
-        + '<tr><td><input class=mini id=jump min=0 step=any type=number><td>Jump'
+        + '<tr><td><input class=mini id=jump type=text><td>Jump'
         + '<tr><td><input class=mini id=mouse-sensitivity min=0 step=any type=number><td>Mouse Sensitivity'
-        + '<tr><td><input class=mini id=move-↑ min=0 step=any type=number><td>Move ↑'
-        + '<tr><td><input class=mini id=move-← min=0 step=any type=number><td>Move ←'
-        + '<tr><td><input class=mini id=move-↓ min=0 step=any type=number><td>Move ↓'
-        + '<tr><td><input class=mini id=move-→ min=0 step=any type=number><td>Move →'
-        + '<tr><td><input class=mini id=reset min=0 step=any type=number><td>Reset</table>'
+        + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
+        + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
+        + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
+        + '<tr><td><input class=mini id=move-→ type=text><td>Move →'
+        + '<tr><td><input class=mini id=reset type=text><td>Reset</table>'
         + '<input id=storage-reset type=button value="Reset Global localStorage">',
       'group': 'core-menu',
       'id': 'global',
@@ -621,15 +611,15 @@ function core_init(){
         'audio-volume': 1,
         'color-negative': '#663366',
         'color-positive': '#206620',
-        'crouch': 67,
+        'crouch': 'KeyC',
         'decimals': 7,
-        'jump': 32,
+        'jump': 'Space',
         'mouse-sensitivity': 1,
-        'move-←': 65,
-        'move-↑': 87,
-        'move-→': 68,
-        'move-↓': 83,
-        'reset': 72,
+        'move-←': 'KeyA',
+        'move-↑': 'KeyW',
+        'move-→': 'KeyD',
+        'move-↓': 'KeyS',
+        'reset': 'KeyH',
       },
     });
     core_storage_update();
@@ -846,7 +836,7 @@ function core_keys_rebind(){
       keybinds,
       core_key_rebinds
     );
-    keybinds[27] = {// Escape
+    keybinds['Escape'] = {
       'solo': true,
       'todo': core_escape,
     };
@@ -874,20 +864,7 @@ function core_keys_updatebinds(args){
     }
 
     for(const keybind in args['keybinds']){
-        let key = keybind;
-
-        if(keybind !== 'all'){
-            key = Number.parseInt(
-              key,
-              10
-            );
-
-            if(Number.isNaN(key)){
-                key = keybind.charCodeAt(0);
-            }
-        }
-
-        core_keys[key] = core_handle_defaults({
+        core_keys[keybind] = core_handle_defaults({
           'default': {
             'loop': false,
             'preventDefault': false,
