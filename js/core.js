@@ -64,17 +64,15 @@ function core_escape(force){
     core_menu_open = !core_menu_open;
 
     if(!core_menu_open){
+        document.getElementById('core-toggle').blur();
+        core_storage_save();
         document.getElementById('core-menu').style.display = 'none';
         document.getElementById('core-ui').style.userSelect = 'none';
         document.getElementById('repo-ui').style.display = 'inline';
-
-        core_storage_save();
         core_interval_resume_all();
-        document.getElementById('core-toggle').blur();
 
     }else{
         core_interval_pause_all();
-
         document.getElementById('repo-ui').style.display = 'none';
         document.getElementById('core-ui').style.userSelect = 'auto';
         document.getElementById('core-menu').style.display = 'inline';
