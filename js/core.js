@@ -302,8 +302,9 @@ function core_handle_gamepaddisconnected(event){
 }
 
 function core_handle_keydown(event){
-    if(event.altKey
-      || event.ctrlKey){
+    if(event.ctrlKey
+      || event.altKey
+      || event.metaKey){
         return;
     }
 
