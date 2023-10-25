@@ -1273,16 +1273,6 @@ function core_sort_numbers(args){
     });
 }
 
-// Required args: array
-function core_sort_random(args){
-    return core_sort_custom({
-      'array': args['array'],
-      'todo': function(a, b){
-          return Math.random() - .5;
-      },
-    });
-}
-
 // Required args: array, property
 function core_sort_property(args){
     return core_sort_custom({
@@ -1297,6 +1287,16 @@ function core_sort_property(args){
           }
 
           return 0;
+      },
+    });
+}
+
+// Required args: array
+function core_sort_random(args){
+    return core_sort_custom({
+      'array': args['array'],
+      'todo': function(a, b){
+          return Math.random() - .5;
       },
     });
 }
