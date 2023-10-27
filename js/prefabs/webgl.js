@@ -248,7 +248,7 @@ function prefabs_webgl_lines_path(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
-        'color': [1, 1, 1],
+        'color': [1, 1, 1, 1],
         'prefix': entity_id_count,
       },
     });
@@ -282,7 +282,7 @@ function prefabs_webgl_lines_path(args){
           args['color'][0],
           args['color'][1],
           args['color'][2],
-          1
+          args['color'][3]
         );
     }
 
@@ -308,12 +308,12 @@ function prefabs_webgl_lines_shrub(args){
       'args': args,
       'defaults': {
         'base-color': [
-          0, 0, 0,
+          0, 0, 0, 1,
         ],
         'character': webgl_character_id,
         'draw-mode': 'LINE_STRIP',
         'leaf-color': [
-          1, 1, 1,
+          1, 1, 1, 1,
         ],
         'leaf-distance': .5,
         'points': 10,
@@ -335,7 +335,7 @@ function prefabs_webgl_lines_shrub(args){
       args['base-color'][0],
       args['base-color'][1],
       args['base-color'][2],
-      1,
+      args['base-color'][3],
     ];
     const points = [
       0, 0, 0,
@@ -378,7 +378,7 @@ function prefabs_webgl_lines_shrub(args){
               args['base-color'][0],
               args['base-color'][1],
               args['base-color'][2],
-              1,
+              args['base-color'][3],
             );
 
         }else{
@@ -386,7 +386,7 @@ function prefabs_webgl_lines_shrub(args){
               args['leaf-color'][0],
               args['leaf-color'][1],
               args['leaf-color'][2],
-              1,
+              args['leaf-color'][3],
             );
         }
     }
