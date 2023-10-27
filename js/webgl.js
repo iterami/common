@@ -135,6 +135,7 @@ function webgl_character_init(args){
       'args': args,
       'defaults': {
         'automove': false,
+        'camera-lock': true,
         'camera-zoom': 50,
         'change-rotate-x': 0,
         'change-rotate-y': 0,
@@ -170,12 +171,13 @@ function webgl_character_init(args){
 
     webgl_characters[args['id']] = {
       'automove': args['automove'],
+      'camera-lock': args['camera-lock'],
       'camera-rotate-x': 0,
       'camera-rotate-y': 0,
       'camera-rotate-z': 0,
-      'camera-x': 0,
-      'camera-y': 0,
-      'camera-z': 0,
+      'camera-x': args['translate-x'],
+      'camera-y': args['translate-y'],
+      'camera-z': args['translate-z'],
       'camera-zoom': Math.min(
         args['camera-zoom'],
         webgl_properties['camera-zoom-max']
@@ -1524,26 +1526,29 @@ function webgl_logicloop(){
             webgl_characters[character][translate_axis] += webgl_characters[character]['change-' + translate_axis];
         }
 
-        if(webgl_characters[character]['camera-zoom'] > 0){
-            const radians_x = math_degrees_to_radians({
-              'degrees': webgl_characters[character]['camera-rotate-x'],
-            });
-            const radians_y = math_degrees_to_radians({
-              'degrees': webgl_characters[character]['camera-rotate-y'],
-            });
-            const cos_x = Math.cos(radians_x);
+        if(character === webgl_character_id
+          && webgl_characters[character]['camera-lock']){
+            if(webgl_characters[character]['camera-zoom'] > 0){
+                const radians_x = math_degrees_to_radians({
+                  'degrees': webgl_characters[character]['camera-rotate-x'],
+                });
+                const radians_y = math_degrees_to_radians({
+                  'degrees': webgl_characters[character]['camera-rotate-y'],
+                });
+                const cos_x = Math.cos(radians_x);
 
-            webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x']
-              + Math.sin(-radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
-            webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y']
-              + Math.sin(radians_x) * webgl_characters[character]['camera-zoom'];
-            webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z']
-              + Math.cos(radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
+                webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x']
+                  + Math.sin(-radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
+                webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y']
+                  + Math.sin(radians_x) * webgl_characters[character]['camera-zoom'];
+                webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z']
+                  + Math.cos(radians_y) * webgl_characters[character]['camera-zoom'] * cos_x;
 
-        }else{
-            webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
-            webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
-            webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
+            }else{
+                webgl_characters[character]['camera-x'] = webgl_characters[character]['translate-x'];
+                webgl_characters[character]['camera-y'] = webgl_characters[character]['translate-y'];
+                webgl_characters[character]['camera-z'] = webgl_characters[character]['translate-z'];
+            }
         }
 
         if(level === -1){
