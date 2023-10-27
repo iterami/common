@@ -291,7 +291,9 @@ function prefabs_webgl_lines_path(args){
         {
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'draw-mode': 'LINE_LOOP',
+          'draw-mode': webgl_paths[args['path']]['end'] !== 'loop'
+            ? 'LINE_STRIP'
+            : 'LINE_LOOP',
           'collision': false,
           'id': args['prefix'],
           'vertex-colors': vertex_colors,
