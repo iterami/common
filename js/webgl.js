@@ -103,9 +103,9 @@ function webgl_camera_rotate(args){
             && webgl_characters[args['character']]['health-current'] > 0)){
             webgl_characters[args['character']]['rotate-y'] = core_mouse['down-2']
               ? webgl_characters[args['character']]['camera-rotate-y']
-              : webgl_characters[args['character']]['rotate-y'] + (args['set']
-                ? 0
-                : args['y']);
+              : args['set']
+                ? args['y']
+                : webgl_characters[args['character']]['rotate-y'] + args['y'];
         }
     }
 }
