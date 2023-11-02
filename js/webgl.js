@@ -1871,6 +1871,9 @@ function webgl_path_move(args){
         character['change-translate-x'] = 0;
         character['change-translate-y'] = 0;
         character['change-translate-z'] = 0;
+        character['translate-x'] = point['translate-x'];
+        character['translate-y'] = point['translate-y'];
+        character['translate-z'] = point['translate-z'];
         webgl_camera_rotate({
           'character': character['id'],
           'set': true,
@@ -1878,9 +1881,6 @@ function webgl_path_move(args){
           'y': point['rotate-y'],
           'z': point['rotate-z'],
         });
-        character['translate-x'] = point['translate-x'];
-        character['translate-y'] = point['translate-y'];
-        character['translate-z'] = point['translate-z'];
 
         const path_end = character['path-end'] === 'default'
           ? path['end']
