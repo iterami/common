@@ -1848,6 +1848,9 @@ function webgl_path_move(args){
     const point = core_handle_defaults({
       'default': {
         'speed': 1,
+        'rotate-x': false,
+        'rotate-y': false,
+        'rotate-z': false,
         'translate-x': character['translate-x'],
         'translate-y': character['translate-y'],
         'translate-z': character['translate-z'],
@@ -1868,6 +1871,13 @@ function webgl_path_move(args){
         character['change-translate-x'] = 0;
         character['change-translate-y'] = 0;
         character['change-translate-z'] = 0;
+        webgl_camera_rotate({
+          'character': character['id'],
+          'set': true,
+          'x': point['rotate-x'],
+          'y': point['rotate-y'],
+          'z': point['rotate-z'],
+        });
         character['translate-x'] = point['translate-x'];
         character['translate-y'] = point['translate-y'];
         character['translate-z'] = point['translate-z'];
