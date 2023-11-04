@@ -651,6 +651,7 @@ function core_init(){
     globalThis.onmousedown = core_handle_mousedown;
     globalThis.onmousemove = core_handle_mousemove;
     globalThis.onmouseup = core_handle_mouseup;
+    globalThis.ontouchcancel = core_handle_mouseup;
     globalThis.ontouchend = core_handle_mouseup;
     globalThis.ontouchmove = core_handle_mousemove;
     globalThis.ontouchstart = core_handle_mousedown;
