@@ -373,6 +373,7 @@ function webgl_character_spawn(args){
       'y': webgl_properties['spawn-rotate-y'],
       'z': webgl_properties['spawn-rotate-z'],
     });
+    webgl_characters[args['character']]['path-id'] = webgl_properties['spawn-path-id'];
 }
 
 // Required args: entity
@@ -963,6 +964,7 @@ function webgl_init(args){
         'gravity-max': -2,
         'groups': [],
         'paths': {},
+        'spawn-path-id': '',
         'spawn-rotate-x': 0,
         'spawn-rotate-y': 0,
         'spawn-rotate-z': 0,
@@ -1012,6 +1014,7 @@ function webgl_init(args){
       'paused': false,
       'picking': false,
       'shader': {},
+      'spawn-path-id': args['spawn-path-id'],
       'spawn-rotate-x': args['spawn-rotate-x'],
       'spawn-rotate-y': args['spawn-rotate-y'],
       'spawn-rotate-z': args['spawn-rotate-z'],
