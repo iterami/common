@@ -117,16 +117,20 @@ function webgl_camera_zoom(event){
 
     const character = webgl_characters[webgl_character_id];
     if(event.deltaY > 0){
-        character['camera-zoom'] = Math.min(
-          character['camera-zoom'] + 1,
-          webgl_properties['camera-zoom-max']
-        );
+        character['camera-zoom'] = core_key_shift
+          ? webgl_properties['camera-zoom-max']
+          : Math.min(
+              character['camera-zoom'] + 1,
+              webgl_properties['camera-zoom-max']
+            );
 
     }else{
-        character['camera-zoom'] = Math.max(
-          character['camera-zoom'] - 1,
-          0
-        );
+        character['camera-zoom'] = core_key_shift
+          ? 0
+          : Math.max(
+              character['camera-zoom'] - 1,
+              0
+            );
     }
 }
 
