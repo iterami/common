@@ -1994,9 +1994,9 @@ function webgl_path_use(args){
 
     if(args['use-path-properties']
       && webgl_paths[args['path-id']]){
-        character['path-direction'] = webgl_paths[args['path-id']]['path-direction'];
-        character['path-end'] = webgl_paths[args['path-id']]['path-end'];
-        character['path-point'] = webgl_paths[args['path-id']]['path-point'];
+        character['path-direction'] = webgl_paths[args['path-id']]['direction'] || 1;
+        character['path-end'] = webgl_paths[args['path-id']]['end'] || '';
+        character['path-point'] = webgl_paths[args['path-id']]['point'] || 0;
     }
 }
 
