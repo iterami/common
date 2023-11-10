@@ -2048,7 +2048,6 @@ function webgl_pick_entity(args){
 
     webgl_properties['picking'] = false;
     webgl_uniform_update();
-    webgl_draw();
 
     const color_blue = core_round({
       'decimals': 1,
