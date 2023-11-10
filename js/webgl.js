@@ -377,7 +377,12 @@ function webgl_character_spawn(args){
       'y': webgl_properties['spawn-rotate-y'],
       'z': webgl_properties['spawn-rotate-z'],
     });
-    webgl_characters[args['character']]['path-id'] = webgl_properties['spawn-path-id'];
+    if(webgl_properties['spawn-path-id'].length > 0){
+        webgl_path_use({
+          'id': args['character'],
+          'path-id': webgl_properties['spawn-path-id'],
+        });
+    }
 }
 
 // Required args: entity
