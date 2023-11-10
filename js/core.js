@@ -357,6 +357,11 @@ function core_handle_mousedown(event){
         return;
     }
 
+    if(core_key_shift && event.button === 2){
+        core_key_shift = false;
+        return;
+    }
+
     core_mouse['down-' + event.button] = true;
     core_mouse['down-x'] = event.pageX;
     core_mouse['down-y'] = event.pageY;
