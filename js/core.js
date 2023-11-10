@@ -353,7 +353,7 @@ function core_handle_keyup(event){
 function core_handle_mousedown(event){
     if((core_menu_open
         && core_menu_block_events)
-      || event['target'].tagName.toLowerCase() === 'input'){
+      || event.target.id === 'core-toggle'){
         return;
     }
 
@@ -403,12 +403,15 @@ function core_handle_mouseup(event){
     }else{
         core_mouse['down-' + event.button] = false;
     }
-    core_handle_event({
-      'event': event,
-      'key': 'mouseup',
-      'object': core_mouse['todo'],
-      'todo': true,
-    });
+
+    if(event.target.id !== 'core-toggle'){
+        core_handle_event({
+          'event': event,
+          'key': 'mouseup',
+          'object': core_mouse['todo'],
+          'todo': true,
+        });
+    }
 }
 
 function core_handle_mousewheel(event){
