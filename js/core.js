@@ -358,7 +358,7 @@ function core_handle_mousedown(event){
     }
 
     if(core_key_shift && event.button === 2){
-        core_key_shift = false;
+        core_handle_blur(event);
         return;
     }
 
