@@ -159,7 +159,7 @@ function webgl_character_init(args){
         'level': -1,
         'lives': -1,
         'path-direction': 1,
-        'path-end': 'default',
+        'path-end': '',
         'path-id': '',
         'path-point': 0,
         'reticle': '#fff',
@@ -1889,7 +1889,7 @@ function webgl_path_move(args){
           'z': point['rotate-z'],
         });
 
-        const path_end = character['path-end'] === 'default'
+        const path_end = character['path-end'] === ''
           ? path['end']
           : character['path-end'];
         if(character['path-direction'] > 0){
