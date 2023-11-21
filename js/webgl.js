@@ -3101,6 +3101,12 @@ function webgl_texture_animate(id){
       core_images[id],
       'repeat'
     );
+    canvas.clearRect(
+      0,
+      0,
+      width,
+      height
+    );
     canvas.translate(
       offset_x,
       offset_y
