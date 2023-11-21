@@ -1209,6 +1209,12 @@ function webgl_level_init(args){
       },
     });
 
+    for(const texture in webgl_textures_animated){
+        webgl_texture_animate_init({
+          'texture': texture,
+        });
+    }
+
     if(!args['json']){
         args['json'] = {};
     }
@@ -3065,7 +3071,7 @@ function webgl_stat_modify(args){
 }
 
 function webgl_texture_animate(id){
-    if(!webgl_textures_animated[id]){
+    if(!webgl_textures_animated[id]['ready']){
         return;
     }
 
@@ -3134,7 +3140,7 @@ function webgl_texture_animate(id){
 
 // Required args: texture
 function webgl_texture_animate_init(args){
-    if(webgl_textures_animated[args['texture']]){
+    if(webgl_textures_animated[args['texture']]['ready']){
         return;
     }
 
@@ -3145,13 +3151,6 @@ function webgl_texture_animate_init(args){
         'speed-y': 0,
       },
     });
-
-    webgl_textures_animated[args['texture']] = {
-      'offset-x': 0,
-      'offset-y': 0,
-      'speed-x': args['speed-x'],
-      'speed-y': args['speed-y'],
-    };
 
     const id = 'texture-' + args['texture'];
     core_html({
@@ -3165,6 +3164,14 @@ function webgl_texture_animate_init(args){
       'store': id,
       'type': 'canvas',
     });
+
+    webgl_textures_animated[args['texture']] = {
+      'offset-x': 0,
+      'offset-y': 0,
+      'ready': true,
+      'speed-x': args['speed-x'],
+      'speed-y': args['speed-y'],
+    };
 }
 
 // Required args: entity
@@ -3178,8 +3185,7 @@ function webgl_texture_set(args){
 
     let texture = '';
     let texture_id = '';
-    if(!entity_entities[args['entity']]['texture-animated']
-      && core_images[args['texture']]
+    if(core_images[args['texture']]
       && core_images[args['texture']].complete){
         texture_id = args['texture'];
 
@@ -3214,6 +3220,13 @@ function webgl_texture_set(args){
     );
     webgl.generateMipmap(webgl.TEXTURE_2D);
 
+    if(entity_entities[args['entity']]['texture-animated']
+      && !webgl_textures_animated[texture_id]){
+        webgl_textures_animated[texture_id] = {
+          'ready': false,
+        };
+    }
+
     if(!core_images[args['texture']]){
         core_image({
           'id': args['texture'],
@@ -3224,17 +3237,16 @@ function webgl_texture_set(args){
                   'webgl',
                 ],
                 'todo': function(entity){
-                    if(!entity_entities[entity]['texture-animated']
-                      && entity_entities[entity]['texture-id'] === args['texture']){
+                    if(entity_entities[entity]['texture-animated']){
+                        webgl_texture_animate_init({
+                          'texture': entity_entities[entity]['texture-id'],
+                        });
+
+                    }else if(entity_entities[entity]['texture-id'] === args['texture']){
                         webgl_entity_todo(entity);
                     }
                 },
               });
-              if(entity_entities[args['entity']]['texture-animated']){
-                  webgl_texture_animate_init({
-                    'texture': args['texture'],
-                  });
-              }
           },
         });
     }
