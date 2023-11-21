@@ -1111,6 +1111,7 @@ function webgl_init(args){
           0, 0,
           1, 0,
         ],
+        'texture-animated': false,
         'texture-id': webgl_default_texture,
         'texture-repeat-x': 1,
         'texture-repeat-y': 1,
@@ -1372,8 +1373,11 @@ function webgl_level_unload(){
 }
 
 function webgl_logicloop(){
-    const level = webgl_character_level();
+    for(const animated_texture in webgl_textures_animated){
+        webgl_texture_animate(animated_texture);
+    }
 
+    const level = webgl_character_level();
     if((level === -1 || !webgl_properties['paused'])
       && webgl_characters[webgl_character_id]['health-current'] > 0
       && webgl_characters[webgl_character_id]['path-id'].length === 0){
@@ -3060,6 +3064,109 @@ function webgl_stat_modify(args){
     }
 }
 
+function webgl_texture_animate(id){
+    if(!webgl_textures_animated[id]){
+        return;
+    }
+
+    const canvas = core_elements['texture-' + id].getContext('2d');
+    const height = core_images[id]['height'];
+    const width = core_images[id]['width'];
+
+    let offset_x = webgl_textures_animated[id]['offset-x'] + webgl_textures_animated[id]['speed-x'];
+    if(offset_x <= 0){
+        offset_x = core_images[id]['width'];
+
+    }else if(offset_x >= core_images[id]['width']){
+        offset_x = 0;
+    }
+    webgl_textures_animated[id]['offset-x'] = offset_x;
+    let offset_y = webgl_textures_animated[id]['offset-y'] + webgl_textures_animated[id]['speed-y'];
+    if(offset_y <= 0){
+        offset_y = core_images[id]['height'];
+
+    }else if(offset_y >= core_images[id]['height']){
+        offset_y = 0;
+    }
+    webgl_textures_animated[id]['offset-y'] = offset_y;
+
+    canvas.save();
+    canvas.fillStyle = canvas.createPattern(
+      core_images[id],
+      'repeat'
+    );
+    canvas.translate(
+      offset_x,
+      offset_y
+    );
+    canvas.fillRect(
+      -width,
+      -height,
+      width * 2,
+      height * 2,
+    );
+    canvas.restore();
+
+    entity_group_modify({
+      'groups': [
+        'webgl',
+      ],
+      'todo': function(entity){
+          if(entity_entities[entity]['texture-animated']
+            && entity_entities[entity]['texture-id'] === id){
+              webgl.bindTexture(
+                webgl.TEXTURE_2D,
+                entity_entities[entity]['texture-gl']
+              );
+              webgl.texImage2D(
+                webgl.TEXTURE_2D,
+                0,
+                webgl.RGBA,
+                webgl.RGBA,
+                webgl.UNSIGNED_BYTE,
+                core_elements['texture-' + entity_entities[entity]['texture-id']]
+              );
+              webgl.generateMipmap(webgl.TEXTURE_2D);
+          }
+      },
+    });
+}
+
+// Required args: texture
+function webgl_texture_animate_init(args){
+    if(webgl_textures_animated[args['texture']]){
+        return;
+    }
+
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'speed-x': 0.1,
+        'speed-y': 0,
+      },
+    });
+
+    webgl_textures_animated[args['texture']] = {
+      'offset-x': 0,
+      'offset-y': 0,
+      'speed-x': args['speed-x'],
+      'speed-y': args['speed-y'],
+    };
+
+    const id = 'texture-' + args['texture'];
+    core_html({
+      'parent': document.getElementById('repo-ui'),
+      'properties': {
+        'className': 'hidden',
+        'height': core_images[args['texture']]['height'],
+        'id': id,
+        'width': core_images[args['texture']]['width'],
+      },
+      'store': id,
+      'type': 'canvas',
+    });
+}
+
 // Required args: entity
 function webgl_texture_set(args){
     args = core_args({
@@ -3070,13 +3177,16 @@ function webgl_texture_set(args){
     });
 
     let texture = '';
-    if(core_images[args['texture']]
+    let texture_id = '';
+    if(!entity_entities[args['entity']]['texture-animated']
+      && core_images[args['texture']]
       && core_images[args['texture']].complete){
-        texture = core_images[args['texture']];
+        texture_id = args['texture'];
 
     }else{
-        texture = core_images[webgl_default_texture];
+        texture_id = webgl_default_texture;
     }
+    texture = core_images[texture_id];
 
     entity_entities[args['entity']]['texture-gl'] = webgl.createTexture();
 
@@ -3114,11 +3224,17 @@ function webgl_texture_set(args){
                   'webgl',
                 ],
                 'todo': function(entity){
-                    if(entity_entities[entity]['texture-id'] === args['texture']){
+                    if(!entity_entities[entity]['texture-animated']
+                      && entity_entities[entity]['texture-id'] === args['texture']){
                         webgl_entity_todo(entity);
                     }
                 },
               });
+              if(entity_entities[args['entity']]['texture-animated']){
+                  webgl_texture_animate_init({
+                    'texture': args['texture'],
+                  });
+              }
           },
         });
     }
@@ -3226,6 +3342,7 @@ globalThis.webgl_diagonal = 0;
 globalThis.webgl_extensions = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
+globalThis.webgl_textures_animated = {};
 
 core_image({
   'id': webgl_default_texture,
