@@ -3146,7 +3146,8 @@ function webgl_texture_animate(id){
 
 // Required args: texture
 function webgl_texture_animate_init(args){
-    if(webgl_textures_animated[args['texture']]['ready']){
+    if(webgl_textures_animated[args['texture']]
+      && webgl_textures_animated[args['texture']]['ready']){
         return;
     }
 
