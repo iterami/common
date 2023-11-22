@@ -628,7 +628,9 @@ function webgl_draw_entity(entity){
 
     webgl.bindTexture(
       webgl.TEXTURE_2D,
-      entity_entities[entity]['texture-gl']
+      entity_entities[entity]['texture-animated']
+        ? webgl_textures_animated[entity_entities[entity]['texture-id']]['gl']
+        : webgl_textures[entity_entities[entity]['texture-id']]
     );
     webgl.uniform1f(
       webgl_properties['shader']['alpha'],
@@ -782,9 +784,13 @@ function webgl_entity_move_to(args){
 }
 
 function webgl_entity_todo(entity){
+    webgl_texture_init({
+      'animated': entity_entities[entity]['texture-animated'],
+      'id': entity_entities[entity]['texture-id'],
+    });
+
     entity_entities[entity]['id'] = entity;
     entity_entities[entity]['vertices-length'] = entity_entities[entity]['vertices'].length / 3;
-
     entity_entities[entity]['normals'] = webgl_normals({
       'rotate-x': entity_entities[entity]['rotate-x'],
       'rotate-y': entity_entities[entity]['rotate-y'],
@@ -836,10 +842,6 @@ function webgl_entity_todo(entity){
       'attribute': 'vec_vertexPosition',
       'data': entity_entities[entity]['vertices'],
       'size': 3,
-    });
-    webgl_texture_set({
-      'entity': entity,
-      'texture': entity_entities[entity]['texture-id'],
     });
 
     entity_entities[entity]['vao'] = vertexArray;
@@ -1190,7 +1192,6 @@ function webgl_level_export(){
         );
 
         delete entity_json['normals'];
-        delete entity_json['texture-gl'];
         delete entity_json['vao'];
         delete entity_json['vertices-length'];
 
@@ -1208,12 +1209,6 @@ function webgl_level_init(args){
         'json': false,
       },
     });
-
-    for(const texture in webgl_textures_animated){
-        webgl_texture_animate_init({
-          'texture': texture,
-        });
-    }
 
     if(!args['json']){
         args['json'] = {};
@@ -1379,8 +1374,8 @@ function webgl_level_unload(){
 }
 
 function webgl_logicloop(){
-    for(const animated_texture in webgl_textures_animated){
-        webgl_texture_animate(animated_texture);
+    for(const texture in webgl_textures_animated){
+        webgl_texture_animate(texture);
     }
 
     const level = webgl_character_level();
@@ -3128,7 +3123,7 @@ function webgl_texture_animate(id){
             && entity_entities[entity]['texture-id'] === id){
               webgl.bindTexture(
                 webgl.TEXTURE_2D,
-                entity_entities[entity]['texture-gl']
+                webgl_textures_animated[entity_entities[entity]['texture-id']]['gl']
               );
               webgl.texImage2D(
                 webgl.TEXTURE_2D,
@@ -3144,13 +3139,8 @@ function webgl_texture_animate(id){
     });
 }
 
-// Required args: texture
+// Required args: gl, id
 function webgl_texture_animate_init(args){
-    if(webgl_textures_animated[args['texture']]
-      && webgl_textures_animated[args['texture']]['ready']){
-        return;
-    }
-
     args = core_args({
       'args': args,
       'defaults': {
@@ -3159,20 +3149,21 @@ function webgl_texture_animate_init(args){
       },
     });
 
-    const id = 'texture-' + args['texture'];
+    const id = 'texture-' + args['id'];
     core_html({
       'parent': document.getElementById('repo-ui'),
       'properties': {
         'className': 'hidden',
-        'height': core_images[args['texture']]['height'],
+        'height': core_images[args['id']]['height'],
         'id': id,
-        'width': core_images[args['texture']]['width'],
+        'width': core_images[args['id']]['width'],
       },
       'store': id,
       'type': 'canvas',
     });
 
-    webgl_textures_animated[args['texture']] = {
+    webgl_textures_animated[args['id']] = {
+      'gl': args['gl'],
       'offset-x': 0,
       'offset-y': 0,
       'ready': true,
@@ -3181,31 +3172,43 @@ function webgl_texture_animate_init(args){
     };
 }
 
-// Required args: entity
-function webgl_texture_set(args){
+// Required args: id
+function webgl_texture_init(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'texture': webgl_default_texture,
+        'animated': false,
+        'loading': false,
       },
     });
 
-    let texture = '';
+    if(!args['loading']){
+        if(args['animated']){
+            if(webgl_textures_animated[args['id']]){
+                return;
+            }
+
+        }else if(webgl_textures[args['id']]){
+            return;
+        }
+    }
+
+    let texture_complete = false;
     let texture_id = '';
-    if(core_images[args['texture']]
-      && core_images[args['texture']].complete){
-        texture_id = args['texture'];
+    if(core_images[args['id']]
+      && core_images[args['id']].complete){
+        texture_complete = true;
+        texture_id = args['id'];
 
     }else{
         texture_id = webgl_default_texture;
     }
-    texture = core_images[texture_id];
-
-    entity_entities[args['entity']]['texture-gl'] = webgl.createTexture();
+    const texture = core_images[texture_id];
+    const texture_gl = webgl.createTexture();
 
     webgl.bindTexture(
       webgl.TEXTURE_2D,
-      entity_entities[args['entity']]['texture-gl']
+      texture_gl
     );
     webgl.texImage2D(
       webgl.TEXTURE_2D,
@@ -3227,35 +3230,36 @@ function webgl_texture_set(args){
     );
     webgl.generateMipmap(webgl.TEXTURE_2D);
 
-    if(entity_entities[args['entity']]['texture-animated']
-      && !webgl_textures_animated[texture_id]){
-        webgl_textures_animated[texture_id] = {
-          'ready': false,
-        };
-    }
-
-    if(!core_images[args['texture']]){
+    if(!texture_complete
+      && !args['loading']){
+        if(args['animated']){
+            webgl_textures_animated[args['id']] = {
+              'gl': texture_gl,
+              'ready': false,
+            };
+        }else{
+            webgl_textures[args['id']] = texture_gl;
+        }
         core_image({
-          'id': args['texture'],
-          'src': uris[args['texture']],
+          'id': args['id'],
+          'src': uris[args['id']],
           'todo': function(){
-              entity_group_modify({
-                'groups': [
-                  'webgl',
-                ],
-                'todo': function(entity){
-                    if(entity_entities[entity]['texture-animated']){
-                        webgl_texture_animate_init({
-                          'texture': entity_entities[entity]['texture-id'],
-                        });
-
-                    }else if(entity_entities[entity]['texture-id'] === args['texture']){
-                        webgl_entity_todo(entity);
-                    }
-                },
+              webgl_texture_init({
+                'animated': args['animated'],
+                'id': args['id'],
+                'loading': true,
               });
           },
         });
+
+    }else if(args['animated']){
+        webgl_texture_animate_init({
+          'gl': texture_gl,
+          'id': args['id'],
+        });
+
+    }else{
+        webgl_textures[args['id']] = texture_gl;
     }
 }
 
@@ -3361,6 +3365,7 @@ globalThis.webgl_diagonal = 0;
 globalThis.webgl_extensions = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
+globalThis.webgl_textures = {};
 globalThis.webgl_textures_animated = {};
 
 core_image({
