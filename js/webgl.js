@@ -3076,17 +3076,17 @@ function webgl_texture_animate(id){
 
     let offset_x = webgl_textures_animated[id]['offset-x'] + webgl_textures_animated[id]['speed-x'];
     if(offset_x <= 0){
-        offset_x = core_images[id]['width'];
+        offset_x = width;
 
-    }else if(offset_x >= core_images[id]['width']){
+    }else if(offset_x >= width){
         offset_x = 0;
     }
     webgl_textures_animated[id]['offset-x'] = offset_x;
     let offset_y = webgl_textures_animated[id]['offset-y'] + webgl_textures_animated[id]['speed-y'];
     if(offset_y <= 0){
-        offset_y = core_images[id]['height'];
+        offset_y = height;
 
-    }else if(offset_y >= core_images[id]['height']){
+    }else if(offset_y >= height){
         offset_y = 0;
     }
     webgl_textures_animated[id]['offset-y'] = offset_y;
