@@ -1856,15 +1856,9 @@ function webgl_path_move(args){
         return;
     }
 
-    const path = core_handle_defaults({
-      'default': {
-        'speed': 1,
-      },
-      'var': webgl_paths[character['path-id']],
-    });
+    const path = webgl_paths[character['path-id']];
     const point = core_handle_defaults({
       'default': {
-        'speed': 1,
         'rotate-x': false,
         'rotate-y': false,
         'rotate-z': false,
@@ -1882,7 +1876,7 @@ function webgl_path_move(args){
       'y1': point['translate-y'],
       'z1': point['translate-z'],
     });
-    const speed = character['speed'] * point['speed'] * path['speed'];
+    const speed = point['speed'] || path['speed'] || character['speed'];
 
     if(distance < speed){
         character['change-translate-x'] = 0;
