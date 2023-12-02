@@ -1983,11 +1983,11 @@ function webgl_path_move(args){
     }
 }
 
-// Required args: id
 function webgl_path_use(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'id': webgl_character_id,
         'path-id': '',
         'use-path-properties': true,
       },
@@ -2718,7 +2718,6 @@ function webgl_primitive_frustum(args){
     }
 }
 
-// Required args:
 function webgl_primitive_stars(args){
     args = core_args({
       'args': args,
