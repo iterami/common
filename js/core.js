@@ -285,10 +285,7 @@ function core_handle_gamepadconnected(event){
 }
 
 function core_handle_gamepaddisconnected(event){
-    Reflect.deleteProperty(
-      core_gamepads,
-      event.gamepad.index
-    );
+    delete core_gamepads[event.gamepad.index];
 }
 
 function core_handle_keydown(event){
@@ -763,11 +760,7 @@ function core_interval_remove(args){
     core_interval_pause({
       'id': args['id'],
     });
-
-    Reflect.deleteProperty(
-      core_intervals,
-      args['id']
-    );
+    delete core_intervals[args['id']];
 }
 
 function core_interval_remove_all(){

@@ -681,10 +681,7 @@ function webgl_entity_create(args){
               'group': args['entities'][entity]['groups'][group],
             });
         }
-        Reflect.deleteProperty(
-          entity_entities[entity_id],
-          'groups'
-        );
+        delete entity_entities[entity_id]['groups'];
 
         if(entity_groups['skybox']
           && entity_groups['skybox'][entity_id] === true){
@@ -1219,11 +1216,7 @@ function webgl_level_init(args){
           || args['json']['characters'][0]['id'] !== webgl_character_id){
             return;
         }
-
-        Reflect.deleteProperty(
-          webgl_characters,
-          webgl_character_id
-        );
+        delete webgl_characters[webgl_character_id];
 
     }else if(args['character'] === 0
       && webgl_character_level() < -1){
@@ -1362,10 +1355,7 @@ function webgl_level_unload(){
     });
 
     for(const character in webgl_characters){
-        Reflect.deleteProperty(
-          webgl_characters,
-          character
-        );
+        delete webgl_characters[character];
     }
     webgl_character_count = 0;
     entity_remove_all();

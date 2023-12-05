@@ -103,10 +103,7 @@ function audio_onended(args){
         }
     }
 
-    Reflect.deleteProperty(
-      audio_sources,
-      args['id']
-    );
+    delete audio_sources[args['id']];
 }
 
 // Required args: id
