@@ -1022,6 +1022,12 @@ function webgl_init(){
       'type': 'webgl',
     });
 
+    webgl_diagonal = Math.sin(math_degrees_to_radians({
+      'degrees': 45,
+    })) / Math.sin(math_degrees_to_radians({
+      'degrees': 90,
+    }));
+
     core_interval_modify({
       'id': 'webgl-interval',
       'paused': true,
@@ -3336,11 +3342,7 @@ globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_default_texture = 'default.png';
-globalThis.webgl_diagonal = Math.sin(math_degrees_to_radians({
-  'degrees': 45,
-})) / Math.sin(math_degrees_to_radians({
-  'degrees': 90,
-}));
+globalThis.webgl_diagonal = 0;
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_textures = {};
