@@ -896,23 +896,6 @@ function webgl_event(args){
 }
 
 // Required args: id
-function webgl_extension(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'label': args['id'],
-      },
-    });
-
-    const extension = webgl.getExtension(args['id']);
-    const result = extension !== null;
-    if(result){
-        webgl_extensions[args['label']] = extension;
-    }
-    return result;
-}
-
-// Required args: id
 function webgl_getContext(args){
     return document.getElementById(args['id']).getContext(
       'webgl2',
@@ -3355,7 +3338,6 @@ globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_default_texture = 'default.png';
 globalThis.webgl_diagonal = 0;
-globalThis.webgl_extensions = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_textures = {};
