@@ -932,88 +932,17 @@ function webgl_get_translation(args){
     };
 }
 
-function webgl_init(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'ambient-blue': 1,
-        'ambient-green': 1,
-        'ambient-red': 1,
-        'camera-zoom-max': 50,
-        'clearcolor-blue': 0,
-        'clearcolor-green': 0,
-        'clearcolor-red': 0,
-        'cursor': 'pointer',
-        'directional-blue': 1,
-        'directional-green': 1,
-        'directional-red': 1,
-        'directional-state': true,
-        'directional-vector': [0, 1, 0],
-        'fog-density': .0001,
-        'fog-state': false,
-        'gravity-acceleration': -.05,
-        'gravity-max': -2,
-        'groups': [],
-        'paths': {},
-        'spawn-path-id': '',
-        'spawn-rotate-x': 0,
-        'spawn-rotate-y': 0,
-        'spawn-rotate-z': 0,
-        'spawn-translate-x': 0,
-        'spawn-translate-y': 0,
-        'spawn-translate-z': 0,
-        'title': false,
+function webgl_init(){
+    core_html({
+      'parent': document.body,
+      'properties': {
+        'id': 'canvas',
       },
+      'type': 'canvas',
     });
-
-    webgl_level_unload();
-
-    if(webgl === 0){
-        core_html({
-          'parent': document.body,
-          'properties': {
-            'id': 'canvas',
-          },
-          'type': 'canvas',
-        });
-
-        webgl = webgl_getContext({
-          'id': 'canvas',
-        });
-    }
-    webgl.canvas.style.cursor = args['cursor'];
-
-    entity_id_count = 0;
-    webgl_properties = {
-      'ambient-blue': args['ambient-blue'],
-      'ambient-green': args['ambient-green'],
-      'ambient-red': args['ambient-red'],
-      'attributes': {},
-      'camera-zoom-max': args['camera-zoom-max'],
-      'clearcolor-blue': args['clearcolor-blue'],
-      'clearcolor-green': args['clearcolor-green'],
-      'clearcolor-red': args['clearcolor-red'],
-      'directional-blue': args['directional-blue'],
-      'directional-green': args['directional-green'],
-      'directional-red': args['directional-red'],
-      'directional-state': args['directional-state'],
-      'directional-vector': args['directional-vector'],
-      'fog-density': args['fog-density'],
-      'fog-state': args['fog-state'],
-      'gravity-acceleration': args['gravity-acceleration'],
-      'gravity-max': args['gravity-max'],
-      'paused': false,
-      'picking': false,
-      'shader': {},
-      'spawn-path-id': args['spawn-path-id'],
-      'spawn-rotate-x': args['spawn-rotate-x'],
-      'spawn-rotate-y': args['spawn-rotate-y'],
-      'spawn-rotate-z': args['spawn-rotate-z'],
-      'spawn-translate-x': args['spawn-translate-x'],
-      'spawn-translate-y': args['spawn-translate-y'],
-      'spawn-translate-z': args['spawn-translate-z'],
-      'title': args['title'],
-    };
+    webgl = webgl_getContext({
+      'id': 'canvas',
+    });
 
     math_matrices['camera'] = math_matrix_create();
     math_matrices['perspective'] = math_matrix_create();
@@ -1022,11 +951,6 @@ function webgl_init(args){
     math_matrices['perspective'][11] = -1;
     math_matrices['perspective'][14] = -2;
 
-    webgl_clearcolor_set({
-      'blue': webgl_properties['clearcolor-blue'],
-      'green': webgl_properties['clearcolor-green'],
-      'red': webgl_properties['clearcolor-red'],
-    });
     webgl.enable(webgl.BLEND);
     webgl.enable(webgl.CULL_FACE);
     webgl.enable(webgl.DEPTH_TEST);
@@ -1036,18 +960,8 @@ function webgl_init(args){
       webgl.ONE_MINUS_SRC_ALPHA
     );
 
-    webgl_shader_remake();
     globalThis.onresize = webgl_resize;
-    webgl_resize();
 
-    args['groups'].push(
-      'foreground',
-      'skybox',
-      'webgl'
-    );
-    entity_group_create({
-      ids: args['groups'],
-    });
     entity_set({
       'default': true,
       'groups': [
@@ -1107,11 +1021,6 @@ function webgl_init(args){
       },
       'type': 'webgl',
     });
-
-    Object.assign(
-      webgl_paths,
-      args['paths']
-    );
 
     core_interval_modify({
       'id': 'webgl-interval',
@@ -1226,13 +1135,108 @@ function webgl_level_init(args){
         }
     }
 
-    webgl_init(args['json']);
+    if(webgl === 0){
+        webgl_init();
+    }
+    webgl_level_unload();
 
-    if(args['json']['characters']
-      && args['json']['characters'] !== false){
-        for(const character in args['json']['characters']){
-            if(!webgl_characters[args['json']['characters'][character]['id']]){
-                webgl_character_init(args['json']['characters'][character]);
+    const level = core_args({
+      'args': args['json'],
+      'defaults': {
+        'ambient-blue': 1,
+        'ambient-green': 1,
+        'ambient-red': 1,
+        'camera-zoom-max': 50,
+        'characters': [],
+        'clearcolor-blue': 0,
+        'clearcolor-green': 0,
+        'clearcolor-red': 0,
+        'cursor': 'pointer',
+        'directional-blue': 1,
+        'directional-green': 1,
+        'directional-red': 1,
+        'directional-state': true,
+        'directional-vector': [0, 1, 0],
+        'fog-density': .0001,
+        'fog-state': false,
+        'gravity-acceleration': -.05,
+        'gravity-max': -2,
+        'groups': [],
+        'paths': {},
+        'prefabs': [],
+        'spawn-path-id': '',
+        'spawn-rotate-x': 0,
+        'spawn-rotate-y': 0,
+        'spawn-rotate-z': 0,
+        'spawn-translate-x': 0,
+        'spawn-translate-y': 0,
+        'spawn-translate-z': 0,
+        'title': false,
+      },
+    });
+
+    webgl.canvas.style.cursor = level['cursor'];
+
+    entity_id_count = 0;
+    webgl_properties = {
+      'ambient-blue': level['ambient-blue'],
+      'ambient-green': level['ambient-green'],
+      'ambient-red': level['ambient-red'],
+      'attributes': {},
+      'camera-zoom-max': level['camera-zoom-max'],
+      'clearcolor-blue': level['clearcolor-blue'],
+      'clearcolor-green': level['clearcolor-green'],
+      'clearcolor-red': level['clearcolor-red'],
+      'directional-blue': level['directional-blue'],
+      'directional-green': level['directional-green'],
+      'directional-red': level['directional-red'],
+      'directional-state': level['directional-state'],
+      'directional-vector': level['directional-vector'],
+      'fog-density': level['fog-density'],
+      'fog-state': level['fog-state'],
+      'gravity-acceleration': level['gravity-acceleration'],
+      'gravity-max': level['gravity-max'],
+      'paused': false,
+      'picking': false,
+      'shader': {},
+      'spawn-path-id': level['spawn-path-id'],
+      'spawn-rotate-x': level['spawn-rotate-x'],
+      'spawn-rotate-y': level['spawn-rotate-y'],
+      'spawn-rotate-z': level['spawn-rotate-z'],
+      'spawn-translate-x': level['spawn-translate-x'],
+      'spawn-translate-y': level['spawn-translate-y'],
+      'spawn-translate-z': level['spawn-translate-z'],
+      'title': level['title'],
+    };
+
+    webgl_clearcolor_set({
+      'blue': webgl_properties['clearcolor-blue'],
+      'green': webgl_properties['clearcolor-green'],
+      'red': webgl_properties['clearcolor-red'],
+    });
+
+    level['groups'].push(
+      'foreground',
+      'skybox',
+      'webgl'
+    );
+    entity_group_create({
+      ids: level['groups'],
+    });
+
+    Object.assign(
+      webgl_paths,
+      level['paths']
+    );
+
+    webgl_shader_remake();
+    webgl_resize();
+
+    if(level['characters']
+      && level['characters'] !== false){
+        for(const character in level['characters']){
+            if(!webgl_characters[level['characters'][character]['id']]){
+                webgl_character_init(level['characters'][character]);
             }
         }
     }
@@ -1255,10 +1259,10 @@ function webgl_level_init(args){
         });
     }
 
-    for(const prefab in args['json']['prefabs']){
+    for(const prefab in level['prefabs']){
         core_call({
-          'args': args['json']['prefabs'][prefab]['properties'],
-          'todo': args['json']['prefabs'][prefab]['type'],
+          'args': level['prefabs'][prefab]['properties'],
+          'todo': level['prefabs'][prefab]['type'],
         });
     }
 
