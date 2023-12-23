@@ -1108,11 +1108,6 @@ function webgl_init(args){
       'type': 'webgl',
     });
 
-    webgl_diagonal = Math.sin(math_degrees_to_radians({
-      'degrees': 45,
-    })) / Math.sin(math_degrees_to_radians({
-      'degrees': 90,
-    }));
     Object.assign(
       webgl_paths,
       args['paths']
@@ -3337,7 +3332,11 @@ globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_default_texture = 'default.png';
-globalThis.webgl_diagonal = 0;
+globalThis.webgl_diagonal = Math.sin(math_degrees_to_radians({
+  'degrees': 45,
+})) / Math.sin(math_degrees_to_radians({
+  'degrees': 90,
+}));
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_textures = {};
