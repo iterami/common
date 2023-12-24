@@ -1055,7 +1055,6 @@ function webgl_level_export(){
     );
 
     delete json['paused'];
-    delete json['picking'];
 
     json['characters'] = {};
     json['paths'] = {};
@@ -1204,7 +1203,6 @@ function webgl_level_init(args){
       'gravity-acceleration': level['gravity-acceleration'],
       'gravity-max': level['gravity-max'],
       'paused': false,
-      'picking': false,
       'spawn-path-id': level['spawn-path-id'],
       'spawn-rotate-x': level['spawn-rotate-x'],
       'spawn-rotate-y': level['spawn-rotate-y'],
@@ -2011,17 +2009,19 @@ function webgl_pick_entity(args){
       },
     });
 
-    webgl_properties['picking'] = true;
-    webgl_uniform_update();
+    webgl.uniform1i(
+      webgl_shader['picking'],
+      true
+    );
     webgl_draw();
-
     const color = webgl_pick_color({
       'x': args['x'],
       'y': args['y'],
     });
-
-    webgl_properties['picking'] = false;
-    webgl_uniform_update();
+    webgl.uniform1i(
+      webgl_shader['picking'],
+      false
+    );
 
     const color_blue = core_round({
       'decimals': 1,
@@ -3280,10 +3280,6 @@ function webgl_uniform_update(){
       webgl_shader['mat_perspectiveMatrix'],
       false,
       math_matrices['perspective']
-    );
-    webgl.uniform1i(
-      webgl_shader['picking'],
-      webgl_properties['picking']
     );
 }
 
