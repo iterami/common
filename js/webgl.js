@@ -1143,8 +1143,10 @@ function webgl_level_init(args){
 
     if(webgl === 0){
         webgl_init();
+
+    }else{
+        webgl_level_unload();
     }
-    webgl_level_unload();
 
     const level = core_args({
       'args': args['json'],
