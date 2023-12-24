@@ -1235,8 +1235,6 @@ function webgl_level_init(args){
       level['paths']
     );
 
-    webgl_resize();
-
     if(level['characters']
       && level['characters'] !== false){
         for(const character in level['characters']){
@@ -1271,11 +1269,11 @@ function webgl_level_init(args){
         });
     }
 
+    webgl_resize();
     webgl_character_spawn();
     core_call({
       'todo': 'repo_level_load',
     });
-    webgl_uniform_update();
 
     if(core_menu_open){
         core_escape();
