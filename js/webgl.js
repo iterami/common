@@ -147,8 +147,8 @@ function webgl_character_init(args){
         'change-translate-x': 0,
         'change-translate-y': 0,
         'change-translate-z': 0,
-        'collide-range-horizontal': 2,
-        'collide-range-vertical': 3,
+        'collide-range-xz': 2,
+        'collide-range-y': 3,
         'collides': true,
         'entities': [],
         'experience': 0,
@@ -192,8 +192,8 @@ function webgl_character_init(args){
       'change-translate-x': args['change-translate-x'],
       'change-translate-y': args['change-translate-y'],
       'change-translate-z': args['change-translate-z'],
-      'collide-range-horizontal': args['collide-range-horizontal'],
-      'collide-range-vertical': args['collide-range-vertical'],
+      'collide-range-xz': args['collide-range-xz'],
+      'collide-range-y': args['collide-range-y'],
       'collides': args['collides'],
       'experience': args['experience'],
       'health-current': Math.max(
@@ -306,16 +306,16 @@ function webgl_character_random(args){
       },
     });
 
-    const horizontal = core_random_number({
+    const xz = core_random_number({
       'multiplier': args['width-random'],
     }) + args['width-base'];
-    const vertical = core_random_number({
+    const y = core_random_number({
       'multiplier': args['height-random'],
     }) + args['height-base'];
 
     webgl_character_init({
-      'collide-range-horizontal': horizontal,
-      'collide-range-vertical': vertical,
+      'collide-range-xz': xz,
+      'collide-range-y': y,
       'id': args['id'],
       'jump-height': args['jump-height'],
       'level': args['level'],
@@ -327,9 +327,9 @@ function webgl_character_random(args){
         'collision': false,
       },
       'character': args['id'],
-      'size-x': horizontal * 2,
-      'size-y': vertical * 2,
-      'size-z': horizontal * 2,
+      'size-x': xz * 2,
+      'size-y': y * 2,
+      'size-z': xz * 2,
     });
     webgl_character_spawn();
 }
@@ -367,7 +367,7 @@ function webgl_character_spawn(args){
     webgl_entity_move_to({
       'entity': webgl_characters[args['character']],
       'x': webgl_properties['spawn-translate-x'],
-      'y': webgl_properties['spawn-translate-y'] + webgl_characters[args['character']]['collide-range-vertical'] + 1,
+      'y': webgl_properties['spawn-translate-y'] + webgl_characters[args['character']]['collide-range-y'] + 1,
       'z': webgl_properties['spawn-translate-z'],
     });
     webgl_camera_rotate({
@@ -451,9 +451,9 @@ function webgl_collision(args){
     let collision = false;
     let collision_sign = 1;
     const range = {
-      'x': args['collider']['collide-range-horizontal'] + Math.abs(args['collider']['change-translate-x']),
-      'y': args['collider']['collide-range-vertical'] + Math.abs(args['collider']['change-translate-y']),
-      'z': args['collider']['collide-range-horizontal'] + Math.abs(args['collider']['change-translate-z']),
+      'x': args['collider']['collide-range-xz'] + Math.abs(args['collider']['change-translate-x']),
+      'y': args['collider']['collide-range-y'] + Math.abs(args['collider']['change-translate-y']),
+      'z': args['collider']['collide-range-xz'] + Math.abs(args['collider']['change-translate-z']),
     };
     const target_position = webgl_get_translation({
       'entity': args['target'],
@@ -544,8 +544,8 @@ function webgl_collision(args){
     if(collision !== false){
         if(Math.abs(target_position[collision] - collider_position[collision]) < range[collision]){
             const range_axis = collision === 'y'
-              ? 'vertical'
-              : 'horizontal';
+              ? 'y'
+              : 'xz';
 
             args['collider']['translate-' + collision] = target_position[collision] + args['collider']['collide-range-' + range_axis] * collision_sign;
             args['collider']['change-translate-' + collision] = args['target']['change-translate-' + collision];
@@ -981,8 +981,8 @@ function webgl_init(){
         'change-translate-x': 0,
         'change-translate-y': 0,
         'change-translate-z': 0,
-        'collide-range-horizontal': 2,
-        'collide-range-vertical': 3,
+        'collide-range-xz': 2,
+        'collide-range-y': 3,
         'collides': false,
         'collision': true,
         'draw': true,
