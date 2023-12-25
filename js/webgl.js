@@ -1275,8 +1275,6 @@ function webgl_level_init(args){
 
     if(core_menu_open){
         core_escape();
-    }else{
-        core_interval_resume_all();
     }
 }
 
