@@ -960,8 +960,6 @@ function webgl_init(){
       webgl.ONE_MINUS_SRC_ALPHA
     );
 
-    globalThis.onresize = webgl_resize;
-
     entity_set({
       'default': true,
       'groups': [
@@ -1029,6 +1027,8 @@ function webgl_init(){
     }));
 
     webgl_shader_remake();
+    globalThis.onresize = webgl_resize;
+    webgl_resize();
 
     core_interval_modify({
       'id': 'webgl-interval',
@@ -1267,7 +1267,7 @@ function webgl_level_init(args){
         });
     }
 
-    webgl_resize();
+    webgl_uniform_update();
     webgl_character_spawn();
     core_call({
       'todo': 'repo_level_load',
@@ -2783,7 +2783,11 @@ function webgl_resize(){
     );
 
     math_matrices['perspective'][0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
-    webgl_uniform_update();
+    webgl.uniformMatrix4fv(
+      webgl_shader['mat_perspectiveMatrix'],
+      false,
+      math_matrices['perspective']
+    );
     if(core_menu_open){
         webgl_draw();
     }
@@ -3275,11 +3279,6 @@ function webgl_uniform_update(){
     webgl.uniform1i(
       webgl_shader['fog-state'],
       webgl_properties['fog-state']
-    );
-    webgl.uniformMatrix4fv(
-      webgl_shader['mat_perspectiveMatrix'],
-      false,
-      math_matrices['perspective']
     );
 }
 
