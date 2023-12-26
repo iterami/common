@@ -838,6 +838,7 @@ function webgl_entity_todo(entity){
 
     webgl_scale({
       'entity': entity,
+      'todo': false,
       'x': entity_entities[entity]['scale-x'] === 1 ? false : entity_entities[entity]['scale-x'],
       'y': entity_entities[entity]['scale-y'] === 1 ? false : entity_entities[entity]['scale-y'],
       'z': entity_entities[entity]['scale-z'] === 1 ? false : entity_entities[entity]['scale-z'],
@@ -2806,6 +2807,7 @@ function webgl_scale(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'todo': true,
         'x': false,
         'y': false,
         'z': false,
@@ -2825,6 +2827,10 @@ function webgl_scale(args){
             entity_entities[args['entity']]['vertices'][i] /= old_scale;
             entity_entities[args['entity']]['vertices'][i] *= args[axes[axis]];
         }
+    }
+
+    if(args['todo']){
+        webgl_entity_todo(args['entity']);
     }
 }
 
