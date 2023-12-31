@@ -6,7 +6,7 @@ function core_args(args){
         args['args'] = {};
     }
 
-    for(let arg in args['defaults']){
+    for(const arg in args['defaults']){
         if(args['args'][arg] === void 0){
             args['args'][arg] = args['defaults'][arg];
         }
