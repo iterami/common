@@ -707,11 +707,9 @@ function core_interval_modify(args){
       },
     });
 
-    if(args['id'] in core_intervals){
-        core_interval_pause({
-          'id': args['id'],
-        });
-    }
+    core_interval_pause({
+      'id': args['id'],
+    });
 
     core_intervals[args['id']] = {
       'animationFrame': args['animationFrame'],
