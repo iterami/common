@@ -739,7 +739,6 @@ function core_interval_pause(args){
       ? 'cancelAnimationFrame'
       : 'clearInterval'](core_intervals[args['id']]['var']);
 
-
     core_intervals[args['id']]['paused'] = true;
 }
 
