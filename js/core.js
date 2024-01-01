@@ -1028,7 +1028,7 @@ function core_random_string(args){
     });
 
     let string = '';
-    for(let loopCounter = 0; loopCounter < args['length']; loopCounter++){
+    for(let i = 0; i < args['length']; i++){
         string += args['characters'][core_random_integer({
           'max': args['characters'].length,
         })];
