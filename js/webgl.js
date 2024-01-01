@@ -726,11 +726,9 @@ function webgl_entity_move(args){
 
     if(args['entity'] === false){
         if(args['y']){
-            let dy = webgl_characters[args['character']]['speed'] * args['multiplier'];
-            dy *= args['strafe']
+            webgl_characters[args['character']]['change-translate-y'] += webgl_characters[args['character']]['speed'] * args['multiplier'] * (args['strafe']
               ? -1
-              : 1;
-            webgl_characters[args['character']]['change-translate-y'] += dy;
+              : 1);
 
         }else{
             const movement = math_move_3d({
@@ -746,11 +744,9 @@ function webgl_entity_move(args){
     }
 
     if(args['y']){
-        let dy = entity_entities[args['entity']]['speed'] * args['multiplier'];
-        dy *= args['strafe']
+        entity_entities[args['entity']]['change-translate-y'] = entity_entities[args['entity']]['speed'] * args['multiplier'] * (args['strafe']
           ? -1
-          : 1;
-        entity_entities[args['entity']]['change-translate-y'] = dy;
+          : 1);
 
     }else{
         const movement = math_move_3d({
@@ -2723,7 +2719,7 @@ function webgl_primitive_stars(args){
     const star_colors = [];
     const star_points = [];
     for(let i = 0; i < args['stars']; i++){
-        let theta = core_random_number({
+        const theta = core_random_number({
           'multiplier': Math.PI * args['radian'],
         });
         const phi = core_random_number({

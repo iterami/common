@@ -315,12 +315,10 @@ function math_move_2d(args){
       args['y1'] - args['y0'],
       args['x1'] - args['x0']
     );
-    let dx = Math.cos(angle) * args['speed'];
-    let dy = Math.sin(angle) * args['speed'];
     return {
       'angle': angle,
-      'x': dx,
-      'y': dy,
+      'x': Math.cos(angle) * args['speed'],
+      'y': Math.sin(angle) * args['speed'],
     };
 }
 
