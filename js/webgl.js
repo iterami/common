@@ -1346,6 +1346,7 @@ function webgl_level_unload(){
     webgl_character_count = 0;
     entity_remove_all();
     webgl_paths = {};
+    webgl_textures_animated = {};
     core_storage_save();
 }
 
@@ -3168,16 +3169,18 @@ function webgl_texture_animate_init(args){
     }
 
     const id = 'texture-' + args['id'];
-    core_html({
-      'parent': document.getElementById('webgl-animated-textures'),
-      'properties': {
-        'height': core_images[args['id']]['height'],
-        'id': id,
-        'width': core_images[args['id']]['width'],
-      },
-      'store': id,
-      'type': 'canvas',
-    });
+    if(!document.getElementById(id)){
+        core_html({
+          'parent': document.getElementById('webgl-animated-textures'),
+          'properties': {
+            'height': core_images[args['id']]['height'],
+            'id': id,
+            'width': core_images[args['id']]['width'],
+          },
+          'store': id,
+          'type': 'canvas',
+        });
+    }
 
     webgl_textures_animated[args['id']] = {
       'gl': args['gl'],
@@ -3199,15 +3202,10 @@ function webgl_texture_init(args){
       },
     });
 
-    if(!args['loading']){
-        if(args['animated']){
-            if(webgl_textures_animated[args['id']]){
-                return;
-            }
-
-        }else if(webgl_textures[args['id']]){
-            return;
-        }
+    if(!args['loading']
+      && !args['animated']
+      && webgl_textures[args['id']]){
+        return;
     }
 
     let texture_complete = false;
