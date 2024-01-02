@@ -3211,14 +3211,11 @@ function webgl_texture_init(args){
     }
 
     let texture_complete = false;
-    let texture_id = '';
+    let texture_id = webgl_default_texture;
     if(core_images[args['id']]
       && core_images[args['id']].complete){
         texture_complete = true;
         texture_id = args['id'];
-
-    }else{
-        texture_id = webgl_default_texture;
     }
     const texture = core_images[texture_id];
     const texture_gl = webgl.createTexture();
