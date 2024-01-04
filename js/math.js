@@ -281,7 +281,7 @@ function math_matrix_round(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': core_storage_data['decimals'],
+        'decimals': 7,
       },
     });
 

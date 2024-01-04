@@ -597,7 +597,6 @@ function core_init(){
         + '<tr><td><input id=color-negative type=color><td>Color Negative'
         + '<tr><td><input id=color-positive type=color><td>Color Positive'
         + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
-        + '<tr><td><input class=mini id=decimals min=0 step=any type=number><td>Decimals'
         + '<tr><td><input class=mini id=jump type=text><td>Jump'
         + '<tr><td><input class=mini id=mouse-sensitivity min=0 step=any type=number><td>Mouse Sensitivity'
         + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
@@ -617,7 +616,6 @@ function core_init(){
         'color-negative': '#663366',
         'color-positive': '#206620',
         'crouch': 'KeyC',
-        'decimals': 7,
         'jump': 'Space',
         'mouse-sensitivity': 1,
         'move-←': 'KeyA',
@@ -903,8 +901,8 @@ function core_number_format(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals-max': core_storage_data['decimals'],
-        'decimals-min': core_storage_data['decimals'],
+        'decimals-max': 7,
+        'decimals-min': 7,
       },
     });
 
@@ -1206,7 +1204,7 @@ function core_round(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals': core_storage_data['decimals'],
+        'decimals': 7,
       },
     });
 
