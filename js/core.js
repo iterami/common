@@ -594,8 +594,6 @@ function core_init(){
 
     core_tab_create({
       'content': '<table><tr><td><input class=mini id=audio-volume max=1 min=0 step=any type=number><td>Audio Volume'
-        + '<tr><td><input id=color-negative type=color><td>Color Negative'
-        + '<tr><td><input id=color-positive type=color><td>Color Positive'
         + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
         + '<tr><td><input class=mini id=jump type=text><td>Jump'
         + '<tr><td><input class=mini id=mouse-sensitivity min=0 step=any type=number><td>Mouse Sensitivity'
@@ -613,8 +611,6 @@ function core_init(){
       'prefix': 'core-',
       'storage': {
         'audio-volume': 1,
-        'color-negative': '#663366',
-        'color-positive': '#206620',
         'crouch': 'KeyC',
         'jump': 'Space',
         'mouse-sensitivity': 1,
