@@ -2065,6 +2065,26 @@ function webgl_pick_entity(args){
     }
 }
 
+function webgl_prefab_args(args){
+    return core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+        'groups': [],
+        'prefix': entity_id_count,
+        'rotate-x': 0,
+        'rotate-y': 0,
+        'rotate-z': 0,
+        'scale-x': 1,
+        'scale-y': 1,
+        'scale-z': 1,
+        'translate-x': 0,
+        'translate-y': 0,
+        'translate-z': 0,
+      },
+    });
+}
+
 // Required args: prefab, prefix
 function webgl_prefab_remake(args){
     for(const entity in entity_entities){
@@ -2124,21 +2144,16 @@ function webgl_primitive_cuboid(args){
         'all': {},
         'back': {},
         'bottom': {},
-        'character': webgl_character_id,
         'front': {},
-        'groups': [],
         'left': {},
-        'prefix': entity_id_count,
         'right': {},
         'size-x': 1,
         'size-y': 1,
         'size-z': 1,
         'top': {},
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
       },
     });
+    args = webgl_prefab_args(args);
 
     const half_size_x = args['size-x'] / 2;
     const half_size_y = args['size-y'] / 2;
@@ -2361,21 +2376,18 @@ function webgl_primitive_ellipsoid(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
         'color0': [],
         'color1': [],
         'groups': [],
-        'prefix': entity_id_count,
         'radius-x': 5,
         'radius-y': 5,
         'radius-z': 5,
         'slices-latitude': 10,
         'slices-longitude': 10,
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
       },
     });
+    args = webgl_prefab_args(args);
+
     if(args['color0'].length === 0){
         args['color0'] = webgl_vertexcolorarray({
           'vertexcount': 1,
@@ -2515,22 +2527,18 @@ function webgl_primitive_frustum(args){
       'args': args,
       'defaults': {
         'bottom': true,
-        'character': webgl_character_id,
         'color-bottom': [],
         'color-top': [],
-        'groups': [],
         'length': 2,
         'middle': true,
         'points': 8,
-        'prefix': entity_id_count,
         'size-bottom': 2,
         'size-top': 1,
         'top': true,
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
       },
     });
+    args = webgl_prefab_args(args);
+
     if(args['color-bottom'].length === 0){
         args['color-bottom'] = webgl_vertexcolorarray({
           'vertexcount': 1,
@@ -2701,19 +2709,14 @@ function webgl_primitive_stars(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
         'color': [1, 1, 1, 1],
-        'groups': [],
-        'prefix': entity_id_count,
         'radian': 2,
         'radius': 250,
         'range': 100,
         'stars': 100,
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
       },
     });
+    args = webgl_prefab_args(args);
 
     const star_colors = [];
     const star_points = [];
