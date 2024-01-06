@@ -2139,7 +2139,7 @@ function webgl_prefab_repeat(args){
 
 function webgl_primitive_cuboid(args){
     args = core_args({
-      'args': args,
+      'args': webgl_prefab_args(args),
       'defaults': {
         'all': {},
         'back': {},
@@ -2153,7 +2153,6 @@ function webgl_primitive_cuboid(args){
         'top': {},
       },
     });
-    args = webgl_prefab_args(args);
 
     const half_size_x = args['size-x'] / 2;
     const half_size_y = args['size-y'] / 2;
@@ -2374,7 +2373,7 @@ function webgl_primitive_cuboid(args){
 
 function webgl_primitive_ellipsoid(args){
     args = core_args({
-      'args': args,
+      'args': webgl_prefab_args(args),
       'defaults': {
         'color0': [],
         'color1': [],
@@ -2386,7 +2385,6 @@ function webgl_primitive_ellipsoid(args){
         'slices-longitude': 10,
       },
     });
-    args = webgl_prefab_args(args);
 
     if(args['color0'].length === 0){
         args['color0'] = webgl_vertexcolorarray({
@@ -2524,7 +2522,7 @@ function webgl_primitive_ellipsoid(args){
 
 function webgl_primitive_frustum(args){
     args = core_args({
-      'args': args,
+      'args': webgl_prefab_args(args),
       'defaults': {
         'bottom': true,
         'color-bottom': [],
@@ -2537,7 +2535,6 @@ function webgl_primitive_frustum(args){
         'top': true,
       },
     });
-    args = webgl_prefab_args(args);
 
     if(args['color-bottom'].length === 0){
         args['color-bottom'] = webgl_vertexcolorarray({
@@ -2707,7 +2704,7 @@ function webgl_primitive_frustum(args){
 
 function webgl_primitive_stars(args){
     args = core_args({
-      'args': args,
+      'args': webgl_prefab_args(args),
       'defaults': {
         'color': [1, 1, 1, 1],
         'radian': 2,
@@ -2716,7 +2713,6 @@ function webgl_primitive_stars(args){
         'stars': 100,
       },
     });
-    args = webgl_prefab_args(args);
 
     const star_colors = [];
     const star_points = [];
