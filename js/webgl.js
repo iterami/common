@@ -718,6 +718,78 @@ function webgl_entity_create(args){
     }
 }
 
+function webgl_entity_init(entity){
+    webgl_texture_init({
+      'animated': entity_entities[entity]['texture-animated'],
+      'id': entity_entities[entity]['texture-id'],
+    });
+
+    entity_entities[entity]['id'] = entity;
+    entity_entities[entity]['vertices-length'] = entity_entities[entity]['vertices'].length / 3;
+    entity_entities[entity]['normals'] = webgl_normals({
+      'rotate-x': entity_entities[entity]['rotate-x'],
+      'rotate-y': entity_entities[entity]['rotate-y'],
+      'rotate-z': entity_entities[entity]['rotate-z'],
+      'vertices-length': entity_entities[entity]['vertices-length'],
+    });
+
+    const pickData = [];
+    const textureData = [];
+    for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
+        pickData.push(
+          entity_entities[entity]['pick-color'][0],
+          entity_entities[entity]['pick-color'][1],
+          entity_entities[entity]['pick-color'][2],
+        );
+        textureData.push(
+          entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-repeat-x'],
+          entity_entities[entity]['texture-align'][i * 2 + 1] * entity_entities[entity]['texture-repeat-y']
+        );
+    }
+
+    const vertexArray = webgl.createVertexArray();
+    webgl.bindVertexArray(vertexArray);
+
+    webgl_buffer_set({
+      'attribute': 'vec_vertexColor',
+      'data': webgl_vertexcolorarray({
+        'colors': entity_entities[entity]['vertex-colors'],
+        'vertexcount': entity_entities[entity]['vertices-length'],
+      }),
+      'size': 4,
+    });
+    webgl_buffer_set({
+      'attribute': 'vec_vertexNormal',
+      'data': entity_entities[entity]['normals'],
+      'size': 3,
+    });
+    webgl_buffer_set({
+      'attribute': 'vec_pickColor',
+      'data': pickData,
+      'size': 3,
+    });
+    webgl_buffer_set({
+      'attribute': 'vec_texturePosition',
+      'data': textureData,
+      'size': 2,
+    });
+
+    webgl_scale({
+      'entity': entity,
+      'todo': false,
+      'x': entity_entities[entity]['scale-x'] === 1 ? false : entity_entities[entity]['scale-x'],
+      'y': entity_entities[entity]['scale-y'] === 1 ? false : entity_entities[entity]['scale-y'],
+      'z': entity_entities[entity]['scale-z'] === 1 ? false : entity_entities[entity]['scale-z'],
+    });
+    webgl_buffer_set({
+      'attribute': 'vec_vertexPosition',
+      'data': entity_entities[entity]['vertices'],
+      'size': 3,
+    });
+
+    entity_entities[entity]['vao'] = vertexArray;
+}
+
 function webgl_entity_move(args){
     args = core_args({
       'args': args,
@@ -805,78 +877,6 @@ function webgl_entity_normals(entity){
       'data': entity_entities[entity]['normals'],
       'size': 3,
     });
-}
-
-function webgl_entity_todo(entity){
-    webgl_texture_init({
-      'animated': entity_entities[entity]['texture-animated'],
-      'id': entity_entities[entity]['texture-id'],
-    });
-
-    entity_entities[entity]['id'] = entity;
-    entity_entities[entity]['vertices-length'] = entity_entities[entity]['vertices'].length / 3;
-    entity_entities[entity]['normals'] = webgl_normals({
-      'rotate-x': entity_entities[entity]['rotate-x'],
-      'rotate-y': entity_entities[entity]['rotate-y'],
-      'rotate-z': entity_entities[entity]['rotate-z'],
-      'vertices-length': entity_entities[entity]['vertices-length'],
-    });
-
-    const pickData = [];
-    const textureData = [];
-    for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
-        pickData.push(
-          entity_entities[entity]['pick-color'][0],
-          entity_entities[entity]['pick-color'][1],
-          entity_entities[entity]['pick-color'][2],
-        );
-        textureData.push(
-          entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-repeat-x'],
-          entity_entities[entity]['texture-align'][i * 2 + 1] * entity_entities[entity]['texture-repeat-y']
-        );
-    }
-
-    const vertexArray = webgl.createVertexArray();
-    webgl.bindVertexArray(vertexArray);
-
-    webgl_buffer_set({
-      'attribute': 'vec_vertexColor',
-      'data': webgl_vertexcolorarray({
-        'colors': entity_entities[entity]['vertex-colors'],
-        'vertexcount': entity_entities[entity]['vertices-length'],
-      }),
-      'size': 4,
-    });
-    webgl_buffer_set({
-      'attribute': 'vec_vertexNormal',
-      'data': entity_entities[entity]['normals'],
-      'size': 3,
-    });
-    webgl_buffer_set({
-      'attribute': 'vec_pickColor',
-      'data': pickData,
-      'size': 3,
-    });
-    webgl_buffer_set({
-      'attribute': 'vec_texturePosition',
-      'data': textureData,
-      'size': 2,
-    });
-
-    webgl_scale({
-      'entity': entity,
-      'todo': false,
-      'x': entity_entities[entity]['scale-x'] === 1 ? false : entity_entities[entity]['scale-x'],
-      'y': entity_entities[entity]['scale-y'] === 1 ? false : entity_entities[entity]['scale-y'],
-      'z': entity_entities[entity]['scale-z'] === 1 ? false : entity_entities[entity]['scale-z'],
-    });
-    webgl_buffer_set({
-      'attribute': 'vec_vertexPosition',
-      'data': entity_entities[entity]['vertices'],
-      'size': 3,
-    });
-
-    entity_entities[entity]['vao'] = vertexArray;
 }
 
 // Required args: parent, target
@@ -1053,7 +1053,7 @@ function webgl_init(){
         'vertices-length': 0,
       },
       'todo': function(entity){
-          webgl_entity_todo(entity);
+          webgl_entity_init(entity);
       },
       'type': 'webgl',
     });
@@ -2862,7 +2862,12 @@ function webgl_scale(args){
     }
 
     if(args['todo']){
-        webgl_entity_todo(args['entity']);
+        webgl.bindVertexArray(entity_entities[args['entity']]['vao']);
+        webgl_buffer_set({
+          'attribute': 'vec_vertexPosition',
+          'data': entity_entities[args['entity']]['vertices'],
+          'size': 3,
+        });
     }
 }
 
@@ -3065,7 +3070,15 @@ function webgl_stat_modify(args){
 
     }else if(args['stat'] === 'vertex-colors'){
         args['target']['vertex-colors'] = webgl_vertexcolorarray();
-        webgl_entity_todo(args['target']['id']);
+        webgl.bindVertexArray(args['target']['vao']);
+        webgl_buffer_set({
+          'attribute': 'vec_vertexColor',
+          'data': webgl_vertexcolorarray({
+            'colors': args['target']['vertex-colors'],
+            'vertexcount': args['target']['vertices-length'],
+          }),
+          'size': 4,
+        });
         return;
 
     }else if(args['target'][args['stat']] === void 0){
