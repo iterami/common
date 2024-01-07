@@ -108,6 +108,12 @@ function webgl_camera_rotate(args){
                 : webgl_characters[args['character']]['rotate-y'] + args['y'];
         }
     }
+
+    for(const entity in entity_entities){
+        if(entity_entities[entity]['attach-to'] === args['character']){
+            webgl_entity_normals(entity);
+        }
+    }
 }
 
 function webgl_camera_zoom(event){
@@ -774,6 +780,31 @@ function webgl_entity_move_to(args){
     args['entity']['translate-x'] = args['x'];
     args['entity']['translate-y'] = args['y'];
     args['entity']['translate-z'] = args['z'];
+}
+
+function webgl_entity_normals(entity){
+    let rotate_x = entity_entities[entity]['rotate-x'];
+    let rotate_y = entity_entities[entity]['rotate-y'];
+    let rotate_z = entity_entities[entity]['rotate-z'];
+    if(entity_entities[entity]['attach-to'] !== false){
+        const attached_to = globalThis[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
+        rotate_x += attached_to['rotate-x'];
+        rotate_y += attached_to['rotate-y'];
+        rotate_z += attached_to['rotate-z'];
+    }
+    entity_entities[entity]['normals'] = webgl_normals({
+      'rotate-x': rotate_x,
+      'rotate-y': rotate_y,
+      'rotate-z': rotate_z,
+      'vertices-length': entity_entities[entity]['vertices-length'],
+    });
+
+    webgl.bindVertexArray(entity_entities[entity]['vao']);
+    webgl_buffer_set({
+      'attribute': 'vec_vertexNormal',
+      'data': entity_entities[entity]['normals'],
+      'size': 3,
+    });
 }
 
 function webgl_entity_todo(entity){
@@ -1712,6 +1743,9 @@ function webgl_logicloop_handle_entity(entity){
         }
     }
 
+    const old_rotate_x = entity_entities[entity]['rotate-x'];
+    const old_rotate_y = entity_entities[entity]['rotate-y'];
+    const old_rotate_z = entity_entities[entity]['rotate-z'];
     if(entity_entities[entity]['billboard']){
         webgl_billboard({
           'entity': entity,
@@ -1723,10 +1757,14 @@ function webgl_logicloop_handle_entity(entity){
             entity_entities[entity][rotate_axis] += entity_entities[entity]['change-' + rotate_axis];
         }
     }
-
-    webgl_clamp_rotation({
-      'entity': entity_entities[entity],
-    });
+    if(entity_entities[entity]['rotate-x'] !== old_rotate_x
+      || entity_entities[entity]['rotate-y'] !== old_rotate_y
+      || entity_entities[entity]['rotate-z'] !== old_rotate_z){
+        webgl_clamp_rotation({
+          'entity': entity_entities[entity],
+        });
+        webgl_entity_normals(entity);
+    }
 
     math_matrix_clone({
       'id': 'camera',
