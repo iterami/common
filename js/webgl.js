@@ -2796,6 +2796,79 @@ function webgl_primitive_stars(args){
     });
 }
 
+function webgl_primitive_terrain(args){
+    args = core_args({
+      'args': webgl_prefab_args(args),
+      'defaults': {
+        'color': [1, 1, 1, 1],
+        'tiles-x': 10,
+        'tiles-x-size': 10,
+        'tiles-z': 10,
+        'tiles-z-size': 10,
+      },
+    });
+
+    let x_direction = -1;
+    const points = [];
+    const point_colors = [];
+    const z_start = -args['tiles-z-size'] * args['tiles-z'] / 2;
+
+    for(let tile_z = 0; tile_z <= args['tiles-z']; tile_z++){
+        const x_start = args['tiles-x-size'] * args['tiles-x'] * x_direction / 2;
+        const z_color = webgl_vertexcolorarray({
+          'vertexcount': 1,
+        });
+        const z_offset = z_start + args['tiles-z-size'] * tile_z;
+        point_colors.push(
+          z_color[0], z_color[1], z_color[2], z_color[3],
+          z_color[0], z_color[1], z_color[2], z_color[3],
+        );
+
+        for(let tile_x = 0; tile_x <= args['tiles-x']; tile_x++){
+            const x_color = webgl_vertexcolorarray({
+              'vertexcount': 1,
+            });
+            const x_offset = x_start + args['tiles-x-size'] * tile_x * -x_direction;
+            if(x_direction === 1){
+                points.push(
+                  x_offset, Math.random()*10, z_offset + args['tiles-z-size'],
+                  x_offset, Math.random()*10, z_offset,
+                );
+            }else{
+                points.push(
+                  x_offset, Math.random()*10, z_offset,
+                  x_offset, Math.random()*10, z_offset + args['tiles-z-size'],
+                );
+            }
+            point_colors.push(
+              x_color[0], x_color[1], x_color[2], x_color[3],
+              x_color[0], x_color[1], x_color[2], x_color[3],
+            );
+        }
+
+        x_direction *= -1;
+    }
+
+    webgl_entity_create({
+      'entities': [
+        {
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'],
+          'collision': false,
+          //'draw-mode': 'LINE_STRIP',
+          'draw-mode': 'TRIANGLE_STRIP',
+          'groups': args['groups'],
+          'id': args['prefix'],
+          'vertex-colors': point_colors,
+          'vertices': points,
+        },
+      ],
+    });
+}
+
 // Required args: shaders
 function webgl_program_create(args){
     const program = webgl.createProgram();
