@@ -73,11 +73,17 @@ function test_run(args){
           test_args,
           args['tests'][test]
         );
-        test_args['args'] = {};
-        Object.assign(
-          test_args['args'],
-          args['tests'][test]['args']
-        );
+        const function_args = args['tests'][test]['args'];
+        if(typeof function_args === 'object'){
+            test_args['args'] = {};
+            Object.assign(
+              test_args['args'],
+              function_args
+            );
+
+        }else{
+            test_args['args['] = function_args;
+        }
         const result = test_function(test_args);
         const expect = core_type({
           'var': args['tests'][test]['expect'],
