@@ -53,9 +53,8 @@ function math_cuboid_overlap(args){
       && args['z-0'] >= args['z-1'] - args['depth-0'];
 }
 
-// Required args: degrees
-function math_degrees_to_radians(args){
-    return args['degrees'] * .017453292519943295;
+function math_degrees_to_radians(degrees){
+    return degrees * .017453292519943295;
 }
 
 function math_distance(args){
@@ -343,12 +342,10 @@ function math_move_3d(args){
       },
     });
 
-    const radians = -math_degrees_to_radians({
-      'degrees': args['angle'] - (args['strafe']
-        ? 90
-        : 0
-      ),
-    });
+    const radians = -math_degrees_to_radians(args['angle'] - (args['strafe']
+      ? 90
+      : 0
+    ));
     return {
       'x': Math.sin(radians) * args['speed'],
       'z': Math.cos(radians) * args['speed'],
@@ -441,9 +438,8 @@ function math_quaternion_to_euler(args){
     };
 }
 
-// Required args: radians
-function math_radians_to_degrees(args){
-    return args['radians'] * 57.29577951308232;
+function math_radians_to_degrees(radians){
+    return radians * 57.29577951308232;
 }
 
 globalThis.math_matrices = {};

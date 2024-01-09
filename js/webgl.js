@@ -6,12 +6,10 @@ function webgl_billboard(args){
       'entity': entity_entities[args['entity']],
     });
 
-    entity_entities[args['entity']]['rotate-y'] = 360 - math_radians_to_degrees({
-      'radians': Math.PI / 2 + Math.atan2(
-        translation['z'] - webgl_characters[webgl_character_id]['camera-z'],
-        translation['x'] - webgl_characters[webgl_character_id]['camera-x'],
-      ),
-    });
+    entity_entities[args['entity']]['rotate-y'] = 360 - math_radians_to_degrees(Math.PI / 2 + Math.atan2(
+      translation['z'] - webgl_characters[webgl_character_id]['camera-z'],
+      translation['x'] - webgl_characters[webgl_character_id]['camera-x'],
+    ));
 }
 
 // Required args: attribute, data, size
@@ -1058,11 +1056,8 @@ function webgl_init(){
       'type': 'webgl',
     });
 
-    webgl_diagonal = Math.sin(math_degrees_to_radians({
-      'degrees': 45,
-    })) / Math.sin(math_degrees_to_radians({
-      'degrees': 90,
-    }));
+    webgl_diagonal = Math.sin(math_degrees_to_radians(45))
+      / Math.sin(math_degrees_to_radians(90));
 
     webgl_shader_remake();
     globalThis.onresize = webgl_resize;
@@ -1570,12 +1565,8 @@ function webgl_logicloop(){
 
     if(webgl_characters[webgl_character_id]['camera-lock']){
         if(webgl_characters[webgl_character_id]['camera-zoom'] > 0){
-            const radians_x = math_degrees_to_radians({
-              'degrees': webgl_characters[webgl_character_id]['camera-rotate-x'],
-            });
-            const radians_y = math_degrees_to_radians({
-              'degrees': webgl_characters[webgl_character_id]['camera-rotate-y'],
-            });
+            const radians_x = math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-x']);
+            const radians_y = math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-y']);
             const cos_x = Math.cos(radians_x);
 
             webgl_characters[webgl_character_id]['camera-x'] = webgl_characters[webgl_character_id]['translate-x']
@@ -1597,15 +1588,9 @@ function webgl_logicloop(){
     });
     math_matrix_rotate({
       'dimensions': [
-        math_degrees_to_radians({
-          'degrees': webgl_characters[webgl_character_id]['camera-rotate-x'],
-        }),
-        math_degrees_to_radians({
-          'degrees': webgl_characters[webgl_character_id]['camera-rotate-y'],
-        }),
-        math_degrees_to_radians({
-          'degrees': webgl_characters[webgl_character_id]['camera-rotate-z'],
-        }),
+        math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-x']),
+        math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-y']),
+        math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-z']),
       ],
       'id': 'camera',
     });
@@ -1783,15 +1768,9 @@ function webgl_logicloop_handle_entity(entity){
             const target = globalThis[entity_entities[entity]['attach-type']][entity_entities[entity]['attach-to']];
             math_matrix_rotate({
               'dimensions': [
-                math_degrees_to_radians({
-                  'degrees': target['rotate-x'],
-                }),
-                math_degrees_to_radians({
-                  'degrees': -target['rotate-y'],
-                }),
-                math_degrees_to_radians({
-                  'degrees': target['rotate-z'],
-                }),
+                math_degrees_to_radians(target['rotate-x']),
+                math_degrees_to_radians(-target['rotate-y']),
+                math_degrees_to_radians(target['rotate-z']),
               ],
               'id': entity,
             });
@@ -1807,15 +1786,9 @@ function webgl_logicloop_handle_entity(entity){
     }
     math_matrix_rotate({
       'dimensions': [
-        math_degrees_to_radians({
-          'degrees': entity_entities[entity]['rotate-x'],
-        }),
-        math_degrees_to_radians({
-          'degrees': entity_entities[entity]['rotate-y'],
-        }),
-        math_degrees_to_radians({
-          'degrees': entity_entities[entity]['rotate-z'],
-        }),
+        math_degrees_to_radians(entity_entities[entity]['rotate-x']),
+        math_degrees_to_radians(entity_entities[entity]['rotate-y']),
+        math_degrees_to_radians(entity_entities[entity]['rotate-z']),
       ],
       'id': entity,
     });
@@ -1832,15 +1805,9 @@ function webgl_normals(args){
       },
     });
 
-    const radians_x = math_degrees_to_radians({
-      'degrees': args['rotate-x'],
-    });
-    const radians_y = math_degrees_to_radians({
-      'degrees': args['rotate-y'],
-    });
-    const radians_z = -math_degrees_to_radians({
-      'degrees': args['rotate-z'],
-    });
+    const radians_x = math_degrees_to_radians(args['rotate-x']);
+    const radians_y = math_degrees_to_radians(args['rotate-y']);
+    const radians_z = -math_degrees_to_radians(args['rotate-z']);
     const cos_y = Math.cos(radians_y);
 
     const normal_x = core_round({
@@ -2435,15 +2402,9 @@ function webgl_primitive_ellipsoid(args){
         });
     }
 
-    const latitude_angles = math_degrees_to_radians({
-      'degrees': 360 / args['slices-latitude'],
-    });
-    const longitude_angles = math_degrees_to_radians({
-      'degrees': 180 / args['slices-longitude'],
-    });
-    const longitude_start = math_degrees_to_radians({
-      'degrees': -90,
-    });
+    const latitude_angles = math_degrees_to_radians(360 / args['slices-latitude']);
+    const longitude_angles = math_degrees_to_radians(180 / args['slices-longitude']);
+    const longitude_start = math_degrees_to_radians(-90);
 
     const properties = {
       'attach-to': args['character'],
@@ -2585,9 +2546,7 @@ function webgl_primitive_frustum(args){
         });
     }
 
-    const rotation = math_degrees_to_radians({
-      'degrees': 360 / args['points'],
-    });
+    const rotation = math_degrees_to_radians(360 / args['points']);
     const properties = {
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
