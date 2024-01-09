@@ -2801,12 +2801,17 @@ function webgl_primitive_terrain(args){
       'args': webgl_prefab_args(args),
       'defaults': {
         'color': [1, 1, 1, 1],
+        'heights': [],
         'tiles-x': 10,
         'tiles-x-size': 10,
         'tiles-z': 10,
         'tiles-z-size': 10,
       },
     });
+
+    while(args['heights'].length < args['tiles-x'] * args['tiles-z']){
+        args['heights'].push(Math.random() * 10);
+    }
 
     let x_direction = -1;
     const points = [];
@@ -2831,13 +2836,13 @@ function webgl_primitive_terrain(args){
             const x_offset = x_start + args['tiles-x-size'] * tile_x * -x_direction;
             if(x_direction === 1){
                 points.push(
-                  x_offset, Math.random()*10, z_offset + args['tiles-z-size'],
-                  x_offset, Math.random()*10, z_offset,
+                  x_offset, args['heights'][tile_z * args['tiles-z'] + tile_x], z_offset + args['tiles-z-size'],
+                  x_offset, args['heights'][(tile_z - 1) * args['tiles-z'] + tile_x], z_offset,
                 );
             }else{
                 points.push(
-                  x_offset, Math.random()*10, z_offset,
-                  x_offset, Math.random()*10, z_offset + args['tiles-z-size'],
+                  x_offset, args['heights'][tile_z * args['tiles-z'] - tile_x], z_offset,
+                  x_offset, args['heights'][(tile_z + 1) * args['tiles-z'] - tile_x], z_offset + args['tiles-z-size'],
                 );
             }
             point_colors.push(
