@@ -2800,7 +2800,7 @@ function webgl_primitive_terrain(args){
     args = core_args({
       'args': webgl_prefab_args(args),
       'defaults': {
-        'color': [1, 1, 1, 1],
+        'colors': [],
         'heights': [],
         'tiles-x': 10,
         'tiles-x-size': 10,
@@ -2809,30 +2809,34 @@ function webgl_primitive_terrain(args){
       },
     });
 
-    while(args['heights'].length < args['tiles-x'] * args['tiles-z']){
+    while(args['colors'].length < args['tiles-x'] * (args['tiles-z'] + 1) * 4 + 1){
+        const random_color = webgl_vertexcolorarray({
+          'vertexcount': 1,
+        });
+        args['colors'].push(
+          random_color[0], random_color[1], random_color[2], random_color[3],
+        );
+    }
+    while(args['heights'].length < args['tiles-x'] * args['tiles-z'] + args['tiles-x'] + 1){
         args['heights'].push(Math.random() * 10);
     }
 
     let x_direction = -1;
     const points = [];
     const point_colors = [];
-    const z_start = -args['tiles-z-size'] * args['tiles-z'] / 2;
+    const z_start = -args['tiles-z-size'] * (args['tiles-z'] + 2) / 2;
 
     for(let tile_z = 0; tile_z <= args['tiles-z']; tile_z++){
+        const z_tile = tile_z * args['tiles-z'] * 4;
         const x_start = args['tiles-x-size'] * args['tiles-x'] * x_direction / 2;
-        const z_color = webgl_vertexcolorarray({
-          'vertexcount': 1,
-        });
-        const z_offset = z_start + args['tiles-z-size'] * tile_z;
+        const z_offset = z_start + tile_z * args['tiles-z-size'];
         point_colors.push(
-          z_color[0], z_color[1], z_color[2], z_color[3],
-          z_color[0], z_color[1], z_color[2], z_color[3],
+          args['colors'][z_tile], args['colors'][z_tile + 1], args['colors'][z_tile + 2], args['colors'][z_tile + 3],
+          args['colors'][z_tile], args['colors'][z_tile + 1], args['colors'][z_tile + 2], args['colors'][z_tile + 3],
         );
 
         for(let tile_x = 0; tile_x <= args['tiles-x']; tile_x++){
-            const x_color = webgl_vertexcolorarray({
-              'vertexcount': 1,
-            });
+            const x_tile = z_tile + tile_x * 4;
             const x_offset = x_start + args['tiles-x-size'] * tile_x * -x_direction;
             if(x_direction === 1){
                 points.push(
@@ -2846,8 +2850,8 @@ function webgl_primitive_terrain(args){
                 );
             }
             point_colors.push(
-              x_color[0], x_color[1], x_color[2], x_color[3],
-              x_color[0], x_color[1], x_color[2], x_color[3],
+              args['colors'][x_tile], args['colors'][x_tile + 1], args['colors'][x_tile + 2], args['colors'][x_tile + 3],
+              args['colors'][x_tile], args['colors'][x_tile + 1], args['colors'][x_tile + 2], args['colors'][x_tile + 3],
             );
         }
 
@@ -2863,7 +2867,6 @@ function webgl_primitive_terrain(args){
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'],
           'collision': false,
-          //'draw-mode': 'LINE_STRIP',
           'draw-mode': 'TRIANGLE_STRIP',
           'groups': args['groups'],
           'id': args['prefix'],
