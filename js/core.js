@@ -443,21 +443,20 @@ function core_handle_pointerlockchange(event){
     }
 }
 
-// Required args: hex
-function core_hex_to_rgb(args){
-    if(args['hex'][0] === '#'){
-        args['hex'] = args['hex'].slice(1);
+function core_hex_to_rgb(hex){
+    if(hex[0] === '#'){
+        hex = hex.slice(1);
     }
-    if(args['hex'].length === 3){
-        args['hex'] = args['hex'][0] + args['hex'][0]
-          + args['hex'][1] + args['hex'][1]
-          + args['hex'][2] + args['hex'][2];
+    if(hex.length === 3){
+        hex = hex[0] + hex[0]
+          + hex[1] + hex[1]
+          + hex[2] + hex[2];
     }
 
     return {
-      'blue': '0x' + args['hex'][4] + args['hex'][5] | 0,
-      'green': '0x' + args['hex'][2] + args['hex'][3] | 0,
-      'red': '0x' + args['hex'][0] + args['hex'][1] | 0,
+      'blue': '0x' + hex[4] + hex[5] | 0,
+      'green': '0x' + hex[2] + hex[3] | 0,
+      'red': '0x' + hex[0] + hex[1] | 0,
     };
 }
 
