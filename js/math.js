@@ -198,17 +198,15 @@ function math_matrix_create(){
     return new Float32Array(16);
 }
 
-// Required args: ids
-function math_matrix_delete(args){
-    for(const id in args['ids']){
-        delete math_matrices[args['ids'][id]];
+function math_matrix_delete(ids){
+    for(const id in ids){
+        delete math_matrices[ids[id]];
     }
 }
 
-// Required args: id
-function math_matrix_identity(args){
-    for(const key in math_matrices[args['id']]){
-        math_matrices[args['id']][key] =
+function math_matrix_identity(id){
+    for(const key in math_matrices[id]){
+        math_matrices[id][key] =
           key % 5 === 0
             ? 1
             : 0;
@@ -270,9 +268,7 @@ function math_matrix_rotate(args){
     math_matrices[args['id']][6] = math_matrices[cache_id][6] * cosine - math_matrices[cache_id][2] * sine;
     math_matrices[args['id']][7] = math_matrices[cache_id][7] * cosine - math_matrices[cache_id][3] * sine;
 
-    math_matrix_delete({
-      'ids': [cache_id],
-    });
+    math_matrix_delete([cache_id]);
 }
 
 // Required args: id

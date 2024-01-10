@@ -1581,9 +1581,7 @@ function webgl_logicloop(){
         }
     }
 
-    math_matrix_identity({
-      'id': 'camera',
-    });
+    math_matrix_identity('camera');
     math_matrix_rotate({
       'dimensions': [
         math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-x']),
