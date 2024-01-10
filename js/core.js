@@ -495,8 +495,7 @@ function core_html(args){
     return element;
 }
 
-// Required args: string
-function core_html_format(args){
+function core_html_format(string){
     return core_replace_multiple({
       'patterns': {
         //'"': '&quot;',
@@ -506,7 +505,7 @@ function core_html_format(args){
         '\'': '&apos;',
         '\n\r': '<br>',
       },
-      'string': args['string'],
+      'string': string,
     });
 }
 
@@ -696,9 +695,7 @@ function core_interval_modify(args){
       },
     });
 
-    core_interval_pause({
-      'id': args['id'],
-    });
+    core_interval_pause(args['id']);
 
     core_intervals[args['id']] = {
       'animationFrame': args['animationFrame'],
@@ -710,30 +707,25 @@ function core_interval_modify(args){
     };
 
     if(!args['paused']){
-        core_interval_resume({
-          'id': args['id'],
-        });
+        core_interval_resume(args['id']);
     }
 }
 
-// Required args: id
-function core_interval_pause(args){
-    if(!(args['id'] in core_intervals)){
+function core_interval_pause(id){
+    if(!(id in core_intervals)){
         return;
     }
 
-    globalThis[core_intervals[args['id']]['animationFrame']
+    globalThis[core_intervals[id]['animationFrame']
       ? 'cancelAnimationFrame'
-      : 'clearInterval'](core_intervals[args['id']]['var']);
+      : 'clearInterval'](core_intervals[id]['var']);
 
-    core_intervals[args['id']]['paused'] = true;
+    core_intervals[id]['paused'] = true;
 }
 
 function core_interval_pause_all(){
     for(const interval in core_intervals){
-        core_interval_pause({
-          'id': interval,
-        });
+        core_interval_pause(interval);
     }
 }
 
@@ -742,9 +734,7 @@ function core_interval_remove(id){
         return;
     }
 
-    core_interval_pause({
-      'id': id,
-    });
+    core_interval_pause(id);
     delete core_intervals[id];
 }
 
@@ -754,39 +744,36 @@ function core_interval_remove_all(){
     }
 }
 
-// Required args: id
-function core_interval_resume(args){
-    if(!(args['id'] in core_intervals)
-      || !core_intervals[args['id']]['paused']){
+function core_interval_resume(id){
+    if(!(id in core_intervals)
+      || !core_intervals[id]['paused']){
         return;
     }
 
-    core_intervals[args['id']]['paused'] = false;
+    core_intervals[id]['paused'] = false;
 
-    if(core_intervals[args['id']]['animationFrame']){
-        core_intervals[args['id']]['var'] = globalThis.requestAnimationFrame(core_intervals[args['id']]['todo']);
+    if(core_intervals[id]['animationFrame']){
+        core_intervals[id]['var'] = globalThis.requestAnimationFrame(core_intervals[id]['todo']);
 
-    }else if(core_intervals[args['id']]['sync']){
-        core_intervals[args['id']]['todo']();
+    }else if(core_intervals[id]['sync']){
+        core_intervals[id]['todo']();
 
-        core_intervals[args['id']]['var'] = core_interval_sync({
-          'id': args['id'],
+        core_intervals[id]['var'] = core_interval_sync({
+          'id': id,
           'interval': 1000 - new Date().getMilliseconds(),
         });
 
     }else{
-        core_intervals[args['id']]['var'] = globalThis[core_intervals[args['id']]['set']](
-          core_intervals[args['id']]['todo'],
-          core_intervals[args['id']]['interval']
+        core_intervals[id]['var'] = globalThis[core_intervals[id]['set']](
+          core_intervals[id]['todo'],
+          core_intervals[id]['interval']
         );
     }
 }
 
 function core_interval_resume_all(){
     for(const interval in core_intervals){
-        core_interval_resume({
-          'id': interval,
-        });
+        core_interval_resume(interval);
     }
 }
 
