@@ -81,9 +81,8 @@ function canvas_draw_path(args){
     }
 }
 
-// Required args: id
-function canvas_getContext(args){
-    return document.getElementById(args['id']).getContext(
+function canvas_getContext(id){
+    return document.getElementById(id).getContext(
       '2d',
       {
         'alpha': false,
@@ -156,9 +155,7 @@ function canvas_init(args){
       'properties': properties,
       'type': 'canvas',
     });
-    canvas = canvas_getContext({
-      'id': 'canvas',
-    });
+    canvas = canvas_getContext('canvas');
     canvas.canvas.style.cursor = args['cursor'];
 
     globalThis.onresize = canvas_resize;
@@ -246,18 +243,15 @@ function canvas_resize(){
     }
 }
 
-function canvas_setmode(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'mode': 0,
-      },
-    });
+function canvas_setmode(mode){
+    if(mode === void 0){
+        mode = 0;
+    }
 
     entity_remove_all();
     core_storage_save();
 
-    core_mode = args['mode'];
+    core_mode = mode;
 
     core_call({
       'args': core_mode,
@@ -266,9 +260,10 @@ function canvas_setmode(args){
 
     if(core_menu_open){
         core_escape();
-    }
 
-    core_interval_resume_all();
+    }else{
+        core_interval_resume_all();
+    }
 }
 
 // Required args: properties
