@@ -1,26 +1,19 @@
 'use strict';
 
-function date_to_timestamp(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'date': false,
-      },
-    });
-
-    if(args['date'] === false){
-        args['date'] = timestamp_to_date();
+function date_to_timestamp(date){
+    if(date === void 0){
+        date = timestamp_to_date();
     }
 
     return new Date(
       Date.UTC(
-        args['date']['year'],
-        args['date']['month'] - 1,
-        args['date']['date'],
-        args['date']['hour'],
-        args['date']['minute'],
-        args['date']['second'],
-        args['date']['millisecond']
+        date['year'],
+        date['month'] - 1,
+        date['date'],
+        date['hour'],
+        date['minute'],
+        date['second'],
+        date['millisecond']
       )
     ).getTime();
 }
@@ -46,9 +39,7 @@ function time_diff(args){
     }
 
     return prefix + time_format({
-      'date': timestamp_to_date({
-        'timestamp': diff,
-      }),
+      'date': timestamp_to_date(diff),
       'diff': true,
     });
 }
@@ -128,20 +119,15 @@ function time_from_inputs(){
         }
     }
 
-    return date_to_timestamp({
-      'date': date,
-    });
+    return date_to_timestamp(date);
 }
 
-function timestamp_to_date(args){
-    args = core_args({
-      'args': args,
-    });
-    args['timestamp'] = args['timestamp'] !== void 0
-      ? new Date(args['timestamp']).getTime()
+function timestamp_to_date(timestamp){
+    timestamp = timestamp !== void 0
+      ? new Date(timestamp).getTime()
       : new Date().getTime();
 
-    const date = new Date(args['timestamp']);
+    const date = new Date(timestamp);
     return {
       'date': date.getUTCDate(),
       'day': date.getUTCDay(),
@@ -150,7 +136,7 @@ function timestamp_to_date(args){
       'minute': date.getUTCMinutes(),
       'month': date.getUTCMonth() + 1,
       'second': date.getUTCSeconds(),
-      'timestamp': args['timestamp'],
+      'timestamp': timestamp,
       'year': date.getUTCFullYear(),
     };
 }
