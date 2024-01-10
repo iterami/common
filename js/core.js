@@ -740,23 +740,20 @@ function core_interval_pause_all(){
     }
 }
 
-// Required args: id
-function core_interval_remove(args){
-    if(!(args['id'] in core_intervals)){
+function core_interval_remove(id){
+    if(!(id in core_intervals)){
         return;
     }
 
     core_interval_pause({
-      'id': args['id'],
+      'id': id,
     });
-    delete core_intervals[args['id']];
+    delete core_intervals[id];
 }
 
 function core_interval_remove_all(){
     for(const interval in core_intervals){
-        core_interval_remove({
-          'id': interval,
-        });
+        core_interval_remove(interval);
     }
 }
 
@@ -1170,26 +1167,18 @@ function core_repo_reset(){
     }
 }
 
-function core_requestpointerlock(args){
+function core_requestpointerlock(id){
     if(core_menu_open){
         return;
     }
 
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'id': 'canvas',
-      },
-    });
-
-    const element = document.getElementById(args['id']);
+    const element = document.getElementById(id);
     if(!element){
         return;
     }
 
     element.requestPointerLock();
-
-    core_mouse['pointerlock-id'] = args['id'];
+    core_mouse['pointerlock-id'] = id;
 }
 
 // Required args: number
@@ -1281,10 +1270,9 @@ function core_sort_property(args){
     });
 }
 
-// Required args: array
-function core_sort_random(args){
+function core_sort_random(array){
     return core_sort_custom({
-      'array': args['array'],
+      'array': array,
       'todo': function(a, b){
           return Math.random() - .5;
       },
