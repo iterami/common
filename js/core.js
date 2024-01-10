@@ -682,9 +682,8 @@ function core_init(){
     });
 }
 
-// Required args: id
-function core_interval_animationFrame(args){
-    core_intervals[args['id']]['var'] = globalThis.requestAnimationFrame(core_intervals[args['id']]['todo']);
+function core_interval_animationFrame(id){
+    core_intervals[id]['var'] = globalThis.requestAnimationFrame(core_intervals[id]['todo']);
 }
 
 // Required args: id, todo

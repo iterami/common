@@ -30,9 +30,7 @@ function canvas_draw(){
 
 function canvas_drawloop(){
     canvas_draw();
-    core_interval_animationFrame({
-      'id': 'canvas-animationFrame',
-    });
+    core_interval_animationFrame('canvas-animationFrame');
 }
 
 // Required args: vertices

@@ -626,9 +626,7 @@ function webgl_draw_entity(entity){
 
 function webgl_drawloop(){
     webgl_draw();
-    core_interval_animationFrame({
-      'id': 'webgl-animationFrame',
-    });
+    core_interval_animationFrame('webgl-animationFrame');
 }
 
 function webgl_entity_create(args){
