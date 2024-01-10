@@ -998,11 +998,10 @@ function core_random_rgb(){
     };
 }
 
-// Required args: array
-function core_random_splice(args){
-    return args['array'].splice(
+function core_random_splice(array){
+    return array.splice(
       core_random_integer({
-        'max': args['array'].length,
+        'max': array.length,
       }),
       1
     )[0];
