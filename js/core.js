@@ -667,7 +667,9 @@ function core_init(){
           },
         },
         'storage-save': {
-          'onclick': core_storage_save,
+          'onclick': function(){
+              core_storage_save();
+          },
         },
       },
     });
@@ -1349,16 +1351,8 @@ function core_storage_reset(args){
     return true;
 }
 
-function core_storage_save(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'keys': false,
-      },
-    });
-
-    let keys = args['keys'];
-    if(keys === false){
+function core_storage_save(keys){
+    if(keys === void 0){
         keys = Object.keys(core_storage_data);
     }
 
@@ -1392,16 +1386,8 @@ function core_storage_save(args){
     core_keys_rebind();
 }
 
-function core_storage_update(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'keys': false,
-      },
-    });
-
-    let keys = args['keys'];
-    if(keys === false){
+function core_storage_update(keys){
+    if(keys === void 0){
         keys = Object.keys(core_storage_data);
     }
 
