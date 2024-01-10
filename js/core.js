@@ -487,11 +487,9 @@ function core_html(args){
     }
 
     if(args['store'] !== false){
-        core_html_store({
-          'ids': [
-            args['store'],
-          ],
-        });
+        core_html_store([
+          args['store'],
+        ]);
     }
 
     return element;
@@ -525,15 +523,14 @@ function core_html_modify(args){
     );
 }
 
-// Required args: ids
-function core_html_store(args){
-    for(const id in args['ids']){
-        const element = document.getElementById(args['ids'][id]);
+function core_html_store(ids){
+    for(const id in ids){
+        const element = document.getElementById(ids[id]);
         if(!element){
             continue;
         }
 
-        core_elements[args['ids'][id]] = element;
+        core_elements[ids[id]] = element;
     }
 }
 
@@ -1122,16 +1119,12 @@ function core_repo_init(args){
         });
 
         if(args['tabs'][tab]['default']){
-            core_tab_switch({
-              'id': 'tab_' + args['tabs'][tab]['group'] + '_' + tab,
-            });
+            core_tab_switch('tab_' + args['tabs'][tab]['group'] + '_' + tab);
             have_default = true;
         }
     }
     if(!have_default){
-        core_tab_switch({
-          'id': 'tab_core-menu_repo',
-        });
+        core_tab_switch('tab_core-menu_repo');
     }
 
     core_storage_update();
@@ -1448,9 +1441,7 @@ function core_tab_create(args){
       'properties': {
         'id': 'tab_' + args['group'] + '_' + args['id'],
         'onclick': function(){
-            core_tab_switch({
-              'id': this.id,
-            });
+            core_tab_switch(this.id);
         },
         'type': 'button',
         'value': args['label'],
@@ -1476,8 +1467,8 @@ function core_tab_reset_group(id){
 }
 
 // Required args: id
-function core_tab_switch(args){
-    const info = args['id'].split('_');
+function core_tab_switch(id){
+    const info = id.split('_');
 
     const element = document.getElementById('tabcontent-' + info[2]);
     if(!element){
