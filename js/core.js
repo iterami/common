@@ -1467,10 +1467,9 @@ function core_tab_create(args){
     });
 }
 
-// Required args: id
-function core_tab_reset_group(args){
+function core_tab_reset_group(id){
     for(const tab in core_tabs){
-        if(core_tabs[tab]['group'] === args['id']){
+        if(core_tabs[tab]['group'] === id){
             document.getElementById('tabcontent-' + tab).style.display = 'none';
         }
     }
@@ -1486,9 +1485,7 @@ function core_tab_switch(args){
     }
 
     const state = element.style.display === 'block';
-    core_tab_reset_group({
-      'id': info[1],
-    });
+    core_tab_reset_group(info[1]);
     element.style.display = state
       ? 'none'
       : 'block';
