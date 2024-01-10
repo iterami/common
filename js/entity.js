@@ -72,9 +72,7 @@ function entity_create(args){
 // Required args: entities, group
 function entity_group_add(args){
     if(!(args['group'] in entity_groups)){
-        entity_group_create({
-          'id': args['group'],
-        });
+        entity_group_create(args['group']);
     }
 
     for(const entity in args['entities']){
@@ -88,11 +86,10 @@ function entity_group_add(args){
     }
 }
 
-// Required args: ids
-function entity_group_create(args){
-    for(const id in args['ids']){
-        entity_groups[args['ids'][id]] = {};
-        entity_groups['_length'][args['ids'][id]] = 0;
+function entity_group_create(ids){
+    for(const id in ids){
+        entity_groups[ids[id]] = {};
+        entity_groups['_length'][ids[id]] = 0;
     }
 }
 
@@ -281,11 +278,9 @@ function entity_set(args){
         entity_types_default.push(args['type']);
     }
 
-    entity_group_create({
-      'ids': [
-        args['type'],
-      ],
-    });
+    entity_group_create([
+      args['type'],
+    ]);
 }
 
 globalThis.entity_entities = {};

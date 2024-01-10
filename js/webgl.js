@@ -1255,9 +1255,7 @@ function webgl_level_init(args){
       'skybox',
       'webgl'
     );
-    entity_group_create({
-      ids: level['groups'],
-    });
+    entity_group_create(level['groups']);
 
     Object.assign(
       webgl_paths,
