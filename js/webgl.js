@@ -1089,13 +1089,9 @@ function webgl_level_init(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'json': false,
+        'json': {},
       },
     });
-
-    if(!args['json']){
-        args['json'] = {};
-    }
 
     if(args['character'] === 1){
         if(!args['json']['characters']
@@ -1225,13 +1221,8 @@ function webgl_level_init(args){
       level['paths']
     );
 
-    if(level['characters']
-      && level['characters'] !== false){
-        for(const character in level['characters']){
-            if(!webgl_characters[level['characters'][character]['id']]){
-                webgl_character_init(level['characters'][character]);
-            }
-        }
+    for(const character in level['characters']){
+        webgl_character_init(level['characters'][character]);
     }
 
     if(args['character'] === -1){
@@ -1275,7 +1266,7 @@ function webgl_level_load(args){
       'args': args,
       'defaults': {
         'character': 0,
-        'json': false,
+        'json': {},
       },
     });
 
