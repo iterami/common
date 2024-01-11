@@ -558,6 +558,11 @@ function webgl_collision(args){
     return true;
 }
 
+function webgl_cursor_set(cursor){
+    webgl_properties['cursor'] = cursor;
+    webgl.canvas.style.cursor = cursor;
+}
+
 function webgl_draw(){
     webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
 
@@ -1172,8 +1177,6 @@ function webgl_level_init(args){
       },
     });
 
-    webgl.canvas.style.cursor = level['cursor'];
-
     entity_id_count = 0;
     webgl_properties = {
       'ambient-blue': level['ambient-blue'],
@@ -1183,6 +1186,7 @@ function webgl_level_init(args){
       'clearcolor-blue': level['clearcolor-blue'],
       'clearcolor-green': level['clearcolor-green'],
       'clearcolor-red': level['clearcolor-red'],
+      'cursor': level['cursor'],
       'directional-blue': level['directional-blue'],
       'directional-green': level['directional-green'],
       'directional-red': level['directional-red'],
@@ -1208,6 +1212,7 @@ function webgl_level_init(args){
       'green': webgl_properties['clearcolor-green'],
       'red': webgl_properties['clearcolor-red'],
     });
+    webgl_cursor_set(level['cursor']);
 
     level['groups'].push(
       'foreground',
