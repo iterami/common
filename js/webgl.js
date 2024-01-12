@@ -250,7 +250,7 @@ function webgl_character_level(character){
 
 function webgl_character_origin(character){
     if(character === void 0){
-        character = webgl_character_id
+        character = webgl_character_id;
     }
     if(webgl_characters[character] === void 0){
         return;
@@ -334,7 +334,7 @@ function webgl_character_set(id){
 
 function webgl_character_spawn(character){
     if(character === void 0){
-        character = webgl_character_id
+        character = webgl_character_id;
     }
     if(webgl_characters[character] === void 0
       || webgl_characters[character]['lives'] === 0){
