@@ -2656,10 +2656,10 @@ function webgl_primitive_stars(args){
     for(let i = 0; i < args['stars']; i++){
         const theta = core_random_number({
           'multiplier': Math.PI * args['radian'],
-        });
+        }) + (1 - args['radian']);
         const phi = core_random_number({
-          'multiplier': Math.PI,
-        });
+          'multiplier': Math.PI * args['radian'],
+        }) + (1 - args['radian']);
         const sin_phi = Math.sin(phi);
         const radius = args['radius'] - core_random_number({
           'multiplier': args['range'],
