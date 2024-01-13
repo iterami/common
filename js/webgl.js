@@ -2108,12 +2108,12 @@ function webgl_primitive_cuboid(args){
 
     if(args['top']['exclude'] !== true){
         const properties = {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
           'attach-y': args['translate-y'] + half_size_y,
           'attach-z': args['translate-z'],
-          'groups': args['groups'],
           'id': args['prefix'] + '-top',
           'vertex-colors': webgl_vertexcolorarray({
             'colors': args['top']['vertex-colors'],
@@ -2142,12 +2142,12 @@ function webgl_primitive_cuboid(args){
 
     if(args['bottom']['exclude'] !== true){
         const properties = {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
           'attach-y': args['translate-y'] - half_size_y,
           'attach-z': args['translate-z'],
-          'groups': args['groups'],
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2177,12 +2177,12 @@ function webgl_primitive_cuboid(args){
 
     if(args['front']['exclude'] !== true){
         const properties = {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'] + half_size_z,
-          'groups': args['groups'],
           'id': args['prefix'] + '-front',
           'rotate-x': 90,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2212,12 +2212,12 @@ function webgl_primitive_cuboid(args){
 
     if(args['back']['exclude'] !== true){
         const properties = {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'] - half_size_z,
-          'groups': args['groups'],
           'id': args['prefix'] + '-back',
           'rotate-x': 270,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2247,12 +2247,12 @@ function webgl_primitive_cuboid(args){
 
     if(args['left']['exclude'] !== true){
         const properties = {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'] - half_size_x,
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'],
-          'groups': args['groups'],
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2282,12 +2282,12 @@ function webgl_primitive_cuboid(args){
 
     if(args['right']['exclude'] !== true){
         const properties = {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'] + half_size_x,
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'],
-          'groups': args['groups'],
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2347,13 +2347,13 @@ function webgl_primitive_ellipsoid(args){
     const longitude_start = math_degrees_to_radians(-90);
 
     const properties = {
+      ...args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'attach-x': args['translate-x'],
       'attach-y': args['translate-y'],
       'attach-z': args['translate-z'],
       'collision': false,
-      'groups': args['groups'],
     };
     for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
         if(longitude === args['slices-longitude'] / 2){
@@ -2488,6 +2488,7 @@ function webgl_primitive_frustum(args){
 
     const rotation = math_degrees_to_radians(360 / args['points']);
     const properties = {
+      ...args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'attach-x': args['translate-x'],
@@ -2495,7 +2496,6 @@ function webgl_primitive_frustum(args){
       'attach-z': args['translate-z'],
       'collision': false,
       'draw-mode': 'TRIANGLE_FAN',
-      'groups': args['groups'],
     };
 
     if(args['points'] === 1
@@ -2679,6 +2679,7 @@ function webgl_primitive_stars(args){
     webgl_entity_create({
       'entities': [
         {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -2686,7 +2687,6 @@ function webgl_primitive_stars(args){
           'attach-z': args['translate-z'],
           'collision': false,
           'draw-mode': 'POINTS',
-          'groups': args['groups'],
           'id': args['prefix'],
           'vertex-colors': star_colors,
           'vertices': star_points,
@@ -2760,6 +2760,7 @@ function webgl_primitive_terrain(args){
     webgl_entity_create({
       'entities': [
         {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -2767,7 +2768,6 @@ function webgl_primitive_terrain(args){
           'attach-z': args['translate-z'],
           'collision': false,
           'draw-mode': 'TRIANGLE_STRIP',
-          'groups': args['groups'],
           'id': args['prefix'],
           'vertex-colors': point_colors,
           'vertices': points,

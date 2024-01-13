@@ -33,6 +33,7 @@ function prefabs_webgl_cuboid_tree(args){
     }
 
     webgl_primitive_cuboid({
+      ...args,
       'all': {
         'collision': args['trunk-collision'],
         'texture-id': args['trunk-texture'],
@@ -71,6 +72,7 @@ function prefabs_webgl_cuboid_tree(args){
       'translate-z': args['translate-z'],
     });
     webgl_primitive_cuboid({
+      ...args,
       'all': {
         'collision': args['leaf-collision'],
         'texture-id': args['leaf-texture'],
@@ -81,9 +83,7 @@ function prefabs_webgl_cuboid_tree(args){
       'size-x': args['leaf-size-x'],
       'size-y': args['leaf-size-y'],
       'size-z': args['leaf-size-z'],
-      'translate-x': args['translate-x'],
       'translate-y': args['translate-y'] + args['trunk-size-y'] + args['leaf-size-y'] / 2,
-      'translate-z': args['translate-z'],
     });
 }
 
@@ -117,6 +117,7 @@ function prefabs_webgl_frustum_tree(args){
     });
 
     webgl_primitive_frustum({
+      ...args,
       'character': args['character'],
       'color-bottom': args['trunk-color'],
       'color-top': args['trunk-color'],
@@ -125,14 +126,12 @@ function prefabs_webgl_frustum_tree(args){
       'prefix': args['prefix'] + '-trunk',
       'size-bottom': args['trunk-size'],
       'size-top': 0,
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'],
-      'translate-z': args['translate-z'],
     });
 
     const leaf_height = height / args['leaf-count'];
     for(let i = 0; i < args['leaf-count']; i++){
         webgl_primitive_frustum({
+          ...args,
           'bottom': args['bottom'],
           'character': args['character'],
           'color-bottom': args['leaf-color-bottom'],
@@ -205,6 +204,7 @@ function prefabs_webgl_humanoid(args){
         }
 
         const properties = {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -272,6 +272,7 @@ function prefabs_webgl_lines_path(args){
     webgl_entity_create({
       'entities': [
         {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'draw-mode': webgl_paths[args['path']]['end'] !== 'loop'
@@ -369,6 +370,7 @@ function prefabs_webgl_lines_shrub(args){
         }
     }
     const properties = {
+      ...args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'attach-x': args['translate-x'],
@@ -419,6 +421,7 @@ function prefabs_webgl_lines_tree(args){
     }
 
     const properties = {
+      ...args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'attach-x': args['translate-x'],
@@ -523,6 +526,7 @@ function prefabs_webgl_tiles(args){
         const entities = args['tiles'][selected]['entities'];
         for(const entity in entities){
             const properties = {
+              ...args,
               'attach-to': character_id,
               'attach-type': 'webgl_characters',
               'id': args['prefix'] + '-' + tile + '-' + entity,
@@ -594,6 +598,7 @@ function prefabs_webgl_tree_2d(args){
     webgl_entity_create({
       'entities': [
         {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -610,6 +615,7 @@ function prefabs_webgl_tree_2d(args){
           ],
         },
         {
+          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
