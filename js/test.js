@@ -66,16 +66,22 @@ function test_run(args){
           test_args,
           args['tests'][test]
         );
-        const function_args = args['tests'][test]['args'];
-        if(typeof function_args === 'object'){
+        let args_json = '';
+        if(typeof args['tests'][test]['args'] === 'object'){
             test_args['args'] = {};
             Object.assign(
               test_args['args'],
-              function_args
+              args['tests'][test]['args']
+            );
+            args_json = JSON.stringify(
+              test_args['args'],
+              void 0,
+              2
             );
 
         }else{
-            test_args['args'] = function_args;
+            test_args['args'] = args['tests'][test]['args'];
+            args_json = test_args['args'];
         }
         const result = test_function(test_args);
         const expect = core_type({
@@ -87,11 +93,6 @@ function test_run(args){
             void 0,
             2
           );
-        const args_json = JSON.stringify(
-          args['tests'][test]['args'],
-          void 0,
-          2
-        );
         const result_json = JSON.stringify(
           result['result'],
           void 0,
