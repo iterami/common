@@ -2657,9 +2657,7 @@ function webgl_primitive_stars(args){
         const theta = core_random_number({
           'multiplier': Math.PI * 2,
         });
-        const phi = core_random_number({
-          'multiplier': Math.PI,
-        });
+        const phi = Math.acos(1 - 2 * core_random_number());
         const sin_phi = Math.sin(phi);
         const radius = args['radius'] - core_random_number({
           'multiplier': args['range'],
