@@ -896,15 +896,12 @@ function core_number_format(args){
       ).format(args['number']);
 }
 
-function core_random_boolean(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'chance': .5,
-      },
-    });
+function core_random_boolean(chance){
+    if(chance === void 0){
+        chance = .5;
+    }
 
-    return Math.random() < args['chance'];
+    return Math.random() < chance;
 }
 
 function core_random_crypto(args){
@@ -1243,7 +1240,7 @@ function core_sort_random(array){
     return core_sort_custom({
       'array': array,
       'todo': function(a, b){
-          return Math.random() - .5;
+          return core_random_boolean(.5);
       },
     });
 }
