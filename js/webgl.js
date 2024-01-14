@@ -2665,7 +2665,7 @@ function webgl_primitive_stars(args){
           'multiplier': args['range'],
         });
         const star_y = radius * sin_phi * Math.sin(theta);
-        if(star_y < (radius - radius * 2 * args['height-limit'])){
+        if(star_y < radius - radius * 2 * args['height-limit']){
             continue;
         }
         star_points.push(
