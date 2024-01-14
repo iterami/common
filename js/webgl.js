@@ -2644,7 +2644,7 @@ function webgl_primitive_stars(args){
       'args': webgl_prefab_args(args),
       'defaults': {
         'color': [1, 1, 1, 1],
-        'radian': 2,
+        'height-limit': 1,
         'radius': 250,
         'range': 100,
         'stars': 100,
@@ -2655,18 +2655,22 @@ function webgl_primitive_stars(args){
     const star_points = [];
     for(let i = 0; i < args['stars']; i++){
         const theta = core_random_number({
-          'multiplier': Math.PI * args['radian'],
-        }) + (1 - args['radian']);
+          'multiplier': Math.PI * 2,
+        });
         const phi = core_random_number({
-          'multiplier': Math.PI * args['radian'],
-        }) + (1 - args['radian']);
+          'multiplier': Math.PI,
+        });
         const sin_phi = Math.sin(phi);
         const radius = args['radius'] - core_random_number({
           'multiplier': args['range'],
         });
+        const star_y = radius * sin_phi * Math.sin(theta);
+        if(star_y < (radius - radius * 2 * args['height-limit'])){
+            continue;
+        }
         star_points.push(
           radius * sin_phi * Math.cos(theta),
-          radius * sin_phi * Math.sin(theta),
+          star_y,
           radius * Math.cos(phi),
         );
         star_colors.push(
