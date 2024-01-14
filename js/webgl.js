@@ -291,12 +291,8 @@ function webgl_character_random(args){
       },
     });
 
-    const xz = core_random_number({
-      'multiplier': args['width-random'],
-    }) + args['width-base'];
-    const y = core_random_number({
-      'multiplier': args['height-random'],
-    }) + args['height-base'];
+    const xz = Math.random() * args['width-random'] + args['width-base'];
+    const y = Math.random() * args['height-random'] + args['height-base'];
 
     webgl_character_init({
       'collide-range-xz': xz,
@@ -1112,9 +1108,7 @@ function webgl_level_init(args){
 
     if(args['json']['randomized']){
         for(const i in args['json']['randomized']){
-            const randomized = core_random_number({
-              'multiplier': args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min'],
-            }) + args['json']['randomized'][i]['min'];
+            const randomized = Math.random() * (args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min']) + args['json']['randomized'][i]['min'];
 
             for(const id in args['json']['randomized'][i]['ids']){
                 const targets = args['json'][args['json']['randomized'][i]['character'] === true
@@ -2065,15 +2059,9 @@ function webgl_prefab_repeat(args){
 
     for(let i = 0; i < args['count']; i++){
         args['properties']['prefix'] = args['prefix'] + '-' + i;
-        args['properties']['translate-x'] = core_random_number({
-          'multiplier': args['x-max'] - args['x-min'],
-        }) + args['x-min'];
-        args['properties']['translate-y'] = core_random_number({
-          'multiplier': args['y-max'] - args['y-min'],
-        }) + args['y-min'];
-        args['properties']['translate-z'] = core_random_number({
-          'multiplier': args['z-max'] - args['z-min'],
-        }) + args['z-min'];
+        args['properties']['translate-x'] = Math.random() * (args['x-max'] - args['x-min']) + args['x-min'];
+        args['properties']['translate-y'] = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
+        args['properties']['translate-z'] = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
 
         core_call({
           'args': args['properties'],
@@ -2654,14 +2642,10 @@ function webgl_primitive_stars(args){
     const star_colors = [];
     const star_points = [];
     for(let i = 0; i < args['stars']; i++){
-        const theta = core_random_number({
-          'multiplier': Math.PI * 2,
-        });
-        const phi = Math.acos(1 - 2 * core_random_number());
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(1 - 2 * Math.random());
         const sin_phi = Math.sin(phi);
-        const radius = args['radius'] - core_random_number({
-          'multiplier': args['range'],
-        });
+        const radius = args['radius'] - Math.random() * args['range'];
         const star_y = radius * sin_phi * Math.sin(theta);
         if(star_y < radius - radius * 2 * args['height-limit']){
             continue;

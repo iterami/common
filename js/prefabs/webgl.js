@@ -112,9 +112,7 @@ function prefabs_webgl_frustum_tree(args){
       },
     });
 
-    const height = args['height'] + core_random_number({
-      'multiplier': args['height-range'],
-    });
+    const height = Math.random() * args['height-range'] + args['height'];
 
     webgl_primitive_frustum({
       ...args,
@@ -324,15 +322,9 @@ function prefabs_webgl_lines_shrub(args){
     let z = 0;
 
     for(let i = 1; i < args['points']; i++){
-        const random_x = core_random_number({
-          'multiplier': args['x-max'] - args['x-min'],
-        }) + args['x-min'];
-        const random_y = core_random_number({
-          'multiplier': args['y-max'] - args['y-min'],
-        }) + args['y-min'];
-        const random_z = core_random_number({
-          'multiplier': args['z-max'] - args['z-min'],
-        }) + args['z-min'];
+        const random_x = Math.random() * (args['x-max'] - args['x-min']) + args['x-min'];
+        const random_y = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
+        const random_z = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
 
         if(args['type'] === 'range'){
             x = random_x;
@@ -464,12 +456,8 @@ function prefabs_webgl_lines_tree(args){
         for(let branch = 0; branch < branch_count; branch++){
             properties['id'] = args['prefix'] + '-trunk-' + trunk + '-branch-' + branch;
             properties['billboard'] = false;
-            properties['rotate-x'] = core_random_number({
-              'multiplier': 45,
-            }) + 90;
-            properties['rotate-z'] = core_random_number({
-              'multiplier': 360,
-            });
+            properties['rotate-x'] = Math.random() * 45 + 90;
+            properties['rotate-z'] = Math.random() * 360;
             properties['vertices'] = [
               branch_width, branch_length, 0,
               -branch_width, branch_length, 0,
@@ -591,9 +579,7 @@ function prefabs_webgl_tree_2d(args){
         args['leaf-color'] = args['leaf-color'].concat(args['leaf-color']);
         args['leaf-color'] = args['leaf-color'].concat(args['leaf-color']);
     }
-    const height = args['height'] + core_random_number({
-      'multiplier': args['height-range'],
-    });
+    const height = Math.random() * args['height-range'] + args['height'];
 
     webgl_entity_create({
       'entities': [
