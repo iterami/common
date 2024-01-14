@@ -942,9 +942,8 @@ function core_random_integer(args){
     return Math[args['todo']](Math.random() * args['max']);
 }
 
-// Required args: object
-function core_random_key(args){
-    const keys = Object.keys(args['object']);
+function core_random_key(object){
+    const keys = Object.keys(object);
 
     return keys[core_random_integer({
       'max': keys.length,
