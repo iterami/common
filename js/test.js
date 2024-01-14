@@ -19,15 +19,8 @@ function test_consts(args){
     return results;
 }
 
-// Required args: expect, function
+// Required args: args, expect, function
 function test_function(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'args': {},
-      },
-    });
-
     let test = false;
     let result = globalThis[args['function']](args['args']);
 
@@ -82,7 +75,7 @@ function test_run(args){
             );
 
         }else{
-            test_args['args['] = function_args;
+            test_args['args'] = function_args;
         }
         const result = test_function(test_args);
         const expect = core_type({
