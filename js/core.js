@@ -732,10 +732,6 @@ function core_interval_pause_all(){
 }
 
 function core_interval_remove(id){
-    if(!(id in core_intervals)){
-        return;
-    }
-
     core_interval_pause(id);
     delete core_intervals[id];
 }
