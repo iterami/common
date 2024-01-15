@@ -556,7 +556,7 @@ function core_init(){
         'id': 'core-ui',
       },
       'todo': 'prepend',
-    })
+    });
     core_html({
       'parent': 'core-ui',
       'properties': {
@@ -571,8 +571,7 @@ function core_init(){
       'parent': 'core-ui',
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>'
-          + '<div id=core-menu-info></div><hr>'
+        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
           + '<span id=core-menu-tabs></span>'
           + '<div id=core-menu-tabcontent></div><hr>'
           + '<input id=storage-save type=button value="Save All to localStorage">',
@@ -1036,7 +1035,14 @@ function core_repo_init(args){
 
     core_repo_title = args['title'];
     if(args['info'].length){
-        document.getElementById('core-menu-info').innerHTML = '<hr>' + args['info'];
+        core_html({
+          'parent': document.getElementById('core-menu-title'),
+          'properties': {
+            'id': 'core-menu-info',
+            'innerHTML': '<hr>' + args['info'],
+          },
+          'todo': 'after',
+        });
     }
     if(args['storage'] !== false){
         core_storage_add({
