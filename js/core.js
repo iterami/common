@@ -572,8 +572,7 @@ function core_init(){
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
-          + '<span id=core-menu-tabs></span>'
-          + '<div id=core-menu-tabcontent></div><hr>'
+          + '<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><hr>'
           + '<input id=storage-save type=button value="Save All to localStorage">',
       },
       'type': 'span',
@@ -1144,8 +1143,8 @@ function core_requestpointerlock(id){
         return;
     }
 
-    element.requestPointerLock();
     core_mouse['pointerlock-id'] = id;
+    element.requestPointerLock();
 }
 
 // Required args: number
