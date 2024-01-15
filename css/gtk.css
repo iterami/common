@@ -11,9 +11,6 @@ text{
     font-family: monospace;
     font-size: 15px;
 }
-#map{
-    font-size: 2px;
-}
 overshoot.bottom,
 overshoot.top{
     background: none;
