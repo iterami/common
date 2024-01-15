@@ -1286,7 +1286,7 @@ function core_storage_element_property(args){
     })
       ? 'checked'
       : (args['element'].tagName === 'DIV' || args['element'].tagName === 'SPAN'
-        ? 'innerHTML'
+        ? 'textContent'
         : 'value');
 }
 
@@ -1501,7 +1501,7 @@ function core_ui_update(args){
 
         const element = document.getElementById(id);
         element[element.tagName !== 'INPUT'
-          ? 'innerHTML'
+          ? 'textContent'
           : 'value'] = args['ids'][id];
 
         if(!args['class']){
@@ -1512,7 +1512,7 @@ function core_ui_update(args){
         for(let i = 0; i < elements.length; i++){
              const item = elements.item(i);
              item[item.tagName !== 'INPUT'
-               ? 'innerHTML'
+               ? 'textContent'
                : 'value'] = args['ids'][id];
         }
     }
