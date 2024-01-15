@@ -715,8 +715,8 @@ function webgl_entity_init(entity){
         );
     }
 
-    const vertexArray = webgl.createVertexArray();
-    webgl.bindVertexArray(vertexArray);
+    entity_entities[entity]['vao'] = webgl.createVertexArray();
+    webgl.bindVertexArray(entity_entities[entity]['vao']);
 
     webgl_buffer_set({
       'attribute': 'vec_vertexColor',
@@ -754,8 +754,6 @@ function webgl_entity_init(entity){
       'data': entity_entities[entity]['vertices'],
       'size': 3,
     });
-
-    entity_entities[entity]['vao'] = vertexArray;
 }
 
 function webgl_entity_move(args){
