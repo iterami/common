@@ -574,6 +574,7 @@ function core_init(){
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
           + '<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><hr>'
           + '<input id=storage-save type=button value="Save All to localStorage">',
+        'style': 'display:none',
       },
       'type': 'span',
     });

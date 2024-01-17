@@ -34,8 +34,6 @@ textarea{
     top: 0;
     z-index: 9;
 }
-#core-menu,
-#core-repo,
 .hidden{
     display: none;
 }
