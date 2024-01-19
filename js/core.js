@@ -1440,11 +1440,11 @@ function core_type(variable){
         return 'function';
     }
 
-    if(variable.constructor === Object){
+    if(variable.constructor.name === 'Object'){
         return 'object';
     }
 
-    if(variable.constructor === Array){
+    if(variable.constructor.name === 'Array'){
         return 'array';
     }
 
