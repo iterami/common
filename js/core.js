@@ -1434,11 +1434,10 @@ function core_type(variable){
       || typeof globalThis[variable] === 'function'){
         return 'function';
 
-    }else if(variable instanceof Array){
+    }else if(variable.constructor === Array){
         return 'array';
 
-    }else if(variable instanceof Object
-      && !(variable instanceof Array)){
+    }else if(variable.constructor === Object){
         return 'object';
 
     }else{
