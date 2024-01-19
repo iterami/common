@@ -23,20 +23,13 @@ function test_consts(args){
 function test_function(args){
     let test = false;
     let result = globalThis[args['function']](args['args']);
+    const type = core_type(args['expect']);
 
-    if(core_type({
-        'type': 'function',
-        'var': args['expect'],
-      })){
+    if(type === 'function'){
         test = args['expect'](result);
 
-    }else if(core_type({
-        'type': 'array',
-        'var': args['expect'],
-      }) || core_type({
-        'type': 'object',
-        'var': args['expect'],
-      })){
+    }else if(type === 'array'
+      || type === 'object'){
         test = true;
         for(const item in result){
             if(args['expect'][item] === void 0
@@ -84,9 +77,7 @@ function test_run(args){
             args_json = test_args['args'];
         }
         const result = test_function(test_args);
-        const expect = core_type({
-          'var': args['tests'][test]['expect'],
-        })
+        const expect = core_type(args['tests'][test]['expect']) === 'function'
           ? args['tests'][test]['expect'].toString()
           : JSON.stringify(
             args['tests'][test]['expect'],

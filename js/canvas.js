@@ -173,10 +173,7 @@ function canvas_init(args){
       'type': 'canvas',
     });
 
-    if(core_type({
-        'var': 'repo_logic',
-        'type': 'function',
-      })){
+    if(core_type('repo_logic') === 'function'){
         core_interval_modify({
           'id': 'canvas-interval',
           'paused': true,

@@ -65,10 +65,7 @@ function audio_node_create(args){
     );
 
     for(const property in args['properties']){
-        if(core_type({
-            'type': 'object',
-            'var': args['properties'][property],
-          })){
+        if(core_type(args['properties'][property]) === 'object'){
             for(const subproperty in args['properties'][property]){
                 source[property][subproperty] = args['properties'][property][subproperty];
             }

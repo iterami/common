@@ -883,9 +883,7 @@ function webgl_event(args){
     }
 
     if(args['parent']['event-todo'] !== false){
-        if(core_type({
-            'var': args['parent']['event-todo'],
-          })){
+        if(core_type(args['parent']['event-todo']) === 'function'){
             globalThis[args['parent']['event-todo']](args['parent']['event-todo-args']);
 
         }else{

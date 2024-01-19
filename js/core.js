@@ -24,9 +24,7 @@ function core_call(args){
       },
     });
 
-    if(core_type({
-        'var': args['todo'],
-      })){
+    if(core_type(args['todo']) === 'function'){
         globalThis[args['todo']](args['args']);
     }
 }
@@ -185,10 +183,7 @@ function core_handle_beforeunload(event){
 
     core_storage_save();
 
-    if(core_type({
-        'type': 'string',
-        'var': result,
-      })){
+    if(core_type(result) === 'string'){
         return result;
     }
 }
@@ -227,10 +222,7 @@ function core_handle_defaults(args){
       },
     });
 
-    if(!core_type({
-        'type': 'object',
-        'var': args['var'],
-      })){
+    if(core_type(args['var']) !== 'object'){
         return args['var'];
     }
 
@@ -1286,10 +1278,7 @@ function core_storage_add(args){
 
 // Required args: element, key
 function core_storage_element_property(args){
-    return core_type({
-      'type': 'boolean',
-      'var': core_storage_info[args['key']]['default'],
-    })
+    return core_type(core_storage_info[args['key']]['default']) === 'boolean'
       ? 'checked'
       : (args['element'].tagName === 'DIV' || args['element'].tagName === 'SPAN'
         ? 'textContent'
@@ -1440,49 +1429,33 @@ function core_tab_switch(id){
       : 'block';
 }
 
-// Required args: var
-function core_type(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'type': 'function',
-      },
-    });
+function core_type(variable){
+    if(typeof variable === 'function'
+      || typeof globalThis[variable] === 'function'){
+        return 'function';
 
-    if(args['type'] === 'function'){
-        return typeof args['var'] === 'function'
-          || typeof globalThis[args['var']] === 'function';
+    }else if(variable instanceof Array){
+        return 'array';
 
-    }else if(args['type'] === 'array'){
-        return args['var'] instanceof Array;
+    }else if(variable instanceof Object
+      && !(variable instanceof Array)){
+        return 'object';
 
-    }else if(args['type'] === 'object'){
-        return args['var'] instanceof Object
-          && !(args['var'] instanceof Array)
-          && typeof args['var'] !== 'function';
+    }else{
+        return typeof variable;
     }
-
-    return typeof args['var'] === args['type'];
 }
 
 // Required args: template, value
 function core_type_convert(args){
-    if(core_type({
-        'type': 'string',
-        'var': args['template'],
-      })){
+    if(core_type(args['template']) === 'string'){
         return args['value'];
 
     }else if(!Number.isNaN(Number.parseFloat(args['template']))){
         return Number.parseFloat(args['value']);
 
-    }else if(core_type({
-        'type': 'boolean',
-        'var': args['template'],
-      }) && !core_type({
-        'type': 'boolean',
-        'var': args['value'],
-      })){
+    }else if(core_type(args['template']) === 'boolean'
+      && core_type(args['value']) !== 'boolean'){
         return args['value'] === 'true';
     }
 
