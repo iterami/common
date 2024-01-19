@@ -1430,19 +1430,25 @@ function core_tab_switch(id){
 }
 
 function core_type(variable){
+    if(variable === void 0
+      || variable === null){
+        return 'undefined';
+    }
+
     if(typeof variable === 'function'
       || typeof globalThis[variable] === 'function'){
         return 'function';
-
-    }else if(variable.constructor === Array){
-        return 'array';
-
-    }else if(variable.constructor === Object){
-        return 'object';
-
-    }else{
-        return typeof variable;
     }
+
+    if(variable.constructor === Object){
+        return 'object';
+    }
+
+    if(variable.constructor === Array){
+        return 'array';
+    }
+
+    return typeof variable;
 }
 
 // Required args: template, value
