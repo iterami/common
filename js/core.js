@@ -1296,7 +1296,7 @@ function core_storage_reset(args){
     });
 
     if(!globalThis.confirm('Reset ' + args['label'] + ' localStorage?')){
-        return false;
+        return;
     }
 
     let keys = [];
@@ -1322,7 +1322,6 @@ function core_storage_reset(args){
     }
 
     core_storage_update();
-    return true;
 }
 
 function core_storage_save(keys){
