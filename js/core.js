@@ -245,7 +245,7 @@ function core_handle_event(args){
       },
     });
 
-    if(Reflect.has(args['object'], args['key'])){
+    if(args['key'] in args['object']){
         if(args['object'][args['key']]['preventDefault']
           && !core_menu_open){
             args['event'].preventDefault();
@@ -326,7 +326,7 @@ function core_handle_keyup(event){
         return;
     }
 
-    if(Reflect.has(core_keys, 'all')){
+    if('all' in core_keys){
         let all = false;
         for(const key in core_keys){
             if(key !== 'all'
