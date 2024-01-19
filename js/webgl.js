@@ -550,8 +550,6 @@ function webgl_collision(args){
             });
         }
     }
-
-    return true;
 }
 
 function webgl_cursor_set(cursor){
