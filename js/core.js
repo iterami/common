@@ -470,11 +470,7 @@ function core_html(args){
           'var': args['properties'][property],
         });
     }
-
-    if(core_type(args['parent']) === 'string'){
-        document.getElementById(args['parent'])[args['todo']](element);
-
-    }else if(core_type(args['parent']) === 'object'){
+    if(args['parent'] !== false){
         args['parent'][args['todo']](element);
     }
 
@@ -542,7 +538,7 @@ function core_image(args){
 }
 
 function core_init(){
-    core_html({
+    const core_ui = core_html({
       'parent': document.body,
       'properties': {
         'id': 'core-ui',
@@ -550,7 +546,7 @@ function core_init(){
       'todo': 'prepend',
     });
     core_html({
-      'parent': 'core-ui',
+      'parent': core_ui,
       'properties': {
         'id': 'core-toggle',
         'onclick': core_escape,
@@ -560,7 +556,7 @@ function core_init(){
       'type': 'input',
     });
     core_html({
-      'parent': 'core-ui',
+      'parent': core_ui,
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
@@ -571,7 +567,7 @@ function core_init(){
       'type': 'span',
     });
     core_html({
-      'parent': 'core-ui',
+      'parent': core_ui,
       'properties': {
         'id': 'repo-ui',
       },
@@ -1383,7 +1379,7 @@ function core_tab_create(args){
     };
 
     core_html({
-      'parent': args['group'] + '-tabs',
+      'parent': document.getElementById(args['group'] + '-tabs'),
       'properties': {
         'id': 'tab_' + args['group'] + '_' + args['id'],
         'onclick': function(){
@@ -1395,7 +1391,7 @@ function core_tab_create(args){
       'type': 'input',
     });
     core_html({
-      'parent': args['group'] + '-tabcontent',
+      'parent': document.getElementById(args['group'] + '-tabcontent'),
       'properties': {
         'id': 'tabcontent-' + args['id'],
         'innerHTML': args['content'],
