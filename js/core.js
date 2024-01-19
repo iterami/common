@@ -24,7 +24,7 @@ function core_call(args){
       },
     });
 
-    if(core_type(args['todo']) === 'function'){
+    if(core_type(globalThis[args['todo']]) === 'function'){
         globalThis[args['todo']](args['args']);
     }
 }
@@ -1430,20 +1430,7 @@ function core_type(variable){
         return 'undefined';
     }
 
-    if(typeof variable === 'function'
-      || typeof globalThis[variable] === 'function'){
-        return 'function';
-    }
-
-    if(variable.constructor.name === 'Object'){
-        return 'object';
-    }
-
-    if(variable.constructor.name === 'Array'){
-        return 'array';
-    }
-
-    return typeof variable;
+    return variable.constructor.name.toLowerCase();
 }
 
 // Required args: template, value
