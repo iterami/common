@@ -1408,7 +1408,6 @@ function core_tab_reset_group(id){
     }
 }
 
-// Required args: id
 function core_tab_switch(id){
     const info = id.split('_');
 
