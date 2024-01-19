@@ -471,10 +471,10 @@ function core_html(args){
         });
     }
 
-    if(typeof args['parent'] === 'string'){
+    if(core_type(args['parent']) === 'string'){
         document.getElementById(args['parent'])[args['todo']](element);
 
-    }else if(typeof args['parent'] === 'object'){
+    }else if(core_type(args['parent']) === 'object'){
         args['parent'][args['todo']](element);
     }
 

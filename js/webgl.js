@@ -3048,7 +3048,7 @@ function webgl_stat_modify(args){
         args['target'][args['stat']] = 0;
     }
 
-    args['target'][args['stat']] = (args['set'] || typeof args['value'] !== 'number')
+    args['target'][args['stat']] = (args['set'] || core_type(args['value']) !== 'number')
       ? args['value']
       : args['target'][args['stat']] + args['value'];
 
