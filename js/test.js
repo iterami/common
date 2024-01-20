@@ -59,19 +59,18 @@ function test_run(args){
           test_args,
           args['tests'][test]
         );
+        const args_type = core_type(args['tests'][test]['args']);
         let args_json = '';
-        if(args['tests'][test]['args']
-          && core_type(args['tests'][test]['args']) === 'object'){
-            test_args['args'] = {};
-            Object.assign(
-              test_args['args'],
-              args['tests'][test]['args']
-            );
+        if(args_type === 'object'){
+            test_args['args'] = {...args['tests'][test]['args']};
             args_json = JSON.stringify(
               test_args['args'],
               void 0,
               2
             );
+
+        }else if(args_type === 'function'){
+            args_json = test_args['args'].toString();
 
         }else{
             test_args['args'] = args['tests'][test]['args'];
