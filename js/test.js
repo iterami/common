@@ -74,7 +74,11 @@ function test_run(args){
 
         }else{
             test_args['args'] = args['tests'][test]['args'];
-            args_json = JSON.stringify(test_args['args']);
+            args_json = JSON.stringify(
+              test_args['args'],
+              void 0,
+              2
+            );
         }
         const result = test_function(test_args);
         const expect = core_type(args['tests'][test]['expect']) === 'function'
