@@ -70,7 +70,7 @@ function test_run(args){
             );
 
         }else if(args_type === 'function'){
-            args_json = test_args['args'].toString();
+            args_json = test_trim(test_args['args'].toString());
 
         }else{
             test_args['args'] = args['tests'][test]['args'];
@@ -78,7 +78,7 @@ function test_run(args){
         }
         const result = test_function(test_args);
         const expect = core_type(args['tests'][test]['expect']) === 'function'
-          ? args['tests'][test]['expect'].toString()
+          ? test_trim(args['tests'][test]['expect'].toString())
           : JSON.stringify(
             args['tests'][test]['expect'],
             void 0,
@@ -141,4 +141,13 @@ function test_time(args){
       'runs': args['runs'],
       'total': time_total,
     };
+}
+
+function test_trim(string){
+    const split = string.split('\n');
+    let trimmed = split[0];
+    for(let i = 1; i < split.length; i++){
+        trimmed += '\n' + split[i].slice(10);
+    }
+    return trimmed;
 }
