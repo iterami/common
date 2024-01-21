@@ -550,10 +550,9 @@ function core_init(){
       'properties': {
         'id': 'core-toggle',
         'onclick': core_escape,
-        'type': 'button',
-        'value': '☰',
+        'textContent': '☰',
       },
-      'type': 'input',
+      'type': 'button',
     });
     core_html({
       'parent': core_ui,
@@ -561,7 +560,7 @@ function core_init(){
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
           + '<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><hr>'
-          + '<input id=storage-save type=button value="Save All to localStorage">',
+          + '<button id=storage-save type=button>Save All to localStorage</button>',
         'style': 'display:none',
       },
       'type': 'span',
@@ -584,7 +583,7 @@ function core_init(){
         + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
         + '<tr><td><input class=mini id=move-→ type=text><td>Move →'
         + '<tr><td><input class=mini id=reset type=text><td>Reset</table>'
-        + '<input id=storage-reset type=button value="Reset Global localStorage">',
+        + '<button id=storage-reset type=button>Reset Global localStorage</button>',
       'group': 'core-menu',
       'id': 'global',
       'label': 'Global',
@@ -1038,7 +1037,7 @@ function core_repo_init(args){
         });
         core_tab_create({
           'content': args['storage-menu']
-            + '<input id=storage-reset-repo type=button value="Reset ' + core_repo_title + ' localStorage">',
+            + '<button id=storage-reset-repo type=button>Reset ' + core_repo_title + ' localStorage</button>',
           'group': 'core-menu',
           'id': 'repo',
           'label': core_repo_title,
@@ -1385,10 +1384,9 @@ function core_tab_create(args){
         'onclick': function(){
             core_tab_switch(this.id);
         },
-        'type': 'button',
-        'value': args['label'],
+        'textContent': args['label'],
       },
-      'type': 'input',
+      'type': 'button',
     });
     core_html({
       'parent': document.getElementById(args['group'] + '-tabcontent'),

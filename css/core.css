@@ -11,6 +11,7 @@ body{
     overscroll-behavior: none;
 }
 body,
+button,
 input,
 input::file-selector-button,
 select,
@@ -18,6 +19,31 @@ textarea{
     background-color: #000;
     color: #ccc;
     font: 700 14px monospace;
+}
+button,
+input{
+    border: 2px solid #999;
+    text-align: center;
+    vertical-align: middle;
+}
+button,
+input::file-selector-button{
+    padding: 2px 7px;
+}
+button:disabled,
+input:disabled,
+textarea:read-only{
+    border-color: #555;
+}
+button:enabled,
+input[type=checkbox]:enabled,
+input[type=color]:enabled,
+input[type=datetime-local]:enabled,
+input[type=file]:enabled,
+input[type=range]:enabled,
+label,
+select:enabled{
+    cursor: pointer;
 }
 #canvas{
     left: 0;
@@ -63,33 +89,10 @@ hr{
 .inline{
     display: inline-block;
 }
-input{
-    border: 2px solid #999;
-    text-align: center;
-    vertical-align: middle;
-}
-input[type=button],
-input::file-selector-button{
-    padding: 2px 7px;
-}
-input[type=button]:enabled,
-input[type=checkbox]:enabled,
-input[type=color]:enabled,
-input[type=datetime-local]:enabled,
-input[type=file]:enabled,
-input[type=range]:enabled,
-label,
-select:enabled{
-    cursor: pointer;
-}
 input[type=number],
 input[type=range],
 input[type=text]{
     width: 200px;
-}
-input:disabled,
-textarea:read-only{
-    border-color: #555;
 }
 input.gridbutton{
     border-width: 0;
@@ -147,6 +150,7 @@ ul{
 }
 
 a:focus,
+button:focus,
 input:focus,
 select:focus,
 textarea:focus{

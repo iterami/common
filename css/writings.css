@@ -2,11 +2,22 @@ a{
     color: #4c4;
 }
 body,
-input[type=button],
+button,
 textarea{
     background-color: #000;
     color: #ccc;
     font: 700 14px monospace;
+}
+button{
+    border: 2px solid #999;
+    padding: 2px 7px;
+}
+button:disabled,
+textarea:read-only{
+    border-color: #555;
+}
+button:enabled{
+    cursor: pointer;
 }
 .center{
     text-align: center;
@@ -35,19 +46,6 @@ code{
 }
 hr{
     border: 2px solid #444;
-}
-input{
-    border: 2px solid #999;
-}
-input:disabled,
-textarea:read-only{
-    border-color: #555;
-}
-input[type=button]{
-    padding: 2px 7px;
-}
-input[type=button]:enabled{
-    cursor: pointer;
 }
 ol{
     margin: 0;
@@ -79,7 +77,7 @@ ul{
 }
 
 a:focus,
-input:focus,
+button:focus,
 textarea:focus{
     outline: 2px solid #4c4;
 }
