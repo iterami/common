@@ -173,13 +173,11 @@ function canvas_init(args){
       'type': 'canvas',
     });
 
-    if(core_type('repo_logic') === 'function'){
-        core_interval_modify({
-          'id': 'canvas-interval',
-          'paused': true,
-          'todo': canvas_logicloop,
-        });
-    }
+    core_interval_modify({
+      'id': 'canvas-interval',
+      'paused': true,
+      'todo': canvas_logicloop,
+    });
     core_interval_modify({
       'animationFrame': true,
       'id': 'canvas-animationFrame',
