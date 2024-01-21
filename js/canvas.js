@@ -186,9 +186,7 @@ function canvas_init(args){
 }
 
 function canvas_logicloop(){
-    core_call({
-      'todo': 'repo_logic',
-    });
+    repo_logic();
 }
 
 function canvas_resize(){

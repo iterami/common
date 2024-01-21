@@ -1425,9 +1425,7 @@ function webgl_logicloop(){
         }
     }
 
-    core_call({
-      'todo': 'repo_logic',
-    });
+    repo_logic();
 
     entity_group_modify({
       'groups': [
