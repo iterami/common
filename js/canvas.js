@@ -162,11 +162,6 @@ function canvas_init(args){
     entity_set({
       'default': true,
       'properties': {
-        'attach-to': false,
-        'attach-type': 'entity_entities',
-        'attach-x': 0,
-        'attach-y': 0,
-        'attach-z': 0,
         'x': 0,
         'y': 0,
       },
