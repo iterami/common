@@ -194,24 +194,6 @@ function canvas_logicloop(){
     core_call({
       'todo': 'repo_logic',
     });
-
-    entity_group_modify({
-      'groups': [
-        'canvas',
-      ],
-      'todo': function(entity){
-          canvas_logicloop_handle_entity(entity);
-      },
-    });
-}
-
-function canvas_logicloop_handle_entity(entity){
-    if(entity_entities[entity]['attach-to'] !== false){
-        const attached = entity_entities[entity_entities[entity]['attach-to']];
-        for(const axis in entity_entities[entity]['position']){
-            entity_entities[entity]['position'][axis] = attached['position'][axis] + entity_entities[entity]['attach-' + axis];
-        }
-    }
 }
 
 function canvas_resize(){
