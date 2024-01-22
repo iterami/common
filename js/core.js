@@ -1235,12 +1235,10 @@ function core_sort_random(array){
 
 // Required args: array
 function core_sort_strings(args){
-    const collator = new Intl.Collator();
-
     return core_sort_custom({
       'array': args['array'],
       'reverse': args['reverse'],
-      'todo': collator.compare,
+      'todo': new Intl.Collator().compare,
     });
 }
 
