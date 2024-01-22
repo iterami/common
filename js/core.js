@@ -1433,7 +1433,7 @@ function core_type(variable){
 // Required args: template, value
 function core_type_convert(args){
     if(core_type(args['template']) === 'string'){
-        return args['value'];
+        return String(args['value']);
 
     }else if(!Number.isNaN(Number.parseFloat(args['template']))){
         return Number.parseFloat(args['value']);
