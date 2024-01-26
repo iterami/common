@@ -4,13 +4,15 @@ a{
 body,
 button,
 input,
+select,
 textarea{
     background-color: #000;
     color: #ccc;
     font: 700 14px monospace;
 }
 button,
-input{
+input,
+select{
     border: 2px solid #999;
     padding: 2px 7px;
     text-align: center;
@@ -19,7 +21,9 @@ button:disabled,
 textarea:read-only{
     border-color: #555;
 }
-button:enabled{
+button:enabled,
+input:enabled,
+select:enabled{
     cursor: pointer;
 }
 .center{
@@ -82,6 +86,7 @@ ul{
 a:focus,
 button:focus,
 input:focus,
+select:focus,
 textarea:focus{
     outline: 2px solid #4c4;
 }
