@@ -7,8 +7,10 @@ a{
     font-size: 225%;
 }
 body{
-    margin-top: 30px;
+    max-width: max-content;
+    margin: 30px auto 0;
     overscroll-behavior: none;
+    text-align: center;
 }
 body,
 button,
@@ -72,8 +74,12 @@ button.gridbuttonclickable{
     background-color: #111;
     left: 0;
     position: absolute;
+    text-align: left;
     top: 0;
     z-index: 9;
+}
+#core-ui table{
+    margin: 0;
 }
 div.box{
     background-color: #000;
@@ -132,6 +138,7 @@ select{
 }
 table{
     border-collapse: collapse;
+    margin: auto;
 }
 td,
 textarea{
@@ -147,6 +154,7 @@ textarea{
 ul{
     margin: 0;
     padding-left: 20px;
+    text-align: left;
 }
 
 a:focus,
