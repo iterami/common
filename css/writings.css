@@ -3,14 +3,17 @@ a{
 }
 body,
 button,
+input,
 textarea{
     background-color: #000;
     color: #ccc;
     font: 700 14px monospace;
 }
-button{
+button,
+input{
     border: 2px solid #999;
     padding: 2px 7px;
+    text-align: center;
 }
 button:disabled,
 textarea:read-only{
@@ -78,6 +81,7 @@ ul{
 
 a:focus,
 button:focus,
+input:focus,
 textarea:focus{
     outline: 2px solid #4c4;
 }
