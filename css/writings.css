@@ -11,8 +11,7 @@ textarea{
     font: 700 14px monospace;
 }
 button,
-input,
-select{
+input{
     border: 2px solid #999;
     padding: 2px 7px;
     text-align: center;
@@ -59,6 +58,9 @@ ol{
 }
 .right{
     text-align: right;
+}
+select{
+    border: 2px solid #999;
 }
 table{
     border-collapse: collapse;
