@@ -22,7 +22,6 @@ textarea:read-only{
     border-color: #555;
 }
 button:enabled,
-input:enabled,
 select:enabled{
     cursor: pointer;
 }
