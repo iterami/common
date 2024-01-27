@@ -81,13 +81,6 @@ button.gridbuttonclickable{
 #core-ui table{
     margin: 0;
 }
-div.box{
-    background-color: #000;
-    border: 1px solid #aaa;
-    height: 6em;
-    margin: auto;
-    width: 250px;
-}
 .external{
     color: #f99;
 }
