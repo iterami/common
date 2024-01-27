@@ -1110,7 +1110,8 @@ function core_repo_init(args){
         });
     }
 
-    if(args['menu']){
+    if(args['menu']
+      || args['menu-lock']){
         core_escape(true);
     }
 }
