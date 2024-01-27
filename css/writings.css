@@ -1,6 +1,9 @@
 a{
     color: #4c4;
 }
+body{
+    margin: 8px;
+}
 body,
 button,
 input,
