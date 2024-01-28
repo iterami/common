@@ -530,13 +530,28 @@ function prefabs_webgl_tiles(args){
             tile_offset_z += args['tiles'][selected]['attach-z'];
         }
         if(args['tiles'][selected]['attach-rotate-x'] !== void 0){
-            tile_rotate_x += args['tiles'][selected]['attach-rotate-x'];
+            const max = tile_rotate_x > 180
+              ? 360
+              : 90;
+            tile_rotate_x = math_clamp({
+              'max': max,
+              'min': max - 90,
+              'value': tile_rotate_x + args['tiles'][selected]['attach-rotate-x'],
+            });
         }
         if(args['tiles'][selected]['attach-rotate-y'] !== void 0){
-            tile_rotate_y += args['tiles'][selected]['attach-rotate-y'];
+            tile_rotate_y = math_clamp({
+              'max': 360,
+              'min': 0,
+              'value': tile_rotate_y + args['tiles'][selected]['attach-rotate-y'],
+            });
         }
         if(args['tiles'][selected]['attach-rotate-z'] !== void 0){
-            tile_rotate_z += args['tiles'][selected]['attach-rotate-z'];
+            tile_rotate_z = math_clamp({
+              'max': 360,
+              'min': 0,
+              'value': tile_rotate_z + args['tiles'][selected]['attach-rotate-z'],
+            });
         }
     }
 }
