@@ -496,17 +496,6 @@ function prefabs_webgl_tiles(args){
     const tiles = args['tiles'].length;
 
     for(let tile = 0; tile < tile_count; tile++){
-        const character_id = args['prefix'] + '-tile-' + tile;
-        webgl_character_init({
-          'collides': false,
-          'id': character_id,
-          'rotate-x': tile_rotate_x,
-          'rotate-y': tile_rotate_y,
-          'rotate-z': tile_rotate_z,
-          'translate-x': tile_offset_x,
-          'translate-y': tile_offset_y,
-          'translate-z': tile_offset_z,
-        });
         const selected = core_random_integer({
           'max': tiles,
         });
@@ -515,15 +504,14 @@ function prefabs_webgl_tiles(args){
         for(const entity in entities){
             const properties = {
               ...args,
-              'attach-to': character_id,
+              ...entities[entity],
+              'attach-to': args['character'],
               'attach-type': 'webgl_characters',
+              'attach-x': tile_offset_x + (entities[entity]['attach-x'] || 0),
+              'attach-y': tile_offset_y + (entities[entity]['attach-y'] || 0),
+              'attach-z': tile_offset_z + (entities[entity]['attach-z'] || 0),
               'id': args['prefix'] + '-' + tile + '-' + entity,
             };
-
-            Object.assign(
-              properties,
-              entities[entity]
-            );
 
             webgl_entity_create({
               'entities': [
