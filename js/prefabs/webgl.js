@@ -493,11 +493,10 @@ function prefabs_webgl_tiles(args){
     let tile_rotate_x = args['rotate-x'];
     let tile_rotate_y = args['rotate-y'];
     let tile_rotate_z = args['rotate-z'];
-    const tiles = args['tiles'].length;
 
     for(let tile = 0; tile < tile_count; tile++){
         const selected = core_random_integer({
-          'max': tiles,
+          'max': args['tiles'].length,
         });
 
         const entities = args['tiles'][selected]['entities'];
