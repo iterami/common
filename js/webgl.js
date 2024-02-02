@@ -552,6 +552,25 @@ function webgl_collision(args){
     }
 }
 
+function webgl_contextlost(event){
+    event.preventDefault();
+    core_interval_pause_all();
+}
+
+function webgl_contextrestored(event){
+    webgl = 0;
+    webgl_shader = {};
+    webgl_textures = {};
+    webgl_textures_animated = {};
+
+    webgl_init();
+    webgl_uniform_update();
+
+    for(const entity in entity_entities){
+        webgl_entity_init(entity);
+    }
+}
+
 function webgl_cursor_set(cursor){
     webgl_properties['cursor'] = cursor;
     webgl.canvas.style.cursor = cursor;
@@ -926,13 +945,23 @@ function webgl_get_translation(entity){
 }
 
 function webgl_init(){
-    core_html({
+    const canvas = core_html({
       'parent': document.body,
       'properties': {
         'id': 'canvas',
       },
       'type': 'canvas',
     });
+    canvas.addEventListener(
+      'webglcontextlost',
+      webgl_contextlost,
+      false
+    );
+    canvas.addEventListener(
+      'webglcontextrestored',
+      webgl_contextrestored,
+      false
+    );
     webgl = webgl_getContext('canvas');
 
     math_matrices['camera'] = math_matrix_create();
