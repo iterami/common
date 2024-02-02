@@ -464,9 +464,10 @@ function core_html(args){
       },
     });
 
+    const existing_element = document.getElementById(args['properties']['id']);
     if(args['properties']['id']
-      && document.getElementById(args['properties']['id'])){
-        return;
+      && existing_element){
+        return existing_element;
     }
 
     const element = document.createElement(args['type']);
