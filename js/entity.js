@@ -267,6 +267,10 @@ function entity_set(args){
       },
     });
 
+    if(entity_info[args['type']]){
+        return;
+    }
+
     entity_info[args['type']] = {
       'count': 0,
       'default': args['properties'],
