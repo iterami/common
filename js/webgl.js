@@ -3160,30 +3160,26 @@ function webgl_texture_animate_init(args){
       },
     });
 
-    if(!document.getElementById('webgl-animated-textures')){
-        core_html({
-          'parent': document.getElementById('repo-ui'),
-          'properties': {
-            'className': 'hidden',
-            'id': 'webgl-animated-textures',
-          },
-          'type': 'div',
-        });
-    }
+    core_html({
+      'parent': document.getElementById('repo-ui'),
+      'properties': {
+        'className': 'hidden',
+        'id': 'webgl-animated-textures',
+      },
+      'type': 'div',
+    });
 
     const id = 'texture-' + args['id'];
-    if(!document.getElementById(id)){
-        core_html({
-          'parent': document.getElementById('webgl-animated-textures'),
-          'properties': {
-            'height': core_images[args['id']]['height'],
-            'id': id,
-            'width': core_images[args['id']]['width'],
-          },
-          'store': id,
-          'type': 'canvas',
-        });
-    }
+    core_html({
+      'parent': document.getElementById('webgl-animated-textures'),
+      'properties': {
+        'height': core_images[args['id']]['height'],
+        'id': id,
+        'width': core_images[args['id']]['width'],
+      },
+      'store': id,
+      'type': 'canvas',
+    });
 
     webgl_textures_animated[args['id']] = {
       'gl': args['gl'],

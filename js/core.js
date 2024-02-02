@@ -464,6 +464,11 @@ function core_html(args){
       },
     });
 
+    if(args['properties']['id']
+      && document.getElementById(args['properties']['id'])){
+        return;
+    }
+
     const element = document.createElement(args['type']);
     for(const property in args['properties']){
         element[property] = core_handle_defaults({
