@@ -1052,11 +1052,13 @@ function webgl_init(){
 
     core_interval_modify({
       'id': 'webgl-interval',
+      'paused': true,
       'todo': webgl_logicloop,
     });
     core_interval_modify({
       'animationFrame': true,
       'id': 'webgl-animationFrame',
+      'paused': true,
       'todo': webgl_drawloop,
     });
 }
