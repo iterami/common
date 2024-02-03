@@ -58,8 +58,12 @@ function core_escape(force){
       && force !== true){
         return;
     }
+    if(core_type(force) === 'boolean'){
+        core_menu_open = force;
 
-    core_menu_open = !core_menu_open;
+    }else{
+        core_menu_open = !core_menu_open;
+    }
 
     if(!core_menu_open){
         document.getElementById('core-toggle').blur();
