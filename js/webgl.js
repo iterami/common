@@ -586,6 +586,13 @@ function webgl_context_restored(event){
     for(const entity in entity_entities){
         webgl_entity_init(entity);
     }
+
+    if(core_menu_open){
+        core_escape();
+
+    }else{
+        core_interval_resume_all();
+    }
 }
 
 function webgl_cursor_set(cursor){
@@ -1282,6 +1289,9 @@ function webgl_level_init(args){
 
     if(core_menu_open){
         core_escape();
+
+    }else{
+        core_interval_resume_all();
     }
 }
 
@@ -1962,6 +1972,7 @@ function webgl_pick_entity(args){
     const level = webgl_character_level();
     if(core_menu_open
       || level < -1
+      || webgl === 0
       || (level >= 0 && webgl_properties['paused'])
       || webgl_characters[webgl_character_id]['health-current'] <= 0){
         return;
