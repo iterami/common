@@ -552,12 +552,29 @@ function webgl_collision(args){
     }
 }
 
-function webgl_contextlost(event){
+function webgl_context(id){
+    return document.getElementById(id).getContext(
+      'webgl2',
+      {
+        'alpha': false,
+        'antialias': true,
+        'depth': true,
+        'desynchronized': false,
+        'failIfMajorPerformanceCaveat': false,
+        'powerPreference': 'low-power',
+        'premultipliedAlpha': false,
+        'preserveDrawingBuffer': false,
+        'stencil': false,
+      }
+    );
+}
+
+function webgl_context_lost(event){
     event.preventDefault();
     core_interval_pause_all();
 }
 
-function webgl_contextrestored(event){
+function webgl_context_restored(event){
     webgl = 0;
     webgl_shader = {};
     webgl_textures = {};
@@ -909,23 +926,6 @@ function webgl_event(args){
     }
 }
 
-function webgl_getContext(id){
-    return document.getElementById(id).getContext(
-      'webgl2',
-      {
-        'alpha': false,
-        'antialias': true,
-        'depth': true,
-        'desynchronized': false,
-        'failIfMajorPerformanceCaveat': false,
-        'powerPreference': 'low-power',
-        'premultipliedAlpha': false,
-        'preserveDrawingBuffer': false,
-        'stencil': false,
-      }
-    );
-}
-
 function webgl_get_translation(entity){
     if(entity['attach-to'] === void 0
       || entity['attach-to'] === false){
@@ -954,15 +954,15 @@ function webgl_init(){
     });
     canvas.addEventListener(
       'webglcontextlost',
-      webgl_contextlost,
+      webgl_context_lost,
       false
     );
     canvas.addEventListener(
       'webglcontextrestored',
-      webgl_contextrestored,
+      webgl_context_restored,
       false
     );
-    webgl = webgl_getContext('canvas');
+    webgl = webgl_context('canvas');
 
     math_matrices['camera'] = math_matrix_create();
     math_matrices['perspective'] = math_matrix_create();

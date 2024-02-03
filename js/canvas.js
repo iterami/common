@@ -1,5 +1,14 @@
 'use strict';
 
+function canvas_context(id){
+    return document.getElementById(id).getContext(
+      '2d',
+      {
+        'alpha': false,
+      }
+    );
+}
+
 function canvas_draw(){
     if(canvas_properties['clearColor'] === '#000'){
         canvas.clearRect(
@@ -79,15 +88,6 @@ function canvas_draw_path(args){
     }
 }
 
-function canvas_getContext(id){
-    return document.getElementById(id).getContext(
-      '2d',
-      {
-        'alpha': false,
-      }
-    );
-}
-
 // Required args: stops
 function canvas_gradient(args){
     args = core_args({
@@ -153,7 +153,7 @@ function canvas_init(args){
       'properties': properties,
       'type': 'canvas',
     });
-    canvas = canvas_getContext('canvas');
+    canvas = canvas_context('canvas');
     canvas.canvas.style.cursor = args['cursor'];
 
     globalThis.onresize = canvas_resize;
