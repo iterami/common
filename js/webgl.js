@@ -571,15 +571,15 @@ function webgl_context(id){
 
 function webgl_context_lost(event){
     event.preventDefault();
-    core_interval_pause_all();
-}
 
-function webgl_context_restored(event){
+    core_interval_pause_all();
     webgl = 0;
     webgl_shader = {};
     webgl_textures = {};
     webgl_textures_animated = {};
+}
 
+function webgl_context_restored(event){
     webgl_init();
     webgl_uniform_update();
 
