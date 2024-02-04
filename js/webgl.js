@@ -571,6 +571,7 @@ function webgl_context(id){
 
 function webgl_context_lost(event){
     event.preventDefault();
+    webgl_context_valid = false;
 
     core_interval_pause_all();
     webgl = 0;
@@ -593,6 +594,8 @@ function webgl_context_restored(event){
     }else{
         core_interval_resume_all();
     }
+
+    webgl_context_valid = true;
 }
 
 function webgl_cursor_set(cursor){
@@ -601,6 +604,11 @@ function webgl_cursor_set(cursor){
 }
 
 function webgl_draw(){
+    if(!webgl_context_valid
+      || webgl === 0){
+        return;
+    }
+
     webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
 
     webgl.disable(webgl.DEPTH_TEST);
@@ -1363,6 +1371,11 @@ function webgl_level_unload(){
 }
 
 function webgl_logicloop(){
+    if(!webgl_context_valid
+      || webgl === 0){
+        return;
+    }
+
     for(const texture in webgl_textures_animated){
         webgl_texture_animate(texture);
     }
@@ -3405,6 +3418,7 @@ globalThis.webgl_character_base_properties = {};
 globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
+globalThis.webgl_context_valid = true;
 globalThis.webgl_default_texture = 'default.png';
 globalThis.webgl_diagonal = 0;
 globalThis.webgl_paths = {};
