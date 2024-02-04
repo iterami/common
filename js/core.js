@@ -55,6 +55,7 @@ function core_digits_min(args){
 
 function core_escape(force){
     if(core_menu_lock
+      && core_menu_open
       && force !== true){
         return;
     }
