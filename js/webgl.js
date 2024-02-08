@@ -1483,14 +1483,14 @@ function webgl_logicloop(){
     });
 
     for(const id in webgl_characters){
-        const character_level = webgl_character_level(id);
+        const level = webgl_character_level(id);
 
         if(webgl_properties['paused']
-          && character_level !== -1){
+          && level !== -1){
             continue;
         }
 
-        if(character_level >= 0){
+        if(level >= 0){
             webgl_characters[id]['change-translate-y'] = Math.max(
               webgl_characters[id]['change-translate-y'] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
@@ -1529,7 +1529,7 @@ function webgl_logicloop(){
             webgl_characters[id][translate_axis] += webgl_characters[id]['change-' + translate_axis];
         }
 
-        if(character_level === -1){
+        if(level === -1){
             webgl_characters[id]['change-translate-x'] = 0;
             webgl_characters[id]['change-translate-y'] = 0;
             webgl_characters[id]['change-translate-z'] = 0;
