@@ -193,6 +193,7 @@ function webgl_character_controls(id){
                 if(core_keys[core_storage_data['crouch']]['state']){
                     if(level === -1){
                         webgl_entity_move({
+                          'character': id,
                           'strafe': true,
                           'y': true,
                         });
@@ -206,6 +207,7 @@ function webgl_character_controls(id){
                 if(core_keys[core_storage_data['jump']]['state']){
                     if(level === -1){
                         webgl_entity_move({
+                          'character': id,
                           'y': true,
                         });
 
@@ -222,11 +224,13 @@ function webgl_character_controls(id){
 
                 if(forwardback !== 0){
                     webgl_entity_move({
+                      'character': id,
                       'multiplier': forwardback,
                     });
                 }
                 if(leftright !== 0){
                     webgl_entity_move({
+                      'character': id,
                       'multiplier': leftright,
                       'strafe': true,
                     });
@@ -927,7 +931,7 @@ function webgl_entity_move(args){
       : entity_entities[args['entity']];
 
     if(args['y']){
-        entity['change-translate-y'] = entity['speed'] * args['multiplier'] * (args['strafe']
+        entity['change-translate-y'] += entity['speed'] * args['multiplier'] * (args['strafe']
           ? -1
           : 1);
 
@@ -938,8 +942,8 @@ function webgl_entity_move(args){
           'strafe': args['strafe'],
         });
 
-        entity['change-translate-x'] = movement['x'];
-        entity['change-translate-z'] = movement['z'];
+        entity['change-translate-x'] += movement['x'];
+        entity['change-translate-z'] += movement['z'];
     }
 }
 
