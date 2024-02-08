@@ -588,14 +588,14 @@ function webgl_context_restored(event){
         webgl_entity_init(entity);
     }
 
+    webgl_context_valid = true;
+
     if(core_menu_open){
         core_escape();
 
     }else{
         core_interval_resume_all();
     }
-
-    webgl_context_valid = true;
 }
 
 function webgl_cursor_set(cursor){
