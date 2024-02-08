@@ -1026,7 +1026,7 @@ function webgl_event(args){
     }
 
     if(args['parent']['event-todo'] !== false){
-        if(core_type(args['parent']['event-todo']) === 'function'){
+        if(core_type(globalThis[args['parent']['event-todo']]) === 'function'){
             globalThis[args['parent']['event-todo']](args['parent']['event-todo-args']);
 
         }else{
