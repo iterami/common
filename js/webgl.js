@@ -133,6 +133,107 @@ function webgl_camera_zoom(event){
     }
 }
 
+function webgl_character_controls(id){
+    const level = webgl_character_level(id);
+    if((level === -1 || !webgl_properties['paused'])
+      && webgl_characters[id]['health-current'] > 0
+      && webgl_characters[id]['path-id'].length === 0){
+        let leftright = 0;
+
+        if(core_keys[core_storage_data['move-←']]['state']){
+            if(webgl_characters[id]['camera-zoom'] === 0
+              || core_mouse['down-2']){
+                leftright -= 1;
+
+            }else{
+                webgl_camera_rotate({
+                  'camera': !core_mouse['down-0'],
+                  'y': -5,
+                });
+            }
+        }
+
+        if(core_keys[core_storage_data['move-→']]['state']){
+            if(webgl_characters[id]['camera-zoom'] === 0
+              || core_mouse['down-2']){
+                leftright += 1;
+
+            }else{
+                webgl_camera_rotate({
+                  'camera': !core_mouse['down-0'],
+                  'y': 5,
+                });
+            }
+        }
+
+        if(level === -1 || webgl_characters[id]['jump-allow']){
+            let forwardback = 0;
+
+            if(core_keys[core_storage_data['move-↓']]['state']){
+                webgl_characters[id]['automove'] = false;
+                if(level === -1){
+                    forwardback = 1;
+
+                }else{
+                    forwardback = .5;
+                    leftright *= .5;
+                }
+            }
+
+            if(core_keys[core_storage_data['move-↑']]['state']
+              || (core_mouse['down-0'] && core_mouse['down-2'])){
+                webgl_characters[id]['automove'] = false;
+                forwardback -= 1;
+
+            }else if(webgl_characters[id]['automove']){
+                forwardback -= 1;
+            }
+
+            if(core_keys[core_storage_data['crouch']]['state']){
+                if(level === -1){
+                    webgl_entity_move({
+                      'strafe': true,
+                      'y': true,
+                    });
+
+                }else{
+                    forwardback *= .1;
+                    leftright *= .1;
+                }
+            }
+
+            if(core_keys[core_storage_data['jump']]['state']){
+                if(level === -1){
+                    webgl_entity_move({
+                      'y': true,
+                    });
+
+                }else{
+                    webgl_character_jump(id);
+                }
+            }
+
+            if(forwardback !== 0
+              && leftright !== 0){
+                forwardback *= webgl_diagonal;
+                leftright *= webgl_diagonal;
+            }
+
+            if(forwardback !== 0){
+                webgl_entity_move({
+                  'multiplier': forwardback,
+                });
+            }
+            if(leftright !== 0){
+                webgl_entity_move({
+                  'multiplier': leftright,
+                  'strafe': true,
+                });
+            }
+        }
+    }
+}
+
 function webgl_character_init(args){
     args = core_args({
       'args': args,
@@ -226,52 +327,52 @@ function webgl_character_init(args){
     });
 }
 
-function webgl_character_jump(character){
-    if(!webgl_characters[character]['jump-allow']
-      || webgl_characters[character]['health-current'] <= 0){
+function webgl_character_jump(id){
+    if(!webgl_characters[id]['jump-allow']
+      || webgl_characters[id]['health-current'] <= 0){
         return;
     }
 
-    webgl_characters[character]['jump-allow'] = false;
-    webgl_characters[character]['change-translate-y'] = webgl_characters[character]['jump-height'];
+    webgl_characters[id]['jump-allow'] = false;
+    webgl_characters[id]['change-translate-y'] = webgl_characters[id]['jump-height'];
 }
 
-function webgl_character_level(character){
-    if(character === void 0){
-        character = webgl_character_id;
+function webgl_character_level(id){
+    if(id === void 0){
+        id = webgl_character_id;
     }
 
-    if(webgl_characters[character]){
-        return webgl_characters[character]['level'];
+    if(webgl_characters[id]){
+        return webgl_characters[id]['level'];
     }
 
     return -2;
 }
 
-function webgl_character_origin(character){
-    if(character === void 0){
-        character = webgl_character_id;
+function webgl_character_origin(id){
+    if(id === void 0){
+        id = webgl_character_id;
     }
-    if(webgl_characters[character] === void 0){
+    if(webgl_characters[id] === void 0){
         return;
     }
 
-    webgl_characters[character]['camera-rotate-x'] = 0;
-    webgl_characters[character]['camera-rotate-y'] = 0;
-    webgl_characters[character]['camera-rotate-z'] = 0;
-    webgl_characters[character]['change-rotate-x'] = 0;
-    webgl_characters[character]['change-rotate-y'] = 0;
-    webgl_characters[character]['change-rotate-z'] = 0;
-    webgl_characters[character]['change-translate-x'] = 0;
-    webgl_characters[character]['change-translate-y'] = 0;
-    webgl_characters[character]['change-translate-z'] = 0;
-    webgl_characters[character]['jump-allow'] = false;
-    webgl_characters[character]['rotate-x'] = 0;
-    webgl_characters[character]['rotate-y'] = 0;
-    webgl_characters[character]['rotate-z'] = 0;
+    webgl_characters[id]['camera-rotate-x'] = 0;
+    webgl_characters[id]['camera-rotate-y'] = 0;
+    webgl_characters[id]['camera-rotate-z'] = 0;
+    webgl_characters[id]['change-rotate-x'] = 0;
+    webgl_characters[id]['change-rotate-y'] = 0;
+    webgl_characters[id]['change-rotate-z'] = 0;
+    webgl_characters[id]['change-translate-x'] = 0;
+    webgl_characters[id]['change-translate-y'] = 0;
+    webgl_characters[id]['change-translate-z'] = 0;
+    webgl_characters[id]['jump-allow'] = false;
+    webgl_characters[id]['rotate-x'] = 0;
+    webgl_characters[id]['rotate-y'] = 0;
+    webgl_characters[id]['rotate-z'] = 0;
 
     webgl_entity_move_to({
-      'entity': webgl_characters[character],
+      'entity': webgl_characters[id],
     });
 }
 
@@ -328,26 +429,26 @@ function webgl_character_set(id){
     });
 }
 
-function webgl_character_spawn(character){
-    if(character === void 0){
-        character = webgl_character_id;
+function webgl_character_spawn(id){
+    if(id === void 0){
+        id = webgl_character_id;
     }
-    if(webgl_characters[character] === void 0
-      || webgl_characters[character]['lives'] === 0){
+    if(webgl_characters[id] === void 0
+      || webgl_characters[id]['lives'] === 0){
         return;
     }
 
-    webgl_characters[character]['health-current'] = webgl_characters[character]['health-max'];
+    webgl_characters[id]['health-current'] = webgl_characters[id]['health-max'];
 
-    webgl_character_origin(character);
+    webgl_character_origin(id);
     webgl_entity_move_to({
-      'entity': webgl_characters[character],
+      'entity': webgl_characters[id],
       'x': webgl_properties['spawn-translate-x'],
-      'y': webgl_properties['spawn-translate-y'] + webgl_characters[character]['collide-range-y'] + 1,
+      'y': webgl_properties['spawn-translate-y'] + webgl_characters[id]['collide-range-y'] + 1,
       'z': webgl_properties['spawn-translate-z'],
     });
     webgl_camera_rotate({
-      'character': character,
+      'character': id,
       'set': true,
       'x': webgl_properties['spawn-rotate-x'],
       'y': webgl_properties['spawn-rotate-y'],
@@ -355,7 +456,7 @@ function webgl_character_spawn(character){
     });
     if(webgl_properties['spawn-path-id'].length > 0){
         webgl_path_use({
-          'id': character,
+          'id': id,
           'path-id': webgl_properties['spawn-path-id'],
         });
     }
@@ -1079,13 +1180,13 @@ function webgl_level_export(){
     json['characters'] = {};
     json['paths'] = {};
 
-    for(const character in webgl_characters){
-        if(character === webgl_character_id){
+    for(const id in webgl_characters){
+        if(id === webgl_character_id){
             continue;
         }
 
-        json['characters'][character] = webgl_characters[character];
-        json['characters'][character]['entities'] = [];
+        json['characters'][id] = webgl_characters[id];
+        json['characters'][id]['entities'] = [];
     }
     for(const path in webgl_paths){
         json['paths'][path] = webgl_paths[path];
@@ -1245,8 +1346,8 @@ function webgl_level_init(args){
       level['paths']
     );
 
-    for(const character in level['characters']){
-        webgl_character_init(level['characters'][character]);
+    for(const id in level['characters']){
+        webgl_character_init(level['characters'][id]);
     }
 
     if(args['character'] === -1){
@@ -1345,8 +1446,8 @@ function webgl_level_unload(){
       },
     });
 
-    for(const character in webgl_characters){
-        delete webgl_characters[character];
+    for(const id in webgl_characters){
+        delete webgl_characters[id];
     }
     webgl_character_count = 0;
     entity_remove_all();
@@ -1365,105 +1466,7 @@ function webgl_logicloop(){
         webgl_texture_animate(texture);
     }
 
-    const level = webgl_character_level();
-    if((level === -1 || !webgl_properties['paused'])
-      && webgl_characters[webgl_character_id]['health-current'] > 0
-      && webgl_characters[webgl_character_id]['path-id'].length === 0){
-        let leftright = 0;
-
-        if(core_keys[core_storage_data['move-←']]['state']){
-            if(webgl_characters[webgl_character_id]['camera-zoom'] === 0
-              || core_mouse['down-2']){
-                leftright -= 1;
-
-            }else{
-                webgl_camera_rotate({
-                  'camera': !core_mouse['down-0'],
-                  'y': -5,
-                });
-            }
-        }
-
-        if(core_keys[core_storage_data['move-→']]['state']){
-            if(webgl_characters[webgl_character_id]['camera-zoom'] === 0
-              || core_mouse['down-2']){
-                leftright += 1;
-
-            }else{
-                webgl_camera_rotate({
-                  'camera': !core_mouse['down-0'],
-                  'y': 5,
-                });
-            }
-        }
-
-        if(level === -1 || webgl_characters[webgl_character_id]['jump-allow']){
-            let forwardback = 0;
-
-            if(core_keys[core_storage_data['move-↓']]['state']){
-                webgl_characters[webgl_character_id]['automove'] = false;
-                if(level === -1){
-                    forwardback = 1;
-
-                }else{
-                    forwardback = .5;
-                    leftright *= .5;
-                }
-            }
-
-            if(core_keys[core_storage_data['move-↑']]['state']
-              || (core_mouse['down-0'] && core_mouse['down-2'])){
-                webgl_characters[webgl_character_id]['automove'] = false;
-                forwardback -= 1;
-
-            }else if(webgl_characters[webgl_character_id]['automove']){
-                forwardback -= 1;
-            }
-
-            if(core_keys[core_storage_data['crouch']]['state']){
-                if(level === -1){
-                    webgl_entity_move({
-                      'strafe': true,
-                      'y': true,
-                    });
-
-                }else{
-                    forwardback *= .1;
-                    leftright *= .1;
-                }
-            }
-
-            if(core_keys[core_storage_data['jump']]['state']){
-                if(level === -1){
-                    webgl_entity_move({
-                      'y': true,
-                    });
-
-                }else{
-                    webgl_character_jump(webgl_character_id);
-                }
-            }
-
-            if(forwardback !== 0
-              && leftright !== 0){
-                forwardback *= webgl_diagonal;
-                leftright *= webgl_diagonal;
-            }
-
-            if(forwardback !== 0){
-                webgl_entity_move({
-                  'multiplier': forwardback,
-                });
-            }
-            if(leftright !== 0){
-                webgl_entity_move({
-                  'multiplier': leftright,
-                  'strafe': true,
-                });
-            }
-        }
-    }
-
+    webgl_character_controls(webgl_character_id);
     repo_logic();
 
     entity_group_modify({
@@ -1475,8 +1478,8 @@ function webgl_logicloop(){
       },
     });
 
-    for(const character in webgl_characters){
-        const character_level = webgl_character_level(character);
+    for(const id in webgl_characters){
+        const character_level = webgl_character_level(id);
 
         if(webgl_properties['paused']
           && character_level !== -1){
@@ -1484,57 +1487,57 @@ function webgl_logicloop(){
         }
 
         if(character_level >= 0){
-            webgl_characters[character]['change-translate-y'] = Math.max(
-              webgl_characters[character]['change-translate-y'] + webgl_properties['gravity-acceleration'],
+            webgl_characters[id]['change-translate-y'] = Math.max(
+              webgl_characters[id]['change-translate-y'] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
         }
 
-        if(webgl_characters[character]['collides']){
+        if(webgl_characters[id]['collides']){
             for(const entity in entity_entities){
                 if(entity_entities[entity]['collision']){
                     webgl_collision({
-                      'collider': webgl_characters[character],
+                      'collider': webgl_characters[id],
                       'target': entity_entities[entity],
                     });
                 }
             }
         }
 
-        webgl_path_move(character);
+        webgl_path_move(id);
 
-        if(webgl_characters[character]['change-rotate-x'] !== 0
-          || webgl_characters[character]['change-rotate-y'] !== 0
-          || webgl_characters[character]['change-rotate-z'] !== 0){
+        if(webgl_characters[id]['change-rotate-x'] !== 0
+          || webgl_characters[id]['change-rotate-y'] !== 0
+          || webgl_characters[id]['change-rotate-z'] !== 0){
             webgl_camera_rotate({
               'camera': false,
-              'character': character,
-              'x': webgl_characters[character]['change-rotate-x'],
-              'y': webgl_characters[character]['change-rotate-y'],
-              'z': webgl_characters[character]['change-rotate-z'],
+              'character': id,
+              'x': webgl_characters[id]['change-rotate-x'],
+              'y': webgl_characters[id]['change-rotate-y'],
+              'z': webgl_characters[id]['change-rotate-z'],
             });
         }
-        webgl_clamp_rotation(webgl_characters[character]);
+        webgl_clamp_rotation(webgl_characters[id]);
 
         const axes = 'xyz';
         for(const axis in axes){
             const translate_axis = 'translate-' + axes[axis];
-            webgl_characters[character][translate_axis] += webgl_characters[character]['change-' + translate_axis];
+            webgl_characters[id][translate_axis] += webgl_characters[id]['change-' + translate_axis];
         }
 
-        if(level === -1){
-            webgl_characters[character]['change-translate-x'] = 0;
-            webgl_characters[character]['change-translate-y'] = 0;
-            webgl_characters[character]['change-translate-z'] = 0;
+        if(character_level === -1){
+            webgl_characters[id]['change-translate-x'] = 0;
+            webgl_characters[id]['change-translate-y'] = 0;
+            webgl_characters[id]['change-translate-z'] = 0;
 
         }else{
-            if(webgl_characters[character]['change-translate-y'] !== 0){
-                webgl_characters[character]['jump-allow'] = false;
+            if(webgl_characters[id]['change-translate-y'] !== 0){
+                webgl_characters[id]['jump-allow'] = false;
             }
 
-            if(webgl_characters[character]['jump-allow']){
-                webgl_characters[character]['change-translate-x'] = 0;
-                webgl_characters[character]['change-translate-z'] = 0;
+            if(webgl_characters[id]['jump-allow']){
+                webgl_characters[id]['change-translate-x'] = 0;
+                webgl_characters[id]['change-translate-z'] = 0;
             }
         }
     }
