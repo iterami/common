@@ -134,101 +134,103 @@ function webgl_camera_zoom(event){
 }
 
 function webgl_character_controls(id){
-    const level = webgl_character_level(id);
-    if((level === -1 || !webgl_properties['paused'])
-      && webgl_characters[id]['health-current'] > 0
-      && webgl_characters[id]['path-id'].length === 0){
-        let leftright = 0;
+    if(webgl_characters[id]['controls'] === 'rpg'){
+        const level = webgl_character_level(id);
+        if((level === -1 || !webgl_properties['paused'])
+          && webgl_characters[id]['health-current'] > 0
+          && webgl_characters[id]['path-id'].length === 0){
+            let leftright = 0;
 
-        if(core_keys[core_storage_data['move-←']]['state']){
-            if(webgl_characters[id]['camera-zoom'] === 0
-              || core_mouse['down-2']){
-                leftright -= 1;
-
-            }else{
-                webgl_camera_rotate({
-                  'camera': !core_mouse['down-0'],
-                  'y': -5,
-                });
-            }
-        }
-
-        if(core_keys[core_storage_data['move-→']]['state']){
-            if(webgl_characters[id]['camera-zoom'] === 0
-              || core_mouse['down-2']){
-                leftright += 1;
-
-            }else{
-                webgl_camera_rotate({
-                  'camera': !core_mouse['down-0'],
-                  'y': 5,
-                });
-            }
-        }
-
-        if(level === -1 || webgl_characters[id]['jump-allow']){
-            let forwardback = 0;
-
-            if(core_keys[core_storage_data['move-↓']]['state']){
-                webgl_characters[id]['automove'] = false;
-                if(level === -1){
-                    forwardback = 1;
+            if(core_keys[core_storage_data['move-←']]['state']){
+                if(webgl_characters[id]['camera-zoom'] === 0
+                  || core_mouse['down-2']){
+                    leftright -= 1;
 
                 }else{
-                    forwardback = .5;
-                    leftright *= .5;
+                    webgl_camera_rotate({
+                      'camera': !core_mouse['down-0'],
+                      'y': -5,
+                    });
                 }
             }
 
-            if(core_keys[core_storage_data['move-↑']]['state']
-              || (core_mouse['down-0'] && core_mouse['down-2'])){
-                webgl_characters[id]['automove'] = false;
-                forwardback -= 1;
+            if(core_keys[core_storage_data['move-→']]['state']){
+                if(webgl_characters[id]['camera-zoom'] === 0
+                  || core_mouse['down-2']){
+                    leftright += 1;
 
-            }else if(webgl_characters[id]['automove']){
-                forwardback -= 1;
+                }else{
+                    webgl_camera_rotate({
+                      'camera': !core_mouse['down-0'],
+                      'y': 5,
+                    });
+                }
             }
 
-            if(core_keys[core_storage_data['crouch']]['state']){
-                if(level === -1){
+            if(level === -1 || webgl_characters[id]['jump-allow']){
+                let forwardback = 0;
+
+                if(core_keys[core_storage_data['move-↓']]['state']){
+                    webgl_characters[id]['automove'] = false;
+                    if(level === -1){
+                        forwardback = 1;
+
+                    }else{
+                        forwardback = .5;
+                        leftright *= .5;
+                    }
+                }
+
+                if(core_keys[core_storage_data['move-↑']]['state']
+                  || (core_mouse['down-0'] && core_mouse['down-2'])){
+                    webgl_characters[id]['automove'] = false;
+                    forwardback -= 1;
+
+                }else if(webgl_characters[id]['automove']){
+                    forwardback -= 1;
+                }
+
+                if(core_keys[core_storage_data['crouch']]['state']){
+                    if(level === -1){
+                        webgl_entity_move({
+                          'strafe': true,
+                          'y': true,
+                        });
+
+                    }else{
+                        forwardback *= .1;
+                        leftright *= .1;
+                    }
+                }
+
+                if(core_keys[core_storage_data['jump']]['state']){
+                    if(level === -1){
+                        webgl_entity_move({
+                          'y': true,
+                        });
+
+                    }else{
+                        webgl_character_jump(id);
+                    }
+                }
+
+                if(forwardback !== 0
+                  && leftright !== 0){
+                    forwardback *= webgl_diagonal;
+                    leftright *= webgl_diagonal;
+                }
+
+                if(forwardback !== 0){
                     webgl_entity_move({
+                      'multiplier': forwardback,
+                    });
+                }
+                if(leftright !== 0){
+                    webgl_entity_move({
+                      'multiplier': leftright,
                       'strafe': true,
-                      'y': true,
                     });
-
-                }else{
-                    forwardback *= .1;
-                    leftright *= .1;
                 }
-            }
-
-            if(core_keys[core_storage_data['jump']]['state']){
-                if(level === -1){
-                    webgl_entity_move({
-                      'y': true,
-                    });
-
-                }else{
-                    webgl_character_jump(id);
-                }
-            }
-
-            if(forwardback !== 0
-              && leftright !== 0){
-                forwardback *= webgl_diagonal;
-                leftright *= webgl_diagonal;
-            }
-
-            if(forwardback !== 0){
-                webgl_entity_move({
-                  'multiplier': forwardback,
-                });
-            }
-            if(leftright !== 0){
-                webgl_entity_move({
-                  'multiplier': leftright,
-                  'strafe': true,
-                });
             }
         }
     }
@@ -250,6 +252,7 @@ function webgl_character_init(args){
         'collide-range-xz': 2,
         'collide-range-y': 3,
         'collides': true,
+        'controls': 'rpg',
         'entities': [],
         'experience': 0,
         'health-current': 1,
@@ -295,6 +298,7 @@ function webgl_character_init(args){
       'collide-range-xz': args['collide-range-xz'],
       'collide-range-y': args['collide-range-y'],
       'collides': args['collides'],
+      'controls': 'rpg',
       'experience': args['experience'],
       'health-current': Math.max(
         args['health-current'],
