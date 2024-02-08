@@ -1026,11 +1026,13 @@ function webgl_event(args){
     }
 
     if(args['parent']['event-todo'] !== false){
+        const todo_args = args['parent']['event-todo-args'] || void 0;
+
         if(core_type(globalThis[args['parent']['event-todo']]) === 'function'){
-            globalThis[args['parent']['event-todo']](args['parent']['event-todo-args']);
+            globalThis[args['parent']['event-todo']](todo_args);
 
         }else{
-            globalThis[args['parent']['event-todo']] = args['parent']['event-todo-args'];
+            globalThis[args['parent']['event-todo']] = todo_args;
         }
     }
 }
@@ -1120,7 +1122,6 @@ function webgl_init(){
         'event-target-id': false,
         'event-target-type': 'character',
         'event-todo': false,
-        'event-todo-args': void 0,
         'gravity': false,
         'normals': [],
         'pick-color': [0, 0, 0,],
