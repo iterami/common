@@ -216,8 +216,8 @@ function webgl_character_controls(id){
 
                 if(forwardback !== 0
                   && leftright !== 0){
-                    forwardback *= webgl_diagonal;
-                    leftright *= webgl_diagonal;
+                    forwardback *= .7071067811865475;
+                    leftright *= .7071067811865475;
                 }
 
                 if(forwardback !== 0){
@@ -1147,9 +1147,6 @@ function webgl_init(){
       },
       'type': 'webgl',
     });
-
-    webgl_diagonal = Math.sin(math_degrees_to_radians(45))
-      / Math.sin(math_degrees_to_radians(90));
 
     webgl_shader_remake();
     globalThis.onresize = webgl_resize;
@@ -3412,7 +3409,6 @@ globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_context_valid = true;
 globalThis.webgl_default_texture = 'default.png';
-globalThis.webgl_diagonal = 0;
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_shader = {};
