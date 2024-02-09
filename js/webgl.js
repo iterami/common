@@ -2375,7 +2375,7 @@ function webgl_primitive_ellipsoid(args){
 
     const latitude_angles = math_degrees_to_radians(360 / args['slices-latitude']);
     const longitude_angles = math_degrees_to_radians(180 / args['slices-longitude']);
-    const longitude_start = math_degrees_to_radians(-90);
+    const longitude_start = -1.5707963267948966;
 
     const properties = {
       ...args,
