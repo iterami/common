@@ -571,7 +571,7 @@ function core_init(){
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
           + '<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><hr>'
-          + '<button id=storage-save type=button>Save All to localStorage</button>',
+          + '<button id=storage-save type=button>Save All Settings</button><button id=mobile-add type=button>Mobile</button><br>',
         'style': 'display:none',
       },
       'type': 'span',
@@ -594,7 +594,7 @@ function core_init(){
         + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
         + '<tr><td><input class=mini id=move-→ type=text><td>Move →'
         + '<tr><td><input class=mini id=reset type=text><td>Reset</table>'
-        + '<button id=storage-reset type=button>Reset Global localStorage</button>',
+        + '<button id=storage-reset type=button>Reset Global Settings</button>',
       'group': 'core-menu',
       'id': 'global',
       'label': 'Global',
@@ -649,6 +649,9 @@ function core_init(){
     globalThis.onwheel = core_handle_mousewheel;
     core_events_bind({
       'elements': {
+        'mobile-add': {
+          'onclick': core_keys_mobile,
+        },
         'storage-reset': {
           'onclick': function(){
               const keys = [];
@@ -789,6 +792,50 @@ function core_interval_sync(args){
       },
       args['interval']
     );
+}
+
+function core_keys_mobile(){
+    const mobile_ui = core_html({
+      'parent': document.getElementById('core-ui'),
+      'properties': {
+        'id': 'mobile-ui',
+      },
+      'type': 'span',
+    });
+
+    const keys = ['KeyA', 'KeyD', 'KeyW', 'KeyS', 'Space', 'KeyC', 'KeyH'];
+    for(const key in core_keys){
+        if(key === 'Escape'
+          || keys.includes(key)){
+            continue;
+        }
+
+        keys.push(key);
+    }
+
+    for(const key in keys){
+        core_html({
+          'parent': mobile_ui,
+          'properties': {
+            'id': 'mobile-ui-' + keys[key],
+            'textContent': keys[key],
+            'onclick': function(){
+                core_keys[keys[key]]['todo']();
+            },
+            'onmousedown': function(){
+                core_keys[keys[key]]['state'] = true;
+            },
+            'onmouseleave': function(){
+                core_keys[keys[key]]['state'] = false;
+            },
+            'onmouseup': function(){
+                core_keys[keys[key]]['state'] = false;
+            },
+            'type': 'button',
+          },
+          'type': 'button',
+        });
+    }
 }
 
 function core_keys_rebind(){
@@ -1048,7 +1095,7 @@ function core_repo_init(args){
         });
         core_tab_create({
           'content': args['storage-menu']
-            + '<button id=storage-reset-repo type=button>Reset ' + core_repo_title + ' localStorage</button>',
+            + '<button id=storage-reset-repo type=button>Reset ' + core_repo_title + ' Settings</button>',
           'group': 'core-menu',
           'id': 'repo',
           'label': core_repo_title,
@@ -1300,7 +1347,7 @@ function core_storage_reset(args){
       },
     });
 
-    if(!globalThis.confirm('Reset ' + args['label'] + ' localStorage?')){
+    if(!globalThis.confirm('Reset ' + args['label'] + ' Settings?')){
         return;
     }
 
