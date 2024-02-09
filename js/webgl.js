@@ -139,6 +139,18 @@ function webgl_character_controls(id){
         if((level === -1 || !webgl_properties['paused'])
           && webgl_characters[id]['health-current'] > 0
           && webgl_characters[id]['path-id'].length === 0){
+            if(id !== webgl_character_id){
+                if(webgl_characters[id]['automove']
+                  && webgl_characters[id]['jump-allow']){
+                    webgl_entity_move({
+                      'character': id,
+                      'multiplier': -1,
+                    });
+                }
+
+                return;
+            }
+
             let leftright = 0;
 
             if(core_keys[core_storage_data['move-←']]['state']){
@@ -1474,7 +1486,6 @@ function webgl_logicloop(){
         webgl_texture_animate(texture);
     }
 
-    webgl_character_controls(webgl_character_id);
     repo_logic();
 
     entity_group_modify({
@@ -1493,6 +1504,8 @@ function webgl_logicloop(){
           && level !== -1){
             continue;
         }
+
+        webgl_character_controls(id);
 
         if(level >= 0){
             webgl_characters[id]['change-translate-y'] = Math.max(
