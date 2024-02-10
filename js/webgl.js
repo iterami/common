@@ -314,7 +314,7 @@ function webgl_character_init(args){
       'collide-range-xz': args['collide-range-xz'],
       'collide-range-y': args['collide-range-y'],
       'collides': args['collides'],
-      'controls': 'rpg',
+      'controls': args['controls'],
       'experience': args['experience'],
       'health-current': Math.max(
         args['health-current'],
