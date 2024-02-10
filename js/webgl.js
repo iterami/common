@@ -275,7 +275,7 @@ function webgl_character_init(args){
         'health-max': 1,
         'id': webgl_character_id,
         'jump-height': 1,
-        'level': -1,
+        'level': -2,
         'lives': -1,
         'path-direction': 1,
         'path-end': '',
@@ -366,7 +366,7 @@ function webgl_character_level(id){
         return webgl_characters[id]['level'];
     }
 
-    return -2;
+    return -3;
 }
 
 function webgl_character_move(args){
