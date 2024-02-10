@@ -1486,7 +1486,7 @@ function webgl_logicloop(){
         }
 
         if(level >= 0
-          && webgl_characters['gravity']){
+          && webgl_characters[id]['gravity']){
             webgl_characters[id]['change-translate-y'] = Math.max(
               webgl_characters[id]['change-translate-y'] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
