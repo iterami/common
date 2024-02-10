@@ -134,8 +134,9 @@ function webgl_camera_zoom(event){
 }
 
 function webgl_character_controls(id){
+    const level = webgl_character_level(id);
+
     if(webgl_characters[id]['controls'] === 'rpg'){
-        const level = webgl_character_level(id);
         if((level === -1 || !webgl_properties['paused'])
           && webgl_characters[id]['health-current'] > 0
           && webgl_characters[id]['path-id'].length === 0){
@@ -1479,24 +1480,27 @@ function webgl_logicloop(){
             continue;
         }
 
-        webgl_character_controls(id);
+        if(webgl_paths[webgl_characters[id]['path-id']] !== void 0){
+            webgl_path_move(id);
 
-        if(level >= 0){
+        }else if(level >= 0){
             webgl_characters[id]['change-translate-y'] = Math.max(
               webgl_characters[id]['change-translate-y'] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
         }
 
-        webgl_path_move(id);
+        if(level >= -1){
+            webgl_character_controls(id);
 
-        if(webgl_characters[id]['collides']){
-            for(const entity in entity_entities){
-                if(entity_entities[entity]['collision']){
-                    webgl_collision({
-                      'collider': webgl_characters[id],
-                      'target': entity_entities[entity],
-                    });
+            if(webgl_characters[id]['collides']){
+                for(const entity in entity_entities){
+                    if(entity_entities[entity]['collision']){
+                        webgl_collision({
+                          'collider': webgl_characters[id],
+                          'target': entity_entities[entity],
+                        });
+                    }
                 }
             }
         }
@@ -1780,10 +1784,6 @@ function webgl_normals(args){
 
 function webgl_path_move(id){
     const character = webgl_characters[id];
-    if(webgl_paths[character['path-id']] === void 0){
-        return;
-    }
-
     const path = webgl_paths[character['path-id']];
     const point = core_handle_defaults({
       'default': {
