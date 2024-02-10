@@ -275,6 +275,7 @@ function webgl_character_init(args){
         'controls': 'rpg',
         'entities': [],
         'experience': 0,
+        'gravity': true,
         'health-current': 1,
         'health-max': 1,
         'id': webgl_character_id,
@@ -320,6 +321,7 @@ function webgl_character_init(args){
       'collides': args['collides'],
       'controls': args['controls'],
       'experience': args['experience'],
+      'gravity': args['gravity'],
       'health-current': Math.max(
         args['health-current'],
         1
@@ -1483,16 +1485,15 @@ function webgl_logicloop(){
             continue;
         }
 
-        if(webgl_paths[webgl_characters[id]['path-id']] !== void 0){
-            webgl_path_move(id);
-
-        }else if(level >= 0){
+        if(level >= 0
+          && webgl_character['gravity']){
             webgl_characters[id]['change-translate-y'] = Math.max(
               webgl_characters[id]['change-translate-y'] + webgl_properties['gravity-acceleration'],
               webgl_properties['gravity-max']
             );
         }
 
+        webgl_path_move(id);
         webgl_character_controls(id);
 
         if(webgl_characters[id]['collides']){
@@ -1785,6 +1786,10 @@ function webgl_normals(args){
 
 function webgl_path_move(id){
     const character = webgl_characters[id];
+    if(webgl_paths[character['path-id']] === void 0){
+        return;
+    }
+
     const path = webgl_paths[character['path-id']];
     const point = core_handle_defaults({
       'default': {
