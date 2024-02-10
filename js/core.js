@@ -831,6 +831,15 @@ function core_keys_mobile(){
             'onmouseup': function(){
                 core_keys[keys[key]]['state'] = false;
             },
+            'ontouchcancel': function(){
+                core_keys[keys[key]]['state'] = false;
+            },
+            'ontouchend': function(){
+                core_keys[keys[key]]['state'] = false;
+            },
+            'ontouchstart': function(){
+                core_keys[keys[key]]['state'] = true;
+            },
             'type': 'button',
           },
           'type': 'button',
