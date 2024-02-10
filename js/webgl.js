@@ -135,6 +135,9 @@ function webgl_camera_zoom(event){
 
 function webgl_character_controls(id){
     const level = webgl_character_level(id);
+    if(level < -1){
+        return;
+    }
 
     if(webgl_characters[id]['controls'] === 'rpg'){
         if((level === -1 || !webgl_properties['paused'])
@@ -1490,17 +1493,15 @@ function webgl_logicloop(){
             );
         }
 
-        if(level >= -1){
-            webgl_character_controls(id);
+        webgl_character_controls(id);
 
-            if(webgl_characters[id]['collides']){
-                for(const entity in entity_entities){
-                    if(entity_entities[entity]['collision']){
-                        webgl_collision({
-                          'collider': webgl_characters[id],
-                          'target': entity_entities[entity],
-                        });
-                    }
+        if(webgl_characters[id]['collides']){
+            for(const entity in entity_entities){
+                if(entity_entities[entity]['collision']){
+                    webgl_collision({
+                      'collider': webgl_characters[id],
+                      'target': entity_entities[entity],
+                    });
                 }
             }
         }
