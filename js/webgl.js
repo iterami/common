@@ -1531,7 +1531,7 @@ function webgl_logicloop(){
             webgl_characters[id][translate_axis] += webgl_characters[id]['change-' + translate_axis];
         }
 
-        if(level === -1){
+        if(level <= -1){
             if(webgl_characters[id]['path-id'].length === 0){
                 webgl_characters[id]['change-translate-x'] = 0;
                 webgl_characters[id]['change-translate-y'] = 0;
