@@ -1358,6 +1358,8 @@ function webgl_level_init(args){
         webgl_character_base_properties = {};
         webgl_character_init({
           'camera-zoom': 0,
+          'collides': true,
+          'controls': 'rpg',
           'entities': [],
           'id': webgl_character_id,
           'level': -1,
