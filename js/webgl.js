@@ -93,7 +93,7 @@ function webgl_camera_rotate(args){
         if(webgl_characters[args['character']]['camera-zoom'] === 0
           || (mouse_check
             && webgl_character_level(args['character']) > -2
-            && webgl_characters[args['character']]['health-current'] > 0)){
+            && webgl_characters[args['character']]['health'] > 0)){
             webgl_characters[args['character']]['rotate-y'] = core_mouse['down-2']
               ? webgl_characters[args['character']]['camera-rotate-y']
               : args['set']
@@ -141,7 +141,7 @@ function webgl_character_controls(id){
 
     if(webgl_characters[id]['controls'] === 'rpg'){
         if((level === -1 || !webgl_properties['paused'])
-          && webgl_characters[id]['health-current'] > 0
+          && webgl_characters[id]['health'] > 0
           && webgl_characters[id]['path-id'].length === 0){
             if(id !== webgl_character_id){
                 if(webgl_characters[id]['automove']
@@ -276,7 +276,7 @@ function webgl_character_init(args){
         'entities': [],
         'experience': 0,
         'gravity': false,
-        'health-current': 1,
+        'health': 1,
         'health-max': 1,
         'id': webgl_character_id,
         'jump-height': 1,
@@ -322,8 +322,8 @@ function webgl_character_init(args){
       'controls': args['controls'],
       'experience': args['experience'],
       'gravity': args['gravity'],
-      'health-current': Math.max(
-        args['health-current'],
+      'health': Math.max(
+        args['health'],
         1
       ),
       'health-max': args['health-max'],
@@ -355,7 +355,7 @@ function webgl_character_init(args){
 
 function webgl_character_jump(id){
     if(!webgl_characters[id]['jump-allow']
-      || webgl_characters[id]['health-current'] <= 0){
+      || webgl_characters[id]['health'] <= 0){
         return;
     }
 
@@ -495,7 +495,7 @@ function webgl_character_spawn(id){
         return;
     }
 
-    webgl_characters[id]['health-current'] = webgl_characters[id]['health-max'];
+    webgl_characters[id]['health'] = webgl_characters[id]['health-max'];
 
     webgl_character_origin(id);
     webgl_entity_move_to({
@@ -1931,7 +1931,7 @@ function webgl_pick_entity(args){
       || level < -1
       || webgl === 0
       || (level >= 0 && webgl_properties['paused'])
-      || webgl_characters[webgl_character_id]['health-current'] <= 0){
+      || webgl_characters[webgl_character_id]['health'] <= 0){
         return;
     }
 
@@ -3047,12 +3047,12 @@ function webgl_stat_modify(args){
       ? args['value']
       : args['target'][args['stat']] + args['value'];
 
-    if(args['stat'] === 'health-current'){
+    if(args['stat'] === 'health'){
         if(webgl_character_level(args['target']['id']) === -1){
-            args['target']['health-current'] = args['target']['health-max'];
+            args['target']['health'] = args['target']['health-max'];
 
-        }else if(args['target']['health-current'] <= 0){
-            args['target']['health-current'] = 0;
+        }else if(args['target']['health'] <= 0){
+            args['target']['health'] = 0;
 
             if(args['target']['lives'] > 0){
                 args['target']['lives']--;
@@ -3067,8 +3067,8 @@ function webgl_stat_modify(args){
             }
 
         }else{
-            args['target']['health-current'] = Math.min(
-              args['target']['health-current'],
+            args['target']['health'] = Math.min(
+              args['target']['health'],
               args['target']['health-max']
             );
         }
