@@ -3322,8 +3322,17 @@ function webgl_tiles(args){
     let tile_rotate_z = args['rotate-z'];
 
     for(const tile in tiles){
+        Object.assign(
+          webgl_paths,
+          args['tiles'][tiles[tile]]['paths']
+        );
+
         const entities = args['tiles'][tiles[tile]]['entities'];
         for(const entity in entities){
+            if(!webgl_characters[args['character']]){
+                webgl_character_init(args['tiles'][tiles[tile]]['characters'][args['character']]);
+            }
+
             const properties = {
               ...args,
               ...entities[entity],
