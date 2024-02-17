@@ -3273,6 +3273,87 @@ function webgl_texture_init(args){
     }
 }
 
+// Required args: tiles
+function webgl_tiles(args){
+    args = core_args({
+      'args': webgl_prefab_args(args),
+      'defaults': {
+        'tiles-max': 5,
+        'tiles-min': 1,
+      },
+    });
+
+    const tile_count = core_random_integer({
+      'max': args['tiles-max'] - args['tiles-min'] + 1,
+    }) + args['tiles-min'];
+    let tile_offset_x = args['translate-x'];
+    let tile_offset_y = args['translate-y'];
+    let tile_offset_z = args['translate-z'];
+    let tile_rotate_x = args['rotate-x'];
+    let tile_rotate_y = args['rotate-y'];
+    let tile_rotate_z = args['rotate-z'];
+
+    for(let tile = 0; tile < tile_count; tile++){
+        const selected = core_random_integer({
+          'max': args['tiles'].length,
+        });
+
+        const entities = args['tiles'][selected]['entities'];
+        for(const entity in entities){
+            const properties = {
+              ...args,
+              ...entities[entity],
+              'attach-to': args['character'],
+              'attach-type': 'webgl_characters',
+              'attach-x': tile_offset_x + (entities[entity]['attach-x'] || 0),
+              'attach-y': tile_offset_y + (entities[entity]['attach-y'] || 0),
+              'attach-z': tile_offset_z + (entities[entity]['attach-z'] || 0),
+              'id': args['prefix'] + '-' + tile + '-' + entity,
+            };
+
+            webgl_entity_create({
+              'entities': [
+                properties,
+              ],
+            });
+        }
+
+        if(args['tiles'][selected]['attach-x'] !== void 0){
+            tile_offset_x += args['tiles'][selected]['attach-x'];
+        }
+        if(args['tiles'][selected]['attach-y'] !== void 0){
+            tile_offset_y += args['tiles'][selected]['attach-y'];
+        }
+        if(args['tiles'][selected]['attach-z'] !== void 0){
+            tile_offset_z += args['tiles'][selected]['attach-z'];
+        }
+        if(args['tiles'][selected]['attach-rotate-x'] !== void 0){
+            const max = tile_rotate_x > 180
+              ? 360
+              : 90;
+            tile_rotate_x = math_clamp({
+              'max': max,
+              'min': max - 90,
+              'value': tile_rotate_x + args['tiles'][selected]['attach-rotate-x'],
+            });
+        }
+        if(args['tiles'][selected]['attach-rotate-y'] !== void 0){
+            tile_rotate_y = math_clamp({
+              'max': 360,
+              'min': 0,
+              'value': tile_rotate_y + args['tiles'][selected]['attach-rotate-y'],
+            });
+        }
+        if(args['tiles'][selected]['attach-rotate-z'] !== void 0){
+            tile_rotate_z = math_clamp({
+              'max': 360,
+              'min': 0,
+              'value': tile_rotate_z + args['tiles'][selected]['attach-rotate-z'],
+            });
+        }
+    }
+}
+
 function webgl_uniform_update(){
     webgl.uniform3f(
       webgl_shader['ambient-color'],
