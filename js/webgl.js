@@ -3278,14 +3278,34 @@ function webgl_tiles(args){
     args = core_args({
       'args': webgl_prefab_args(args),
       'defaults': {
+        'once': false,
         'tiles-max': 5,
         'tiles-min': 1,
       },
     });
 
-    const tile_count = core_random_integer({
-      'max': args['tiles-max'] - args['tiles-min'] + 1,
-    }) + args['tiles-min'];
+    const tiles = [];
+    if(args['once']){
+        const all_tiles = Array.from(Array(args['tiles'].length).keys());
+        for(let tile = 0; tile < args['tiles'].length; tile++){
+            const random_tile = core_random_integer({
+              'max': all_tiles.length,
+            });
+
+            tiles.push(all_tiles.splice(random_tile, 1)[0]);
+        }
+
+    }else{
+        const tile_count = core_random_integer({
+          'max': args['tiles-max'] - args['tiles-min'] + 1,
+        }) + args['tiles-min'];
+        for(let tile = 0; tile < tile_count; tile++){
+            tiles.push(core_random_integer({
+              'max': args['tiles'].length,
+            }));
+        }
+    }
+
     let tile_offset_x = args['translate-x'];
     let tile_offset_y = args['translate-y'];
     let tile_offset_z = args['translate-z'];
@@ -3293,12 +3313,8 @@ function webgl_tiles(args){
     let tile_rotate_y = args['rotate-y'];
     let tile_rotate_z = args['rotate-z'];
 
-    for(let tile = 0; tile < tile_count; tile++){
-        const selected = core_random_integer({
-          'max': args['tiles'].length,
-        });
-
-        const entities = args['tiles'][selected]['entities'];
+    for(const tile in tiles){
+        const entities = args['tiles'][tiles[tile]]['entities'];
         for(const entity in entities){
             const properties = {
               ...args,
@@ -3318,37 +3334,37 @@ function webgl_tiles(args){
             });
         }
 
-        if(args['tiles'][selected]['attach-x'] !== void 0){
-            tile_offset_x += args['tiles'][selected]['attach-x'];
+        if(args['tiles'][tiles[tile]]['attach-x'] !== void 0){
+            tile_offset_x += args['tiles'][tiles[tile]]['attach-x'];
         }
-        if(args['tiles'][selected]['attach-y'] !== void 0){
-            tile_offset_y += args['tiles'][selected]['attach-y'];
+        if(args['tiles'][tiles[tile]]['attach-y'] !== void 0){
+            tile_offset_y += args['tiles'][tiles[tile]]['attach-y'];
         }
-        if(args['tiles'][selected]['attach-z'] !== void 0){
-            tile_offset_z += args['tiles'][selected]['attach-z'];
+        if(args['tiles'][tiles[tile]]['attach-z'] !== void 0){
+            tile_offset_z += args['tiles'][tiles[tile]]['attach-z'];
         }
-        if(args['tiles'][selected]['attach-rotate-x'] !== void 0){
+        if(args['tiles'][tiles[tile]]['attach-rotate-x'] !== void 0){
             const max = tile_rotate_x > 180
               ? 360
               : 90;
             tile_rotate_x = math_clamp({
               'max': max,
               'min': max - 90,
-              'value': tile_rotate_x + args['tiles'][selected]['attach-rotate-x'],
+              'value': tile_rotate_x + args['tiles'][tiles[tile]]['attach-rotate-x'],
             });
         }
-        if(args['tiles'][selected]['attach-rotate-y'] !== void 0){
+        if(args['tiles'][tiles[tile]]['attach-rotate-y'] !== void 0){
             tile_rotate_y = math_clamp({
               'max': 360,
               'min': 0,
-              'value': tile_rotate_y + args['tiles'][selected]['attach-rotate-y'],
+              'value': tile_rotate_y + args['tiles'][tiles[tile]]['attach-rotate-y'],
             });
         }
-        if(args['tiles'][selected]['attach-rotate-z'] !== void 0){
+        if(args['tiles'][tiles[tile]]['attach-rotate-z'] !== void 0){
             tile_rotate_z = math_clamp({
               'max': 360,
               'min': 0,
-              'value': tile_rotate_z + args['tiles'][selected]['attach-rotate-z'],
+              'value': tile_rotate_z + args['tiles'][tiles[tile]]['attach-rotate-z'],
             });
         }
     }
