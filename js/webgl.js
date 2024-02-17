@@ -3278,16 +3278,24 @@ function webgl_tiles(args){
     args = core_args({
       'args': webgl_prefab_args(args),
       'defaults': {
-        'once': false,
+        'repeat': false,
         'tiles-max': 5,
         'tiles-min': 1,
       },
     });
 
     const tiles = [];
-    if(args['once']){
-        const all_tiles = Array.from(Array(args['tiles'].length).keys());
-        for(let tile = 0; tile < args['tiles'].length; tile++){
+    if(args['repeat'] !== false){
+        let all_tiles = [];
+        for(let repeat = 0; repeat < args['repeat']; repeat++){
+            all_tiles = [
+              ...all_tiles,
+              ...Array.from(Array(args['tiles'].length).keys()),
+            ];
+        }
+
+        const tile_count = args['tiles'].length * args['repeat'];
+        for(let tile = 0; tile < tile_count; tile++){
             const random_tile = core_random_integer({
               'max': all_tiles.length,
             });
