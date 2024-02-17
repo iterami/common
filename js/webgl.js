@@ -3322,15 +3322,19 @@ function webgl_tiles(args){
     let tile_rotate_z = args['rotate-z'];
 
     for(const tile in tiles){
-        Object.assign(
-          webgl_paths,
-          args['tiles'][tiles[tile]]['paths']
-        );
+        const prefix = args['prefix'] + '-' + tile + '-';
+
+        for(const path in args['tiles'][tiles[tile]]['paths']){
+            webgl_paths[prefix + path] = args['tiles'][tiles[tile]]['paths'][path];
+        }
 
         const entities = args['tiles'][tiles[tile]]['entities'];
         for(const entity in entities){
             if(!webgl_characters[args['character']]){
-                webgl_character_init(args['tiles'][tiles[tile]]['characters'][args['character']]);
+                webgl_character_init({
+                  ...args['tiles'][tiles[tile]]['characters'][args['character']],
+                  'id': prefix + args['tiles'][tiles[tile]]['characters'][args['character']]['id'],
+                });
             }
 
             const properties = {
@@ -3341,7 +3345,10 @@ function webgl_tiles(args){
               'attach-x': tile_offset_x + (entities[entity]['attach-x'] || 0),
               'attach-y': tile_offset_y + (entities[entity]['attach-y'] || 0),
               'attach-z': tile_offset_z + (entities[entity]['attach-z'] || 0),
-              'id': args['prefix'] + '-' + tile + '-' + entity,
+              'id': prefix + entity,
+              'path-id': entities[entity]['path-id'] !== ''
+                ? prefix + entities[entity]['path-id']
+                : '',
             };
 
             webgl_entity_create({
