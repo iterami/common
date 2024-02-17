@@ -3325,18 +3325,43 @@ function webgl_tiles(args){
         const prefix = args['prefix'] + '-' + tile + '-';
 
         for(const path in args['tiles'][tiles[tile]]['paths']){
-            webgl_paths[prefix + path] = args['tiles'][tiles[tile]]['paths'][path];
+            const path_object = {
+              ...args['tiles'][tiles[tile]]['paths'][path],
+              'points': [],
+            };
+            const points = args['tiles'][tiles[tile]]['paths'][path]['points'];
+            for(const point in points){
+                const point_object = {};
+                if(points[point]['translate-x'] !== void 0){
+                    point_object['translate-x'] = tile_offset_x + points[point]['translate-x'];
+                }
+                if(points[point]['translate-y'] !== void 0){
+                    point_object['translate-y'] = tile_offset_y + points[point]['translate-y'];
+                }
+                if(points[point]['translate-z'] !== void 0){
+                    point_object['translate-z'] = tile_offset_z + points[point]['translate-z'];
+                }
+                path_object['points'].push(point_object);
+            }
+            webgl_paths[prefix + path] = path_object;
+        }
+
+        for(const character in args['tiles'][tiles[tile]]['characters']){
+            const character_object = args['tiles'][tiles[tile]]['characters'][character];
+            webgl_character_init({
+              ...character_object,
+              'id': prefix + character_object['id'],
+              'path-id': character_object['path-id'] !== ''
+                ? prefix + character_object['path-id']
+                : '',
+              'translate-x': tile_offset_x + (character_object['translate-x'] || 0),
+              'translate-y': tile_offset_y + (character_object['translate-y'] || 0),
+              'translate-z': tile_offset_z + (character_object['translate-z'] || 0),
+            });
         }
 
         const entities = args['tiles'][tiles[tile]]['entities'];
         for(const entity in entities){
-            if(!webgl_characters[args['character']]){
-                webgl_character_init({
-                  ...args['tiles'][tiles[tile]]['characters'][args['character']],
-                  'id': prefix + args['tiles'][tiles[tile]]['characters'][args['character']]['id'],
-                });
-            }
-
             const properties = {
               ...args,
               ...entities[entity],
