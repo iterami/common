@@ -3278,6 +3278,7 @@ function webgl_tiles(args){
     args = core_args({
       'args': webgl_prefab_args(args),
       'defaults': {
+        'order': false,
         'repeat': false,
         'tiles-max': 5,
         'tiles-min': 1,
@@ -3285,7 +3286,12 @@ function webgl_tiles(args){
     });
 
     const tiles = [];
-    if(args['repeat'] !== false){
+    if(args['order'] !== false){
+        for(const tile in args['order']){
+            tiles.push(args['order'][tile]);
+        }
+
+    }else if(args['repeat'] !== false){
         let all_tiles = [];
         for(let repeat = 0; repeat < args['repeat']; repeat++){
             all_tiles = [
