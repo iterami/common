@@ -799,9 +799,13 @@ function core_keys_mobile(){
       'parent': document.getElementById('core-ui'),
       'properties': {
         'id': 'mobile-ui',
+        'style': 'display:none',
       },
       'type': 'span',
     });
+    mobile_ui.style.display = mobile_ui.style.display === 'none'
+      ? 'block'
+      : 'none';
 
     const keys = ['KeyA', 'KeyD', 'KeyW', 'KeyS', 'Space', 'KeyC', 'KeyH'];
     for(const key in core_keys){
