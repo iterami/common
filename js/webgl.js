@@ -165,7 +165,7 @@ function webgl_character_controls(id){
                 }else{
                     webgl_camera_rotate({
                       'camera': !core_mouse['down-0'],
-                      'y': -5,
+                      'y': -webgl_characters[id]['turn-speed'],
                     });
                 }
             }
@@ -178,7 +178,7 @@ function webgl_character_controls(id){
                 }else{
                     webgl_camera_rotate({
                       'camera': !core_mouse['down-0'],
-                      'y': 5,
+                      'y': webgl_characters[id]['turn-speed'],
                     });
                 }
             }
@@ -294,6 +294,7 @@ function webgl_character_init(args){
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,
+        'turn-speed': 5,
       },
     });
 
@@ -344,6 +345,7 @@ function webgl_character_init(args){
       'translate-x': args['translate-x'],
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
+      'turn-speed': args['turn-speed'],
     };
     webgl_character_count++;
 
