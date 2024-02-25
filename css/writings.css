@@ -55,6 +55,9 @@ code{
 hr{
     border: 2px solid #444;
 }
+li{
+    text-align: left;
+}
 ol{
     margin: 0;
     padding-left: 30px;
