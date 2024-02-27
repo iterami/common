@@ -110,7 +110,7 @@ function webgl_camera_rotate(args){
 }
 
 function webgl_camera_zoom(event){
-    if(webgl_character_level() < -1){
+    if(webgl_character_level() < 0){
         return;
     }
 
