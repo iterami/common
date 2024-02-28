@@ -1,6 +1,10 @@
 'use strict';
 
 function cards_draw(id){
+    if(cards_decks[id]['deck'].length === 0){
+        return;
+    }
+
     const card = cards_decks[id]['deck'].shift();
     cards_decks[id]['drawn'].unshift(card);
     return card;
