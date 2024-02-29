@@ -110,12 +110,11 @@ function webgl_camera_rotate(args){
 }
 
 function webgl_camera_zoom(event){
-    const character = webgl_characters[webgl_character_id];
-    if(webgl_character_level() < 0){
-        character['camera-zoom'] = 0;
+    if(webgl_character_level() < -1){
         return;
     }
 
+    const character = webgl_characters[webgl_character_id];
     if(event.deltaY > 0){
         character['camera-zoom'] = core_key_shift
           ? webgl_properties['camera-zoom-max']
