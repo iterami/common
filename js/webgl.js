@@ -3391,14 +3391,25 @@ function webgl_tiles(args){
 
         const prefabs = args['tiles'][tiles[tile]]['prefabs'];
         for(const prefab in prefabs){
+            const attached = prefabs[prefab]['properties']['character'] !== void 0;
+
             core_call({
               'args': {
                 ...args,
                 ...prefabs[prefab]['properties'],
-                'prefix': prefix + prefabs[prefab]['properties']['prefix'],
-                'translate-x': tile_offset_x + (prefabs[prefab]['translate-x'] || 0),
-                'translate-y': tile_offset_y + (prefabs[prefab]['translate-y'] || 0),
-                'translate-z': tile_offset_z + (prefabs[prefab]['translate-z'] || 0),
+                'character': attached
+                  ? prefix + prefabs[prefab]['properties']['character']
+                  : args['character'],
+                'prefix': prefix + (prefabs[prefab]['properties']['prefix'] || entity_id_count),
+                'translate-x': (prefabs[prefab]['translate-x'] || 0) + attached
+                  ? 0
+                  : tile_offset_x,
+                'translate-y': (prefabs[prefab]['translate-y'] || 0) + attached
+                  ? 0
+                  : tile_offset_y,
+                'translate-z': (prefabs[prefab]['translate-z'] || 0) + attached
+                  ? 0
+                  : tile_offset_z,
               },
               'todo': prefabs[prefab]['type'],
             });
