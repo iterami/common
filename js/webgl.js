@@ -468,6 +468,7 @@ function webgl_character_random(args){
         'collision': false,
       },
       'character': args['id'],
+      'prefix': args['id'],
       'size-x': xz * 2,
       'size-y': y * 2,
       'size-z': xz * 2,
