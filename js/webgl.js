@@ -3402,15 +3402,15 @@ function webgl_tiles(args){
                   ? prefix + prefabs[prefab]['properties']['character']
                   : args['character'],
                 'prefix': prefix + (prefabs[prefab]['properties']['prefix'] || entity_id_count),
-                'translate-x': (prefabs[prefab]['translate-x'] || 0) + attached
+                'translate-x': (prefabs[prefab]['properties']['translate-x'] || 0) + (attached
                   ? 0
-                  : tile_offset_x,
-                'translate-y': (prefabs[prefab]['translate-y'] || 0) + attached
+                  : tile_offset_x),
+                'translate-y': (prefabs[prefab]['properties']['translate-y'] || 0) + (attached
                   ? 0
-                  : tile_offset_y,
-                'translate-z': (prefabs[prefab]['translate-z'] || 0) + attached
+                  : tile_offset_y),
+                'translate-z': (prefabs[prefab]['properties']['translate-z'] || 0) + (attached
                   ? 0
-                  : tile_offset_z,
+                  : tile_offset_z),
               },
               'todo': prefabs[prefab]['type'],
             });
