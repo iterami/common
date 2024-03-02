@@ -489,6 +489,10 @@ function chess_validate(args){
     };
 }
 
+function chess_xy_to_fr(x, y){
+    return 'abcdefgh'[x] + (8 - y);
+}
+
 globalThis.chess_games = {};
 globalThis.chess_pieces = [
   ['♙', '♘', '♗', '♖', '♕', '♔'],
