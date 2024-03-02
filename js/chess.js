@@ -77,6 +77,14 @@ function chess_move(args){
 
         chess_games[args['id']]['board'][args['piece-y']][args['piece-x']] = '';
         let taken_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']];
+        if(taken_piece.length > 0
+          || piece === chess_pieces[0][0]
+          || piece === chess_pieces[1][0]){
+            chess_games[args['id']]['50-moves'] = 0.5;
+
+        }else{
+            chess_games[args['id']]['50-moves'] += 0.5;
+        }
         if(validation['castling']){
             if(validation['rook-long-moved']){
                 chess_games[args['id']]['board'][args['piece-y']][0] = '';
@@ -104,13 +112,6 @@ function chess_move(args){
         chess_games[args['id']]['players'][player]['rook-short-moved'] = validation['rook-short-moved'];
         chess_games[args['id']]['board'][args['target-y']][args['target-x']] = piece;
         chess_games[args['id']]['player'] = 1 - player;
-        if(taken_piece.length > 0
-          || validation['pawn-promote']){
-            chess_games[args['id']]['50-moves'] = 0.5;
-
-        }else{
-            chess_games[args['id']]['50-moves'] += 0.5;
-        }
     }
     return validation;
 }
