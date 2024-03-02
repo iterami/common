@@ -104,6 +104,13 @@ function chess_move(args){
         chess_games[args['id']]['players'][player]['rook-short-moved'] = validation['rook-short-moved'];
         chess_games[args['id']]['board'][args['target-y']][args['target-x']] = piece;
         chess_games[args['id']]['player'] = 1 - player;
+        if(taken_piece.length > 0
+          || validation['pawn-promote']){
+            chess_games[args['id']]['50-moves'] = 0.5;
+
+        }else{
+            chess_games[args['id']]['50-moves'] += 0.5;
+        }
     }
     return validation;
 }
@@ -111,6 +118,7 @@ function chess_move(args){
 // Required args: id
 function chess_new(args){
     chess_games[args['id']] = {
+      '50-moves': 0.5,
       'board': [
         [chess_pieces[1][3], chess_pieces[1][1], chess_pieces[1][2], chess_pieces[1][4], chess_pieces[1][5], chess_pieces[1][2], chess_pieces[1][1], chess_pieces[1][3],],
         [chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0],],
@@ -176,9 +184,14 @@ function chess_threat(args){
 // Required args: id, piece-x, piece-y, player, target-x, target-y
 // Optional args: threat
 function chess_validate(args){
+    if(!chess_games[args['id']]){
+        return;
+    }
+
     let castling = false;
     let en_passant = -1;
     let en_passant_taken = false;
+    let fifty_moves = chess_games[args['id']]['50-moves'];
     let king_checked = false;
     let king_moved = false;
     let king_x = -1;
@@ -188,7 +201,7 @@ function chess_validate(args){
     let pawn_promote = false;
     let valid_move = true;
 
-    if(!chess_games[args['id']]
+    if(fifty_moves > 50
       || args['piece-x'] < 0 || args['piece-x'] > 7
       || args['piece-y'] < 0 || args['piece-y'] > 7
       || args['target-x'] < 0 || args['target-x'] > 7
@@ -460,6 +473,7 @@ function chess_validate(args){
     }
 
     return {
+      '50-moves': fifty_moves,
       'castling': castling,
       'en-passant': en_passant,
       'en-passant-taken': en_passant_taken,
