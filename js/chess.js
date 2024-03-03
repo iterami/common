@@ -72,19 +72,12 @@ function chess_move(args){
       'threat': false,
     });
     if(validation['valid'] || args['override'] === true){
+        chess_games[args['id']]['50-moves'] = validation['50-moves'];
         chess_games[args['id']]['en-passant'] = validation['en-passant'];
         let piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
 
         chess_games[args['id']]['board'][args['piece-y']][args['piece-x']] = '';
         let taken_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']];
-        if(taken_piece.length > 0
-          || piece === chess_pieces[0][0]
-          || piece === chess_pieces[1][0]){
-            chess_games[args['id']]['50-moves'] = 0.5;
-
-        }else{
-            chess_games[args['id']]['50-moves'] += 0.5;
-        }
         if(validation['castling']){
             if(validation['rook-long-moved']){
                 chess_games[args['id']]['board'][args['piece-y']][0] = '';
@@ -119,7 +112,7 @@ function chess_move(args){
 // Required args: id
 function chess_new(args){
     chess_games[args['id']] = {
-      '50-moves': 0.5,
+      '50-moves': 0,
       'board': [
         [chess_pieces[1][3], chess_pieces[1][1], chess_pieces[1][2], chess_pieces[1][4], chess_pieces[1][5], chess_pieces[1][2], chess_pieces[1][1], chess_pieces[1][3],],
         [chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0],],
@@ -202,7 +195,7 @@ function chess_validate(args){
     let pawn_promote = false;
     let valid_move = true;
 
-    if(fifty_moves > 50
+    if(fifty_moves >= 50
       || args['piece-x'] < 0 || args['piece-x'] > 7
       || args['piece-y'] < 0 || args['piece-y'] > 7
       || args['target-x'] < 0 || args['target-x'] > 7
@@ -218,11 +211,11 @@ function chess_validate(args){
         rook_short_moved = chess_games[args['id']]['players'][player]['rook-short-moved'];
 
         const piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
+        const target_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']];
         if(piece.length === 0 || (args['threat'] !== true && !chess_pieces[player].includes(piece))){
             valid_move = false;
 
         }else{
-            const target_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']];
             if(args['threat'] !== true && chess_pieces[player].includes(target_piece)){
                 valid_move = false;
 
@@ -464,13 +457,21 @@ function chess_validate(args){
                     'player': 1 - player,
                   })){
                     king_checked = true;
+                    //valid_move = false;
                 }
             }
         }
-    }
 
-    if(king_checked){
-        //valid_move = false;
+        if(valid_move){
+            if(target_piece.length > 0
+              || piece === chess_pieces[0][0]
+              || piece === chess_pieces[1][0]){
+                fifty_moves = 0;
+
+            }else{
+                fifty_moves += 0.5;
+            }
+        }
     }
 
     return {
