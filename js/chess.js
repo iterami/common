@@ -459,7 +459,7 @@ function chess_validate(args){
                     'player': 1 - player,
                   })){
                     king_checked = true;
-                    //valid_move = false;
+                    valid_move = false;
                 }
             }
         }
