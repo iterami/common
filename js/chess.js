@@ -71,6 +71,7 @@ function chess_move(args){
     }
 
     const player = chess_games[args['id']]['player'];
+    const players = chess_games[args['id']]['players'];
     const validation = chess_validate({
       'id': args['id'],
       'piece-x': args['piece-x'],
@@ -81,49 +82,51 @@ function chess_move(args){
       'threat': false,
     });
     if(validation['valid'] || args['override'] === true){
+        const board = chess_games[args['id']]['board'];
+
         chess_games[args['id']]['50-moves'] = validation['50-moves'];
         chess_games[args['id']]['en-passant'] = validation['en-passant'];
-        let piece = chess_games[args['id']]['board'][args['piece-y']][args['piece-x']];
+        let piece = board[args['piece-y']][args['piece-x']];
 
-        chess_games[args['id']]['board'][args['piece-y']][args['piece-x']] = '';
-        let taken_piece = chess_games[args['id']]['board'][args['target-y']][args['target-x']];
+        board[args['piece-y']][args['piece-x']] = '';
+        let taken_piece = board[args['target-y']][args['target-x']];
         if(validation['castling']){
             if(validation['rook-long-moved']){
-                chess_games[args['id']]['board'][args['piece-y']][0] = '';
-                chess_games[args['id']]['board'][args['piece-y']][3] = chess_pieces[player][3];
+                board[args['piece-y']][0] = '';
+                board[args['piece-y']][3] = chess_pieces[player][3];
 
             }else if(validation['rook-short-moved']){
-                chess_games[args['id']]['board'][args['piece-y']][7] = '';
-                chess_games[args['id']]['board'][args['piece-y']][5] = chess_pieces[player][3];
+                board[args['piece-y']][7] = '';
+                board[args['piece-y']][5] = chess_pieces[player][3];
             }
 
         }else if(validation['en-passant-taken']){
-            taken_piece = chess_games[args['id']]['board'][args['piece-y']][args['target-x']];
-            chess_games[args['id']]['board'][args['piece-y']][args['target-x']] = '';
+            taken_piece = board[args['piece-y']][args['target-x']];
+            board[args['piece-y']][args['target-x']] = '';
 
         }else if(validation['pawn-promote']){
-            piece = chess_pieces[player][chess_games[args['id']]['players'][player]['pawn-promote']];
+            piece = chess_pieces[player][players[player]['pawn-promote']];
         }
 
-        chess_games[args['id']]['players'][player]['king-checked'] = validation['king-checked'];
-        chess_games[args['id']]['players'][player]['king-moved'] = validation['king-moved'];
-        chess_games[args['id']]['players'][player]['king-x'] = validation['king-x'];
-        chess_games[args['id']]['players'][player]['king-y'] = validation['king-y'];
-        chess_games[args['id']]['players'][player]['pieces-taken'] += taken_piece;
-        chess_games[args['id']]['players'][player]['rook-long-moved'] = validation['rook-long-moved'];
-        chess_games[args['id']]['players'][player]['rook-short-moved'] = validation['rook-short-moved'];
-        chess_games[args['id']]['board'][args['target-y']][args['target-x']] = piece;
+        players[player]['king-checked'] = validation['king-checked'];
+        players[player]['king-moved'] = validation['king-moved'];
+        players[player]['king-x'] = validation['king-x'];
+        players[player]['king-y'] = validation['king-y'];
+        players[player]['pieces-taken'] += taken_piece;
+        players[player]['rook-long-moved'] = validation['rook-long-moved'];
+        players[player]['rook-short-moved'] = validation['rook-short-moved'];
+        board[args['target-y']][args['target-x']] = piece;
         chess_games[args['id']]['player'] = 1 - player;
     }
 
     validation['king-checked-enemy'] = args['threat'] !== true
         && chess_threat({
           'id': args['id'],
-          'piece-x': chess_games[args['id']]['players'][1 - player]['king-x'],
-          'piece-y': chess_games[args['id']]['players'][1 - player]['king-y'],
+          'piece-x': players[1 - player]['king-x'],
+          'piece-y': players[1 - player]['king-y'],
           'player': player,
          });
-    chess_games[args['id']]['players'][1 - player]['king-checked'] = validation['king-checked-enemy'];
+    players[1 - player]['king-checked'] = validation['king-checked-enemy'];
 
     return validation;
 }
