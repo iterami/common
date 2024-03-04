@@ -208,10 +208,9 @@ function chess_validate(args){
     }else{
         const piece = game['board'][args['piece-y']][args['piece-x']];
         const target_piece = game['board'][args['target-y']][args['target-x']];
-        if(piece.length === 0 || (args['threat'] !== true && !chess_pieces[player].includes(piece))){
-            valid_move = false;
-
-        }else if(args['threat'] !== true && chess_pieces[player].includes(target_piece)){
+        if(piece.length === 0
+          || (args['threat'] !== true
+          && (!chess_pieces[player].includes(piece) || chess_pieces[player].includes(target_piece)))){
             valid_move = false;
 
         }else{
