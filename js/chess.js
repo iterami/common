@@ -122,9 +122,11 @@ function chess_move(args){
     validation['king-checked-enemy'] = args['threat'] !== true
         && chess_threat({
           'id': args['id'],
-          'piece-x': players[1 - player]['king-x'],
-          'piece-y': players[1 - player]['king-y'],
           'player': player,
+          'squares': [
+            players[1 - player]['king-x'],
+            players[1 - player]['king-y'],
+          ],
          });
     players[1 - player]['king-checked'] = validation['king-checked-enemy'];
 
@@ -173,7 +175,7 @@ function chess_new(args){
     };
 }
 
-// Required args: id, piece-x, piece-y, player
+// Required args: id, player, squares
 // Optional args: board
 function chess_threat(args){
     const board = args['board'] || chess_games[args['id']]['board'];
@@ -181,17 +183,19 @@ function chess_threat(args){
         for(let x = 0; x < 8; x++){
             if(board[y][x].length === 1
               && chess_pieces[args['player']].includes(board[y][x])){
-                if(chess_validate({
-                    'board': args['board'],
-                    'id': args['id'],
-                    'piece-x': x,
-                    'piece-y': y,
-                    'player': args['player'],
-                    'target-x': args['piece-x'],
-                    'target-y': args['piece-y'],
-                    'threat': true,
-                  })['valid']){
-                    return true;
+                for(let square = 0; square < args['squares'].length / 2; square += 2){
+                    if(chess_validate({
+                        'board': args['board'],
+                        'id': args['id'],
+                        'piece-x': x,
+                        'piece-y': y,
+                        'player': args['player'],
+                        'target-x': args['squares'][square],
+                        'target-y': args['squares'][square + 1],
+                        'threat': true,
+                      })['valid']){
+                        return true;
+                    }
                 }
             }
         }
@@ -419,8 +423,8 @@ function chess_validate(args){
 
                 // King
                 case chess_pieces[player][5]: {
-                    if(!king_checked
-                      && !king_moved
+                    if(!king_moved
+                      && !king_checked
                       && movement_x === 2 && movement_y === 0
                       && args['target-y'] === (1 - player) * 7){
                         if(!rook_long_moved && args['target-x'] === 2){
@@ -492,9 +496,11 @@ function chess_validate(args){
                 if(chess_threat({
                     'board': chess_test,
                     'id': args['id'],
-                    'piece-x': king_x,
-                    'piece-y': king_y,
                     'player': 1 - player,
+                    'squares': [
+                      king_x,
+                      king_y,
+                    ],
                   })){
                     valid_move = false;
 
