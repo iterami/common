@@ -183,16 +183,17 @@ function chess_validate(args){
         return;
     }
 
+    const player = args['player'];
     let castling = false;
     let en_passant = -1;
     let en_passant_taken = false;
     let fifty_moves = game['50-moves'];
     let king_checked = false;
-    let king_moved = false;
-    let king_x = -1;
-    let king_y = -1;
-    let rook_long_moved = false;
-    let rook_short_moved = false;
+    let king_moved = game['players'][player]['king-moved'];
+    let king_x = game['players'][player]['king-x'];
+    let king_y = game['players'][player]['king-y'];
+    let rook_long_moved = game['players'][player]['rook-long-moved'];
+    let rook_short_moved = game['players'][player]['rook-short-moved'];
     let pawn_promote = false;
     let valid_move = true;
 
@@ -205,13 +206,6 @@ function chess_validate(args){
         valid_move = false;
 
     }else{
-        const player = args['player'];
-        king_moved = game['players'][player]['king-moved'];
-        king_x = game['players'][player]['king-x'];
-        king_y = game['players'][player]['king-y'];
-        rook_long_moved = game['players'][player]['rook-long-moved'];
-        rook_short_moved = game['players'][player]['rook-short-moved'];
-
         const piece = game['board'][args['piece-y']][args['piece-x']];
         const target_piece = game['board'][args['target-y']][args['target-x']];
         if(piece.length === 0 || (args['threat'] !== true && !chess_pieces[player].includes(piece))){
@@ -404,7 +398,6 @@ function chess_validate(args){
                                 'loopstart': 0,
                                 'row': args['piece-y'],
                               })){
-                                king_moved = true;
                                 castling = true;
                                 rook_long_moved = true;
 
@@ -419,7 +412,6 @@ function chess_validate(args){
                                 'loopstart': args['piece-x'],
                                 'row': args['piece-y'],
                               })){
-                                king_moved = true;
                                 castling = true;
                                 rook_short_moved = true;
 
