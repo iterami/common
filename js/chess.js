@@ -419,7 +419,8 @@ function chess_validate(args){
 
                 // King
                 case chess_pieces[player][5]: {
-                    if(!king_moved
+                    if(!king_checked
+                      && !king_moved
                       && movement_x === 2 && movement_y === 0
                       && args['target-y'] === (1 - player) * 7){
                         if(!rook_long_moved && args['target-x'] === 2){
