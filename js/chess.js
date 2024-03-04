@@ -162,12 +162,14 @@ function chess_new(args){
 }
 
 // Required args: id, piece-x, piece-y, player
+// Optional args: board
 function chess_threat(args){
     for(let y = 0; y < 8; y++){
         for(let x = 0; x < 8; x++){
-            const piece = chess_games[args['id']]['board'][y][x];
-            if(chess_pieces[args['player']].includes(piece)){
+            const board = args['board'] || chess_games[args['id']]['board'];
+            if(chess_pieces[args['player']].includes(board[y][x])){
                 if(chess_validate({
+                    'board': args['board'],
                     'id': args['id'],
                     'piece-x': x,
                     'piece-y': y,
@@ -186,7 +188,7 @@ function chess_threat(args){
 }
 
 // Required args: id, piece-x, piece-y, player, target-x, target-y
-// Optional args: threat
+// Optional args: board, threat
 function chess_validate(args){
     const game = chess_games[args['id']];
     if(!game){
@@ -194,6 +196,7 @@ function chess_validate(args){
     }
 
     const player = args['player'];
+    const board = args['board'] || game['board'];
     let castling = false;
     let en_passant = -1;
     let en_passant_taken = false;
@@ -216,8 +219,8 @@ function chess_validate(args){
         valid_move = false;
 
     }else{
-        const piece = game['board'][args['piece-y']][args['piece-x']];
-        const target_piece = game['board'][args['target-y']][args['target-x']];
+        const piece = board[args['piece-y']][args['piece-x']];
+        const target_piece = board[args['target-y']][args['target-x']];
         if(piece.length === 0
           || (args['threat'] !== true
           && (!chess_pieces[player].includes(piece) || chess_pieces[player].includes(target_piece)))){
