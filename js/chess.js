@@ -117,18 +117,19 @@ function chess_move(args){
         players[player]['rook-short-moved'] = validation['rook-short-moved'];
         board[args['target-y']][args['target-x']] = piece;
         chess_games[args['id']]['player'] = 1 - player;
+
+        validation['king-checked-enemy'] = args['threat'] !== true
+            && chess_threat({
+              'id': args['id'],
+              'player': player,
+              'squares': [
+                players[1 - player]['king-x'],
+                players[1 - player]['king-y'],
+              ],
+             });
+        players[1 - player]['king-checked'] = validation['king-checked-enemy'];
     }
 
-    validation['king-checked-enemy'] = args['threat'] !== true
-        && chess_threat({
-          'id': args['id'],
-          'player': player,
-          'squares': [
-            players[1 - player]['king-x'],
-            players[1 - player]['king-y'],
-          ],
-         });
-    players[1 - player]['king-checked'] = validation['king-checked-enemy'];
 
     return validation;
 }
@@ -183,7 +184,7 @@ function chess_threat(args){
         for(let x = 0; x < 8; x++){
             if(board[y][x].length === 1
               && chess_pieces[args['player']].includes(board[y][x])){
-                for(let square = 0; square < args['squares'].length / 2; square += 2){
+                for(let square = 0; square < args['squares'].length; square += 2){
                     if(chess_validate({
                         'board': args['board'],
                         'id': args['id'],
@@ -427,8 +428,19 @@ function chess_validate(args){
                       && !king_checked
                       && movement_x === 2 && movement_y === 0
                       && args['target-y'] === (1 - player) * 7){
+                        const y = (1 - player) * 7;
                         if(!rook_long_moved && args['target-x'] === 2){
-                            if(!chess_check_row({
+                            if(!chess_threat({
+                                'board': args['board'],
+                                'id': args['id'],
+                                'player': 1 - args['player'],
+                                'squares': [
+                                  args['piece-x'] - 1,
+                                  y,
+                                  args['piece-x'] - 2,
+                                  y,
+                                ],
+                              }) && !chess_check_row({
                                 'board': args['board'],
                                 'id': args['id'],
                                 'loopend': args['piece-x'],
@@ -443,7 +455,17 @@ function chess_validate(args){
                             }
 
                         }else if(!rook_short_moved && args['target-x'] === 6){
-                            if(!chess_check_row({
+                            if(!chess_threat({
+                                'board': args['board'],
+                                'id': args['id'],
+                                'player': 1 - args['player'],
+                                'squares': [
+                                  args['piece-x'] + 1,
+                                  y,
+                                  args['piece-x'] + 2,
+                                  y,
+                                ],
+                              }) && !chess_check_row({
                                 'board': args['board'],
                                 'id': args['id'],
                                 'loopend': 7,
