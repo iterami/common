@@ -217,250 +217,246 @@ function chess_validate(args){
         if(piece.length === 0 || (args['threat'] !== true && !chess_pieces[player].includes(piece))){
             valid_move = false;
 
+        }else if(args['threat'] !== true && chess_pieces[player].includes(target_piece)){
+            valid_move = false;
+
         }else{
-            if(args['threat'] !== true && chess_pieces[player].includes(target_piece)){
-                valid_move = false;
+            const movement_x = Math.abs(args['piece-x'] - args['target-x']);
+            const movement_y = Math.abs(args['piece-y'] - args['target-y']);
+            switch(piece){
+                // Pawn
+                case chess_pieces[player][0]: {
+                    const direction = player === 0 ? -1 : 1;
 
-            }else{
-                const movement_x = Math.abs(args['piece-x'] - args['target-x']);
-                const movement_y = Math.abs(args['piece-y'] - args['target-y']);
-                switch(piece){
-                    // Pawn
-                    case chess_pieces[player][0]: {
-                        const direction = player === 0 ? -1 : 1;
+                    if(args['target-x'] !== args['piece-x']){
+                        if(movement_x !== 1
+                          || args['target-y'] - args['piece-y'] !== direction){
+                            valid_move = false;
 
-                        if(args['target-x'] !== args['piece-x']){
-                            if(movement_x !== 1
-                              || args['target-y'] - args['piece-y'] !== direction){
+                        }else if(args['target-x'] === game['en-passant'] - 1
+                          && args['target-y'] === 2 + (player * 3)){
+                            en_passant_taken = true;
+
+                        }else if(!chess_pieces[1 - player].includes(target_piece)){
+                            valid_move = false;
+                        }
+
+                    }else if(target_piece.length === 0){
+                        if(args['piece-y'] === 6 - (player * 5)){
+                            if(args['target-y'] !== args['piece-y'] + direction
+                              && args['target-y'] !== args['piece-y'] + direction * 2){
                                 valid_move = false;
 
-                            }else if(args['target-x'] === game['en-passant'] - 1
-                              && args['target-y'] === 2 + (player * 3)){
-                                en_passant_taken = true;
-
-                            }else if(!chess_pieces[1 - player].includes(target_piece)){
+                            }else if(game['board'][args['piece-y'] + direction][args['piece-x']].length){
                                 valid_move = false;
+
+                            }else if(args['target-y'] === args['piece-y'] + direction * 2){
+                                en_passant = args['piece-x'] + 1;
                             }
 
-                        }else if(target_piece.length === 0){
-                            if(args['piece-y'] === 6 - (player * 5)){
-                                if(args['target-y'] !== args['piece-y'] + direction
-                                  && args['target-y'] !== args['piece-y'] + direction * 2){
-                                    valid_move = false;
-
-                                }else if(game['board'][args['piece-y'] + direction][args['piece-x']].length){
-                                    valid_move = false;
-
-                                }else if(args['target-y'] === args['piece-y'] + direction * 2){
-                                    en_passant = args['piece-x'] + 1;
-                                }
-
-                            }else if(args['target-y'] !== args['piece-y'] + direction){
-                                valid_move = false;
-                            }
-
-                        }else{
+                        }else if(args['target-y'] !== args['piece-y'] + direction){
                             valid_move = false;
                         }
 
-                        if(valid_move && args['target-y'] === player * 7){
-                            pawn_promote = true;
-                        }
-
-                        break;
+                    }else{
+                        valid_move = false;
                     }
 
-                    // Knight
-                    case chess_pieces[player][1]: {
-                        if(movement_x < 1 || movement_x > 2 || movement_y < 1 || movement_y > 2){
-                            valid_move = false;
+                    if(valid_move && args['target-y'] === player * 7){
+                        pawn_promote = true;
+                    }
 
-                        }else if((movement_x === 1 && movement_y !== 2)
-                          || (movement_x === 2 && movement_y !== 1)){
+                    break;
+                }
+
+                // Knight
+                case chess_pieces[player][1]: {
+                    if(movement_x < 1 || movement_x > 2 || movement_y < 1 || movement_y > 2){
+                        valid_move = false;
+
+                    }else if((movement_x === 1 && movement_y !== 2)
+                      || (movement_x === 2 && movement_y !== 1)){
+                        valid_move = false;
+                    }
+
+                    break;
+                }
+
+                // Bishop
+                case chess_pieces[player][2]: {
+                    if(movement_x === movement_y){
+                        if(movement_y > 1 && chess_check_diagonal({
+                            'column': args['piece-x'],
+                            'dx': args['piece-x'] < args['target-x']
+                              ? 1
+                              : -1,
+                            'dy': args['piece-y'] < args['target-y']
+                              ? 1
+                              : -1,
+                            'id': args['id'],
+                            'loopend': args['target-x'],
+                            'loopstart': args['piece-x'],
+                            'row': args['piece-y'],
+                          })){
                             valid_move = false;
                         }
 
-                        break;
+                    }else{
+                        valid_move = false;
                     }
 
-                    // Bishop
-                    case chess_pieces[player][2]: {
-                        if(movement_x === movement_y){
-                            if(movement_y > 1 && chess_check_diagonal({
-                                'column': args['piece-x'],
-                                'dx': args['piece-x'] < args['target-x']
-                                  ? 1
-                                  : -1,
-                                'dy': args['piece-y'] < args['target-y']
-                                  ? 1
-                                  : -1,
+                    break;
+                }
+
+                // Rook
+                case chess_pieces[player][3]: {
+                    if(args['target-x'] === args['piece-x']){
+                        if(movement_y > 1 && chess_check_column({
+                            'column': args['piece-x'],
+                            'id': args['id'],
+                            'loopend': args['target-y'],
+                            'loopstart': args['piece-y'],
+                          })){
+                            valid_move = false;
+                        }
+
+                    }else if(args['target-y'] === args['piece-y']){
+                        if(movement_x > 1 && chess_check_row({
+                            'id': args['id'],
+                            'loopend': args['target-x'],
+                            'loopstart': args['piece-x'],
+                            'row': args['piece-y'],
+                          })){
+                            valid_move = false;
+                        }
+
+                    }else{
+                        valid_move = false;
+                    }
+
+                    if(valid_move && args['piece-y'] === (1 - player) * 7){
+                        if(!rook_long_moved && args['piece-x'] === 0){
+                            rook_long_moved = true;
+
+                        }else if(!rook_short_moved && args['piece-x'] === 7){
+                            rook_short_moved = true;
+                        }
+                    }
+
+                    break;
+                }
+
+                // Queen
+                case chess_pieces[player][4]: {
+                    if(movement_x === movement_y){
+                        if(movement_y > 1 && chess_check_diagonal({
+                            'column': args['piece-x'],
+                            'dx': args['piece-x'] < args['target-x']
+                              ? 1
+                              : -1,
+                            'dy': args['piece-y'] < args['target-y']
+                              ? 1
+                              : -1,
+                            'id': args['id'],
+                            'loopend': args['target-x'],
+                            'loopstart': args['piece-x'],
+                            'row': args['piece-y'],
+                          })){
+                            valid_move = false;
+                        }
+
+                    }else if(args['target-x'] === args['piece-x']){
+                        if(movement_y > 1 && chess_check_column({
+                            'column': args['piece-x'],
+                            'id': args['id'],
+                            'loopend': args['target-y'],
+                            'loopstart': args['piece-y'],
+                          })){
+                            valid_move = false;
+                        }
+
+                    }else if(args['target-y'] === args['piece-y']){
+                        if(movement_x > 1 && chess_check_row({
+                            'id': args['id'],
+                            'loopend': args['target-x'],
+                            'loopstart': args['piece-x'],
+                            'row': args['piece-y'],
+                          })){
+                            valid_move = false;
+                        }
+
+                    }else{
+                        valid_move = false;
+                    }
+
+                    break;
+                }
+
+                // King
+                case chess_pieces[player][5]: {
+                    if(!king_moved
+                      && movement_x === 2 && movement_y === 0
+                      && args['target-y'] === (1 - player) * 7){
+                        if(!rook_long_moved && args['target-x'] === 2){
+                            if(!chess_check_row({
                                 'id': args['id'],
-                                'loopend': args['target-x'],
-                                'loopstart': args['piece-x'],
+                                'loopend': args['piece-x'],
+                                'loopstart': 0,
                                 'row': args['piece-y'],
                               })){
-                                valid_move = false;
-                            }
-
-                        }else{
-                            valid_move = false;
-                        }
-
-                        break;
-                    }
-
-                    // Rook
-                    case chess_pieces[player][3]: {
-                        if(args['target-x'] === args['piece-x']){
-                            if(movement_y > 1 && chess_check_column({
-                                'column': args['piece-x'],
-                                'id': args['id'],
-                                'loopend': args['target-y'],
-                                'loopstart': args['piece-y'],
-                              })){
-                                valid_move = false;
-                            }
-
-                        }else if(args['target-y'] === args['piece-y']){
-                            if(movement_x > 1 && chess_check_row({
-                                'id': args['id'],
-                                'loopend': args['target-x'],
-                                'loopstart': args['piece-x'],
-                                'row': args['piece-y'],
-                              })){
-                                valid_move = false;
-                            }
-
-                        }else{
-                            valid_move = false;
-                        }
-
-                        if(valid_move && args['piece-y'] === (1 - player) * 7){
-                            if(!rook_long_moved && args['piece-x'] === 0){
+                                king_moved = true;
+                                castling = true;
                                 rook_long_moved = true;
-
-                            }else if(!rook_short_moved && args['piece-x'] === 7){
-                                rook_short_moved = true;
-                            }
-                        }
-
-                        break;
-                    }
-
-                    // Queen
-                    case chess_pieces[player][4]: {
-                        if(movement_x === movement_y){
-                            if(movement_y > 1 && chess_check_diagonal({
-                                'column': args['piece-x'],
-                                'dx': args['piece-x'] < args['target-x']
-                                  ? 1
-                                  : -1,
-                                'dy': args['piece-y'] < args['target-y']
-                                  ? 1
-                                  : -1,
-                                'id': args['id'],
-                                'loopend': args['target-x'],
-                                'loopstart': args['piece-x'],
-                                'row': args['piece-y'],
-                              })){
-                                valid_move = false;
-                            }
-
-                        }else if(args['target-x'] === args['piece-x']){
-                            if(movement_y > 1 && chess_check_column({
-                                'column': args['piece-x'],
-                                'id': args['id'],
-                                'loopend': args['target-y'],
-                                'loopstart': args['piece-y'],
-                              })){
-                                valid_move = false;
-                            }
-
-                        }else if(args['target-y'] === args['piece-y']){
-                            if(movement_x > 1 && chess_check_row({
-                                'id': args['id'],
-                                'loopend': args['target-x'],
-                                'loopstart': args['piece-x'],
-                                'row': args['piece-y'],
-                              })){
-                                valid_move = false;
-                            }
-
-                        }else{
-                            valid_move = false;
-                        }
-
-                        break;
-                    }
-
-                    // King
-                    case chess_pieces[player][5]: {
-                        if(!king_moved
-                          && movement_x === 2 && movement_y === 0
-                          && args['target-y'] === (1 - player) * 7){
-                            if(!rook_long_moved && args['target-x'] === 2){
-                                if(!chess_check_row({
-                                    'id': args['id'],
-                                    'loopend': args['piece-x'],
-                                    'loopstart': 0,
-                                    'row': args['piece-y'],
-                                  })){
-                                    king_moved = true;
-                                    castling = true;
-                                    rook_long_moved = true;
-
-                                }else{
-                                    valid_move = false;
-                                }
-
-                            }else if(!rook_short_moved && args['target-x'] === 6){
-                                if(!chess_check_row({
-                                    'id': args['id'],
-                                    'loopend': 7,
-                                    'loopstart': args['piece-x'],
-                                    'row': args['piece-y'],
-                                  })){
-                                    king_moved = true;
-                                    castling = true;
-                                    rook_short_moved = true;
-
-                                }else{
-                                    valid_move = false;
-                                }
 
                             }else{
                                 valid_move = false;
                             }
 
-                        }else if(movement_x > 1 || movement_y > 1){
-                            valid_move = false;
+                        }else if(!rook_short_moved && args['target-x'] === 6){
+                            if(!chess_check_row({
+                                'id': args['id'],
+                                'loopend': 7,
+                                'loopstart': args['piece-x'],
+                                'row': args['piece-y'],
+                              })){
+                                king_moved = true;
+                                castling = true;
+                                rook_short_moved = true;
+
+                            }else{
+                                valid_move = false;
+                            }
 
                         }else{
-                            king_moved = true;
+                            valid_move = false;
                         }
 
-                        if(valid_move){
-                            king_x = args['target-x'];
-                            king_y = args['target-y'];
-                        }
-
-                        break;
+                    }else if(movement_x > 1 || movement_y > 1){
+                        valid_move = false;
                     }
 
-                    default:
-                        valid_move = false;
+                    if(valid_move){
+                        king_moved = true;
+                        king_x = args['target-x'];
+                        king_y = args['target-y'];
+                    }
+
+                    break;
                 }
 
-                if(args['threat'] !== true
-                  && chess_threat({
-                    'id': args['id'],
-                    'piece-x': king_x,
-                    'piece-y': king_y,
-                    'player': 1 - player,
-                  })){
-                    king_checked = true;
+                default:
                     valid_move = false;
-                }
+            }
+
+            if(args['threat'] !== true
+              && chess_threat({
+                'id': args['id'],
+                'piece-x': king_x,
+                'piece-y': king_y,
+                'player': 1 - player,
+              })){
+                king_checked = true;
+                valid_move = false;
             }
         }
 
