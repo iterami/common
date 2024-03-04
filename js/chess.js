@@ -106,6 +106,16 @@ function chess_move(args){
         chess_games[args['id']]['board'][args['target-y']][args['target-x']] = piece;
         chess_games[args['id']]['player'] = 1 - player;
     }
+
+    validation['king-checked-enemy'] = args['threat'] !== true
+        && chess_threat({
+          'id': args['id'],
+          'piece-x': chess_games[args['id']]['players'][1 - player]['king-x'],
+          'piece-y': chess_games[args['id']]['players'][1 - player]['king-y'],
+          'player': player,
+         });
+    chess_games[args['id']]['players'][1 - player]['king-checked'] = validation['king-checked-enemy'];
+
     return validation;
 }
 
@@ -188,7 +198,7 @@ function chess_validate(args){
     let en_passant = -1;
     let en_passant_taken = false;
     let fifty_moves = game['50-moves'];
-    let king_checked = false;
+    let king_checked = game['players'][player]['king-checked'];
     let king_moved = game['players'][player]['king-moved'];
     let king_x = game['players'][player]['king-x'];
     let king_y = game['players'][player]['king-y'];
