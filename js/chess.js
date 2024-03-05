@@ -247,6 +247,9 @@ function chess_validate(args){
     let threefold = game['threefold-highest'];
     let valid_move = true;
 
+    const piece = board[args['piece-y']][args['piece-x']];
+    const target_piece = board[args['target-y']][args['target-x']];
+
     if(fifty_moves >= 50
       || threefold >= 3
       || args['piece-x'] < 0 || args['piece-x'] > 7
@@ -257,8 +260,6 @@ function chess_validate(args){
         valid_move = false;
 
     }else{
-        const piece = board[args['piece-y']][args['piece-x']];
-        const target_piece = board[args['target-y']][args['target-x']];
         if(piece.length === 0
           || (args['threat'] !== true
           && (!chess_pieces[player].includes(piece) || chess_pieces[player].includes(target_piece)))){
@@ -574,6 +575,14 @@ function chess_validate(args){
 
     if(valid_move
       && args['threat'] !== true){
+        if(target_piece.length === 1){
+            for(const threefold in game['threefold']){
+                if(threefold.includes(target_piece)){
+                    delete game['threefold'][threefold];
+                }
+            }
+        }
+
         let threefold_string = '';
         for(const rank in chess_test){
             for(const square in chess_test[rank]){
