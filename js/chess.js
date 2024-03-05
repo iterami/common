@@ -250,8 +250,8 @@ function chess_validate(args){
     const piece = board[args['piece-y']][args['piece-x']];
     const target_piece = board[args['target-y']][args['target-x']];
 
-    if(fifty_moves >= 50
-      || threefold >= 3
+    if(fifty_moves >= 75
+      || threefold >= 5
       || args['piece-x'] < 0 || args['piece-x'] > 7
       || args['piece-y'] < 0 || args['piece-y'] > 7
       || args['target-x'] < 0 || args['target-x'] > 7
