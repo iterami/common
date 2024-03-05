@@ -66,12 +66,13 @@ function chess_check_row(args){
 
 // Required args: id, piece-x, piece-y, target-x, target-y
 function chess_move(args){
-    if(!chess_games[args['id']]){
+    const game = chess_games[args['id']];
+    if(!game){
         return false;
     }
 
-    const player = chess_games[args['id']]['player'];
-    const players = chess_games[args['id']]['players'];
+    const player = game['player'];
+    const players = game['players'];
     const validation = chess_validate({
       'id': args['id'],
       'piece-x': args['piece-x'],
@@ -82,10 +83,14 @@ function chess_move(args){
       'threat': false,
     });
     if(validation['valid'] || args['override'] === true){
-        const board = chess_games[args['id']]['board'];
+        const board = game['board'];
 
-        chess_games[args['id']]['50-moves'] = validation['50-moves'];
-        chess_games[args['id']]['en-passant'] = validation['en-passant'];
+        game['50-moves'] = validation['50-moves'];
+        game['en-passant'] = validation['en-passant'];
+        game['threefold-highest'] = Math.max(
+          game['threefold-highest'],
+          validation['threefold']
+        );
         let piece = board[args['piece-y']][args['piece-x']];
 
         board[args['piece-y']][args['piece-x']] = '';
@@ -116,7 +121,7 @@ function chess_move(args){
         players[player]['rook-long-moved'] = validation['rook-long-moved'];
         players[player]['rook-short-moved'] = validation['rook-short-moved'];
         board[args['target-y']][args['target-x']] = piece;
-        chess_games[args['id']]['player'] = 1 - player;
+        game['player'] = 1 - player;
 
         validation['king-checked-enemy'] = args['threat'] !== true
             && chess_threat({
@@ -130,24 +135,33 @@ function chess_move(args){
         players[1 - player]['king-checked'] = validation['king-checked-enemy'];
     }
 
-
     return validation;
 }
 
 // Required args: id
 function chess_new(args){
+    const board = [
+      [chess_pieces[1][3], chess_pieces[1][1], chess_pieces[1][2], chess_pieces[1][4], chess_pieces[1][5], chess_pieces[1][2], chess_pieces[1][1], chess_pieces[1][3],],
+      [chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0],],
+      ['', '', '', '', '', '', '', '',],
+      ['', '', '', '', '', '', '', '',],
+      ['', '', '', '', '', '', '', '',],
+      ['', '', '', '', '', '', '', '',],
+      [chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0],],
+      [chess_pieces[0][3], chess_pieces[0][1], chess_pieces[0][2], chess_pieces[0][4], chess_pieces[0][5], chess_pieces[0][2], chess_pieces[0][1], chess_pieces[0][3],],
+    ];
+    let threefold = '';
+    for(const rank in board){
+        for(const square in board[rank]){
+            threefold += board[rank][square].length === 0
+              ? ' '
+              : board[rank][square];
+        }
+    }
+
     chess_games[args['id']] = {
       '50-moves': 0,
-      'board': [
-        [chess_pieces[1][3], chess_pieces[1][1], chess_pieces[1][2], chess_pieces[1][4], chess_pieces[1][5], chess_pieces[1][2], chess_pieces[1][1], chess_pieces[1][3],],
-        [chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0],],
-        ['', '', '', '', '', '', '', '',],
-        ['', '', '', '', '', '', '', '',],
-        ['', '', '', '', '', '', '', '',],
-        ['', '', '', '', '', '', '', '',],
-        [chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0],],
-        [chess_pieces[0][3], chess_pieces[0][1], chess_pieces[0][2], chess_pieces[0][4], chess_pieces[0][5], chess_pieces[0][2], chess_pieces[0][1], chess_pieces[0][3],],
-      ],
+      'board': board,
       'en-passant': -1,
       'en-passant-taken': false,
       'player': 0,
@@ -173,6 +187,10 @@ function chess_new(args){
           'rook-short-moved': false,
         },
       ],
+      'threefold': {
+        [threefold]: 1,
+      },
+      'threefold-highest': 1,
     };
 }
 
@@ -226,9 +244,11 @@ function chess_validate(args){
     let rook_long_moved = game['players'][player]['rook-long-moved'];
     let rook_short_moved = game['players'][player]['rook-short-moved'];
     let pawn_promote = false;
+    let threefold = game['threefold-highest'];
     let valid_move = true;
 
     if(fifty_moves >= 50
+      || threefold >= 3
       || args['piece-x'] < 0 || args['piece-x'] > 7
       || args['piece-y'] < 0 || args['piece-y'] > 7
       || args['target-x'] < 0 || args['target-x'] > 7
@@ -529,8 +549,6 @@ function chess_validate(args){
                 }else{
                     king_checked = false;
                 }
-
-                chess_test.length = 0;
             }
         }
 
@@ -543,8 +561,37 @@ function chess_validate(args){
             }else{
                 fifty_moves += 0.5;
             }
+
+            if(castling
+              || en_passant !== -1
+              || en_passant_taken
+              || pawn_promote
+              || piece === chess_pieces[player][0]){
+                game['threefold'] = {};
+            }
         }
     }
+
+    if(valid_move
+      && args['threat'] !== true){
+        let threefold_string = '';
+        for(const rank in chess_test){
+            for(const square in chess_test[rank]){
+                threefold_string += chess_test[rank][square].length === 0
+                  ? ' '
+                  : chess_test[rank][square];
+            }
+        }
+        if(game['threefold'][threefold_string] === void 0){
+            game['threefold'][threefold_string] = 0;
+        }
+
+        game['threefold'][threefold_string]++;
+        threefold = game['threefold'][threefold_string];
+
+        chess_test.length = 0;
+    }
+
 
     return {
       '50-moves': fifty_moves,
@@ -558,6 +605,7 @@ function chess_validate(args){
       'pawn-promote': pawn_promote,
       'rook-long-moved': rook_long_moved,
       'rook-short-moved': rook_short_moved,
+      'threefold': threefold,
       'valid': valid_move,
     };
 }
