@@ -569,6 +569,7 @@ function chess_validate(args){
               || pawn_promote
               || piece === chess_pieces[player][0]){
                 game['threefold'] = {};
+                game['threefold-highest'] = 1;
             }
         }
     }
