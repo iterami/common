@@ -133,6 +133,9 @@ function chess_move(args){
               ],
              });
         players[1 - player]['king-checked'] = validation['king-checked-enemy'];
+        if(validation['king-checked-enemy']){
+            validation['state'] = 'check';
+        }
     }
 
     return validation;
@@ -244,6 +247,7 @@ function chess_validate(args){
     let rook_long_moved = game['players'][player]['rook-long-moved'];
     let rook_short_moved = game['players'][player]['rook-short-moved'];
     let pawn_promote = false;
+    let state = 'valid';
     let threefold = game['threefold-highest'];
     let valid_move = true;
 
@@ -252,11 +256,14 @@ function chess_validate(args){
 
     if(fifty_moves >= 75
       || threefold >= 5
-      || args['piece-x'] < 0 || args['piece-x'] > 7
+      || (game['players'][0]['pieces-taken'].length === 15 && game['players'][1]['pieces-taken'].length === 15)){
+        state = 'draw';
+        valid_move = false;
+
+    }else if(args['piece-x'] < 0 || args['piece-x'] > 7
       || args['piece-y'] < 0 || args['piece-y'] > 7
       || args['target-x'] < 0 || args['target-x'] > 7
-      || args['target-y'] < 0 || args['target-y'] > 7
-      || (game['players'][0]['pieces-taken'].length === 15 && game['players'][1]['pieces-taken'].length === 15)){
+      || args['target-y'] < 0 || args['target-y'] > 7){
         valid_move = false;
 
     }else{
@@ -545,6 +552,7 @@ function chess_validate(args){
                       king_y,
                     ],
                   })){
+                    state = 'check';
                     valid_move = false;
 
                 }else{
@@ -615,6 +623,7 @@ function chess_validate(args){
       'pawn-promote': pawn_promote,
       'rook-long-moved': rook_long_moved,
       'rook-short-moved': rook_short_moved,
+      'state': state,
       'threefold': threefold,
       'valid': valid_move,
     };
