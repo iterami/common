@@ -32,9 +32,7 @@ function audio_create(args){
 
         audio_audios[audio]['connections'][0]['id'] = audio;
         audio_audios[audio]['connections'][0]['onended'] = function(){
-            audio_onended({
-              'id': this.id,
-            });
+            audio_onended(this.id);
         };
     }
 }
@@ -85,80 +83,73 @@ function audio_node_create(args){
     audio_sources[args['id']][args['properties']['label']] = source;
 }
 
-// Required args: id
-function audio_onended(args){
-    audio_audios[args['id']]['playing'] = false;
+function audio_onended(id){
+    audio_audios[id]['playing'] = false;
 
-    if(audio_audios[args['id']]['repeat']){
-        if(audio_audios[args['id']]['timeout'] <= 0){
-            audio_start({
-              'id': args['id'],
-            });
+    if(audio_audios[id]['repeat']){
+        if(audio_audios[id]['timeout'] <= 0){
+            audio_start(id);
 
         }else{
             globalThis.setTimeout(
-              'audio_start({id:"' + args['id'] + '"});',
-              audio_audios[args['id']]['duration'] * audio_audios[args['id']]['timeout']
+              'audio_start(' + id + ');',
+              audio_audios[id]['duration'] * audio_audios[id]['timeout']
             );
         }
     }
 
-    delete audio_sources[args['id']];
+    delete audio_sources[id];
 }
 
-// Required args: id
-function audio_source_create(args){
-    audio_sources[args['id']] = {
-      'duration': audio_audios[args['id']]['duration'] || 0,
-      'start': audio_audios[args['id']]['start'] || 0,
-      'timeout': audio_audios[args['id']]['timeout'] || 1000,
+function audio_source_create(id){
+    audio_sources[id] = {
+      'duration': audio_audios[id]['duration'] || 0,
+      'start': audio_audios[id]['start'] || 0,
+      'timeout': audio_audios[id]['timeout'] || 1000,
     };
 
-    const connections_length = audio_audios[args['id']]['connections'].length;
+    const connections_length = audio_audios[id]['connections'].length;
     for(let i = 0; i < connections_length; i++){
         audio_node_create({
-          'id': args['id'],
-          'properties': audio_audios[args['id']]['connections'][i],
+          'id': id,
+          'properties': audio_audios[id]['connections'][i],
         });
 
-        if(audio_audios[args['id']]['connections'][i]['label'] === 'Gain'){
-            audio_sources[args['id']]['Gain']['gain']['value'] =
-              audio_audios[args['id']]['volume'] || core_storage_data['audio-volume'];
+        if(audio_audios[id]['connections'][i]['label'] === 'Gain'){
+            audio_sources[id]['Gain']['gain']['value'] =
+              audio_audios[id]['volume'] || core_storage_data['audio-volume'];
         }
     }
 
     for(let i = 0; i < connections_length - 1; i++){
-        audio_sources[args['id']][audio_audios[args['id']]['connections'][i]['label']].connect(
-          audio_sources[args['id']][audio_audios[args['id']]['connections'][i + 1]['label']]
+        audio_sources[id][audio_audios[id]['connections'][i]['label']].connect(
+          audio_sources[id][audio_audios[id]['connections'][i + 1]['label']]
         );
     }
-    audio_sources[args['id']][audio_audios[args['id']]['connections'][connections_length - 1]['label']].connect(
+    audio_sources[id][audio_audios[id]['connections'][connections_length - 1]['label']].connect(
       audio_context.destination
     );
 }
 
-// Required args: id
-function audio_start(args){
+function audio_start(id){
     if(audio_context === false){
         audio_init();
     }
 
-    if(audio_audios[args['id']]['playing']){
+    if(audio_audios[id]['playing']){
         audio_stop({
-          'id': args['id'],
+          'id': id,
         });
     }
 
-    audio_source_create({
-      'id': args['id'],
-    });
+    audio_source_create(id);
 
-    const startTime = audio_context.currentTime + audio_sources[args['id']]['start'];
-    audio_audios[args['id']]['playing'] = true;
-    audio_sources[args['id']][audio_audios[args['id']]['connections'][0]['label']].start(startTime);
+    const startTime = audio_context.currentTime + audio_sources[id]['start'];
+    audio_audios[id]['playing'] = true;
+    audio_sources[id][audio_audios[id]['connections'][0]['label']].start(startTime);
     audio_stop({
-      'id': args['id'],
-      'when': startTime + audio_sources[args['id']]['duration'],
+      'id': id,
+      'when': startTime + audio_sources[id]['duration'],
     });
 }
 
