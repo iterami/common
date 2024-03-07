@@ -41,6 +41,13 @@ function audio_create(args){
 
 function audio_init(){
     audio_context = new globalThis.AudioContext();
+    audio_create({
+      'audios': {
+        'boop': {
+          'duration': .1,
+        },
+      },
+    });
 }
 
 function audio_node_create(args){
@@ -53,10 +60,6 @@ function audio_node_create(args){
         },
       },
     });
-
-    if(audio_context === false){
-        audio_init();
-    }
 
     const source = audio_context['create' + args['properties']['label']](
       args['properties']['arg0'],
@@ -105,10 +108,6 @@ function audio_onended(args){
 
 // Required args: id
 function audio_source_create(args){
-    if(audio_context === false){
-        audio_init();
-    }
-
     audio_sources[args['id']] = {
       'duration': audio_audios[args['id']]['duration'] || 0,
       'start': audio_audios[args['id']]['start'] || 0,
@@ -140,6 +139,10 @@ function audio_source_create(args){
 
 // Required args: id
 function audio_start(args){
+    if(audio_context === false){
+        audio_init();
+    }
+
     if(audio_audios[args['id']]['playing']){
         audio_stop({
           'id': args['id'],
