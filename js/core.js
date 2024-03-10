@@ -377,8 +377,8 @@ function core_handle_mousemove(event){
         return;
     }
 
-    core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-sensitivity'];
-    core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-sensitivity'];
+    core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-horizontal'];
+    core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-vertical'];
     core_mouse['x'] = event.pageX;
     core_mouse['y'] = event.pageY;
     core_handle_event({
@@ -588,7 +588,8 @@ function core_init(){
       'content': '<table><tr><td><input class=mini id=audio-volume max=1 min=0 step=any type=number><td>Audio Volume'
         + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
         + '<tr><td><input class=mini id=jump type=text><td>Jump'
-        + '<tr><td><input class=mini id=mouse-sensitivity min=0 step=any type=number><td>Mouse Sensitivity'
+        + '<tr><td><input class=mini id=mouse-horizontal min=0 step=any type=number><td>Mouse Sensitivity<br>Horizontal'
+        + '<tr><td><input class=mini id=mouse-vertical min=0 step=any type=number><td>Mouse Sensitivity<br>Vertical'
         + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
         + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
         + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
@@ -605,7 +606,8 @@ function core_init(){
         'audio-volume': 1,
         'crouch': 'KeyC',
         'jump': 'Space',
-        'mouse-sensitivity': 1,
+        'mouse-horizontal': 1,
+        'mouse-vertical': 1,
         'move-←': 'KeyA',
         'move-↑': 'KeyW',
         'move-→': 'KeyD',
