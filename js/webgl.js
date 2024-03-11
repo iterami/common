@@ -108,12 +108,14 @@ function webgl_camera_rotate(args){
     }
 
     if(normals){
-        for(const entity in entity_entities){
-            if(entity_entities[entity]['attach-to'] === args['character']
-              && entity_groups['skybox'][entity] !== true){
-                webgl_entity_normals(entity);
-            }
-        }
+        entity_group_modify({
+          'groups': [
+            'webgl_characters_' + args['character'],
+          ],
+          'todo': function(entity){
+              webgl_entity_normals(entity);
+          },
+        });
     }
 }
 
@@ -357,6 +359,7 @@ function webgl_character_init(args){
     };
     webgl_character_count++;
 
+    entity_group_create(['webgl_characters_' + args['id']]);
     webgl_entity_create({
       'character': args['id'],
       'entities': args['entities'],
@@ -492,6 +495,13 @@ function webgl_character_set(id){
         'skybox',
       ],
       'todo': function(entity){
+          entity_group_move({
+            'entities': [
+              entity,
+            ],
+            'from': 'webgl_characters_' + entity_entities[entity]['attach-to'],
+            'to': 'webgl_characters_' + args['id'],
+          });
           entity_entities[entity]['attach-to'] = webgl_character_id;
       },
     });
@@ -852,6 +862,12 @@ function webgl_entity_create(args){
               'y': args['entities'][entity]['attach-y'],
               'z': args['entities'][entity]['attach-z'],
             });
+            entity_group_add({
+              'entities': [
+                entity_id,
+              ],
+              'group': 'webgl_characters_' + args['entities'][entity]['attach-to'],
+            });
         }
     }
 }
@@ -1206,6 +1222,10 @@ function webgl_level_init(args){
           || args['json']['characters'][0]['id'] !== webgl_character_id){
             return;
         }
+        entity_group_remove({
+          'delete-empty': true,
+          'group': 'webgl_characters_' + webgl_character_id,
+        });
         delete webgl_characters[webgl_character_id];
 
     }else if(args['character'] === 0
@@ -1433,7 +1453,9 @@ function webgl_level_unload(){
         delete webgl_characters[id];
     }
     webgl_character_count = 0;
-    entity_remove_all();
+    entity_remove_all({
+      'delete-empty': true,
+    });
     webgl_paths = {};
     webgl_textures_animated = {};
     core_storage_save();
@@ -3070,11 +3092,14 @@ function webgl_stat_modify(args){
             }
 
             if(args['target']['lives'] === 0){
-                for(const entity in entity_entities){
-                    if(entity_entities[entity]['attach-to'] === args['character']){
+                entity_group_modify({
+                  'groups': [
+                    'webgl_characters_' + args['target']['id'],
+                  ],
+                  'todo': function(entity){
                        entity_entities[entity]['attach-to'] = false;
-                    }
-                }
+                  },
+                });
             }
 
         }else{

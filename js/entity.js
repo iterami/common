@@ -72,7 +72,9 @@ function entity_create(args){
 // Required args: entities, group
 function entity_group_add(args){
     if(!(args['group'] in entity_groups)){
-        entity_group_create(args['group']);
+        entity_group_create([
+          args['group'],
+        ]);
     }
 
     for(const entity in args['entities']){
