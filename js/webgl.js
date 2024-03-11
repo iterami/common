@@ -138,6 +138,7 @@ function webgl_character_init(args){
         'translate-y': 0,
         'translate-z': 0,
         'turn-speed': 5,
+        'vehicle': false,
       },
     });
 
@@ -189,6 +190,7 @@ function webgl_character_init(args){
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
       'turn-speed': args['turn-speed'],
+      'vehicle': args['vehicle'],
     };
     webgl_character_count++;
 
@@ -558,7 +560,9 @@ function webgl_controls_keyboard(id){
         return;
     }
 
-    if(webgl_characters[id]['controls'] === 'rpg'){
+    if(webgl_characters[id]['vehicle'] !== false){
+
+    }else if(webgl_characters[id]['controls'] === 'rpg'){
         if((level !== -1 && webgl_properties['paused'])
           || webgl_characters[id]['health'] <= 0
           || webgl_characters[id]['path-id'].length !== 0){
@@ -3574,6 +3578,7 @@ globalThis.webgl_properties = {};
 globalThis.webgl_shader = {};
 globalThis.webgl_textures = {};
 globalThis.webgl_textures_animated = {};
+globalThis.webgl_vehicles = {};
 
 core_image({
   'id': webgl_default_texture,
