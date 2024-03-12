@@ -602,7 +602,6 @@ function webgl_controls_keyboard(id){
                   0
                 );
             }
-
             webgl_character_move({
               'id': vehicle['id'],
               'multiplier': vehicle['vehicle-stats']['speed'],
@@ -612,11 +611,9 @@ function webgl_controls_keyboard(id){
             if(core_keys[core_storage_data['move-←']]['state']){
                 turn -= vehicle['turn-speed'];
             }
-
             if(core_keys[core_storage_data['move-→']]['state']){
                 turn += vehicle['turn-speed'];
             }
-
             if(turn !== 0){
                 webgl_camera_rotate({
                   'id': vehicle['id'],
@@ -639,7 +636,6 @@ function webgl_controls_keyboard(id){
         }
 
         let leftright = 0;
-
         if(core_keys[core_storage_data['move-←']]['state']){
             if(webgl_characters[id]['camera-zoom'] === 0
               || core_mouse['down-2']){
@@ -652,7 +648,6 @@ function webgl_controls_keyboard(id){
                 });
             }
         }
-
         if(core_keys[core_storage_data['move-→']]['state']){
             if(webgl_characters[id]['camera-zoom'] === 0
               || core_mouse['down-2']){
@@ -668,7 +663,6 @@ function webgl_controls_keyboard(id){
 
         if(level === -1 || webgl_characters[id]['jump-allow']){
             let forwardback = 0;
-
             if(core_keys[core_storage_data['move-↓']]['state']){
                 webgl_characters[id]['automove'] = false;
                 if(level === -1){
@@ -679,7 +673,6 @@ function webgl_controls_keyboard(id){
                     leftright *= .5;
                 }
             }
-
             if(core_keys[core_storage_data['move-↑']]['state']
               || (core_mouse['down-0'] && core_mouse['down-2'])){
                 webgl_characters[id]['automove'] = false;
@@ -702,7 +695,6 @@ function webgl_controls_keyboard(id){
                     leftright *= .1;
                 }
             }
-
             if(core_keys[core_storage_data['jump']]['state']){
                 if(level === -1){
                     webgl_character_move({
@@ -721,7 +713,6 @@ function webgl_controls_keyboard(id){
                 forwardback *= .7071067811865475;
                 leftright *= .7071067811865475;
             }
-
             if(forwardback !== 0){
                 webgl_character_move({
                   'id': id,
