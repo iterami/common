@@ -139,6 +139,7 @@ function webgl_character_init(args){
         'translate-z': 0,
         'turn-speed': 5,
         'vehicle': false,
+        'vehicle-stats': false,
       },
     });
 
@@ -191,6 +192,7 @@ function webgl_character_init(args){
       'translate-z': args['translate-z'],
       'turn-speed': args['turn-speed'],
       'vehicle': args['vehicle'],
+      'vehicle-stats': args['vehicle-stats'],
     };
     webgl_character_count++;
 
@@ -556,19 +558,24 @@ function webgl_context_restored(event){
 
 function webgl_controls_keyboard(id){
     const level = webgl_character_level(id);
-    if(level < -1){
+    if(level < -1
+      || (level !== -1 && webgl_properties['paused'])
+      || webgl_characters[id]['health'] <= 0
+      || webgl_characters[id]['path-id'].length !== 0){
         return;
     }
 
     if(webgl_characters[id]['vehicle'] !== false){
-
-    }else if(webgl_characters[id]['controls'] === 'rpg'){
-        if((level !== -1 && webgl_properties['paused'])
-          || webgl_characters[id]['health'] <= 0
-          || webgl_characters[id]['path-id'].length !== 0){
-            return;
+        const axes = 'xyz';
+        const vehicle = webgl_characters[webgl_characters[id]['vehicle']];
+        for(const axis in axes){
+            webgl_characters[id]['change-rotate-' + axes[axis]] = 0;
+            webgl_characters[id]['change-translate-' + axes[axis]] = 0;
+            webgl_characters[id]['rotate-' + axes[axis]] = vehicle['rotate-' + axes[axis]];
+            webgl_characters[id]['translate-' + axes[axis]] = vehicle['translate-' + axes[axis]];
         }
 
+    }else if(webgl_characters[id]['controls'] === 'rpg'){
         if(id !== webgl_character_id){
             if(webgl_characters[id]['automove']
               && webgl_characters[id]['jump-allow']){
@@ -3519,6 +3526,31 @@ function webgl_uniform_update(){
     );
 }
 
+function webgl_vehicle_toggle(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': webgl_character_id,
+        'vehicle': false,
+      },
+    });
+
+    if(webgl_characters[args['id']]['vehicle'] === false){
+        if(args['vehicle'] === false
+          || webgl_characters[args['vehicle']]['vehicle-stats'] === false
+          || webgl_characters[args['vehicle']]['vehicle-stats']['character'] !== false){
+            return;
+        }
+
+        webgl_characters[args['id']]['vehicle'] = args['vehicle'];
+        webgl_characters[args['vehicle']]['vehicle-stats']['character'] = args['character'];
+
+    }else{
+        webgl_characters[args['id']]['vehicle'] = false;
+        webgl_characters[args['vehicle']]['vehicle-stats']['character'] = false;
+    }
+}
+
 // Required args: attributes, program
 function webgl_vertexattribarray_set(args){
     for(const attribute in args['attributes']){
@@ -3578,7 +3610,6 @@ globalThis.webgl_properties = {};
 globalThis.webgl_shader = {};
 globalThis.webgl_textures = {};
 globalThis.webgl_textures_animated = {};
-globalThis.webgl_vehicles = {};
 
 core_image({
   'id': webgl_default_texture,
