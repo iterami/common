@@ -572,6 +572,58 @@ function webgl_controls_keyboard(id){
             webgl_characters[id]['rotate-' + axes[axis]] = vehicle['rotate-' + axes[axis]];
             webgl_characters[id]['translate-' + axes[axis]] = vehicle['translate-' + axes[axis]];
         }
+        const vehicle_args = core_args({
+          'args': vehicle['vehicle-stats'],
+          'defaults': {
+            'speed': 0,
+            'speed-acceleration': .1,
+            'speed-deceleration': -.1,
+            'speed-max': 1,
+          },
+        });
+        if(vehicle['jump-allow']){
+            if(core_keys[core_storage_data['move-↑']]['state']
+              || (core_mouse['down-0'] && core_mouse['down-2'])){
+                vehicle['automove'] = false;
+                vehicle['vehicle-stats']['speed'] = Math.min(
+                  vehicle_args['speed'] + vehicle_args['speed-acceleration'],
+                  vehicle_args['speed-max']
+                );
+
+            }else if(webgl_characters[id]['automove']){
+                vehicle['vehicle-stats']['speed'] = Math.min(
+                  vehicle_args['speed'] + vehicle_args['speed-acceleration'],
+                  vehicle_args['speed-max']
+                );
+
+            }else{
+                vehicle['vehicle-stats']['speed'] = Math.max(
+                  vehicle_args['speed'] + vehicle_args['speed-deceleration'],
+                  0
+                );
+            }
+
+            webgl_character_move({
+              'id': vehicle['id'],
+              'multiplier': vehicle['vehicle-stats']['speed'],
+            });
+
+            let turn = 0;
+            if(core_keys[core_storage_data['move-←']]['state']){
+                turn -= vehicle['turn-speed'];
+            }
+
+            if(core_keys[core_storage_data['move-→']]['state']){
+                turn += vehicle['turn-speed'];
+            }
+
+            if(turn !== 0){
+                webgl_camera_rotate({
+                  'id': vehicle['id'],
+                  'y': turn,
+                });
+            }
+        }
 
     }else if(webgl_characters[id]['controls'] === 'rpg'){
         if(id !== webgl_character_id){
