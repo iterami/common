@@ -585,30 +585,34 @@ function webgl_controls_keyboard(id){
           },
         });
 
+        let speed = 0;
         if(core_keys[core_storage_data['move-↑']]['state']
           || (core_mouse['down-0'] && core_mouse['down-2'])){
             vehicle['automove'] = false;
-            vehicle['vehicle-stats']['speed'] = Math.min(
+            speed = Math.min(
               vehicle_args['speed'] + vehicle_args['speed-acceleration'],
               vehicle_args['speed-max']
             );
 
         }else if(webgl_characters[id]['automove']){
-            vehicle['vehicle-stats']['speed'] = Math.min(
+            speed = Math.min(
               vehicle_args['speed'] + vehicle_args['speed-acceleration'],
               vehicle_args['speed-max']
             );
 
         }else{
-            vehicle['vehicle-stats']['speed'] = Math.max(
+            speed = Math.max(
               vehicle_args['speed'] + vehicle_args['speed-deceleration'],
               0
             );
         }
-        webgl_character_move({
-          'id': vehicle['id'],
-          'multiplier': vehicle['vehicle-stats']['speed'],
-        });
+        if(speed !== 0){
+            vehicle['vehicle-stats']['speed'] = speed;
+            webgl_character_move({
+              'id': vehicle['id'],
+              'multiplier': speed,
+            });
+        }
 
         let turn = 0;
         if(core_keys[core_storage_data['move-←']]['state']){
@@ -731,6 +735,30 @@ function webgl_controls_keyboard(id){
         }
 
     }else if(webgl_characters[id]['vehicle-stats'] !== false){
+        const vehicle = webgl_characters[webgl_characters[id]['vehicle']];
+        if(!vehicle['jump-allow']){
+            return;
+        }
+        const vehicle_args = core_args({
+          'args': vehicle['vehicle-stats'],
+          'defaults': {
+            'speed': 0,
+            'speed-acceleration': .1,
+            'speed-deceleration': -.1,
+            'speed-max': 1,
+          },
+        });
+        const speed = Math.max(
+          vehicle_args['speed'] + vehicle_args['speed-deceleration'],
+          0
+        );
+        if(speed !== 0){
+            vehicle['vehicle-stats']['speed'] = speed;
+            webgl_character_move({
+              'id': vehicle['id'],
+              'multiplier': speed,
+            });
+        }
     }
 }
 
