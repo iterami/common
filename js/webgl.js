@@ -569,8 +569,6 @@ function webgl_controls_keyboard(id){
         const axes = 'xyz';
         const vehicle = webgl_characters[webgl_characters[id]['vehicle']];
         for(const axis in axes){
-            webgl_characters[id]['change-rotate-' + axes[axis]] = 0;
-            webgl_characters[id]['change-translate-' + axes[axis]] = 0;
             webgl_characters[id]['rotate-' + axes[axis]] = vehicle['rotate-' + axes[axis]];
             webgl_characters[id]['translate-' + axes[axis]] = vehicle['translate-' + axes[axis]];
         }
@@ -1504,6 +1502,10 @@ function webgl_logicloop(){
 
         webgl_path_move(id);
         webgl_controls_keyboard(id);
+
+        if(webgl_characters[id]['vehicle'] !== false){
+            continue;
+        }
 
         if(webgl_characters[id]['collides']){
             for(const entity in entity_entities){
@@ -3544,6 +3546,11 @@ function webgl_vehicle_toggle(args){
 
         webgl_characters[args['id']]['vehicle'] = args['vehicle'];
         webgl_characters[args['vehicle']]['vehicle-stats']['character'] = args['character'];
+        const axes = 'xyz';
+        for(const axis in axes){
+            webgl_characters[args['id']]['change-rotate-' + axes[axis]] = 0;
+            webgl_characters[args['id']]['change-translate-' + axes[axis]] = 0;
+        }
 
     }else{
         webgl_characters[args['id']]['vehicle'] = false;
