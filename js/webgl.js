@@ -620,6 +620,12 @@ function webgl_controls_keyboard(id){
             turn += vehicle['turn-speed'];
         }
         if(turn !== vehicle['rotate-y']){
+            turn = math_clamp({
+              'max': 360,
+              'min': 0,
+              'value': turn,
+              'wrap': true,
+            });
             const turn_speed = Math.min(
               vehicle['turn-speed'],
               Math.abs(turn - vehicle['rotate-y'])
