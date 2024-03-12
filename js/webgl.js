@@ -575,15 +575,7 @@ function webgl_controls_keyboard(id){
         if(!vehicle['jump-allow']){
             return;
         }
-        const vehicle_args = core_args({
-          'args': vehicle['vehicle-stats'],
-          'defaults': {
-            'speed': 0,
-            'speed-acceleration': .1,
-            'speed-deceleration': -.1,
-            'speed-max': 1,
-          },
-        });
+        const vehicle_args = webgl_vehicle_args(vehicle['vehicle-stats']);
 
         let speed = 0;
         if(core_keys[core_storage_data['move-↑']]['state']
@@ -735,19 +727,11 @@ function webgl_controls_keyboard(id){
         }
 
     }else if(webgl_characters[id]['vehicle-stats'] !== false){
-        if(webgl_characters[id]['vehicle-stats']['character'] !== false){
+        if(webgl_characters[id]['vehicle-stats']['character'] !== false
           || !webgl_characters[id]['jump-allow']){
             return;
         }
-        const vehicle_args = core_args({
-          'args': webgl_characters[id]['vehicle-stats'],
-          'defaults': {
-            'speed': 0,
-            'speed-acceleration': .1,
-            'speed-deceleration': -.1,
-            'speed-max': 1,
-          },
-        });
+        const vehicle_args = webgl_vehicle_args(webgl_characters[id]['vehicle-stats']);
         const speed = Math.max(
           vehicle_args['speed'] + vehicle_args['speed-deceleration'],
           0
@@ -3601,6 +3585,18 @@ function webgl_uniform_update(){
       webgl_shader['fog-state'],
       webgl_properties['fog-state']
     );
+}
+
+function webgl_vehicle_args(args){
+    return core_args({
+      'args': args,
+      'defaults': {
+        'speed': 0,
+        'speed-acceleration': .1,
+        'speed-deceleration': -.1,
+        'speed-max': 1,
+      },
+    });
 }
 
 function webgl_vehicle_toggle(args){
