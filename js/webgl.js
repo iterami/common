@@ -606,8 +606,8 @@ function webgl_controls_keyboard(id){
               0
             );
         }
+        vehicle['vehicle-stats']['speed'] = speed;
         if(speed !== 0){
-            vehicle['vehicle-stats']['speed'] = speed;
             webgl_character_move({
               'id': vehicle['id'],
               'multiplier': speed,
@@ -735,12 +735,12 @@ function webgl_controls_keyboard(id){
         }
 
     }else if(webgl_characters[id]['vehicle-stats'] !== false){
-        const vehicle = webgl_characters[webgl_characters[id]['vehicle']];
-        if(!vehicle['jump-allow']){
+        if(webgl_characters[id]['vehicle-stats']['character'] !== false){
+          || !webgl_characters[id]['jump-allow']){
             return;
         }
         const vehicle_args = core_args({
-          'args': vehicle['vehicle-stats'],
+          'args': webgl_characters[id]['vehicle-stats'],
           'defaults': {
             'speed': 0,
             'speed-acceleration': .1,
@@ -752,10 +752,10 @@ function webgl_controls_keyboard(id){
           vehicle_args['speed'] + vehicle_args['speed-deceleration'],
           0
         );
+        webgl_characters[id]['vehicle-stats']['speed'] = speed;
         if(speed !== 0){
-            vehicle['vehicle-stats']['speed'] = speed;
             webgl_character_move({
-              'id': vehicle['id'],
+              'id': id,
               'multiplier': speed,
             });
         }
