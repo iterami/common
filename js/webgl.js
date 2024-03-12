@@ -684,6 +684,8 @@ function webgl_controls_keyboard(id){
                 });
             }
         }
+
+    }else if(webgl_characters[id]['vehicle-stats'] !== false){
     }
 }
 
