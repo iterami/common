@@ -75,11 +75,17 @@ function webgl_camera_rotate(args){
           || (mouse_check
             && webgl_character_level(args['character']) > -2
             && webgl_characters[args['character']]['health'] > 0)){
-            webgl_characters[args['character']]['rotate-y'] = core_mouse['down-2']
+            const rotation = core_mouse['down-2']
               ? webgl_characters[args['character']]['camera-rotate-y']
               : args['set']
                 ? args['y']
                 : webgl_characters[args['character']]['rotate-y'] + args['y'];
+            if(webgl_characters[args['character']]['vehicle'] === false){
+                webgl_characters[args['character']]['rotate-y'] = rotation;
+
+            }else{
+                webgl_characters[webgl_characters[args['character']]]['vehicle-stats']['rotate-target'] = rotation;
+            }
             normals = true;
         }
 
@@ -606,17 +612,24 @@ function webgl_controls_keyboard(id){
             });
         }
 
-        let turn = 0;
+        let turn = vehicle_args['rotate-target'];
         if(core_keys[core_storage_data['move-←']]['state']){
             turn -= vehicle['turn-speed'];
         }
         if(core_keys[core_storage_data['move-→']]['state']){
             turn += vehicle['turn-speed'];
         }
-        if(turn !== 0){
+        if(turn !== vehicle['rotate-y']){
+            const turn_speed = Math.min(
+              vehicle['turn-speed'],
+              Math.abs(turn - vehicle['rotate-y'])
+            );
+            const turn_change = turn_speed * Math.sign(turn - vehicle['rotate-y']);
+
             webgl_camera_rotate({
+              'camera': !core_mouse['down-2'],
               'id': vehicle['id'],
-              'y': turn,
+              'y': turn_change,
             });
         }
 
@@ -3591,6 +3604,8 @@ function webgl_vehicle_args(args){
     return core_args({
       'args': args,
       'defaults': {
+        'character': false,
+        'rotate-target': 0,
         'speed': 0,
         'speed-acceleration': .1,
         'speed-deceleration': -.1,
