@@ -2114,10 +2114,6 @@ function webgl_pick_entity(args){
     }
 
     for(const entity in entity_entities){
-        if(entity_entities[entity]['event-range'] === false){
-            continue;
-        }
-
         const entity_color = entity_entities[entity]['pick-color'];
 
         if(color_blue === entity_color[2]
