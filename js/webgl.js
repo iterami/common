@@ -57,13 +57,14 @@ function webgl_camera_rotate(args){
             continue;
         }
 
-        if(webgl_characters[args['character']]['vehicle'] === false
-          || (webgl_characters[args['character']]['vehicle'] !== false && prefix === 'camera-rotate-')){
-            if(!args['set']){
-                axis_value += webgl_characters[args['character']][prefix + axes[axis]];
-            }
-            webgl_characters[args['character']][prefix + axes[axis]] = axis_value;
+        if(!args['set']){
+            axis_value += webgl_characters[args['character']][prefix + axes[axis]];
         }
+        webgl_characters[args['character']][prefix + axes[axis]] = axis_value;
+    }
+
+    if(webgl_characters[args['character']]['vehicle'] !== false){
+        return;
     }
 
     let normals = false;
@@ -646,8 +647,11 @@ function webgl_controls_keyboard(id){
                     webgl_characters[id]['camera-rotate-y'] += turn_change;
                 }
                 webgl_clamp_rotation(vehicle);
-                webgl_clamp_rotation(webgl_characters[id]);
             }
+            if(core_mouse['down-2']){
+                webgl_characters[id]['camera-rotate-y'] = vehicle['vehicle-stats']['rotate-target'];
+            }
+            webgl_clamp_rotation(webgl_characters[id]);
         }
 
     }else if(webgl_characters[id]['controls'] === 'rpg'){
