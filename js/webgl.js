@@ -121,7 +121,7 @@ function webgl_character_init(args){
         'controls': '',
         'entities': [],
         'experience': 0,
-        'gravity': false,
+        'gravity': 0,
         'health': 1,
         'health-max': 1,
         'id': webgl_character_id,
@@ -304,7 +304,7 @@ function webgl_character_random(args){
       'collide-range-y': y,
       'collides': true,
       'controls': 'rpg',
-      'gravity': true,
+      'gravity': 1,
       'id': args['id'],
       'jump-height': args['jump-height'],
       'level': args['level'],
@@ -1595,11 +1595,10 @@ function webgl_logicloop(){
             continue;
         }
 
-        if(level >= 0
-          && webgl_characters[id]['gravity']){
+        if(webgl_characters[id]['gravity'] !== 0){
             webgl_characters[id]['change-translate-y'] = Math.max(
-              webgl_characters[id]['change-translate-y'] + webgl_properties['gravity-acceleration'],
-              webgl_properties['gravity-max']
+              webgl_characters[id]['change-translate-y'] + webgl_properties['gravity-acceleration'] * webgl_characters[id]['gravity'],
+              webgl_properties['gravity-max'] * webgl_characters[id]['gravity']
             );
         }
 
