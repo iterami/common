@@ -284,6 +284,7 @@ function webgl_character_random(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'gravity': 1,
         'height-base': 2,
         'height-random': 5,
         'id': webgl_character_count,
@@ -304,7 +305,7 @@ function webgl_character_random(args){
       'collide-range-y': y,
       'collides': true,
       'controls': 'rpg',
-      'gravity': 1,
+      'gravity': args['gravity'],
       'id': args['id'],
       'jump-height': args['jump-height'],
       'level': args['level'],
