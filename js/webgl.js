@@ -632,7 +632,7 @@ function webgl_controls_keyboard(id){
             });
         }
 
-        let turn = vehicle['vehicle-stats']['rotate-target'];
+        let turn = 0;
         if(core_keys[core_storage_data['move-←']]['state']){
             turn -= vehicle['turn-speed'];
         }
@@ -640,23 +640,22 @@ function webgl_controls_keyboard(id){
             turn += vehicle['turn-speed'];
         }
         if(turn !== vehicle['rotate-y']){
-            turn = math_clamp({
+            vehicle['vehicle-stats']['rotate-target'] = math_clamp({
               'max': 360,
               'min': 0,
-              'value': turn,
+              'value': vehicle['vehicle-stats']['rotate-target'] + turn,
               'wrap': true,
             });
-            const turn_speed = Math.min(
-              vehicle['turn-speed'],
-              Math.abs(turn - vehicle['rotate-y'])
-            );
-            const turn_change = turn_speed * Math.sign(turn - vehicle['rotate-y']);
+
+            const turn_change = vehicle['turn-speed'] * Math.sign(vehicle['vehicle-stats']['rotate-target'] - vehicle['rotate-y']);
 
             webgl_camera_rotate({
               'camera': core_mouse['down-2'],
               'id': vehicle['id'],
               'y': turn_change,
             });
+            webgl_characters[id]['camera-rotate-y'] += turn_change;
+            webgl_clamp_rotation(webgl_characters[id]);
         }
 
     }else if(webgl_characters[id]['controls'] === 'rpg'){
