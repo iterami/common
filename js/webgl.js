@@ -779,7 +779,7 @@ function webgl_controls_keyboard(id){
         if(speed !== 0){
             webgl_character_move({
               'id': id,
-              'multiplier': speed,
+              'multiplier': -speed,
             });
         }
     }
