@@ -990,11 +990,13 @@ function webgl_entity_init(entity){
     const pickData = [];
     const textureData = [];
     for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
-        pickData.push(
-          entity_entities[entity]['pick-color'][0],
-          entity_entities[entity]['pick-color'][1],
-          entity_entities[entity]['pick-color'][2],
-        );
+        if(entity_entities[entity]['pick-color'] !== false){
+            pickData.push(
+              entity_entities[entity]['pick-color'][0],
+              entity_entities[entity]['pick-color'][1],
+              entity_entities[entity]['pick-color'][2],
+            );
+        }
         textureData.push(
           entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-repeat-x'],
           entity_entities[entity]['texture-align'][i * 2 + 1] * entity_entities[entity]['texture-repeat-y']
@@ -1017,11 +1019,13 @@ function webgl_entity_init(entity){
       'data': entity_entities[entity]['normals'],
       'size': 3,
     });
-    webgl_buffer_set({
-      'attribute': 'vec_pickColor',
-      'data': pickData,
-      'size': 3,
-    });
+    if(entity_entities[entity]['pick-color'] !== false){
+        webgl_buffer_set({
+          'attribute': 'vec_pickColor',
+          'data': pickData,
+          'size': 3,
+        });
+    }
     webgl_buffer_set({
       'attribute': 'vec_texturePosition',
       'data': textureData,
@@ -1216,7 +1220,7 @@ function webgl_init(){
         'event-target-type': 'character',
         'event-todo': false,
         'normals': [],
-        'pick-color': [0, 0, 0,],
+        'pick-color': false,
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
@@ -2116,7 +2120,8 @@ function webgl_pick_entity(args){
     for(const entity in entity_entities){
         const entity_color = entity_entities[entity]['pick-color'];
 
-        if(color_blue === entity_color[2]
+        if(entity_color !== false
+          && color_blue === entity_color[2]
           && color_green === entity_color[1]
           && color_red === entity_color[0]){
             webgl_event({
