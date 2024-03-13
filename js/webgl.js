@@ -199,7 +199,7 @@ function webgl_character_init(args){
       'translate-y': args['translate-y'],
       'translate-z': args['translate-z'],
       'turn-speed': args['turn-speed'],
-      'vehicle': args['vehicle'],
+      'vehicle': false,
       'vehicle-stats': args['vehicle-stats'] === false
         ? false
         : core_args({
