@@ -1589,6 +1589,12 @@ function webgl_logicloop(){
             continue;
         }
 
+        webgl_controls_keyboard(id);
+
+        if(webgl_characters[id]['vehicle'] !== false){
+            continue;
+        }
+
         if(level >= 0
           && webgl_characters[id]['gravity']){
             webgl_characters[id]['change-translate-y'] = Math.max(
@@ -1598,11 +1604,6 @@ function webgl_logicloop(){
         }
 
         webgl_path_move(id);
-        webgl_controls_keyboard(id);
-
-        if(webgl_characters[id]['vehicle'] !== false){
-            continue;
-        }
 
         if(webgl_characters[id]['collides']){
             for(const entity in entity_entities){
