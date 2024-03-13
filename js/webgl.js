@@ -77,17 +77,11 @@ function webgl_camera_rotate(args){
           || (mouse_check
             && webgl_character_level(args['character']) > -2
             && webgl_characters[args['character']]['health'] > 0)){
-            const rotation = core_mouse['down-2']
+            webgl_characters[args['character']]['rotate-y'] = core_mouse['down-2']
               ? webgl_characters[args['character']]['camera-rotate-y']
               : args['set']
                 ? args['y']
                 : webgl_characters[args['character']]['rotate-y'] + args['y'];
-            if(webgl_characters[args['character']]['vehicle'] === false){
-                webgl_characters[args['character']]['rotate-y'] = rotation;
-
-            }else{
-                webgl_characters[webgl_characters[args['character']]['vehicle']]['vehicle-stats']['rotate-target'] = rotation;
-            }
             normals = true;
         }
 
@@ -636,26 +630,21 @@ function webgl_controls_keyboard(id){
         const rotate_diff = vehicle['vehicle-stats']['rotate-target'] - vehicle['rotate-y'];
         if(turn !== 0
           || rotate_diff !== 0){
-            turn = rotate_diff !== 0
-              ? Math.abs(rotate_diff)
-              : turn;
             const unclamped = vehicle['vehicle-stats']['rotate-target'] + turn;
-            vehicle['vehicle-stats']['rotate-target'] = math_clamp({
-              'max': 360,
-              'min': 0,
-              'value': unclamped,
-              'wrap': true,
-            });
+            if(turn !== 0){
+                vehicle['vehicle-stats']['rotate-target'] = math_clamp({
+                  'max': 360,
+                  'min': 0,
+                  'value': unclamped,
+                  'wrap': true,
+                });
+            }
             const turn_change = vehicle['turn-speed'] * Math.sign(unclamped - vehicle['rotate-y']);
-
-            webgl_camera_rotate({
-              'camera': core_mouse['down-2'],
-              'id': vehicle['id'],
-              'y': turn_change,
-            });
-            vehicle['rotate-y'] += turn_change;
-            webgl_characters[id]['camera-rotate-y'] += turn_change;
-            webgl_clamp_rotation(webgl_characters[id]);
+            if(rotate_diff !== 0){
+                vehicle['rotate-y'] += turn_change;
+                webgl_characters[id]['camera-rotate-y'] += turn_change;
+            }
+            webgl_clamp_rotation(vehicle);
         }
 
     }else if(webgl_characters[id]['controls'] === 'rpg'){
