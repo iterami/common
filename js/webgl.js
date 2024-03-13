@@ -637,14 +637,13 @@ function webgl_controls_keyboard(id){
         const rotate_diff = target - vehicle['rotate-y'];
         if(turn !== 0
           || rotate_diff !== 0){
-            const unclamped = target + turn;
             vehicle['vehicle-stats']['rotate-target'] = math_clamp({
               'max': 360,
               'min': 0,
-              'value': unclamped,
+              'value': target + turn,
               'wrap': true,
             });
-            const turn_change = vehicle['turn-speed'] * Math.sign(unclamped - vehicle['rotate-y'] - rotate_diff);
+            const turn_change = vehicle['turn-speed'] * Math.sign(turn);
             vehicle['rotate-y'] += turn_change;
             if(core_mouse['down-2']){
                 webgl_characters[id]['camera-rotate-y'] = vehicle['vehicle-stats']['rotate-target'];
