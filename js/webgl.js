@@ -1097,11 +1097,11 @@ function webgl_event(args){
     }
 
     if(args['parent']['event-limit'] !== false){
-        args['parent']['event-limit']--;
-
         if(args['parent']['event-limit'] <= 0){
-            args['parent']['event-range'] = false;
+            return;
         }
+
+        args['parent']['event-limit']--;
     }
 
     for(const stat in args['parent']['event-modify']){
