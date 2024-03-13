@@ -57,11 +57,19 @@ function webgl_camera_rotate(args){
             continue;
         }
 
-        if(!args['set']){
-            axis_value += webgl_characters[args['character']][prefix + axes[axis]];
-        }
+        if(webgl_characters[args['character']]['vehicle'] === false
+          || prefix === 'camera-rotate-'){
+            if(!args['set']){
+                axis_value += webgl_characters[args['character']][prefix + axes[axis]];
+            }
+            webgl_characters[args['character']][prefix + axes[axis]] = axis_value;
 
-        webgl_characters[args['character']][prefix + axes[axis]] = axis_value;
+        }else{
+            if(!args['set']){
+                axis_value += webgl_characters[webgl_characters[args['character']]['vehicle']]['rotate-' + axes[axis]];
+            }
+            webgl_characters[webgl_characters[args['character']]['vehicle']]['rotate-' + axes[axis]] = axis_value;
+        }
     }
 
     let normals = false;
