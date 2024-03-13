@@ -620,7 +620,7 @@ function webgl_controls_keyboard(id){
         if(speed !== 0){
             webgl_character_move({
               'id': vehicle['id'],
-              'multiplier': speed,
+              'multiplier': -speed,
             });
         }
 
@@ -645,7 +645,7 @@ function webgl_controls_keyboard(id){
             const turn_change = turn_speed * Math.sign(turn - vehicle['rotate-y']);
 
             webgl_camera_rotate({
-              'camera': !core_mouse['down-2'],
+              'camera': core_mouse['down-2'],
               'id': vehicle['id'],
               'y': turn_change,
             });
