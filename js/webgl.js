@@ -625,6 +625,12 @@ function webgl_controls_keyboard(id){
         let turn = 0;
         if(core_mouse['down-2']){
             target += core_mouse['movement-x'] / 10;
+            const direction = target < vehicle['rotate-y']
+              ? Math.abs(target - vehicle['rotate-y']) < 180
+              : (target - vehicle['rotate-y']) > 180;
+            turn = vehicle['turn-speed'] * (direction
+              ? -1
+              : 1);
 
         }else{
             if(core_keys[core_storage_data['move-←']]['state']){
