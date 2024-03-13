@@ -639,12 +639,15 @@ function webgl_controls_keyboard(id){
                   'wrap': true,
                 });
             }
-            const turn_change = vehicle['turn-speed'] * Math.sign(unclamped - vehicle['rotate-y']);
+            const turn_change = vehicle['turn-speed'] * Math.sign(unclamped - vehicle['rotate-y'] - rotate_diff);
             if(rotate_diff !== 0){
                 vehicle['rotate-y'] += turn_change;
-                webgl_characters[id]['camera-rotate-y'] += turn_change;
+                if(!core_mouse['down-0']){
+                    webgl_characters[id]['camera-rotate-y'] += turn_change;
+                }
+                webgl_clamp_rotation(vehicle);
+                webgl_clamp_rotation(webgl_characters[id]);
             }
-            webgl_clamp_rotation(vehicle);
         }
 
     }else if(webgl_characters[id]['controls'] === 'rpg'){
