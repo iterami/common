@@ -634,9 +634,8 @@ function webgl_controls_keyboard(id){
                 turn += vehicle['turn-speed'];
             }
         }
-        const rotate_diff = target - vehicle['rotate-y'];
         if(turn !== 0
-          || rotate_diff !== 0){
+          || core_mouse['down-2']){
             vehicle['vehicle-stats']['rotate-target'] = math_clamp({
               'max': 360,
               'min': 0,
