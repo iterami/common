@@ -198,16 +198,16 @@ function webgl_character_init(args){
       'vehicle-stats': args['vehicle-stats'] === false
         ? false
         : core_args({
-          'args': args['vehicle-stats'],
-          'defaults': {
-            'character': false,
-            'rotate-target': 0,
-            'speed': 0,
-            'speed-acceleration': .1,
-            'speed-deceleration': -.1,
-            'speed-max': 1,
-          },
-        }),
+            'args': args['vehicle-stats'],
+            'defaults': {
+              'character': false,
+              'rotate-target': 0,
+              'speed': 0,
+              'speed-acceleration': .1,
+              'speed-deceleration': -.1,
+              'speed-max': 1,
+            },
+          }),
     };
     webgl_character_count++;
 
