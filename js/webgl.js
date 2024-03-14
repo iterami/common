@@ -1089,10 +1089,9 @@ function webgl_event(args){
         return;
     }
 
-    if(args['parent']['event-target-type'] === 'character'){
-        if(webgl_character_level(args['target']['id']) < -1){
-            return;
-        }
+    if(args['parent']['event-target-type'] === 'character'
+      && webgl_character_level(args['target']['id']) < -1){
+        return;
     }
 
     if(args['parent']['event-limit'] !== false){
