@@ -3645,7 +3645,7 @@ function webgl_vehicle_toggle(args){
             webgl_characters[args['id']]['change-rotate-' + axes[axis]] = 0;
             webgl_characters[args['id']]['change-translate-' + axes[axis]] = 0;
         }
-        webgl_characters[args['id']]['camera-rotate-y'] = webgl_characters[args['vehicle']]['camera-rotate-y'];
+        webgl_characters[args['id']]['camera-rotate-y'] = webgl_characters[args['vehicle']]['rotate-y'];
 
     }else{
         webgl_characters[args['id']]['vehicle'] = false;
