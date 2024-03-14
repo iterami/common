@@ -2900,16 +2900,13 @@ function webgl_program_create(shaders){
 }
 
 function webgl_resize(){
-    const height = globalThis.innerHeight;
-    const width = globalThis.innerWidth;
-    webgl.canvas.height = height;
-    webgl.canvas.width = width;
-
+    webgl.canvas.height = globalThis.innerHeight;
+    webgl.canvas.width = globalThis.innerWidth;
     webgl.viewport(
       0,
       0,
-      width,
-      height
+      webgl.drawingBufferWidth,
+      webgl.drawingBufferHeight
     );
 
     math_matrices['perspective'][0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
@@ -2918,6 +2915,7 @@ function webgl_resize(){
       false,
       math_matrices['perspective']
     );
+
     if(core_menu_open){
         webgl_draw();
     }
