@@ -500,9 +500,8 @@ function webgl_collision(args){
             args['collider']['change-translate-' + collision] = 0;
 
             if(collision === 'y'){
-                if(args['collider']['jump-allow'] === false
-                  && webgl_properties['gravity-max'] / webgl_properties['gravity-max'] === collision_sign){
-                    args['collider']['jump-allow'] = true;
+                if(args['collider']['jump-allow'] === false){
+                    args['collider']['jump-allow'] = collision_sign !== Math.sign(webgl_properties['gravity-max']);
                 }
 
                 if(args['target']['attach-to']){
