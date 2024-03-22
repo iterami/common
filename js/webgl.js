@@ -1170,6 +1170,7 @@ function webgl_init(){
     );
     webgl = webgl_context('canvas');
 
+    math_matrices['cache'] = math_matrix_create();
     math_matrices['camera'] = math_matrix_create();
     math_matrices['perspective'] = math_matrix_create();
     math_matrices['perspective'][5] = 1;

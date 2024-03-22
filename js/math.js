@@ -215,60 +215,59 @@ function math_matrix_identity(id){
 
 // Required args: dimensions, id
 function math_matrix_rotate(args){
-    const cache_id = 'rotate-cache-' + args['id'];
-
     // Rotate X.
-    math_matrix_clone({
+    math_matrix_copy({
       'id': args['id'],
-      'to': cache_id,
+      'to': 'cache',
     });
+    let cache = math_matrices['cache'];
     let cosine = Math.cos(args['dimensions'][0]);
     let sine = Math.sin(args['dimensions'][0]);
 
-    math_matrices[args['id']][4] = math_matrices[cache_id][4] * cosine + math_matrices[cache_id][8] * sine;
-    math_matrices[args['id']][5] = math_matrices[cache_id][5] * cosine + math_matrices[cache_id][9] * sine;
-    math_matrices[args['id']][6] = math_matrices[cache_id][6] * cosine + math_matrices[cache_id][10] * sine;
-    math_matrices[args['id']][7] = math_matrices[cache_id][7] * cosine + math_matrices[cache_id][11] * sine;
-    math_matrices[args['id']][8] = math_matrices[cache_id][8] * cosine - math_matrices[cache_id][4] * sine;
-    math_matrices[args['id']][9] = math_matrices[cache_id][9] * cosine - math_matrices[cache_id][5] * sine;
-    math_matrices[args['id']][10] = math_matrices[cache_id][10] * cosine - math_matrices[cache_id][6] * sine;
-    math_matrices[args['id']][11] = math_matrices[cache_id][11] * cosine - math_matrices[cache_id][7] * sine;
+    math_matrices[args['id']][4] = cache[4] * cosine + cache[8] * sine;
+    math_matrices[args['id']][5] = cache[5] * cosine + cache[9] * sine;
+    math_matrices[args['id']][6] = cache[6] * cosine + cache[10] * sine;
+    math_matrices[args['id']][7] = cache[7] * cosine + cache[11] * sine;
+    math_matrices[args['id']][8] = cache[8] * cosine - cache[4] * sine;
+    math_matrices[args['id']][9] = cache[9] * cosine - cache[5] * sine;
+    math_matrices[args['id']][10] = cache[10] * cosine - cache[6] * sine;
+    math_matrices[args['id']][11] = cache[11] * cosine - cache[7] * sine;
 
     // Rotate Y.
     math_matrix_copy({
       'id': args['id'],
-      'to': cache_id,
+      'to': 'cache',
     });
+    cache = math_matrices['cache'];
     cosine = Math.cos(args['dimensions'][1]);
     sine = Math.sin(args['dimensions'][1]);
 
-    math_matrices[args['id']][0] = math_matrices[cache_id][0] * cosine - math_matrices[cache_id][8] * sine;
-    math_matrices[args['id']][1] = math_matrices[cache_id][1] * cosine - math_matrices[cache_id][9] * sine;
-    math_matrices[args['id']][2] = math_matrices[cache_id][2] * cosine - math_matrices[cache_id][10] * sine;
-    math_matrices[args['id']][3] = math_matrices[cache_id][3] * cosine - math_matrices[cache_id][11] * sine;
-    math_matrices[args['id']][8] = math_matrices[cache_id][8] * cosine + math_matrices[cache_id][0] * sine;
-    math_matrices[args['id']][9] = math_matrices[cache_id][9] * cosine + math_matrices[cache_id][1] * sine;
-    math_matrices[args['id']][10] = math_matrices[cache_id][10] * cosine + math_matrices[cache_id][2] * sine;
-    math_matrices[args['id']][11] = math_matrices[cache_id][11] * cosine + math_matrices[cache_id][3] * sine;
+    math_matrices[args['id']][0] = cache[0] * cosine - cache[8] * sine;
+    math_matrices[args['id']][1] = cache[1] * cosine - cache[9] * sine;
+    math_matrices[args['id']][2] = cache[2] * cosine - cache[10] * sine;
+    math_matrices[args['id']][3] = cache[3] * cosine - cache[11] * sine;
+    math_matrices[args['id']][8] = cache[8] * cosine + cache[0] * sine;
+    math_matrices[args['id']][9] = cache[9] * cosine + cache[1] * sine;
+    math_matrices[args['id']][10] = cache[10] * cosine + cache[2] * sine;
+    math_matrices[args['id']][11] = cache[11] * cosine + cache[3] * sine;
 
     // Rotate Z.
     math_matrix_copy({
       'id': args['id'],
-      'to': cache_id,
+      'to': 'cache',
     });
+    cache = math_matrices['cache'];
     cosine = Math.cos(args['dimensions'][2]);
     sine = Math.sin(args['dimensions'][2]);
 
-    math_matrices[args['id']][0] = math_matrices[cache_id][0] * cosine + math_matrices[cache_id][4] * sine;
-    math_matrices[args['id']][1] = math_matrices[cache_id][1] * cosine + math_matrices[cache_id][5] * sine;
-    math_matrices[args['id']][2] = math_matrices[cache_id][2] * cosine + math_matrices[cache_id][6] * sine;
-    math_matrices[args['id']][3] = math_matrices[cache_id][3] * cosine + math_matrices[cache_id][7] * sine;
-    math_matrices[args['id']][4] = math_matrices[cache_id][4] * cosine - math_matrices[cache_id][0] * sine;
-    math_matrices[args['id']][5] = math_matrices[cache_id][5] * cosine - math_matrices[cache_id][1] * sine;
-    math_matrices[args['id']][6] = math_matrices[cache_id][6] * cosine - math_matrices[cache_id][2] * sine;
-    math_matrices[args['id']][7] = math_matrices[cache_id][7] * cosine - math_matrices[cache_id][3] * sine;
-
-    math_matrix_delete([cache_id]);
+    math_matrices[args['id']][0] = cache[0] * cosine + cache[4] * sine;
+    math_matrices[args['id']][1] = cache[1] * cosine + cache[5] * sine;
+    math_matrices[args['id']][2] = cache[2] * cosine + cache[6] * sine;
+    math_matrices[args['id']][3] = cache[3] * cosine + cache[7] * sine;
+    math_matrices[args['id']][4] = cache[4] * cosine - cache[0] * sine;
+    math_matrices[args['id']][5] = cache[5] * cosine - cache[1] * sine;
+    math_matrices[args['id']][6] = cache[6] * cosine - cache[2] * sine;
+    math_matrices[args['id']][7] = cache[7] * cosine - cache[3] * sine;
 }
 
 // Required args: id
