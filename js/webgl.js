@@ -69,6 +69,10 @@ function webgl_camera_rotate(args){
 
     let normals = false;
     if(args['camera']){
+        if(args['y'] === false){
+            return;
+        }
+
         const mouse_check = core_mouse['down-2']
           || (!core_mouse['down-0']
             && !core_mouse['down-2'])
