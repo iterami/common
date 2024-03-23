@@ -854,28 +854,25 @@ function core_keys_mobile(){
 }
 
 function core_keys_rebind(){
-    const keybinds = {};
-    keybinds[core_storage_data['crouch']] = {};
-    keybinds[core_storage_data['jump']] = {};
-    keybinds[core_storage_data['move-←']] = {};
-    keybinds[core_storage_data['move-↑']] = {};
-    keybinds[core_storage_data['move-→']] = {};
-    keybinds[core_storage_data['move-↓']] = {};
-    Object.assign(
-      keybinds,
-      core_key_rebinds
-    );
-    keybinds['Escape'] = {
-      'solo': true,
-      'todo': core_escape,
-    };
-    keybinds[core_storage_data['reset']] = {
-      'solo': true,
-      'todo': core_repo_reset,
-    };
     core_events_bind({
       'clearkeys': true,
-      'keybinds': keybinds,
+      'keybinds': {
+        'Escape': {
+          'solo': true,
+          'todo': core_escape,
+        },
+        [core_storage_data['crouch']]: {},
+        [core_storage_data['jump']]: {},
+        [core_storage_data['move-←']]: {},
+        [core_storage_data['move-↑']]: {},
+        [core_storage_data['move-→']]: {},
+        [core_storage_data['move-↓']]: {},
+        [core_storage_data['reset']]: {
+          'solo': true,
+          'todo': core_repo_reset,
+        },
+        ...core_key_rebinds,
+      },
     });
 }
 
