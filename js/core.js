@@ -469,10 +469,11 @@ function core_html(args){
       },
     });
 
-    const existing_element = document.getElementById(args['properties']['id']);
-    if(args['properties']['id']
-      && existing_element){
-        return existing_element;
+    if(args['properties']['id']){
+        const existing_element = document.getElementById(args['properties']['id']);
+        if(existing_element){
+            return existing_element;
+        }
     }
 
     const element = document.createElement(args['type']);
@@ -1241,7 +1242,7 @@ function core_round(args){
 
     if(Number.isNaN(result)
       || Math.abs(result) < Number('1e-' + args['decimals'])){
-        result = 0;
+        return 0;
     }
 
     return result;
@@ -1285,11 +1286,10 @@ function core_sort_property(args){
       'todo': function(a, b){
           if(a[args['property']] > b[args['property']]){
               return 1;
-
-          }else if(a[args['property']] < b[args['property']]){
+          }
+          if(a[args['property']] < b[args['property']]){
               return -1;
           }
-
           return 0;
       },
     });
@@ -1503,15 +1503,14 @@ function core_type(variable){
 function core_type_convert(args){
     if(core_type(args['template']) === 'string'){
         return String(args['value']);
-
-    }else if(!Number.isNaN(Number.parseFloat(args['template']))){
+    }
+    if(!Number.isNaN(Number.parseFloat(args['template']))){
         return Number.parseFloat(args['value']);
-
-    }else if(core_type(args['template']) === 'boolean'
+    }
+    if(core_type(args['template']) === 'boolean'
       && core_type(args['value']) !== 'boolean'){
         return args['value'] === 'true';
     }
-
     return args['value'];
 }
 
