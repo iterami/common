@@ -97,23 +97,9 @@ function entity_group_create(ids){
 
 // Required args: groups, todo
 function entity_group_modify(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'pretodo': false,
-      },
-    });
-
-    const pretodo = {};
-    if(args['pretodo'] !== false){
-        pretodo = args['pretodo']();
-    }
     for(const group in args['groups']){
         for(const entity in entity_groups[args['groups'][group]]){
-            args['todo'](
-              entity,
-              pretodo
-            );
+            args['todo'](entity);
         }
     }
 }
