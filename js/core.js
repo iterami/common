@@ -67,18 +67,18 @@ function core_escape(force){
     }
 
     if(!core_menu_open){
-        document.getElementById('core-toggle').blur();
+        core_elements['core-toggle'].blur();
         core_storage_save();
-        document.getElementById('core-menu').style.display = 'none';
-        document.getElementById('core-ui').style.userSelect = 'none';
-        document.getElementById('repo-ui').style.display = 'inline';
+        core_elements['core-menu'].style.display = 'none';
+        core_elements['core-ui'].style.userSelect = 'none';
+        core_elements['repo-ui'].style.display = 'inline';
         core_interval_resume_all();
 
     }else{
         core_interval_pause_all();
-        document.getElementById('repo-ui').style.display = 'none';
-        document.getElementById('core-ui').style.userSelect = 'auto';
-        document.getElementById('core-menu').style.display = 'inline';
+        core_elements['repo-ui'].style.display = 'none';
+        core_elements['core-ui'].style.userSelect = 'auto';
+        core_elements['core-menu'].style.display = 'inline';
     }
 
     core_call({
@@ -555,6 +555,7 @@ function core_init(){
       'properties': {
         'id': 'core-ui',
       },
+      'store': 'core-ui',
       'todo': 'prepend',
     });
     core_html({
@@ -564,6 +565,7 @@ function core_init(){
         'onclick': core_escape,
         'textContent': '☰',
       },
+      'store': 'core-toggle',
       'type': 'button',
     });
     core_html({
@@ -575,6 +577,7 @@ function core_init(){
           + '<button id=storage-save type=button>Save All Settings</button><button id=mobile-add type=button>Mobile</button><br>',
         'style': 'display:none',
       },
+      'store': 'core-menu',
       'type': 'span',
     });
     core_html({
@@ -582,6 +585,7 @@ function core_init(){
       'properties': {
         'id': 'repo-ui',
       },
+      'store': 'repo-ui',
       'type': 'span',
     });
 
@@ -799,7 +803,7 @@ function core_interval_sync(args){
 
 function core_keys_mobile(){
     const mobile_ui = core_html({
-      'parent': document.getElementById('core-ui'),
+      'parent': core_elements['core-ui'],
       'properties': {
         'id': 'mobile-ui',
         'style': 'display:none',
@@ -1139,7 +1143,7 @@ function core_repo_init(args){
         'textContent': core_repo_title,
       },
     });
-    document.getElementById('repo-ui').innerHTML = args['ui'];
+    core_elements['repo-ui'].innerHTML = args['ui'];
 
     let have_default = false;
     for(const tab in args['tabs']){

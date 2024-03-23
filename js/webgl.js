@@ -3298,7 +3298,7 @@ function webgl_texture_animate_init(args){
     });
 
     core_html({
-      'parent': document.getElementById('repo-ui'),
+      'parent': core_elements['repo-ui'],
       'properties': {
         'className': 'hidden',
         'id': 'webgl-animated-textures',
