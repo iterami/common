@@ -20,9 +20,7 @@ function canvas_draw(){
 
     }else{
         canvas_setproperties({
-          'properties': {
-            'fillStyle': canvas_properties['clearColor'],
-          },
+          'fillStyle': canvas_properties['clearColor'],
         });
         canvas.fillRect(
           0,
@@ -77,10 +75,7 @@ function canvas_draw_path(args){
     }
     canvas.closePath();
 
-    canvas_setproperties({
-      'properties': args['properties'],
-    });
-
+    canvas_setproperties(args['properties']);
     canvas[args['style']]();
 
     if(args['translate']){
@@ -125,19 +120,17 @@ function canvas_init(args){
     });
 
     canvas_setproperties({
-      'properties': {
-        'clearColor': '#000',
-        'fillStyle': '#fff',
-        'font': '200% monospace',
-        'height': 0,
-        'lineJoin': 'miter',
-        'lineWidth': 1,
-        'strokeStyle': '#fff',
-        'style': 'fill',
-        'textAlign': 'start',
-        'textBaseline': 'alphabetic',
-        'width': 0,
-      },
+      'clearColor': '#000',
+      'fillStyle': '#fff',
+      'font': '200% monospace',
+      'height': 0,
+      'lineJoin': 'miter',
+      'lineWidth': 1,
+      'strokeStyle': '#fff',
+      'style': 'fill',
+      'textAlign': 'start',
+      'textBaseline': 'alphabetic',
+      'width': 0,
     });
 
     const properties = {
@@ -234,15 +227,14 @@ function canvas_setmode(mode){
     }
 }
 
-// Required args: properties
-function canvas_setproperties(args){
+function canvas_setproperties(properties){
     Object.assign(
       canvas_properties,
-      args['properties']
+      properties
     );
     Object.assign(
       canvas,
-      args['properties']
+      properties
     );
 }
 
