@@ -9,28 +9,21 @@ function math_clamp(args){
       },
     });
 
-    let value = args['value'];
     if(args['wrap']){
-        const range = args['max'] - args['min'];
-
-        if(value < args['min']){
-            value = args['max'] - (args['min'] - value) % range;
-
-        }else{
-            value = args['min'] + (value - args['min']) % range;
+        if(args['value'] < args['min']){
+            return args['max'] - (args['min'] - args['value']) % (args['max'] - args['min']);
         }
 
-    }else{
-        value = Math.min(
-          Math.max(
-            value,
-            args['min']
-          ),
-          args['max']
-        );
+        return args['min'] + (args['value'] - args['min']) % (args['max'] - args['min']);
     }
 
-    return value;
+    return Math.min(
+      Math.max(
+        args['value'],
+        args['min']
+      ),
+      args['max']
+    );
 }
 
 // Required args: height-0, height-1, width-0, width-1, x-0, x-1, y-0, y-1
@@ -138,7 +131,6 @@ function math_fraction_reduce(args){
     }
 
     let done = false;
-
     while(!done){
         const gcd = math_greatest_common_divisor({
           'a': args['numerator'],
@@ -356,7 +348,7 @@ function math_normalize(args){
       },
     });
 
-    let length = Math.sqrt(
+    const length = Math.sqrt(
       Math.pow(
         args['x'],
         2
@@ -370,7 +362,11 @@ function math_normalize(args){
     );
 
     if(length === 0){
-        length = 1;
+        return {
+          'x': args['x'],
+          'y': args['y'],
+          'z': args['z'],
+        };
     }
 
     return {
@@ -424,7 +420,7 @@ function math_quaternion_to_euler(args){
         1 - (args['x'] * args['x'] + args['y'] * args['y']) * 2
       ),
       'y': y_sine >= 1
-        ? (Math.PI / 2) * Math.sign(y_sine)
+        ? 1.5707963267948966 * Math.sign(y_sine)
         : Math.asin(y_sine),
       'z': Math.atan2(
         (args['w'] * args['z'] + args['x'] * args['y']) * 2,
