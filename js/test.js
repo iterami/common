@@ -63,8 +63,21 @@ function test_run(args){
         let args_json = '';
         if(args_type === 'object'){
             test_args['args'] = {...args['tests'][test]['args']};
+            const args_object = {};
+            for(const arg in test_args['args']){
+                if(core_type(test_args['args'][arg]) === 'function'){
+                    args_object[arg] = core_replace_multiple({
+                      'patterns': {
+                        '\n': '<br>',
+                      },
+                      'string': test_trim(test_args['args'][arg].toString()),
+                    });
+                    continue;
+                }
+                args_object[arg] = test_args['args'][arg];
+            }
             args_json = JSON.stringify(
-              test_args['args'],
+              args_object,
               void 0,
               2
             );
