@@ -64,7 +64,7 @@ function time_format(args){
         args['date']['year'] -= 1970;
     }
 
-    let date = core_digits_min({
+    return core_digits_min({
         'number': args['date']['year'],
       }) + '-'
       + core_digits_min({
@@ -81,16 +81,12 @@ function time_format(args){
       }) + ':'
       + core_digits_min({
         'number': args['date']['second'],
-      });
-
-    if(args['milliseconds']){
-        date += '.' + core_digits_min({
-          'digits': 3,
-          'number': args['date']['millisecond'],
-        });
-    }
-
-    return date;
+      }) + (args['milliseconds']
+        ? '.' + core_digits_min({
+            'digits': 3,
+            'number': args['date']['millisecond'],
+          })
+        : '');
 }
 
 function time_from_inputs(){
