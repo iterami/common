@@ -205,7 +205,6 @@ function webgl_character_init(args){
             'args': args['vehicle-stats'],
             'defaults': {
               'character': false,
-              'rotate-target': 0,
               'speed': 0,
               'speed-acceleration': .1,
               'speed-deceleration': -.1,
@@ -620,16 +619,10 @@ function webgl_controls_keyboard(id){
             });
         }
 
-        let target = vehicle['vehicle-stats']['rotate-target'];
         let turn = 0;
         if(core_mouse['down-2']){
-            target += core_mouse['movement-x'] / 10;
-            const direction = target < vehicle['rotate-y']
-              ? Math.abs(target - vehicle['rotate-y']) < 180
-              : (target - vehicle['rotate-y']) > 180;
-            turn = vehicle['turn-speed'] * (direction
-              ? -1
-              : 1);
+            const half = webgl.drawingBufferWidth / 2;
+            turn = vehicle['turn-speed'] * ((core_mouse['x'] - half) / half);
 
         }else{
             if(core_keys[core_storage_data['move-←']]['state']){
@@ -641,19 +634,9 @@ function webgl_controls_keyboard(id){
         }
         if(turn !== 0
           || core_mouse['down-2']){
-            vehicle['vehicle-stats']['rotate-target'] = math_clamp({
-              'max': 360,
-              'min': 0,
-              'value': target + turn,
-              'wrap': true,
-            });
-            const turn_change = vehicle['turn-speed'] * Math.sign(turn);
-            vehicle['rotate-y'] += turn_change;
-            if(core_mouse['down-2']){
-                webgl_characters[id]['camera-rotate-y'] = vehicle['vehicle-stats']['rotate-target'];
-
-            }else if(!core_mouse['down-0']){
-                webgl_characters[id]['camera-rotate-y'] += turn_change;
+            vehicle['rotate-y'] += turn;
+            if(!core_mouse['down-0']){
+                webgl_characters[id]['camera-rotate-y'] += turn;
             }
             webgl_clamp_rotation(vehicle);
             webgl_clamp_rotation(webgl_characters[id]);
