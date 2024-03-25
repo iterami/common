@@ -622,7 +622,14 @@ function webgl_controls_keyboard(id){
         let turn = 0;
         if(core_mouse['down-2']){
             const half = webgl.drawingBufferWidth / 2;
-            turn = vehicle['turn-speed'] * ((core_mouse['x'] - half) / half);
+            let mouse = (core_mouse['x'] - half) / half;
+            if(mouse > 1){
+                mouse = 1;
+
+            }else if(mouse < -1){
+                mouse = -1;
+            }
+            turn = vehicle['turn-speed'] * mouse;
 
         }else{
             if(core_keys[core_storage_data['move-←']]['state']){
@@ -635,7 +642,10 @@ function webgl_controls_keyboard(id){
         if(turn !== 0
           || core_mouse['down-2']){
             vehicle['rotate-y'] += turn;
-            if(!core_mouse['down-0']){
+            if(core_mouse['down-2']){
+                webgl_characters[id]['camera-rotate-y'] = vehicle['rotate-y'];
+
+            }else if(!core_mouse['down-0']){
                 webgl_characters[id]['camera-rotate-y'] += turn;
             }
             webgl_clamp_rotation(vehicle);
