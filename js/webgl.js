@@ -622,7 +622,7 @@ function webgl_controls_keyboard(id){
         let turn = 0;
         if(core_mouse['down-2']){
             const half = webgl.drawingBufferWidth / 2;
-            let mouse = (core_mouse['x'] - half) / half;
+            let mouse = (core_mouse['x'] - half) / half * core_storage_data['mouse-horizontal'];
             if(mouse > 1){
                 mouse = 1;
 
