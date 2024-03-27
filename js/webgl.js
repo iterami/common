@@ -629,6 +629,9 @@ function webgl_controls_keyboard(id){
               'id': vehicle['id'],
               'multiplier': -speed,
             });
+
+        }else{
+            return;
         }
 
         let turn = 0;
