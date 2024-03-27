@@ -624,15 +624,13 @@ function webgl_controls_keyboard(id){
             );
         }
         vehicle['vehicle-stats']['speed'] = speed;
-        if(speed !== 0){
-            webgl_character_move({
-              'id': vehicle['id'],
-              'multiplier': -speed,
-            });
-
-        }else{
+        if(speed === 0){
             return;
         }
+        webgl_character_move({
+          'id': vehicle['id'],
+          'multiplier': -speed,
+        });
 
         let turn = 0;
         if(core_mouse['down-2']){
@@ -654,11 +652,11 @@ function webgl_controls_keyboard(id){
                 turn += vehicle['turn-speed'];
             }
         }
-        if(speed < 0){
-            turn *= -1;
-        }
         if(turn !== 0
           || core_mouse['down-2']){
+            if(speed < 0){
+                turn *= -1;
+            }
             vehicle['rotate-y'] += turn;
             if(core_mouse['down-2']){
                 webgl_characters[id]['camera-rotate-y'] = vehicle['rotate-y'];
