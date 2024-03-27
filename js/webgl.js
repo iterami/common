@@ -605,9 +605,21 @@ function webgl_controls_keyboard(id){
               vehicle['vehicle-stats']['speed-max']
             );
 
-        }else{
+        }else if(core_keys[core_storage_data['move-↓']]['state']){
+            speed = Math.max(
+              vehicle['vehicle-stats']['speed'] - vehicle['vehicle-stats']['speed-acceleration'],
+              -vehicle['vehicle-stats']['speed-max'] / 2
+            );
+
+        }else if(vehicle['vehicle-stats']['speed'] >= 0){
             speed = Math.max(
               vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-deceleration'],
+              0
+            );
+
+        }else{
+            speed = Math.min(
+              vehicle['vehicle-stats']['speed'] - vehicle['vehicle-stats']['speed-deceleration'],
               0
             );
         }
@@ -638,6 +650,9 @@ function webgl_controls_keyboard(id){
             if(core_keys[core_storage_data['move-→']]['state']){
                 turn += vehicle['turn-speed'];
             }
+        }
+        if(speed < 0){
+            turn *= -1;
         }
         if(turn !== 0
           || core_mouse['down-2']){
@@ -763,10 +778,19 @@ function webgl_controls_keyboard(id){
           || !webgl_characters[id]['jump-allow']){
             return;
         }
-        const speed = Math.max(
-          webgl_characters[id]['vehicle-stats']['speed'] + webgl_characters[id]['vehicle-stats']['speed-deceleration'],
-          0
-        );
+        let speed = 0;
+        if(webgl_characters[id]['vehicle-stats']['speed'] >= 0){
+            speed = Math.max(
+              webgl_characters[id]['vehicle-stats']['speed'] + webgl_characters[id]['vehicle-stats']['speed-deceleration'],
+              0
+            );
+
+        }else{
+            speed = Math.min(
+              webgl_characters[id]['vehicle-stats']['speed'] - webgl_characters[id]['vehicle-stats']['speed-deceleration'],
+              0
+            );
+        }
         webgl_characters[id]['vehicle-stats']['speed'] = speed;
         if(speed !== 0){
             webgl_character_move({
