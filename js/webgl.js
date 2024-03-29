@@ -379,6 +379,10 @@ function webgl_character_spawn(id){
           'path-id': webgl_properties['spawn-path-id'],
         });
     }
+    if(webgl_characters[id]['vehicle-stats'] !== false){
+        webgl_characters[id]['vehicle-stats']['speed'] = 0;
+        webgl_character_spawn(webgl_characters[id]['vehicle-stats']['character']);
+    }
 }
 
 function webgl_clamp_rotation(entity){
@@ -1141,9 +1145,15 @@ function webgl_event(args){
     }
 
     if(args['parent']['event-todo'] !== false){
-        const todo_args = args['parent']['event-todo-args'] === void 0
+        let todo_args = args['parent']['event-todo-args'] === void 0
           ? void 0
           : args['parent']['event-todo-args'];
+        if(todo_args === '_self'){
+            todo_args = args['parent']['id'];
+
+        }else if(todo_args === '_target'){
+            todo_args = args['target']['id'];
+        }
 
         if(core_type(globalThis[args['parent']['event-todo']]) === 'function'){
             globalThis[args['parent']['event-todo']](todo_args);
@@ -3659,7 +3669,7 @@ function webgl_vehicle_toggle(args){
         }
 
         webgl_characters[args['id']]['vehicle'] = args['vehicle'];
-        webgl_characters[args['vehicle']]['vehicle-stats']['character'] = args['character'];
+        webgl_characters[args['vehicle']]['vehicle-stats']['character'] = args['id'];
         const axes = 'xyz';
         for(const axis in axes){
             webgl_characters[args['id']]['change-rotate-' + axes[axis]] = 0;
