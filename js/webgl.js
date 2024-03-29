@@ -1148,7 +1148,7 @@ function webgl_event(args){
         let todo_args = args['parent']['event-todo-args'] === void 0
           ? void 0
           : args['parent']['event-todo-args'];
-        if(todo_args === '_self'){
+        if(todo_args === '_parent'){
             todo_args = args['parent']['id'];
 
         }else if(todo_args === '_target'){
