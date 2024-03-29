@@ -3661,7 +3661,13 @@ function webgl_vehicle_toggle(args){
       },
     });
 
-    if(webgl_characters[args['id']]['vehicle'] === false){
+    const vehicle = webgl_characters[args['id']]['vehicle'];
+    if(vehicle !== false){
+        webgl_characters[args['id']]['vehicle'] = false;
+        webgl_characters[args['vehicle']]['vehicle-stats']['character'] = false;
+    }
+
+    if(vehicle !== args['vehicle']){
         if(args['vehicle'] === false
           || webgl_characters[args['vehicle']]['vehicle-stats'] === false
           || webgl_characters[args['vehicle']]['vehicle-stats']['character'] !== false){
@@ -3676,10 +3682,6 @@ function webgl_vehicle_toggle(args){
             webgl_characters[args['id']]['change-translate-' + axes[axis]] = 0;
         }
         webgl_characters[args['id']]['camera-rotate-y'] = webgl_characters[args['vehicle']]['rotate-y'];
-
-    }else{
-        webgl_characters[args['id']]['vehicle'] = false;
-        webgl_characters[args['vehicle']]['vehicle-stats']['character'] = false;
     }
 }
 
