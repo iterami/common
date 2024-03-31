@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "core.h"
 
 size_t core_get_int_length(const int integer){
