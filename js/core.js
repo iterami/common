@@ -550,7 +550,7 @@ function core_image(args){
 }
 
 function core_init(){
-    const core_ui = core_html({
+    core_html({
       'parent': document.body,
       'properties': {
         'id': 'core-ui',
@@ -559,7 +559,7 @@ function core_init(){
       'todo': 'prepend',
     });
     core_html({
-      'parent': core_ui,
+      'parent': core_elements['core-ui'],
       'properties': {
         'id': 'core-toggle',
         'onclick': core_escape,
@@ -569,7 +569,7 @@ function core_init(){
       'type': 'button',
     });
     core_html({
-      'parent': core_ui,
+      'parent': core_elements['core-ui'],
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
@@ -581,7 +581,7 @@ function core_init(){
       'type': 'span',
     });
     core_html({
-      'parent': core_ui,
+      'parent': core_elements['core-ui'],
       'properties': {
         'id': 'repo-ui',
       },
