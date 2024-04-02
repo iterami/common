@@ -1598,8 +1598,10 @@ function webgl_logicloop(){
         return;
     }
 
-    for(const texture in webgl_textures_animated){
-        webgl_texture_animate(texture);
+    if(!webgl_properties['paused']){
+        for(const texture in webgl_textures_animated){
+            webgl_texture_animate(texture);
+        }
     }
 
     repo_logic();
