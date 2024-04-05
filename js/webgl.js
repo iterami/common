@@ -3,10 +3,10 @@
 function webgl_billboard(entity){
     const translation = webgl_get_translation(entity_entities[entity]);
 
-    entity_entities[entity]['rotate-y'] = 360 - math_radians_to_degrees(Math.PI / 2 + Math.atan2(
+    entity_entities[entity]['rotate-y'] = 360 - math_radians_to_degrees(Math.atan2(
       translation['z'] - webgl_characters[webgl_character_id]['camera-z'],
       translation['x'] - webgl_characters[webgl_character_id]['camera-x'],
-    ));
+    ) + 1.5707963267948966);
 }
 
 // Required args: attribute, data, size
@@ -2800,7 +2800,7 @@ function webgl_primitive_stars(args){
     const star_colors = [];
     const star_points = [];
     for(let i = 0; i < args['stars']; i++){
-        const theta = Math.random() * Math.PI * 2;
+        const theta = Math.random() * 6.283185307179586;
         const phi = Math.acos(1 - 2 * Math.random());
         const sin_phi = Math.sin(phi);
         const radius = args['radius'] - Math.random() * args['range'];

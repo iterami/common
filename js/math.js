@@ -434,4 +434,3 @@ function math_radians_to_degrees(radians){
 }
 
 globalThis.math_matrices = {};
-globalThis.math_tau = 6.283185307179586;
