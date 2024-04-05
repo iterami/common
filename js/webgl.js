@@ -1469,7 +1469,7 @@ function webgl_level_init(args){
       'green': webgl_properties['clearcolor-green'],
       'red': webgl_properties['clearcolor-red'],
     });
-    webgl_cursor_set(level['cursor']);
+    webgl_cursor_set(webgl_properties['cursor']);
 
     level['groups'].push(
       'foreground',
