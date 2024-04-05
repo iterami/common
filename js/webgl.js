@@ -219,6 +219,10 @@ function webgl_character_init(args){
       'character': args['id'],
       'entities': args['entities'],
     });
+    webgl_vehicle_toggle({
+      'id': args['id'],
+      'vehicle': args['vehicle'],
+    });
 }
 
 function webgl_character_level(id){
