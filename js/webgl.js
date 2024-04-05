@@ -2204,7 +2204,9 @@ function webgl_prefab_repeat(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'characters': false,
         'count': 1,
+        'prefix': entity_id_count,
         'x-max': 0,
         'x-min': 0,
         'y-max': 0,
@@ -2213,6 +2215,25 @@ function webgl_prefab_repeat(args){
         'z-min': 0,
       },
     });
+
+    if(args['characters'] !== false){
+        for(let i = 0; i < args['count']; i++){
+            const prefix = args['prefix'] + '-' + i;
+            webgl_character_init({
+              ...args['characters'],
+              'id': prefix,
+              'translate-x': Math.random() * (args['x-max'] - args['x-min']) + args['x-min'],
+              'translate-y': Math.random() * (args['y-max'] - args['y-min']) + args['y-min'],
+              'translate-z': Math.random() * (args['z-max'] - args['z-min']) + args['z-min'],
+            });
+
+            args['properties']['character'] = prefix;
+            args['properties']['prefix'] = prefix;
+
+            globalThis[args['type']](args['properties']);
+        }
+        return;
+    }
 
     for(let i = 0; i < args['count']; i++){
         args['properties']['prefix'] = args['prefix'] + '-' + i;
