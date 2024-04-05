@@ -1508,10 +1508,7 @@ function webgl_level_init(args){
     }
 
     for(const prefab in level['prefabs']){
-        core_call({
-          'args': level['prefabs'][prefab]['properties'],
-          'todo': level['prefabs'][prefab]['type'],
-        });
+        globalThis[level['prefabs'][prefab]['type']](level['prefabs'][prefab]['properties']);
     }
 
     webgl_uniform_update();
@@ -2199,10 +2196,7 @@ function webgl_prefab_remake(args){
         }
     }
 
-    core_call({
-      'args': args['prefab']['properties'],
-      'todo': args['prefab']['type'],
-    });
+    globalThis[args['prefab']['type']](args['prefab']['properties']);
 }
 
 // Required args: properties, type
@@ -2226,10 +2220,7 @@ function webgl_prefab_repeat(args){
         args['properties']['translate-y'] = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
         args['properties']['translate-z'] = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
 
-        core_call({
-          'args': args['properties'],
-          'todo': args['type'],
-        });
+        globalThis[args['type']](args['properties']);
     }
 }
 
@@ -3564,25 +3555,22 @@ function webgl_tiles(args){
         for(const prefab in prefabs){
             const attached = prefabs[prefab]['properties']['character'] !== void 0;
 
-            core_call({
-              'args': {
-                ...args,
-                ...prefabs[prefab]['properties'],
-                'character': attached
-                  ? prefix + prefabs[prefab]['properties']['character']
-                  : args['character'],
-                'prefix': prefix + (prefabs[prefab]['properties']['prefix'] || entity_id_count),
-                'translate-x': (prefabs[prefab]['properties']['translate-x'] || 0) + (attached
-                  ? 0
-                  : tile_offset_x),
-                'translate-y': (prefabs[prefab]['properties']['translate-y'] || 0) + (attached
-                  ? 0
-                  : tile_offset_y),
-                'translate-z': (prefabs[prefab]['properties']['translate-z'] || 0) + (attached
-                  ? 0
-                  : tile_offset_z),
-              },
-              'todo': prefabs[prefab]['type'],
+            globalThis[prefabs[prefab]['type']]({
+              ...args,
+              ...prefabs[prefab]['properties'],
+              'character': attached
+                ? prefix + prefabs[prefab]['properties']['character']
+                : args['character'],
+              'prefix': prefix + (prefabs[prefab]['properties']['prefix'] || entity_id_count),
+              'translate-x': (prefabs[prefab]['properties']['translate-x'] || 0) + (attached
+                ? 0
+                : tile_offset_x),
+              'translate-y': (prefabs[prefab]['properties']['translate-y'] || 0) + (attached
+                ? 0
+                : tile_offset_y),
+              'translate-z': (prefabs[prefab]['properties']['translate-z'] || 0) + (attached
+                ? 0
+                : tile_offset_z),
             });
         }
 
