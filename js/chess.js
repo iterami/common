@@ -1,25 +1,6 @@
 'use strict';
 
-// Required args: id, column, loopend, loopstart
-// Optional args: board
-function chess_check_column(args){
-    const board = args['board'] || chess_games[args['id']]['board'];
-
-    if(args['loopstart'] > args['loopend']){
-        const temp = args['loopstart'];
-        args['loopstart'] = args['loopend'];
-        args['loopend'] = temp;
-    }
-
-    for(let i = args['loopstart'] + 1; i < args['loopend']; i++){
-        if(board[i][args['column']].length === 1){
-            return true;
-        }
-    }
-    return false;
-}
-
-// Required args: id, column, dx, dy, loopstart, loopend, row
+// Required args: file, dx, dy, id, loopstart, loopend, rank
 // Optional args: board
 function chess_check_diagonal(args){
     const board = args['board'] || chess_games[args['id']]['board'];
@@ -30,8 +11,8 @@ function chess_check_diagonal(args){
         args['loopend'] = temp;
     }
 
-    let x = args['column'];
-    let y = args['row'];
+    let x = args['file'];
+    let y = args['rank'];
 
     for(let i = args['loopstart'] + 1; i < args['loopend']; i++){
         x += args['dx'];
@@ -45,9 +26,9 @@ function chess_check_diagonal(args){
     return false;
 }
 
-// Required args: id, loopend, loopstart, row
+// Required args: file, id, loopend, loopstart
 // Optional args: board
-function chess_check_row(args){
+function chess_check_file(args){
     const board = args['board'] || chess_games[args['id']]['board'];
 
     if(args['loopstart'] > args['loopend']){
@@ -57,7 +38,26 @@ function chess_check_row(args){
     }
 
     for(let i = args['loopstart'] + 1; i < args['loopend']; i++){
-        if(board[args['row']][i].length === 1){
+        if(board[i][args['file']].length === 1){
+            return true;
+        }
+    }
+    return false;
+}
+
+// Required args: id, loopend, loopstart, rank
+// Optional args: board
+function chess_check_rank(args){
+    const board = args['board'] || chess_games[args['id']]['board'];
+
+    if(args['loopstart'] > args['loopend']){
+        const temp = args['loopstart'];
+        args['loopstart'] = args['loopend'];
+        args['loopend'] = temp;
+    }
+
+    for(let i = args['loopstart'] + 1; i < args['loopend']; i++){
+        if(board[args['rank']][i].length === 1){
             return true;
         }
     }
@@ -339,7 +339,7 @@ function chess_validate(args){
                     if(movement_x === movement_y){
                         if(movement_y > 1 && chess_check_diagonal({
                             'board': args['board'],
-                            'column': args['piece-x'],
+                            'file': args['piece-x'],
                             'dx': args['piece-x'] < args['target-x']
                               ? 1
                               : -1,
@@ -349,7 +349,7 @@ function chess_validate(args){
                             'id': args['id'],
                             'loopend': args['target-x'],
                             'loopstart': args['piece-x'],
-                            'row': args['piece-y'],
+                            'rank': args['piece-y'],
                           })){
                             valid_move = false;
                         }
@@ -364,9 +364,9 @@ function chess_validate(args){
                 // Rook
                 case chess_pieces[player][3]: {
                     if(args['target-x'] === args['piece-x']){
-                        if(movement_y > 1 && chess_check_column({
+                        if(movement_y > 1 && chess_check_file({
                             'board': args['board'],
-                            'column': args['piece-x'],
+                            'file': args['piece-x'],
                             'id': args['id'],
                             'loopend': args['target-y'],
                             'loopstart': args['piece-y'],
@@ -375,12 +375,12 @@ function chess_validate(args){
                         }
 
                     }else if(args['target-y'] === args['piece-y']){
-                        if(movement_x > 1 && chess_check_row({
+                        if(movement_x > 1 && chess_check_rank({
                             'board': args['board'],
                             'id': args['id'],
                             'loopend': args['target-x'],
                             'loopstart': args['piece-x'],
-                            'row': args['piece-y'],
+                            'rank': args['piece-y'],
                           })){
                             valid_move = false;
                         }
@@ -406,7 +406,7 @@ function chess_validate(args){
                     if(movement_x === movement_y){
                         if(movement_y > 1 && chess_check_diagonal({
                             'board': args['board'],
-                            'column': args['piece-x'],
+                            'file': args['piece-x'],
                             'dx': args['piece-x'] < args['target-x']
                               ? 1
                               : -1,
@@ -416,15 +416,15 @@ function chess_validate(args){
                             'id': args['id'],
                             'loopend': args['target-x'],
                             'loopstart': args['piece-x'],
-                            'row': args['piece-y'],
+                            'rank': args['piece-y'],
                           })){
                             valid_move = false;
                         }
 
                     }else if(args['target-x'] === args['piece-x']){
-                        if(movement_y > 1 && chess_check_column({
+                        if(movement_y > 1 && chess_check_file({
                             'board': args['board'],
-                            'column': args['piece-x'],
+                            'file': args['piece-x'],
                             'id': args['id'],
                             'loopend': args['target-y'],
                             'loopstart': args['piece-y'],
@@ -433,12 +433,12 @@ function chess_validate(args){
                         }
 
                     }else if(args['target-y'] === args['piece-y']){
-                        if(movement_x > 1 && chess_check_row({
+                        if(movement_x > 1 && chess_check_rank({
                             'board': args['board'],
                             'id': args['id'],
                             'loopend': args['target-x'],
                             'loopstart': args['piece-x'],
-                            'row': args['piece-y'],
+                            'rank': args['piece-y'],
                           })){
                             valid_move = false;
                         }
@@ -468,12 +468,12 @@ function chess_validate(args){
                                   args['piece-x'] - 2,
                                   y,
                                 ],
-                              }) && !chess_check_row({
+                              }) && !chess_check_rank({
                                 'board': args['board'],
                                 'id': args['id'],
                                 'loopend': args['piece-x'],
                                 'loopstart': 0,
-                                'row': args['piece-y'],
+                                'rank': args['piece-y'],
                               })){
                                 castling = true;
                                 rook_long_moved = true;
@@ -493,12 +493,12 @@ function chess_validate(args){
                                   args['piece-x'] + 2,
                                   y,
                                 ],
-                              }) && !chess_check_row({
+                              }) && !chess_check_rank({
                                 'board': args['board'],
                                 'id': args['id'],
                                 'loopend': 7,
                                 'loopstart': args['piece-x'],
-                                'row': args['piece-y'],
+                                'rank': args['piece-y'],
                               })){
                                 castling = true;
                                 rook_short_moved = true;
