@@ -391,7 +391,10 @@ function webgl_character_spawn(id){
     }
     if(webgl_characters[id]['vehicle-stats'] !== false){
         webgl_characters[id]['vehicle-stats']['speed'] = 0;
-        webgl_character_spawn(webgl_characters[id]['vehicle-stats']['character']);
+        const character = webgl_characters[id]['vehicle-stats']['character'];
+        if(character !== false){
+            webgl_character_spawn(character);
+        }
     }
 }
 
