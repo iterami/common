@@ -205,6 +205,7 @@ function webgl_character_init(args){
             'args': args['vehicle-stats'],
             'defaults': {
               'character': false,
+              'locked': false,
               'speed': 0,
               'speed-acceleration': .1,
               'speed-deceleration': -.1,
@@ -3677,27 +3678,33 @@ function webgl_vehicle_toggle(args){
       },
     });
 
-    const vehicle = webgl_characters[args['id']]['vehicle'];
-    if(vehicle !== false){
-        webgl_characters[args['id']]['vehicle'] = false;
-        webgl_characters[args['vehicle']]['vehicle-stats']['character'] = false;
+    const current = webgl_characters[args['id']]['vehicle'];
+    const vehicle = webgl_characters[args['vehicle']];
+    if(vehicle
+      && vehicle['vehicle-stats']['locked']){
+        return;
     }
 
-    if(vehicle !== args['vehicle']){
+    if(current !== false){
+        webgl_characters[args['id']]['vehicle'] = false;
+        vehicle['vehicle-stats']['character'] = false;
+    }
+
+    if(current !== args['vehicle']){
         if(args['vehicle'] === false
-          || webgl_characters[args['vehicle']]['vehicle-stats'] === false
-          || webgl_characters[args['vehicle']]['vehicle-stats']['character'] !== false){
+          || vehicle['vehicle-stats'] === false
+          || vehicle['vehicle-stats']['character'] !== false){
             return;
         }
 
         webgl_characters[args['id']]['vehicle'] = args['vehicle'];
-        webgl_characters[args['vehicle']]['vehicle-stats']['character'] = args['id'];
+        vehicle['vehicle-stats']['character'] = args['id'];
         const axes = 'xyz';
         for(const axis in axes){
             webgl_characters[args['id']]['change-rotate-' + axes[axis]] = 0;
             webgl_characters[args['id']]['change-translate-' + axes[axis]] = 0;
         }
-        webgl_characters[args['id']]['camera-rotate-y'] = webgl_characters[args['vehicle']]['rotate-y'];
+        webgl_characters[args['id']]['camera-rotate-y'] = vehicle['rotate-y'];
     }
 }
 
