@@ -3678,18 +3678,17 @@ function webgl_vehicle_toggle(args){
       },
     });
 
-    const current = webgl_characters[args['id']]['vehicle'];
     const vehicle = webgl_characters[args['vehicle']];
     if(vehicle
       && vehicle['vehicle-stats']['locked']){
         return;
     }
 
+    const current = webgl_characters[args['id']]['vehicle'];
     if(current !== false){
         webgl_characters[args['id']]['vehicle'] = false;
         vehicle['vehicle-stats']['character'] = false;
     }
-
     if(current !== args['vehicle']){
         if(args['vehicle'] === false
           || vehicle['vehicle-stats'] === false
