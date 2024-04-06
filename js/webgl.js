@@ -220,10 +220,15 @@ function webgl_character_init(args){
       'character': args['id'],
       'entities': args['entities'],
     });
-    webgl_vehicle_toggle({
-      'id': args['id'],
-      'vehicle': args['vehicle'],
-    });
+    if(args['vehicle-stats'] !== false
+      && args['vehicle-stats']['character'] !== false){
+        const character = webgl_characters[args['id']]['vehicle-stats']['character'];
+        webgl_characters[args['id']]['vehicle-stats']['character'] = false;
+        webgl_vehicle_toggle({
+          'id': character,
+          'vehicle': args['id'],
+        });
+    }
 }
 
 function webgl_character_level(id){
@@ -1484,10 +1489,6 @@ function webgl_level_init(args){
       level['paths']
     );
 
-    for(const id in level['characters']){
-        webgl_character_init(level['characters'][id]);
-    }
-
     if(args['character'] === -1){
         webgl_character_base_entities = [];
         webgl_character_base_properties = {};
@@ -1508,6 +1509,9 @@ function webgl_level_init(args){
         });
     }
 
+    for(const id in level['characters']){
+        webgl_character_init(level['characters'][id]);
+    }
     for(const prefab in level['prefabs']){
         globalThis[level['prefabs'][prefab]['type']](level['prefabs'][prefab]['properties']);
     }
