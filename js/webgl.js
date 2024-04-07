@@ -112,6 +112,9 @@ function webgl_character_init(args){
       'defaults': {
         'automove': false,
         'camera-lock': true,
+        'camera-rotate-x': 0,
+        'camera-rotate-y': 0,
+        'camera-rotate-z': 0,
         'camera-zoom': 50,
         'change-rotate-x': 0,
         'change-rotate-y': 0,
@@ -153,9 +156,9 @@ function webgl_character_init(args){
     webgl_characters[args['id']] = {
       'automove': args['automove'],
       'camera-lock': args['camera-lock'],
-      'camera-rotate-x': 0,
-      'camera-rotate-y': 0,
-      'camera-rotate-z': 0,
+      'camera-rotate-x': args['camera-rotate-x'],
+      'camera-rotate-y': args['camera-rotate-y'],
+      'camera-rotate-z': args['camera-rotate-z'],
       'camera-x': args['translate-x'],
       'camera-y': args['translate-y'],
       'camera-z': args['translate-z'],
