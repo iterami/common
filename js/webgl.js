@@ -472,8 +472,7 @@ function webgl_collision(args){
 
     if(args['target']['normals'][0] !== 0){
         const normal_sign = Math.sign(args['target']['normals'][0]);
-        if(args['target']['normals'][0] % 1 === 0
-          && normal_sign !== Math.sign(args['collider']['change-translate-x'])
+        if(normal_sign !== Math.sign(args['collider']['change-translate-x'])
           && collider_position['x'] > target_position['x'] - (normal_sign === -1 ? range['x'] : 0)
           && collider_position['x'] < target_position['x'] + (normal_sign === 1 ? range['x'] : 0)
           && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y']
@@ -486,8 +485,7 @@ function webgl_collision(args){
 
     }else if(args['target']['normals'][1] !== 0){
         const normal_sign = Math.sign(args['target']['normals'][1]);
-        if(args['target']['normals'][1] % 1 === 0
-          && normal_sign !== Math.sign(args['collider']['change-translate-y'])
+        if(normal_sign !== Math.sign(args['collider']['change-translate-y'])
           && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
           && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
           && collider_position['y'] > target_position['y'] - (normal_sign === -1 ? range['y'] : 0)
@@ -500,8 +498,7 @@ function webgl_collision(args){
 
     }else if(args['target']['normals'][2] !== 0){
         const normal_sign = Math.sign(args['target']['normals'][2]);
-        if(args['target']['normals'][2] % 1 === 0
-          && normal_sign !== Math.sign(args['collider']['change-translate-z'])
+        if(normal_sign !== Math.sign(args['collider']['change-translate-z'])
           && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
           && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
           && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
