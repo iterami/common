@@ -481,17 +481,6 @@ function webgl_collision(args){
         collision += 'x';
         collision_sign.push(sign);
     }
-    sign = Math.sign(args['target']['normals'][1]);
-    if(sign !== Math.sign(args['collider']['change-translate-y'])
-      && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
-      && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
-      && collider_position['y'] > target_position['y'] - (sign === -1 ? range['y'] : 0)
-      && collider_position['y'] < target_position['y'] + (sign === 1 ? range['y'] : 0)
-      && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
-      && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
-        collision += 'y';
-        collision_sign.push(sign);
-    }
     sign = Math.sign(args['target']['normals'][2]);
     if(sign !== Math.sign(args['collider']['change-translate-z'])
       && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
@@ -501,6 +490,17 @@ function webgl_collision(args){
       && collider_position['z'] > target_position['z'] - (sign === -1 ? range['z'] : 0)
       && collider_position['z'] < target_position['z'] + (sign === 1 ? range['z'] : 0)){
         collision += 'z';
+        collision_sign.push(sign);
+    }
+    sign = Math.sign(args['target']['normals'][1]);
+    if(sign !== Math.sign(args['collider']['change-translate-y'])
+      && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
+      && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
+      && collider_position['y'] > target_position['y'] - (sign === -1 ? range['y'] : 0)
+      && collider_position['y'] < target_position['y'] + (sign === 1 ? range['y'] : 0)
+      && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
+      && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
+        collision += 'y';
         collision_sign.push(sign);
     }
 
