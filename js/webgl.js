@@ -471,53 +471,43 @@ function webgl_collision(args){
     const target_position = webgl_get_translation(args['target']);
 
     let sign = Math.sign(args['target']['normals'][0]);
-    if(sign !== Math.sign(args['collider']['change-translate-x'])){
-        if(collider_position['x'] > target_position['x'] - (sign === -1 ? range['x'] : 0)
-          && collider_position['x'] < target_position['x'] + (sign === 1 ? range['x'] : 0)
-          && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y']
-          && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y']
-          && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
-          && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
-            collision += 'x';
-            collision_sign.push(sign);
-        }
+    if(sign !== Math.sign(args['collider']['change-translate-x'])
+      && collider_position['x'] > target_position['x'] - (sign === -1 ? range['x'] : 0)
+      && collider_position['x'] < target_position['x'] + (sign === 1 ? range['x'] : 0)
+      && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y']
+      && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y']
+      && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
+      && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
+        collision += 'x';
+        collision_sign.push(sign);
     }
     sign = Math.sign(args['target']['normals'][1]);
-    if(sign !== Math.sign(args['collider']['change-translate-y'])){
-        if(collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
-          && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
-          && collider_position['y'] > target_position['y'] - (sign === -1 ? range['y'] : 0)
-          && collider_position['y'] < target_position['y'] + (sign === 1 ? range['y'] : 0)
-          && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
-          && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
-            collision += 'y';
-            collision_sign.push(sign);
-        }
+    if(sign !== Math.sign(args['collider']['change-translate-y'])
+      && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
+      && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
+      && collider_position['y'] > target_position['y'] - (sign === -1 ? range['y'] : 0)
+      && collider_position['y'] < target_position['y'] + (sign === 1 ? range['y'] : 0)
+      && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
+      && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
+        collision += 'y';
+        collision_sign.push(sign);
     }
     sign = Math.sign(args['target']['normals'][2]);
-    if(sign !== Math.sign(args['collider']['change-translate-z'])){
-        if(collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
-          && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
-          && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
-          && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y']
-          && collider_position['z'] > target_position['z'] - (sign === -1 ? range['z'] : 0)
-          && collider_position['z'] < target_position['z'] + (sign === 1 ? range['z'] : 0)){
-            collision += 'z';
-            collision_sign.push(sign);
-        }
+    if(sign !== Math.sign(args['collider']['change-translate-z'])
+      && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
+      && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
+      && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
+      && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y']
+      && collider_position['z'] > target_position['z'] - (sign === -1 ? range['z'] : 0)
+      && collider_position['z'] < target_position['z'] + (sign === 1 ? range['z'] : 0)){
+        collision += 'z';
+        collision_sign.push(sign);
     }
 
     if(collision.length !== 0){
         for(const axis in collision){
-            if(Math.abs(target_position[collision[axis]] - collider_position[collision[axis]]) >= range[collision[axis]]){
-                continue;
-            }
-
-            const range_axis = collision[axis] === 'y'
-              ? 'y'
-              : 'xz';
-
-            args['collider']['translate-' + collision[axis]] = target_position[collision[axis]] + args['collider']['collide-range-' + range_axis] * collision_sign[axis];
+            args['collider']['translate-' + collision[axis]] = target_position[collision[axis]]
+              + args['collider']['collide-range-' + (collision[axis] === 'y' ? 'y' : 'xz')] * collision_sign[axis];
             args['collider']['change-translate-' + collision[axis]] = 0;
 
             if(collision[axis] === 'y'){
