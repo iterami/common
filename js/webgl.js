@@ -470,43 +470,40 @@ function webgl_collision(args){
     };
     const target_position = webgl_get_translation(args['target']);
 
-    if(args['target']['normals'][0] !== 0){
-        const normal_sign = Math.sign(args['target']['normals'][0]);
-        if(normal_sign !== Math.sign(args['collider']['change-translate-x'])
-          && collider_position['x'] > target_position['x'] - (normal_sign === -1 ? range['x'] : 0)
-          && collider_position['x'] < target_position['x'] + (normal_sign === 1 ? range['x'] : 0)
+    let sign = Math.sign(args['target']['normals'][0]);
+    if(sign !== Math.sign(args['collider']['change-translate-x'])){
+        if(collider_position['x'] > target_position['x'] - (sign === -1 ? range['x'] : 0)
+          && collider_position['x'] < target_position['x'] + (sign === 1 ? range['x'] : 0)
           && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y']
           && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y']
           && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
           && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
             collision += 'x';
-            collision_sign.push(normal_sign);
+            collision_sign.push(sign);
         }
     }
-    if(args['target']['normals'][1] !== 0){
-        const normal_sign = Math.sign(args['target']['normals'][1]);
-        if(normal_sign !== Math.sign(args['collider']['change-translate-y'])
-          && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
+    sign = Math.sign(args['target']['normals'][1]);
+    if(sign !== Math.sign(args['collider']['change-translate-y'])){
+        if(collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
           && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
-          && collider_position['y'] > target_position['y'] - (normal_sign === -1 ? range['y'] : 0)
-          && collider_position['y'] < target_position['y'] + (normal_sign === 1 ? range['y'] : 0)
+          && collider_position['y'] > target_position['y'] - (sign === -1 ? range['y'] : 0)
+          && collider_position['y'] < target_position['y'] + (sign === 1 ? range['y'] : 0)
           && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
           && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
             collision += 'y';
-            collision_sign.push(normal_sign);
+            collision_sign.push(sign);
         }
     }
-    if(args['target']['normals'][2] !== 0){
-        const normal_sign = Math.sign(args['target']['normals'][2]);
-        if(normal_sign !== Math.sign(args['collider']['change-translate-z'])
-          && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
+    sign = Math.sign(args['target']['normals'][2]);
+    if(sign !== Math.sign(args['collider']['change-translate-z'])){
+        if(collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
           && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
           && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
           && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y']
-          && collider_position['z'] > target_position['z'] - (normal_sign === -1 ? range['z'] : 0)
-          && collider_position['z'] < target_position['z'] + (normal_sign === 1 ? range['z'] : 0)){
+          && collider_position['z'] > target_position['z'] - (sign === -1 ? range['z'] : 0)
+          && collider_position['z'] < target_position['z'] + (sign === 1 ? range['z'] : 0)){
             collision += 'z';
-            collision_sign.push(normal_sign);
+            collision_sign.push(sign);
         }
     }
 
