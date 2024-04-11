@@ -11,6 +11,10 @@ function webgl_billboard(entity){
 
 // Required args: attribute, data, size
 function webgl_buffer_set(args){
+    if(!(args['attribute'] in webgl_shaders[webgl_shader_active]['attributes'])){
+        return;
+    }
+
     const buffer = webgl.createBuffer();
     webgl.bindBuffer(
       webgl.ARRAY_BUFFER,
@@ -22,15 +26,14 @@ function webgl_buffer_set(args){
       webgl.STATIC_DRAW
     );
     webgl.vertexAttribPointer(
-      webgl_attributes[args['attribute']],
+      webgl_shaders[webgl_shader_active]['attributes'][args['attribute']],
       args['size'],
       webgl.FLOAT,
       false,
       0,
       0
     );
-    webgl.enableVertexAttribArray(webgl_attributes[args['attribute']]);
-    return buffer;
+    webgl.enableVertexAttribArray(webgl_shaders[webgl_shader_active]['attributes'][args['attribute']]);
 }
 
 function webgl_camera_rotate(args){
@@ -554,10 +557,6 @@ function webgl_context_lost(event){
 
     core_interval_pause_all();
     webgl = 0;
-    webgl_shaders = {
-      'active': false,
-      'shaders': {},
-    };
     webgl_textures = {};
     webgl_textures_animated = {};
 }
@@ -917,11 +916,11 @@ function webgl_draw_entity(entity){
         : webgl_textures[entity_entities[entity]['texture-id']]
     );
     webgl.uniform1f(
-      webgl_shaders['shaders'][webgl_shaders['active']]['alpha'],
+      webgl_shaders[webgl_shader_active]['uniforms']['alpha'],
       entity_entities[entity]['alpha']
     );
     webgl.uniformMatrix4fv(
-      webgl_shaders['shaders'][webgl_shaders['active']]['mat_cameraMatrix'],
+      webgl_shaders[webgl_shader_active]['uniforms']['mat_cameraMatrix'],
       false,
       math_matrices[entity]
     );
@@ -1024,6 +1023,13 @@ function webgl_entity_init(entity){
               entity_entities[entity]['pick-color'][1],
               entity_entities[entity]['pick-color'][2],
             );
+
+        }else{
+            pickData.push(
+              0,
+              0,
+              0
+            );
         }
         textureData.push(
           entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-repeat-x'],
@@ -1047,13 +1053,11 @@ function webgl_entity_init(entity){
       'data': entity_entities[entity]['normals'],
       'size': 3,
     });
-    if(entity_entities[entity]['pick-color'] !== false){
-        webgl_buffer_set({
-          'attribute': 'vec_pickColor',
-          'data': pickData,
-          'size': 3,
-        });
-    }
+    webgl_buffer_set({
+      'attribute': 'vec_pickColor',
+      'data': pickData,
+      'size': 3,
+    });
     webgl_buffer_set({
       'attribute': 'vec_texturePosition',
       'data': textureData,
@@ -1284,7 +1288,6 @@ function webgl_init(){
 
     webgl_shader_create({
       'attributes': [
-        'vec_pickColor',
         'vec_texturePosition',
         'vec_vertexColor',
         'vec_vertexNormal',
@@ -1293,7 +1296,6 @@ function webgl_init(){
       'fragment': `#version 300 es
 precision lowp float;
 uniform bool fog;
-uniform bool picking;
 uniform float float_fogDensity;
 uniform sampler2D sampler;
 uniform vec3 vec_clearColor;
@@ -1303,22 +1305,18 @@ in vec4 vec_lighting;
 in vec4 vec_position;
 out vec4 fragColor;
 void main(void){
-    if(picking){
-        fragColor = vec_fragmentColor;
-    }else{
-        fragColor = vec_fragmentColor * vec_lighting * texture(sampler, vec_textureCoord);
-        if(fog){
-            float distance = length(vec_position.xyz);
-            fragColor.rgb = vec3(mix(
-              vec_clearColor,
-              fragColor.rgb,
-              clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)
-            ));
-        }
+    fragColor = vec_fragmentColor * vec_lighting * texture(sampler, vec_textureCoord);
+    if(fog){
+        float distance = length(vec_position.xyz);
+        fragColor.rgb = vec3(mix(
+          vec_clearColor,
+          fragColor.rgb,
+          clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)
+        ));
     }
 }`,
       'id': 'default',
-      'locations': {
+      'uniforms': {
         'alpha': 'alpha',
         'ambient-color': 'vec_ambientColor',
         'clear-color': 'vec_clearColor',
@@ -1329,17 +1327,14 @@ void main(void){
         'fog-state': 'fog',
         'mat_cameraMatrix': 'mat_cameraMatrix',
         'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
-        'picking': 'picking',
         'sampler': 'sampler',
       },
       'vertex': `#version 300 es
 in vec2 vec_texturePosition;
 in vec3 vec_vertexNormal;
-in vec4 vec_pickColor;
 in vec4 vec_vertexColor;
 in vec3 vec_vertexPosition;
 uniform bool directional;
-uniform bool picking;
 uniform float alpha;
 uniform mat4 mat_cameraMatrix;
 uniform mat4 mat_perspectiveMatrix;
@@ -1361,11 +1356,36 @@ void main(void){
         lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), 0.0);
     }
     vec_lighting = vec4(lighting, alpha);
-    if(picking){
-        vec_fragmentColor = vec_pickColor;
-    }else{
-        vec_fragmentColor = vec_vertexColor;
-    }
+    vec_fragmentColor = vec_vertexColor;
+}`,
+    });
+    webgl_shader_create({
+      'attributes': [
+        'vec_pickColor',
+        'vec_vertexPosition',
+      ],
+      'fragment': `#version 300 es
+precision lowp float;
+in vec4 vec_fragmentColor;
+out vec4 fragColor;
+void main(void){
+    fragColor = vec_fragmentColor;
+}`,
+      'id': 'picking',
+      'uniforms': {
+        'mat_cameraMatrix': 'mat_cameraMatrix',
+        'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
+      },
+      'vertex': `#version 300 es
+in vec3 vec_pickColor;
+in vec3 vec_vertexPosition;
+uniform mat4 mat_cameraMatrix;
+uniform mat4 mat_perspectiveMatrix;
+out vec4 vec_fragmentColor;
+void main(void){
+    vec4 vec_position = mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);
+    gl_Position = mat_perspectiveMatrix * vec_position;
+    vec_fragmentColor = vec4(vec_pickColor.rgb, 1.0);
 }`,
     });
     webgl_shader_use('default');
@@ -2204,19 +2224,13 @@ function webgl_pick_entity(args){
       },
     });
 
-    webgl.uniform1i(
-      webgl_shaders['shaders'][webgl_shaders['active']]['picking'],
-      true
-    );
+    webgl_shader_use('picking');
     webgl_draw();
     const color = webgl_pick_color({
       'x': args['x'],
       'y': args['y'],
     });
-    webgl.uniform1i(
-      webgl_shaders['shaders'][webgl_shaders['active']]['picking'],
-      false
-    );
+    webgl_shader_use('default');
 
     const color_blue = core_round({
       'decimals': 1,
@@ -3038,7 +3052,7 @@ function webgl_resize(){
 
     math_matrices['perspective'][0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
     webgl.uniformMatrix4fv(
-      webgl_shaders['shaders'][webgl_shaders['active']]['mat_perspectiveMatrix'],
+      webgl_shaders[webgl_shader_active]['uniforms']['mat_perspectiveMatrix'],
       false,
       math_matrices['perspective']
     );
@@ -3134,7 +3148,7 @@ function webgl_screenshot(args){
     );
 }
 
-// Required args: attributes, fragment, id, locations, vertex
+// Required args: attributes, fragment, id, uniforms, vertex
 function webgl_shader_create(args){
     const fragment = webgl.createShader(webgl.FRAGMENT_SHADER);
     webgl.shaderSource(
@@ -3159,25 +3173,35 @@ function webgl_shader_create(args){
       vertex
     );
     webgl.linkProgram(program);
-    webgl_shaders['shaders'][args['id']] = {
+    webgl_shaders[args['id']] = {
+      'attributes': {},
       'program': program,
+      'uniforms': {},
     };
 
-    webgl_vertexattribarray_set({
-      'attributes': args['attributes'],
-      'program': program,
-    });
-    for(const location in args['locations']){
-        webgl_shaders['shaders'][args['id']][location] = webgl.getUniformLocation(
+    for(const attribute in args['attributes']){
+        webgl_shaders[args['id']]['attributes'][args['attributes'][attribute]] = webgl.getAttribLocation(
           program,
-          args['locations'][location]
+          args['attributes'][attribute]
+        );
+        webgl.enableVertexAttribArray(webgl_shaders[args['id']][args['attributes'][attribute]]);
+    }
+    for(const uniform in args['uniforms']){
+        webgl_shaders[args['id']]['uniforms'][uniform] = webgl.getUniformLocation(
+          program,
+          args['uniforms'][uniform]
         );
     }
 }
 
 function webgl_shader_use(id){
-    webgl_shaders['active'] = id;
-    webgl.useProgram(webgl_shaders['shaders'][id]['program']);
+    webgl_shader_active = id;
+    webgl.useProgram(webgl_shaders[id]['program']);
+    webgl_resize();
+
+    for(const entity in entity_entities){
+        webgl_entity_init(entity);
+    }
 }
 
 // Required args: stat, target
@@ -3632,37 +3656,37 @@ function webgl_tiles(args){
 
 function webgl_uniform_update(){
     webgl.uniform3f(
-      webgl_shaders['shaders'][webgl_shaders['active']]['ambient-color'],
+      webgl_shaders['default']['uniforms']['ambient-color'],
       webgl_properties['ambient-red'],
       webgl_properties['ambient-green'],
       webgl_properties['ambient-blue']
     );
     webgl.uniform3f(
-      webgl_shaders['shaders'][webgl_shaders['active']]['clear-color'],
+      webgl_shaders['default']['uniforms']['clear-color'],
       webgl_properties['clearcolor-red'],
       webgl_properties['clearcolor-green'],
       webgl_properties['clearcolor-blue']
     );
     webgl.uniform1i(
-      webgl_shaders['shaders'][webgl_shaders['active']]['directional'],
+      webgl_shaders['default']['uniforms']['directional'],
       webgl_properties['directional-state']
     );
     webgl.uniform3f(
-      webgl_shaders['shaders'][webgl_shaders['active']]['directional-color'],
+      webgl_shaders['default']['uniforms']['directional-color'],
       webgl_properties['directional-red'],
       webgl_properties['directional-green'],
       webgl_properties['directional-blue']
     );
     webgl.uniform3fv(
-      webgl_shaders['shaders'][webgl_shaders['active']]['directional-vector'],
+      webgl_shaders['default']['uniforms']['directional-vector'],
       webgl_properties['directional-vector']
     );
     webgl.uniform1f(
-      webgl_shaders['shaders'][webgl_shaders['active']]['fog-density'],
+      webgl_shaders['default']['uniforms']['fog-density'],
       webgl_properties['fog-density']
     );
     webgl.uniform1i(
-      webgl_shaders['shaders'][webgl_shaders['active']]['fog-state'],
+      webgl_shaders['default']['uniforms']['fog-state'],
       webgl_properties['fog-state']
     );
 }
@@ -3705,17 +3729,6 @@ function webgl_vehicle_toggle(args){
     }
 }
 
-// Required args: attributes, program
-function webgl_vertexattribarray_set(args){
-    for(const attribute in args['attributes']){
-        webgl_attributes[args['attributes'][attribute]] = webgl.getAttribLocation(
-          args['program'],
-          args['attributes'][attribute]
-        );
-        webgl.enableVertexAttribArray(webgl_attributes[args['attributes'][attribute]]);
-    }
-}
-
 function webgl_vertexcolorarray(args){
     args = core_args({
       'args': args,
@@ -3751,7 +3764,6 @@ function webgl_vertexcolorarray(args){
 }
 
 globalThis.webgl = 0;
-globalThis.webgl_attributes = {};
 globalThis.webgl_character_base_entities = [];
 globalThis.webgl_character_base_properties = {};
 globalThis.webgl_character_count = 0;
@@ -3761,10 +3773,8 @@ globalThis.webgl_context_valid = true;
 globalThis.webgl_default_texture = 'default.png';
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
-globalThis.webgl_shaders = {
-  'active': false,
-  'shaders': {},
-};
+globalThis.webgl_shader_active = false;
+globalThis.webgl_shaders = {};
 globalThis.webgl_textures = {};
 globalThis.webgl_textures_animated = {};
 
