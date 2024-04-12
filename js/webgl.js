@@ -1007,6 +1007,10 @@ function webgl_entity_init(entity){
 
     entity_entities[entity]['id'] = entity;
     entity_entities[entity]['vertices-length'] = entity_entities[entity]['vertices'].length / 3;
+    entity_entities[entity]['vertex-colors'] = webgl_vertexcolorarray({
+      'colors': entity_entities[entity]['vertex-colors'],
+      'vertexcount': entity_entities[entity]['vertices-length'],
+    });
     entity_entities[entity]['normals'] = webgl_normals({
       'rotate-x': entity_entities[entity]['rotate-x'],
       'rotate-y': entity_entities[entity]['rotate-y'],
@@ -1042,10 +1046,7 @@ function webgl_entity_init(entity){
 
     webgl_buffer_set({
       'attribute': 'vec_vertexColor',
-      'data': webgl_vertexcolorarray({
-        'colors': entity_entities[entity]['vertex-colors'],
-        'vertexcount': entity_entities[entity]['vertices-length'],
-      }),
+      'data': entity_entities[entity]['vertex-colors'],
       'size': 4,
     });
     webgl_buffer_set({
