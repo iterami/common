@@ -564,8 +564,9 @@ function webgl_context_lost(event){
 function webgl_context_restored(event){
     webgl_init();
     webgl_uniform_update();
-    webgl_shader_use('default');
-
+    for(const entity in entity_entities){
+        webgl_entity_init(entity);
+    }
     webgl_context_valid = true;
 
     if(core_menu_open){
