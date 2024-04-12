@@ -1390,9 +1390,7 @@ void main(void){
 }`,
     });
     webgl_shader_use('default');
-
     globalThis.onresize = webgl_resize;
-    webgl_resize();
 
     core_interval_modify({
       'id': 'webgl-interval',
