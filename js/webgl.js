@@ -1289,6 +1289,7 @@ function webgl_init(){
 
     webgl_shader_create({
       'attributes': [
+        'vec_pickColor',
         'vec_texturePosition',
         'vec_vertexColor',
         'vec_vertexNormal',
@@ -1298,6 +1299,7 @@ function webgl_init(){
 precision lowp float;
 uniform bool fog;
 uniform float float_fogDensity;
+uniform bool picking;
 uniform sampler2D sampler;
 uniform vec3 vec_clearColor;
 in vec2 vec_textureCoord;
@@ -1306,14 +1308,18 @@ in vec4 vec_lighting;
 in vec4 vec_position;
 out vec4 fragColor;
 void main(void){
-    fragColor = vec_fragmentColor * vec_lighting * texture(sampler, vec_textureCoord);
-    if(fog){
-        float distance = length(vec_position.xyz);
-        fragColor.rgb = vec3(mix(
-          vec_clearColor,
-          fragColor.rgb,
-          clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)
-        ));
+    if(picking){
+        fragColor = vec_fragmentColor;
+    }else{
+        fragColor = vec_fragmentColor * vec_lighting * texture(sampler, vec_textureCoord);
+        if(fog){
+            float distance = length(vec_position.xyz);
+            fragColor.rgb = vec3(mix(
+              vec_clearColor,
+              fragColor.rgb,
+              clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)
+            ));
+        }
     }
 }`,
       'id': 'default',
@@ -1328,17 +1334,20 @@ void main(void){
         'fog-state': 'fog',
         'mat_cameraMatrix': 'mat_cameraMatrix',
         'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
+        'picking': 'picking',
         'sampler': 'sampler',
       },
       'vertex': `#version 300 es
+in vec4 vec_pickColor;
 in vec2 vec_texturePosition;
 in vec3 vec_vertexNormal;
 in vec4 vec_vertexColor;
 in vec3 vec_vertexPosition;
-uniform bool directional;
 uniform float alpha;
+uniform bool directional;
 uniform mat4 mat_cameraMatrix;
 uniform mat4 mat_perspectiveMatrix;
+uniform bool picking;
 uniform vec3 vec_ambientColor;
 uniform vec3 vec_directionalColor;
 uniform vec3 vec_directionalVector;
@@ -1357,36 +1366,11 @@ void main(void){
         lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), 0.0);
     }
     vec_lighting = vec4(lighting, alpha);
-    vec_fragmentColor = vec_vertexColor;
-}`,
-    });
-    webgl_shader_create({
-      'attributes': [
-        'vec_pickColor',
-        'vec_vertexPosition',
-      ],
-      'fragment': `#version 300 es
-precision lowp float;
-in vec4 vec_fragmentColor;
-out vec4 fragColor;
-void main(void){
-    fragColor = vec_fragmentColor;
-}`,
-      'id': 'picking',
-      'uniforms': {
-        'mat_cameraMatrix': 'mat_cameraMatrix',
-        'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
-      },
-      'vertex': `#version 300 es
-in vec3 vec_pickColor;
-in vec3 vec_vertexPosition;
-uniform mat4 mat_cameraMatrix;
-uniform mat4 mat_perspectiveMatrix;
-out vec4 vec_fragmentColor;
-void main(void){
-    vec4 vec_position = mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);
-    gl_Position = mat_perspectiveMatrix * vec_position;
-    vec_fragmentColor = vec4(vec_pickColor.rgb, 1.0);
+    if(picking){
+        vec_fragmentColor = vec_pickColor;
+    }else{
+        vec_fragmentColor = vec_vertexColor;
+    }
 }`,
     });
     webgl_shader_use('default');
@@ -2223,13 +2207,19 @@ function webgl_pick_entity(args){
       },
     });
 
-    webgl_shader_use('picking');
+    webgl.uniform1i(
+      webgl_shaders[webgl_shader_active]['uniforms']['picking'],
+      true
+    );
     webgl_draw();
     const color = webgl_pick_color({
       'x': args['x'],
       'y': args['y'],
     });
-    webgl_shader_use('default');
+    webgl.uniform1i(
+      webgl_shaders[webgl_shader_active]['uniforms']['picking'],
+      false
+    );
 
     const color_blue = core_round({
       'decimals': 1,
