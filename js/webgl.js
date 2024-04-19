@@ -11,7 +11,8 @@ function webgl_billboard(entity){
 
 // Required args: attribute, data, size
 function webgl_buffer_set(args){
-    if(!(args['attribute'] in webgl_shaders[webgl_shader_active]['attributes'])){
+    const attributes = webgl_shaders[webgl_shader_active]['attributes'];
+    if(!(args['attribute'] in attributes)){
         return;
     }
 
@@ -26,14 +27,14 @@ function webgl_buffer_set(args){
       webgl.STATIC_DRAW
     );
     webgl.vertexAttribPointer(
-      webgl_shaders[webgl_shader_active]['attributes'][args['attribute']],
+      attributes[args['attribute']],
       args['size'],
       webgl.FLOAT,
       false,
       0,
       0
     );
-    webgl.enableVertexAttribArray(webgl_shaders[webgl_shader_active]['attributes'][args['attribute']]);
+    webgl.enableVertexAttribArray(attributes[args['attribute']]);
 }
 
 function webgl_camera_rotate(args){
@@ -911,12 +912,13 @@ function webgl_draw_entity(entity){
         ? webgl_textures_animated[entity_entities[entity]['texture-id']]['gl']
         : webgl_textures[entity_entities[entity]['texture-id']]
     );
+    const uniforms = webgl_shaders[webgl_shader_active]['uniforms'];
     webgl.uniform1f(
-      webgl_shaders[webgl_shader_active]['uniforms']['alpha'],
+      uniforms['alpha'],
       entity_entities[entity]['alpha']
     );
     webgl.uniformMatrix4fv(
-      webgl_shaders[webgl_shader_active]['uniforms']['mat_cameraMatrix'],
+      uniforms['mat_cameraMatrix'],
       false,
       math_matrices[entity]
     );
@@ -2206,9 +2208,10 @@ function webgl_pick_entity(args){
         'y': core_mouse['y'],
       },
     });
+    const uniforms = webgl_shaders[webgl_shader_active]['uniforms'];
 
     webgl.uniform1i(
-      webgl_shaders[webgl_shader_active]['uniforms']['picking'],
+      uniforms['picking'],
       true
     );
     webgl_draw();
@@ -2217,7 +2220,7 @@ function webgl_pick_entity(args){
       'y': args['y'],
     });
     webgl.uniform1i(
-      webgl_shaders[webgl_shader_active]['uniforms']['picking'],
+      uniforms['picking'],
       false
     );
 
@@ -3162,25 +3165,27 @@ function webgl_shader_create(args){
       vertex
     );
     webgl.linkProgram(program);
-    webgl_shaders[args['id']] = {
+    const shader = {
       'attributes': {},
       'program': program,
       'uniforms': {},
     };
 
     for(const attribute in args['attributes']){
-        webgl_shaders[args['id']]['attributes'][args['attributes'][attribute]] = webgl.getAttribLocation(
+        shader['attributes'][args['attributes'][attribute]] = webgl.getAttribLocation(
           program,
           args['attributes'][attribute]
         );
-        webgl.enableVertexAttribArray(webgl_shaders[args['id']][args['attributes'][attribute]]);
+        webgl.enableVertexAttribArray(shader[args['attributes'][attribute]]);
     }
     for(const uniform in args['uniforms']){
-        webgl_shaders[args['id']]['uniforms'][uniform] = webgl.getUniformLocation(
+        shader['uniforms'][uniform] = webgl.getUniformLocation(
           program,
           args['uniforms'][uniform]
         );
     }
+
+    webgl_shaders[args['id']] = shader;
 }
 
 function webgl_shader_use(id){
@@ -3644,38 +3649,39 @@ function webgl_tiles(args){
 }
 
 function webgl_uniform_update(){
+    const uniforms = webgl_shaders['default']['uniforms'];
     webgl.uniform3f(
-      webgl_shaders['default']['uniforms']['ambient-color'],
+      uniforms['ambient-color'],
       webgl_properties['ambient-red'],
       webgl_properties['ambient-green'],
       webgl_properties['ambient-blue']
     );
     webgl.uniform3f(
-      webgl_shaders['default']['uniforms']['clear-color'],
+      uniforms['clear-color'],
       webgl_properties['clearcolor-red'],
       webgl_properties['clearcolor-green'],
       webgl_properties['clearcolor-blue']
     );
     webgl.uniform1i(
-      webgl_shaders['default']['uniforms']['directional'],
+      uniforms['directional'],
       webgl_properties['directional-state']
     );
     webgl.uniform3f(
-      webgl_shaders['default']['uniforms']['directional-color'],
+      uniforms['directional-color'],
       webgl_properties['directional-red'],
       webgl_properties['directional-green'],
       webgl_properties['directional-blue']
     );
     webgl.uniform3fv(
-      webgl_shaders['default']['uniforms']['directional-vector'],
+      uniforms['directional-vector'],
       webgl_properties['directional-vector']
     );
     webgl.uniform1f(
-      webgl_shaders['default']['uniforms']['fog-density'],
+      uniforms['fog-density'],
       webgl_properties['fog-density']
     );
     webgl.uniform1i(
-      webgl_shaders['default']['uniforms']['fog-state'],
+      uniforms['fog-state'],
       webgl_properties['fog-state']
     );
 }
