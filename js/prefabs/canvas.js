@@ -13,33 +13,35 @@ function prefabs_canvas_fence_2d(args){
       },
     });
 
-    scenery.push({
-      'color': args['color'],
-      'vertices': [
-        {
-          'type': 'moveTo',
-          'x': -args['length-half'],
-          'y': -20,
-        },
-        {
-          'x': args['length-half'],
-          'y': -20,
-        },
-        {
-          'x': args['length-half'],
-          'y': -15,
-        },
-        {
-          'x': -args['length-half'],
-          'y': -15,
-        },
-      ],
-      'x': args['x'],
-      'y': args['y'],
-    });
+    const fence = [
+      {
+        'color': args['color'],
+        'vertices': [
+          {
+            'type': 'moveTo',
+            'x': -args['length-half'],
+            'y': -20,
+          },
+          {
+            'x': args['length-half'],
+            'y': -20,
+          },
+          {
+            'x': args['length-half'],
+            'y': -15,
+          },
+          {
+            'x': -args['length-half'],
+            'y': -15,
+          },
+        ],
+        'x': args['x'],
+        'y': args['y'],
+      },
+    ];
 
     for(let i = 0; i < args['length-half'] * 2; i += args['frequency']){
-        scenery.push({
+        fence.push({
           'color': args['color'],
           'vertices': [
             {
@@ -62,6 +64,8 @@ function prefabs_canvas_fence_2d(args){
           'x': args['x'] - args['length-half'] + i,
         });
     }
+
+    return fence;
 }
 
 // Required args: id
@@ -83,48 +87,50 @@ function prefabs_canvas_tree_2d(args){
     const half_base = args['width-base'] / 2;
     const half_leaf = args['width-leaf'] / 2;
 
-    scenery.push({
-      'color': args['color-base'],
-      'vertices': [
-        {
-          'type': 'moveTo',
-          'x': -half_base,
-          'y': -args['height-base'],
-        },
-        {
-          'x': half_base,
-          'y': -args['height-base'],
-        },
-        {
-          'x': half_base,
-        },
-        {
-          'x': -half_base,
-        },
-      ],
-      'x': args['x'],
-      'y': args['y'],
-    },
-    {
-      'color': args['color-leaf'],
-      'vertices': [
-        {
-          'type': 'moveTo',
-          'x': -half_leaf,
-          'y': -args['height-leaf'],
-        },
-        {
-          'x': half_leaf,
-          'y': -args['height-leaf'],
-        },
-        {
-          'x': half_leaf,
-        },
-        {
-          'x': -half_leaf,
-        },
-      ],
-      'x': args['x'],
-      'y': args['y'] - args['height-base'],
-    });
+    return [
+      {
+        'color': args['color-base'],
+        'vertices': [
+          {
+            'type': 'moveTo',
+            'x': -half_base,
+            'y': -args['height-base'],
+          },
+          {
+            'x': half_base,
+            'y': -args['height-base'],
+          },
+          {
+            'x': half_base,
+          },
+          {
+            'x': -half_base,
+          },
+        ],
+        'x': args['x'],
+        'y': args['y'],
+      },
+      {
+        'color': args['color-leaf'],
+        'vertices': [
+          {
+            'type': 'moveTo',
+            'x': -half_leaf,
+            'y': -args['height-leaf'],
+          },
+          {
+            'x': half_leaf,
+            'y': -args['height-leaf'],
+          },
+          {
+            'x': half_leaf,
+          },
+          {
+            'x': -half_leaf,
+          },
+        ],
+        'x': args['x'],
+        'y': args['y'] - args['height-base'],
+      },
+    ];
 }
