@@ -3758,6 +3758,11 @@ function webgl_vertexcolorarray(args){
     return color;
 }
 
+globalThis.webgl_default_texture = 'default.png';
+core_image({
+  'id': webgl_default_texture,
+  'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
+});
 globalThis.webgl = 0;
 globalThis.webgl_character_base_entities = [];
 globalThis.webgl_character_base_properties = {};
@@ -3765,15 +3770,9 @@ globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_context_valid = true;
-globalThis.webgl_default_texture = 'default.png';
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_shader_active = false;
 globalThis.webgl_shaders = {};
 globalThis.webgl_textures = {};
 globalThis.webgl_textures_animated = {};
-
-core_image({
-  'id': webgl_default_texture,
-  'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
-});
