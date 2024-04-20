@@ -2602,7 +2602,6 @@ function webgl_primitive_ellipsoid(args){
 
     const latitude_angles = math_degrees_to_radians(360 / args['slices-latitude']);
     const longitude_angles = math_degrees_to_radians(180 / args['slices-longitude']);
-    const longitude_start = -1.5707963267948966;
 
     const properties = {
       ...args,
@@ -2612,6 +2611,10 @@ function webgl_primitive_ellipsoid(args){
       'attach-y': args['translate-y'],
       'attach-z': args['translate-z'],
       'collision': false,
+      'draw-mode': 'TRIANGLE_STRIP',
+      'id': args['prefix'],
+      'vertex-colors': [],
+      'vertices': [],
     };
     for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
         if(longitude === args['slices-longitude'] / 2){
@@ -2628,41 +2631,8 @@ function webgl_primitive_ellipsoid(args){
             args['color1'][2] = temp_blue;
         }
 
-        let pole = 0;
-        if(longitude === 0){
-            pole = 1;
-
-        }else if(longitude === args['slices-longitude'] - 1){
-            pole = -1;
-        }
-
-        properties['id'] = args['prefix'] + '-quad-' + longitude;
-        properties['vertex-colors'] = [];
-        properties['vertices'] = [];
-
-        const longitude_bottom = longitude_start + longitude * longitude_angles;
-        const longitude_top = longitude_start + (longitude + 1) * longitude_angles;
-
-        if(pole === 0){
-            properties['draw-mode'] = 'TRIANGLE_STRIP';
-
-        }else{
-            if(pole === 1){
-                properties['vertex-colors'].push(
-                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
-                );
-
-            }else{
-                properties['vertex-colors'].push(
-                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
-                );
-            }
-
-            properties['vertices'].push(
-              0, args['radius-y'] * pole, 0
-            );
-            properties['draw-mode'] = 'TRIANGLE_FAN';
-        }
+        const longitude_bottom = -1.5707963267948966 + longitude * longitude_angles;
+        const longitude_top = -1.5707963267948966 + (longitude + 1) * longitude_angles;
 
         for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
             const rotation = latitude * latitude_angles;
@@ -2671,50 +2641,26 @@ function webgl_primitive_ellipsoid(args){
             const cos_top = Math.cos(longitude_top);
             const sin_rotation = Math.sin(rotation);
 
-            const xbottom = args['radius-x'] * sin_rotation * cos_bottom;
-            const ybottom = args['radius-y'] * Math.sin(longitude_bottom);
-            const zbottom = args['radius-z'] * cos_rotation * cos_bottom;
-
-            const xtop = args['radius-x'] * sin_rotation * cos_top;
-            const ytop = args['radius-y'] * Math.sin(longitude_top);
-            const ztop = args['radius-z'] * cos_rotation * cos_top;
-
-            if(pole === 1){
-                properties['vertex-colors'].push(
-                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
-                );
-                properties['vertices'].push(
-                  xtop, -ytop, ztop
-                );
-
-            }else if(pole === -1){
-                properties['vertex-colors'].push(
-                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3]
-                );
-                properties['vertices'].splice(
-                  3,
-                  0,
-                  xbottom, -ybottom, zbottom
-                );
-
-            }else{
-                properties['vertex-colors'].push(
-                  args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
-                  args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
-                );
-                properties['vertices'].push(
-                  xtop, ytop, ztop,
-                  xbottom, ybottom, zbottom
-                );
-            }
+            properties['vertex-colors'].push(
+              args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
+              args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
+            );
+            properties['vertices'].push(
+              args['radius-x'] * sin_rotation * cos_top,
+              args['radius-y'] * Math.sin(longitude_top),
+              args['radius-z'] * cos_rotation * cos_top,
+              args['radius-x'] * sin_rotation * cos_bottom,
+              args['radius-y'] * Math.sin(longitude_bottom),
+              args['radius-z'] * cos_rotation * cos_bottom
+            );
         }
-
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-        });
     }
+
+    webgl_entity_create({
+      'entities': [
+        properties,
+      ],
+    });
 }
 
 function webgl_primitive_frustum(args){
