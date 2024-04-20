@@ -295,8 +295,8 @@ function webgl_character_origin(id){
     }
     webgl_characters[id]['jump-allow'] = false;
 
-    webgl_entity_move_to({
-      'entity': webgl_characters[id],
+    webgl_move_to({
+      'move': webgl_characters[id],
     });
 }
 
@@ -377,8 +377,8 @@ function webgl_character_spawn(id){
     webgl_characters[id]['health'] = webgl_characters[id]['health-max'];
 
     webgl_character_origin(id);
-    webgl_entity_move_to({
-      'entity': webgl_characters[id],
+    webgl_move_to({
+      'move': webgl_characters[id],
       'x': webgl_properties['spawn-translate-x'],
       'y': webgl_properties['spawn-translate-y'] + webgl_characters[id]['collide-range-y'] + 1,
       'z': webgl_properties['spawn-translate-z'],
@@ -1079,22 +1079,6 @@ function webgl_entity_init(entity){
     entity_entities[entity]['vao'] = webgl.createVertexArray();
 
     webgl_entity_buffer(entity);
-}
-
-// Required args: entity
-function webgl_entity_move_to(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'x': 0,
-        'y': 0,
-        'z': 0,
-      },
-    });
-
-    args['entity']['translate-x'] = args['x'];
-    args['entity']['translate-y'] = args['y'];
-    args['entity']['translate-z'] = args['z'];
 }
 
 function webgl_entity_normals(entity){
@@ -1983,6 +1967,30 @@ function webgl_logicloop_handle_entity(entity){
       ],
       'id': entity,
     });
+}
+
+// Required args: move
+function webgl_move_to(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'target': false,
+        'x': 0,
+        'y': 0,
+        'z': 0,
+      },
+    });
+
+    if(args['target'] !== false){
+        args['entity']['translate-x'] = args['target']['translate-x'];
+        args['entity']['translate-y'] = args['target']['translate-y'];
+        args['entity']['translate-z'] = args['target']['translate-z'];
+        return;
+    }
+
+    args['entity']['translate-x'] = args['x'];
+    args['entity']['translate-y'] = args['y'];
+    args['entity']['translate-z'] = args['z'];
 }
 
 function webgl_normals(args){
