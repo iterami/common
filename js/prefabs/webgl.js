@@ -211,6 +211,7 @@ function prefabs_webgl_humanoid(args){
               'attach-z': args['translate-z'],
               'draw-mode': 'LINE_STRIP',
               'collision': false,
+              'groups': args['groups'],
               'id': args['prefix'] + '-' + part,
               'vertex-colors': webgl_vertexcolorarray({
                 'vertexcount': bodyparts[part].length / 3,
@@ -273,6 +274,7 @@ function prefabs_webgl_lines_path(args){
             ? 'LINE_STRIP'
             : 'LINE_LOOP',
           'collision': false,
+          'groups': args['groups'],
           'id': args['prefix'],
           'vertex-colors': vertex_colors,
           'vertices': vertices,
@@ -368,6 +370,7 @@ function prefabs_webgl_lines_shrub(args){
           'attach-z': args['translate-z'],
           'draw-mode': args['draw-mode'],
           'collision': false,
+          'groups': args['groups'],
           'id': args['prefix'],
           'vertex-colors': colors,
           'vertices': points,
@@ -413,6 +416,7 @@ function prefabs_webgl_lines_tree(args){
       'attach-y': args['translate-y'],
       'attach-z': args['translate-z'],
       'collision': false,
+      'groups': args['groups'],
       'vertex-colors': args['trunk-color'],
     };
 
@@ -505,6 +509,7 @@ function prefabs_webgl_tree_2d(args){
           'attach-z': args['translate-z'],
           'billboard': args['billboard'],
           'collision': false,
+          'groups': args['groups'],
           'id': args['prefix'] + '-base',
           'vertex-colors': args['base-color'],
           'vertices': [
@@ -522,6 +527,7 @@ function prefabs_webgl_tree_2d(args){
           'billboard': args['billboard'],
           'collision': false,
           'draw-mode': 'TRIANGLES',
+          'groups': args['groups'],
           'id': args['prefix'] + '-leaf',
           'vertex-colors': args['leaf-color'],
           'vertices': [

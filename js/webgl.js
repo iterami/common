@@ -2371,6 +2371,7 @@ function webgl_primitive_cuboid(args){
           'attach-x': args['translate-x'],
           'attach-y': args['translate-y'] + half_size_y,
           'attach-z': args['translate-z'],
+          'groups': args['groups'],
           'id': args['prefix'] + '-top',
           'vertex-colors': webgl_vertexcolorarray({
             'colors': args['top']['vertex-colors'],
@@ -2404,6 +2405,7 @@ function webgl_primitive_cuboid(args){
           'attach-x': args['translate-x'],
           'attach-y': args['translate-y'] - half_size_y,
           'attach-z': args['translate-z'],
+          'groups': args['groups'],
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2438,6 +2440,7 @@ function webgl_primitive_cuboid(args){
           'attach-x': args['translate-x'],
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'] + half_size_z,
+          'groups': args['groups'],
           'id': args['prefix'] + '-front',
           'rotate-x': 90,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2472,6 +2475,7 @@ function webgl_primitive_cuboid(args){
           'attach-x': args['translate-x'],
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'] - half_size_z,
+          'groups': args['groups'],
           'id': args['prefix'] + '-back',
           'rotate-x': 270,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2506,6 +2510,7 @@ function webgl_primitive_cuboid(args){
           'attach-x': args['translate-x'] - half_size_x,
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'],
+          'groups': args['groups'],
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2540,6 +2545,7 @@ function webgl_primitive_cuboid(args){
           'attach-x': args['translate-x'] + half_size_x,
           'attach-y': args['translate-y'],
           'attach-z': args['translate-z'],
+          'groups': args['groups'],
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2605,6 +2611,7 @@ function webgl_primitive_ellipsoid(args){
       'attach-z': args['translate-z'],
       'collision': false,
       'draw-mode': 'TRIANGLE_STRIP',
+      'groups': args['groups'],
       'id': args['prefix'],
       'vertex-colors': [],
       'vertices': [],
@@ -2692,6 +2699,7 @@ function webgl_primitive_frustum(args){
       'attach-z': args['translate-z'],
       'collision': false,
       'draw-mode': 'TRIANGLE_FAN',
+      'groups': args['groups'],
     };
 
     if(args['points'] === 1
@@ -2880,6 +2888,7 @@ function webgl_primitive_stars(args){
           'attach-z': args['translate-z'],
           'collision': false,
           'draw-mode': 'POINTS',
+          'groups': args['groups'],
           'id': args['prefix'],
           'vertex-colors': star_colors,
           'vertices': star_points,
@@ -2960,6 +2969,7 @@ function webgl_primitive_terrain(args){
           'attach-z': args['translate-z'],
           'collision': false,
           'draw-mode': 'TRIANGLE_STRIP',
+          'groups': args['groups'],
           'id': args['prefix'],
           'vertex-colors': point_colors,
           'vertices': points,
