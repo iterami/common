@@ -201,25 +201,22 @@ function prefabs_webgl_humanoid(args){
             }
         }
 
-        const properties = {
-          ...args,
-          'attach-to': args['character'],
-          'attach-type': 'webgl_characters',
-          'attach-x': args['translate-x'],
-          'attach-y': args['translate-y'],
-          'attach-z': args['translate-z'],
-          'draw-mode': 'LINE_STRIP',
-          'collision': false,
-          'id': args['prefix'] + '-' + part,
-          'vertex-colors': webgl_vertexcolorarray({
-            'vertexcount': bodyparts[part].length / 3,
-          }),
-          'vertices': bodyparts[part],
-        };
-
         webgl_entity_create({
           'entities': [
-            properties,
+            {
+              'attach-to': args['character'],
+              'attach-type': 'webgl_characters',
+              'attach-x': args['translate-x'],
+              'attach-y': args['translate-y'],
+              'attach-z': args['translate-z'],
+              'draw-mode': 'LINE_STRIP',
+              'collision': false,
+              'id': args['prefix'] + '-' + part,
+              'vertex-colors': webgl_vertexcolorarray({
+                'vertexcount': bodyparts[part].length / 3,
+              }),
+              'vertices': bodyparts[part],
+            },
           ],
         });
     }
@@ -270,7 +267,6 @@ function prefabs_webgl_lines_path(args){
     webgl_entity_create({
       'entities': [
         {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'draw-mode': webgl_paths[args['path']]['end'] !== 'loop'
@@ -361,23 +357,21 @@ function prefabs_webgl_lines_shrub(args){
             );
         }
     }
-    const properties = {
-      ...args,
-      'attach-to': args['character'],
-      'attach-type': 'webgl_characters',
-      'attach-x': args['translate-x'],
-      'attach-y': args['translate-y'],
-      'attach-z': args['translate-z'],
-      'draw-mode': args['draw-mode'],
-      'collision': false,
-      'id': args['prefix'],
-      'vertex-colors': colors,
-      'vertices': points,
-    };
 
     webgl_entity_create({
       'entities': [
-        properties,
+        {
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'attach-x': args['translate-x'],
+          'attach-y': args['translate-y'],
+          'attach-z': args['translate-z'],
+          'draw-mode': args['draw-mode'],
+          'collision': false,
+          'id': args['prefix'],
+          'vertex-colors': colors,
+          'vertices': points,
+        },
       ],
     });
 }
@@ -413,7 +407,6 @@ function prefabs_webgl_lines_tree(args){
     }
 
     const properties = {
-      ...args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'attach-x': args['translate-x'],
@@ -505,7 +498,6 @@ function prefabs_webgl_tree_2d(args){
     webgl_entity_create({
       'entities': [
         {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -522,7 +514,6 @@ function prefabs_webgl_tree_2d(args){
           ],
         },
         {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],

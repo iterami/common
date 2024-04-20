@@ -2366,7 +2366,6 @@ function webgl_primitive_cuboid(args){
 
     if(args['top']['exclude'] !== true){
         const properties = {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -2400,7 +2399,6 @@ function webgl_primitive_cuboid(args){
 
     if(args['bottom']['exclude'] !== true){
         const properties = {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -2435,7 +2433,6 @@ function webgl_primitive_cuboid(args){
 
     if(args['front']['exclude'] !== true){
         const properties = {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -2470,7 +2467,6 @@ function webgl_primitive_cuboid(args){
 
     if(args['back']['exclude'] !== true){
         const properties = {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -2505,7 +2501,6 @@ function webgl_primitive_cuboid(args){
 
     if(args['left']['exclude'] !== true){
         const properties = {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'] - half_size_x,
@@ -2540,7 +2535,6 @@ function webgl_primitive_cuboid(args){
 
     if(args['right']['exclude'] !== true){
         const properties = {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'] + half_size_x,
@@ -2604,7 +2598,6 @@ function webgl_primitive_ellipsoid(args){
     const longitude_angles = math_degrees_to_radians(180 / args['slices-longitude']);
 
     const properties = {
-      ...args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'attach-x': args['translate-x'],
@@ -2692,7 +2685,6 @@ function webgl_primitive_frustum(args){
 
     const rotation = math_degrees_to_radians(360 / args['points']);
     const properties = {
-      ...args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
       'attach-x': args['translate-x'],
@@ -2881,7 +2873,6 @@ function webgl_primitive_stars(args){
     webgl_entity_create({
       'entities': [
         {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -2962,7 +2953,6 @@ function webgl_primitive_terrain(args){
     webgl_entity_create({
       'entities': [
         {
-          ...args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'attach-x': args['translate-x'],
@@ -3519,7 +3509,6 @@ function webgl_tiles(args){
             webgl_entity_create({
               'entities': [
                 {
-                  ...args,
                   ...entities[entity],
                   'attach-to': args['character'],
                   'attach-type': 'webgl_characters',
