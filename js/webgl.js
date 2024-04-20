@@ -1982,15 +1982,15 @@ function webgl_move_to(args){
     });
 
     if(args['target'] !== false){
-        args['entity']['translate-x'] = args['target']['translate-x'];
-        args['entity']['translate-y'] = args['target']['translate-y'];
-        args['entity']['translate-z'] = args['target']['translate-z'];
+        args['move']['translate-x'] = args['target']['translate-x'];
+        args['move']['translate-y'] = args['target']['translate-y'];
+        args['move']['translate-z'] = args['target']['translate-z'];
         return;
     }
 
-    args['entity']['translate-x'] = args['x'];
-    args['entity']['translate-y'] = args['y'];
-    args['entity']['translate-z'] = args['z'];
+    args['move']['translate-x'] = args['x'];
+    args['move']['translate-y'] = args['y'];
+    args['move']['translate-z'] = args['z'];
 }
 
 function webgl_normals(args){
