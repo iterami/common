@@ -1282,7 +1282,7 @@ function webgl_init(){
         'vec_vertexPosition',
       ],
       'fragment': `#version 300 es
-precision lowp float;
+precision mediump float;
 uniform bool fog;
 uniform float float_fogDensity;
 uniform bool picking;
