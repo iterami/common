@@ -3658,6 +3658,7 @@ function webgl_vehicle_toggle(args){
     if(current !== false){
         webgl_characters[args['id']]['vehicle'] = false;
         vehicle['vehicle-stats']['character'] = false;
+        webgl_characters[args['id']]['camera-rotate-y'] = webgl_characters[args['id']]['rotate-y'];
     }
     if(current !== args['vehicle']){
         if(args['vehicle'] === false
