@@ -593,14 +593,14 @@ function webgl_controls_keyboard(id){
         if(vehicle['jump-allow']){
             if(core_keys[core_storage_data['move-↑']]['state']
               || (core_mouse['down-0'] && core_mouse['down-2'])){
-                vehicle['automove'] = false;
+                webgl_characters[id]['automove'] = false;
                 speed = Math.min(
                   vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-acceleration'],
                   vehicle['vehicle-stats']['speed-max']
                 );
 
             }else if(core_keys[core_storage_data['move-↓']]['state']){
-                vehicle['automove'] = false;
+                webgl_characters[id]['automove'] = false;
                 speed = Math.max(
                   vehicle['vehicle-stats']['speed'] - vehicle['vehicle-stats']['speed-acceleration'],
                   -vehicle['vehicle-stats']['speed-max'] / 2
