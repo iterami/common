@@ -599,16 +599,17 @@ function webgl_controls_keyboard(id){
                   vehicle['vehicle-stats']['speed-max']
                 );
 
+            }else if(core_keys[core_storage_data['move-↓']]['state']){
+                vehicle['automove'] = false;
+                speed = Math.max(
+                  vehicle['vehicle-stats']['speed'] - vehicle['vehicle-stats']['speed-acceleration'],
+                  -vehicle['vehicle-stats']['speed-max'] / 2
+                );
+
             }else if(webgl_characters[id]['automove']){
                 speed = Math.min(
                   vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-acceleration'],
                   vehicle['vehicle-stats']['speed-max']
-                );
-
-            }else if(core_keys[core_storage_data['move-↓']]['state']){
-                speed = Math.max(
-                  vehicle['vehicle-stats']['speed'] - vehicle['vehicle-stats']['speed-acceleration'],
-                  -vehicle['vehicle-stats']['speed-max'] / 2
                 );
 
             }else if(vehicle['vehicle-stats']['speed'] >= 0){
