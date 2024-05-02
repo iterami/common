@@ -53,6 +53,7 @@ button.gridbutton{
     border-width: 0;
     height: 25px;
     margin: 1px;
+    padding: 0;
     vertical-align: top;
     width: 25px;
 }
@@ -62,6 +63,7 @@ button.gridbuttonclickable{
     font-size: 300%;
     height: 50px;
     margin: 1px;
+    padding: 0;
     width: 50px;
 }
 #canvas{
