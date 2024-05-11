@@ -3,7 +3,7 @@
 // Required args: args, defaults
 function core_args(args){
     if(args['args'] === void 0){
-        args['args'] = {};
+        return args['defaults'];
     }
 
     for(const arg in args['defaults']){
