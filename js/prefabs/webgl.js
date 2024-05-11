@@ -257,12 +257,7 @@ function prefabs_webgl_lines_path(args){
         }
 
         vertices.push(x, y, z);
-        vertex_colors.push(
-          args['color'][0],
-          args['color'][1],
-          args['color'][2],
-          args['color'][3]
-        );
+        vertex_colors.push(...args['color']);
     }
 
     webgl_entity_create({
@@ -306,12 +301,7 @@ function prefabs_webgl_lines_shrub(args){
       },
     });
 
-    const colors = [
-      args['base-color'][0],
-      args['base-color'][1],
-      args['base-color'][2],
-      args['base-color'][3],
-    ];
+    const colors = [...args['base-color']];
     const points = [
       0, 0, 0,
     ];
@@ -343,20 +333,10 @@ function prefabs_webgl_lines_shrub(args){
             'y1': y,
             'z1': z,
           }) < args['leaf-distance']){
-            colors.push(
-              args['base-color'][0],
-              args['base-color'][1],
-              args['base-color'][2],
-              args['base-color'][3],
-            );
+            colors.push(...args['base-color']);
 
         }else{
-            colors.push(
-              args['leaf-color'][0],
-              args['leaf-color'][1],
-              args['leaf-color'][2],
-              args['leaf-color'][3],
-            );
+            colors.push(...args['leaf-color']);
         }
     }
 
