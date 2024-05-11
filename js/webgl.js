@@ -941,11 +941,7 @@ function webgl_entity_buffer(entity){
     const textureData = [];
     for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
         if(entity_entities[entity]['pick-color'] !== false){
-            pickData.push(
-              entity_entities[entity]['pick-color'][0],
-              entity_entities[entity]['pick-color'][1],
-              entity_entities[entity]['pick-color'][2],
-            );
+            pickData.push(...entity_entities[entity]['pick-color']);
 
         }else{
             pickData.push(
@@ -2651,8 +2647,8 @@ function webgl_primitive_ellipsoid(args){
             const sin_rotation = Math.sin(rotation);
 
             properties['vertex-colors'].push(
-              args['color0'][0], args['color0'][1], args['color0'][2], args['color0'][3],
-              args['color1'][0], args['color1'][1], args['color1'][2], args['color1'][3]
+              ...args['color0'],
+              ...args['color1']
             );
             properties['vertices'].push(
               args['radius-x'] * sin_rotation * cos_top,
@@ -2746,9 +2742,7 @@ function webgl_primitive_frustum(args){
             const sin_rotation = Math.sin(point_rotation);
 
             if(args['size-bottom'] === 0){
-                properties['vertex-colors'].push(
-                  args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3]
-                );
+                properties['vertex-colors'].push(...args['color-top']);
                 properties['vertices'].push(
                   args['size-top'] * sin_rotation,
                   args['length'],
@@ -2756,9 +2750,7 @@ function webgl_primitive_frustum(args){
                 );
 
             }else{
-                properties['vertex-colors'].push(
-                  args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3]
-                );
+                properties['vertex-colors'].push(...args['color-bottom']);
                 properties['vertices'].push(
                   args['size-bottom'] * sin_rotation,
                   0,
@@ -2787,9 +2779,7 @@ function webgl_primitive_frustum(args){
             const sin_rotation = Math.sin(point_rotation);
 
             if(args['size-top'] === 0){
-                properties['vertex-colors'].push(
-                  args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3]
-                );
+                properties['vertex-colors'].push(...args['color-bottom']);
                 properties['vertices'].push(
                   args['size-bottom'] * sin_rotation,
                   0,
@@ -2797,9 +2787,7 @@ function webgl_primitive_frustum(args){
                 );
 
             }else{
-                properties['vertex-colors'].push(
-                  args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3]
-                );
+                properties['vertex-colors'].push(...args['color-top']);
                 properties['vertices'].push(
                   args['size-top'] * sin_rotation,
                   args['length'],
@@ -2832,8 +2820,8 @@ function webgl_primitive_frustum(args){
             const next_rotation = (i + 1) * rotation;
 
             properties['vertex-colors'].push(
-              args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3],
-              args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3]
+              ...args['color-bottom'],
+              ...args['color-top']
             );
             properties['vertices'].push(
               args['size-bottom'] * Math.sin(point_rotation),
@@ -2880,12 +2868,7 @@ function webgl_primitive_stars(args){
           star_y,
           radius * Math.cos(phi),
         );
-        star_colors.push(
-          args['color'][0],
-          args['color'][1],
-          args['color'][2],
-          args['color'][3]
-        );
+        star_colors.push(...args['color']);
     }
     webgl_entity_create({
       'entities': [
@@ -2923,9 +2906,7 @@ function webgl_primitive_terrain(args){
         const random_color = webgl_vertexcolorarray({
           'vertexcount': 1,
         });
-        args['colors'].push(
-          random_color[0], random_color[1], random_color[2], random_color[3],
-        );
+        args['colors'].push(...random_color);
     }
     while(args['heights'].length < args['tiles-x'] * args['tiles-z'] + args['tiles-x'] + 1){
         args['heights'].push(Math.random() * 10);
