@@ -122,6 +122,9 @@ function chess_move(args){
         players[player]['rook-short-moved'] = validation['rook-short-moved'];
         board[args['target-y']][args['target-x']] = piece;
         game['player'] = 1 - player;
+        if(players[player]['time'] > 0){
+            players[player]['time'] += players[player]['time-increment'];
+        }
 
         validation['king-checked-enemy'] = args['threat'] !== true
             && chess_threat({
@@ -162,6 +165,8 @@ function chess_new(args){
         }
     }
 
+    const time = Math.floor(args['time']) || 3600;
+    const increment = Math.floor(args['increment']) || 10;
     chess_games[args['id']] = {
       '50-moves': 0,
       'board': board,
@@ -178,6 +183,8 @@ function chess_new(args){
           'pieces-taken': '',
           'rook-long-moved': false,
           'rook-short-moved': false,
+          'time': time,
+          'time-increment': increment,
         },
         {
           'king-checked': false,
@@ -188,6 +195,8 @@ function chess_new(args){
           'pieces-taken': '',
           'rook-long-moved': false,
           'rook-short-moved': false,
+          'time': time,
+          'time-increment': increment,
         },
       ],
       'threefold': {
@@ -263,7 +272,8 @@ function chess_validate(args){
     }else if(args['piece-x'] < 0 || args['piece-x'] > 7
       || args['piece-y'] < 0 || args['piece-y'] > 7
       || args['target-x'] < 0 || args['target-x'] > 7
-      || args['target-y'] < 0 || args['target-y'] > 7){
+      || args['target-y'] < 0 || args['target-y'] > 7
+      || game['players'][player]['time'] === 0){
         valid_move = false;
 
     }else{
