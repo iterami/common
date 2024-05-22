@@ -978,13 +978,7 @@ function core_random_crypto(args){
 }
 
 function core_random_hex(){
-    const color = core_random_rgb();
-
-    const blue = '0' + color['blue'].toString(16);
-    const green = '0' + color['green'].toString(16);
-    const red = '0' + color['red'].toString(16);
-
-    return red.slice(-2) + green.slice(-2) + blue.slice(-2);
+    return Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
 }
 
 function core_random_integer(args){
