@@ -134,9 +134,9 @@ function test_time(args){
     let time_total = 0;
 
     while(runs_done < args['runs']){
-        const time_before = new Date();
+        const time_before = globalThis.performance.now();
         args['function'](args['function-args']);
-        const time_after = new Date();
+        const time_after = globalThis.performance.now();
 
         const diff = time_after - time_before;
         if(diff < time_min
