@@ -30,9 +30,7 @@ function canvas_draw(){
         );
     }
 
-    core_call({
-      'todo': 'repo_drawlogic',
-    });
+    globalThis['repo_drawlogic']?.();
 }
 
 function canvas_drawloop(){
@@ -196,9 +194,7 @@ function canvas_resize(){
       canvas_properties
     );
 
-    core_call({
-      'todo': 'repo_resizelogic',
-    });
+    globalThis['repo_resizelogic']?.();
     if(core_menu_open){
         canvas_draw();
     }
@@ -214,10 +210,7 @@ function canvas_setmode(mode){
 
     core_mode = mode;
 
-    core_call({
-      'args': core_mode,
-      'todo': 'load_data',
-    });
+    globalThis['load_data']?.(core_mode);
 
     if(core_menu_open){
         core_escape();

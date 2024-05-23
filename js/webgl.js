@@ -1588,9 +1588,7 @@ function webgl_level_init(args){
 
     webgl_uniform_update();
     webgl_character_spawn();
-    core_call({
-      'todo': 'repo_level_load',
-    });
+    globalThis['repo_level_load']?.();
 
     if(core_menu_open){
         core_escape();

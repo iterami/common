@@ -15,20 +15,6 @@ function core_args(args){
     return args['args'];
 }
 
-// Required args: todo
-function core_call(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'args': void 0,
-      },
-    });
-
-    if(core_type(globalThis[args['todo']]) === 'function'){
-        globalThis[args['todo']](args['args']);
-    }
-}
-
 // Required args: number
 function core_digits_min(args){
     args = core_args({
@@ -81,9 +67,7 @@ function core_escape(force){
         core_elements['core-menu'].style.display = 'inline';
     }
 
-    core_call({
-      'todo': 'repo_escape',
-    });
+    globalThis['repo_escape']?.();
 }
 
 function core_events_bind(args){
@@ -682,9 +666,7 @@ function core_init(){
     });
     core_keys_rebind();
 
-    core_call({
-      'todo': 'repo_init',
-    });
+    globalThis['repo_init']?.();
 }
 
 function core_interval_animationFrame(id){
