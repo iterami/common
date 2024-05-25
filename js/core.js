@@ -947,16 +947,17 @@ function core_random_crypto(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'array': 'Uint8Array',
         'length': 1,
-        'type': 'Uint8Array',
       },
     });
 
-    const array = new globalThis[args['type']](args['length']);
+    if(core_type(args['array']) === 'string'){
+        args['array'] = new globalThis[args['array']](args['length']);
+    }
 
-    globalThis.crypto.getRandomValues(array);
-
-    return array;
+    globalThis.crypto.getRandomValues(args['array']);
+    return args['array'];
 }
 
 function core_random_hex(){
