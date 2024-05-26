@@ -1407,7 +1407,7 @@ function core_storage_save(keys){
 }
 
 function core_storage_update(keys){
-    if(keys === void 0){
+    if(core_type(keys) !== 'array'){
         keys = Object.keys(core_storage_data);
     }
 
