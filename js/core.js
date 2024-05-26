@@ -54,7 +54,6 @@ function core_escape(force){
 
     if(!core_menu_open){
         core_elements['core-toggle'].blur();
-        core_storage_save();
         core_elements['core-menu'].style.display = 'none';
         core_elements['core-ui'].style.userSelect = 'none';
         core_elements['repo-ui'].style.display = 'inline';
@@ -843,7 +842,6 @@ function core_keys_rebind(){
       'clearkeys': true,
       'keybinds': {
         'Escape': {
-          ...core_keys['Escape'],
           'solo': true,
           'todo': core_escape,
         },
