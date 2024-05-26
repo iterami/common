@@ -1675,10 +1675,10 @@ function webgl_logicloop(){
         return;
     }
 
-    if(webgl_properties['pointerlock']){
-        if(document.pointerLockElement === null){
-            core_requestpointerlock('canvas');
-        }
+    if(webgl_properties['pointerlock']
+      && document.pointerLockElement === null
+      && !core_keys['Escape']['state']){
+        core_requestpointerlock('canvas');
     }
 
     if(!webgl_properties['paused']){
