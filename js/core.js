@@ -1234,24 +1234,28 @@ function core_sort_custom(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'clone': true,
         'reverse': false,
       },
     });
 
-    const array_clone = [...args['array']];
+    const target_array = args['clone']
+      ? [...args['array']]
+      : args['array'];
 
-    array_clone.sort(args['todo']);
+    target_array.sort(args['todo']);
     if(args['reverse']){
-        array_clone.reverse();
+        target_array.reverse();
     }
 
-    return array_clone;
+    return target_array;
 }
 
 // Required args: array
 function core_sort_numbers(args){
     return core_sort_custom({
       'array': args['array'],
+      'clone': args['clone'],
       'reverse': args['reverse'],
       'todo': function(a, b){
           return a - b;
@@ -1263,6 +1267,7 @@ function core_sort_numbers(args){
 function core_sort_property(args){
     return core_sort_custom({
       'array': args['array'],
+      'clone': args['clone'],
       'reverse': args['reverse'],
       'todo': function(a, b){
           if(a[args['property']] > b[args['property']]){
@@ -1276,9 +1281,10 @@ function core_sort_property(args){
     });
 }
 
-function core_sort_random(array){
+function core_sort_random(args){
     return core_sort_custom({
-      'array': array,
+      'array': args['array'],
+      'clone': args['clone'],
       'todo': function(a, b){
           return core_random_boolean(.5);
       },
@@ -1289,6 +1295,7 @@ function core_sort_random(array){
 function core_sort_strings(args){
     return core_sort_custom({
       'array': args['array'],
+      'clone': args['clone'],
       'reverse': args['reverse'],
       'todo': new Intl.Collator().compare,
     });
