@@ -245,9 +245,11 @@ function core_handle_event(args){
         }
 
         if(args['todo'] !== void 0
-          && !args['object'][args['key']]['loop']
-          && args['object'][args['key']]['todo'](args['event']) !== void 0){
-            return;
+          && !args['object'][args['key']]['loop']){
+            const returned = args['object'][args['key']]['todo'](args['event']);
+            if(returned !== void 0){
+                return returned;
+            }
         }
 
         return args['object'][args['key']]['solo'];
