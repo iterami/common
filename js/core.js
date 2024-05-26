@@ -843,6 +843,7 @@ function core_keys_rebind(){
       'clearkeys': true,
       'keybinds': {
         'Escape': {
+          ...core_keys['Escape'],
           'solo': true,
           'todo': core_escape,
         },
