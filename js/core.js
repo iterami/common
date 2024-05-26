@@ -240,18 +240,14 @@ function core_handle_event(args){
             args['event'].preventDefault();
         }
 
-        let returned = void 0;
-        if(args['todo'] !== void 0
-          && !args['object'][args['key']]['loop']){
-            returned = args['object'][args['key']]['todo'](args['event']);
-        }
-
         if(args['state'] !== void 0){
             args['object'][args['key']]['state'] = args['state'];
         }
 
-        if(returned !== void 0){
-            return returned;
+        if(args['todo'] !== void 0
+          && !args['object'][args['key']]['loop']
+          && args['object'][args['key']]['todo'](args['event']) !== void 0){
+            return;
         }
 
         return args['object'][args['key']]['solo'];
