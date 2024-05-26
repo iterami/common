@@ -1498,6 +1498,7 @@ function webgl_level_init(args){
         'groups': [],
         'paused': false,
         'paths': {},
+        'pointerlock': false,
         'prefabs': [],
         'spawn-path-id': '',
         'spawn-rotate-x': 0,
@@ -1530,6 +1531,7 @@ function webgl_level_init(args){
       'gravity-acceleration': level['gravity-acceleration'],
       'gravity-max': level['gravity-max'],
       'paused': level['paused'],
+      'pointerlock': level['pointerlock'],
       'spawn-path-id': level['spawn-path-id'],
       'spawn-rotate-x': level['spawn-rotate-x'],
       'spawn-rotate-y': level['spawn-rotate-y'],
@@ -1671,6 +1673,12 @@ function webgl_logicloop(){
     if(!webgl_context_valid
       || webgl === 0){
         return;
+    }
+
+    if(webgl_properties['pointerlock']){
+        if(document.pointerLockElement === null){
+            core_requestpointerlock('canvas');
+        }
     }
 
     if(!webgl_properties['paused']){
