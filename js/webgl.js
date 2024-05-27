@@ -3303,18 +3303,16 @@ function webgl_texture_animate_init(args){
       },
     });
 
-    core_html({
-      'parent': core_elements['repo-ui'],
-      'properties': {
-        'className': 'hidden',
-        'id': 'webgl-animated-textures',
-      },
-      'type': 'div',
-    });
-
     const id = 'texture-' + args['id'];
     core_html({
-      'parent': document.getElementById('webgl-animated-textures'),
+      'parent': core_html({
+        'parent': core_elements['repo-ui'],
+        'properties': {
+          'className': 'hidden',
+          'id': 'webgl-animated-textures',
+        },
+        'type': 'div',
+      }),
       'properties': {
         'height': core_images[args['id']]['height'],
         'id': id,
