@@ -409,12 +409,8 @@ function core_handle_mousewheel(event){
 }
 
 function core_handle_pointerlockchange(event){
-    const element = document.getElementById(core_mouse['pointerlock-id']);
-    if(!element){
-        return;
-    }
-
-    core_mouse['pointerlock-state'] = element === document.pointerLockElement;
+    core_mouse['pointerlock-state'] = document.pointerLockElement !== null
+      && document.pointerLockElement.id === core_mouse['pointerlock-id'];
 
     if(!core_mouse['pointerlock-state']){
         core_escape();
