@@ -413,7 +413,7 @@ function core_handle_pointerlockchange(event){
       && document.pointerLockElement.id === core_mouse['pointerlock-id'];
 
     if(!core_mouse['pointerlock-state']){
-        core_escape();
+        core_escape(true);
     }
 }
 
