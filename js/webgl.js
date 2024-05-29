@@ -512,11 +512,22 @@ function webgl_collision(args){
         for(const axis in collision){
             args['collider']['translate-' + collision[axis]] = target_position[collision[axis]]
               + args['collider']['collide-range-' + (collision[axis] === 'y' ? 'y' : 'xz')] * collision_sign[axis];
+            const change = args['collider']['change-translate-' + collision[axis]];
             args['collider']['change-translate-' + collision[axis]] = 0;
 
             if(collision[axis] === 'y'){
                 if(args['collider']['jump-allow'] === false){
                     args['collider']['jump-allow'] = collision_sign[axis] !== Math.sign(webgl_properties['gravity-max']);
+
+                    if(webgl_properties['gravity-damage']
+                      && args['collider']['level'] >= 0
+                      && change < webgl_properties['gravity-max'] / 2){
+                        webgl_stat_modify({
+                          'stat': 'health',
+                          'target': args['collider'],
+                          'value': Math.floor((change - webgl_properties['gravity-max'] / 2) * 10),
+                        });
+                    }
                 }
 
                 if(args['target']['attach-to']){
@@ -1494,6 +1505,7 @@ function webgl_level_init(args){
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
+        'gravity-damage': false,
         'gravity-max': -2,
         'groups': [],
         'paused': false,
@@ -1529,6 +1541,7 @@ function webgl_level_init(args){
       'fog-density': level['fog-density'],
       'fog-state': level['fog-state'],
       'gravity-acceleration': level['gravity-acceleration'],
+      'gravity-damage': level['gravity-damage'],
       'gravity-max': level['gravity-max'],
       'paused': level['paused'],
       'pointerlock': level['pointerlock'],
