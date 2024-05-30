@@ -189,14 +189,13 @@ function core_handle_blur(event){
 }
 
 function core_handle_contextmenu(event){
-    const result = core_handle_event({
-      'event': event,
-      'key': 'contextmenu',
-      'object': core_mouse['todo'],
-      'todo': true,
-    });
-    if(result === void 0
-      && !core_menu_open){
+    if(!core_menu_open
+      && core_handle_event({
+        'event': event,
+        'key': 'contextmenu',
+        'object': core_mouse['todo'],
+        'todo': true,
+      }) === void 0){
         return false;
     }
 }
