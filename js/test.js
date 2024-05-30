@@ -5,12 +5,8 @@ function test_consts(args){
     let results = '<tr class=header><td>Const<td>Value<td>Test';
     for(const id in args['consts']){
         const label = args['consts'][id];
-        let result = false;
-        let value = '';
-        try{
-            value = eval(label);
-            result = value !== void 0;
-        }catch{}
+        const value = eval(label);
+        const result = value !== void 0;
         results += '<tr ' + (!result ? ' style=background-color:#600' : '') + '>'
           + '<td>' + label
           + '<td>' + value
@@ -22,7 +18,7 @@ function test_consts(args){
 // Required args: args, expect, function
 function test_function(args){
     let test = false;
-    let result = globalThis[args['function']](args['args']);
+    const result = globalThis[args['function']](args['args']);
     const type = core_type(args['expect']);
 
     if(type === 'function'){
