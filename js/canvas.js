@@ -1,12 +1,30 @@
 'use strict';
 
-function canvas_context(id){
-    return document.getElementById(id).getContext(
+function canvas_context(element){
+    return element.getContext(
       '2d',
       {
         'alpha': false,
       }
     );
+}
+
+function canvas_context_lost(event){
+    event.preventDefault();
+
+    core_interval_pause_all();
+    canvas = 0;
+}
+
+function canvas_context_restored(event){
+    canvas_init();
+
+    if(core_menu_open){
+        core_escape();
+
+    }else{
+        core_interval_resume_all();
+    }
 }
 
 function canvas_draw(){
@@ -139,12 +157,22 @@ function canvas_init(args){
             return false;
         };
     }
-    core_html({
+    const canvas_element = core_html({
       'parent': document.body,
       'properties': properties,
       'type': 'canvas',
     });
-    canvas = canvas_context('canvas');
+    canvas_element.addEventListener(
+      'contextlost',
+      canvas_context_lost,
+      false
+    );
+    canvas_element.addEventListener(
+      'contextrestored',
+      canvas_context_restored,
+      false
+    );
+    canvas = canvas_context(canvas_element);
     canvas.canvas.style.cursor = args['cursor'];
 
     globalThis.onresize = canvas_resize;

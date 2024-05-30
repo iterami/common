@@ -546,8 +546,8 @@ function webgl_collision(args){
     }
 }
 
-function webgl_context(id){
-    return document.getElementById(id).getContext(
+function webgl_context(element){
+    return element.getContext(
       'webgl2',
       {
         'alpha': false,
@@ -1206,7 +1206,7 @@ function webgl_init(){
       webgl_context_restored,
       false
     );
-    webgl = webgl_context('canvas');
+    webgl = webgl_context(canvas);
 
     math_matrices['cache'] = math_matrix_create();
     math_matrices['camera'] = math_matrix_create();
