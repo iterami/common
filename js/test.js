@@ -5,7 +5,7 @@ function test_consts(args){
     let results = '<tr class=header><td>Const<td>Value<td>Test';
     for(const id in args['consts']){
         const label = args['consts'][id];
-        const value = eval(label);
+        const value = globalThis.eval(label);
         const result = value !== void 0;
         results += '<tr ' + (!result ? ' style=background-color:#600' : '') + '>'
           + '<td>' + label
