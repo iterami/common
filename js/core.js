@@ -1495,9 +1495,11 @@ function core_ui_update(args){
 
         core_ui_values[id] = args['ids'][id];
 
-        const element = core_elements[id]
-          ? core_elements[id]
-          : document.getElementById(id);
+        if(!core_elements[id]){
+            core_elements[id] = document.getElementById(id);
+        }
+
+        const element = core_elements[id];
         element[element.tagName !== 'INPUT'
           ? 'textContent'
           : 'value'] = args['ids'][id];
