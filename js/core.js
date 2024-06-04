@@ -1041,6 +1041,7 @@ function core_repo_init(args){
         'storage-menu': '',
         'tabs': {},
         'ui': '',
+        'ui-elements': [],
       },
     });
 
@@ -1098,6 +1099,9 @@ function core_repo_init(args){
       },
     });
     core_elements['repo-ui'].innerHTML = args['ui'];
+    for(const element in args['ui-elements']){
+        core_elements[args['ui-elements'][element]] = document.getElementById(args['ui-elements'][element]);
+    }
 
     let have_default = false;
     for(const tab in args['tabs']){
