@@ -1062,15 +1062,15 @@ function core_repo_init(args){
         });
     }
     if(args['storage'] !== false){
-        core_storage_add({
-          'storage': args['storage'],
-        });
         core_tab_create({
           'content': args['storage-menu']
             + '<button id=storage-reset-repo type=button>Reset ' + core_repo_title + ' Settings</button>',
           'group': 'core-menu',
           'id': 'repo',
           'label': core_repo_title,
+        });
+        core_storage_add({
+          'storage': args['storage'],
         });
         args['events']['storage-reset-repo'] = {
           'onclick': function(){
@@ -1296,12 +1296,12 @@ function core_storage_add(args){
           'prefix': args['prefix'],
         };
         const value = globalThis.localStorage.getItem(args['prefix'] + key);
-        core_storage_data[key] = core_type_convert({
-          'template': core_storage_info[key]['default'],
-          'value': value === null
-            ? core_storage_info[key]['default']
-            : value,
-        });
+        core_storage_data[key] = value === null
+          ? core_storage_info[key]['default']
+          : core_type_convert({
+              'template': core_storage_info[key]['default'],
+              'value': value,
+            });
         core_elements[key] = document.getElementById(key);
     }
 }
