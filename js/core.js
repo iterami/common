@@ -1295,17 +1295,14 @@ function core_storage_add(args){
           'default': args['storage'][key],
           'prefix': args['prefix'],
         };
-        core_storage_data[key] = globalThis.localStorage.getItem(args['prefix'] + key);
-        core_elements[key] = document.getElementById(key);
-
-        if(core_storage_data[key] === null){
-            core_storage_data[key] = core_storage_info[key]['default'];
-        }
-
+        const value = globalThis.localStorage.getItem(args['prefix'] + key);
         core_storage_data[key] = core_type_convert({
           'template': core_storage_info[key]['default'],
-          'value': core_storage_data[key],
+          'value': value === null
+            ? core_storage_info[key]['default']
+            : value,
         });
+        core_elements[key] = document.getElementById(key);
     }
 }
 
