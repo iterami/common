@@ -1296,6 +1296,7 @@ function core_storage_add(args){
           'prefix': args['prefix'],
         };
         core_storage_data[key] = globalThis.localStorage.getItem(args['prefix'] + key);
+        core_elements[key] = document.getElementById(key);
 
         if(core_storage_data[key] === null){
             core_storage_data[key] = core_storage_info[key]['default'];
@@ -1364,7 +1365,7 @@ function core_storage_save(keys){
     for(const keyid in keys){
         const key = keys[keyid];
 
-        const element = document.getElementById(key);
+        const element = core_elements[key];
         const data = core_type_convert({
           'template': core_storage_info[key]['default'],
           'value': element[core_storage_element_property({
@@ -1399,7 +1400,7 @@ function core_storage_update(keys){
     for(const keyid in keys){
         const key = keys[keyid];
 
-        const element = document.getElementById(key);
+        const element = core_elements[key];
         element[core_storage_element_property({
           'element': element,
           'key': key,
