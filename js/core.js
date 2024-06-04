@@ -1519,17 +1519,17 @@ function core_ui_update(args){
     }
 }
 
+// Required args: element
 function core_uri(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'id': 'canvas',
         'quality': 1,
         'type': 'image/png',
       },
     });
 
-    return document.getElementById(args['id']).toDataURL(
+    return args['element'].toDataURL(
       args['type'],
       args['quality']
     );
