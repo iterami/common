@@ -1088,13 +1088,12 @@ function core_repo_init(args){
         'textContent': args['owner'],
       },
     });
-    if(args['link'] === false){
-        args['link'] = 'https://github.com/' + args['owner'] + '/' + core_repo_title;
-    }
     core_html_modify({
       'id': 'core-menu-title',
       'properties': {
-        'href': args['link'],
+        'href': args['link'] === false
+          ? 'https://github.com/' + args['owner'] + '/' + core_repo_title
+          : args['link'],
         'textContent': core_repo_title,
       },
     });
