@@ -680,7 +680,7 @@ function core_interval_modify(args){
 }
 
 function core_interval_pause(id){
-    if(!(id in core_intervals)){
+    if(!Object.hasOwn(core_intervals, id)){
         return;
     }
 
@@ -709,7 +709,7 @@ function core_interval_remove_all(){
 }
 
 function core_interval_resume(id){
-    if(!(id in core_intervals)
+    if(!Object.hasOwn(core_intervals, id)
       || !core_intervals[id]['paused']){
         return;
     }
@@ -1496,7 +1496,7 @@ function core_ui_update(args){
 
         core_ui_values[id] = args['ids'][id];
 
-        if(!core_elements[id]){
+        if(!Object.hasOwn(core_elements, id)){
             core_elements[id] = document.getElementById(id);
         }
 
