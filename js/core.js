@@ -1201,7 +1201,7 @@ function core_round(args){
         result = Number(result + eString);
     }
 
-    if(Number.isNaN(result)
+    if(globalThis.isNaN(result)
       || Math.abs(result) < Number('1e-' + args['decimals'])){
         return 0;
     }
@@ -1373,7 +1373,7 @@ function core_storage_save(keys){
         core_storage_data[key] = data;
 
         if(data !== void 0
-          && !Number.isNaN(data)
+          && !globalThis.isNaN(data)
           && String(data).length
           && data !== core_storage_info[key]['default']){
             globalThis.localStorage.setItem(
@@ -1470,7 +1470,7 @@ function core_type_convert(args){
     if(core_type(args['template']) === 'string'){
         return String(args['value']);
     }
-    if(!Number.isNaN(Number.parseFloat(args['template']))){
+    if(!globalThis.isNaN(Number.parseFloat(args['template']))){
         return Number.parseFloat(args['value']);
     }
     if(core_type(args['template']) === 'boolean'
