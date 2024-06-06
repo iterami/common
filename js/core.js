@@ -1373,7 +1373,7 @@ function core_storage_save(keys){
         core_storage_data[key] = data;
 
         if(data !== void 0
-          && !globalThis.isNaN(data)
+          && !Number.isNaN(data)
           && String(data).length
           && data !== core_storage_info[key]['default']){
             globalThis.localStorage.setItem(
