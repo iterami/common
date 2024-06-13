@@ -1253,6 +1253,7 @@ function webgl_init(){
         'event-target-type': 'character',
         'event-todo': false,
         'normals': [],
+        'particle': false,
         'pick-color': false,
         'rotate-x': 0,
         'rotate-y': 0,
@@ -1677,6 +1678,7 @@ function webgl_level_unload(){
     entity_remove_all({
       'delete-empty': true,
     });
+    webgl_particles = {};
     webgl_paths = {};
     webgl_textures_animated = {};
     core_storage_save();
@@ -1707,7 +1709,7 @@ function webgl_logicloop(){
         'webgl',
       ],
       'todo': function(entity){
-          webgl_logicloop_handle_entity(entity);
+          webgl_logicloop_entity(entity);
       },
     });
 
@@ -1822,7 +1824,7 @@ function webgl_logicloop(){
     });
 }
 
-function webgl_logicloop_handle_entity(entity){
+function webgl_logicloop_entity(entity){
     if(entity_entities[entity]['event-range'] > 0){
         const event_position = webgl_get_translation(entity_entities[entity]);
 
@@ -1942,6 +1944,17 @@ function webgl_logicloop_handle_entity(entity){
         webgl_entity_normals(entity);
     }
 
+    if(entity_entities[entity]['particle'] !== false){
+        webgl_logicloop_particle(entity);
+
+        webgl.bindVertexArray(entity_entities[entity]['vao']);
+        webgl_buffer_set({
+          'attribute': 'vec_vertexPosition',
+          'data': entity_entities[entity]['vertices'],
+          'size': 3,
+        });
+    }
+
     math_matrix_clone({
       'id': 'camera',
       'to': entity,
@@ -2044,6 +2057,28 @@ function webgl_normals(args){
         );
     }
     return normals;
+}
+
+function webgl_logicloop_particle(entity){
+    const particle = entity_entities[entity]['particle'];
+    const repeat = entity_entities[entity]['vertices-length'] * 3;
+    for(let vertex = 0; vertex < repeat; vertex += 3){
+        const vertices = entity_entities[entity]['vertices'];
+
+        vertices[vertex] += webgl_particles[particle]['speed-x'];
+        vertices[vertex + 1] += webgl_particles[particle]['speed-y'];
+        vertices[vertex + 2] += webgl_particles[particle]['speed-z'];
+
+        if(vertices[vertex] <= webgl_particles[particle]['x-min']){
+            vertices[vertex] = webgl_particles[particle]['x-max'];
+        }
+        if(vertices[vertex + 1] <= webgl_particles[particle]['y-min']){
+            vertices[vertex + 1] = webgl_particles[particle]['y-max'];
+        }
+        if(vertices[vertex + 2] <= webgl_particles[particle]['z-min']){
+            vertices[vertex + 2] = webgl_particles[particle]['z-max'];
+        }
+    }
 }
 
 function webgl_path_move(id){
@@ -2854,6 +2889,73 @@ function webgl_primitive_frustum(args){
         webgl_entity_create({
           'entities': [
             properties,
+          ],
+        });
+    }
+}
+
+// Required args: id
+function webgl_primitive_particle(args){
+    args = core_args({
+      'args': webgl_prefab_args(args),
+      'defaults': {
+        'draw-mode': 'POINTS',
+        'entities': [],
+        'speed-x': 0,
+        'speed-y': -1,
+        'speed-z': 0,
+        'x-max': 100,
+        'x-min': -100,
+        'y-max': 100,
+        'y-min': -100,
+        'z-max': 100,
+        'z-min': -100,
+      },
+    });
+
+    webgl_particles[args['id']] = {
+      'draw-mode': args['draw-mode'],
+      'speed-x': args['speed-x'],
+      'speed-y': args['speed-y'],
+      'speed-z': args['speed-z'],
+      'x-max': args['x-max'],
+      'x-min': args['x-min'],
+      'y-max': args['y-max'],
+      'y-min': args['y-min'],
+      'z-max': args['z-max'],
+      'z-min': args['z-min'],
+    };
+
+    for(const entity in args['entities']){
+        const vertices = [];
+        const vertexcount = args['entities'][entity]['vertex-repeat'];
+        delete args['entities'][entity]['vertex-repeat'];
+        for(let vertex = 0; vertex <= vertexcount; vertex++){
+            vertices.push(
+              args['x-min'] + Math.random() * (args['x-max'] - args['x-min']),
+              args['y-min'] + Math.random() * (args['y-max'] - args['y-min']),
+              args['z-min'] + Math.random() * (args['z-max'] - args['z-min'])
+            );
+        }
+
+        webgl_entity_create({
+          'entities': [
+            {
+              ...args['entities'][entity],
+              'attach-to': args['character'],
+              'attach-type': 'webgl_characters',
+              'attach-x': args['translate-x'],
+              'attach-y': args['translate-y'],
+              'attach-z': args['translate-z'],
+              'collision': false,
+              'draw-mode': webgl_particles[args['id']]['draw-mode'],
+              'particle': args['id'],
+              'groups': args['groups'],
+              'vertex-colors': args['entities']['vertex-colors'] || webgl_vertexcolorarray({
+                'vertexcount': 1,
+              }),
+              'vertices': vertices,
+            },
           ],
         });
     }
@@ -3723,6 +3825,7 @@ globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_context_valid = true;
+globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_shader_active = false;
