@@ -2072,19 +2072,24 @@ function webgl_logicloop_particle(entity){
     for(let vertex = 0; vertex < repeat; vertex += 3){
         const vertices = entity_entities[entity]['vertices'];
 
-        vertices[vertex] += webgl_particles[particle]['speed-x'];
-        vertices[vertex + 1] += webgl_particles[particle]['speed-y'];
-        vertices[vertex + 2] += webgl_particles[particle]['speed-z'];
-
-        if(vertices[vertex] <= webgl_particles[particle]['x-min']){
-            vertices[vertex] = webgl_particles[particle]['x-max'];
-        }
-        if(vertices[vertex + 1] <= webgl_particles[particle]['y-min']){
-            vertices[vertex + 1] = webgl_particles[particle]['y-max'];
-        }
-        if(vertices[vertex + 2] <= webgl_particles[particle]['z-min']){
-            vertices[vertex + 2] = webgl_particles[particle]['z-max'];
-        }
+        vertices[vertex] = math_clamp({
+          'max': webgl_particles[particle]['x-max'],
+          'min': webgl_particles[particle]['x-min'],
+          'value': vertices[vertex] + webgl_particles[particle]['speed-x'],
+          'wrap': true,
+        });
+        vertices[vertex + 1] = math_clamp({
+          'max': webgl_particles[particle]['y-max'],
+          'min': webgl_particles[particle]['y-min'],
+          'value': vertices[vertex + 1] + webgl_particles[particle]['speed-y'],
+          'wrap': true,
+        });
+        vertices[vertex + 2] = math_clamp({
+          'max': webgl_particles[particle]['z-max'],
+          'min': webgl_particles[particle]['z-min'],
+          'value': vertices[vertex + 2] + webgl_particles[particle]['speed-z'],
+          'wrap': true,
+        });
     }
 }
 
