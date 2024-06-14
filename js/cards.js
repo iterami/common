@@ -45,9 +45,7 @@ function cards_shuffle(id){
     const deck = cards_decks[id]['deck'];
     for(var card = deck.length - 1; card > 0; card--){
         const shuffled = Math.floor(Math.random() * (card + 1));
-        const temp = deck[card];
-        deck[card] = deck[shuffled];
-        deck[shuffled] = temp;
+        [deck[card], deck[shuffled]] = [deck[shuffled], deck[card]];
     }
     return cards_decks[id]['deck'];
 }

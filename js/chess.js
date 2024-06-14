@@ -6,9 +6,7 @@ function chess_check_diagonal(args){
     const board = args['board'] || chess_games[args['id']]['board'];
 
     if(args['loopstart'] > args['loopend']){
-        const temp = args['loopstart'];
-        args['loopstart'] = args['loopend'];
-        args['loopend'] = temp;
+        [args['loopstart'], args['loopend']] = [args['loopend'], args['loopstart']];
     }
 
     let x = args['file'];
@@ -32,9 +30,7 @@ function chess_check_file(args){
     const board = args['board'] || chess_games[args['id']]['board'];
 
     if(args['loopstart'] > args['loopend']){
-        const temp = args['loopstart'];
-        args['loopstart'] = args['loopend'];
-        args['loopend'] = temp;
+        [args['loopstart'], args['loopend']] = [args['loopend'], args['loopstart']];
     }
 
     for(let i = args['loopstart'] + 1; i < args['loopend']; i++){
@@ -51,9 +47,7 @@ function chess_check_rank(args){
     const board = args['board'] || chess_games[args['id']]['board'];
 
     if(args['loopstart'] > args['loopend']){
-        const temp = args['loopstart'];
-        args['loopstart'] = args['loopend'];
-        args['loopend'] = temp;
+        [args['loopstart'], args['loopend']] = [args['loopend'], args['loopstart']];
     }
 
     for(let i = args['loopstart'] + 1; i < args['loopend']; i++){

@@ -2689,17 +2689,7 @@ function webgl_primitive_ellipsoid(args){
     };
     for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
         if(longitude === args['slices-longitude'] / 2){
-            const temp_blue = args['color0'][2];
-            const temp_green = args['color0'][1];
-            const temp_red = args['color0'][0];
-
-            args['color0'][0] = args['color1'][0];
-            args['color0'][1] = args['color1'][1];
-            args['color0'][2] = args['color1'][2];
-
-            args['color1'][0] = temp_red;
-            args['color1'][1] = temp_green;
-            args['color1'][2] = temp_blue;
+            [args['color0'], args['color1']] = [args['color1'], args['color0']];
         }
 
         const longitude_bottom = -1.5707963267948966 + longitude * longitude_angles;
