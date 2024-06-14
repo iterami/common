@@ -929,6 +929,10 @@ function webgl_draw_entity(entity){
       uniforms['alpha'],
       entity_entities[entity]['alpha']
     );
+    webgl.uniform1f(
+      uniforms['point-size'],
+      entity_entities[entity]['point-size']
+    );
     webgl.uniformMatrix4fv(
       uniforms['mat_cameraMatrix'],
       false,
@@ -1255,6 +1259,7 @@ function webgl_init(){
         'normals': [],
         'particle': false,
         'pick-color': false,
+        'point-size': 500,
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
@@ -1320,6 +1325,7 @@ void main(void){
       'id': 'default',
       'uniforms': {
         'alpha': 'alpha',
+        'point-size': 'pointSize',
         'ambient-color': 'vec_ambientColor',
         'clear-color': 'vec_clearColor',
         'directional': 'directional',
@@ -1339,6 +1345,7 @@ in vec3 vec_vertexNormal;
 in vec4 vec_vertexColor;
 in vec3 vec_vertexPosition;
 uniform float alpha;
+uniform float pointSize;
 uniform bool directional;
 uniform mat4 mat_cameraMatrix;
 uniform mat4 mat_perspectiveMatrix;
@@ -1353,7 +1360,7 @@ out vec4 vec_position;
 void main(void){
     vec_position = mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);
     gl_Position = mat_perspectiveMatrix * vec_position;
-    gl_PointSize = 500. / length(vec_position.xyz);
+    gl_PointSize = pointSize / length(vec_position.xyz);
     vec_textureCoord = vec_texturePosition;
     vec3 lighting = vec_ambientColor;
     if(directional){
