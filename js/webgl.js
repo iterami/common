@@ -2914,7 +2914,7 @@ function webgl_primitive_particle(args){
         'draw-mode': 'POINTS',
         'entities': [],
         'speed-x': 0,
-        'speed-y': -1,
+        'speed-y': 0,
         'speed-z': 0,
         'x-max': 100,
         'x-min': -100,
@@ -2963,7 +2963,7 @@ function webgl_primitive_particle(args){
               'draw-mode': webgl_particles[args['id']]['draw-mode'],
               'particle': args['id'],
               'groups': args['groups'],
-              'vertex-colors': args['entities']['vertex-colors'] || webgl_vertexcolorarray({
+              'vertex-colors': args['entities'][entity]['vertex-colors'] || webgl_vertexcolorarray({
                 'vertexcount': 1,
               }),
               'vertices': vertices,
