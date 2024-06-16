@@ -1365,7 +1365,7 @@ void main(void){
     vec3 lighting = vec_ambientColor;
     if(directional){
         vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);
-        lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), 0.0);
+        lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), -0.5);
     }
     vec_lighting = vec4(lighting, alpha);
     if(picking){
