@@ -31,7 +31,6 @@ function entity_create(args){
     });
 
     entity_id_count++;
-
     const entity = {};
 
     for(const type in entity_types_default){
@@ -50,12 +49,10 @@ function entity_create(args){
         });
     }
 
-    for(const property in args['properties']){
-        entity[property] = core_handle_defaults({
-          'default': entity[property],
-          'var': args['properties'][property],
-        });
-    }
+    Object.assign(
+      entity,
+      args['properties'],
+    );
 
     entity_entities[args['id']] = entity;
 
@@ -172,12 +169,10 @@ function entity_group_remove_all(args){
 
 // Required args: id, type
 function entity_handle_defaults(args){
-    for(const property in entity_info[args['type']]['default']){
-        args['entity'][property] = core_handle_defaults({
-          'default': args['entity'][property],
-          'var': entity_info[args['type']]['default'][property],
-        });
-    }
+    args['entity'] = core_args({
+      'args': args['entity'],
+      'defaults': entity_info[args['type']]['default'],
+    });
 
     if(entity_groups[args['type']][args['id']] === void 0){
         entity_group_add({

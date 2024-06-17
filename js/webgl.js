@@ -2100,8 +2100,9 @@ function webgl_path_move(id){
     }
 
     const path = webgl_paths[character['path-id']];
-    const point = core_handle_defaults({
-      'default': {
+    const point = core_args({
+      'args': path['points'][character['path-point']],
+      'defaults': {
         'rotate-x': false,
         'rotate-y': false,
         'rotate-z': false,
@@ -2109,7 +2110,6 @@ function webgl_path_move(id){
         'translate-y': character['translate-y'],
         'translate-z': character['translate-z'],
       },
-      'var': path['points'][character['path-point']],
     });
     const distance = math_distance({
       'x0': character['translate-x'],
@@ -2154,13 +2154,13 @@ function webgl_path_move(id){
 
                 }else if(path_end === 'warp'){
                     character['path-point'] = 1;
-                    const warp_point = core_handle_defaults({
-                      'default': {
+                    const warp_point = core_args({
+                      'args': path['points'][0],
+                      'defaults': {
                         'translate-x': character['translate-x'],
                         'translate-y': character['translate-y'],
                         'translate-z': character['translate-z'],
                       },
-                      'var': path['points'][0],
                     });
                     character['translate-x'] = warp_point['translate-x'];
                     character['translate-y'] = warp_point['translate-y'];
@@ -2186,13 +2186,13 @@ function webgl_path_move(id){
             }else if(path_end === 'warp'){
                 const last = path['points'].length - 1;
                 character['path-point'] = last - 1;
-                const warp_point = core_handle_defaults({
-                  'default': {
+                const warp_point = core_args({
+                  'args': path['points'][last],
+                  'defaults': {
                     'translate-x': character['translate-x'],
                     'translate-y': character['translate-y'],
                     'translate-z': character['translate-z'],
                   },
-                  'var': path['points'][last],
                 });
                 character['translate-x'] = warp_point['translate-x'];
                 character['translate-y'] = warp_point['translate-y'];

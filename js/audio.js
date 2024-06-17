@@ -7,12 +7,10 @@ function audio_create(args){
           'playing': false,
         };
 
-        for(const property in args['audios'][audio]){
-            audio_audios[audio][property] = core_handle_defaults({
-              'default': audio_audios[audio],
-              'var': args['audios'][audio][property],
-            });
-        }
+        audio_audios[audio] = core_args({
+          'args': args['audios'][audio],
+          'defaults': audio_audios[audio],
+        });
 
         audio_audios[audio]['connections'] = args['audios'][audio]['connections'] || [
           {

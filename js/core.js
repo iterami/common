@@ -83,15 +83,15 @@ function core_events_bind(args){
     });
 
     if(args['beforeunload'] !== false){
-        core_events['beforeunload'] = core_handle_defaults({
-          'default': {
+        core_events['beforeunload'] = core_args({
+          'args': args['beforeunload'],
+          'defaults': {
             'loop': false,
             'preventDefault': false,
             'solo': false,
             'state': false,
             'todo': function(){},
           },
-          'var': args['beforeunload'],
         });
     }
 
@@ -198,28 +198,6 @@ function core_handle_contextmenu(event){
       }) === void 0){
         return false;
     }
-}
-
-function core_handle_defaults(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'default': {},
-        'var': {},
-      },
-    });
-
-    if(core_type(args['var']) !== 'object'){
-        return args['var'];
-    }
-
-    const object = args['default'];
-    for(const property in args['var']){
-        object[property] = core_handle_defaults({
-          'var': args['var'][property],
-        });
-    }
-    return object;
 }
 
 // Required args: event, key, object
@@ -453,11 +431,10 @@ function core_html(args){
     }
 
     const element = document.createElement(args['type']);
-    for(const property in args['properties']){
-        element[property] = core_handle_defaults({
-          'var': args['properties'][property],
-        });
-    }
+    Object.assign(
+      element,
+      args['properties'],
+    );
     if(args['parent'] !== false){
         args['parent'][args['todo']](element);
     }
@@ -854,15 +831,15 @@ function core_keys_updatebinds(args){
     }
 
     for(const keybind in args['keybinds']){
-        core_keys[keybind] = core_handle_defaults({
-          'default': {
+        core_keys[keybind] = core_args({
+          'args': args['keybinds'][keybind],
+          'defaults': {
             'loop': false,
             'preventDefault': false,
             'solo': false,
             'state': false,
             'todo': function(){},
           },
-          'var': args['keybinds'][keybind],
         });
     }
 }
