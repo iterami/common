@@ -11,11 +11,6 @@ function webgl_billboard(entity){
 
 // Required args: attribute, data, size
 function webgl_buffer_set(args){
-    const attributes = webgl_shaders[webgl_shader_active]['attributes'];
-    if(!(args['attribute'] in attributes)){
-        return;
-    }
-
     const buffer = webgl.createBuffer();
     webgl.bindBuffer(
       webgl.ARRAY_BUFFER,
@@ -26,6 +21,8 @@ function webgl_buffer_set(args){
       new Float32Array(args['data']),
       webgl.STATIC_DRAW
     );
+
+    const attributes = webgl_shaders[webgl_shader_active]['attributes'];
     webgl.vertexAttribPointer(
       attributes[args['attribute']],
       args['size'],
