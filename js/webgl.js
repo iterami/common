@@ -2456,10 +2456,7 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args['all']
-        );
-        Object.assign(
-          properties,
+          args['all'],
           args['top']
         );
         webgl_entity_create({
@@ -2491,10 +2488,7 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args['all']
-        );
-        Object.assign(
-          properties,
+          args['all'],
           args['bottom']
         );
         webgl_entity_create({
@@ -2526,10 +2520,7 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args['all']
-        );
-        Object.assign(
-          properties,
+          args['all'],
           args['front']
         );
         webgl_entity_create({
@@ -2561,10 +2552,7 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args['all']
-        );
-        Object.assign(
-          properties,
+          args['all'],
           args['back']
         );
         webgl_entity_create({
@@ -2596,10 +2584,7 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args['all']
-        );
-        Object.assign(
-          properties,
+          args['all'],
           args['left']
         );
         webgl_entity_create({
@@ -2631,10 +2616,7 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args['all']
-        );
-        Object.assign(
-          properties,
+          args['all'],
           args['right']
         );
         webgl_entity_create({
