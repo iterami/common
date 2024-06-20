@@ -111,7 +111,7 @@ function core_events_bind(args){
 
     if(args['elements'] !== false){
         for(const element in args['elements']){
-            const domelement = document.getElementById(element);
+            const domelement = core_getelement(element);
             for(const event in args['elements'][element]){
                 domelement[event] = args['elements'][element][event];
             }
@@ -159,6 +159,14 @@ function core_float_compare(args){
     });
 
     return Math.abs(args['a'] - args['b']) < args['precision'];
+}
+
+function core_getelement(id){
+    if(Object.hasOwn(core_elements, id)){
+        return core_elements[id];
+    }
+
+    return document.getElementById(id);
 }
 
 function core_handle_beforeunload(event){
@@ -424,7 +432,7 @@ function core_html(args){
     });
 
     if(args['properties']['id']){
-        const existing_element = document.getElementById(args['properties']['id']);
+        const existing_element = core_getelement(args['properties']['id']);
         if(existing_element){
             return existing_element;
         }
@@ -462,7 +470,7 @@ function core_html_format(string){
 
 // Required args: id, properties
 function core_html_modify(args){
-    const element = document.getElementById(args['id']);
+    const element = core_getelement(args['id']);
     if(!element){
         return;
     }
@@ -1136,7 +1144,7 @@ function core_requestpointerlock(id){
         return;
     }
 
-    const element = document.getElementById(id);
+    const element = core_getelement(id);
     if(!element){
         return;
     }
