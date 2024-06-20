@@ -100,7 +100,7 @@ function time_from_inputs(){
       'year': 0,
     };
     for(const value in date){
-        const element = document.getElementById(value);
+        const element = core_getelement(value);
         if(!element){
             continue;
         }
