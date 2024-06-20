@@ -1139,17 +1139,12 @@ function core_repo_reset(){
     }
 }
 
-function core_requestpointerlock(id){
+function core_requestpointerlock(element){
     if(core_menu_open){
         return;
     }
 
-    const element = core_getelement(id);
-    if(!element){
-        return;
-    }
-
-    core_mouse['pointerlock-id'] = id;
+    core_mouse['pointerlock-id'] = element.id;
     element.requestPointerLock();
 }
 
