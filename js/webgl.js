@@ -1032,8 +1032,7 @@ function webgl_entity_create(args){
         }
         delete entity_entities[entity_id]['groups'];
 
-        if(entity_groups['skybox']
-          && entity_groups['skybox'][entity_id] === true){
+        if(entity_groups['skybox']?.[entity_id] === true){
             entity_group_remove({
               'entities': [
                 entity_id,
@@ -3443,8 +3442,7 @@ function webgl_texture_init(args){
 
     let texture_complete = false;
     let texture_id = webgl_default_texture;
-    if(core_images[args['id']]
-      && core_images[args['id']].complete){
+    if(core_images[args['id']]?.complete){
         texture_complete = true;
         texture_id = args['id'];
     }
@@ -3728,8 +3726,7 @@ function webgl_vehicle_toggle(args){
     });
 
     const vehicle = webgl_characters[args['vehicle']];
-    if(vehicle
-      && vehicle['vehicle-stats']['locked']){
+    if(vehicle?.['vehicle-stats']['locked']){
         return;
     }
 
