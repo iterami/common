@@ -468,19 +468,6 @@ function core_html_format(string){
     });
 }
 
-// Required args: id, properties
-function core_html_modify(args){
-    const element = core_getelement(args['id']);
-    if(!element){
-        return;
-    }
-
-    Object.assign(
-      element,
-      args['properties']
-    );
-}
-
 // Required args: id, src
 function core_image(args){
     args = core_args({
@@ -1066,22 +1053,22 @@ function core_repo_init(args){
           },
         };
     }
-    core_html_modify({
-      'id': 'core-menu-root',
-      'properties': {
+    Object.assign(
+      document.getElementById('core-menu-root'),
+      {
         'href': args['root'],
         'textContent': args['owner'],
-      },
-    });
-    core_html_modify({
-      'id': 'core-menu-title',
-      'properties': {
+      }
+    );
+    Object.assign(
+      document.getElementById('core-menu-title'),
+      {
         'href': args['link'] === false
           ? 'https://github.com/' + args['owner'] + '/' + core_repo_title
           : args['link'],
         'textContent': core_repo_title,
-      },
-    });
+      }
+    );
     core_elements['repo-ui'].innerHTML = args['ui'];
 
     let have_default = false;
