@@ -457,11 +457,11 @@ function core_html(args){
 function core_html_format(string){
     return core_replace_multiple({
       'patterns': {
-        //'"': '&quot;',
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
-        '\'': '&apos;',
+        '\'': '&#39;',
+        '"': '&#34;',
         '\n\r': '<br>',
       },
       'string': string,
