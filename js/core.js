@@ -525,11 +525,11 @@ function core_init(){
     });
 
     core_tab_create({
-      'content': '<table><tr><td><input class=mini id=audio-volume max=1 min=0 step=any type=number><td>Audio Volume'
+      'content': '<table><tr><td><input class=mini id=audio-volume min=0 step=any type=number><td>Audio Volume'
         + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
         + '<tr><td><input class=mini id=jump type=text><td>Jump'
-        + '<tr><td><input class=mini id=mouse-horizontal min=0 step=any type=number><td>Mouse Sensitivity<br>Horizontal'
-        + '<tr><td><input class=mini id=mouse-vertical min=0 step=any type=number><td>Mouse Sensitivity<br>Vertical'
+        + '<tr><td><input class=mini id=mouse-horizontal step=any type=number><td>Mouse Sensitivity<br>Horizontal'
+        + '<tr><td><input class=mini id=mouse-vertical step=any type=number><td>Mouse Sensitivity<br>Vertical'
         + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
         + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
         + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
