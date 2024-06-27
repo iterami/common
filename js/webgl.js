@@ -2672,12 +2672,18 @@ function webgl_primitive_ellipsoid(args){
 
         const longitude_bottom = -1.5707963267948966 + longitude * longitude_angles;
         const longitude_top = -1.5707963267948966 + (longitude + 1) * longitude_angles;
+        const cos_bottom = Math.cos(longitude_bottom);
+        const cos_bottom_x = args['radius-x'] * cos_bottom;
+        const cos_bottom_z = args['radius-z'] * cos_bottom;
+        const cos_top = Math.cos(longitude_top);
+        const cos_top_x = args['radius-x'] * cos_top;
+        const cos_top_z = args['radius-z'] * cos_top;
+        const sin_bottom = args['radius-y'] * Math.sin(longitude_bottom);
+        const sin_top = args['radius-y'] * Math.sin(longitude_top);
 
         for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
             const rotation = latitude * latitude_angles;
-            const cos_bottom = Math.cos(longitude_bottom);
             const cos_rotation = Math.cos(rotation);
-            const cos_top = Math.cos(longitude_top);
             const sin_rotation = Math.sin(rotation);
 
             properties['vertex-colors'].push(
@@ -2685,12 +2691,12 @@ function webgl_primitive_ellipsoid(args){
               ...args['color1']
             );
             properties['vertices'].push(
-              args['radius-x'] * sin_rotation * cos_top,
-              args['radius-y'] * Math.sin(longitude_top),
-              args['radius-z'] * cos_rotation * cos_top,
-              args['radius-x'] * sin_rotation * cos_bottom,
-              args['radius-y'] * Math.sin(longitude_bottom),
-              args['radius-z'] * cos_rotation * cos_bottom
+              cos_top_x * sin_rotation,
+              sin_top,
+              cos_top_z * cos_rotation,
+              cos_bottom_x * sin_rotation,
+              sin_bottom,
+              cos_bottom_z * cos_rotation,
             );
         }
     }
