@@ -113,6 +113,9 @@ input[type=range],
 input[type=text]{
     width: 200px;
 }
+input:invalid{
+    border-color: #f00;
+}
 input.mini,
 input[type=color],
 .mini{
