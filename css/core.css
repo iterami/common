@@ -88,7 +88,7 @@ button.gridbuttonclickable{
 .external{
     color: #f99;
 }
-.external:after{
+.external::after{
     content: "↗";
 }
 .header{
