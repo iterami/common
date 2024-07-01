@@ -50,6 +50,7 @@ select:enabled{
     cursor: pointer;
 }
 button.gridbutton{
+    background-color: #222;
     border-width: 0;
     height: 25px;
     margin: 1px;
@@ -58,6 +59,7 @@ button.gridbutton{
     width: 25px;
 }
 button.gridbuttonclickable{
+    background-color: #222;
     border-width: 0;
     color: #000;
     font-size: 300%;
