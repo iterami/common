@@ -13,15 +13,13 @@ textarea{
     color: #ccc;
     font: 700 14px monospace;
 }
+button{
+    padding: 2px 7px;
+}
 button,
 input{
     border: 2px solid #999;
-    padding: 2px 7px;
     text-align: center;
-}
-button:disabled,
-textarea:read-only{
-    border-color: #555;
 }
 button:enabled,
 select:enabled{
@@ -55,6 +53,9 @@ code{
 hr{
     border: 2px solid #444;
 }
+input:invalid{
+    border-color: #f00;
+}
 li{
     text-align: left;
 }
@@ -84,6 +85,9 @@ textarea{
     border-color: #999;
     height: 190px;
     width: 490px;
+}
+textarea:read-only{
+    border-color: #555;
 }
 ul{
     margin: 0;
