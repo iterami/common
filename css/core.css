@@ -35,6 +35,8 @@ input::file-selector-button{
 }
 button:disabled,
 input:disabled,
+input:disabled::file-selector-button,
+input:not([type=color]):not([type=file]):read-only,
 textarea:read-only{
     border-color: #555;
 }
