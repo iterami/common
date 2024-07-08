@@ -17,23 +17,26 @@ function prefabs_canvas_fence_2d(args){
       {
         'color': args['color'],
         'vertices': [
-          {
-            'type': 'moveTo',
-            'x': -args['length-half'],
-            'y': -20,
-          },
-          {
-            'x': args['length-half'],
-            'y': -20,
-          },
-          {
-            'x': args['length-half'],
-            'y': -15,
-          },
-          {
-            'x': -args['length-half'],
-            'y': -15,
-          },
+          [
+            'moveTo',
+            -args['length-half'],
+            -20,
+          ],
+          [
+            'lineTo',
+            args['length-half'],
+            -20,
+          ],
+          [
+            'lineTo',
+            args['length-half'],
+            -15,
+          ],
+          [
+            'lineTo',
+            -args['length-half'],
+            -15,
+          ],
         ],
         'x': args['x'],
         'y': args['y'],
@@ -44,21 +47,26 @@ function prefabs_canvas_fence_2d(args){
         fence.push({
           'color': args['color'],
           'vertices': [
-            {
-              'type': 'moveTo',
-              'x': -5,
-              'y': -25,
-            },
-            {
-              'x': 5,
-              'y': -25,
-            },
-            {
-              'x': 5,
-            },
-            {
-              'x': -5,
-            },
+            [
+              'moveTo',
+              -5,
+              -25,
+            ],
+            [
+              'lineTo',
+              5,
+              -25,
+            ],
+            [
+              'lineTo',
+              5,
+              0,
+            ],
+            [
+              'lineTo',
+              -5,
+              0,
+            ],
           ],
           'y': args['y'],
           'x': args['x'] - args['length-half'] + i,
@@ -91,21 +99,26 @@ function prefabs_canvas_tree_2d(args){
       {
         'color': args['color-base'],
         'vertices': [
-          {
-            'type': 'moveTo',
-            'x': -half_base,
-            'y': -args['height-base'],
-          },
-          {
-            'x': half_base,
-            'y': -args['height-base'],
-          },
-          {
-            'x': half_base,
-          },
-          {
-            'x': -half_base,
-          },
+          [
+            'moveTo',
+            -half_base,
+            -args['height-base'],
+          ],
+          [
+            'lineTo',
+            half_base,
+            -args['height-base'],
+          ],
+          [
+            'lineTo',
+            half_base,
+            0,
+          ],
+          [
+            'lineTo',
+            -half_base,
+            0,
+          ],
         ],
         'x': args['x'],
         'y': args['y'],
@@ -113,21 +126,26 @@ function prefabs_canvas_tree_2d(args){
       {
         'color': args['color-leaf'],
         'vertices': [
-          {
-            'type': 'moveTo',
-            'x': -half_leaf,
-            'y': -args['height-leaf'],
-          },
-          {
-            'x': half_leaf,
-            'y': -args['height-leaf'],
-          },
-          {
-            'x': half_leaf,
-          },
-          {
-            'x': -half_leaf,
-          },
+          [
+            'moveTo',
+            -half_leaf,
+            -args['height-leaf'],
+          ],
+          [
+            'lineTo',
+            half_leaf,
+            -args['height-leaf'],
+          ],
+          [
+            'lineTo',
+            half_leaf,
+            0,
+          ],
+          [
+            'lineTo',
+            -half_leaf,
+            0,
+          ],
         ],
         'x': args['x'],
         'y': args['y'] - args['height-base'],

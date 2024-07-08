@@ -64,7 +64,6 @@ function canvas_draw_path(args){
         'properties': {},
         'style': canvas_properties['style'],
         'translate': false,
-        'type': 'lineTo',
         'x': 0,
         'y': 0,
       },
@@ -80,14 +79,8 @@ function canvas_draw_path(args){
 
     canvas.beginPath();
     for(const vertex in args['vertices']){
-        canvas[args['vertices'][vertex]['type'] || args['type']](
-          args['vertices'][vertex]['x'] || 0,
-          args['vertices'][vertex]['y'] || 0,
-          args['vertices'][vertex]['radius'],
-          args['vertices'][vertex]['startAngle'],
-          args['vertices'][vertex]['endAngle'],
-          args['vertices'][vertex]['antiClockwise']
-        );
+        const data = [...args['vertices'][vertex]];
+        canvas[data.shift()](...data);
     }
     canvas.closePath();
 
