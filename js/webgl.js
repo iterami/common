@@ -579,7 +579,7 @@ function webgl_context_restored(event){
     webgl_context_valid = true;
 
     if(core_menu_open){
-        core_escape();
+        webgl_draw();
 
     }else{
         core_interval_resume_all();

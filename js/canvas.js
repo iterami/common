@@ -20,7 +20,7 @@ function canvas_context_restored(event){
     canvas_init();
 
     if(core_menu_open){
-        core_escape();
+        canvas_draw();
 
     }else{
         core_interval_resume_all();
