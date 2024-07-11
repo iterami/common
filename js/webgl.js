@@ -3287,8 +3287,14 @@ function webgl_stat_modify(args){
       : args['target'][args['stat']] + args['value'];
 
     if(args['stat'] === 'level-xp'){
-        while(args['target']['level-xp'] >= args['target']['level'] * 1e3){
-            args['target']['level-xp'] -= args['target']['level'] * 1e3;
+        while(args['target']['level-xp'] >= Math.max(
+            args['target']['level'] * 1e3,
+            1000
+          )){
+            args['target']['level-xp'] -= Math.max(
+              args['target']['level'] * 1e3,
+              1000
+            );
             args['target']['level']++;
         }
 
