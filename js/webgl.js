@@ -3286,7 +3286,13 @@ function webgl_stat_modify(args){
       ? args['value']
       : args['target'][args['stat']] + args['value'];
 
-    if(args['stat'] === 'health'){
+    if(args['stat'] === 'level-xp'){
+        while(args['target']['level-xp'] >= args['target']['level'] * 1e3){
+            args['target']['level-xp'] -= args['target']['level'] * 1e3;
+            args['target']['level']++;
+        }
+
+    }else if(args['stat'] === 'health'){
         if(webgl_character_level(args['target']['id']) === -1){
             args['target']['health'] = args['target']['health-max'];
 
