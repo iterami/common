@@ -17,7 +17,8 @@ button{
     padding: 2px 7px;
 }
 button,
-input{
+input,
+select{
     border: 2px solid #999;
     text-align: center;
 }
@@ -53,6 +54,9 @@ code{
 hr{
     border: 2px solid #444;
 }
+input{
+    width: 200px;
+}
 input:invalid{
     border-color: #f00;
 }
@@ -65,9 +69,6 @@ ol{
 }
 .right{
     text-align: right;
-}
-select{
-    border: 2px solid #999;
 }
 table{
     border-collapse: collapse;

@@ -24,7 +24,8 @@ textarea{
 }
 button,
 input,
-input::file-selector-button{
+input::file-selector-button,
+select{
     border: 2px solid #999;
     text-align: center;
     vertical-align: middle;
@@ -141,9 +142,6 @@ ol{
 }
 .right{
     text-align: right;
-}
-select{
-    border: 2px solid #999;
 }
 table{
     border-collapse: collapse;
