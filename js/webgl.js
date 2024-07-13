@@ -3249,7 +3249,11 @@ function webgl_stat_modify(args){
       },
     });
 
-    if(args['stat'].startsWith('rotate-')
+    if(args['stat'] === 'level-xp'
+      && webgl_character_level(args['target']['id']) < 0){
+        return;
+
+    }else if(args['stat'].startsWith('rotate-')
       || args['stat'].startsWith('camera-rotate-')){
         const rotate_args = {
           'camera': args['stat'].startsWith('camera-rotate-'),
@@ -3287,14 +3291,8 @@ function webgl_stat_modify(args){
       : args['target'][args['stat']] + args['value'];
 
     if(args['stat'] === 'level-xp'){
-        while(args['target']['level-xp'] >= Math.max(
-            args['target']['level'] * 1e3,
-            1000
-          )){
-            args['target']['level-xp'] -= Math.max(
-              args['target']['level'] * 1e3,
-              1000
-            );
+        while(args['target']['level-xp'] >= Math.floor(args['target']['level'] + 1) * 1e3){
+            args['target']['level-xp'] -= Math.floor(args['target']['level'] + 1) * 1e3;
             args['target']['level']++;
         }
 
