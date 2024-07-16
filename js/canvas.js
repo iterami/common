@@ -92,24 +92,16 @@ function canvas_draw_path(args){
     }
 }
 
-// Required args: stops
+// Required args: args, stops
 function canvas_gradient(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'height': 0,
-        'width': 0,
-        'x': 0,
-        'y': 0,
+        'type': 'createLinearGradient',
       },
     });
 
-    const gradient = canvas.createLinearGradient(
-      args['x'],
-      args['y'],
-      args['width'],
-      args['height']
-    );
+    const gradient = canvas[args['type']](...args['args']);
     for(const step in args['stops']){
         gradient.addColorStop(
           args['stops'][step]['offset'] || 0,
