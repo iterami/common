@@ -164,7 +164,12 @@ function webgl_character_init(args){
       'camera-y': args['translate-y'],
       'camera-z': args['translate-z'],
       'camera-zoom': Math.min(
-        args['camera-zoom'],
+        Math.max(
+          args['camera-zoom'],
+          args['level'] === -1
+            ? 0
+            : webgl_properties['camera-zoom-min']
+        ),
         webgl_properties['camera-zoom-max']
       ),
       'change-rotate-x': args['change-rotate-x'],
@@ -853,11 +858,15 @@ function webgl_controls_mousewheel(id, deltaY){
             );
 
     }else{
-        character['camera-zoom'] = core_key_shift
+        const min = character['level'] === -1
           ? 0
+          : webgl_properties['camera-zoom-min'];
+
+        character['camera-zoom'] = core_key_shift
+          ? min
           : Math.max(
               character['camera-zoom'] - 1,
-              0
+              min
             );
     }
 }
@@ -1496,6 +1505,7 @@ function webgl_level_init(args){
         'ambient-green': 1,
         'ambient-red': 1,
         'camera-zoom-max': 50,
+        'camera-zoom-min': 0,
         'characters': [],
         'clearcolor-blue': 0,
         'clearcolor-green': 0,
@@ -1533,6 +1543,7 @@ function webgl_level_init(args){
       'ambient-green': level['ambient-green'],
       'ambient-red': level['ambient-red'],
       'camera-zoom-max': level['camera-zoom-max'],
+      'camera-zoom-min': level['camera-zoom-min'],
       'clearcolor-blue': level['clearcolor-blue'],
       'clearcolor-green': level['clearcolor-green'],
       'clearcolor-red': level['clearcolor-red'],
