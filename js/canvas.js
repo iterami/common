@@ -117,6 +117,7 @@ function canvas_init(args){
       'defaults': {
         'contextmenu': true,
         'cursor': 'default',
+        'interval': true,
       },
     });
 
@@ -172,17 +173,19 @@ function canvas_init(args){
       'type': 'canvas',
     });
 
-    core_interval_modify({
-      'id': 'canvas-interval',
-      'paused': true,
-      'todo': canvas_logicloop,
-    });
-    core_interval_modify({
-      'animationFrame': true,
-      'id': 'canvas-animationFrame',
-      'paused': true,
-      'todo': canvas_drawloop,
-    });
+    if(args['interval']){
+        core_interval_modify({
+          'id': 'canvas-interval',
+          'paused': true,
+          'todo': canvas_logicloop,
+        });
+        core_interval_modify({
+          'animationFrame': true,
+          'id': 'canvas-animationFrame',
+          'paused': true,
+          'todo': canvas_drawloop,
+        });
+    }
 
     if(!core_menu_open){
         canvas_setmode();
@@ -208,9 +211,7 @@ function canvas_resize(){
     );
 
     globalThis['repo_resizelogic']?.();
-    if(core_menu_open){
-        canvas_draw();
-    }
+    canvas_draw();
 }
 
 function canvas_setmode(mode){
