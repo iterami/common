@@ -17,7 +17,7 @@ function canvas_context_lost(event){
 }
 
 function canvas_context_restored(event){
-    canvas_init();
+    canvas_init(canvas_properties['args']);
 
     if(core_menu_open){
         canvas_draw();
@@ -122,6 +122,7 @@ function canvas_init(args){
     });
 
     canvas_setproperties({
+      'args': {...args},
       'clearColor': '#000',
       'fillStyle': '#fff',
       'font': '200% monospace',
