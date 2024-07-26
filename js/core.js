@@ -635,6 +635,10 @@ function core_interval_modify(args){
       },
     });
 
+    if(core_type(args['todo']) !== 'function'){
+        return;
+    }
+
     core_interval_pause(args['id']);
 
     core_intervals[args['id']] = {
