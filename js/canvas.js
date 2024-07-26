@@ -177,7 +177,7 @@ function canvas_init(args){
         core_interval_modify({
           'id': 'canvas-interval',
           'paused': true,
-          'todo': canvas_logicloop,
+          'todo': globalThis['repo_logic'],
         });
         core_interval_modify({
           'animationFrame': true,
@@ -190,10 +190,6 @@ function canvas_init(args){
     if(!core_menu_open){
         canvas_setmode();
     }
-}
-
-function canvas_logicloop(){
-    repo_logic();
 }
 
 function canvas_resize(){

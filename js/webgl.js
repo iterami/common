@@ -1716,7 +1716,7 @@ function webgl_logicloop(){
         }
     }
 
-    repo_logic();
+    globalThis['repo_logic']?.();
 
     entity_group_modify({
       'groups': [
