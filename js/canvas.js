@@ -18,11 +18,9 @@ function canvas_context_lost(event){
 
 function canvas_context_restored(event){
     canvas_init(canvas_properties['args']);
+    canvas_draw();
 
-    if(core_menu_open){
-        canvas_draw();
-
-    }else{
+    if(!core_menu_open){
         core_interval_resume_all();
     }
 }
