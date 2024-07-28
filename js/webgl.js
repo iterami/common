@@ -1388,7 +1388,7 @@ void main(void){
     core_interval_modify({
       'id': 'webgl-interval',
       'paused': true,
-      'todo': webgl_logicloop,
+      'todo': webgl_logic,
     });
     core_interval_modify({
       'animationFrame': true,
@@ -1702,7 +1702,7 @@ function webgl_level_unload(){
     core_storage_save();
 }
 
-function webgl_logicloop(){
+function webgl_logic(){
     if(!webgl_context_valid
       || webgl === 0){
         return;
@@ -1727,7 +1727,7 @@ function webgl_logicloop(){
         'webgl',
       ],
       'todo': function(entity){
-          webgl_logicloop_entity(entity);
+          webgl_logic_entity(entity);
       },
     });
 
@@ -1848,7 +1848,7 @@ function webgl_logicloop(){
     });
 }
 
-function webgl_logicloop_entity(entity){
+function webgl_logic_entity(entity){
     if(entity_entities[entity]['event-range'] > 0){
         const event_position = webgl_get_translation(entity_entities[entity]);
 
@@ -1969,7 +1969,7 @@ function webgl_logicloop_entity(entity){
     }
 
     if(entity_entities[entity]['particle'] !== false){
-        webgl_logicloop_particle(entity);
+        webgl_logic_particle(entity);
 
         webgl.bindVertexArray(entity_entities[entity]['vao']);
         webgl_buffer_set({
@@ -2083,7 +2083,7 @@ function webgl_normals(args){
     return normals;
 }
 
-function webgl_logicloop_particle(entity){
+function webgl_logic_particle(entity){
     const particle = entity_entities[entity]['particle'];
     const repeat = entity_entities[entity]['vertices-length'] * 3;
     for(let vertex = 0; vertex < repeat; vertex += 3){
