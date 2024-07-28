@@ -136,6 +136,7 @@ function webgl_character_init(args){
         'level': -2,
         'level-xp': 0,
         'lives': -1,
+        'lock': {},
         'path-direction': 1,
         'path-end': '',
         'path-id': '',
@@ -194,6 +195,7 @@ function webgl_character_init(args){
       'level': args['level'],
       'level-xp': args['level-xp'],
       'lives': args['lives'],
+      'lock': args['lock'],
       'path-direction': args['path-direction'],
       'path-end': args['path-end'],
       'path-id': args['path-id'],
@@ -1522,6 +1524,7 @@ function webgl_level_init(args){
         'gravity-damage': false,
         'gravity-max': -2,
         'groups': [],
+        'lock': {},
         'paused': false,
         'paths': {},
         'pointerlock': false,
@@ -1558,6 +1561,7 @@ function webgl_level_init(args){
       'gravity-acceleration': level['gravity-acceleration'],
       'gravity-damage': level['gravity-damage'],
       'gravity-max': level['gravity-max'],
+      'lock': level['lock'],
       'paused': level['paused'],
       'pointerlock': level['pointerlock'],
       'spawn-path-id': level['spawn-path-id'],
@@ -1750,17 +1754,6 @@ function webgl_logicloop(){
 
         webgl_path_move(id);
 
-        if(webgl_characters[id]['collides']){
-            for(const entity in entity_entities){
-                if(entity_entities[entity]['collision']){
-                    webgl_collision({
-                      'collider': webgl_characters[id],
-                      'target': entity_entities[entity],
-                    });
-                }
-            }
-        }
-
         if(webgl_characters[id]['change-rotate-x'] !== 0
           || webgl_characters[id]['change-rotate-y'] !== 0
           || webgl_characters[id]['change-rotate-z'] !== 0){
@@ -1778,6 +1771,23 @@ function webgl_logicloop(){
         for(const axis in axes){
             const translate_axis = 'translate-' + axes[axis];
             webgl_characters[id][translate_axis] += webgl_characters[id]['change-' + translate_axis];
+        }
+
+        Object.assign(
+           webgl_characters[id],
+           webgl_characters[id]['lock'],
+           webgl_properties['lock']
+        );
+
+        if(webgl_characters[id]['collides']){
+            for(const entity in entity_entities){
+                if(entity_entities[entity]['collision']){
+                    webgl_collision({
+                      'collider': webgl_characters[id],
+                      'target': entity_entities[entity],
+                    });
+                }
+            }
         }
 
         if(level <= -1){
