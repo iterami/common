@@ -141,6 +141,7 @@ function webgl_character_init(args){
         'path-end': '',
         'path-id': '',
         'path-point': 0,
+        'randomize': false,
         'reticle': '#fff',
         'rotate-x': 0,
         'rotate-y': 0,
@@ -240,6 +241,21 @@ function webgl_character_init(args){
           'vehicle': args['id'],
         });
     }
+
+    if(args['randomize']){
+        const xz = webgl_characters[args['id']]['collide-range-xz'] * 2;
+
+        webgl_primitive_cuboid({
+          'all': {
+            'collision': false,
+          },
+          'character': args['id'],
+          'prefix': args['id'],
+          'size-x': xz,
+          'size-y': webgl_characters[args['id']]['collide-range-y'] * 2,
+          'size-z': xz,
+        });
+    }
 }
 
 function webgl_character_level(id){
@@ -302,51 +318,6 @@ function webgl_character_origin(id){
     webgl_move_to({
       'move': webgl_characters[id],
     });
-}
-
-function webgl_character_random(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'gravity': 1,
-        'height-base': 2,
-        'height-random': 5,
-        'id': webgl_character_count,
-        'jump-height': 1,
-        'level': 0,
-        'lives': -1,
-        'speed': 1,
-        'width-base': 2,
-        'width-random': 2,
-      },
-    });
-
-    const xz = Math.random() * args['width-random'] + args['width-base'];
-    const y = Math.random() * args['height-random'] + args['height-base'];
-
-    webgl_character_init({
-      'collide-range-xz': xz,
-      'collide-range-y': y,
-      'collides': true,
-      'controls': 'rpg',
-      'gravity': args['gravity'],
-      'id': args['id'],
-      'jump-height': args['jump-height'],
-      'level': args['level'],
-      'lives': args['lives'],
-      'speed': args['speed'],
-    });
-    webgl_primitive_cuboid({
-      'all': {
-        'collision': false,
-      },
-      'character': args['id'],
-      'prefix': args['id'],
-      'size-x': xz * 2,
-      'size-y': y * 2,
-      'size-z': xz * 2,
-    });
-    webgl_character_spawn();
 }
 
 function webgl_character_set(id){
