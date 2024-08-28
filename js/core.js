@@ -931,7 +931,7 @@ function core_random_drop(args){
         total += args['options'][option];
 
         options.push(option);
-        percentages.push(args['options'][option]);
+        percentages.push(total);
     }
 
     if(args['nothing-type'] === 0){
@@ -940,14 +940,14 @@ function core_random_drop(args){
             total += remaining;
 
             options.push(false);
-            percentages.push(remaining);
+            percentages.push(total);
         }
 
     }else if(args['nothing-type'] === 1){
         total += args['nothing'];
 
         options.push(false);
-        percentages.push(args['nothing']);
+        percentages.push(total);
     }
 
     const random = Math.random() * total;
