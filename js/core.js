@@ -913,6 +913,53 @@ function core_random_crypto(args){
     return args['array'];
 }
 
+// Required args: options
+function core_random_drop(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'nothing': 1,
+        'nothing-type': 0,
+      },
+    });
+
+    const options = [];
+    const percentages = [];
+    let total = 0;
+
+    for(const option in args['options']){
+        total += args['options'][option];
+
+        options.push(option);
+        percentages.push(args['options'][option]);
+    }
+
+    if(args['nothing-type'] === 0){
+        if(total < args['nothing']){
+            const remaining = args['nothing'] - total;
+            total += remaining;
+
+            options.push(false);
+            percentages.push(remaining);
+        }
+
+    }else if(args['nothing-type'] === 1){
+        total += args['nothing'];
+
+        options.push(false);
+        percentages.push(args['nothing']);
+    }
+
+    const random = Math.random() * total;
+    for(let option = 0; option < options.length; option++){
+        if(random < percentages[option]){
+            return options[option];
+        }
+    }
+
+    return false;
+}
+
 function core_random_hex(){
     return Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
 }
