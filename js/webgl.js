@@ -217,7 +217,7 @@ function webgl_character_init(args){
             'args': args['vehicle-stats'],
             'defaults': {
               'character': false,
-              'locked': false,
+              'lock': 0,
               'speed': 0,
               'speed-acceleration': .1,
               'speed-deceleration': -.1,
@@ -3734,17 +3734,20 @@ function webgl_vehicle_toggle(args){
     });
 
     const vehicle = webgl_characters[args['vehicle']];
-    if(vehicle?.['vehicle-stats']['locked']){
+    const lock = vehicle?.['vehicle-stats']['lock'];
+    if(lock === 3){
         return;
     }
 
     const current = webgl_characters[args['id']]['vehicle'];
-    if(current !== false){
+    if(current !== false
+      && lock !== 2){
         webgl_characters[args['id']]['vehicle'] = false;
         vehicle['vehicle-stats']['character'] = false;
         webgl_characters[args['id']]['camera-rotate-y'] = webgl_characters[args['id']]['rotate-y'];
     }
-    if(current !== args['vehicle']){
+    if(current !== args['vehicle']
+      && lock !== 1){
         if(args['vehicle'] === false
           || vehicle['vehicle-stats'] === false
           || vehicle['vehicle-stats']['character'] !== false){
