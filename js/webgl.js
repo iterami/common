@@ -931,19 +931,27 @@ function webgl_drawloop(){
 }
 
 function webgl_entity_buffer(entity){
+    if(entity_entities[entity]['picking'] === true){
+        entity_entities[entity]['picking'] = [
+          core_round({
+            'decimals': 3,
+            'number': (entity_id_count % 255) / 255,
+          }),
+          core_round({
+            'decimals': 3,
+            'number': Math.floor(entity_id_count / 255) / 255,
+          }),
+          core_round({
+            'decimals': 3,
+            'number': Math.floor(entity_id_count / 65025) / 255,
+          }),
+        ];
+    }
+
     const pickData = [];
     const textureData = [];
     for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
-        if(entity_entities[entity]['pick-color'] !== false){
-            pickData.push(...entity_entities[entity]['pick-color']);
-
-        }else{
-            pickData.push(
-              0,
-              0,
-              0
-            );
-        }
+        pickData.push(...(entity_entities[entity]['picking'] || [0,0,0]))
         textureData.push(
           entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-repeat-x'],
           entity_entities[entity]['texture-align'][i * 2 + 1] * entity_entities[entity]['texture-repeat-y']
@@ -1236,7 +1244,7 @@ function webgl_init(){
         'event-todo': false,
         'normals': [],
         'particle': false,
-        'pick-color': false,
+        'picking': false,
         'point-size': 500,
         'rotate-x': 0,
         'rotate-y': 0,
@@ -2284,15 +2292,15 @@ function webgl_pick_entity(args){
     );
 
     const color_blue = core_round({
-      'decimals': 1,
+      'decimals': 3,
       'number': color[2] / 255,
     });
     const color_green = core_round({
-      'decimals': 1,
+      'decimals': 3,
       'number': color[1] / 255,
     });
     const color_red = core_round({
-      'decimals': 1,
+      'decimals': 3,
       'number': color[0] / 255,
     });
 
@@ -2303,7 +2311,7 @@ function webgl_pick_entity(args){
     }
 
     for(const entity in entity_entities){
-        const entity_color = entity_entities[entity]['pick-color'];
+        const entity_color = entity_entities[entity]['picking'];
 
         if(entity_color !== false
           && color_blue === entity_color[2]
