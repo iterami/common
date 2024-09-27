@@ -82,7 +82,7 @@ function webgl_camera_rotate(args){
         if(webgl_characters[args['character']]['camera-zoom'] === 0
           || (mouse_check
             && webgl_character_level(args['character']) > -2
-            && webgl_characters[args['character']]['health'] > 0)){
+            && webgl_characters[args['character']]['life'] > 0)){
             webgl_characters[args['character']]['rotate-y'] = core_mouse['down-2']
               ? webgl_characters[args['character']]['camera-rotate-y']
               : args['set']
@@ -129,12 +129,12 @@ function webgl_character_init(args){
         'controls': '',
         'entities': [],
         'gravity': 0,
-        'health': 1,
-        'health-max': 1,
         'id': webgl_character_id,
         'jump-height': 1,
         'level': -2,
         'level-xp': 0,
+        'life': 1,
+        'life-max': 1,
         'lives': -1,
         'lock': {},
         'path-direction': 1,
@@ -185,16 +185,16 @@ function webgl_character_init(args){
       'collides': args['collides'],
       'controls': args['controls'],
       'gravity': args['gravity'],
-      'health': Math.max(
-        args['health'],
-        1
-      ),
-      'health-max': args['health-max'],
       'id': args['id'],
       'jump-allow': false,
       'jump-height': args['jump-height'],
       'level': args['level'],
       'level-xp': args['level-xp'],
+      'life': Math.max(
+        args['life'],
+        1
+      ),
+      'life-max': args['life-max'],
       'lives': args['lives'],
       'lock': args['lock'],
       'path-direction': args['path-direction'],
@@ -349,7 +349,7 @@ function webgl_character_spawn(id){
         return;
     }
 
-    webgl_characters[id]['health'] = webgl_characters[id]['health-max'];
+    webgl_characters[id]['life'] = webgl_characters[id]['life-max'];
 
     webgl_character_origin(id);
     webgl_move_to({
@@ -498,7 +498,7 @@ function webgl_collision(args){
                       && args['collider']['level'] >= 0
                       && change < webgl_properties['gravity-max'] / 2){
                         webgl_stat_modify({
-                          'stat': 'health',
+                          'stat': 'life',
                           'target': args['collider'],
                           'value': Math.floor((change - webgl_properties['gravity-max'] / 2) * 10),
                         });
@@ -568,7 +568,7 @@ function webgl_controls_keyboard(id){
     const level = webgl_character_level(id);
     if(level < -1
       || (level !== -1 && webgl_properties['paused'])
-      || webgl_characters[id]['health'] <= 0
+      || webgl_characters[id]['life'] <= 0
       || webgl_characters[id]['path-id'].length !== 0){
         return;
     }
@@ -2264,7 +2264,7 @@ function webgl_pick_entity(args){
       || level < -1
       || webgl === 0
       || (level >= 0 && webgl_properties['paused'])
-      || webgl_characters[webgl_character_id]['health'] <= 0){
+      || webgl_characters[webgl_character_id]['life'] <= 0){
         return;
     }
 
@@ -3296,12 +3296,12 @@ function webgl_stat_modify(args){
             args['target']['level']++;
         }
 
-    }else if(args['stat'] === 'health'){
+    }else if(args['stat'] === 'life'){
         if(webgl_character_level(args['target']['id']) === -1){
-            args['target']['health'] = args['target']['health-max'];
+            args['target']['life'] = args['target']['life-max'];
 
-        }else if(args['target']['health'] <= 0){
-            args['target']['health'] = 0;
+        }else if(args['target']['life'] <= 0){
+            args['target']['life'] = 0;
 
             if(args['target']['lives'] > 0){
                 args['target']['lives']--;
@@ -3319,9 +3319,9 @@ function webgl_stat_modify(args){
             }
 
         }else{
-            args['target']['health'] = Math.min(
-              args['target']['health'],
-              args['target']['health-max']
+            args['target']['life'] = Math.min(
+              args['target']['life'],
+              args['target']['life-max']
             );
         }
     }
