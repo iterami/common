@@ -741,13 +741,11 @@ function core_keys_mobile(){
       'parent': core_elements['core-ui'],
       'properties': {
         'id': 'mobile-ui',
-        'style': 'display:none',
       },
-      'type': 'span',
+      'type': 'div',
     });
-    mobile_ui.style.display = mobile_ui.style.display === 'none'
-      || mobile_ui.textContent.length === 0
-      ? 'block'
+    mobile_ui.style.display = mobile_ui.style.display !== 'inline-block'
+      ? 'inline-block'
       : 'none';
 
     const keys = ['KeyA', 'KeyD', 'KeyW', 'KeyS', 'Space', 'KeyC', 'KeyH'];
