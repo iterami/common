@@ -229,6 +229,7 @@ function canvas_setmode(mode){
         core_escape();
 
     }else{
+        canvas_draw();
         core_interval_resume_all();
     }
 }
