@@ -210,14 +210,12 @@ function canvas_resize(){
 }
 
 function canvas_setmode(mode){
-    if(mode === void 0){
-        mode = 0;
-    }
-
     entity_remove_all();
     core_storage_save();
 
-    core_mode = mode;
+    core_mode = mode === void 0
+      ? 0
+      : mode;
 
     globalThis['load_data']?.(core_mode);
 
