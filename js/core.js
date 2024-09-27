@@ -746,6 +746,7 @@ function core_keys_mobile(){
       'type': 'span',
     });
     mobile_ui.style.display = mobile_ui.style.display === 'none'
+      || mobile_ui.textContent.length === 0
       ? 'block'
       : 'none';
 
