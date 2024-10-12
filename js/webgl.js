@@ -1516,6 +1516,7 @@ function webgl_level_init(args){
         'spawn-translate-y': 0,
         'spawn-translate-z': 0,
         'title': false,
+        'y-min': false,
       },
     });
 
@@ -1551,6 +1552,7 @@ function webgl_level_init(args){
       'spawn-translate-y': level['spawn-translate-y'],
       'spawn-translate-z': level['spawn-translate-z'],
       'title': level['title'],
+      'y-min': level['y-min'],
     };
 
     webgl_clearcolor_set({
@@ -1784,6 +1786,17 @@ function webgl_logic(){
             if(webgl_characters[id]['jump-allow']){
                 webgl_characters[id]['change-translate-x'] = 0;
                 webgl_characters[id]['change-translate-z'] = 0;
+            }
+
+            if(webgl_properties['y-min'] !== false
+              && webgl_characters[id]['translate-y'] < webgl_properties['y-min']){
+                webgl_stat_modify({
+                  'set': true,
+                  'stat': 'life',
+                  'target': id,
+                  'value': 0,
+                });
+                webgl_character_spawn(id);
             }
         }
     }
