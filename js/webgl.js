@@ -275,21 +275,21 @@ function webgl_character_move(args){
       'args': args,
       'defaults': {
         'id': webgl_character_id,
-        'multiplier': 1,
+        'speed': 1,
         'strafe': false,
         'y': false,
       },
     });
 
     if(args['y']){
-        webgl_characters[args['id']]['change-translate-y'] += webgl_characters[args['id']]['speed'] * args['multiplier'] * (args['strafe']
+        webgl_characters[args['id']]['change-translate-y'] += args['speed'] * (args['strafe']
           ? -1
           : 1);
 
     }else{
         const movement = math_move_3d({
           'angle': webgl_characters[args['id']]['rotate-y'],
-          'speed': webgl_characters[args['id']]['speed'] * args['multiplier'],
+          'speed': args['speed'],
           'strafe': args['strafe'],
         });
 
@@ -653,7 +653,7 @@ function webgl_controls_keyboard(id){
         if(speed !== 0){
             webgl_character_move({
               'id': vehicle['id'],
-              'multiplier': -speed,
+              'speed': -speed,
             });
         }
 
@@ -670,7 +670,7 @@ function webgl_controls_keyboard(id){
               && webgl_characters[id]['jump-allow']){
                 webgl_character_move({
                   'id': id,
-                  'multiplier': -1,
+                  'speed': -1,
                 });
             }
 
@@ -728,6 +728,7 @@ function webgl_controls_keyboard(id){
                 if(level === -1){
                     webgl_character_move({
                       'id': id,
+                      'speed': webgl_characters[id]['speed'],
                       'strafe': true,
                       'y': true,
                     });
@@ -741,6 +742,7 @@ function webgl_controls_keyboard(id){
                 if(level === -1){
                     webgl_character_move({
                       'id': id,
+                      'speed': webgl_characters[id]['speed'],
                       'y': true,
                     });
 
@@ -758,13 +760,13 @@ function webgl_controls_keyboard(id){
             if(forwardback !== 0){
                 webgl_character_move({
                   'id': id,
-                  'multiplier': forwardback,
+                  'speed': forwardback,
                 });
             }
             if(leftright !== 0){
                 webgl_character_move({
                   'id': id,
-                  'multiplier': leftright,
+                  'speed': leftright,
                   'strafe': true,
                 });
             }
@@ -792,7 +794,7 @@ function webgl_controls_keyboard(id){
         if(speed !== 0){
             webgl_character_move({
               'id': id,
-              'multiplier': -speed,
+              'speed': -speed,
             });
         }
     }
