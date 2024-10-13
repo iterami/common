@@ -323,12 +323,22 @@ function core_handle_mousedown(event){
     }
 
     core_mouse['down-' + event.button] = true;
-    core_mouse['down-x'] = event.pageX;
-    core_mouse['down-y'] = event.pageY;
     core_mouse['movement-x'] = 0;
     core_mouse['movement-y'] = 0;
-    core_mouse['x'] = event.pageX;
-    core_mouse['y'] = event.pageY;
+
+    if(core_type(event) === 'touchevent'){
+        core_mouse['down-x'] = event['touches'][0].pageX;
+        core_mouse['down-y'] = event['touches'][0].pageY;
+        core_mouse['x'] = event['touches'][0].pageX;
+        core_mouse['y'] = event['touches'][0].pageY;
+
+    }else{
+        core_mouse['down-x'] = event.pageX;
+        core_mouse['down-y'] = event.pageY;
+        core_mouse['x'] = event.pageX;
+        core_mouse['y'] = event.pageY;
+    }
+
     core_handle_event({
       'event': event,
       'key': 'mousedown',
@@ -345,8 +355,16 @@ function core_handle_mousemove(event){
 
     core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-horizontal'];
     core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-vertical'];
-    core_mouse['x'] = event.pageX;
-    core_mouse['y'] = event.pageY;
+
+    if(core_type(event) === 'touchevent'){
+        core_mouse['x'] = event['touches'][0].pageX;
+        core_mouse['y'] = event['touches'][0].pageY;
+
+    }else{
+        core_mouse['x'] = event.pageX;
+        core_mouse['y'] = event.pageY;
+    }
+
     core_handle_event({
       'event': event,
       'key': 'mousemove',
@@ -356,9 +374,16 @@ function core_handle_mousemove(event){
 }
 
 function core_handle_mouseup(event){
-    if(event.pageX < 0 || event.pageY < 0
-      || event.pageX > globalThis.innerWidth
-      || event.pageY > globalThis.innerHeight){
+    let pageX = event.pageX;
+    let pageY = event.pageY;
+    if(core_type(event) === 'touchevent'){
+        pageX = event['touches'][0].pageX;
+        pageY = event['touches'][0].pageY;
+    }
+
+    if(pageX < 0 || pageY < 0
+      || pageX > globalThis.innerWidth
+      || pageY > globalThis.innerHeight){
         core_mouse['down-0'] = false;
         core_mouse['down-1'] = false;
         core_mouse['down-2'] = false;
