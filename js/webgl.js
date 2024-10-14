@@ -74,7 +74,9 @@ function webgl_camera_rotate(args){
             return;
         }
 
-        const mouse_check = core_mouse['down-2']
+        const strafe = core_mouse['down-2']
+          || webgl_characters[args['character']]['controls'] === 'rts';
+        const mouse_check = strafe
           || (!core_mouse['down-0']
             && !core_mouse['down-2'])
           || !args['mouse'];
@@ -83,7 +85,7 @@ function webgl_camera_rotate(args){
           || (mouse_check
             && webgl_character_level(args['character']) > -2
             && webgl_characters[args['character']]['life'] > 0)){
-            webgl_characters[args['character']]['rotate-y'] = core_mouse['down-2']
+            webgl_characters[args['character']]['rotate-y'] = strafe
               ? webgl_characters[args['character']]['camera-rotate-y']
               : args['set']
                 ? args['y']
@@ -674,7 +676,40 @@ function webgl_controls_keyboard(id){
         }
         webgl_characters[id]['translate-y'] += webgl_characters[id]['collide-range-y'];
 
-    }else if(webgl_characters[id]['controls'] === 'rpg'){
+    }else if(webgl_characters[id]['vehicle-stats'] !== false){
+        if(webgl_characters[id]['vehicle-stats']['character'] !== false
+          || !webgl_characters[id]['jump-allow']){
+            return;
+        }
+        let speed = 0;
+        if(webgl_characters[id]['vehicle-stats']['speed'] >= 0){
+            speed = Math.max(
+              webgl_characters[id]['vehicle-stats']['speed'] + webgl_characters[id]['vehicle-stats']['speed-deceleration'],
+              0
+            );
+
+        }else{
+            speed = Math.min(
+              webgl_characters[id]['vehicle-stats']['speed'] - webgl_characters[id]['vehicle-stats']['speed-deceleration'],
+              0
+            );
+        }
+        webgl_characters[id]['vehicle-stats']['speed'] = speed;
+        if(speed !== 0){
+            webgl_character_move({
+              'id': id,
+              'speed': -speed,
+            });
+        }
+
+    }else if(webgl_characters[id]['controls'].length === 0){
+        return;
+
+    }else{
+        const strafe = core_mouse['down-2']
+          || webgl_characters[id]['camera-zoom'] === 0
+          || webgl_characters[id]['controls'] === 'rts';
+
         if(id !== webgl_character_id){
             if(webgl_characters[id]['automove']
               && webgl_characters[id]['jump-allow']){
@@ -689,8 +724,7 @@ function webgl_controls_keyboard(id){
 
         let leftright = 0;
         if(core_keys[core_storage_data['move-←']]['state']){
-            if(webgl_characters[id]['camera-zoom'] === 0
-              || core_mouse['down-2']){
+            if(strafe){
                 leftright -= 1;
 
             }else{
@@ -701,8 +735,7 @@ function webgl_controls_keyboard(id){
             }
         }
         if(core_keys[core_storage_data['move-→']]['state']){
-            if(webgl_characters[id]['camera-zoom'] === 0
-              || core_mouse['down-2']){
+            if(strafe){
                 leftright += 1;
 
             }else{
@@ -781,32 +814,6 @@ function webgl_controls_keyboard(id){
                 });
             }
         }
-
-    }else if(webgl_characters[id]['vehicle-stats'] !== false){
-        if(webgl_characters[id]['vehicle-stats']['character'] !== false
-          || !webgl_characters[id]['jump-allow']){
-            return;
-        }
-        let speed = 0;
-        if(webgl_characters[id]['vehicle-stats']['speed'] >= 0){
-            speed = Math.max(
-              webgl_characters[id]['vehicle-stats']['speed'] + webgl_characters[id]['vehicle-stats']['speed-deceleration'],
-              0
-            );
-
-        }else{
-            speed = Math.min(
-              webgl_characters[id]['vehicle-stats']['speed'] - webgl_characters[id]['vehicle-stats']['speed-deceleration'],
-              0
-            );
-        }
-        webgl_characters[id]['vehicle-stats']['speed'] = speed;
-        if(speed !== 0){
-            webgl_character_move({
-              'id': id,
-              'speed': -speed,
-            });
-        }
     }
 }
 
@@ -817,8 +824,8 @@ function webgl_controls_mouse(id){
     }
 
     if(core_mouse['pointerlock-state']
-      || core_mouse['down-0']
-      || core_mouse['down-2']){
+      || core_mouse['down-2']
+      || (core_mouse['down-0'] && webgl_characters[id]['controls'] !== 'rts')){
         if(level !== -1 && webgl_properties['paused']){
             return;
         }
