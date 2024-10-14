@@ -680,7 +680,7 @@ function webgl_controls_keyboard(id){
               && webgl_characters[id]['jump-allow']){
                 webgl_character_move({
                   'id': id,
-                  'speed': -1,
+                  'speed': webgl_characters[id]['speed'],
                 });
             }
 
@@ -770,13 +770,13 @@ function webgl_controls_keyboard(id){
             if(forwardback !== 0){
                 webgl_character_move({
                   'id': id,
-                  'speed': forwardback,
+                  'speed': forwardback * webgl_characters[id]['speed'],
                 });
             }
             if(leftright !== 0){
                 webgl_character_move({
                   'id': id,
-                  'speed': leftright,
+                  'speed': leftright * webgl_characters[id]['speed'],
                   'strafe': true,
                 });
             }
