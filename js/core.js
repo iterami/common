@@ -533,7 +533,7 @@ function core_init(){
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
-          + '<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div><hr>'
+          + '<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div>'
           + '<button id=storage-save type=button>Save All Settings</button><button id=mobile-add type=button>Mobile</button><br>',
         'style': 'display:none',
       },
