@@ -1202,7 +1202,9 @@ function core_repo_reset(){
 }
 
 function core_requestpointerlock(element){
-    if(core_menu_open){
+    if(core_menu_open
+      || document.pointerLockElement !== null
+      || core_keys['Escape']['state']){
         return;
     }
 

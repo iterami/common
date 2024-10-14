@@ -1703,9 +1703,7 @@ function webgl_logic(){
         return;
     }
 
-    if(webgl_properties['pointerlock']
-      && document.pointerLockElement === null
-      && !core_keys['Escape']['state']){
+    if(webgl_properties['pointerlock']){
         core_requestpointerlock(webgl.canvas);
     }
 
