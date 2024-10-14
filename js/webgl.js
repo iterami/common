@@ -512,6 +512,16 @@ function webgl_collision(args){
                 args['collider']['change-translate-x'] += webgl_characters[args['target']['attach-to']]['change-translate-x'];
                 args['collider']['change-translate-z'] += webgl_characters[args['target']['attach-to']]['change-translate-z'];
             }
+
+        }else if(args['collider']['vehicle-stats'] !== false){
+            const other_axis = collision[axis] === 'x'
+              ? 'z'
+              : 'x';
+
+            args['collider']['vehicle-stats']['speed'] = Math.min(
+              args['collider']['vehicle-stats']['speed'],
+              Math.abs(args['collider']['change-translate-' + other_axis])
+            );
         }
     }
 
