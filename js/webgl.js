@@ -1812,7 +1812,7 @@ function webgl_logic(){
                 webgl_stat_modify({
                   'set': true,
                   'stat': 'life',
-                  'target': id,
+                  'target': webgl_characters[id],
                   'value': 0,
                 });
                 webgl_character_spawn(id);
