@@ -1732,6 +1732,7 @@ function webgl_logic(){
     });
 
     for(const id in webgl_characters){
+        const character = webgl_characters[id];
         const level = webgl_character_level(id);
 
         if(webgl_properties['paused']
@@ -1741,49 +1742,49 @@ function webgl_logic(){
 
         webgl_controls_keyboard(id);
 
-        if(webgl_characters[id]['vehicle'] !== false){
+        if(character['vehicle'] !== false){
             continue;
         }
 
-        if(webgl_characters[id]['gravity'] !== 0){
-            webgl_characters[id]['change-translate-y'] = Math.max(
-              webgl_characters[id]['change-translate-y'] + webgl_properties['gravity-acceleration'] * webgl_characters[id]['gravity'],
-              webgl_properties['gravity-max'] * webgl_characters[id]['gravity']
+        if(character['gravity'] !== 0){
+            character['change-translate-y'] = Math.max(
+              character['change-translate-y'] + webgl_properties['gravity-acceleration'] * character['gravity'],
+              webgl_properties['gravity-max'] * character['gravity']
             );
         }
 
         webgl_path_move(id);
 
-        if(webgl_characters[id]['change-rotate-x'] !== 0
-          || webgl_characters[id]['change-rotate-y'] !== 0
-          || webgl_characters[id]['change-rotate-z'] !== 0){
+        if(character['change-rotate-x'] !== 0
+          || character['change-rotate-y'] !== 0
+          || character['change-rotate-z'] !== 0){
             webgl_camera_rotate({
               'camera': false,
               'character': id,
-              'x': webgl_characters[id]['change-rotate-x'],
-              'y': webgl_characters[id]['change-rotate-y'],
-              'z': webgl_characters[id]['change-rotate-z'],
+              'x': character['change-rotate-x'],
+              'y': character['change-rotate-y'],
+              'z': character['change-rotate-z'],
             });
         }
-        webgl_clamp_rotation(webgl_characters[id]);
+        webgl_clamp_rotation(character);
 
         const axes = 'xyz';
         for(const axis in axes){
             const translate_axis = 'translate-' + axes[axis];
-            webgl_characters[id][translate_axis] += webgl_characters[id]['change-' + translate_axis];
+            character[translate_axis] += character['change-' + translate_axis];
         }
 
         Object.assign(
-           webgl_characters[id],
-           webgl_characters[id]['lock'],
+           character,
+           character['lock'],
            webgl_properties['lock']
         );
 
-        if(webgl_characters[id]['collides']){
+        if(character['collides']){
             for(const entity in entity_entities){
                 if(entity_entities[entity]['collision']){
                     webgl_collision({
-                      'collider': webgl_characters[id],
+                      'collider': character,
                       'target': entity_entities[entity],
                     });
                 }
@@ -1791,28 +1792,28 @@ function webgl_logic(){
         }
 
         if(level <= -1){
-            if(webgl_characters[id]['path-id'].length === 0){
-                webgl_characters[id]['change-translate-x'] = 0;
-                webgl_characters[id]['change-translate-y'] = 0;
-                webgl_characters[id]['change-translate-z'] = 0;
+            if(character['path-id'].length === 0){
+                character['change-translate-x'] = 0;
+                character['change-translate-y'] = 0;
+                character['change-translate-z'] = 0;
             }
 
         }else{
-            if(webgl_characters[id]['change-translate-y'] !== 0){
-                webgl_characters[id]['jump-allow'] = false;
+            if(character['change-translate-y'] !== 0){
+                character['jump-allow'] = false;
             }
 
-            if(webgl_characters[id]['jump-allow']){
-                webgl_characters[id]['change-translate-x'] = 0;
-                webgl_characters[id]['change-translate-z'] = 0;
+            if(character['jump-allow']){
+                character['change-translate-x'] = 0;
+                character['change-translate-z'] = 0;
             }
 
             if(webgl_properties['y-min'] !== false
-              && webgl_characters[id]['translate-y'] < webgl_properties['y-min']){
+              && character['translate-y'] < webgl_properties['y-min']){
                 webgl_stat_modify({
                   'set': true,
                   'stat': 'life',
-                  'target': webgl_characters[id],
+                  'target': character,
                   'value': 0,
                 });
                 webgl_character_spawn(id);
