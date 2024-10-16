@@ -1821,40 +1821,41 @@ function webgl_logic(){
         }
     }
 
-    if(webgl_characters[webgl_character_id]['camera-lock']){
-        if(webgl_characters[webgl_character_id]['camera-zoom'] > 0){
-            const radians_x = math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-x']);
-            const radians_y = math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-y']);
+    const character = webgl_characters[webgl_character_id];
+    if(character['camera-lock']){
+        if(character['camera-zoom'] > 0){
+            const radians_x = math_degrees_to_radians(character['camera-rotate-x']);
+            const radians_y = math_degrees_to_radians(character['camera-rotate-y']);
             const cos_x = Math.cos(radians_x);
 
-            webgl_characters[webgl_character_id]['camera-x'] = webgl_characters[webgl_character_id]['translate-x']
-              + Math.sin(-radians_y) * webgl_characters[webgl_character_id]['camera-zoom'] * cos_x;
-            webgl_characters[webgl_character_id]['camera-y'] = webgl_characters[webgl_character_id]['translate-y']
-              + Math.sin(radians_x) * webgl_characters[webgl_character_id]['camera-zoom'];
-            webgl_characters[webgl_character_id]['camera-z'] = webgl_characters[webgl_character_id]['translate-z']
-              + Math.cos(radians_y) * webgl_characters[webgl_character_id]['camera-zoom'] * cos_x;
+            character['camera-x'] = character['translate-x']
+              + Math.sin(-radians_y) * character['camera-zoom'] * cos_x;
+            character['camera-y'] = character['translate-y']
+              + Math.sin(radians_x) * character['camera-zoom'];
+            character['camera-z'] = character['translate-z']
+              + Math.cos(radians_y) * character['camera-zoom'] * cos_x;
 
         }else{
-            webgl_characters[webgl_character_id]['camera-x'] = webgl_characters[webgl_character_id]['translate-x'];
-            webgl_characters[webgl_character_id]['camera-y'] = webgl_characters[webgl_character_id]['translate-y'];
-            webgl_characters[webgl_character_id]['camera-z'] = webgl_characters[webgl_character_id]['translate-z'];
+            character['camera-x'] = character['translate-x'];
+            character['camera-y'] = character['translate-y'];
+            character['camera-z'] = character['translate-z'];
         }
     }
 
     math_matrix_identity('camera');
     math_matrix_rotate({
       'dimensions': [
-        math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-x']),
-        math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-y']),
-        math_degrees_to_radians(webgl_characters[webgl_character_id]['camera-rotate-z']),
+        math_degrees_to_radians(character['camera-rotate-x']),
+        math_degrees_to_radians(character['camera-rotate-y']),
+        math_degrees_to_radians(character['camera-rotate-z']),
       ],
       'id': 'camera',
     });
     math_matrix_translate({
       'dimensions': [
-        webgl_characters[webgl_character_id]['camera-x'],
-        webgl_characters[webgl_character_id]['camera-y'],
-        webgl_characters[webgl_character_id]['camera-z'],
+        character['camera-x'],
+        character['camera-y'],
+        character['camera-z'],
       ],
       'id': 'camera',
     });
