@@ -404,20 +404,6 @@ function core_handle_mouseup(event){
     }
 }
 
-function core_handle_mousewheel(event){
-    if(core_menu_open
-      && core_menu_block_events){
-        return;
-    }
-
-    core_handle_event({
-      'event': event,
-      'key': 'mousewheel',
-      'object': core_mouse['todo'],
-      'todo': true,
-    });
-}
-
 function core_handle_pointerlockchange(event){
     core_mouse['pointerlock-state'] = document.pointerLockElement !== null
       && document.pointerLockElement.id === core_mouse['pointerlock-id'];
@@ -425,6 +411,20 @@ function core_handle_pointerlockchange(event){
     if(!core_mouse['pointerlock-state']){
         core_escape(true);
     }
+}
+
+function core_handle_wheel(event){
+    if(core_menu_open
+      && core_menu_block_events){
+        return;
+    }
+
+    core_handle_event({
+      'event': event,
+      'key': 'wheel',
+      'object': core_mouse['todo'],
+      'todo': true,
+    });
 }
 
 function core_hex_to_rgb(hex){
@@ -613,7 +613,7 @@ function core_init(){
     globalThis.ontouchend = core_handle_mouseup;
     globalThis.ontouchmove = core_handle_mousemove;
     globalThis.ontouchstart = core_handle_mousedown;
-    globalThis.onwheel = core_handle_mousewheel;
+    globalThis.onwheel = core_handle_wheel;
     core_events_bind({
       'elements': {
         'mobile-add': {

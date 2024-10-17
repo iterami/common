@@ -837,7 +837,7 @@ function webgl_controls_mouse(id){
     }
 }
 
-function webgl_controls_mousewheel(id, deltaY){
+function webgl_controls_wheel(id, deltaY){
     if(webgl_character_level(id) < -1){
         return;
     }
