@@ -344,10 +344,10 @@ function core_handle_mousemove(event){
         return;
     }
 
+    core_mouse['movement-x'] = (event.pageX - core_mouse['x']) * core_storage_data['mouse-horizontal'];
+    core_mouse['movement-y'] = (event.pageY - core_mouse['y']) * core_storage_data['mouse-vertical'];
     core_mouse['x'] = event.pageX;
     core_mouse['y'] = event.pageY;
-    core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-horizontal'];
-    core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-vertical'];
 
     core_handle_event({
       'event': event,
@@ -413,8 +413,11 @@ function core_handle_touchmove(event){
         return;
     }
 
-    core_mouse['x'] = event['touches'][0].pageX;
-    core_mouse['y'] = event['touches'][0].pageY;
+    const touch = event['touches'][0];
+    core_mouse['movement-x'] = (touch.pageX - core_mouse['x']) * core_storage_data['mouse-horizontal'];
+    core_mouse['movement-y'] = (touch.pageY - core_mouse['y']) * core_storage_data['mouse-vertical'];
+    core_mouse['x'] = touch.pageX;
+    core_mouse['y'] = touch.pageY;
 
     core_handle_event({
       'event': event,
@@ -431,10 +434,11 @@ function core_handle_touchstart(event){
         return;
     }
 
+    const touch = event['touches'][0];
     core_mouse['movement-x'] = 0;
     core_mouse['movement-y'] = 0;
-    core_mouse['x'] = event['touches'][0].pageX;
-    core_mouse['y'] = event['touches'][0].pageY;
+    core_mouse['x'] = touch.pageX;
+    core_mouse['y'] = touch.pageY;
     core_mouse['down-0'] = true;
     core_mouse['down-x'] = core_mouse['x'];
     core_mouse['down-y'] = core_mouse['y'];
