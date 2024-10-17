@@ -322,22 +322,13 @@ function core_handle_mousedown(event){
         return;
     }
 
-    core_mouse['down-' + event.button] = true;
     core_mouse['movement-x'] = 0;
     core_mouse['movement-y'] = 0;
-
-    if(core_type(event) === 'touchevent'){
-        core_mouse['down-x'] = event['touches'][0].pageX;
-        core_mouse['down-y'] = event['touches'][0].pageY;
-        core_mouse['x'] = event['touches'][0].pageX;
-        core_mouse['y'] = event['touches'][0].pageY;
-
-    }else{
-        core_mouse['down-x'] = event.pageX;
-        core_mouse['down-y'] = event.pageY;
-        core_mouse['x'] = event.pageX;
-        core_mouse['y'] = event.pageY;
-    }
+    core_mouse['x'] = event.pageX;
+    core_mouse['y'] = event.pageY;
+    core_mouse['down-' + event.button] = true;
+    core_mouse['down-x'] = event.pageX;
+    core_mouse['down-y'] = event.pageY;
 
     core_handle_event({
       'event': event,
@@ -353,17 +344,10 @@ function core_handle_mousemove(event){
         return;
     }
 
+    core_mouse['x'] = event.pageX;
+    core_mouse['y'] = event.pageY;
     core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-horizontal'];
     core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-vertical'];
-
-    if(core_type(event) === 'touchevent'){
-        core_mouse['x'] = event['touches'][0].pageX;
-        core_mouse['y'] = event['touches'][0].pageY;
-
-    }else{
-        core_mouse['x'] = event.pageX;
-        core_mouse['y'] = event.pageY;
-    }
 
     core_handle_event({
       'event': event,
@@ -374,16 +358,9 @@ function core_handle_mousemove(event){
 }
 
 function core_handle_mouseup(event){
-    let pageX = event.pageX;
-    let pageY = event.pageY;
-    if(core_type(event) === 'touchevent'){
-        pageX = event['touches'][0].pageX;
-        pageY = event['touches'][0].pageY;
-    }
-
-    if(pageX < 0 || pageY < 0
-      || pageX > globalThis.innerWidth
-      || pageY > globalThis.innerHeight){
+    if(event.pageX < 0 || event.pageY < 0
+      || event.pageX > globalThis.innerWidth
+      || event.pageY > globalThis.innerHeight){
         core_mouse['down-0'] = false;
         core_mouse['down-1'] = false;
         core_mouse['down-2'] = false;
@@ -411,6 +388,63 @@ function core_handle_pointerlockchange(event){
     if(!core_mouse['pointerlock-state']){
         core_escape(true);
     }
+}
+
+function core_handle_touchend(event){
+    core_mouse['down-0'] = false;
+    core_mouse['down-1'] = false;
+    core_mouse['down-2'] = false;
+    core_mouse['down-3'] = false;
+    core_mouse['down-4'] = false;
+
+    if(event.target.id !== 'core-toggle'){
+        core_handle_event({
+          'event': event,
+          'key': 'mouseup',
+          'object': core_mouse['todo'],
+          'todo': true,
+        });
+    }
+}
+
+function core_handle_touchmove(event){
+    if(core_menu_open
+      && core_menu_block_events){
+        return;
+    }
+
+    core_mouse['x'] = event['touches'][0].pageX;
+    core_mouse['y'] = event['touches'][0].pageY;
+
+    core_handle_event({
+      'event': event,
+      'key': 'mousemove',
+      'object': core_mouse['todo'],
+      'todo': true,
+    });
+}
+
+function core_handle_touchstart(event){
+    if((core_menu_open
+        && core_menu_block_events)
+      || event.target.id === 'core-toggle'){
+        return;
+    }
+
+    core_mouse['movement-x'] = 0;
+    core_mouse['movement-y'] = 0;
+    core_mouse['x'] = event['touches'][0].pageX;
+    core_mouse['y'] = event['touches'][0].pageY;
+    core_mouse['down-0'] = true;
+    core_mouse['down-x'] = core_mouse['x'];
+    core_mouse['down-y'] = core_mouse['y'];
+
+    core_handle_event({
+      'event': event,
+      'key': 'mousedown',
+      'object': core_mouse['todo'],
+      'todo': true,
+    });
 }
 
 function core_handle_wheel(event){
@@ -609,10 +643,10 @@ function core_init(){
     globalThis.onmousedown = core_handle_mousedown;
     globalThis.onmousemove = core_handle_mousemove;
     globalThis.onmouseup = core_handle_mouseup;
-    globalThis.ontouchcancel = core_handle_mouseup;
-    globalThis.ontouchend = core_handle_mouseup;
-    globalThis.ontouchmove = core_handle_mousemove;
-    globalThis.ontouchstart = core_handle_mousedown;
+    globalThis.ontouchcancel = core_handle_touchend;
+    globalThis.ontouchend = core_handle_touchend;
+    globalThis.ontouchmove = core_handle_touchmove;
+    globalThis.ontouchstart = core_handle_touchstart;
     globalThis.onwheel = core_handle_wheel;
     core_events_bind({
       'elements': {
