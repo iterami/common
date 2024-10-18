@@ -439,9 +439,16 @@ function core_handle_touchstart(event){
     core_mouse['movement-y'] = 0;
     core_mouse['x'] = touch.pageX;
     core_mouse['y'] = touch.pageY;
-    core_mouse['down-0'] = true;
-    core_mouse['down-x'] = core_mouse['x'];
-    core_mouse['down-y'] = core_mouse['y'];
+    core_mouse['down-x'] = touch.pageX;
+    core_mouse['down-y'] = touch.pageY;
+
+    const touches = event['touches'].length;
+    if(touches !== 2){
+        core_mouse['down-0'] = true;
+    }
+    if(touches > 1){
+        core_mouse['down-2'] = true;
+    }
 
     core_handle_event({
       'event': event,
