@@ -11,10 +11,9 @@ function webgl_billboard(entity){
 
 // Required args: attribute, data, size
 function webgl_buffer_set(args){
-    const buffer = webgl.createBuffer();
     webgl.bindBuffer(
       webgl.ARRAY_BUFFER,
-      buffer
+      webgl.createBuffer()
     );
     webgl.bufferData(
       webgl.ARRAY_BUFFER,
@@ -236,10 +235,9 @@ function webgl_character_init(args){
     });
     if(args['vehicle-stats'] !== false
       && args['vehicle-stats']['character'] !== false){
-        const character = webgl_characters[args['id']]['vehicle-stats']['character'];
         webgl_characters[args['id']]['vehicle-stats']['character'] = false;
         webgl_vehicle_toggle({
-          'id': character,
+          'id': webgl_characters[args['id']]['vehicle-stats']['character'],
           'vehicle': args['id'],
         });
     }
@@ -1735,9 +1733,7 @@ function webgl_logic(){
     });
 
     for(const id in webgl_characters){
-        const character = webgl_characters[id];
         const level = webgl_character_level(id);
-
         if(webgl_properties['paused']
           && level !== -1){
             continue;
@@ -1745,6 +1741,7 @@ function webgl_logic(){
 
         webgl_controls_keyboard(id);
 
+        const character = webgl_characters[id];
         if(character['vehicle'] !== false){
             continue;
         }
