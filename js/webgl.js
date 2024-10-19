@@ -581,7 +581,6 @@ function webgl_context_restored(event){
 function webgl_controls_keyboard(id){
     const level = webgl_character_level(id);
     if(level < -1
-      || (level !== -1 && webgl_properties['paused'])
       || webgl_characters[id]['life'] <= 0
       || webgl_characters[id]['path-id'].length !== 0){
         return;
