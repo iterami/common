@@ -821,10 +821,14 @@ function webgl_controls_mouse(id){
     if(level < -1){
         return;
     }
+    const controls = webgl_characters[id]['controls'];
+    if(controls.length === 0){
+        return
+    }
 
     if(core_mouse['pointerlock-state']
       || core_mouse['down-2']
-      || (core_mouse['down-0'] && webgl_characters[id]['controls'] !== 'rts')){
+      || (core_mouse['down-0'] && controls !== 'rts')){
         if(level !== -1 && webgl_properties['paused']){
             return;
         }
