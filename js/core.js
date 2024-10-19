@@ -344,8 +344,8 @@ function core_handle_mousemove(event){
         return;
     }
 
-    core_mouse['movement-x'] = (event.pageX - core_mouse['x']) * core_storage_data['mouse-horizontal'];
-    core_mouse['movement-y'] = (event.pageY - core_mouse['y']) * core_storage_data['mouse-vertical'];
+    core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-horizontal'];
+    core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-vertical'];
     core_mouse['x'] = event.pageX;
     core_mouse['y'] = event.pageY;
 
