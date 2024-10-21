@@ -235,9 +235,10 @@ function webgl_character_init(args){
     });
     if(args['vehicle-stats'] !== false
       && args['vehicle-stats']['character'] !== false){
+        const character = webgl_characters[args['id']]['vehicle-stats']['character'];
         webgl_characters[args['id']]['vehicle-stats']['character'] = false;
         webgl_vehicle_toggle({
-          'id': webgl_characters[args['id']]['vehicle-stats']['character'],
+          'id': character,
           'vehicle': args['id'],
         });
     }
@@ -1128,16 +1129,6 @@ function webgl_entity_normals(entity){
 
 // Required args: parent, target
 function webgl_event(args){
-    if(args['parent']['event-target-id'] !== false
-      && args['parent']['event-target-id'] !== args['target']['id']){
-        return;
-    }
-
-    if(args['parent']['event-target-type'] === 'character'
-      && webgl_character_level(args['target']['id']) < -1){
-        return;
-    }
-
     if(args['parent']['event-limit'] !== false){
         if(args['parent']['event-limit'] <= 0){
             return;
@@ -1146,38 +1137,54 @@ function webgl_event(args){
         args['parent']['event-limit']--;
     }
 
-    for(const stat in args['parent']['event-modify']){
-        const event_modify = args['parent']['event-modify'][stat];
-        const event_type = event_modify['type'] || 'entity_entities';
+    for(const todo in args['parent']['event-todo']){
+        const modify = args['parent']['event-todo'][todo];
 
-        const target = event_modify['target'] !== void 0
-          ? globalThis[event_type][event_modify['target']]
-          : args['target'];
+        if(modify['limit'] !== false){
+            if(modify['limit'] <= 0){
+                continue;
+            }
 
-        webgl_stat_modify({
-          'set': event_modify['set'],
-          'stat': event_modify['stat'],
-          'target': target,
-          'value': event_modify['value'],
-        });
-    }
-
-    if(args['parent']['event-todo'] !== false){
-        let todo_args = args['parent']['event-todo-args'] === void 0
-          ? void 0
-          : args['parent']['event-todo-args'];
-        if(todo_args === '_parent'){
-            todo_args = args['parent']['id'];
-
-        }else if(todo_args === '_target'){
-            todo_args = args['target']['id'];
+            modify['limit']--;
         }
 
-        if(core_type(globalThis[args['parent']['event-todo']]) === 'function'){
-            globalThis[args['parent']['event-todo']](todo_args);
+        if(modify['type'] === 'function'){
+            globalThis[modify['todo']](modify['value']);
+
+        }else if(modify['type'] === 'variable'){
+            if(modify['set']){
+                globalThis[modify['todo']] = modify['value'];
+
+            }else{
+                globalThis[modify['todo']] += modify['value'];
+            }
+
+        }else if(modify['type'] === 'character'){
+            const target = modify['todo'] === void 0
+              ? args['target']
+              : webgl_characters[modify['todo']];
+            if(webgl_character_level(target['id']) < -1){
+                continue;
+            }
+
+            webgl_stat_modify({
+              'set': modify['set'],
+              'stat': modify['stat'],
+              'target': target,
+              'value': modify['value'],
+            });
 
         }else{
-            globalThis[args['parent']['event-todo']] = todo_args;
+            const target = modify['todo'] === void 0
+              ? args['target']
+              : entity_entities[modify['todo']];
+
+            webgl_stat_modify({
+              'set': modify['set'],
+              'stat': modify['stat'],
+              'target': target,
+              'value': modify['value'],
+            });
         }
     }
 }
