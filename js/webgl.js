@@ -1140,7 +1140,7 @@ function webgl_event(args){
     for(const todo in args['parent']['event-todo']){
         const modify = args['parent']['event-todo'][todo];
 
-        if(modify['limit'] !== false){
+        if(modify['limit'] !== void 0){
             if(modify['limit'] <= 0){
                 continue;
             }
