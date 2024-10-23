@@ -1785,6 +1785,9 @@ function webgl_logic(){
            webgl_properties['lock']
         );
 
+        const change_translate_x = character['change-translate-x'];
+        const change_translate_z = character['change-translate-z'];
+
         if(character['collides']){
             for(const entity in entity_entities){
                 if(entity_entities[entity]['collision']){
@@ -1809,8 +1812,8 @@ function webgl_logic(){
             }
 
             if(character['jump-allow']){
-                character['change-translate-x'] = 0;
-                character['change-translate-z'] = 0;
+                character['change-translate-x'] -= change_translate_x;
+                character['change-translate-z'] -= change_translate_z;
             }
 
             if(webgl_properties['y-min'] !== false
