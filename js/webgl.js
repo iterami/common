@@ -489,15 +489,23 @@ function webgl_collision(args){
     }
 
     for(const axis in collision){
+        const character = args['target']['attach-to']
+          ? webgl_characters[args['target']['attach-to']]
+          : false;
+        const change_translate = character
+          ? character['change-translate-' + collision[axis]]
+          : 0;
+
         args['collider']['translate-' + collision[axis]] = target_position[collision[axis]]
-          + args['collider']['collide-range-' + (collision[axis] === 'y' ? 'y' : 'xz')] * collision_sign[axis];
-        const change = args['collider']['change-translate-' + collision[axis]];
-        args['collider']['change-translate-' + collision[axis]] = 0;
+          + args['collider']['collide-range-' + (collision[axis] === 'y' ? 'y' : 'xz')] * collision_sign[axis]
+          + change_translate;
+        args['collider']['change-translate-' + collision[axis]] = change_translate;
 
         if(collision[axis] === 'y'){
             if(args['collider']['jump-allow'] === false){
                 args['collider']['jump-allow'] = collision_sign[axis] !== Math.sign(webgl_properties['gravity-max']);
 
+                const change = args['collider']['change-translate-' + collision[axis]];
                 if(webgl_properties['gravity-damage']
                   && args['collider']['level'] >= 0
                   && change < webgl_properties['gravity-max'] / 2){
@@ -509,9 +517,9 @@ function webgl_collision(args){
                 }
             }
 
-            if(args['target']['attach-to']){
-                args['collider']['change-translate-x'] += webgl_characters[args['target']['attach-to']]['change-translate-x'];
-                args['collider']['change-translate-z'] += webgl_characters[args['target']['attach-to']]['change-translate-z'];
+            if(character){
+                args['collider']['change-translate-x'] += character['change-translate-x'];
+                args['collider']['change-translate-z'] += character['change-translate-z'];
             }
 
         }else if(args['collider']['vehicle-stats'] !== false){
