@@ -1131,6 +1131,7 @@ function webgl_entity_normals(entity){
 function webgl_event(args){
     if(args['parent']['event-limit'] !== false){
         if(args['parent']['event-limit'] <= 0){
+            args['parent']['event-range'] = false;
             return;
         }
 
