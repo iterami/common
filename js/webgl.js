@@ -2181,10 +2181,6 @@ function webgl_path_move(id){
                 if(path_end === 'loop'){
                     character['path-point'] = 0;
 
-                }else if(path_end === 'exit'){
-                    character['path-id'] = '';
-                    character['path-point'] = 0;
-
                 }else if(path_end === 'reverse'){
                     character['path-direction'] = -1;
                     character['path-point'] -= 1;
@@ -2202,6 +2198,10 @@ function webgl_path_move(id){
                     character['translate-x'] = warp_point['translate-x'];
                     character['translate-y'] = warp_point['translate-y'];
                     character['translate-z'] = warp_point['translate-z'];
+
+                }else{
+                    character['path-id'] = '';
+                    character['path-point'] = 0;
                 }
 
             }else{
@@ -2215,10 +2215,6 @@ function webgl_path_move(id){
             }else if(path_end === 'reverse'){
                 character['path-direction'] = 1;
                 character['path-point'] = 1;
-
-            }else if(path_end === 'exit'){
-                character['path-id'] = '';
-                character['path-point'] = 0;
 
             }else if(path_end === 'warp'){
                 const last = path['points'].length - 1;
@@ -2234,6 +2230,10 @@ function webgl_path_move(id){
                 character['translate-x'] = warp_point['translate-x'];
                 character['translate-y'] = warp_point['translate-y'];
                 character['translate-z'] = warp_point['translate-z'];
+
+            }else{
+                character['path-id'] = '';
+                character['path-point'] = 0;
             }
 
         }else{
