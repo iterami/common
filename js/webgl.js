@@ -1266,11 +1266,8 @@ function webgl_init(){
         'draw': true,
         'draw-mode': 'TRIANGLE_FAN',
         'event-limit': false,
-        'event-modify': [],
         'event-range': false,
-        'event-target-id': false,
-        'event-target-type': 'character',
-        'event-todo': false,
+        'event-todo': [],
         'normals': [],
         'particle': false,
         'picking': false,
@@ -1872,82 +1869,23 @@ function webgl_logic_entity(entity){
     if(entity_entities[entity]['event-range'] > 0){
         const event_position = webgl_get_translation(entity_entities[entity]);
 
-        if(entity_entities[entity]['event-target-type'] === 'character'){
-            if(entity_entities[entity]['event-target-id'] !== false){
-                const character = webgl_characters[entity_entities[entity]['event-target-id']];
-
-                if(math_distance({
-                    'x0': character['translate-x'],
-                    'y0': character['translate-y'],
-                    'z0': character['translate-z'],
-                    'x1': event_position['x'],
-                    'y1': event_position['y'],
-                    'z1': event_position['z'],
-                  }) < entity_entities[entity]['event-range']){
-                    webgl_event({
-                      'parent': entity_entities[entity],
-                      'target': character,
-                    });
-                }
-
-            }else{
-                for(const character in webgl_characters){
-                    if(character === entity_entities[entity]['attach-to']){
-                        continue;
-                    }
-
-                    if(math_distance({
-                        'x0': webgl_characters[character]['translate-x'],
-                        'y0': webgl_characters[character]['translate-y'],
-                        'z0': webgl_characters[character]['translate-z'],
-                        'x1': event_position['x'],
-                        'y1': event_position['y'],
-                        'z1': event_position['z'],
-                      }) < entity_entities[entity]['event-range']){
-                        webgl_event({
-                          'parent': entity_entities[entity],
-                          'target': webgl_characters[character],
-                        });
-                    }
-                }
+        for(const character in webgl_characters){
+            if(character === entity_entities[entity]['attach-to']){
+                continue;
             }
 
-        }else if(entity_entities[entity]['event-target-id'] !== false){
-            const target_position = webgl_get_translation(entity_entities[entity_entities[entity]['event-target-id']]);
-
             if(math_distance({
-                'x0': target_position['x'],
-                'y0': target_position['y'],
-                'z0': target_position['z'],
+                'x0': webgl_characters[character]['translate-x'],
+                'y0': webgl_characters[character]['translate-y'],
+                'z0': webgl_characters[character]['translate-z'],
                 'x1': event_position['x'],
                 'y1': event_position['y'],
                 'z1': event_position['z'],
               }) < entity_entities[entity]['event-range']){
                 webgl_event({
                   'parent': entity_entities[entity],
-                  'target': entity_entities[entity_entities[entity]['event-target-id']],
+                  'target': webgl_characters[character],
                 });
-            }
-
-        }else{
-            for(const target in entity_entities){
-                if(target === entity){
-                    continue;
-                }
-
-                if(math_distance({
-                    'x0': entity_entities[target]['translate-x'],
-                    'y0': entity_entities[target]['translate-y'],
-                    'z0': entity_entities[target]['translate-z'],
-                    'x1': event_position['x'],
-                    'y1': event_position['y'],
-                    'z1': event_position['z'],
-                  }) < entity_entities[entity]['event-range']){
-                    webgl_event({
-                      'parent': entity_entities[entity],
-                      'target': entity_entities[target],
-                    });
-                }
             }
         }
     }
