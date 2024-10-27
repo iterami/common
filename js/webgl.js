@@ -519,7 +519,6 @@ function webgl_collision(args){
 
             if(character){
                 args['collider']['change-translate-x'] += character['change-translate-x'];
-                args['collider']['change-translate-y'] += character['change-translate-y'];
                 args['collider']['change-translate-z'] += character['change-translate-z'];
             }
 
