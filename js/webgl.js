@@ -3310,6 +3310,9 @@ function webgl_stat_modify(args){
                        entity_entities[entity]['attach-to'] = false;
                   },
                 });
+
+            }else{
+                webgl_character_spawn(args['target']['id']);
             }
 
         }else{
