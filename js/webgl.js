@@ -519,6 +519,7 @@ function webgl_collision(args){
 
             if(character){
                 args['collider']['change-translate-x'] += character['change-translate-x'];
+                args['collider']['change-translate-y'] += character['change-translate-y'];
                 args['collider']['change-translate-z'] += character['change-translate-z'];
             }
 
@@ -1785,6 +1786,9 @@ function webgl_logic(){
 
         const change_translate_x = character['change-translate-x'];
         const change_translate_z = character['change-translate-z'];
+        if(character['change-translate-y'] !== 0){
+            character['jump-allow'] = false;
+        }
 
         if(character['collides']){
             for(const entity in entity_entities){
@@ -1805,10 +1809,6 @@ function webgl_logic(){
             }
 
         }else{
-            if(character['change-translate-y'] !== 0){
-                character['jump-allow'] = false;
-            }
-
             if(character['jump-allow']){
                 character['change-translate-x'] -= change_translate_x;
                 character['change-translate-z'] -= change_translate_z;
