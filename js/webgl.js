@@ -3063,6 +3063,19 @@ function webgl_primitive_terrain(args){
     });
 }
 
+function webgl_random_vertex(id){
+    const entity = entity_entities[id];
+    const translation = webgl_get_translation(entity);
+    const vertex = core_random_integer({
+      'max': entity['vertices-length'],
+    });
+    return {
+      'x': translation['x'] + entity['vertices'][vertex * 3],
+      'y': translation['y'] + entity['vertices'][vertex * 3 + 1],
+      'z': translation['z'] + entity['vertices'][vertex * 3 + 2],
+    };
+}
+
 function webgl_resize(){
     webgl.canvas.height = globalThis.innerHeight;
     webgl.canvas.width = globalThis.innerWidth;
