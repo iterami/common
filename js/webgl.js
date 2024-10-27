@@ -1688,22 +1688,17 @@ function webgl_level_unload(){
       webgl_characters[webgl_character_id]
     );
     webgl_character_base_entities = [];
-    entity_group_modify({
-      'groups': [
-        'webgl',
-      ],
-      'todo': function(entity){
-          if(entity_entities[entity]['attach-to'] === webgl_character_id
-            && entity_groups['skybox'][entity] !== true){
-              const properties = {};
-              Object.assign(
-                properties,
-                entity_entities[entity]
-              );
-              webgl_character_base_entities.push(properties);
-          }
-      },
-    });
+    for(const entity in entity_entities){
+        if(entity_entities[entity]['attach-to'] === webgl_character_id
+          && entity_groups['skybox'][entity] !== true){
+            const properties = {};
+            Object.assign(
+              properties,
+              entity_entities[entity]
+            );
+            webgl_character_base_entities.push(properties);
+        }
+    }
 
     for(const id in webgl_characters){
         delete webgl_characters[id];
@@ -1736,14 +1731,9 @@ function webgl_logic(){
 
     globalThis['repo_logic']?.();
 
-    entity_group_modify({
-      'groups': [
-        'webgl',
-      ],
-      'todo': function(entity){
-          webgl_logic_entity(entity);
-      },
-    });
+    for(const entity in entity_entities){
+        webgl_logic_entity(entity);
+    }
 
     for(const id in webgl_characters){
         const level = webgl_character_level(id);
@@ -3380,29 +3370,24 @@ function webgl_texture_animate(id){
     );
     canvas.restore();
 
-    entity_group_modify({
-      'groups': [
-        'webgl',
-      ],
-      'todo': function(entity){
-          if(entity_entities[entity]['texture-animated']
-            && entity_entities[entity]['texture-id'] === id){
-              webgl.bindTexture(
-                webgl.TEXTURE_2D,
-                webgl_textures_animated[entity_entities[entity]['texture-id']]['gl']
-              );
-              webgl.texImage2D(
-                webgl.TEXTURE_2D,
-                0,
-                webgl.RGBA,
-                webgl.RGBA,
-                webgl.UNSIGNED_BYTE,
-                core_elements['texture-' + entity_entities[entity]['texture-id']]
-              );
-              webgl.generateMipmap(webgl.TEXTURE_2D);
-          }
-      },
-    });
+    for(const entity in entity_entities){
+        if(entity_entities[entity]['texture-animated']
+          && entity_entities[entity]['texture-id'] === id){
+            webgl.bindTexture(
+              webgl.TEXTURE_2D,
+              webgl_textures_animated[entity_entities[entity]['texture-id']]['gl']
+            );
+            webgl.texImage2D(
+              webgl.TEXTURE_2D,
+              0,
+              webgl.RGBA,
+              webgl.RGBA,
+              webgl.UNSIGNED_BYTE,
+              core_elements['texture-' + entity_entities[entity]['texture-id']]
+            );
+            webgl.generateMipmap(webgl.TEXTURE_2D);
+        }
+    }
 }
 
 // Required args: gl, id
