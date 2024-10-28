@@ -830,7 +830,7 @@ function webgl_controls_mouse(id){
     }
     const controls = webgl_characters[id]['controls'];
     if(controls.length === 0){
-        return
+        return;
     }
 
     if(core_mouse['pointerlock-state']
