@@ -237,8 +237,9 @@ function chess_validate(args){
         return;
     }
 
-    const player = args['player'];
     const board = args['board'] || game['board'];
+    const chess_test = [];
+    const player = args['player'];
     let castling = false;
     let en_passant = -1;
     let en_passant_taken = false;
@@ -531,7 +532,7 @@ function chess_validate(args){
 
             if(valid_move
               && args['threat'] !== true){
-                chess_test = [
+                chess_test.push(
                   [...board[0]],
                   [...board[1]],
                   [...board[2]],
@@ -539,8 +540,8 @@ function chess_validate(args){
                   [...board[4]],
                   [...board[5]],
                   [...board[6]],
-                  [...board[7]],
-                ];
+                  [...board[7]]
+                );
                 chess_test[args['piece-y']][args['piece-x']] = '';
                 chess_test[args['target-y']][args['target-x']] = piece;
 
@@ -607,10 +608,7 @@ function chess_validate(args){
 
         game['threefold'][threefold_string]++;
         threefold = game['threefold'][threefold_string];
-
-        chess_test.length = 0;
     }
-
 
     return {
       '50-moves': fifty_moves,
@@ -639,4 +637,3 @@ globalThis.chess_pieces = [
   ['♙', '♘', '♗', '♖', '♕', '♔'],
   ['♟', '♞', '♝', '♜', '♛', '♚'],
 ];
-globalThis.chess_test = [];
