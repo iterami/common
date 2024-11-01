@@ -81,10 +81,6 @@ function chess_move(args){
 
         game['50-moves'] = validation['50-moves'];
         game['en-passant'] = validation['en-passant'];
-        game['threefold-highest'] = Math.max(
-          game['threefold-highest'],
-          validation['threefold']
-        );
         let piece = board[args['piece-y']][args['piece-x']];
 
         board[args['piece-y']][args['piece-x']] = '';
@@ -606,7 +602,10 @@ function chess_validate(args){
         }
 
         game['threefold'][threefold_string]++;
-        game['threefold-highest'] = game['threefold'][threefold_string];
+        game['threefold-highest'] = Math.max(
+          game['threefold'][threefold_string],
+          game['threefold-highest']
+        );
     }
 
     return {
