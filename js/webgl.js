@@ -926,7 +926,8 @@ function webgl_draw_entity(entity){
         return;
     }
 
-    if(entity_entities[entity]['draw-range']){
+    const draw_range = entity_entities[entity]['draw-range'] || webgl_properties['draw-range'];
+    if(draw_range){
         const translation = webgl_get_translation(entity_entities[entity]);
         if(math_distance({
             'x0': webgl_characters[webgl_character_id]['translate-x'],
@@ -935,7 +936,7 @@ function webgl_draw_entity(entity){
             'x1': translation['x'],
             'y1': translation['y'],
             'z1': translation['z'],
-          }) > entity_entities[entity]['draw-range']){
+          }) > draw_range){
             return;
         }
     }
@@ -1547,6 +1548,7 @@ function webgl_level_init(args){
         'directional-red': 1,
         'directional-state': true,
         'directional-vector': [0, 1, 0],
+        'draw-range': false,
         'fog-density': .0001,
         'fog-state': false,
         'gravity-acceleration': -.05,
@@ -1586,6 +1588,7 @@ function webgl_level_init(args){
       'directional-red': level['directional-red'],
       'directional-state': level['directional-state'],
       'directional-vector': level['directional-vector'],
+      'draw-range': level['draw-range'],
       'fog-density': level['fog-density'],
       'fog-state': level['fog-state'],
       'gravity-acceleration': level['gravity-acceleration'],
