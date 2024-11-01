@@ -927,7 +927,7 @@ function webgl_draw_entity(entity){
     }
 
     if(entity_entities[entity]['draw-range']){
-        const translation = webgl_get_translation(entity)
+        const translation = webgl_get_translation(entity_entities[entity]);
         if(math_distance({
             'x0': webgl_characters[webgl_character_id]['translate-x'],
             'y0': webgl_characters[webgl_character_id]['translate-y'],
