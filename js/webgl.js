@@ -926,6 +926,20 @@ function webgl_draw_entity(entity){
         return;
     }
 
+    if(entity_entities[entity]['draw-range']){
+        const translation = webgl_get_translation(entity)
+        if(math_distance({
+            'x0': webgl_characters[webgl_character_id]['translate-x'],
+            'y0': webgl_characters[webgl_character_id]['translate-y'],
+            'z0': webgl_characters[webgl_character_id]['translate-z'],
+            'x1': translation['x'],
+            'y1': translation['y'],
+            'z1': translation['z'],
+          }) > entity_entities[entity]['draw-range']){
+            return;
+        }
+    }
+
     webgl.bindVertexArray(entity_entities[entity]['vao']);
 
     webgl.bindTexture(
@@ -1274,6 +1288,7 @@ function webgl_init(){
         'collision': true,
         'draw': true,
         'draw-mode': 'TRIANGLE_FAN',
+        'draw-range': false,
         'event-limit': false,
         'event-range': false,
         'event-todo': [],
