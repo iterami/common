@@ -252,14 +252,13 @@ function chess_validate(args){
     let rook_short_moved = game['players'][player]['rook-short-moved'];
     let pawn_promote = false;
     let state = 'valid';
-    let threefold = game['threefold-highest'];
     let valid_move = true;
 
     const piece = board[args['piece-y']][args['piece-x']];
     const target_piece = board[args['target-y']][args['target-x']];
 
     if(fifty_moves >= 75
-      || threefold >= 5
+      || game['threefold-highest'] >= 5
       || (game['players'][0]['pieces-taken'].length === 15 && game['players'][1]['pieces-taken'].length === 15)){
         state = 'draw';
         valid_move = false;
@@ -607,7 +606,7 @@ function chess_validate(args){
         }
 
         game['threefold'][threefold_string]++;
-        threefold = game['threefold'][threefold_string];
+        game['threefold-highest'] = game['threefold'][threefold_string];
     }
 
     return {
@@ -623,7 +622,7 @@ function chess_validate(args){
       'rook-long-moved': rook_long_moved,
       'rook-short-moved': rook_short_moved,
       'state': state,
-      'threefold': threefold,
+      'threefold': game['threefold-highest'],
       'valid': valid_move,
     };
 }
