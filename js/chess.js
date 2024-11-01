@@ -327,11 +327,8 @@ function chess_validate(args){
 
                 // Knight
                 case chess_pieces[player][1]: {
-                    if(movement_x < 1 || movement_x > 2 || movement_y < 1 || movement_y > 2){
-                        valid_move = false;
-
-                    }else if((movement_x === 1 && movement_y !== 2)
-                      || (movement_x === 2 && movement_y !== 1)){
+                    if(!((movement_x === 1 && movement_y === 2)
+                      || (movement_x === 2 && movement_y === 1))){
                         valid_move = false;
                     }
 
