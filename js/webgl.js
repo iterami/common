@@ -922,23 +922,9 @@ function webgl_draw(){
 }
 
 function webgl_draw_entity(entity){
-    if(!entity_entities[entity]['draw']){
+    if(!entity_entities[entity]['draw']
+      || !entity_entities[entity]['visible']){
         return;
-    }
-
-    const draw_range = entity_entities[entity]['draw-range'] || webgl_properties['draw-range'];
-    if(draw_range){
-        const translation = webgl_get_translation(entity_entities[entity]);
-        if(math_distance({
-            'x0': webgl_characters[webgl_character_id]['camera-x'],
-            'y0': webgl_characters[webgl_character_id]['camera-y'],
-            'z0': webgl_characters[webgl_character_id]['camera-z'],
-            'x1': translation['x'],
-            'y1': translation['y'],
-            'z1': translation['z'],
-          }) > draw_range){
-            return;
-        }
     }
 
     webgl.bindVertexArray(entity_entities[entity]['vao']);
@@ -1317,6 +1303,7 @@ function webgl_init(){
         'translate-y': 0,
         'translate-z': 0,
         'vertices-length': 0,
+        'visible': true,
       },
       'todo': function(entity){
           webgl_entity_init(entity);
@@ -1885,6 +1872,22 @@ function webgl_logic(){
 }
 
 function webgl_logic_entity(entity){
+    const draw_range = entity_entities[entity]['draw-range'] || webgl_properties['draw-range'];
+    if(draw_range){
+        const translation = webgl_get_translation(entity_entities[entity]);
+        entity_entities[entity]['visible'] = math_distance({
+            'x0': webgl_characters[webgl_character_id]['camera-x'],
+            'y0': webgl_characters[webgl_character_id]['camera-y'],
+            'z0': webgl_characters[webgl_character_id]['camera-z'],
+            'x1': translation['x'],
+            'y1': translation['y'],
+            'z1': translation['z'],
+          }) <= draw_range;
+
+    }else{
+        entity_entities[entity]['visible'] = true;
+    }
+
     if(entity_entities[entity]['event-range'] > 0){
         const event_position = webgl_get_translation(entity_entities[entity]);
 
