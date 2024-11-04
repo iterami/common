@@ -2999,6 +2999,7 @@ function webgl_primitive_terrain(args){
       'args': webgl_prefab_args(args),
       'defaults': {
         'colors': [],
+        'height-random': 10,
         'heights': [],
         'tiles-x': 10,
         'tiles-x-size': 10,
@@ -3014,7 +3015,7 @@ function webgl_primitive_terrain(args){
         args['colors'].push(...random_color);
     }
     while(args['heights'].length < args['tiles-x'] * args['tiles-z'] + args['tiles-x'] + 1){
-        args['heights'].push(Math.random() * 10);
+        args['heights'].push(Math.random() * args['height-random']);
     }
 
     let x_direction = -1;
