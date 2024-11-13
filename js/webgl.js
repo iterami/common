@@ -3008,13 +3008,14 @@ function webgl_primitive_terrain(args){
       },
     });
 
-    while(args['colors'].length < args['tiles-x'] * (args['tiles-z'] + 1) * 4 + 1){
-        const random_color = webgl_vertexcolorarray({
+    const color_count = args['tiles-x'] * (args['tiles-z'] + 1) * 4 + 1;
+    while(args['colors'].length < color_count){
+        args['colors'].push(...webgl_vertexcolorarray({
           'vertexcount': 1,
-        });
-        args['colors'].push(...random_color);
+        }));
     }
-    while(args['heights'].length < args['tiles-x'] * args['tiles-z'] + args['tiles-x'] + 1){
+    const height_count = args['tiles-x'] * args['tiles-z'] + args['tiles-x'] + 1;
+    while(args['heights'].length < height_count){
         args['heights'].push(Math.random() * args['height-random']);
     }
 
