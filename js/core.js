@@ -522,7 +522,7 @@ function core_html(args){
 }
 
 function core_html_format(string){
-    return core_replace_multiple({
+    return core_replace({
       'patterns': {
         '&': '&amp;',
         '<': '&lt;',
@@ -1092,7 +1092,7 @@ function core_random_string(args){
 }
 
 // Required args: patterns, string
-function core_replace_multiple(args){
+function core_replace(args){
     let string_value = args['string'];
     for(const pattern in args['patterns']){
         string_value = string_value.replace(

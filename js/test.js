@@ -66,7 +66,7 @@ function test_run(args){
             const args_object = {};
             for(const arg in test_args['args']){
                 if(core_type(test_args['args'][arg]) === 'function'){
-                    args_object[arg] = core_replace_multiple({
+                    args_object[arg] = core_replace({
                       'patterns': {
                         '\n': '<br>',
                       },
