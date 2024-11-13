@@ -1626,6 +1626,7 @@ function webgl_level_init(args){
     webgl_cursor_set(webgl_properties['cursor']);
 
     level['groups'].push(
+      'opaque',
       'skybox',
       'transparent',
     );
