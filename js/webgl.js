@@ -893,31 +893,16 @@ function webgl_draw(){
       'groups': [
         'skybox',
       ],
-      'todo': function(entity){
-          webgl_draw_entity(entity);
-      },
+      'todo': webgl_draw_entity,
     });
     webgl.enable(webgl.DEPTH_TEST);
 
     entity_group_modify({
       'groups': [
-        'foreground',
+        'opaque',
+        'transparent',
       ],
-      'todo': function(entity){
-          if(entity_entities[entity]['alpha'] === 1){
-              webgl_draw_entity(entity);
-          }
-      },
-    });
-    entity_group_modify({
-      'groups': [
-        'foreground',
-      ],
-      'todo': function(entity){
-          if(entity_entities[entity]['alpha'] < 1){
-              webgl_draw_entity(entity);
-          }
-      },
+      'todo': webgl_draw_entity,
     });
 }
 
@@ -960,6 +945,37 @@ function webgl_draw_entity(entity){
 function webgl_drawloop(){
     webgl_draw();
     core_interval_animationFrame('webgl-animationFrame');
+}
+
+// Required args: id
+function webgl_entity_alpha(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'alpha': 1,
+      },
+    });
+
+    entity_entities[args['id']]['alpha'] = args['alpha'];
+
+    if(args['alpha'] === 1){
+        entity_group_move({
+          'entities': [
+            args['id'],
+          ],
+          'from': 'transparent',
+          'to': 'opaque',
+        });
+
+    }else{
+        entity_group_move({
+          'entities': [
+            args['id'],
+          ],
+          'from': 'opaque',
+          'to': 'transparent',
+        });
+    }
 }
 
 function webgl_entity_buffer(entity){
@@ -1059,7 +1075,13 @@ function webgl_entity_create(args){
               'entities': [
                 entity_id,
               ],
-              'group': 'foreground',
+              'group': 'opaque',
+            });
+            entity_group_remove({
+              'entities': [
+                entity_id,
+              ],
+              'group': 'transparent',
             });
             args['entities'][entity]['attach-to'] = webgl_character_id;
             args['entities'][entity]['attach-type'] = 'webgl_characters';
@@ -1108,6 +1130,10 @@ function webgl_entity_init(entity){
     });
     entity_entities[entity]['vao'] = webgl.createVertexArray();
 
+    webgl_entity_alpha({
+      'alpha': entity_entities[entity]['alpha'],
+      'id': entity,
+    });
     webgl_entity_buffer(entity);
 }
 
@@ -1256,9 +1282,6 @@ function webgl_init(){
 
     entity_set({
       'default': true,
-      'groups': [
-        'foreground',
-      ],
       'properties': {
         'alpha': 1,
         'attach-to': false,
@@ -1308,7 +1331,7 @@ function webgl_init(){
       'todo': function(entity){
           webgl_entity_init(entity);
       },
-      'type': 'webgl',
+      'type': 'opaque',
     });
 
     webgl_shader_create({
@@ -1603,9 +1626,8 @@ function webgl_level_init(args){
     webgl_cursor_set(webgl_properties['cursor']);
 
     level['groups'].push(
-      'foreground',
       'skybox',
-      'webgl'
+      'transparent',
     );
     entity_group_create(level['groups']);
 
