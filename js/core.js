@@ -915,7 +915,7 @@ function core_mouse_updatebinds(args){
         core_mouse['todo'][mousebind] = {
           'loop': args['mousebinds'][mousebind]['loop'] || false,
           'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
-          'todo': args['mousebinds'][mousebind]['todo'] || function(){},
+          'todo': args['mousebinds'][mousebind]['todo'],
         };
     }
 }

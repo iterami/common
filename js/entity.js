@@ -57,10 +57,10 @@ function entity_create(args){
     entity_entities[args['id']] = entity;
 
     for(const type in entity_types_default){
-        entity_info[entity_types_default[type]]['todo'](args['id']);
+        entity_info[entity_types_default[type]]['todo']?.(args['id']);
     }
     for(const type in args['types']){
-        entity_info[args['types'][type]]['todo'](args['id']);
+        entity_info[args['types'][type]]['todo']?.(args['id']);
     }
 
     return args['id'];
@@ -246,7 +246,6 @@ function entity_set(args){
         'default': false,
         'groups': [],
         'properties': {},
-        'todo': function(){},
       },
     });
 
