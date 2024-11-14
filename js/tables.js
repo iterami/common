@@ -59,11 +59,12 @@ function tables_sort(element, column, direction, type){
     }
 
     const rows = Array.from(tbody.children);
-    const header = rows[0].classList.contains('header');
-    const header_row = header ? rows.shift() : '';
     if(rows.length === 0){
         return;
     }
+
+    const header = rows[0].classList.contains('header');
+    const header_row = header ? rows.shift() : '';
 
     const column_content = [];
     let main_column = 0;
