@@ -12,16 +12,16 @@ function audio_create(audios){
 }
 
 function audio_start(id){
-    const audio_context = new globalThis.AudioContext();
-    const oscillator = audio_context.createOscillator();
-    const gain = audio_context.createGain();
+    const context = new globalThis.AudioContext();
 
-    oscillator.connect(gain);
-    gain.connect(audio_context.destination);
-
+    const gain = context.createGain();
     gain.gain.value = core_storage_data['audio-volume'];
+    gain.connect(context.destination);
+
+    const oscillator = context.createOscillator();
     oscillator.frequency.value = audio_audios[id]['frequency'];
     oscillator.type = audio_audios[id]['type'];
+    oscillator.connect(gain);
 
     oscillator.start();
     oscillator.stop(audio_audios[id]['duration']);
