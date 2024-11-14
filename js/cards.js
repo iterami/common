@@ -43,7 +43,7 @@ function cards_reset(id){
 
 function cards_shuffle(id){
     const deck = cards_decks[id]['deck'];
-    for(var card = deck.length - 1; card > 0; card--){
+    for(let card = deck.length - 1; card > 0; card--){
         const shuffled = Math.floor(Math.random() * (card + 1));
         [deck[card], deck[shuffled]] = [deck[shuffled], deck[card]];
     }
