@@ -101,9 +101,7 @@ function webgl_camera_rotate(args){
           'groups': [
             'webgl_characters_' + args['character'],
           ],
-          'todo': function(entity){
-              webgl_entity_normals(entity);
-          },
+          'todo': webgl_entity_normals,
         });
     }
 }
@@ -1328,9 +1326,7 @@ function webgl_init(){
         'vertices-length': 0,
         'visible': true,
       },
-      'todo': function(entity){
-          webgl_entity_init(entity);
-      },
+      'todo': webgl_entity_init,
       'type': 'opaque',
     });
 
