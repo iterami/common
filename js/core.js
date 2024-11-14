@@ -90,7 +90,6 @@ function core_events_bind(args){
             'preventDefault': false,
             'solo': false,
             'state': false,
-            'todo': function(){},
           },
         });
     }
@@ -143,9 +142,7 @@ function core_file(args){
     });
 
     const filereader = new FileReader();
-    filereader.onloadend = function(event){
-        args['todo'](event);
-    };
+    filereader.onloadend = args['todo'];
     filereader[args['type']](args['file']);
 }
 
@@ -230,7 +227,7 @@ function core_handle_event(args){
 
         if(args['todo'] !== void 0
           && !args['object'][args['key']]['loop']){
-            const returned = args['object'][args['key']]['todo'](args['event']);
+            const returned = args['object'][args['key']]['todo']?.(args['event']);
             if(returned !== void 0){
                 return returned;
             }
@@ -537,13 +534,6 @@ function core_html_format(string){
 
 // Required args: id, src
 function core_image(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'todo': function(){},
-      },
-    });
-
     const image = new Image();
     image.onload = args['todo'];
     image.src = args['src'];
@@ -903,7 +893,6 @@ function core_keys_updatebinds(args){
             'preventDefault': false,
             'solo': false,
             'state': false,
-            'todo': function(){},
           },
         });
     }
