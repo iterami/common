@@ -915,8 +915,8 @@ function webgl_draw_entity(entity){
     webgl.bindTexture(
       webgl.TEXTURE_2D,
       entity_entities[entity]['texture-animated']
-        ? webgl_textures_animated[entity_entities[entity]['texture-id']]['gl']
-        : webgl_textures[entity_entities[entity]['texture-id']]
+        ? webgl_textures_animated[entity_entities[entity]['texture']]['gl']
+        : webgl_textures[entity_entities[entity]['texture']]
     );
     const uniforms = webgl_shaders[webgl_shader_active]['uniforms'];
     webgl.uniform1f(
@@ -1111,7 +1111,7 @@ function webgl_entity_create(args){
 function webgl_entity_init(entity){
     webgl_texture_init({
       'animated': entity_entities[entity]['texture-animated'],
-      'id': entity_entities[entity]['texture-id'],
+      'id': entity_entities[entity]['texture'],
     });
 
     entity_entities[entity]['id'] = entity;
@@ -1310,6 +1310,7 @@ function webgl_init(){
         'scale-x': 1,
         'scale-y': 1,
         'scale-z': 1,
+        'texture': webgl_default_texture,
         'texture-align': [
           1, 1,
           0, 1,
@@ -1317,7 +1318,6 @@ function webgl_init(){
           1, 0,
         ],
         'texture-animated': false,
-        'texture-id': webgl_default_texture,
         'texture-repeat-x': 1,
         'texture-repeat-y': 1,
         'translate-x': 0,
@@ -3416,10 +3416,10 @@ function webgl_texture_animate(id){
 
     for(const entity in entity_entities){
         if(entity_entities[entity]['texture-animated']
-          && entity_entities[entity]['texture-id'] === id){
+          && entity_entities[entity]['texture'] === id){
             webgl.bindTexture(
               webgl.TEXTURE_2D,
-              webgl_textures_animated[entity_entities[entity]['texture-id']]['gl']
+              webgl_textures_animated[entity_entities[entity]['texture']]['gl']
             );
             webgl.texImage2D(
               webgl.TEXTURE_2D,
@@ -3427,7 +3427,7 @@ function webgl_texture_animate(id){
               webgl.RGBA,
               webgl.RGBA,
               webgl.UNSIGNED_BYTE,
-              core_elements['texture-' + entity_entities[entity]['texture-id']]
+              core_elements['texture-' + entity_entities[entity]['texture']]
             );
             webgl.generateMipmap(webgl.TEXTURE_2D);
         }
