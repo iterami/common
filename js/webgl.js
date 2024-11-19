@@ -999,8 +999,8 @@ function webgl_entity_buffer(entity){
     for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
         pickData.push(...(entity_entities[entity]['picking'] || [0,0,0]))
         textureData.push(
-          entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-repeat-x'],
-          entity_entities[entity]['texture-align'][i * 2 + 1] * entity_entities[entity]['texture-repeat-y']
+          entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-x'],
+          entity_entities[entity]['texture-align'][i * 2 + 1] * entity_entities[entity]['texture-y']
         );
     }
 
@@ -1318,8 +1318,8 @@ function webgl_init(){
           1, 0,
         ],
         'texture-animated': false,
-        'texture-repeat-x': 1,
-        'texture-repeat-y': 1,
+        'texture-x': 1,
+        'texture-y': 1,
         'translate-x': 0,
         'translate-y': 0,
         'translate-z': 0,

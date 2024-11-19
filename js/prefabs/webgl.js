@@ -37,7 +37,7 @@ function prefabs_webgl_cuboid_tree(args){
       'all': {
         'collision': args['trunk-collision'],
         'texture': args['trunk-texture'],
-        'texture-repeat-y': 2,
+        'texture-y': 2,
         'vertex-colors': args['trunk-color'],
       },
       'bottom': {
