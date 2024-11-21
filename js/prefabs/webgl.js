@@ -363,7 +363,6 @@ function prefabs_webgl_lines_tree(args){
     args = core_args({
       'args': webgl_prefab_args(args),
       'defaults': {
-        'billboard': true,
         'leaf-color': [
           0, .5, 0, 1,
         ],
@@ -458,7 +457,6 @@ function prefabs_webgl_tree_2d(args){
         'base-color': [
           .4, .2, 0, 1,
         ],
-        'billboard': true,
         'height': 5,
         'height-range': 0,
         'leaf-color': [
