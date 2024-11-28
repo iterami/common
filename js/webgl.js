@@ -800,8 +800,7 @@ function webgl_controls_keyboard(id){
                 }
             }
 
-            if(forwardback !== 0
-              && leftright !== 0){
+            if(leftright !== 0){
                 forwardback *= .7071067811865475;
                 leftright *= .7071067811865475;
             }
