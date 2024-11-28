@@ -115,7 +115,7 @@ function webgl_character_init(args){
         'camera-rotate-x': 0,
         'camera-rotate-y': 0,
         'camera-rotate-z': 0,
-        'camera-zoom': 50,
+        'camera-zoom': 0,
         'change-rotate-x': 0,
         'change-rotate-y': 0,
         'change-rotate-z': 0,
