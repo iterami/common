@@ -2115,7 +2115,7 @@ function webgl_path_move(id){
         return;
     }
 
-    const path = webgl_paths[character['path-id']];
+    const path = globalThis.structuredClone(webgl_paths[character['path-id']]);
     const point = core_args({
       'args': path['points'][character['path-point']],
       'defaults': {
