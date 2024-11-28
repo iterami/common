@@ -490,7 +490,7 @@ function webgl_collision(args){
           : 0;
 
         args['collider']['translate-' + collision[axis]] = target_position[collision[axis]]
-          + args['collider']['collide-range-' + (collision[axis] === 'y' ? 'y' : 'xz')] * collision_sign[axis]
+          + range[collision[axis]] * collision_sign[axis]
           + change_translate;
         args['collider']['change-translate-' + collision[axis]] = change_translate;
 
