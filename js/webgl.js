@@ -343,7 +343,7 @@ function webgl_character_spawn(id){
     webgl_characters[id]['life'] = webgl_characters[id]['life-max'];
     webgl_characters[id]['camera-zoom'] = webgl_characters[id]['level'] === -1
       ? 0
-      : webgl_properties['camera-zoom-max'];
+      : webgl_properties['camera-zoom'];
 
     webgl_character_origin(id);
     webgl_move_to({
@@ -1538,6 +1538,7 @@ function webgl_level_init(args){
         'ambient-blue': 1,
         'ambient-green': 1,
         'ambient-red': 1,
+        'camera-zoom': 25,
         'camera-zoom-max': 50,
         'camera-zoom-min': 0,
         'characters': [],
@@ -1579,6 +1580,7 @@ function webgl_level_init(args){
       'ambient-blue': level['ambient-blue'],
       'ambient-green': level['ambient-green'],
       'ambient-red': level['ambient-red'],
+      'camera-zoom': level['camera-zoom'],
       'camera-zoom-max': level['camera-zoom-max'],
       'camera-zoom-min': level['camera-zoom-min'],
       'clearcolor-blue': level['clearcolor-blue'],
