@@ -164,15 +164,7 @@ function webgl_character_init(args){
       'camera-x': args['translate-x'],
       'camera-y': args['translate-y'],
       'camera-z': args['translate-z'],
-      'camera-zoom': Math.min(
-        Math.max(
-          args['camera-zoom'],
-          args['level'] === -1
-            ? 0
-            : webgl_properties['camera-zoom-min']
-        ),
-        webgl_properties['camera-zoom-max']
-      ),
+      'camera-zoom': args['camera-zoom'],
       'change-rotate-x': args['change-rotate-x'],
       'change-rotate-y': args['change-rotate-y'],
       'change-rotate-z': args['change-rotate-z'],
@@ -349,6 +341,9 @@ function webgl_character_spawn(id){
     }
 
     webgl_characters[id]['life'] = webgl_characters[id]['life-max'];
+    webgl_characters[id]['camera-zoom'] = webgl_characters[id]['level'] === -1
+      ? 0
+      : webgl_properties['camera-zoom-max'];
 
     webgl_character_origin(id);
     webgl_move_to({
