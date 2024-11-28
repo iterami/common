@@ -753,23 +753,24 @@ function webgl_controls_keyboard(id){
 
         if(level === -1 || webgl_characters[id]['jump-allow']){
             let forwardback = 0;
-            if(core_keys[core_storage_data['move-↓']]['state']){
-                webgl_characters[id]['automove'] = false;
-                if(level === -1){
-                    forwardback = 1;
-
-                }else{
-                    forwardback = .5;
-                    leftright *= .5;
-                }
-            }
             if(core_keys[core_storage_data['move-↑']]['state']
               || (core_mouse['down-0'] && core_mouse['down-2'])){
                 webgl_characters[id]['automove'] = false;
-                forwardback -= 1;
+                forwardback = -1;
 
             }else if(webgl_characters[id]['automove']){
-                forwardback -= 1;
+                forwardback = -1;
+
+            }
+            if(core_keys[core_storage_data['move-↓']]['state']){
+                webgl_characters[id]['automove'] = false;
+                if(level === -1){
+                    forwardback += 1;
+
+                }else{
+                    forwardback = forwardback ? 0 : .5;
+                    leftright *= .5;
+                }
             }
 
             if(core_keys[core_storage_data['crouch']]['state']){
@@ -801,20 +802,20 @@ function webgl_controls_keyboard(id){
             }
 
             if(leftright !== 0){
-                forwardback *= .7071067811865475;
-                leftright *= .7071067811865475;
+                if(level !== -1){
+                    forwardback *= .7;
+                    leftright *= .7;
+                }
+                webgl_character_move({
+                  'id': id,
+                  'speed': leftright * webgl_characters[id]['speed'],
+                  'strafe': true,
+                });
             }
             if(forwardback !== 0){
                 webgl_character_move({
                   'id': id,
                   'speed': forwardback * webgl_characters[id]['speed'],
-                });
-            }
-            if(leftright !== 0){
-                webgl_character_move({
-                  'id': id,
-                  'speed': leftright * webgl_characters[id]['speed'],
-                  'strafe': true,
                 });
             }
         }
