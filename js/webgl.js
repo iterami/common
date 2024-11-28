@@ -711,6 +711,7 @@ function webgl_controls_keyboard(id){
 
     }else{
         const strafe = core_mouse['down-2']
+          || webgl_properties['pointerlock']
           || webgl_characters[id]['camera-zoom'] === 0
           || webgl_characters[id]['controls'] === 'rts';
 
@@ -831,7 +832,7 @@ function webgl_controls_mouse(id){
         return;
     }
 
-    if(core_mouse['pointerlock-state']
+    if(webgl_properties['pointerlock']
       || core_mouse['down-2']
       || (core_mouse['down-0'] && controls !== 'rts')){
         if(level !== -1 && webgl_properties['paused']){
