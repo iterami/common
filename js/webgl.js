@@ -439,16 +439,21 @@ function webgl_collision(args){
     let collision = '';
     const collider_position = webgl_get_translation(args['collider']);
     const collision_sign = [];
+    const diffs = {
+      'x': args['collider']['change-translate-x'] - character?.['change-translate-x'],
+      'y': args['collider']['change-translate-y'] - character?.['change-translate-y'],
+      'z': args['collider']['change-translate-z'] - character?.['change-translate-z'],
+    };
     const range = {
-      'x': args['collider']['collide-range-xz'],
-      'y': args['collider']['collide-range-y'],
-      'z': args['collider']['collide-range-xz'],
+      'x': args['collider']['collide-range-xz'] + Math.abs(diffs['x']),
+      'y': args['collider']['collide-range-y'] + Math.abs(diffs['y']),
+      'z': args['collider']['collide-range-xz'] + Math.abs(diffs['z']),
     };
     const target_position = webgl_get_translation(args['target']);
 
     let sign = Math.sign(args['target']['normals'][0]);
     if(sign !== 0
-      && sign !== Math.sign(args['collider']['change-translate-x'] - character?.['change-translate-x'])
+      && sign !== Math.sign(diffs['x'])
       && collider_position['x'] > target_position['x'] - range['x']
       && collider_position['x'] < target_position['x'] + range['x']
       && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y']
@@ -460,7 +465,7 @@ function webgl_collision(args){
     }
     sign = Math.sign(args['target']['normals'][2]);
     if(sign !== 0
-      && sign !== Math.sign(args['collider']['change-translate-z'] - character?.['change-translate-z'])
+      && sign !== Math.sign(diffs['z'])
       && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
       && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
       && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
@@ -472,7 +477,7 @@ function webgl_collision(args){
     }
     sign = Math.sign(args['target']['normals'][1]);
     if(sign !== 0
-      && sign !== Math.sign(args['collider']['change-translate-y'] - character?.['change-translate-y'])
+      && sign !== Math.sign(diffs['y'])
       && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
       && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
       && collider_position['y'] > target_position['y'] - range['y']
@@ -493,7 +498,7 @@ function webgl_collision(args){
           : 0;
 
         args['collider']['translate-' + collision[axis]] = target_position[collision[axis]]
-          + range[collision[axis]] * collision_sign[axis]
+          + args['collider']['collide-range-' + (collision[axis] === 'y' ? 'y' : 'xz')] * collision_sign[axis]
           + change_translate;
         args['collider']['change-translate-' + collision[axis]] = change_translate;
 
