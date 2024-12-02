@@ -73,8 +73,7 @@ function webgl_camera_rotate(args){
             return;
         }
 
-        const strafe = core_mouse['down-2']
-          || webgl_characters[args['character']]['controls'] === 'rts';
+        const strafe = webgl_character_strafe(args['character']);
         const mouse_check = strafe
           || (!core_mouse['down-0']
             && !core_mouse['down-2'])
@@ -372,6 +371,13 @@ function webgl_character_spawn(id){
             webgl_character_spawn(character);
         }
     }
+}
+
+function webgl_character_strafe(id){
+    return webgl_properties['pointerlock']
+      || core_mouse['down-2']
+      || webgl_characters[id]['camera-zoom'] === 0
+      || webgl_characters[id]['controls'] === 'rts';
 }
 
 function webgl_clamp_rotation(entity){
@@ -713,17 +719,14 @@ function webgl_controls_keyboard(id){
         return;
 
     }else{
-        const strafe = core_mouse['down-2']
-          || webgl_properties['pointerlock']
-          || webgl_characters[id]['camera-zoom'] === 0
-          || webgl_characters[id]['controls'] === 'rts';
-
+        const strafe = webgl_character_strafe(id);
         if(id !== webgl_character_id){
             if(webgl_characters[id]['automove']
               && webgl_characters[id]['jump-allow']){
                 webgl_character_move({
                   'id': id,
                   'speed': webgl_characters[id]['speed'],
+                  'strafe': strafe,
                 });
             }
 
