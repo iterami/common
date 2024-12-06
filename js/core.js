@@ -1561,6 +1561,7 @@ function core_ui_update(args){
       'defaults': {
         'class': false,
         'ids': {},
+        'todo': 'textContent',
       },
     });
 
@@ -1576,9 +1577,9 @@ function core_ui_update(args){
         }
 
         const element = core_elements[id];
-        element[element.tagName !== 'INPUT'
-          ? 'textContent'
-          : 'value'] = args['ids'][id];
+        element[element.tagName === 'INPUT'
+          ? 'value'
+          : args['todo']] = args['ids'][id];
 
         if(!args['class']){
             continue;
@@ -1587,9 +1588,9 @@ function core_ui_update(args){
         const elements = document.getElementsByClassName(id);
         for(let i = 0; i < elements.length; i++){
              const item = elements.item(i);
-             item[item.tagName !== 'INPUT'
-               ? 'textContent'
-               : 'value'] = args['ids'][id];
+             item[item.tagName === 'INPUT'
+               ? 'value'
+               : args['todo']] = args['ids'][id];
         }
     }
 }
