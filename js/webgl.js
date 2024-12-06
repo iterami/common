@@ -1822,7 +1822,8 @@ function webgl_logic(){
             character['jump-allow'] = false;
         }
 
-        if(character['collides']){
+        if(character['collides']
+          && webgl_paths[character['path-id']]?.['collision'] !== false){
             for(const entity in entity_entities){
                 if(entity_entities[entity]['collision']){
                     webgl_collision({
