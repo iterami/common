@@ -1513,6 +1513,8 @@ function webgl_level_init(args){
         return;
     }
 
+    core_interval_pause_all();
+
     if(args['json']['randomized']){
         for(const i in args['json']['randomized']){
             const randomized = Math.random() * (args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min']) + args['json']['randomized'][i]['min'];
