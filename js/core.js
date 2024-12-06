@@ -61,6 +61,9 @@ function core_escape(force){
 
     }else{
         core_interval_pause_all();
+        if(document.pointerLockElement){
+            document.exitPointerLock();
+        }
         core_elements['repo-ui'].style.display = 'none';
         core_elements['core-ui'].style.userSelect = 'auto';
         core_elements['core-menu'].style.display = 'inline';
@@ -379,13 +382,13 @@ function core_handle_mouseup(event){
 }
 
 function core_handle_pointerlockchange(event){
-    core_mouse['pointerlock-state'] = document.pointerLockElement !== null
-      && document.pointerLockElement.id === core_mouse['pointerlock-id'];
-
-    if(!core_mouse['pointerlock-state']){
+    if(document.pointerLockElement === null){
         core_escape(true);
-        document.exitPointerLock();
     }
+}
+
+function core_handle_pointerlockerror(event){
+    core_escape(true);
 }
 
 function core_handle_touchend(event){
@@ -624,13 +627,12 @@ function core_init(){
       'down-y': 0,
       'movement-x': 0,
       'movement-y': 0,
-      'pointerlock-id': 'canvas',
-      'pointerlock-state': false,
       'todo': {},
       'x': 0,
       'y': 0,
     };
     document.onpointerlockchange = core_handle_pointerlockchange;
+    document.onpointerlockerror = core_handle_pointerlockerror;
     globalThis.onbeforeunload = core_handle_beforeunload;
     globalThis.onblur = core_handle_blur;
     globalThis.oncontextmenu = core_handle_contextmenu;
@@ -1239,7 +1241,6 @@ function core_requestpointerlock(element){
         return;
     }
 
-    core_mouse['pointerlock-id'] = element.id;
     element.requestPointerLock();
 }
 
