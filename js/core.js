@@ -387,10 +387,6 @@ function core_handle_pointerlockchange(event){
     }
 }
 
-function core_handle_pointerlockerror(event){
-    core_escape(true);
-}
-
 function core_handle_touchend(event){
     core_mouse['down-0'] = false;
     core_mouse['down-1'] = false;
@@ -632,7 +628,6 @@ function core_init(){
       'y': 0,
     };
     document.onpointerlockchange = core_handle_pointerlockchange;
-    document.onpointerlockerror = core_handle_pointerlockerror;
     globalThis.onbeforeunload = core_handle_beforeunload;
     globalThis.onblur = core_handle_blur;
     globalThis.oncontextmenu = core_handle_contextmenu;
@@ -1235,8 +1230,8 @@ function core_repo_reset(){
 }
 
 function core_requestpointerlock(element){
-    if(core_menu_open
-      || document.pointerLockElement !== null
+    if(document.pointerLockElement !== null
+      || core_menu_open
       || core_keys['Escape']['state']){
         return;
     }
