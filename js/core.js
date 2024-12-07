@@ -384,6 +384,9 @@ function core_handle_mouseup(event){
 function core_handle_pointerlockchange(event){
     if(document.pointerLockElement === null){
         core_escape(true);
+
+    }else if(core_menu_open){
+        document.exitPointerLock();
     }
 }
 
