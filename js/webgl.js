@@ -3304,7 +3304,9 @@ function webgl_stat_modify(args){
         return;
 
     }else if(args['stat'] === 'vertex-colors'){
-        args['target']['vertex-colors'] = webgl_vertexcolorarray();
+        args['target']['vertex-colors'] = core_type(args['value']) === 'array'
+          ? args['value']
+          : webgl_vertexcolorarray();
         webgl.bindVertexArray(args['target']['vao']);
         webgl_buffer_set({
           'attribute': 'vec_vertexColor',
