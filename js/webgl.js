@@ -238,6 +238,7 @@ function webgl_character_init(args){
         webgl_primitive_cuboid({
           'all': {
             'collision': false,
+            'texture': 'grid.png',
           },
           'character': args['id'],
           'prefix': args['id'],
