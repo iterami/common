@@ -3353,9 +3353,17 @@ function webgl_stat_modify(args){
                     'webgl_characters_' + args['target']['id'],
                   ],
                   'todo': function(entity){
-                       entity_entities[entity]['attach-to'] = false;
+                       if(!entity_groups['skybox'][entity]){
+                           entity_entities[entity]['attach-to'] = false;
+                       }
                   },
                 });
+                const axes = 'xyz';
+                for(const axis in axes){
+                    args['target']['change-rotate-' + axes[axis]] = 0;
+                    args['target']['change-translate-' + axes[axis]] = 0;
+                }
+                args['target']['gravity'] = 0;
 
             }else{
                 webgl_character_spawn(args['target']['id']);
