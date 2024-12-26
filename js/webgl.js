@@ -1,5 +1,37 @@
 'use strict';
 
+// Required args: id
+function webgl_audio(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'audio': false,
+        'divider-x': 50,
+        'divider-y': 50,
+        'divider-z': 50,
+        'type': 'webgl_characters',
+      },
+    });
+
+    if(!audio_audios[args['id']]){
+        audio_create?.({
+          [args['id']]: args['audio'],
+        });
+    }
+
+    const radians_y = math_degrees_to_radians(webgl_characters[webgl_character_id]['rotate-y']);
+    const target = webgl_get_translation(globalThis[args['type']][args['target']]);
+    audio_start_at?.({
+      'forwardX': Math.sin(-radians_y),
+      'forwardY': 0,
+      'forwardZ': Math.cos(radians_y),
+      'id': args['id'],
+      'positionX': (webgl_characters[webgl_character_id]['translate-x'] - target['x']) / args['divider-x'],
+      'positionY': (webgl_characters[webgl_character_id]['translate-y'] - target['y']) / args['divider-y'],
+      'positionZ': (webgl_characters[webgl_character_id]['translate-z'] - target['z']) / args['divider-z'],
+    });
+}
+
 function webgl_billboard(entity){
     const translation = webgl_get_translation(entity_entities[entity]);
 
@@ -1862,14 +1894,11 @@ function webgl_logic(){
         if(character['camera-zoom'] > 0){
             const radians_x = math_degrees_to_radians(character['camera-rotate-x']);
             const radians_y = math_degrees_to_radians(character['camera-rotate-y']);
-            const cos_x = Math.cos(radians_x);
+            const zoom_cos_x = character['camera-zoom'] * Math.cos(radians_x);
 
-            character['camera-x'] = character['translate-x']
-              + Math.sin(-radians_y) * character['camera-zoom'] * cos_x;
-            character['camera-y'] = character['translate-y']
-              + Math.sin(radians_x) * character['camera-zoom'];
-            character['camera-z'] = character['translate-z']
-              + Math.cos(radians_y) * character['camera-zoom'] * cos_x;
+            character['camera-x'] = character['translate-x'] + Math.sin(-radians_y) * zoom_cos_x;
+            character['camera-y'] = character['translate-y'] + Math.sin(radians_x) * character['camera-zoom'];
+            character['camera-z'] = character['translate-z'] + Math.cos(radians_y) * zoom_cos_x;
 
         }else{
             character['camera-x'] = character['translate-x'];
@@ -2069,7 +2098,7 @@ function webgl_normals(args){
     const cos_y = Math.cos(radians_y);
 
     const normal_x = core_round({
-      'number': cos_y * Math.sin(radians_z),
+      'number': Math.sin(radians_z) * cos_y,
     });
     const normal_y = core_round({
       'number': Math.cos(radians_x) * Math.cos(radians_z),
@@ -2234,15 +2263,15 @@ function webgl_path_move(id){
       point['translate-x'] - character['translate-x']
     );
     const angle_y = Math.asin(Math.abs(character['translate-y'] - point['translate-y']) / distance);
-    const cos_y = Math.cos(angle_y);
+    const cos_y_speed = Math.cos(angle_y) * speed;
     character['change-translate-x'] = core_round({
-      'number': Math.cos(angle_xz) * cos_y * speed,
+      'number': Math.cos(angle_xz) * cos_y_speed,
     });
     character['change-translate-y'] = core_round({
       'number': Math.sin(angle_y) * speed,
     });
     character['change-translate-z'] = core_round({
-      'number': Math.sin(angle_xz) * cos_y * speed,
+      'number': Math.sin(angle_xz) * cos_y_speed,
     });
     if(character['translate-y'] > point['translate-y']){
         character['change-translate-y'] *= -1;
