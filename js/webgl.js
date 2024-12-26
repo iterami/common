@@ -1318,12 +1318,7 @@ function webgl_init(){
         'scale-y': 1,
         'scale-z': 1,
         'texture': webgl_default_texture,
-        'texture-align': [
-          1, 1,
-          0, 1,
-          0, 0,
-          1, 0,
-        ],
+        'texture-align': '11010010',
         'texture-animated': false,
         'texture-x': 1,
         'texture-y': 1,

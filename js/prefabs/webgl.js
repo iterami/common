@@ -45,21 +45,11 @@ function prefabs_webgl_cuboid_tree(args){
       },
       'character': args['character'],
       'left': {
-        'texture-align': [
-          1, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-        ],
+        'texture-align': '10110100',
       },
       'prefix': args['prefix'] + '-trunk',
       'right': {
-        'texture-align': [
-          1, 0,
-          1, 1,
-          0, 1,
-          0, 0,
-        ],
+        'texture-align': '10110100',
       },
       'size-x': args['trunk-size-x'],
       'size-y': args['trunk-size-y'],
