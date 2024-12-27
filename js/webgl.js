@@ -3312,11 +3312,12 @@ function webgl_stat_modify(args){
       },
     });
 
-    if(args['stat'] === 'level-xp'
-      && webgl_character_level(args['target']['id']) < 0){
+    if(webgl_character_level(args['target']['id']) < 0
+      && (args['stat'] === 'level-xp' || args['stat'] === 'life')){
         return;
+    }
 
-    }else if(args['stat'].startsWith('rotate-')
+    if(args['stat'].startsWith('rotate-')
       || args['stat'].startsWith('camera-rotate-')){
         const rotate_args = {
           'camera': args['stat'].startsWith('camera-rotate-'),
@@ -3362,10 +3363,7 @@ function webgl_stat_modify(args){
         }
 
     }else if(args['stat'] === 'life'){
-        if(webgl_character_level(args['target']['id']) === -1){
-            args['target']['life'] = args['target']['life-max'];
-
-        }else if(args['target']['life'] <= 0){
+        if(args['target']['life'] <= 0){
             args['target']['life'] = 0;
 
             if(args['target']['lives'] > 0){
