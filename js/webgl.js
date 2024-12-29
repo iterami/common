@@ -2386,10 +2386,9 @@ function webgl_prefab_args(args){
     return core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
-        'groups': [],
-        'prefix': entity_id_count,
         ...entity_info['opaque']['default'],
+        'character': webgl_character_id,
+        'prefix': entity_id_count,
       },
     });
 }
