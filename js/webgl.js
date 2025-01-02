@@ -1034,12 +1034,18 @@ function webgl_entity_buffer(entity){
     }
 
     const pickData = [];
+    const picking = entity_entities[entity]['picking'] || [0, 0, 0];
+    const texture_align = entity_entities[entity]['texture-align'];
     const textureData = [];
+    const half_length = texture_align.length / 2;
     for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
-        pickData.push(...(entity_entities[entity]['picking'] || [0,0,0]))
+        pickData.push(...picking);
+        const align = i < half_length
+          ? i * 2
+          : (i % half_length) * 2;
         textureData.push(
-          entity_entities[entity]['texture-align'][i * 2] * entity_entities[entity]['texture-x'],
-          entity_entities[entity]['texture-align'][i * 2 + 1] * entity_entities[entity]['texture-y']
+          texture_align[align] * entity_entities[entity]['texture-x'],
+          texture_align[align + 1] * entity_entities[entity]['texture-y']
         );
     }
 
