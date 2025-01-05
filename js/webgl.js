@@ -1104,12 +1104,19 @@ function webgl_entity_create(args){
         });
         math_matrices[entity_id] = math_matrix_create();
 
-        for(const group in args['groups']){
+        const groups = [
+          ...args['groups'],
+        ];
+        if(entity_entities[entity_id]['groups']){
+            groups.push(entity_entities[entity_id]['groups']);
+            delete entity_entities[entity_id]['groups'];
+        }
+        for(const group in groups){
             entity_group_add({
               'entities': [
                 entity_id,
               ],
-              'group': args['groups'][group],
+              'group': groups[group],
             });
         }
 
@@ -1126,28 +1133,28 @@ function webgl_entity_create(args){
               ],
               'group': 'transparent',
             });
-            args['entities'][entity]['attach-to'] = webgl_character_id;
-            args['entities'][entity]['attach-type'] = 'webgl_characters';
+            entity_entities[entity_id]['attach-to'] = webgl_character_id;
+            entity_entities[entity_id]['attach-type'] = 'webgl_characters';
 
         }else if(args['character']){
-            args['entities'][entity]['attach-to'] = args['character'];
-            args['entities'][entity]['attach-type'] = 'webgl_characters';
+            entity_entities[entity_id]['attach-to'] = args['character'];
+            entity_entities[entity_id]['attach-type'] = 'webgl_characters';
         }
 
-        if(args['entities'][entity]['attach-to']){
+        if(entity_entities[entity_id]['attach-to']){
             entity_attach({
               'entity': entity_id,
-              'to': args['entities'][entity]['attach-to'],
-              'type': args['entities'][entity]['attach-type'],
-              'x': args['entities'][entity]['attach-x'],
-              'y': args['entities'][entity]['attach-y'],
-              'z': args['entities'][entity]['attach-z'],
+              'to': entity_entities[entity_id]['attach-to'],
+              'type': entity_entities[entity_id]['attach-type'],
+              'x': entity_entities[entity_id]['attach-x'],
+              'y': entity_entities[entity_id]['attach-y'],
+              'z': entity_entities[entity_id]['attach-z'],
             });
             entity_group_add({
               'entities': [
                 entity_id,
               ],
-              'group': 'webgl_characters_' + args['entities'][entity]['attach-to'],
+              'group': 'webgl_characters_' + entity_entities[entity_id]['attach-to'],
             });
         }
     }
