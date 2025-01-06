@@ -2200,6 +2200,12 @@ function webgl_path_move(id){
           'y': point['rotate-y'],
           'z': point['rotate-z'],
         });
+        if(point['event-todo'] !== void 0){
+            webgl_event({
+              'parent': point,
+              'target': character,
+            });
+        }
 
         const path_end = character['path-end'] === ''
           ? path['end']
