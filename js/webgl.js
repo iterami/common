@@ -3428,22 +3428,27 @@ function webgl_stat_modify(args){
             }
 
             if(args['target']['lives'] === 0){
-                entity_group_modify({
-                  'groups': [
-                    'webgl_characters_' + args['target']['id'],
-                  ],
-                  'todo': function(entity){
-                       if(!entity_groups['skybox'][entity]){
-                           entity_entities[entity]['attach-to'] = false;
-                       }
-                  },
-                });
                 const axes = 'xyz';
                 for(const axis in axes){
                     args['target']['change-rotate-' + axes[axis]] = 0;
                     args['target']['change-translate-' + axes[axis]] = 0;
                 }
                 args['target']['gravity'] = 0;
+                entity_group_modify({
+                  'groups': [
+                    'webgl_characters_' + args['target']['id'],
+                  ],
+                  'todo': function(entity){
+                       if(entity_groups['skybox'][entity]){
+                           return;
+                       }
+
+                       entity_entities[entity]['attach-to'] = false;
+                       for(const axis in axes){
+                           entity_entities[entity]['translate-' + axes[axis]] = args['target']['translate-' + axes[axis]];
+                       }
+                  },
+                });
 
             }else{
                 webgl_character_spawn(args['target']['id']);
