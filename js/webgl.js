@@ -1056,9 +1056,13 @@ function webgl_entity_buffer(entity){
       'data': entity_entities[entity]['vertex-colors'],
       'size': 4,
     });
+    const normals = [];
+    for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
+        normals.push(...entity_entities[entity]['normals']);
+    }
     webgl_buffer_set({
       'attribute': 'vec_vertexNormal',
-      'data': entity_entities[entity]['normals'],
+      'data': normals,
       'size': 3,
     });
     webgl_buffer_set({
@@ -1176,7 +1180,6 @@ function webgl_entity_init(entity){
       'rotate-x': entity_entities[entity]['rotate-x'],
       'rotate-y': entity_entities[entity]['rotate-y'],
       'rotate-z': entity_entities[entity]['rotate-z'],
-      'vertices-length': entity_entities[entity]['vertices-length'],
     });
     entity_entities[entity]['vao'] = webgl.createVertexArray();
 
@@ -1201,13 +1204,16 @@ function webgl_entity_normals(entity){
       'rotate-x': rotate_x,
       'rotate-y': rotate_y,
       'rotate-z': rotate_z,
-      'vertices-length': entity_entities[entity]['vertices-length'],
     });
 
+    const normals = [];
+    for(let i = 0; i < entity_entities[entity]['vertices-length']; i++){
+        normals.push(...entity_entities[entity]['normals']);
+    }
     webgl.bindVertexArray(entity_entities[entity]['vao']);
     webgl_buffer_set({
       'attribute': 'vec_vertexNormal',
-      'data': entity_entities[entity]['normals'],
+      'data': normals,
       'size': 3,
     });
 }
@@ -2101,7 +2107,6 @@ function webgl_normals(args){
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
-        'vertices-length': 1,
       },
     });
 
@@ -2110,25 +2115,17 @@ function webgl_normals(args){
     const radians_z = -math_degrees_to_radians(args['rotate-z']);
     const cos_y = Math.cos(radians_y);
 
-    const normal_x = core_round({
-      'number': Math.sin(radians_z) * cos_y,
-    });
-    const normal_y = core_round({
-      'number': Math.cos(radians_x) * Math.cos(radians_z),
-    });
-    const normal_z = core_round({
-      'number': Math.sin(radians_x) * cos_y,
-    });
-
-    const normals = [];
-    for(let i = 0; i < args['vertices-length']; i++){
-        normals.push(
-          normal_x,
-          normal_y,
-          normal_z
-        );
-    }
-    return normals;
+    return [
+      core_round({
+        'number': Math.sin(radians_z) * cos_y,
+      }),
+      core_round({
+        'number': Math.cos(radians_x) * Math.cos(radians_z),
+      }),
+      core_round({
+        'number': Math.sin(radians_x) * cos_y,
+      }),
+    ];
 }
 
 function webgl_logic_particle(entity){
