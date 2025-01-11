@@ -2131,9 +2131,22 @@ function webgl_normals(args){
 function webgl_logic_particle(entity){
     const particle = entity_entities[entity]['particle'];
     const repeat = entity_entities[entity]['vertices-length'] * 3;
-    for(let vertex = 0; vertex < repeat; vertex += 3){
-        const vertices = entity_entities[entity]['vertices'];
+    const vertices = entity_entities[entity]['vertices'];
 
+    if(webgl_particles[particle]['randomize']){
+        for(let vertex = 0; vertex < repeat; vertex += 3){
+            const y_vertex = vertices[vertex + 1] + webgl_particles[particle]['speed-y'];
+            if(y_vertex < webgl_particles[particle]['y-min']
+              || y_vertex > webgl_particles[particle]['y-max']){
+                vertices[vertex] = webgl_particles[particle]['x-min']
+                  + Math.random() * (webgl_particles[particle]['x-max'] - webgl_particles[particle]['x-min']);
+                vertices[vertex + 2] = webgl_particles[particle]['z-min']
+                  + Math.random() * (webgl_particles[particle]['z-max'] - webgl_particles[particle]['z-min']);
+            }
+        }
+    }
+
+    for(let vertex = 0; vertex < repeat; vertex += 3){
         vertices[vertex] = math_clamp({
           'max': webgl_particles[particle]['x-max'],
           'min': webgl_particles[particle]['x-min'],
@@ -2977,6 +2990,7 @@ function webgl_primitive_particle(args){
         'entities': [],
         'groups': [],
         'prefix': entity_id_count,
+        'randomize': true,
         'speed-x': 0,
         'speed-y': 0,
         'speed-z': 0,
@@ -2991,6 +3005,7 @@ function webgl_primitive_particle(args){
 
     webgl_particles[args['id']] = {
       'draw-mode': args['draw-mode'],
+      'randomize': args['randomize'],
       'speed-x': args['speed-x'],
       'speed-y': args['speed-y'],
       'speed-z': args['speed-z'],
