@@ -47,6 +47,7 @@ function prefabs_webgl_cuboid_tree(args){
       'bottom': {
         'exclude': true,
       },
+      'character': args['character'],
       'left': {
         'texture-align': '10110100',
       },
@@ -71,6 +72,7 @@ function prefabs_webgl_cuboid_tree(args){
         'texture': args['leaf-texture'],
         'vertex-colors': args['leaf-color'],
       },
+      'character': args['character'],
       'prefix': args['prefix'] + '-leaf',
       'size-x': args['leaf-size-x'],
       'size-y': args['leaf-size-y'],
@@ -112,6 +114,7 @@ function prefabs_webgl_frustum_tree(args){
 
     webgl_primitive_frustum({
       ...prefab_args,
+      'character': args['character'],
       'color-bottom': args['trunk-color'],
       'color-top': args['trunk-color'],
       'length': height,
@@ -126,6 +129,7 @@ function prefabs_webgl_frustum_tree(args){
         webgl_primitive_frustum({
           ...prefab_args,
           'bottom': args['bottom'],
+          'character': args['character'],
           'color-bottom': args['leaf-color-bottom'],
           'color-top': args['leaf-color-top'],
           'length': leaf_height,
