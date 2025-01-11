@@ -2212,7 +2212,7 @@ function webgl_path_move(id){
         });
         if(point['event-todo'] !== void 0){
             webgl_event({
-              'parent': point,
+              'parent': webgl_paths[character['path-id']]['points'][character['path-point']],
               'target': character,
             });
         }
