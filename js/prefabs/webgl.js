@@ -26,18 +26,9 @@ function prefabs_webgl_cuboid_tree(args){
       },
     });
 
-    if(args['leaf-color'].length === 4){
-        args['leaf-color'] = args['leaf-color'].concat(args['leaf-color']);
-        args['leaf-color'] = args['leaf-color'].concat(args['leaf-color']);
-    }
-    if(args['trunk-color'].length === 4){
-        args['trunk-color'] = args['trunk-color'].concat(args['trunk-color']);
-        args['trunk-color'] = args['trunk-color'].concat(args['trunk-color']);
-    }
     const prefab_args = webgl_prefab_args(args);
-
     webgl_primitive_cuboid({
-        ...prefab_args,
+      ...prefab_args,
       'all': {
         'collision': args['trunk-collision'],
         'texture': args['trunk-texture'],
@@ -395,16 +386,7 @@ function prefabs_webgl_lines_tree(args){
       },
     });
 
-    if(args['leaf-color'].length === 4){
-        args['leaf-color'] = args['leaf-color'].concat(args['leaf-color']);
-        args['leaf-color'] = args['leaf-color'].concat(args['leaf-color']);
-    }
-    if(args['trunk-color'].length === 4){
-        args['trunk-color'] = args['trunk-color'].concat(args['trunk-color']);
-        args['trunk-color'] = args['trunk-color'].concat(args['trunk-color']);
-    }
     const prefab_args = webgl_prefab_args(args);
-
     const properties = {
       ...prefab_args,
       'attach-to': args['character'],
@@ -489,17 +471,8 @@ function prefabs_webgl_tree_2d(args){
       },
     });
 
-    if(args['base-color'].length === 4){
-        args['base-color'] = args['base-color'].concat(args['base-color']);
-        args['base-color'] = args['base-color'].concat(args['base-color']);
-    }
-    if(args['leaf-color'].length === 4){
-        args['leaf-color'] = args['leaf-color'].concat(args['leaf-color']);
-        args['leaf-color'] = args['leaf-color'].concat(args['leaf-color']);
-    }
     const height = Math.random() * args['height-range'] + args['height'];
     const prefab_args = webgl_prefab_args(args);
-
     webgl_entity_create({
       'entities': [
         {
