@@ -1629,6 +1629,7 @@ function webgl_level_init(args){
         'spawn-translate-x': 0,
         'spawn-translate-y': 0,
         'spawn-translate-z': 0,
+        'textures': false,
         'title': false,
         'y-min': false,
       },
@@ -1684,6 +1685,12 @@ function webgl_level_init(args){
       'transparent',
     );
     entity_group_create(level['groups']);
+
+    if(level['textures'] !== false){
+        for(const texture in level['textures']){
+            uris[texture] = level['textures'][texture];
+        }
+    }
 
     Object.assign(
       webgl_paths,
