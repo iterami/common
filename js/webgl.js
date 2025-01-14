@@ -749,113 +749,111 @@ function webgl_controls_keyboard(id){
 
     }else if(webgl_characters[id]['controls'].length === 0){
         return;
+    }
 
-    }else{
-        const strafe = webgl_character_strafe(id);
-        if(id !== webgl_character_id){
-            if(webgl_characters[id]['automove']
-              && webgl_characters[id]['jump-allow']){
+    const strafe = webgl_character_strafe(id);
+    if(id !== webgl_character_id){
+        if(webgl_characters[id]['automove']
+          && webgl_characters[id]['jump-allow']){
+            webgl_character_move({
+              'id': id,
+              'speed': webgl_characters[id]['speed'],
+              'strafe': strafe,
+            });
+        }
+
+        return;
+    }
+
+    let leftright = 0;
+    if(core_keys[core_storage_data['move-←']]['state']){
+        if(strafe){
+            leftright -= 1;
+
+        }else{
+            webgl_camera_rotate({
+              'camera': !core_mouse['down-0'],
+              'y': -webgl_characters[id]['turn-speed'],
+            });
+        }
+    }
+    if(core_keys[core_storage_data['move-→']]['state']){
+        if(strafe){
+            leftright += 1;
+
+        }else{
+            webgl_camera_rotate({
+              'camera': !core_mouse['down-0'],
+              'y': webgl_characters[id]['turn-speed'],
+            });
+        }
+    }
+
+    if(level === -1 || webgl_characters[id]['jump-allow']){
+        let forwardback = 0;
+        if(core_keys[core_storage_data['move-↑']]['state']
+          || (core_mouse['down-0'] && core_mouse['down-2'])){
+            webgl_characters[id]['automove'] = false;
+            forwardback = -1;
+
+        }else if(webgl_characters[id]['automove']){
+            forwardback = -1;
+        }
+        if(core_keys[core_storage_data['move-↓']]['state']){
+            webgl_characters[id]['automove'] = false;
+            if(level === -1){
+                forwardback += 1;
+
+            }else{
+                forwardback = forwardback ? 0 : .5;
+                leftright *= .5;
+            }
+        }
+
+        if(core_keys[core_storage_data['crouch']]['state']){
+            if(level === -1){
                 webgl_character_move({
                   'id': id,
                   'speed': webgl_characters[id]['speed'],
-                  'strafe': strafe,
-                });
-            }
-
-            return;
-        }
-
-        let leftright = 0;
-        if(core_keys[core_storage_data['move-←']]['state']){
-            if(strafe){
-                leftright -= 1;
-
-            }else{
-                webgl_camera_rotate({
-                  'camera': !core_mouse['down-0'],
-                  'y': -webgl_characters[id]['turn-speed'],
-                });
-            }
-        }
-        if(core_keys[core_storage_data['move-→']]['state']){
-            if(strafe){
-                leftright += 1;
-
-            }else{
-                webgl_camera_rotate({
-                  'camera': !core_mouse['down-0'],
-                  'y': webgl_characters[id]['turn-speed'],
-                });
-            }
-        }
-
-        if(level === -1 || webgl_characters[id]['jump-allow']){
-            let forwardback = 0;
-            if(core_keys[core_storage_data['move-↑']]['state']
-              || (core_mouse['down-0'] && core_mouse['down-2'])){
-                webgl_characters[id]['automove'] = false;
-                forwardback = -1;
-
-            }else if(webgl_characters[id]['automove']){
-                forwardback = -1;
-
-            }
-            if(core_keys[core_storage_data['move-↓']]['state']){
-                webgl_characters[id]['automove'] = false;
-                if(level === -1){
-                    forwardback += 1;
-
-                }else{
-                    forwardback = forwardback ? 0 : .5;
-                    leftright *= .5;
-                }
-            }
-
-            if(core_keys[core_storage_data['crouch']]['state']){
-                if(level === -1){
-                    webgl_character_move({
-                      'id': id,
-                      'speed': webgl_characters[id]['speed'],
-                      'strafe': true,
-                      'y': true,
-                    });
-
-                }else{
-                    forwardback *= .1;
-                    leftright *= .1;
-                }
-            }
-            if(core_keys[core_storage_data['jump']]['state']){
-                if(level === -1){
-                    webgl_character_move({
-                      'id': id,
-                      'speed': webgl_characters[id]['speed'],
-                      'y': true,
-                    });
-
-                }else{
-                    webgl_characters[id]['jump-allow'] = false;
-                    webgl_characters[id]['change-translate-y'] = webgl_characters[id]['jump-height'];
-                }
-            }
-
-            if(leftright !== 0){
-                if(level !== -1){
-                    forwardback *= .7;
-                    leftright *= .7;
-                }
-                webgl_character_move({
-                  'id': id,
-                  'speed': leftright * webgl_characters[id]['speed'],
                   'strafe': true,
+                  'y': true,
                 });
+
+            }else{
+                forwardback *= .1;
+                leftright *= .1;
             }
-            if(forwardback !== 0){
+        }
+        if(core_keys[core_storage_data['jump']]['state']){
+            if(level === -1){
                 webgl_character_move({
                   'id': id,
-                  'speed': forwardback * webgl_characters[id]['speed'],
+                  'speed': webgl_characters[id]['speed'],
+                  'y': true,
                 });
+
+            }else{
+                webgl_characters[id]['jump-allow'] = false;
+                webgl_characters[id]['change-translate-y'] = webgl_characters[id]['jump-height'];
             }
+        }
+
+        if(leftright !== 0){
+            if(level !== -1){
+                forwardback *= .7;
+                leftright *= .7;
+            }
+            webgl_character_move({
+              'id': id,
+              'speed': leftright * webgl_characters[id]['speed'],
+              'strafe': true,
+            });
+        }
+        if(forwardback !== 0){
+            webgl_character_move({
+              'id': id,
+              'speed': forwardback * webgl_characters[id]['speed'],
+            });
         }
     }
 }
