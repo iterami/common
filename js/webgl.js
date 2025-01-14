@@ -1685,9 +1685,10 @@ function webgl_level_init(args){
     entity_group_create(level['groups']);
 
     if(level['textures'] !== false){
-        for(const texture in level['textures']){
-            uris[texture] = level['textures'][texture];
-        }
+        Object.assign(
+          uris,
+          level['textures']
+        );
     }
 
     Object.assign(
