@@ -257,11 +257,10 @@ function prefabs_webgl_lines_path(args){
         vertex_colors.push(...args['color']);
     }
 
-    const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
       'entities': [
         {
-          ...prefab_args,
+          ...webgl_prefab_args(args),
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
           'draw-mode': webgl_paths[args['path']]['end'] !== 'loop'

@@ -3036,11 +3036,10 @@ function webgl_primitive_particle(args){
             );
         }
 
-        const prefab_args = webgl_prefab_args(args);
         webgl_entity_create({
           'entities': [
             {
-              ...prefab_args,
+              ...webgl_prefab_args(args),
               ...args['entities'][entity],
               'attach-to': args['character'],
               'attach-type': 'webgl_characters',
@@ -3683,7 +3682,6 @@ function webgl_tiles(args){
         'tiles-min': 1,
       },
     });
-    const prefab_args = webgl_prefab_args(args);
 
     const tiles = [];
     if(args['order']){
@@ -3720,6 +3718,7 @@ function webgl_tiles(args){
         }
     }
 
+    const prefab_args = webgl_prefab_args(args);
     let tile_offset_x = prefab_args['translate-x'];
     let tile_offset_y = prefab_args['translate-y'];
     let tile_offset_z = prefab_args['translate-z'];
