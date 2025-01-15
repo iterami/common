@@ -720,6 +720,7 @@ function webgl_controls_keyboard(id){
             webgl_characters[id]['translate-' + axes[axis]] = vehicle['translate-' + axes[axis]] + vehicle['change-translate-' + axes[axis]];
         }
         webgl_characters[id]['translate-y'] += webgl_characters[id]['collide-range-y'];
+        return;
 
     }else if(webgl_characters[id]['vehicle-stats']){
         if(webgl_characters[id]['vehicle-stats']['character']
@@ -746,6 +747,7 @@ function webgl_controls_keyboard(id){
               'speed': -speed,
             });
         }
+        return;
 
     }else if(webgl_characters[id]['controls'].length === 0){
         return;
