@@ -1541,13 +1541,20 @@ function webgl_level_init(args){
     });
 
     if(args['character'] === 1){
-        if(args['json']?.['characters']?.[0]?.['id']){
-            args['character'] = args['json']['characters'][0];
-            webgl_character_id = args['character']['id'];
-
-        }else{
+        if(!args['json']['characters']
+          || args['json']['characters'].length === 0){
             return;
         }
+
+        let id = 0;
+        for(const character in args['json']['characters']){
+            if(args['json']['characters'][character]['id'] === webgl_character_id){
+                id = character;
+                break;
+            }
+        }
+        args['character'] = args['json']['characters'][id];
+        webgl_character_id = args['character']['id'];
 
     }else if(args['character'] === 0
       && webgl_character_level() < -1){
