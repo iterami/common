@@ -373,9 +373,6 @@ function webgl_character_spawn(id){
     }
 
     webgl_characters[id]['life'] = webgl_characters[id]['life-max'];
-    webgl_characters[id]['camera-zoom'] = webgl_characters[id]['level'] === -1
-      ? 0
-      : webgl_properties['camera-zoom'];
 
     webgl_character_origin(id);
     webgl_move_to({
@@ -1702,7 +1699,6 @@ function webgl_level_init(args){
         webgl_character_base_entities = [];
         webgl_character_base_properties = {};
         webgl_character_init({
-          'camera-zoom': 0,
           'collides': true,
           'controls': 'rpg',
           'entities': [],
