@@ -412,10 +412,16 @@ function webgl_character_spawn(id){
 }
 
 function webgl_character_strafe(id){
-    return webgl_properties['pointerlock']
-      || core_mouse['down-2']
+    const checks = webgl_properties['pointerlock']
       || webgl_characters[id]['camera-zoom'] === 0
       || webgl_characters[id]['controls'] === 'rts';
+
+    if(id !== webgl_character_id){
+        return checks;
+    }
+
+    return checks
+      || core_mouse['down-2'];
 }
 
 function webgl_clamp_rotation(entity){
