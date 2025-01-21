@@ -1721,11 +1721,8 @@ function webgl_level_init(args){
         });
 
     }else if(core_type(args['character']) === 'object'){
-        entity_group_remove({
-          'delete-empty': true,
-          'group': 'webgl_characters_' + webgl_character_id,
-        });
-        delete webgl_characters[webgl_character_id];
+        webgl_character_base_entities = [];
+        webgl_character_base_properties = {};
         webgl_character_init(args['character']);
 
     }else{
