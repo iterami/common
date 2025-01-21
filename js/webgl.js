@@ -2010,6 +2010,9 @@ function webgl_logic_entity(entity){
                   'parent': entity_entities[entity],
                   'target': webgl_characters[character],
                 });
+                if(!entity_entities[entity]){
+                    return;
+                }
             }
         }
     }
