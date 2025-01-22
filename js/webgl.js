@@ -644,29 +644,44 @@ function webgl_controls_keyboard(id){
         return;
     }
 
+    const strafe = webgl_character_strafe(id);
+    if(id !== webgl_character_id){
+        if(webgl_characters[id]['automove']
+          && webgl_characters[id]['jump-allow']){
+            webgl_character_move({
+              'id': id,
+              'speed': webgl_characters[id]['speed'],
+              'strafe': strafe,
+            });
+        }
+
+        return;
+    }
+
+    const back = core_keys[core_storage_data['move-↓']]['state'];
+    const forward = core_keys[core_storage_data['move-↑']]['state']
+      || (core_mouse['down-0'] && core_mouse['down-2']);
+    const left = core_keys[core_storage_data['move-←']]['state'];
+    const right = core_keys[core_storage_data['move-→']]['state'];
+
+    if(forward || back){
+        webgl_characters[id]['automove'] = false;
+    }
+
     if(webgl_characters[id]['vehicle']){
         const vehicle = webgl_characters[webgl_characters[id]['vehicle']];
         let speed = 0;
         if(vehicle['jump-allow']){
-            if(core_keys[core_storage_data['move-↑']]['state']
-              || (core_mouse['down-0'] && core_mouse['down-2'])){
-                webgl_characters[id]['automove'] = false;
+            if(forward || webgl_characters[id]['automove']){
                 speed = Math.min(
                   vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-acceleration'],
                   vehicle['vehicle-stats']['speed-max']
                 );
 
-            }else if(core_keys[core_storage_data['move-↓']]['state']){
-                webgl_characters[id]['automove'] = false;
+            }else if(back){
                 speed = Math.max(
                   vehicle['vehicle-stats']['speed'] - vehicle['vehicle-stats']['speed-acceleration'],
                   -vehicle['vehicle-stats']['speed-max'] / 2
-                );
-
-            }else if(webgl_characters[id]['automove']){
-                speed = Math.min(
-                  vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-acceleration'],
-                  vehicle['vehicle-stats']['speed-max']
                 );
 
             }else if(vehicle['vehicle-stats']['speed'] >= 0){
@@ -764,22 +779,8 @@ function webgl_controls_keyboard(id){
         return;
     }
 
-    const strafe = webgl_character_strafe(id);
-    if(id !== webgl_character_id){
-        if(webgl_characters[id]['automove']
-          && webgl_characters[id]['jump-allow']){
-            webgl_character_move({
-              'id': id,
-              'speed': webgl_characters[id]['speed'],
-              'strafe': strafe,
-            });
-        }
-
-        return;
-    }
-
     let leftright = 0;
-    if(core_keys[core_storage_data['move-←']]['state']){
+    if(left){
         if(strafe){
             leftright -= 1;
 
@@ -790,7 +791,7 @@ function webgl_controls_keyboard(id){
             });
         }
     }
-    if(core_keys[core_storage_data['move-→']]['state']){
+    if(right){
         if(strafe){
             leftright += 1;
 
@@ -804,16 +805,10 @@ function webgl_controls_keyboard(id){
 
     if(level === -1 || webgl_characters[id]['jump-allow']){
         let forwardback = 0;
-        if(core_keys[core_storage_data['move-↑']]['state']
-          || (core_mouse['down-0'] && core_mouse['down-2'])){
-            webgl_characters[id]['automove'] = false;
-            forwardback = -1;
-
-        }else if(webgl_characters[id]['automove']){
+        if(forward || webgl_characters[id]['automove']){
             forwardback = -1;
         }
-        if(core_keys[core_storage_data['move-↓']]['state']){
-            webgl_characters[id]['automove'] = false;
+        if(back){
             if(level === -1){
                 forwardback += 1;
 
