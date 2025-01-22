@@ -644,6 +644,37 @@ function webgl_controls_keyboard(id){
         return;
     }
 
+    if(webgl_characters[id]['vehicle-stats']){
+        if(webgl_characters[id]['vehicle-stats']['character']
+          || !webgl_characters[id]['jump-allow']){
+            return;
+        }
+        let speed = 0;
+        if(webgl_characters[id]['vehicle-stats']['speed'] >= 0){
+            speed = Math.max(
+              webgl_characters[id]['vehicle-stats']['speed'] + webgl_characters[id]['vehicle-stats']['speed-deceleration'],
+              0
+            );
+
+        }else{
+            speed = Math.min(
+              webgl_characters[id]['vehicle-stats']['speed'] - webgl_characters[id]['vehicle-stats']['speed-deceleration'],
+              0
+            );
+        }
+        webgl_characters[id]['vehicle-stats']['speed'] = speed;
+        if(speed !== 0){
+            webgl_character_move({
+              'id': id,
+              'speed': -speed,
+            });
+        }
+        return;
+
+    }else if(webgl_characters[id]['controls'].length === 0){
+        return;
+    }
+
     const strafe = webgl_character_strafe(id);
     if(id !== webgl_character_id){
         if(webgl_characters[id]['automove']
@@ -746,36 +777,6 @@ function webgl_controls_keyboard(id){
             webgl_characters[id]['translate-' + axes[axis]] = vehicle['translate-' + axes[axis]] + vehicle['change-translate-' + axes[axis]];
         }
         webgl_characters[id]['translate-y'] += webgl_characters[id]['collide-range-y'];
-        return;
-
-    }else if(webgl_characters[id]['vehicle-stats']){
-        if(webgl_characters[id]['vehicle-stats']['character']
-          || !webgl_characters[id]['jump-allow']){
-            return;
-        }
-        let speed = 0;
-        if(webgl_characters[id]['vehicle-stats']['speed'] >= 0){
-            speed = Math.max(
-              webgl_characters[id]['vehicle-stats']['speed'] + webgl_characters[id]['vehicle-stats']['speed-deceleration'],
-              0
-            );
-
-        }else{
-            speed = Math.min(
-              webgl_characters[id]['vehicle-stats']['speed'] - webgl_characters[id]['vehicle-stats']['speed-deceleration'],
-              0
-            );
-        }
-        webgl_characters[id]['vehicle-stats']['speed'] = speed;
-        if(speed !== 0){
-            webgl_character_move({
-              'id': id,
-              'speed': -speed,
-            });
-        }
-        return;
-
-    }else if(webgl_characters[id]['controls'].length === 0){
         return;
     }
 
