@@ -701,6 +701,7 @@ function webgl_controls_keyboard(id){
     if(webgl_characters[id]['vehicle']){
         const vehicle = webgl_characters[webgl_characters[id]['vehicle']];
         let speed = 0;
+        let turn = 0;
         if(vehicle['jump-allow']){
             if(forward || webgl_characters[id]['automove']){
                 speed = Math.min(
@@ -728,7 +729,6 @@ function webgl_controls_keyboard(id){
             }
             vehicle['vehicle-stats']['speed'] = speed;
 
-            let turn = 0;
             if(core_mouse['down-2']){
                 const half = webgl.drawingBufferWidth / 2;
                 turn = vehicle['turn-speed'] * Math.max(
@@ -747,21 +747,21 @@ function webgl_controls_keyboard(id){
                     turn += vehicle['turn-speed'];
                 }
             }
-            if(turn !== 0
-              || core_mouse['down-2']){
-                if(speed < 0){
-                    turn *= -1;
-                }
-                vehicle['rotate-y'] += turn;
-                if(core_mouse['down-2']){
-                    webgl_characters[id]['camera-rotate-y'] = vehicle['rotate-y'];
-
-                }else if(!core_mouse['down-0']){
-                    webgl_characters[id]['camera-rotate-y'] += turn;
-                }
-                webgl_clamp_rotation(vehicle);
-                webgl_clamp_rotation(webgl_characters[id]);
+        }
+        if(turn !== 0
+          || core_mouse['down-2']){
+            if(speed < 0){
+                turn *= -1;
             }
+            vehicle['rotate-y'] += turn;
+            if(core_mouse['down-2']){
+                webgl_characters[id]['camera-rotate-y'] = vehicle['rotate-y'];
+
+            }else if(!core_mouse['down-0']){
+                webgl_characters[id]['camera-rotate-y'] += turn;
+            }
+            webgl_clamp_rotation(vehicle);
+            webgl_clamp_rotation(webgl_characters[id]);
         }
         if(speed !== 0){
             webgl_character_move({
