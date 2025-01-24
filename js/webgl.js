@@ -414,6 +414,7 @@ function webgl_character_spawn(id){
 function webgl_character_strafe(id){
     const checks = webgl_properties['pointerlock']
       || webgl_characters[id]['camera-zoom'] === 0
+      || webgl_characters[id]['controls'] === 'arpg'
       || webgl_characters[id]['controls'] === 'rts';
 
     if(id !== webgl_character_id){
@@ -670,7 +671,9 @@ function webgl_controls_keyboard(id){
         }
         return;
 
-    }else if(webgl_characters[id]['controls'].length === 0){
+    }
+    const controls = webgl_characters[id]['controls'];
+    if(controls.length === 0){
         return;
     }
 
@@ -809,7 +812,8 @@ function webgl_controls_keyboard(id){
             forwardback = -1;
         }
         if(back){
-            if(level === -1){
+            if(level === -1
+              || controls === 'arpg'){
                 forwardback += 1;
 
             }else{
@@ -846,11 +850,14 @@ function webgl_controls_keyboard(id){
             }
         }
 
+        if(level !== -1
+          && leftright !== 0
+          && forwardback !== 0){
+            forwardback *= .7;
+            leftright *= .7;
+        }
+
         if(leftright !== 0){
-            if(level !== -1){
-                forwardback *= .7;
-                leftright *= .7;
-            }
             webgl_character_move({
               'id': id,
               'speed': leftright * webgl_characters[id]['speed'],
