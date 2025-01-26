@@ -305,6 +305,7 @@ function webgl_character_move(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'angle': true,
         'id': webgl_character_id,
         'speed': 1,
         'strafe': false,
@@ -318,8 +319,11 @@ function webgl_character_move(args){
           : 1);
 
     }else{
+        const angle = args['angle'] === true
+          ? webgl_characters[args['id']]['rotate-y']
+          : args['angle'];
         const movement = math_move_3d({
-          'angle': webgl_characters[args['id']]['rotate-y'],
+          'angle': angle,
           'speed': args['speed'],
           'strafe': args['strafe'],
         });
@@ -859,6 +863,9 @@ function webgl_controls_keyboard(id){
 
         if(leftright !== 0){
             webgl_character_move({
+              'angle': controls === 'arpg'
+                ? 0
+                : true,
               'id': id,
               'speed': leftright * webgl_characters[id]['speed'],
               'strafe': true,
@@ -866,9 +873,45 @@ function webgl_controls_keyboard(id){
         }
         if(forwardback !== 0){
             webgl_character_move({
+              'angle': controls === 'arpg'
+                ? 0
+                : true,
               'id': id,
               'speed': forwardback * webgl_characters[id]['speed'],
             });
+        }
+
+        if(controls === 'arpg'){
+            let angle = 0;
+            if(forwardback === 0){
+                if(leftright > 0){
+                    angle = 90;
+
+                }else if(leftright < 0){
+                    angle = 270;
+
+                }else{
+                    return;
+                }
+
+            }else if(forwardback < 0){
+                if(leftright > 0){
+                    angle = 45;
+
+                }else if(leftright < 0){
+                    angle = 315;
+                }
+
+            }else if(leftright > 0){
+                angle = 135;
+
+            }else if(leftright < 0){
+                angle = 225;
+
+            }else{
+                angle = 180;
+            }
+            webgl_characters[id]['rotate-y'] = angle;
         }
     }
 }
