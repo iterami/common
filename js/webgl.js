@@ -1250,6 +1250,20 @@ function webgl_event(args){
             modify['limit']--;
         }
 
+        if(modify['target']){
+            if(modify['value'] === '_target'){
+                modify['value'] = args['target']['id'];
+
+            }else if(core_type(modify['value']) === 'object'
+              || core_type(modify['value']) === 'array'){
+                for(const value in modify['value']){
+                    if(modify['value'][value] === '_target'){
+                        modify['value'][value] = args['target']['id'];
+                    }
+                }
+            }
+        }
+
         if(modify['type'] === 'function'){
             globalThis[modify['todo']]?.(modify['value']);
 
