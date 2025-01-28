@@ -2435,7 +2435,7 @@ function webgl_pick_entity(args){
       || webgl === 0
       || (level >= 0 && webgl_properties['paused'])
       || webgl_characters[webgl_character_id]['life'] <= 0){
-        return;
+        return false;
     }
 
     args = core_args({
@@ -2477,7 +2477,7 @@ function webgl_pick_entity(args){
     if(color_blue === 0
       && color_green === 0
       && color_red === 0){
-        return;
+        return false;
     }
 
     for(const entity in entity_entities){
@@ -2491,7 +2491,7 @@ function webgl_pick_entity(args){
               'parent': entity_entities[entity],
               'target': webgl_characters[webgl_character_id],
             });
-            break;
+            return true;
         }
     }
 }
