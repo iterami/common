@@ -1523,16 +1523,16 @@ void main(void){
     vec_position = mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);
     gl_Position = mat_perspectiveMatrix * vec_position;
     gl_PointSize = pointSize / length(vec_position.xyz);
-    vec_textureCoord = vec_texturePosition;
-    vec3 lighting = vec_ambientColor;
-    if(directional){
-        vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);
-        lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), -0.5);
-    }
-    vec_lighting = vec4(lighting, alpha);
     if(picking){
         vec_fragmentColor = vec_pickColor;
     }else{
+        vec_textureCoord = vec_texturePosition;
+        vec3 lighting = vec_ambientColor;
+        if(directional){
+            vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);
+            lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), -0.5);
+        }
+        vec_lighting = vec4(lighting, alpha);
         vec_fragmentColor = vec_vertexColor;
     }
 }`,
