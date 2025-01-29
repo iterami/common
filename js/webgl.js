@@ -2474,26 +2474,26 @@ function webgl_pick_entity(args){
       'number': color[0] / 255,
     });
 
-    if(color_blue === 0
-      && color_green === 0
-      && color_red === 0){
-        return false;
-    }
+    if(color_blue !== 0
+      || color_green !== 0
+      || color_red !== 0){
+        for(const entity in entity_entities){
+            const entity_color = entity_entities[entity]['picking'];
 
-    for(const entity in entity_entities){
-        const entity_color = entity_entities[entity]['picking'];
-
-        if(entity_color
-          && color_blue === entity_color[2]
-          && color_green === entity_color[1]
-          && color_red === entity_color[0]){
-            webgl_event({
-              'parent': entity_entities[entity],
-              'target': webgl_characters[webgl_character_id],
-            });
-            return true;
+            if(entity_color
+              && color_blue === entity_color[2]
+              && color_green === entity_color[1]
+              && color_red === entity_color[0]){
+                webgl_event({
+                  'parent': entity_entities[entity],
+                  'target': webgl_characters[webgl_character_id],
+                });
+                return true;
+            }
         }
     }
+
+    return false;
 }
 
 function webgl_prefab_args(args){
