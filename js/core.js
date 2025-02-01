@@ -89,7 +89,6 @@ function core_events_bind(args){
         core_events['beforeunload'] = core_args({
           'args': args['beforeunload'],
           'defaults': {
-            'loop': false,
             'preventDefault': false,
             'solo': false,
             'state': false,
@@ -117,20 +116,6 @@ function core_events_bind(args){
             for(const event in args['elements'][element]){
                 domelement[event] = args['elements'][element][event];
             }
-        }
-    }
-}
-
-function core_events_todoloop(){
-    for(const key in core_keys){
-        if(core_keys[key]['state']
-          && core_keys[key]['loop']){
-            core_keys[key]['todo']();
-        }
-    }
-    for(const mousebind in core_mouse['todo']){
-        if(core_mouse['todo'][mousebind]['loop']){
-            core_mouse['todo'][mousebind]['todo']();
         }
     }
 }
@@ -228,8 +213,7 @@ function core_handle_event(args){
             args['object'][args['key']]['state'] = args['state'];
         }
 
-        if(args['todo'] !== void 0
-          && !args['object'][args['key']]['loop']){
+        if(args['todo'] !== void 0){
             const returned = args['object'][args['key']]['todo']?.(args['event']);
             if(returned !== void 0){
                 return returned;
@@ -252,13 +236,14 @@ function core_handle_gamepaddisconnected(event){
 }
 
 function core_handle_keydown(event){
+    core_key_shift = event.shiftKey;
+
     if(event.ctrlKey
       || event.altKey
-      || event.metaKey){
+      || event.metaKey
+      || core_keys[event.code]?.['state']){
         return;
     }
-
-    core_key_shift = event.shiftKey;
 
     if(core_menu_open
       && core_menu_block_events
@@ -889,7 +874,6 @@ function core_keys_updatebinds(args){
         core_keys[keybind] = core_args({
           'args': args['keybinds'][keybind],
           'defaults': {
-            'loop': false,
             'preventDefault': false,
             'solo': false,
             'state': false,
@@ -913,7 +897,6 @@ function core_mouse_updatebinds(args){
 
     for(const mousebind in args['mousebinds']){
         core_mouse['todo'][mousebind] = {
-          'loop': args['mousebinds'][mousebind]['loop'] || false,
           'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
           'todo': args['mousebinds'][mousebind]['todo'],
         };
