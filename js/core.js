@@ -158,7 +158,6 @@ function core_handle_beforeunload(event){
       'event': event,
       'key': 'beforeunload',
       'object': core_events,
-      'todo': true,
     });
 
     core_storage_save();
@@ -186,7 +185,6 @@ function core_handle_contextmenu(event){
         'event': event,
         'key': 'contextmenu',
         'object': core_mouse['todo'],
-        'todo': true,
       }) === void 0){
         return false;
     }
@@ -198,7 +196,6 @@ function core_handle_event(args){
       'args': args,
       'defaults': {
         'state': void 0,
-        'todo': void 0,
       },
     });
 
@@ -212,17 +209,13 @@ function core_handle_event(args){
             args['object'][args['key']]['state'] = args['state'];
         }
 
-        if(args['todo'] !== void 0){
+        if(args['object'][args['key']]['todo']){
             const returned = args['object'][args['key']]['todo']?.(args['event']);
             if(returned !== void 0){
                 return returned;
             }
         }
-
-        return true;
     }
-
-    return false;
 }
 
 function core_handle_gamepadconnected(event){
@@ -255,7 +248,6 @@ function core_handle_keydown(event){
       'key': event.code,
       'object': core_keys,
       'state': true,
-      'todo': true,
     });
 }
 
@@ -294,7 +286,6 @@ function core_handle_mousedown(event){
       'event': event,
       'key': 'mousedown',
       'object': core_mouse['todo'],
-      'todo': true,
     });
 }
 
@@ -313,7 +304,6 @@ function core_handle_mousemove(event){
       'event': event,
       'key': 'mousemove',
       'object': core_mouse['todo'],
-      'todo': true,
     });
 }
 
@@ -336,7 +326,6 @@ function core_handle_mouseup(event){
           'event': event,
           'key': 'mouseup',
           'object': core_mouse['todo'],
-          'todo': true,
         });
     }
 }
@@ -362,7 +351,6 @@ function core_handle_touchend(event){
           'event': event,
           'key': 'mouseup',
           'object': core_mouse['todo'],
-          'todo': true,
         });
     }
 }
@@ -383,7 +371,6 @@ function core_handle_touchmove(event){
       'event': event,
       'key': 'mousemove',
       'object': core_mouse['todo'],
-      'todo': true,
     });
 }
 
@@ -410,7 +397,6 @@ function core_handle_touchstart(event){
       'event': event,
       'key': 'mousedown',
       'object': core_mouse['todo'],
-      'todo': true,
     });
 }
 
@@ -424,7 +410,6 @@ function core_handle_wheel(event){
       'event': event,
       'key': 'wheel',
       'object': core_mouse['todo'],
-      'todo': true,
     });
 }
 
