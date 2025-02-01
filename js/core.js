@@ -196,6 +196,7 @@ function core_handle_event(args){
       'args': args,
       'defaults': {
         'state': void 0,
+        'todo': true,
       },
     });
 
@@ -209,7 +210,7 @@ function core_handle_event(args){
             args['object'][args['key']]['state'] = args['state'];
         }
 
-        if(args['object'][args['key']]['todo']){
+        if(args['todo']){
             const returned = args['object'][args['key']]['todo']?.(args['event']);
             if(returned !== void 0){
                 return returned;
@@ -259,6 +260,7 @@ function core_handle_keyup(event){
       'key': event.code,
       'object': core_keys,
       'state': false,
+      'todo': false,
     });
 }
 
