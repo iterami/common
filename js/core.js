@@ -90,7 +90,6 @@ function core_events_bind(args){
           'args': args['beforeunload'],
           'defaults': {
             'preventDefault': false,
-            'solo': false,
             'state': false,
           },
         });
@@ -220,7 +219,7 @@ function core_handle_event(args){
             }
         }
 
-        return args['object'][args['key']]['solo'];
+        return true;
     }
 
     return false;
@@ -251,19 +250,9 @@ function core_handle_keydown(event){
         return;
     }
 
-    if(core_handle_event({
-        'event': event,
-        'key': event.code,
-        'object': core_keys,
-        'state': true,
-        'todo': true,
-      })){
-        return;
-    }
-
     core_handle_event({
       'event': event,
-      'key': 'all',
+      'key': event.code,
       'object': core_keys,
       'state': true,
       'todo': true,
@@ -273,26 +262,12 @@ function core_handle_keydown(event){
 function core_handle_keyup(event){
     core_key_shift = event.shiftKey;
 
-    if(core_handle_event({
-        'event': event,
-        'key': event.code,
-        'object': core_keys,
-        'state': false,
-      })){
-        return;
-    }
-
-    if('all' in core_keys){
-        let all = false;
-        for(const key in core_keys){
-            if(key !== 'all'
-              && core_keys[key]['state']){
-                all = true;
-                break;
-            }
-        }
-        core_keys['all']['state'] = all;
-    }
+    core_handle_event({
+      'event': event,
+      'key': event.code,
+      'object': core_keys,
+      'state': false,
+    });
 }
 
 function core_handle_mousedown(event){
@@ -839,7 +814,6 @@ function core_keys_rebind(){
       'clearkeys': true,
       'keybinds': {
         'Escape': {
-          'solo': true,
           'todo': core_escape,
         },
         [core_storage_data['crouch']]: {},
@@ -849,7 +823,6 @@ function core_keys_rebind(){
         [core_storage_data['move-→']]: {},
         [core_storage_data['move-↓']]: {},
         [core_storage_data['reset']]: {
-          'solo': true,
           'todo': core_repo_reset,
         },
         ...core_key_rebinds,
@@ -875,7 +848,6 @@ function core_keys_updatebinds(args){
           'args': args['keybinds'][keybind],
           'defaults': {
             'preventDefault': false,
-            'solo': false,
             'state': false,
           },
         });
