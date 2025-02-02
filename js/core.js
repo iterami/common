@@ -167,7 +167,7 @@ function core_handle_beforeunload(event){
     }
 }
 
-function core_handle_blur(event){
+function core_handle_blur(){
     core_key_shift = false;
     for(const key in core_keys){
         core_keys[key]['state'] = false;
@@ -267,7 +267,7 @@ function core_handle_mousedown(event){
     }
 
     if(core_key_shift && event.button === 2){
-        core_handle_blur(event);
+        core_handle_blur();
         return;
     }
 
