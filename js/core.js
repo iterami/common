@@ -327,7 +327,7 @@ function core_handle_mouseup(event){
     }
 }
 
-function core_handle_pointerlockchange(event){
+function core_handle_pointerlockchange(){
     if(core_menu_open){
         document.exitPointerLock();
 
