@@ -14,12 +14,12 @@ function canvas_context_lost(event){
 
     core_interval_pause_all();
     canvas = 0;
-    canvas_ready = false;
+    canvas_properties['ready'] = false;
 }
 
 function canvas_context_restored(event){
     canvas_init(canvas_properties['args']);
-    if(canvas_ready){
+    if(canvas_properties['ready']){
         canvas_draw();
     }
 
@@ -209,7 +209,7 @@ function canvas_resize(){
     );
 
     globalThis['repo_resizelogic']?.();
-    if(canvas_ready){
+    if(canvas_properties['ready']){
         canvas_draw();
     }
 }
@@ -223,7 +223,7 @@ function canvas_setmode(mode){
       : mode;
 
     globalThis['load_data']?.(core_mode);
-    canvas_ready = true;
+    canvas_properties['ready'] = true;
 
     if(core_menu_open){
         core_escape();
@@ -246,5 +246,6 @@ function canvas_setproperties(properties){
 }
 
 globalThis.canvas = 0;
-globalThis.canvas_properties = {};
-globalThis.canvas_ready = false;
+globalThis.canvas_properties = {
+  'ready': false,
+};
