@@ -793,6 +793,7 @@ function webgl_controls_keyboard(id){
         }else{
             webgl_camera_rotate({
               'camera': !core_mouse['down-0'],
+              'character': id,
               'y': -webgl_characters[id]['turn-speed'],
             });
         }
@@ -804,6 +805,7 @@ function webgl_controls_keyboard(id){
         }else{
             webgl_camera_rotate({
               'camera': !core_mouse['down-0'],
+              'character': id,
               'y': webgl_characters[id]['turn-speed'],
             });
         }
@@ -925,16 +927,28 @@ function webgl_controls_mouse(id){
         return;
     }
 
+    let mouse_0_down = false;
+    let mouse_2_down = false;
+    let movement_x = 0;
+    let movement_y = 0;
+    if(id === webgl_character_id){
+        mouse_0_down = core_mouse['down-0'];
+        mouse_2_down = core_mouse['down-2'];
+        movement_x = core_mouse['movement-x'];
+        movement_y = core_mouse['movement-y'];
+    }
+
     if(webgl_properties['pointerlock']
-      || core_mouse['down-2']
-      || (core_mouse['down-0'] && controls !== 'rts')){
+      || mouse_2_down
+      || (mouse_0_down && controls !== 'rts')){
         if(level !== -1 && webgl_properties['paused']){
             return;
         }
 
         webgl_camera_rotate({
-          'x': core_mouse['movement-y'] / 10,
-          'y': core_mouse['movement-x'] / 10,
+          'character': id,
+          'x': movement_y / 10,
+          'y': movement_x / 10,
         });
     }
 }
