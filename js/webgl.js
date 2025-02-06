@@ -630,7 +630,7 @@ function webgl_context_lost(event){
     webgl_textures = {};
 }
 
-function webgl_context_restored(event){
+function webgl_context_restored(){
     webgl_init();
     webgl_uniform_update();
     for(const entity in entity_entities){

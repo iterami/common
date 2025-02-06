@@ -11,13 +11,13 @@ function canvas_context(element){
 
 function canvas_context_lost(event){
     event.preventDefault();
+    canvas_properties['ready'] = false;
 
     core_interval_pause_all();
     canvas = 0;
-    canvas_properties['ready'] = false;
 }
 
-function canvas_context_restored(event){
+function canvas_context_restored(){
     canvas_init(canvas_properties['args']);
     if(canvas_properties['ready']){
         canvas_draw();
