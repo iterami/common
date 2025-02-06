@@ -623,9 +623,8 @@ function webgl_context(element){
 
 function webgl_context_lost(event){
     event.preventDefault();
-    webgl_context_valid = false;
-
     core_interval_pause_all();
+    webgl_context_valid = false;
     webgl = 0;
     webgl_textures = {};
 }

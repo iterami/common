@@ -11,9 +11,8 @@ function canvas_context(element){
 
 function canvas_context_lost(event){
     event.preventDefault();
-    canvas_properties['ready'] = false;
-
     core_interval_pause_all();
+    canvas_properties['ready'] = false;
     canvas = 0;
 }
 
