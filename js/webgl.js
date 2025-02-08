@@ -2549,7 +2549,6 @@ function webgl_prefab_remake(args){
     globalThis[args['prefab']['type']]?.(args['prefab']['properties']);
 }
 
-// Required args: properties, type
 function webgl_prefab_repeat(args){
     args = core_args({
       'args': args,
@@ -2557,6 +2556,8 @@ function webgl_prefab_repeat(args){
         'characters': false,
         'count': 1,
         'prefix': entity_id_count,
+        'properties': {},
+        'type': '',
         'x-max': 0,
         'x-min': 0,
         'y-max': 0,
