@@ -2308,12 +2308,6 @@ function webgl_path_move(id){
     const speed = point['speed'] || path['speed'] || character['speed'];
 
     if(distance - speed < point['distance']){
-        character['change-translate-x'] = 0;
-        character['change-translate-y'] = 0;
-        character['change-translate-z'] = 0;
-        character['translate-x'] = point['translate-x'];
-        character['translate-y'] = point['translate-y'];
-        character['translate-z'] = point['translate-z'];
         webgl_camera_rotate({
           'character': character['id'],
           'set': true,
