@@ -2288,6 +2288,7 @@ function webgl_path_move(id){
     const point = core_args({
       'args': path['points'][character['path-point']],
       'defaults': {
+        'distance': 0,
         'rotate-x': false,
         'rotate-y': false,
         'rotate-z': false,
@@ -2306,7 +2307,7 @@ function webgl_path_move(id){
     });
     const speed = point['speed'] || path['speed'] || character['speed'];
 
-    if(distance < speed){
+    if(distance - speed < point['distance']){
         character['change-translate-x'] = 0;
         character['change-translate-y'] = 0;
         character['change-translate-z'] = 0;
