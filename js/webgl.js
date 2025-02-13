@@ -1978,7 +1978,7 @@ function webgl_logic(){
         }
 
         if(character['collides']
-          && webgl_paths[character['path-id']]?.['collision']){
+          && webgl_paths[character['path-id']]?.['collision'] !== false){
             for(const entity in entity_entities){
                 if(entity_entities[entity]['collision']){
                     webgl_collision({
@@ -1989,29 +1989,28 @@ function webgl_logic(){
             }
         }
 
-        if(level <= -1){
-            if(character['path-id'].length === 0){
-                character['change-translate-x'] = 0;
-                character['change-translate-y'] = 0;
-                character['change-translate-z'] = 0;
-            }
+        if(level <= -1
+          && character['path-id'].length === 0){
+            character['change-translate-x'] = 0;
+            character['change-translate-y'] = 0;
+            character['change-translate-z'] = 0;
+            continue;
+        }
 
-        }else{
-            if(character['jump-allow']){
-                character['change-translate-x'] -= change_translate_x;
-                character['change-translate-z'] -= change_translate_z;
-            }
+        if(character['jump-allow']){
+            character['change-translate-x'] -= change_translate_x;
+            character['change-translate-z'] -= change_translate_z;
+        }
 
-            if(webgl_properties['y-min'] !== false
-              && character['translate-y'] < webgl_properties['y-min']){
-                webgl_stat_modify({
-                  'set': true,
-                  'stat': 'life',
-                  'target': character,
-                  'value': 0,
-                });
-                webgl_character_spawn(id);
-            }
+        if(webgl_properties['y-min'] !== false
+          && character['translate-y'] < webgl_properties['y-min']){
+            webgl_stat_modify({
+              'set': true,
+              'stat': 'life',
+              'target': character,
+              'value': 0,
+            });
+            webgl_character_spawn(id);
         }
     }
 
