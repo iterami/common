@@ -223,7 +223,7 @@ function prefabs_webgl_lines_path(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
-        'color': [1, 1, 1, 1],
+        'colors': [],
         'groups': [],
         'prefix': entity_id_count,
       },
@@ -233,6 +233,11 @@ function prefabs_webgl_lines_path(args){
         return;
     }
 
+    if(args['colors'].length === 0){
+        args['colors'].push([1, 1, 1, 1]);
+    }
+
+    let color = -1;
     let x = 0;
     let y = 0;
     let z = 0;
@@ -254,7 +259,11 @@ function prefabs_webgl_lines_path(args){
         }
 
         vertices.push(x, y, z);
-        vertex_colors.push(...args['color']);
+        color++;
+        if(color >= args['colors'].length){
+            color = 0;
+        }
+        vertex_colors.push(...args['colors'][color]);
     }
 
     webgl_entity_create({
