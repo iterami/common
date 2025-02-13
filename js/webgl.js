@@ -564,7 +564,7 @@ function webgl_collision(args){
         args['collider']['change-translate-' + collision[axis]] = change_translate;
 
         if(collision[axis] === 'y'){
-            if(args['collider']['jump-allow'] === false){
+            if(!args['collider']['jump-allow']){
                 args['collider']['jump-allow'] = collision_sign[axis] !== Math.sign(webgl_properties['gravity-max']);
 
                 const change = args['collider']['change-translate-' + collision[axis]];
@@ -1203,7 +1203,7 @@ function webgl_entity_create(args){
             });
         }
 
-        if(entity_groups['skybox']?.[entity_id] === true){
+        if(entity_groups['skybox']?.[entity_id]){
             entity_group_remove({
               'entities': [
                 entity_id,
@@ -1662,7 +1662,7 @@ function webgl_level_init(args){
             const randomized = Math.random() * (args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min']) + args['json']['randomized'][i]['min'];
 
             for(const id in args['json']['randomized'][i]['ids']){
-                const targets = args['json'][args['json']['randomized'][i]['character'] === true
+                const targets = args['json'][args['json']['randomized'][i]['character']
                   ? 'characters'
                   : 'entities'];
 
@@ -1978,7 +1978,7 @@ function webgl_logic(){
         }
 
         if(character['collides']
-          && webgl_paths[character['path-id']]?.['collision'] !== false){
+          && webgl_paths[character['path-id']]?.['collision']){
             for(const entity in entity_entities){
                 if(entity_entities[entity]['collision']){
                     webgl_collision({
@@ -2101,7 +2101,7 @@ function webgl_logic_entity(entity){
         let x = target['translate-x'];
         let y = target['translate-y'];
         let z = target['translate-z'];
-        if(entity_groups['skybox'][entity] === true){
+        if(entity_groups['skybox'][entity]){
             x = target['camera-x'];
             y = target['camera-y'];
             z = target['camera-z'];
