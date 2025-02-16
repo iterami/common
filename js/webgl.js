@@ -2335,7 +2335,7 @@ function webgl_path_move(id){
 
                 }else if(path_end === 'warp'){
                     character['path-point'] = 1;
-                    const warp_point = core_args({
+                    const warp = core_args({
                       'args': path['points'][0],
                       'defaults': {
                         'translate-x': character['translate-x'],
@@ -2343,13 +2343,19 @@ function webgl_path_move(id){
                         'translate-z': character['translate-z'],
                       },
                     });
-                    character['translate-x'] = warp_point['translate-x'];
-                    character['translate-y'] = warp_point['translate-y'];
-                    character['translate-z'] = warp_point['translate-z'];
+                    character['translate-x'] = warp['translate-x'];
+                    character['translate-y'] = warp['translate-y'];
+                    character['translate-z'] = warp['translate-z'];
 
                 }else{
                     character['path-id'] = '';
                     character['path-point'] = 0;
+                    if(character['level'] < -1){
+                        character['change-translate-x'] = 0;
+                        character['change-translate-y'] = 0;
+                        character['change-translate-z'] = 0;
+                    }
+                    return;
                 }
 
             }else{
@@ -2367,7 +2373,7 @@ function webgl_path_move(id){
             }else if(path_end === 'warp'){
                 const last = path['points'].length - 1;
                 character['path-point'] = last - 1;
-                const warp_point = core_args({
+                const warp = core_args({
                   'args': path['points'][last],
                   'defaults': {
                     'translate-x': character['translate-x'],
@@ -2375,20 +2381,24 @@ function webgl_path_move(id){
                     'translate-z': character['translate-z'],
                   },
                 });
-                character['translate-x'] = warp_point['translate-x'];
-                character['translate-y'] = warp_point['translate-y'];
-                character['translate-z'] = warp_point['translate-z'];
+                character['translate-x'] = warp['translate-x'];
+                character['translate-y'] = warp['translate-y'];
+                character['translate-z'] = warp['translate-z'];
 
             }else{
                 character['path-id'] = '';
                 character['path-point'] = 0;
+                if(character['level'] < -1){
+                    character['change-translate-x'] = 0;
+                    character['change-translate-y'] = 0;
+                    character['change-translate-z'] = 0;
+                }
+                return;
             }
 
         }else{
             character['path-point'] -= 1;
         }
-
-        return;
     }
 
     const angle_xz = Math.atan2(
@@ -2400,15 +2410,16 @@ function webgl_path_move(id){
     character['change-translate-x'] = core_round({
       'number': Math.cos(angle_xz) * cos_y_speed,
     });
+    let change_translate_y = Math.sin(angle_y) * speed;
+    if(character['translate-y'] > point['translate-y']){
+        change_translate_y *= -1;
+    }
     character['change-translate-y'] = core_round({
-      'number': Math.sin(angle_y) * speed,
+      'number': change_translate_y,
     });
     character['change-translate-z'] = core_round({
       'number': Math.sin(angle_xz) * cos_y_speed,
     });
-    if(character['translate-y'] > point['translate-y']){
-        character['change-translate-y'] *= -1;
-    }
 }
 
 function webgl_path_use(args){
