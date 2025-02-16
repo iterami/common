@@ -3577,6 +3577,8 @@ function webgl_stat_modify(args){
             );
         }
     }
+
+    globalThis['repo_stat_modified']?.(args);
 }
 
 function webgl_texture_animate(id){
