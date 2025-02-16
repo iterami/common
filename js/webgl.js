@@ -2307,6 +2307,11 @@ function webgl_path_move(id){
     const speed = point['speed'] || path['speed'] || character['speed'];
 
     if(distance - speed < point['distance']){
+        if(point['distance'] === 0){
+            character['translate-x'] = point['translate-x'];
+            character['translate-y'] = point['translate-y'];
+            character['translate-z'] = point['translate-z'];
+        }
         webgl_camera_rotate({
           'character': character['id'],
           'set': true,
@@ -2355,11 +2360,13 @@ function webgl_path_move(id){
                         character['change-translate-y'] = 0;
                         character['change-translate-z'] = 0;
                     }
-                    return;
                 }
 
             }else{
                 character['path-point'] += 1;
+                character['change-translate-x'] = 0;
+                character['change-translate-y'] = 0;
+                character['change-translate-z'] = 0;
             }
 
         }else if(character['path-point'] === 0){
@@ -2393,12 +2400,16 @@ function webgl_path_move(id){
                     character['change-translate-y'] = 0;
                     character['change-translate-z'] = 0;
                 }
-                return;
             }
 
         }else{
             character['path-point'] -= 1;
+            character['change-translate-x'] = 0;
+            character['change-translate-y'] = 0;
+            character['change-translate-z'] = 0;
         }
+
+        return;
     }
 
     const angle_xz = Math.atan2(
