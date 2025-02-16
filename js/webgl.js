@@ -3500,7 +3500,6 @@ function webgl_stat_modify(args){
         };
         rotate_args[args['stat'].at(-1)] = args['value'];
         webgl_camera_rotate(rotate_args);
-        return;
 
     }else if(args['stat'] === 'vertex-colors'){
         args['target']['vertex-colors'] = core_type(args['value']) === 'array'
@@ -3515,66 +3514,67 @@ function webgl_stat_modify(args){
           }),
           'size': 4,
         });
-        return;
 
-    }else if(args['target'][args['stat']] === void 0){
-        if(args['has']){
-            return;
-        }
-
-        args['target'][args['stat']] = 0;
-    }
-
-    args['target'][args['stat']] = (args['set'] || core_type(args['value']) !== 'number')
-      ? args['value']
-      : args['target'][args['stat']] + args['value'];
-
-    if(args['stat'] === 'level-xp'){
-        while(args['target']['level-xp'] >= Math.floor(args['target']['level'] + 1) * 1e3){
-            args['target']['level-xp'] -= Math.floor(args['target']['level'] + 1) * 1e3;
-            args['target']['level']++;
-        }
-
-    }else if(args['stat'] === 'life'){
-        if(args['target']['life'] <= 0){
-            args['target']['life'] = 0;
-
-            if(args['target']['lives'] > 0){
-                args['target']['lives']--;
+    }else{
+        if(args['target'][args['stat']] === void 0){
+            if(args['has']){
+                return;
             }
 
-            if(args['target']['lives'] === 0){
-                const axes = 'xyz';
-                for(const axis in axes){
-                    args['target']['change-rotate-' + axes[axis]] = 0;
-                    args['target']['change-translate-' + axes[axis]] = 0;
-                }
-                args['target']['gravity'] = 0;
-                entity_group_modify({
-                  'groups': [
-                    'webgl_characters_' + args['target']['id'],
-                  ],
-                  'todo': function(entity){
-                       if(entity_groups['skybox'][entity]){
-                           return;
-                       }
+            args['target'][args['stat']] = 0;
+        }
 
-                       entity_entities[entity]['attach-to'] = false;
-                       for(const axis in axes){
-                           entity_entities[entity]['translate-' + axes[axis]] = args['target']['translate-' + axes[axis]];
-                       }
-                  },
-                });
+        args['target'][args['stat']] = (args['set'] || core_type(args['value']) !== 'number')
+          ? args['value']
+          : args['target'][args['stat']] + args['value'];
+
+        if(args['stat'] === 'level-xp'){
+            while(args['target']['level-xp'] >= Math.floor(args['target']['level'] + 1) * 1e3){
+                args['target']['level-xp'] -= Math.floor(args['target']['level'] + 1) * 1e3;
+                args['target']['level']++;
+            }
+
+        }else if(args['stat'] === 'life'){
+            if(args['target']['life'] <= 0){
+                args['target']['life'] = 0;
+
+                if(args['target']['lives'] > 0){
+                    args['target']['lives']--;
+                }
+
+                if(args['target']['lives'] === 0){
+                    const axes = 'xyz';
+                    for(const axis in axes){
+                        args['target']['change-rotate-' + axes[axis]] = 0;
+                        args['target']['change-translate-' + axes[axis]] = 0;
+                    }
+                    args['target']['gravity'] = 0;
+                    entity_group_modify({
+                      'groups': [
+                        'webgl_characters_' + args['target']['id'],
+                      ],
+                      'todo': function(entity){
+                           if(entity_groups['skybox'][entity]){
+                               return;
+                           }
+
+                           entity_entities[entity]['attach-to'] = false;
+                           for(const axis in axes){
+                               entity_entities[entity]['translate-' + axes[axis]] = args['target']['translate-' + axes[axis]];
+                           }
+                      },
+                    });
+
+                }else{
+                    webgl_character_spawn(args['target']['id']);
+                }
 
             }else{
-                webgl_character_spawn(args['target']['id']);
+                args['target']['life'] = Math.min(
+                  args['target']['life'],
+                  args['target']['life-max']
+                );
             }
-
-        }else{
-            args['target']['life'] = Math.min(
-              args['target']['life'],
-              args['target']['life-max']
-            );
         }
     }
 
