@@ -192,12 +192,13 @@ function webgl_character_init(args){
       },
     });
 
+    const entities = args['entities'];
+    const randomize = args['randomize'];
+    delete args['entities'];
+    delete args['randomize'];
+
     webgl_characters[args['id']] = {
-      'automove': args['automove'],
-      'camera-lock': args['camera-lock'],
-      'camera-rotate-x': args['camera-rotate-x'],
-      'camera-rotate-y': args['camera-rotate-y'],
-      'camera-rotate-z': args['camera-rotate-z'],
+      ...args,
       'camera-x': args['translate-x'],
       'camera-y': args['translate-y'],
       'camera-z': args['translate-z'],
@@ -210,42 +211,11 @@ function webgl_character_init(args){
             : webgl_properties['camera-zoom-min']
         )
       ),
-      'change-rotate-x': args['change-rotate-x'],
-      'change-rotate-y': args['change-rotate-y'],
-      'change-rotate-z': args['change-rotate-z'],
-      'change-translate-x': args['change-translate-x'],
-      'change-translate-y': args['change-translate-y'],
-      'change-translate-z': args['change-translate-z'],
-      'collide-range-xz': args['collide-range-xz'],
-      'collide-range-y': args['collide-range-y'],
-      'collides': args['collides'],
-      'controls': args['controls'],
-      'gravity': args['gravity'],
-      'id': args['id'],
       'jump-allow': false,
-      'jump-height': args['jump-height'],
-      'level': args['level'],
-      'level-xp': args['level-xp'],
       'life': Math.max(
         args['life'],
         1
       ),
-      'life-max': args['life-max'],
-      'lives': args['lives'],
-      'lock': args['lock'],
-      'path-direction': args['path-direction'],
-      'path-end': args['path-end'],
-      'path-id': args['path-id'],
-      'path-point': args['path-point'],
-      'reticle': args['reticle'],
-      'rotate-x': args['rotate-x'],
-      'rotate-y': args['rotate-y'],
-      'rotate-z': args['rotate-z'],
-      'speed': args['speed'],
-      'translate-x': args['translate-x'],
-      'translate-y': args['translate-y'],
-      'translate-z': args['translate-z'],
-      'turn-speed': args['turn-speed'],
       'vehicle': false,
       'vehicle-stats': args['vehicle-stats'] === false
         ? false
@@ -266,7 +236,7 @@ function webgl_character_init(args){
     entity_group_create(['webgl_characters_' + args['id']]);
     webgl_entity_create({
       'character': args['id'],
-      'entities': args['entities'],
+      'entities': entities,
     });
     if(args['vehicle-stats']
       && args['vehicle-stats']['character']){
@@ -278,7 +248,7 @@ function webgl_character_init(args){
         });
     }
 
-    if(args['randomize']){
+    if(randomize){
         const xz = webgl_characters[args['id']]['collide-range-xz'] * 2;
 
         webgl_primitive_cuboid({
