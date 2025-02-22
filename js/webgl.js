@@ -1621,7 +1621,7 @@ function webgl_level_init(args){
         webgl_character_id = args['character']['id'];
 
     }else if(args['character'] === 0
-      && webgl_character_level() < -1){
+      && webgl_character_base_properties['level'] < -1){
         return;
     }
 
