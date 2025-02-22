@@ -1625,8 +1625,6 @@ function webgl_level_init(args){
         return;
     }
 
-    core_interval_pause_all();
-
     if(args['json']['randomized']){
         for(const i in args['json']['randomized']){
             const randomized = Math.random() * (args['json']['randomized'][i]['max'] - args['json']['randomized'][i]['min']) + args['json']['randomized'][i]['min'];
@@ -1652,9 +1650,6 @@ function webgl_level_init(args){
 
     if(webgl === 0){
         webgl_init();
-
-    }else{
-        webgl_level_unload();
     }
 
     const level = core_args({
@@ -1834,6 +1829,8 @@ function webgl_level_load(args){
         return true;
     }
 
+    core_interval_pause_all();
+    webgl_level_unload();
     webgl_level_init({
       'character': args['character'],
       'json': args['json'],
