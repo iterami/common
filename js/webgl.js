@@ -362,7 +362,6 @@ function webgl_character_spawn(id){
 
     webgl_characters[id]['life'] = webgl_characters[id]['life-max'];
 
-    webgl_character_origin(id);
     webgl_move_to({
       'move': webgl_characters[id],
       'x': webgl_properties['spawn-translate-x'],
