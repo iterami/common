@@ -86,7 +86,6 @@ function core_events_bind(args){
     });
 
     if(args['beforeunload'] !== false){
-        globalThis.onbeforeunload = core_handle_beforeunload;
         core_events['beforeunload'] = core_args({
           'args': args['beforeunload'],
           'defaults': {
@@ -94,6 +93,7 @@ function core_events_bind(args){
             'state': false,
           },
         });
+        globalThis.onbeforeunload = core_handle_beforeunload;
     }
 
     if(args['keybinds'] !== false){
@@ -104,6 +104,10 @@ function core_events_bind(args){
     }
 
     if(args['mousebinds'] !== false){
+        core_mouse_updatebinds({
+          'clear': args['clearmouse'],
+          'mousebinds': args['mousebinds'],
+        });
         document.onpointerlockchange = core_handle_pointerlockchange;
         globalThis.oncontextmenu = core_handle_contextmenu;
         globalThis.onmousedown = core_handle_mousedown;
@@ -114,10 +118,6 @@ function core_events_bind(args){
         globalThis.ontouchmove = core_handle_touchmove;
         globalThis.ontouchstart = core_handle_touchstart;
         globalThis.onwheel = core_handle_wheel;
-        core_mouse_updatebinds({
-          'clear': args['clearmouse'],
-          'mousebinds': args['mousebinds'],
-        });
     }
 
     if(args['elements'] !== false){
