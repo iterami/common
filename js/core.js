@@ -86,6 +86,7 @@ function core_events_bind(args){
     });
 
     if(args['beforeunload'] !== false){
+        globalThis.onbeforeunload = core_handle_beforeunload;
         core_events['beforeunload'] = core_args({
           'args': args['beforeunload'],
           'defaults': {
@@ -103,6 +104,16 @@ function core_events_bind(args){
     }
 
     if(args['mousebinds'] !== false){
+        document.onpointerlockchange = core_handle_pointerlockchange;
+        globalThis.oncontextmenu = core_handle_contextmenu;
+        globalThis.onmousedown = core_handle_mousedown;
+        globalThis.onmousemove = core_handle_mousemove;
+        globalThis.onmouseup = core_handle_mouseup;
+        globalThis.ontouchcancel = core_handle_touchend;
+        globalThis.ontouchend = core_handle_touchend;
+        globalThis.ontouchmove = core_handle_touchmove;
+        globalThis.ontouchstart = core_handle_touchstart;
+        globalThis.onwheel = core_handle_wheel;
         core_mouse_updatebinds({
           'clear': args['clearmouse'],
           'mousebinds': args['mousebinds'],
@@ -213,15 +224,6 @@ function core_handle_event(args){
             return args['object'][args['key']]['todo']?.(args['event']);
         }
     }
-}
-
-function core_handle_gamepadconnected(event){
-    const gamepad = event.gamepad;
-    core_gamepads[gamepad.index] = gamepad;
-}
-
-function core_handle_gamepaddisconnected(event){
-    delete core_gamepads[event.gamepad.index];
 }
 
 function core_handle_keydown(event){
@@ -572,22 +574,9 @@ function core_init(){
       'x': 0,
       'y': 0,
     };
-    document.onpointerlockchange = core_handle_pointerlockchange;
-    globalThis.onbeforeunload = core_handle_beforeunload;
     globalThis.onblur = core_handle_blur;
-    globalThis.oncontextmenu = core_handle_contextmenu;
-    globalThis.ongamepadconnected = core_handle_gamepadconnected;
-    globalThis.ongamepaddisconnected = core_handle_gamepaddisconnected;
     globalThis.onkeydown = core_handle_keydown;
     globalThis.onkeyup = core_handle_keyup;
-    globalThis.onmousedown = core_handle_mousedown;
-    globalThis.onmousemove = core_handle_mousemove;
-    globalThis.onmouseup = core_handle_mouseup;
-    globalThis.ontouchcancel = core_handle_touchend;
-    globalThis.ontouchend = core_handle_touchend;
-    globalThis.ontouchmove = core_handle_touchmove;
-    globalThis.ontouchstart = core_handle_touchstart;
-    globalThis.onwheel = core_handle_wheel;
     core_events_bind({
       'elements': {
         'mobile-add': {
@@ -1549,7 +1538,6 @@ function core_uri(args){
 
 globalThis.core_elements = {};
 globalThis.core_events = {};
-globalThis.core_gamepads = {};
 globalThis.core_images = {};
 globalThis.core_intervals = {};
 globalThis.core_key_rebinds = {};
