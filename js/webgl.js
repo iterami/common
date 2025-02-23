@@ -309,28 +309,6 @@ function webgl_character_move(args){
     }
 }
 
-function webgl_character_origin(id){
-    if(id === void 0){
-        id = webgl_character_id;
-    }
-    if(webgl_characters[id] === void 0){
-        return;
-    }
-
-    const axes = 'xyz';
-    for(const axis in axes){
-        webgl_characters[id]['camera-rotate-' + axes[axis]] = 0;
-        webgl_characters[id]['change-rotate-' + axes[axis]] = 0;
-        webgl_characters[id]['change-translate-' + axes[axis]] = 0;
-        webgl_characters[id]['rotate-' + axes[axis]] = 0;
-    }
-    webgl_characters[id]['jump-allow'] = false;
-
-    webgl_move_to({
-      'move': webgl_characters[id],
-    });
-}
-
 function webgl_character_set(id){
     webgl_character_id = id;
 
@@ -360,8 +338,13 @@ function webgl_character_spawn(id){
         return;
     }
 
-    webgl_characters[id]['life'] = webgl_characters[id]['life-max'];
-
+    const axes = 'xyz';
+    for(const axis in axes){
+        webgl_characters[id]['camera-rotate-' + axes[axis]] = 0;
+        webgl_characters[id]['change-rotate-' + axes[axis]] = 0;
+        webgl_characters[id]['change-translate-' + axes[axis]] = 0;
+        webgl_characters[id]['rotate-' + axes[axis]] = 0;
+    }
     webgl_move_to({
       'move': webgl_characters[id],
       'x': webgl_properties['spawn-translate-x'],
@@ -375,6 +358,8 @@ function webgl_character_spawn(id){
       'y': webgl_properties['spawn-rotate-y'],
       'z': webgl_properties['spawn-rotate-z'],
     });
+    webgl_characters[id]['jump-allow'] = false;
+    webgl_characters[id]['life'] = webgl_characters[id]['life-max'];
     if(webgl_properties['spawn-path-id'].length > 0){
         webgl_path_use({
           'id': id,
