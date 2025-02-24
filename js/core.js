@@ -159,7 +159,7 @@ function core_getelement(id){
 }
 
 function core_handle_beforeunload(event){
-    const result = core_handle_event({
+    core_handle_event({
       'event': event,
       'key': 'beforeunload',
       'object': core_events,
