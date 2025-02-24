@@ -86,13 +86,7 @@ function core_events_bind(args){
     });
 
     if(args['beforeunload'] !== false){
-        core_events['beforeunload'] = core_args({
-          'args': args['beforeunload'],
-          'defaults': {
-            'preventDefault': false,
-            'state': false,
-          },
-        });
+        core_events['beforeunload'] = args['beforeunload'];
         globalThis.onbeforeunload = core_handle_beforeunload;
     }
 
@@ -172,10 +166,6 @@ function core_handle_beforeunload(event){
     });
 
     core_storage_save();
-
-    if(core_type(result) === 'string'){
-        return result;
-    }
 }
 
 function core_handle_blur(){
