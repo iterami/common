@@ -364,8 +364,8 @@ function webgl_character_spawn(id){
         'spawn-rotate-y': character['spawn-rotate-y'],
         'spawn-rotate-z': character['spawn-rotate-z'],
         'spawn-translate-x': character['spawn-translate-x'],
-        'spawn-translate-y': character['spawn-translate-x'],
-        'spawn-translate-z': character['spawn-translate-x'],
+        'spawn-translate-y': character['spawn-translate-y'],
+        'spawn-translate-z': character['spawn-translate-z'],
       },
       'defaults': {
         'spawn-path-id': webgl_properties['spawn-path-id'],
@@ -373,8 +373,8 @@ function webgl_character_spawn(id){
         'spawn-rotate-y': webgl_properties['spawn-rotate-y'],
         'spawn-rotate-z': webgl_properties['spawn-rotate-z'],
         'spawn-translate-x': webgl_properties['spawn-translate-x'],
-        'spawn-translate-y': webgl_properties['spawn-translate-x'],
-        'spawn-translate-z': webgl_properties['spawn-translate-x'],
+        'spawn-translate-y': webgl_properties['spawn-translate-y'],
+        'spawn-translate-z': webgl_properties['spawn-translate-z'],
       },
     });
     webgl_move_to({
@@ -1991,7 +1991,6 @@ function webgl_logic(){
               'target': character,
               'value': 0,
             });
-            webgl_character_spawn(id);
         }
     }
 
