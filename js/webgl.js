@@ -354,6 +354,8 @@ function webgl_character_spawn(id){
         character['camera-rotate-' + axes[axis]] = 0;
         character['rotate-' + axes[axis]] = 0;
     }
+    character['jump-allow'] = false;
+    character['life'] = character['life-max'];
 
     const spawn = core_args({
       'args': {
@@ -388,8 +390,6 @@ function webgl_character_spawn(id){
       'y': spawn['spawn-rotate-y'],
       'z': spawn['spawn-rotate-z'],
     });
-    character['jump-allow'] = false;
-    character['life'] = character['life-max'];
     if(spawn['spawn-path-id'].length > 0){
         webgl_path_use({
           'id': id,
