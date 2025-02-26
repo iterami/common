@@ -184,6 +184,7 @@ function webgl_character_init(args){
         'spawn-translate-y': webgl_properties['spawn-translate-y'],
         'spawn-translate-z': webgl_properties['spawn-translate-z'],
         'speed': 1,
+        'static': false,
         'turn-speed': 5,
         'vehicle': false,
         'vehicle-stats': false,
@@ -192,8 +193,10 @@ function webgl_character_init(args){
 
     const entities = args['entities'];
     const randomize = args['randomize'];
+    const is_static = args['static'];
     delete args['entities'];
     delete args['randomize'];
+    delete args['static'];
 
     webgl_characters[args['id']] = {
       ...args,
@@ -245,6 +248,11 @@ function webgl_character_init(args){
       'character': args['id'],
       'entities': entities,
     });
+
+    if(is_static){
+        return;
+    }
+
     if(args['vehicle-stats']
       && args['vehicle-stats']['character']){
         const character = webgl_characters[args['id']]['vehicle-stats']['character'];
