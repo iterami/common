@@ -150,12 +150,6 @@ function webgl_character_init(args){
         'automove': false,
         'camera-lock': true,
         'camera-zoom': 0,
-        'change-rotate-x': 0,
-        'change-rotate-y': 0,
-        'change-rotate-z': 0,
-        'change-translate-x': 0,
-        'change-translate-y': 0,
-        'change-translate-z': 0,
         'collide-range-xz': 2,
         'collide-range-y': 3,
         'collides': false,
@@ -176,13 +170,7 @@ function webgl_character_init(args){
         'path-point': 0,
         'randomize': false,
         'reticle': '#fff',
-        'spawn-path-id': webgl_properties['spawn-path-id'],
-        'spawn-rotate-x': webgl_properties['spawn-rotate-x'],
-        'spawn-rotate-y': webgl_properties['spawn-rotate-y'],
-        'spawn-rotate-z': webgl_properties['spawn-rotate-z'],
-        'spawn-translate-x': webgl_properties['spawn-translate-x'],
-        'spawn-translate-y': webgl_properties['spawn-translate-y'],
-        'spawn-translate-z': webgl_properties['spawn-translate-z'],
+        'spawn': {},
         'speed': 1,
         'static': false,
         'turn-speed': 5,
@@ -200,12 +188,18 @@ function webgl_character_init(args){
 
     webgl_characters[args['id']] = {
       ...args,
-      'camera-x': args['spawn-translate-x'],
-      'camera-y': args['spawn-translate-y'],
-      'camera-z': args['spawn-translate-z'],
+      'camera-x': 0,
+      'camera-y': 0,
+      'camera-z': 0,
       'camera-rotate-x': 0,
       'camera-rotate-y': 0,
       'camera-rotate-z': 0,
+      'change-rotate-x': 0,
+      'change-rotate-y': 0,
+      'change-rotate-z': 0,
+      'change-translate-x': 0,
+      'change-translate-y': 0,
+      'change-translate-z': 0,
       'camera-zoom': Math.min(
         webgl_properties['camera-zoom-max'],
         Math.max(
@@ -367,23 +361,15 @@ function webgl_character_spawn(id){
     character['jump-allow'] = false;
     character['life'] = character['life-max'];
 
-    webgl_move_to({
-      'move': character,
-      'x': character['spawn-translate-x'],
-      'y': character['spawn-translate-y'],
-      'z': character['spawn-translate-z'],
-    });
-    webgl_camera_rotate({
-      'character': id,
-      'set': true,
-      'x': character['spawn-rotate-x'],
-      'y': character['spawn-rotate-y'],
-      'z': character['spawn-rotate-z'],
-    });
-    if(character['spawn-path-id'].length > 0){
+    Object.assign(
+      character,
+      webgl_properties['spawn'],
+      character['spawn']
+    );
+    if(character['spawn']['path-id']){
         webgl_path_use({
           'id': id,
-          'path-id': character['spawn-path-id'],
+          'path-id': character['path-id'],
         });
     }
     if(character['vehicle-stats']){
@@ -1687,13 +1673,7 @@ function webgl_level_init(args){
         'paths': {},
         'pointerlock': false,
         'prefabs': [],
-        'spawn-path-id': '',
-        'spawn-rotate-x': 0,
-        'spawn-rotate-y': 0,
-        'spawn-rotate-z': 0,
-        'spawn-translate-x': 0,
-        'spawn-translate-y': 0,
-        'spawn-translate-z': 0,
+        'spawn': {},
         'textures': false,
         'title': false,
         'y-min': false,
@@ -1726,13 +1706,7 @@ function webgl_level_init(args){
       'lock': level['lock'],
       'paused': level['paused'],
       'pointerlock': level['pointerlock'],
-      'spawn-path-id': level['spawn-path-id'],
-      'spawn-rotate-x': level['spawn-rotate-x'],
-      'spawn-rotate-y': level['spawn-rotate-y'],
-      'spawn-rotate-z': level['spawn-rotate-z'],
-      'spawn-translate-x': level['spawn-translate-x'],
-      'spawn-translate-y': level['spawn-translate-y'],
-      'spawn-translate-z': level['spawn-translate-z'],
+      'spawn': level['spawn'],
       'title': level['title'],
       'y-min': level['y-min'],
     };
@@ -1781,13 +1755,6 @@ function webgl_level_init(args){
         webgl_character_init(args['character']);
 
     }else{
-        delete webgl_character_base_properties['spawn-path-id'];
-        delete webgl_character_base_properties['spawn-rotate-x'];
-        delete webgl_character_base_properties['spawn-rotate-y'];
-        delete webgl_character_base_properties['spawn-rotate-z'];
-        delete webgl_character_base_properties['spawn-translate-x'];
-        delete webgl_character_base_properties['spawn-translate-y'];
-        delete webgl_character_base_properties['spawn-translate-z'];
         webgl_character_init(webgl_character_base_properties);
         webgl_entity_create({
           'entities': webgl_character_base_entities,
@@ -2562,12 +2529,16 @@ function webgl_prefab_repeat(args){
     if(args['characters']){
         for(let i = 0; i < args['count']; i++){
             const prefix = args['prefix'] + '-' + i;
+            const spawn = args['characters']['spawn'] || {};
             webgl_character_init({
               ...args['characters'],
               'id': prefix,
-              'spawn-translate-x': Math.random() * (args['x-max'] - args['x-min']) + args['x-min'],
-              'spawn-translate-y': Math.random() * (args['y-max'] - args['y-min']) + args['y-min'],
-              'spawn-translate-z': Math.random() * (args['z-max'] - args['z-min']) + args['z-min'],
+              'spawn': {
+                'translate-x': Math.random() * (args['x-max'] - args['x-min']) + args['x-min'],
+                'translate-y': Math.random() * (args['y-max'] - args['y-min']) + args['y-min'],
+                'translate-z': Math.random() * (args['z-max'] - args['z-min']) + args['z-min'],
+                ...spawn,
+              },
             });
 
             args['properties']['character'] = prefix;
@@ -3810,15 +3781,19 @@ function webgl_tiles(args){
 
         for(const character in args['tiles'][tiles[tile]]['characters']){
             const character_object = args['tiles'][tiles[tile]]['characters'][character];
+            const spawn = character_object['spawn'] || {};
             webgl_character_init({
               ...character_object,
               'id': prefix + character_object['id'],
               'path-id': character_object['path-id'] !== ''
                 ? prefix + character_object['path-id']
                 : '',
-              'spawn-translate-x': tile_offset_x + (character_object['translate-x'] || 0),
-              'spawn-translate-y': tile_offset_y + (character_object['translate-y'] || 0),
-              'spawn-translate-z': tile_offset_z + (character_object['translate-z'] || 0),
+              'spawn': {
+                'translate-x': tile_offset_x + (character_object['translate-x'] || 0),
+                'translate-y': tile_offset_y + (character_object['translate-y'] || 0),
+                'translate-z': tile_offset_z + (character_object['translate-z'] || 0),
+                ...spawn,
+              },
             });
         }
 
