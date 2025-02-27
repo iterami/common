@@ -1560,7 +1560,7 @@ function webgl_level_export(){
         }
 
         json['characters'][id] = webgl_characters[id];
-        json['characters'][id]['entities'] = [];
+        json['characters'][id]['entities'].length = 0;
     }
     for(const path in webgl_paths){
         json['paths'][path] = webgl_paths[path];
@@ -1738,7 +1738,7 @@ function webgl_level_init(args){
     );
 
     if(args['character'] === -1){
-        webgl_character_base_entities = [];
+        webgl_character_base_entities.length = 0;
         webgl_character_base_properties = {};
         webgl_character_init({
           'collides': true,
@@ -1750,7 +1750,7 @@ function webgl_level_init(args){
         });
 
     }else if(core_type(args['character']) === 'object'){
-        webgl_character_base_entities = [];
+        webgl_character_base_entities.length = 0;
         webgl_character_base_properties = {};
         webgl_character_init(args['character']);
 
@@ -1820,7 +1820,7 @@ function webgl_level_unload(){
       webgl_character_base_properties,
       webgl_characters[webgl_character_id]
     );
-    webgl_character_base_entities = [];
+    webgl_character_base_entities.length = 0;
     for(const entity in entity_entities){
         if(entity_entities[entity]['attach-to'] === webgl_character_id
           && entity_groups['skybox'][entity] !== true){
