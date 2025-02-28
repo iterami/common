@@ -586,7 +586,7 @@ function webgl_context_lost(event){
     core_interval_pause_all();
     webgl_context_valid = false;
     webgl = 0;
-    webgl_textures = {};
+    core_object_reset(webgl_textures);
 }
 
 function webgl_context_restored(){
@@ -1560,7 +1560,7 @@ function webgl_level_export(){
         }
 
         json['characters'][id] = webgl_characters[id];
-        json['characters'][id]['entities'].length = 0;
+        core_object_reset(json['characters'][id]['entities']);
     }
     for(const path in webgl_paths){
         json['paths'][path] = webgl_paths[path];
@@ -1738,8 +1738,8 @@ function webgl_level_init(args){
     );
 
     if(args['character'] === -1){
-        webgl_character_base_entities.length = 0;
-        webgl_character_base_properties = {};
+        core_object_reset(webgl_character_base_entities);
+        core_object_reset(webgl_character_base_properties);
         webgl_character_init({
           'collides': true,
           'controls': 'rpg',
@@ -1750,8 +1750,8 @@ function webgl_level_init(args){
         });
 
     }else if(core_type(args['character']) === 'object'){
-        webgl_character_base_entities.length = 0;
-        webgl_character_base_properties = {};
+        core_object_reset(webgl_character_base_entities);
+        core_object_reset(webgl_character_base_properties);
         webgl_character_init(args['character']);
 
     }else{
@@ -1820,7 +1820,7 @@ function webgl_level_unload(){
       webgl_character_base_properties,
       webgl_characters[webgl_character_id]
     );
-    webgl_character_base_entities.length = 0;
+    core_object_reset(webgl_character_base_entities);
     for(const entity in entity_entities){
         if(entity_entities[entity]['attach-to'] === webgl_character_id
           && entity_groups['skybox'][entity] !== true){
@@ -1833,15 +1833,13 @@ function webgl_level_unload(){
         }
     }
 
-    for(const id in webgl_characters){
-        delete webgl_characters[id];
-    }
-    webgl_character_count = 0;
     entity_remove_all({
       'delete-empty': true,
     });
-    webgl_particles = {};
-    webgl_paths = {};
+    core_object_reset(webgl_characters);
+    webgl_character_count = 0;
+    core_object_reset(webgl_particles);
+    core_object_reset(webgl_paths);
 }
 
 function webgl_logic(){

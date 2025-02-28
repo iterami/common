@@ -799,7 +799,7 @@ function core_keys_updatebinds(args){
     });
 
     if(args['clear']){
-        core_keys = {};
+        core_object_reset(core_keys);
     }
 
     for(const keybind in args['keybinds']){
@@ -823,7 +823,7 @@ function core_mouse_updatebinds(args){
     });
 
     if(args['clear']){
-        core_mouse['todo'] = {};
+        core_object_reset(core_mouse['todo']);
     }
 
     for(const mousebind in args['mousebinds']){
@@ -855,6 +855,17 @@ function core_number_format(args){
           'minimumFractionDigits': args['decimals-min'],
         }
       ).format(args['number']);
+}
+
+function core_object_reset(object){
+    if(core_type(object) === 'array'){
+        object.length = 0;
+        return;
+    }
+
+    for(const property in object){
+        delete object[property];
+    }
 }
 
 function core_random_boolean(chance){
