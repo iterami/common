@@ -164,8 +164,6 @@ function core_handle_beforeunload(event){
       'key': 'beforeunload',
       'object': core_events,
     });
-
-    core_storage_save();
 }
 
 function core_handle_blur(){

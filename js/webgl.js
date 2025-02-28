@@ -1842,7 +1842,6 @@ function webgl_level_unload(){
     });
     webgl_particles = {};
     webgl_paths = {};
-    core_storage_save();
 }
 
 function webgl_logic(){
