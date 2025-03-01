@@ -737,8 +737,6 @@ function webgl_controls_keyboard(id){
             }else if(!mouse_0_down){
                 webgl_characters[id]['camera-rotate-y'] += turn;
             }
-            webgl_clamp_rotation(vehicle);
-            webgl_clamp_rotation(webgl_characters[id]);
         }
         if(speed !== 0){
             webgl_character_move({
