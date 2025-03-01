@@ -1681,35 +1681,39 @@ function webgl_level_init(args){
     });
 
     entity_id_count = 0;
-    webgl_properties = {
-      'ambient-blue': level['ambient-blue'],
-      'ambient-green': level['ambient-green'],
-      'ambient-red': level['ambient-red'],
-      'camera-zoom': level['camera-zoom'],
-      'camera-zoom-max': level['camera-zoom-max'],
-      'camera-zoom-min': level['camera-zoom-min'],
-      'clearcolor-blue': level['clearcolor-blue'],
-      'clearcolor-green': level['clearcolor-green'],
-      'clearcolor-red': level['clearcolor-red'],
-      'cursor': level['cursor'],
-      'directional-blue': level['directional-blue'],
-      'directional-green': level['directional-green'],
-      'directional-red': level['directional-red'],
-      'directional-state': level['directional-state'],
-      'directional-vector': level['directional-vector'],
-      'draw-range': level['draw-range'],
-      'fog-density': level['fog-density'],
-      'fog-state': level['fog-state'],
-      'gravity-acceleration': level['gravity-acceleration'],
-      'gravity-damage': level['gravity-damage'],
-      'gravity-max': level['gravity-max'],
-      'lock': level['lock'],
-      'paused': level['paused'],
-      'pointerlock': level['pointerlock'],
-      'spawn': level['spawn'],
-      'title': level['title'],
-      'y-min': level['y-min'],
-    };
+    core_object_reset(webgl_properties);
+    Object.assign(
+      webgl_properties,
+      {
+        'ambient-blue': level['ambient-blue'],
+        'ambient-green': level['ambient-green'],
+        'ambient-red': level['ambient-red'],
+        'camera-zoom': level['camera-zoom'],
+        'camera-zoom-max': level['camera-zoom-max'],
+        'camera-zoom-min': level['camera-zoom-min'],
+        'clearcolor-blue': level['clearcolor-blue'],
+        'clearcolor-green': level['clearcolor-green'],
+        'clearcolor-red': level['clearcolor-red'],
+        'cursor': level['cursor'],
+        'directional-blue': level['directional-blue'],
+        'directional-green': level['directional-green'],
+        'directional-red': level['directional-red'],
+        'directional-state': level['directional-state'],
+        'directional-vector': level['directional-vector'],
+        'draw-range': level['draw-range'],
+        'fog-density': level['fog-density'],
+        'fog-state': level['fog-state'],
+        'gravity-acceleration': level['gravity-acceleration'],
+        'gravity-damage': level['gravity-damage'],
+        'gravity-max': level['gravity-max'],
+        'lock': level['lock'],
+        'paused': level['paused'],
+        'pointerlock': level['pointerlock'],
+        'spawn': level['spawn'],
+        'title': level['title'],
+        'y-min': level['y-min'],
+      }
+    );
 
     webgl_clearcolor_set({
       'blue': webgl_properties['clearcolor-blue'],
