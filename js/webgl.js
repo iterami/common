@@ -80,6 +80,7 @@ function webgl_camera_rotate(args){
     });
 
     const axes = 'xyz';
+    const character = webgl_characters[args['character']];
     const prefix = args['camera']
       ? 'camera-rotate-'
       : 'rotate-';
@@ -90,17 +91,31 @@ function webgl_camera_rotate(args){
         }
 
         if(!args['set']){
-            axis_value += webgl_characters[args['character']][prefix + axes[axis]];
+            axis_value += character[prefix + axes[axis]];
         }
-        webgl_characters[args['character']][prefix + axes[axis]] = axis_value;
+        character[prefix + axes[axis]] = math_clamp({
+          'max': 360,
+          'min': 0,
+          'value': axis_value,
+          'wrap': true,
+        });
     }
 
-    if(webgl_characters[args['character']]['vehicle']){
+    if(character['vehicle']){
         return;
     }
 
     let normals = false;
     if(args['camera']){
+        const max = character['camera-rotate-x'] > 180
+          ? 360
+          : 90;
+        character['camera-rotate-x'] = math_clamp({
+          'max': max,
+          'min': max - 90,
+          'value': character['camera-rotate-x'],
+        });
+
         if(args['y'] === false){
             return;
         }
@@ -117,15 +132,15 @@ function webgl_camera_rotate(args){
           || (!mouse_0_down && !mouse_2_down)
           || !args['mouse'];
 
-        if(webgl_characters[args['character']]['camera-zoom'] === 0
+        if(character['camera-zoom'] === 0
           || (mouse_check
             && webgl_character_level(args['character']) > -2
-            && webgl_characters[args['character']]['life'] > 0)){
-            webgl_characters[args['character']]['rotate-y'] = strafe
-              ? webgl_characters[args['character']]['camera-rotate-y']
+            && character['life'] > 0)){
+            character['rotate-y'] = strafe
+              ? character['camera-rotate-y']
               : args['set']
                 ? args['y']
-                : webgl_characters[args['character']]['rotate-y'] + args['y'];
+                : character['rotate-y'] + args['y'];
             normals = true;
         }
 
@@ -393,42 +408,6 @@ function webgl_character_strafe(id){
 
     return checks
       || core_mouse['down-2'];
-}
-
-function webgl_clamp_rotation(entity){
-    const axes = 'xyz';
-    const character = entity['camera-rotate-x'] !== void 0;
-
-    for(const axis in axes){
-        const property = 'rotate-' + axes[axis];
-
-        if(character){
-            entity['camera-' + property] = math_clamp({
-              'max': 360,
-              'min': 0,
-              'value': entity['camera-' + property],
-              'wrap': true,
-            });
-        }
-
-        entity[property] = math_clamp({
-          'max': 360,
-          'min': 0,
-          'value': entity[property],
-          'wrap': true,
-        });
-    }
-
-    if(character){
-        const max = entity['camera-rotate-x'] > 180
-          ? 360
-          : 90;
-        entity['camera-rotate-x'] = math_clamp({
-          'max': max,
-          'min': max - 90,
-          'value': entity['camera-rotate-x'],
-        });
-    }
 }
 
 function webgl_clearcolor_set(args){
@@ -1900,10 +1879,17 @@ function webgl_logic(){
               'z': character['change-rotate-z'],
             });
         }
-        webgl_clamp_rotation(character);
 
         const axes = 'xyz';
         for(const axis in axes){
+            const rotate_axis = 'rotate-' + axes[axis];
+            character[rotate_axis] = math_clamp({
+              'max': 360,
+              'min': 0,
+              'value': character[rotate_axis],
+              'wrap': true,
+            });
+
             const translate_axis = 'translate-' + axes[axis];
             character[translate_axis] += character['change-' + translate_axis];
         }
@@ -2056,20 +2042,22 @@ function webgl_logic_entity(entity){
     const old_rotate_x = entity_entities[entity]['rotate-x'];
     const old_rotate_y = entity_entities[entity]['rotate-y'];
     const old_rotate_z = entity_entities[entity]['rotate-z'];
+    const axes = 'xyz';
+    for(const axis in axes){
+        const rotate_axis = 'rotate-' + axes[axis];
+        entity_entities[entity][rotate_axis] = math_clamp({
+          'max': 360,
+          'min': 0,
+          'value': entity_entities[entity][rotate_axis] + entity_entities[entity]['change-' + rotate_axis],
+          'wrap': true,
+        });
+    }
     if(entity_entities[entity]['billboard']){
         webgl_billboard(entity);
-
-    }else{
-        const axes = 'xyz';
-        for(const axis in axes){
-            const rotate_axis = 'rotate-' + axes[axis];
-            entity_entities[entity][rotate_axis] += entity_entities[entity]['change-' + rotate_axis];
-        }
     }
     if(entity_entities[entity]['rotate-x'] !== old_rotate_x
       || entity_entities[entity]['rotate-y'] !== old_rotate_y
       || entity_entities[entity]['rotate-z'] !== old_rotate_z){
-        webgl_clamp_rotation(entity_entities[entity]);
         webgl_entity_normals(entity);
     }
 
