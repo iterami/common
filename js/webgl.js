@@ -1166,20 +1166,21 @@ function webgl_entity_create(args){
       },
     });
 
-    for(const entity in args['entities']){
+    for(const id in args['entities']){
         const entity_id = entity_create({
-          'id': args['entities'][entity]['id'],
-          'properties': args['entities'][entity],
-          'types': args['entities'][entity]['types'],
+          'id': args['entities'][id]['id'],
+          'properties': args['entities'][id],
+          'types': args['entities'][id]['types'],
         });
+        const entity = entity_entities[entity_id];
         math_matrices[entity_id] = math_matrix_create();
 
         const groups = [
           ...args['groups'],
         ];
-        if(entity_entities[entity_id]['groups']){
-            groups.push(entity_entities[entity_id]['groups']);
-            delete entity_entities[entity_id]['groups'];
+        if(entity['groups']){
+            groups.push(entity['groups']);
+            delete entity['groups'];
         }
         for(const group in groups){
             entity_group_add({
@@ -1203,37 +1204,50 @@ function webgl_entity_create(args){
               ],
               'group': 'transparent',
             });
-            entity_entities[entity_id]['attach-to'] = webgl_character_id;
-            entity_entities[entity_id]['attach-type'] = 'webgl_characters';
+            entity['attach-to'] = webgl_character_id;
+            entity['attach-type'] = 'webgl_characters';
 
         }else if(args['character']){
-            entity_entities[entity_id]['attach-to'] = args['character'];
-            entity_entities[entity_id]['attach-type'] = 'webgl_characters';
+            entity['attach-to'] = args['character'];
+            entity['attach-type'] = 'webgl_characters';
         }
 
-        if(entity_entities[entity_id]['attach-to']){
+        if(entity['scale-x'] !== 1
+          || entity['scale-y'] !== 1
+          || entity['scale-z'] !== 1){
+            webgl_entity_scale({
+              'init': true,
+              'entity': entity_id,
+              'set': true,
+              'x': entity['scale-x'],
+              'y': entity['scale-y'],
+              'z': entity['scale-z'],
+            });
+        }
+
+        if(entity['attach-to']){
             entity_attach({
               'entity': entity_id,
-              'to': entity_entities[entity_id]['attach-to'],
-              'type': entity_entities[entity_id]['attach-type'],
-              'x': entity_entities[entity_id]['attach-x'],
-              'y': entity_entities[entity_id]['attach-y'],
-              'z': entity_entities[entity_id]['attach-z'],
+              'to': entity['attach-to'],
+              'type': entity['attach-type'],
+              'x': entity['attach-x'],
+              'y': entity['attach-y'],
+              'z': entity['attach-z'],
             });
             entity_group_add({
               'entities': [
                 entity_id,
               ],
-              'group': 'webgl_characters_' + entity_entities[entity_id]['attach-to'],
+              'group': 'webgl_characters_' + entity['attach-to'],
             });
-            const character = webgl_characters[entity_entities[entity_id]['attach-to']];
+            const character = webgl_characters[entity['attach-to']];
             webgl_entity_scale({
               'entity': entity_id,
               'set': true,
               'update': false,
-              'x': character['scale-x'],
-              'y': character['scale-y'],
-              'z': character['scale-z'],
+              'x': entity['scale-x'] * character['scale-x'],
+              'y': entity['scale-y'] * character['scale-y'],
+              'z': entity['scale-z'] * character['scale-z'],
             });
         }
     }
@@ -1297,6 +1311,7 @@ function webgl_entity_scale(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'init': false,
         'set': false,
         'todo': true,
         'update': true,
@@ -1308,7 +1323,7 @@ function webgl_entity_scale(args){
 
     const axes = 'xyz';
     const entity = entity_entities[args['entity']];
-    let scaled = false;
+    let scaled = args['init'];
     for(const axis in axes){
         let axis_value = args[axes[axis]];
         if(axis_value === false){
@@ -1319,7 +1334,7 @@ function webgl_entity_scale(args){
         if(!args['set']){
             axis_value += old_scale;
         }
-        if(axis_value !== old_scale){
+        if(axis_value !== old_scale || args['init']){
             scaled = true;
 
             if(args['update']){
@@ -1327,7 +1342,9 @@ function webgl_entity_scale(args){
             }
 
             for(let i = Number(axis); i < entity['vertices-length'] * 3; i += 3){
-                entity['vertices'][i] /= old_scale;
+                if(!args['init']){
+                    entity['vertices'][i] /= old_scale;
+                }
                 entity['vertices'][i] *= axis_value;
             }
         }
