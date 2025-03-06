@@ -3291,6 +3291,7 @@ function webgl_scale(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'set': false,
         'todo': true,
         'x': false,
         'y': false,
@@ -3299,25 +3300,30 @@ function webgl_scale(args){
     });
 
     const axes = 'xyz';
+    const entity = entity_entities[args['entity']];
     for(const axis in axes){
-        if(args[axes[axis]] === false){
+        let axis_value = args[axes[axis]];
+        if(axis_value === false){
             continue;
         }
 
-        const old_scale = entity_entities[args['entity']]['scale-' + axes[axis]];
-        entity_entities[args['entity']]['scale-' + axes[axis]] = args[axes[axis]];
+        const old_scale = entity['scale-' + axes[axis]];
+        if(!args['set']){
+            axis_value += old_scale;
+        }
+        entity['scale-' + axes[axis]] = axis_value;
 
-        for(let i = Number(axis); i < entity_entities[args['entity']]['vertices-length'] * 3; i += 3){
-            entity_entities[args['entity']]['vertices'][i] /= old_scale;
-            entity_entities[args['entity']]['vertices'][i] *= args[axes[axis]];
+        for(let i = Number(axis); i < entity['vertices-length'] * 3; i += 3){
+            entity['vertices'][i] /= old_scale;
+            entity['vertices'][i] *= axis_value;
         }
     }
 
     if(args['todo']){
-        webgl.bindVertexArray(entity_entities[args['entity']]['vao']);
+        webgl.bindVertexArray(entity['vao']);
         webgl_buffer_set({
           'attribute': 'vec_vertexPosition',
-          'data': entity_entities[args['entity']]['vertices'],
+          'data': entity['vertices'],
           'size': 3,
         });
     }
