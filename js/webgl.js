@@ -185,6 +185,9 @@ function webgl_character_init(args){
         'path-point': 0,
         'randomize': false,
         'reticle': '#fff',
+        'scale-x': 1,
+        'scale-y': 1,
+        'scale-z': 1,
         'spawn': {},
         'speed': 1,
         'static': false,
@@ -333,6 +336,53 @@ function webgl_character_move(args){
         webgl_characters[args['id']]['change-translate-x'] += movement['x'];
         webgl_characters[args['id']]['change-translate-z'] += movement['z'];
     }
+}
+
+function webgl_character_scale(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': webgl_character_id,
+        'set': false,
+        'x': false,
+        'y': false,
+        'z': false,
+      },
+    });
+
+    const axes = 'xyz';
+    const character = webgl_characters[args['id']];
+    for(const axis in axes){
+        let axis_value = args[axes[axis]];
+        if(axis_value === false){
+            continue;
+        }
+
+        if(!args['set']){
+            axis_value += character['scale-' + axes[axis]];
+        }
+        character['scale-' + axes[axis]] = axis_value;
+    }
+
+    entity_group_modify({
+      'groups': [
+        'webgl_characters_' + args['id'],
+      ],
+      'todo': function(entity){
+          if(entity_groups['skybox']?.[entity]){
+              return;
+          }
+
+          webgl_entity_scale({
+            'entity': entity,
+            'set': true,
+            'update': false,
+            'x': entity_entities[entity]['scale-x'] * character['scale-x'],
+            'y': entity_entities[entity]['scale-y'] * character['scale-y'],
+            'z': entity_entities[entity]['scale-z'] * character['scale-z'],
+          });
+      },
+    });
 }
 
 function webgl_character_set(id){
