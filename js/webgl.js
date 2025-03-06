@@ -1347,6 +1347,12 @@ function webgl_entity_scale(args){
                 }
                 entity['vertices'][i] *= axis_value;
             }
+            if(entity['attach-to']){
+                if(!args['init']){
+                    entity['attach-' + axes[axis]] /= old_scale;
+                }
+                entity['attach-' + axes[axis]] *= axis_value;
+            }
         }
     }
 
