@@ -352,6 +352,7 @@ function webgl_character_scale(args){
 
     const axes = 'xyz';
     const character = webgl_characters[args['id']];
+    let scaled = false;
     for(const axis in axes){
         let axis_value = args[axes[axis]];
         if(axis_value === false){
@@ -361,7 +362,14 @@ function webgl_character_scale(args){
         if(!args['set']){
             axis_value += character['scale-' + axes[axis]];
         }
-        character['scale-' + axes[axis]] = axis_value;
+        if(character['scale-' + axes[axis]] !== axis_value){
+            scaled = true;
+            character['scale-' + axes[axis]] = axis_value;
+        }
+    }
+
+    if(!scaled){
+        return;
     }
 
     entity_group_modify({
@@ -1141,15 +1149,6 @@ function webgl_entity_buffer(entity){
       'data': textureData,
       'size': 2,
     });
-
-    webgl_entity_scale({
-      'entity': entity,
-      'todo': false,
-      'update': false,
-      'x': entity_entities[entity]['scale-x'] === 1 ? false : entity_entities[entity]['scale-x'],
-      'y': entity_entities[entity]['scale-y'] === 1 ? false : entity_entities[entity]['scale-y'],
-      'z': entity_entities[entity]['scale-z'] === 1 ? false : entity_entities[entity]['scale-z'],
-    });
     webgl_buffer_set({
       'attribute': 'vec_vertexPosition',
       'data': entity_entities[entity]['vertices'],
@@ -1227,6 +1226,15 @@ function webgl_entity_create(args){
               ],
               'group': 'webgl_characters_' + entity_entities[entity_id]['attach-to'],
             });
+            const character = webgl_characters[entity_entities[entity_id]['attach-to']];
+            webgl_entity_scale({
+              'entity': entity_id,
+              'set': true,
+              'update': false,
+              'x': character['scale-x'],
+              'y': character['scale-y'],
+              'z': character['scale-z'],
+            });
         }
     }
 }
@@ -1300,6 +1308,7 @@ function webgl_entity_scale(args){
 
     const axes = 'xyz';
     const entity = entity_entities[args['entity']];
+    let scaled = false;
     for(const axis in axes){
         let axis_value = args[axes[axis]];
         if(axis_value === false){
@@ -1310,17 +1319,21 @@ function webgl_entity_scale(args){
         if(!args['set']){
             axis_value += old_scale;
         }
-        if(args['update']){
-            entity['scale-' + axes[axis]] = axis_value;
-        }
+        if(axis_value !== old_scale){
+            scaled = true;
 
-        for(let i = Number(axis); i < entity['vertices-length'] * 3; i += 3){
-            entity['vertices'][i] /= old_scale;
-            entity['vertices'][i] *= axis_value;
+            if(args['update']){
+                entity['scale-' + axes[axis]] = axis_value;
+            }
+
+            for(let i = Number(axis); i < entity['vertices-length'] * 3; i += 3){
+                entity['vertices'][i] /= old_scale;
+                entity['vertices'][i] *= axis_value;
+            }
         }
     }
 
-    if(args['todo']){
+    if(scaled && args['todo']){
         webgl.bindVertexArray(entity['vao']);
         webgl_buffer_set({
           'attribute': 'vec_vertexPosition',
