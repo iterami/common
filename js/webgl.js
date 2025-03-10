@@ -1511,8 +1511,6 @@ function webgl_init(){
         'change-rotate-x': 0,
         'change-rotate-y': 0,
         'change-rotate-z': 0,
-        'collide-range-xz': 2,
-        'collide-range-y': 3,
         'collision': true,
         'draw': true,
         'draw-mode': 'TRIANGLE_FAN',
