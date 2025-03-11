@@ -158,6 +158,28 @@ function webgl_camera_rotate(args){
     }
 }
 
+function webgl_character_hit(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'id': webgl_character_id,
+        'target': webgl_character_id,
+        'xz': 1,
+        'y': 1,
+      },
+    });
+
+    const character = webgl_characters[args['id']];
+    const target = webgl_characters[args['target']];
+    const angle_xz = Math.atan2(
+      target['translate-z'] - character['translate-z'],
+      target['translate-x'] - character['translate-x']
+    );
+    target['change-translate-x'] = Math.cos(angle_xz) * args['xz'];
+    target['change-translate-y'] = args['y'];
+    target['change-translate-z'] = Math.sin(angle_xz) * args['xz'];
+}
+
 function webgl_character_init(args){
     args = core_args({
       'args': args,
