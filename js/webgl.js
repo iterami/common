@@ -2035,14 +2035,6 @@ function webgl_logic(){
 
         const axes = 'xyz';
         for(const axis in axes){
-            const rotate_axis = 'rotate-' + axes[axis];
-            character[rotate_axis] = math_clamp({
-              'max': 360,
-              'min': 0,
-              'value': character[rotate_axis],
-              'wrap': true,
-            });
-
             const translate_axis = 'translate-' + axes[axis];
             character[translate_axis] += character['change-' + translate_axis];
         }
@@ -2198,6 +2190,10 @@ function webgl_logic_entity(entity){
     const axes = 'xyz';
     for(const axis in axes){
         const rotate_axis = 'rotate-' + axes[axis];
+        if(entity_entities[entity]['change-' + rotate_axis] === 0){
+            continue;
+        }
+
         entity_entities[entity][rotate_axis] = math_clamp({
           'max': 360,
           'min': 0,
