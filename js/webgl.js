@@ -2221,7 +2221,7 @@ function webgl_logic_entity(entity){
         });
     }
 
-    math_matrix_clone({
+    math_matrix_copy({
       'id': 'camera',
       'to': entity,
     });
