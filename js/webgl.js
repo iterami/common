@@ -2264,6 +2264,46 @@ function webgl_logic_entity(entity){
     });
 }
 
+function webgl_logic_particle(entity){
+    const particle = webgl_particles[entity_entities[entity]['particle']];
+    const repeat = entity_entities[entity]['vertices-length'] * 3;
+    const vertices = entity_entities[entity]['vertices'];
+
+    if(particle['randomize']){
+        for(let vertex = 0; vertex < repeat; vertex += 3){
+            const y_vertex = vertices[vertex + 1] + particle['speed-y'];
+            if(y_vertex < particle['y-min']
+              || y_vertex > particle['y-max']){
+                vertices[vertex] = particle['x-min']
+                  + Math.random() * (particle['x-max'] - particle['x-min']);
+                vertices[vertex + 2] = particle['z-min']
+                  + Math.random() * (particle['z-max'] - particle['z-min']);
+            }
+        }
+    }
+
+    for(let vertex = 0; vertex < repeat; vertex += 3){
+        vertices[vertex] = math_clamp({
+          'max': particle['x-max'],
+          'min': particle['x-min'],
+          'value': vertices[vertex] + particle['speed-x'],
+          'wrap': true,
+        });
+        vertices[vertex + 1] = math_clamp({
+          'max': particle['y-max'],
+          'min': particle['y-min'],
+          'value': vertices[vertex + 1] + particle['speed-y'],
+          'wrap': true,
+        });
+        vertices[vertex + 2] = math_clamp({
+          'max': particle['z-max'],
+          'min': particle['z-min'],
+          'value': vertices[vertex + 2] + particle['speed-z'],
+          'wrap': true,
+        });
+    }
+}
+
 // Required args: move
 function webgl_move_to(args){
     args = core_args({
@@ -2314,46 +2354,6 @@ function webgl_normals(args){
         'number': Math.sin(radians_x) * cos_y,
       }),
     ];
-}
-
-function webgl_logic_particle(entity){
-    const particle = entity_entities[entity]['particle'];
-    const repeat = entity_entities[entity]['vertices-length'] * 3;
-    const vertices = entity_entities[entity]['vertices'];
-
-    if(webgl_particles[particle]['randomize']){
-        for(let vertex = 0; vertex < repeat; vertex += 3){
-            const y_vertex = vertices[vertex + 1] + webgl_particles[particle]['speed-y'];
-            if(y_vertex < webgl_particles[particle]['y-min']
-              || y_vertex > webgl_particles[particle]['y-max']){
-                vertices[vertex] = webgl_particles[particle]['x-min']
-                  + Math.random() * (webgl_particles[particle]['x-max'] - webgl_particles[particle]['x-min']);
-                vertices[vertex + 2] = webgl_particles[particle]['z-min']
-                  + Math.random() * (webgl_particles[particle]['z-max'] - webgl_particles[particle]['z-min']);
-            }
-        }
-    }
-
-    for(let vertex = 0; vertex < repeat; vertex += 3){
-        vertices[vertex] = math_clamp({
-          'max': webgl_particles[particle]['x-max'],
-          'min': webgl_particles[particle]['x-min'],
-          'value': vertices[vertex] + webgl_particles[particle]['speed-x'],
-          'wrap': true,
-        });
-        vertices[vertex + 1] = math_clamp({
-          'max': webgl_particles[particle]['y-max'],
-          'min': webgl_particles[particle]['y-min'],
-          'value': vertices[vertex + 1] + webgl_particles[particle]['speed-y'],
-          'wrap': true,
-        });
-        vertices[vertex + 2] = math_clamp({
-          'max': webgl_particles[particle]['z-max'],
-          'min': webgl_particles[particle]['z-min'],
-          'value': vertices[vertex + 2] + webgl_particles[particle]['speed-z'],
-          'wrap': true,
-        });
-    }
 }
 
 function webgl_path_move(id){
