@@ -207,59 +207,59 @@ function math_matrix_identity(id){
 
 // Required args: dimensions, id
 function math_matrix_rotate(args){
+    const cache = math_matrices['cache'];
+    const matrix = math_matrices[args['id']];
+
     // Rotate X.
     math_matrix_copy({
       'id': args['id'],
       'to': 'cache',
     });
-    let cache = math_matrices['cache'];
     let cosine = Math.cos(args['dimensions'][0]);
     let sine = Math.sin(args['dimensions'][0]);
 
-    math_matrices[args['id']][4] = cache[4] * cosine + cache[8] * sine;
-    math_matrices[args['id']][5] = cache[5] * cosine + cache[9] * sine;
-    math_matrices[args['id']][6] = cache[6] * cosine + cache[10] * sine;
-    math_matrices[args['id']][7] = cache[7] * cosine + cache[11] * sine;
-    math_matrices[args['id']][8] = cache[8] * cosine - cache[4] * sine;
-    math_matrices[args['id']][9] = cache[9] * cosine - cache[5] * sine;
-    math_matrices[args['id']][10] = cache[10] * cosine - cache[6] * sine;
-    math_matrices[args['id']][11] = cache[11] * cosine - cache[7] * sine;
+    matrix[4] = cache[4] * cosine + cache[8] * sine;
+    matrix[5] = cache[5] * cosine + cache[9] * sine;
+    matrix[6] = cache[6] * cosine + cache[10] * sine;
+    matrix[7] = cache[7] * cosine + cache[11] * sine;
+    matrix[8] = cache[8] * cosine - cache[4] * sine;
+    matrix[9] = cache[9] * cosine - cache[5] * sine;
+    matrix[10] = cache[10] * cosine - cache[6] * sine;
+    matrix[11] = cache[11] * cosine - cache[7] * sine;
 
     // Rotate Y.
     math_matrix_copy({
       'id': args['id'],
       'to': 'cache',
     });
-    cache = math_matrices['cache'];
     cosine = Math.cos(args['dimensions'][1]);
     sine = Math.sin(args['dimensions'][1]);
 
-    math_matrices[args['id']][0] = cache[0] * cosine - cache[8] * sine;
-    math_matrices[args['id']][1] = cache[1] * cosine - cache[9] * sine;
-    math_matrices[args['id']][2] = cache[2] * cosine - cache[10] * sine;
-    math_matrices[args['id']][3] = cache[3] * cosine - cache[11] * sine;
-    math_matrices[args['id']][8] = cache[8] * cosine + cache[0] * sine;
-    math_matrices[args['id']][9] = cache[9] * cosine + cache[1] * sine;
-    math_matrices[args['id']][10] = cache[10] * cosine + cache[2] * sine;
-    math_matrices[args['id']][11] = cache[11] * cosine + cache[3] * sine;
+    matrix[0] = cache[0] * cosine - cache[8] * sine;
+    matrix[1] = cache[1] * cosine - cache[9] * sine;
+    matrix[2] = cache[2] * cosine - cache[10] * sine;
+    matrix[3] = cache[3] * cosine - cache[11] * sine;
+    matrix[8] = cache[8] * cosine + cache[0] * sine;
+    matrix[9] = cache[9] * cosine + cache[1] * sine;
+    matrix[10] = cache[10] * cosine + cache[2] * sine;
+    matrix[11] = cache[11] * cosine + cache[3] * sine;
 
     // Rotate Z.
     math_matrix_copy({
       'id': args['id'],
       'to': 'cache',
     });
-    cache = math_matrices['cache'];
     cosine = Math.cos(args['dimensions'][2]);
     sine = Math.sin(args['dimensions'][2]);
 
-    math_matrices[args['id']][0] = cache[0] * cosine + cache[4] * sine;
-    math_matrices[args['id']][1] = cache[1] * cosine + cache[5] * sine;
-    math_matrices[args['id']][2] = cache[2] * cosine + cache[6] * sine;
-    math_matrices[args['id']][3] = cache[3] * cosine + cache[7] * sine;
-    math_matrices[args['id']][4] = cache[4] * cosine - cache[0] * sine;
-    math_matrices[args['id']][5] = cache[5] * cosine - cache[1] * sine;
-    math_matrices[args['id']][6] = cache[6] * cosine - cache[2] * sine;
-    math_matrices[args['id']][7] = cache[7] * cosine - cache[3] * sine;
+    matrix[0] = cache[0] * cosine + cache[4] * sine;
+    matrix[1] = cache[1] * cosine + cache[5] * sine;
+    matrix[2] = cache[2] * cosine + cache[6] * sine;
+    matrix[3] = cache[3] * cosine + cache[7] * sine;
+    matrix[4] = cache[4] * cosine - cache[0] * sine;
+    matrix[5] = cache[5] * cosine - cache[1] * sine;
+    matrix[6] = cache[6] * cosine - cache[2] * sine;
+    matrix[7] = cache[7] * cosine - cache[3] * sine;
 }
 
 // Required args: id
@@ -271,20 +271,22 @@ function math_matrix_round(args){
       },
     });
 
-    for(const key in math_matrices[args['id']]){
-        math_matrices[args['id']][key] = core_round({
+    const matrix = math_matrices[args['id']];
+    for(const key in matrix){
+        matrix[key] = core_round({
           'decimals': args['decimals'],
-          'number': math_matrices[args['id']][key],
+          'number': matrix[key],
         });
     }
 }
 
 // Required args: dimensions, id
 function math_matrix_translate(args){
+    const matrix = math_matrices[args['id']];
     for(let i = 0; i < 4; i++){
-        math_matrices[args['id']][i + 12] -= math_matrices[args['id']][i] * args['dimensions'][0]
-          + math_matrices[args['id']][i + 4] * args['dimensions'][1]
-          + math_matrices[args['id']][i + 8] * args['dimensions'][2];
+        matrix[i + 12] -= matrix[i] * args['dimensions'][0]
+          + matrix[i + 4] * args['dimensions'][1]
+          + matrix[i + 8] * args['dimensions'][2];
     }
 }
 
