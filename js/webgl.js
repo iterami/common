@@ -1514,12 +1514,15 @@ function webgl_init(){
     math_matrices['perspective'][14] = -2;
 
     webgl.enable(webgl.BLEND);
-    webgl.enable(webgl.CULL_FACE);
-    webgl.enable(webgl.DEPTH_TEST);
-
     webgl.blendFunc(
       webgl.SRC_ALPHA,
       webgl.ONE_MINUS_SRC_ALPHA
+    );
+    webgl.enable(webgl.CULL_FACE);
+    webgl.enable(webgl.DEPTH_TEST);
+    webgl.hint(
+      webgl.GENERATE_MIPMAP_HINT,
+      webgl.FASTEST
     );
 
     entity_set({
@@ -2222,20 +2225,6 @@ function webgl_logic_entity(entity){
           'size': 3,
         });
 
-    }else if(webgl_textures[entity['texture']]['ready'] === true){
-        webgl.bindTexture(
-          webgl.TEXTURE_2D,
-          webgl_textures[entity['texture']]['gl']
-        );
-        webgl.texImage2D(
-          webgl.TEXTURE_2D,
-          0,
-          webgl.RGBA,
-          webgl.RGBA,
-          webgl.UNSIGNED_BYTE,
-          core_elements['texture-' + entity['texture']]
-        );
-        webgl.generateMipmap(webgl.TEXTURE_2D);
     }
 
     math_matrix_copy({
@@ -3703,6 +3692,20 @@ function webgl_texture_animate(id){
       height * 2,
     );
     canvas.restore();
+
+    webgl.bindTexture(
+      webgl.TEXTURE_2D,
+      texture['gl']
+    );
+    webgl.texImage2D(
+      webgl.TEXTURE_2D,
+      0,
+      webgl.RGBA,
+      webgl.RGBA,
+      webgl.UNSIGNED_BYTE,
+      core_elements['texture-' + id]
+    );
+    webgl.generateMipmap(webgl.TEXTURE_2D);
 }
 
 // Required args: id
