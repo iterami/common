@@ -12,12 +12,11 @@ function entity_attach(args){
       },
     });
 
-    const entity = entity_entities[args['entity']];
-    entity['attach-x'] = args['x'];
-    entity['attach-y'] = args['y'];
-    entity['attach-z'] = args['z'];
-    entity['attach-to'] = args['to'];
-    entity['attach-type'] = args['type'];
+    args['entity']['attach-x'] = args['x'];
+    args['entity']['attach-y'] = args['y'];
+    args['entity']['attach-z'] = args['z'];
+    args['entity']['attach-to'] = args['to'];
+    args['entity']['attach-type'] = args['type'];
 }
 
 function entity_create(args){
@@ -31,7 +30,9 @@ function entity_create(args){
     });
 
     entity_id_count++;
-    const entity = {};
+    const entity = {
+      'id': args['id'],
+    };
 
     for(const type in entity_types_default){
         entity_handle_defaults({
@@ -57,13 +58,13 @@ function entity_create(args){
     entity_entities[args['id']] = entity;
 
     for(const type in entity_types_default){
-        entity_info[entity_types_default[type]]['todo']?.(args['id']);
+        entity_info[entity_types_default[type]]['todo']?.(entity);
     }
     for(const type in args['types']){
-        entity_info[args['types'][type]]['todo']?.(args['id']);
+        entity_info[args['types'][type]]['todo']?.(entity);
     }
 
-    return args['id'];
+    return entity;
 }
 
 // Required args: entities, group
@@ -96,7 +97,7 @@ function entity_group_create(ids){
 function entity_group_modify(args){
     for(const group in args['groups']){
         for(const entity in entity_groups[args['groups'][group]]){
-            args['todo'](entity);
+            args['todo'](entity_entities[entity]);
         }
     }
 }
