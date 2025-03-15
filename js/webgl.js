@@ -3717,6 +3717,7 @@ function webgl_texture_init(args){
     if(!webgl_textures[args['id']]){
         webgl_textures[args['id']] = {};
     }
+    const texture = webgl_textures[args['id']];
 
     const split = args['id'].split(',');
     const image = split[0];
@@ -3730,7 +3731,7 @@ function webgl_texture_init(args){
     if(!texture_complete
       && !args['loading']){
         if(split.length > 1){
-            webgl_textures[args['id']]['ready'] = false;
+            texture['ready'] = false;
         }
         core_image({
           'id': image,
@@ -3764,12 +3765,12 @@ function webgl_texture_init(args){
           'store': id,
           'type': 'canvas',
         });
-        webgl_textures[args['id']]['image'] = image;
-        webgl_textures[args['id']]['offset-x'] = 0;
-        webgl_textures[args['id']]['offset-y'] = 0;
-        webgl_textures[args['id']]['speed-x'] = Number(split[1]);
-        webgl_textures[args['id']]['speed-y'] = split.length > 2 ? Number(split[2]) : 0;
-        webgl_textures[args['id']]['ready'] = true;
+        texture['image'] = image;
+        texture['offset-x'] = 0;
+        texture['offset-y'] = 0;
+        texture['speed-x'] = 0;
+        texture['speed-y'] = 0;
+        texture['ready'] = true;
     }
 
     const texture_gl = webgl.createTexture();
@@ -3796,7 +3797,13 @@ function webgl_texture_init(args){
       webgl.NEAREST_MIPMAP_LINEAR
     );
     webgl.generateMipmap(webgl.TEXTURE_2D);
-    webgl_textures[args['id']]['gl'] = texture_gl;
+    texture['gl'] = texture_gl;
+
+    if(texture['ready'] === true){
+        webgl_texture_animate(args['id']);
+        texture['speed-x'] = Number(split[1]);
+        texture['speed-y'] = split.length > 2 ? Number(split[2]) : 0;
+    }
 }
 
 // Required args: tiles
