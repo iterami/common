@@ -19,25 +19,28 @@ function webgl_audio(args){
         });
     }
 
-    const radians_y = math_degrees_to_radians(webgl_characters[webgl_character_id]['rotate-y']);
+    const character = webgl_characters[webgl_character_id];
+    const radians_y = math_degrees_to_radians(character['rotate-y']);
     const target = webgl_get_translation(globalThis[args['type']][args['target']]);
     audio_start_at?.({
       'forwardX': Math.sin(-radians_y),
       'forwardY': 0,
       'forwardZ': Math.cos(radians_y),
       'id': args['id'],
-      'positionX': (webgl_characters[webgl_character_id]['translate-x'] - target['x']) / args['divider-x'],
-      'positionY': (webgl_characters[webgl_character_id]['translate-y'] - target['y']) / args['divider-y'],
-      'positionZ': (webgl_characters[webgl_character_id]['translate-z'] - target['z']) / args['divider-z'],
+      'positionX': (character['translate-x'] - target['x']) / args['divider-x'],
+      'positionY': (character['translate-y'] - target['y']) / args['divider-y'],
+      'positionZ': (character['translate-z'] - target['z']) / args['divider-z'],
     });
 }
 
 function webgl_billboard(id){
-    const translation = webgl_get_translation(entity_entities[id]);
+    const character = webgl_characters[webgl_character_id];
+    const entity = entity_entities[id];
+    const translation = webgl_get_translation(entity);
 
-    entity_entities[id]['rotate-y'] = 360 - math_radians_to_degrees(Math.atan2(
-      translation['z'] - webgl_characters[webgl_character_id]['camera-z'],
-      translation['x'] - webgl_characters[webgl_character_id]['camera-x'],
+    entity['rotate-y'] = 360 - math_radians_to_degrees(Math.atan2(
+      translation['z'] - character['camera-z'],
+      translation['x'] - character['camera-x'],
     ) + 1.5707963267948966);
 }
 
@@ -1960,13 +1963,14 @@ function webgl_level_unload(){
       webgl_characters[webgl_character_id]
     );
     core_object_reset(webgl_character_base_entities);
-    for(const entity in entity_entities){
-        if(entity_entities[entity]['attach-to'] === webgl_character_id
-          && entity_groups['skybox'][entity] !== true){
+    for(const id in entity_entities){
+        const entity = entity_entities[id];
+        if(entity['attach-to'] === webgl_character_id
+          && entity_groups['skybox'][id] !== true){
             const properties = {};
             Object.assign(
               properties,
-              entity_entities[entity]
+              entity
             );
             webgl_character_base_entities.push(properties);
         }
@@ -2058,11 +2062,12 @@ function webgl_logic(){
 
         if(character['collides']
           && webgl_paths[character['path-id']]?.['collision'] !== false){
-            for(const entity in entity_entities){
-                if(entity_entities[entity]['collision']){
+            for(const id in entity_entities){
+                const entity = entity_entities[id];
+                if(entity['collision']){
                     webgl_collision({
                       'collider': character,
-                      'target': entity_entities[entity],
+                      'target': entity,
                     });
                 }
             }
@@ -2132,11 +2137,12 @@ function webgl_logic(){
 function webgl_logic_entity(entity){
     const draw_range = entity['draw-range'] || webgl_properties['draw-range'];
     if(draw_range){
+        const character = webgl_characters[webgl_character_id];
         const translation = webgl_get_translation(entity);
         entity['visible'] = math_distance({
-            'x0': webgl_characters[webgl_character_id]['camera-x'],
-            'y0': webgl_characters[webgl_character_id]['camera-y'],
-            'z0': webgl_characters[webgl_character_id]['camera-z'],
+            'x0': character['camera-x'],
+            'y0': character['camera-y'],
+            'z0': character['camera-z'],
             'x1': translation['x'],
             'y1': translation['y'],
             'z1': translation['z'],
@@ -2605,15 +2611,16 @@ function webgl_pick_entity(args){
     if(color_blue !== 0
       || color_green !== 0
       || color_red !== 0){
-        for(const entity in entity_entities){
-            const entity_color = entity_entities[entity]['picking'];
+        for(const id in entity_entities){
+            const entity = entity_entities[id];
+            const entity_color = entity['picking'];
 
             if(entity_color
               && color_blue === entity_color[2]
               && color_green === entity_color[1]
               && color_red === entity_color[0]){
                 webgl_event({
-                  'parent': entity_entities[entity],
+                  'parent': entity,
                   'target': webgl_characters[webgl_character_id],
                 });
                 return true;
