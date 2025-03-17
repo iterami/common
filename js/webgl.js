@@ -1702,6 +1702,10 @@ function webgl_level_export(){
         delete entity_json['vao'];
         delete entity_json['vertices-length'];
 
+        if(entity_groups['skybox'][id] === true){
+            entity_json['groups'] = ['skybox'];
+        }
+
         json['characters'][entity_json['attach-to']]['entities'].push(entity_json);
     }
 
