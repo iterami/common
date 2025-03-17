@@ -1683,33 +1683,31 @@ function webgl_level_export(){
 
     const json = {
       ...webgl_properties,
+      'characters': {},
       'paths': {
         ...webgl_paths,
       },
     };
 
-    json['characters'] = {};
     for(const id in webgl_characters){
         if(id === webgl_character_id){
             continue;
         }
 
-        json['characters'][id] = webgl_characters[id];
-        json['characters'][id]['entities'] = [];
+        json['characters'][id] = {
+          ...webgl_characters[id],
+          'entities': [],
+        };
     }
     for(const id in entity_entities){
         const entity = entity_entities[id];
-        if(entity['attach-to'] === webgl_character_id
-          && entity_groups['skybox'][id] !== true){
+        if(entity['attach-to'] === webgl_character_id){
             continue;
         }
 
-        const entity_json = {};
-        Object.assign(
-          entity_json,
-          entity
-        );
-
+        const entity_json = {
+          ...entity,
+        };
         delete entity_json['normals'];
         delete entity_json['vao'];
         delete entity_json['vertices-length'];
