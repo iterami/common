@@ -1857,10 +1857,10 @@ function webgl_level_init(args){
     });
     webgl_cursor(webgl_properties['cursor']);
 
-    level['groups'].push(
+    level['groups'].unshift(
       'opaque',
-      'skybox',
       'transparent',
+      'skybox',
     );
     entity_group_create(level['groups']);
 
