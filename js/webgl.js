@@ -1681,36 +1681,33 @@ function webgl_level_export(){
         return;
     }
 
-    const json = {};
-    Object.assign(
-      json,
-      webgl_properties
-    );
-
-    delete json['paused'];
+    const json = {
+      ...webgl_properties,
+      'paths': {
+        ...webgl_paths,
+      },
+    };
 
     json['characters'] = {};
-    json['paths'] = {};
-
     for(const id in webgl_characters){
         if(id === webgl_character_id){
             continue;
         }
 
         json['characters'][id] = webgl_characters[id];
-        core_object_reset(json['characters'][id]['entities']);
+        json['characters'][id]['entities'] = [];
     }
-    for(const path in webgl_paths){
-        json['paths'][path] = webgl_paths[path];
-    }
+    for(const id in entity_entities){
+        const entity = entity_entities[id];
+        if(entity['attach-to'] === webgl_character_id
+          && entity_groups['skybox'][id] !== true){
+            continue;
+        }
 
-    for(const entity in entity_entities){
         const entity_json = {};
-        entity_json['id'] = entity_entities[entity]['id'];
-
         Object.assign(
           entity_json,
-          entity_entities[entity]
+          entity
         );
 
         delete entity_json['normals'];
