@@ -1688,25 +1688,15 @@ function webgl_level_export(){
         ...webgl_paths,
       },
     };
-
     for(const id in webgl_characters){
-        if(id === webgl_character_id){
-            continue;
-        }
-
         json['characters'][id] = {
           ...webgl_characters[id],
           'entities': [],
         };
     }
     for(const id in entity_entities){
-        const entity = entity_entities[id];
-        if(entity['attach-to'] === webgl_character_id){
-            continue;
-        }
-
         const entity_json = {
-          ...entity,
+          ...entity_entities[id],
         };
         delete entity_json['normals'];
         delete entity_json['vao'];
