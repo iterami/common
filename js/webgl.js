@@ -1684,10 +1684,19 @@ function webgl_level_export(){
     const json = {
       ...webgl_properties,
       'characters': {},
+      'groups': [],
       'paths': {
         ...webgl_paths,
       },
     };
+    for(const id in entity_groups){
+        if(id === '_length'
+          || id.startsWith('webgl_')){
+            continue;
+        }
+
+        json['groups'].push(id);
+    }
     for(const id in webgl_characters){
         json['characters'][id] = {
           ...webgl_characters[id],
