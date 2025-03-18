@@ -1710,6 +1710,11 @@ function webgl_level_export(){
         delete entity_json['normals'];
         delete entity_json['vao'];
         delete entity_json['vertices-length'];
+        for(const property in entity_json){
+            if(entity_json[property] === entity_info['opaque']['default'][property]){
+                delete entity_json[property];
+            }
+        }
 
         if(entity_groups['skybox'][id] === true){
             entity_json['groups'] = ['skybox'];
