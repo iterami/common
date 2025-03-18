@@ -1688,15 +1688,8 @@ function webgl_level_export(){
       'paths': {
         ...webgl_paths,
       },
+      'textures': {},
     };
-    for(const id in entity_groups){
-        if(id === '_length'
-          || id.startsWith('webgl_')){
-            continue;
-        }
-
-        json['groups'].push(id);
-    }
     for(const id in webgl_characters){
         json['characters'][id] = {
           ...webgl_characters[id],
@@ -1721,6 +1714,20 @@ function webgl_level_export(){
         }
 
         json['characters'][entity_json['attach-to']]['entities'].push(entity_json);
+    }
+    for(const id in entity_groups){
+        if(id === '_length'
+          || id.startsWith('webgl_')){
+            continue;
+        }
+
+        json['groups'].push(id);
+    }
+    for(const id in webgl_textures){
+        if(id === 'default.png'){
+            continue;
+        }
+        json['textures'][id] = uris[id];
     }
 
     return JSON.stringify(json);
