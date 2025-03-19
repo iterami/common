@@ -1724,6 +1724,13 @@ function webgl_level_export(){
         json['groups'].push(id);
         groups.push(id);
     }
+    for(const id in webgl_particles){
+        if(!json['particles']){
+            json['particles'] = {};
+        }
+
+        json['particles'][id] = webgl_particles[id];
+    }
     for(const id in webgl_paths){
         if(!json['paths']){
             json['paths'] = {};
@@ -1864,6 +1871,7 @@ function webgl_level_init(args){
         'groups': [],
         'lock': {},
         'paused': false,
+        'particles': {},
         'paths': {},
         'pointerlock': false,
         'prefabs': [],
@@ -1930,6 +1938,10 @@ function webgl_level_init(args){
         );
     }
 
+    Object.assign(
+      webgl_particles,
+      level['particles']
+    );
     Object.assign(
       webgl_paths,
       level['paths']
