@@ -1282,9 +1282,11 @@ function webgl_entity_create(args){
 }
 
 function webgl_entity_init(entity){
-    webgl_texture_init({
-      'id': entity['texture'],
-    });
+    if(!webgl_textures[entity['texture']]){
+        webgl_texture_init({
+          'id': entity['texture'],
+        });
+    }
 
     entity['vertices-length'] = entity['vertices'].length / 3;
     entity['vertex-colors'] = webgl_vertexcolorarray({
