@@ -2279,7 +2279,7 @@ function webgl_logic_entity(entity){
       'id': entity['id'],
     });
     if(entity['attach-to']){
-        if(entity_groups['skybox'][entity] !== true){
+        if(entity_groups['skybox'][entity['id']] !== true){
             const target = globalThis[entity['attach-type']][entity['attach-to']];
             math_matrix_rotate({
               'dimensions': [
