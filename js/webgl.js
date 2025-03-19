@@ -1099,73 +1099,6 @@ function webgl_entity_alpha(args){
     }
 }
 
-function webgl_entity_buffer(entity){
-    if(entity['picking'] === true){
-        entity['picking'] = [
-          core_round({
-            'decimals': 3,
-            'number': (entity_id_count % 255) / 255,
-          }),
-          core_round({
-            'decimals': 3,
-            'number': Math.floor(entity_id_count / 255) / 255,
-          }),
-          core_round({
-            'decimals': 3,
-            'number': Math.floor(entity_id_count / 65025) / 255,
-          }),
-        ];
-    }
-
-    const pickData = [];
-    const picking = entity['picking'] || [0, 0, 0];
-    const texture_align = entity['texture-align'];
-    const textureData = [];
-    const half_length = texture_align.length / 2;
-    for(let i = 0; i < entity['vertices-length']; i++){
-        pickData.push(...picking);
-        const align = i < half_length
-          ? i * 2
-          : (i % half_length) * 2;
-        textureData.push(
-          texture_align[align] * entity['texture-x'],
-          texture_align[align + 1] * entity['texture-y']
-        );
-    }
-
-    webgl.bindVertexArray(entity['vao']);
-
-    webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_vertexColor'],
-      'data': entity['vertex-colors'],
-      'size': 4,
-    });
-    const normals = [];
-    for(let i = 0; i < entity['vertices-length']; i++){
-        normals.push(...entity['normals']);
-    }
-    webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_vertexNormal'],
-      'data': normals,
-      'size': 3,
-    });
-    webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_pickColor'],
-      'data': pickData,
-      'size': 3,
-    });
-    webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_texturePosition'],
-      'data': textureData,
-      'size': 2,
-    });
-    webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_vertexPosition'],
-      'data': entity['vertices'],
-      'size': 3,
-    });
-}
-
 function webgl_entity_create(args){
     args = core_args({
       'args': args,
@@ -1269,23 +1202,85 @@ function webgl_entity_init(entity){
         });
     }
 
-    entity['vertices-length'] = entity['vertices'].length / 3;
-    entity['vertex-colors'] = webgl_vertexcolorarray({
-      'colors': entity['vertex-colors'],
-      'vertexcount': entity['vertices-length'],
+    webgl_entity_alpha({
+      'alpha': entity['alpha'],
+      'id': entity['id'],
     });
     entity['normals'] = webgl_normals({
       'rotate-x': entity['rotate-x'],
       'rotate-y': entity['rotate-y'],
       'rotate-z': entity['rotate-z'],
     });
-    entity['vao'] = webgl.createVertexArray();
-
-    webgl_entity_alpha({
-      'alpha': entity['alpha'],
-      'id': entity['id'],
+    entity['vertices-length'] = entity['vertices'].length / 3;
+    entity['vertex-colors'] = webgl_vertexcolorarray({
+      'colors': entity['vertex-colors'],
+      'vertexcount': entity['vertices-length'],
     });
-    webgl_entity_buffer(entity);
+
+    if(entity['picking'] === true){
+        entity['picking'] = [
+          core_round({
+            'decimals': 3,
+            'number': (entity_id_count % 255) / 255,
+          }),
+          core_round({
+            'decimals': 3,
+            'number': Math.floor(entity_id_count / 255) / 255,
+          }),
+          core_round({
+            'decimals': 3,
+            'number': Math.floor(entity_id_count / 65025) / 255,
+          }),
+        ];
+    }
+    const pickData = [];
+    const picking = entity['picking'] || [0, 0, 0];
+    const texture_align = entity['texture-align'];
+    const textureData = [];
+    const half_length = texture_align.length / 2;
+    for(let i = 0; i < entity['vertices-length']; i++){
+        pickData.push(...picking);
+        const align = i < half_length
+          ? i * 2
+          : (i % half_length) * 2;
+        textureData.push(
+          texture_align[align] * entity['texture-x'],
+          texture_align[align + 1] * entity['texture-y']
+        );
+    }
+
+    entity['vao'] = webgl.createVertexArray();
+    webgl.bindVertexArray(entity['vao']);
+
+    webgl_buffer_set({
+      'attribute': webgl_shader_attributes['vec_vertexColor'],
+      'data': entity['vertex-colors'],
+      'size': 4,
+    });
+    const normals = [];
+    for(let i = 0; i < entity['vertices-length']; i++){
+        normals.push(...entity['normals']);
+    }
+    webgl_buffer_set({
+      'attribute': webgl_shader_attributes['vec_vertexNormal'],
+      'data': normals,
+      'size': 3,
+    });
+    webgl_buffer_set({
+      'attribute': webgl_shader_attributes['vec_pickColor'],
+      'data': pickData,
+      'size': 3,
+    });
+    webgl_buffer_set({
+      'attribute': webgl_shader_attributes['vec_texturePosition'],
+      'data': textureData,
+      'size': 2,
+    });
+    webgl_buffer_set({
+      'attribute': webgl_shader_attributes['vec_vertexPosition'],
+      'data': entity['vertices'],
+      'size': 3,
+    });
 }
 
 function webgl_entity_normals(entity){
