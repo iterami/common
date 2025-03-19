@@ -3665,10 +3665,8 @@ function webgl_texture_animate(id){
     }
 
     const image = core_images[texture['image']];
-    const canvas = core_elements['texture-' + id].getContext('2d');
-    const height = image['height'];
-    const width = image['width'];
 
+    const width = image['width'];
     let offset_x = texture['offset-x'] + texture['speed-x'];
     if(offset_x <= 0){
         offset_x = width;
@@ -3677,6 +3675,8 @@ function webgl_texture_animate(id){
         offset_x = 0;
     }
     texture['offset-x'] = offset_x;
+
+    const height = image['height'];
     let offset_y = texture['offset-y'] + texture['speed-y'];
     if(offset_y <= 0){
         offset_y = height;
@@ -3686,6 +3686,7 @@ function webgl_texture_animate(id){
     }
     texture['offset-y'] = offset_y;
 
+    const canvas = core_elements['texture-' + id].getContext('2d');
     canvas.save();
     canvas.fillStyle = canvas.createPattern(
       image,
@@ -3792,10 +3793,10 @@ function webgl_texture_init(args){
         texture['ready'] = true;
     }
 
-    const texture_gl = webgl.createTexture();
+    texture['gl'] = webgl.createTexture();
     webgl.bindTexture(
       webgl.TEXTURE_2D,
-      texture_gl
+      texture['gl']
     );
     webgl.texImage2D(
       webgl.TEXTURE_2D,
@@ -3816,7 +3817,6 @@ function webgl_texture_init(args){
       webgl.NEAREST_MIPMAP_LINEAR
     );
     webgl.generateMipmap(webgl.TEXTURE_2D);
-    texture['gl'] = texture_gl;
 
     if(texture['ready'] === true){
         webgl_texture_animate(args['id']);
