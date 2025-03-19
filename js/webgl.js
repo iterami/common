@@ -625,23 +625,6 @@ function webgl_collision(args){
     }
 }
 
-function webgl_context(element){
-    return element.getContext(
-      'webgl2',
-      {
-        'alpha': false,
-        'antialias': true,
-        'depth': true,
-        'desynchronized': false,
-        'failIfMajorPerformanceCaveat': false,
-        'powerPreference': 'low-power',
-        'premultipliedAlpha': false,
-        'preserveDrawingBuffer': false,
-        'stencil': false,
-      }
-    );
-}
-
 function webgl_context_lost(event){
     event.preventDefault();
     core_interval_pause_all();
@@ -1506,7 +1489,20 @@ function webgl_init(){
       webgl_context_restored,
       false
     );
-    webgl = webgl_context(canvas);
+    webgl = canvas.getContext(
+      'webgl2',
+      {
+        'alpha': false,
+        'antialias': true,
+        'depth': true,
+        'desynchronized': false,
+        'failIfMajorPerformanceCaveat': false,
+        'powerPreference': 'low-power',
+        'premultipliedAlpha': false,
+        'preserveDrawingBuffer': false,
+        'stencil': false,
+      }
+    );
 
     math_matrices['cache'] = math_matrix_create();
     math_matrices['camera'] = math_matrix_create();

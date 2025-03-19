@@ -1,14 +1,5 @@
 'use strict';
 
-function canvas_context(element){
-    return element.getContext(
-      '2d',
-      {
-        'alpha': false,
-      }
-    );
-}
-
 function canvas_context_lost(event){
     event.preventDefault();
     core_interval_pause_all();
@@ -159,7 +150,12 @@ function canvas_init(args){
       canvas_context_restored,
       false
     );
-    canvas = canvas_context(canvas_element);
+    canvas = canvas_element.getContext(
+      '2d',
+      {
+        'alpha': false,
+      }
+    );
     canvas.canvas.style.cursor = args['cursor'];
 
     globalThis.onresize = canvas_resize;
