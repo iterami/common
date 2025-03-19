@@ -1684,12 +1684,28 @@ function webgl_level_export(){
     const json = {
       ...webgl_properties,
       'characters': {},
-      'groups': [],
-      'paths': {
-        ...webgl_paths,
-      },
-      'textures': {},
     };
+    const groups = ['skybox'];
+    for(const id in entity_groups){
+        if(['_length', 'opaque', 'skybox', 'transparent'].includes(id)
+          || id.startsWith('webgl_')){
+            continue;
+        }
+
+        if(!json['groups']){
+            json['groups'] = [];
+        }
+
+        json['groups'].push(id);
+        groups.push(id);
+    }
+    for(const id in webgl_paths){
+        if(!json['paths']){
+            json['paths'] = {};
+        }
+
+        json['paths'][id] = webgl_paths[id];
+    }
     for(const id in webgl_characters){
         json['characters'][id] = {
           ...webgl_characters[id],
@@ -1709,24 +1725,29 @@ function webgl_level_export(){
             }
         }
 
-        if(entity_groups['skybox'][id] === true){
-            entity_json['groups'] = ['skybox'];
+        for(const group in groups){
+            if(entity_groups[groups[group]][id] !== true){
+                continue;
+            }
+
+            if(!entity_json['groups']){
+                entity_json['groups'] = [];
+            }
+
+            entity_json['groups'].push(groups[group]);
         }
 
         json['characters'][entity_json['attach-to']]['entities'].push(entity_json);
-    }
-    for(const id in entity_groups){
-        if(id === '_length'
-          || id.startsWith('webgl_')){
-            continue;
-        }
-
-        json['groups'].push(id);
     }
     for(const id in webgl_textures){
         if(id === 'default.png'){
             continue;
         }
+
+        if(!json['textures']){
+            json['textures'] = {};
+        }
+
         json['textures'][id] = uris[id];
     }
 
