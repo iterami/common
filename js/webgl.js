@@ -3507,7 +3507,8 @@ function webgl_resize(){
       math_matrices['perspective']
     );
 
-    if(core_menu_open){
+    if(core_menu_open
+      && webgl_textures[webgl_default_texture]){
         webgl_draw();
     }
 }
