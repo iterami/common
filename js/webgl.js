@@ -628,7 +628,6 @@ function webgl_collision(args){
 function webgl_context_lost(event){
     event.preventDefault();
     core_interval_pause_all();
-    webgl_context_valid = false;
     webgl = 0;
 }
 
@@ -639,7 +638,6 @@ function webgl_context_restored(){
     for(const entity in entity_entities){
         webgl_entity_init(entity_entities[entity]);
     }
-    webgl_context_valid = true;
 
     if(core_menu_open){
         webgl_draw();
@@ -1004,8 +1002,7 @@ function webgl_cursor(cursor){
 }
 
 function webgl_draw(){
-    if(!webgl_context_valid
-      || webgl === 0){
+    if(webgl === 0){
         return;
     }
 
@@ -2054,8 +2051,7 @@ function webgl_level_unload(){
 }
 
 function webgl_logic(){
-    if(!webgl_context_valid
-      || webgl === 0){
+    if(webgl === 0){
         return;
     }
 
@@ -4128,7 +4124,6 @@ globalThis.webgl_character_base_properties = {};
 globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
-globalThis.webgl_context_valid = true;
 globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
