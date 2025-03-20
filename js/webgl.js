@@ -630,10 +630,10 @@ function webgl_context_lost(event){
     core_interval_pause_all();
     webgl_context_valid = false;
     webgl = 0;
-    core_object_reset(webgl_textures);
 }
 
 function webgl_context_restored(){
+    core_object_reset(webgl_textures);
     webgl_init();
     webgl_uniform_update();
     for(const entity in entity_entities){
