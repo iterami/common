@@ -492,25 +492,26 @@ function webgl_character_strafe(character){
       || core_mouse['down-2'];
 }
 
-function webgl_clearcolor_set(args){
+function webgl_color_set(args){
     args = core_args({
       'args': args,
       'defaults': {
         'blue': 0,
         'green': 0,
         'red': 0,
+        'type': 'clear',
       },
     });
 
-    webgl_properties['clearcolor-blue'] = args['blue'];
-    webgl_properties['clearcolor-green'] = args['green'];
-    webgl_properties['clearcolor-red'] = args['red'];
-    webgl.clearColor(
-      webgl_properties['clearcolor-red'],
-      webgl_properties['clearcolor-green'],
-      webgl_properties['clearcolor-blue'],
-      1
-    );
+    webgl_properties[args['type'] + '-color'] = [args['red'], args['green'], args['blue']];
+    if(args['type'] === 'clear'){
+        webgl.clearColor(
+          args['red'],
+          args['green'],
+          args['blue'],
+          1
+        );
+    }
 }
 
 // Required args: collider, target
@@ -1843,20 +1844,14 @@ function webgl_level_init(args){
     const level = core_args({
       'args': args['json'],
       'defaults': {
-        'ambient-blue': 1,
-        'ambient-green': 1,
-        'ambient-red': 1,
+        'ambient-color': [1, 1, 1],
         'camera-zoom': 25,
         'camera-zoom-max': 50,
         'camera-zoom-min': 0,
         'characters': [],
-        'clearcolor-blue': 0,
-        'clearcolor-green': 0,
-        'clearcolor-red': 0,
+        'clear-color': [0, 0, 0],
         'cursor': 'pointer',
-        'directional-blue': 1,
-        'directional-green': 1,
-        'directional-red': 1,
+        'directional-color': [1, 1, 1],
         'directional-state': true,
         'directional-vector': [0, 1, 0],
         'draw-range': false,
@@ -1884,19 +1879,13 @@ function webgl_level_init(args){
     Object.assign(
       webgl_properties,
       {
-        'ambient-blue': level['ambient-blue'],
-        'ambient-green': level['ambient-green'],
-        'ambient-red': level['ambient-red'],
+        'ambient-color': level['ambient-color'],
         'camera-zoom': level['camera-zoom'],
         'camera-zoom-max': level['camera-zoom-max'],
         'camera-zoom-min': level['camera-zoom-min'],
-        'clearcolor-blue': level['clearcolor-blue'],
-        'clearcolor-green': level['clearcolor-green'],
-        'clearcolor-red': level['clearcolor-red'],
+        'clear-color': level['clear-color'],
         'cursor': level['cursor'],
-        'directional-blue': level['directional-blue'],
-        'directional-green': level['directional-green'],
-        'directional-red': level['directional-red'],
+        'directional-color': level['directional-color'],
         'directional-state': level['directional-state'],
         'directional-vector': level['directional-vector'],
         'draw-range': level['draw-range'],
@@ -1914,10 +1903,10 @@ function webgl_level_init(args){
       }
     );
 
-    webgl_clearcolor_set({
-      'blue': webgl_properties['clearcolor-blue'],
-      'green': webgl_properties['clearcolor-green'],
-      'red': webgl_properties['clearcolor-red'],
+    webgl_color_set({
+      'blue': webgl_properties['clear-color'][2],
+      'green': webgl_properties['clear-color'][1],
+      'red': webgl_properties['clear-color'][0],
     });
     webgl_cursor(webgl_properties['cursor']);
 
@@ -4002,27 +3991,21 @@ function webgl_tiles(args){
 }
 
 function webgl_uniform_update(){
-    webgl.uniform3f(
+    webgl.uniform3fv(
       webgl_shader_uniforms['ambient-color'],
-      webgl_properties['ambient-red'],
-      webgl_properties['ambient-green'],
-      webgl_properties['ambient-blue']
+      webgl_properties['ambient-color']
     );
-    webgl.uniform3f(
+    webgl.uniform3fv(
       webgl_shader_uniforms['clear-color'],
-      webgl_properties['clearcolor-red'],
-      webgl_properties['clearcolor-green'],
-      webgl_properties['clearcolor-blue']
+      webgl_properties['clear-color']
     );
     webgl.uniform1i(
       webgl_shader_uniforms['directional'],
       webgl_properties['directional-state']
     );
-    webgl.uniform3f(
+    webgl.uniform3fv(
       webgl_shader_uniforms['directional-color'],
-      webgl_properties['directional-red'],
-      webgl_properties['directional-green'],
-      webgl_properties['directional-blue']
+      webgl_properties['directional-color']
     );
     webgl.uniform3fv(
       webgl_shader_uniforms['directional-vector'],
