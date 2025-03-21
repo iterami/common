@@ -522,6 +522,8 @@ function webgl_color_set(args){
           1
         );
     }
+
+    webgl_uniform_update();
 }
 
 // Required args: collider, target
@@ -1913,11 +1915,6 @@ function webgl_level_init(args){
       }
     );
 
-    webgl_color_set({
-      'blue': webgl_properties['clear-color'][2],
-      'green': webgl_properties['clear-color'][1],
-      'red': webgl_properties['clear-color'][0],
-    });
     webgl_cursor(webgl_properties['cursor']);
 
     level['groups'].unshift(
@@ -1974,7 +1971,11 @@ function webgl_level_init(args){
         globalThis[level['prefabs'][prefab]['type']]?.(level['prefabs'][prefab]['properties']);
     }
 
-    webgl_uniform_update();
+    webgl_color_set({
+      'blue': webgl_properties['clear-color'][2],
+      'green': webgl_properties['clear-color'][1],
+      'red': webgl_properties['clear-color'][0],
+    });
     globalThis['repo_level_load']?.();
 
     if(core_menu_open){
