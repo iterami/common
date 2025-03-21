@@ -496,19 +496,29 @@ function webgl_color_set(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'blue': 0,
-        'green': 0,
-        'red': 0,
+        'blue': false,
+        'green': false,
+        'red': false,
         'type': 'clear',
       },
     });
 
-    webgl_properties[args['type'] + '-color'] = [args['red'], args['green'], args['blue']];
+    const color = webgl_properties[args['type'] + '-color'];
+    if(args['blue'] !== false){
+        color[2] = args['blue'];
+    }
+    if(args['green'] !== false){
+        color[1] = args['green'];
+    }
+    if(args['red'] !== false){
+        color[0] = args['red'];
+    }
+
     if(args['type'] === 'clear'){
         webgl.clearColor(
-          args['red'],
-          args['green'],
-          args['blue'],
+          color[0],
+          color[1],
+          color[2],
           1
         );
     }
