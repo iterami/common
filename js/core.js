@@ -498,7 +498,7 @@ function core_init(){
       'parent': core_elements['core-ui'],
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a><hr>'
+        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>'
           + '<span id=core-menu-tabs></span><div id=core-menu-tabcontent></div>'
           + '<button id=storage-save type=button>Save All Settings</button><button id=mobile-add type=button>Mobile</button><br>',
         'style': 'display:none',
@@ -1059,7 +1059,7 @@ function core_repo_init(args){
           'parent': document.getElementById('core-menu-title'),
           'properties': {
             'id': 'core-menu-info',
-            'innerHTML': '<hr>' + args['info'],
+            'innerHTML': args['info'],
           },
           'todo': 'after',
         });

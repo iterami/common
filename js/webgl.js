@@ -2294,7 +2294,6 @@ function webgl_logic_entity(entity){
           'data': entity['vertices'],
           'size': 3,
         });
-
     }
 
     math_matrix_copy({
