@@ -2216,6 +2216,20 @@ function webgl_logic_entity(entity){
         entity['visible'] = true;
     }
 
+    const target = globalThis[entity['attach-type']][entity['attach-to']];
+    if(target){
+        if(entity_groups['skybox'][entity['id']]){
+            entity['translate-x'] = target['camera-x'];
+            entity['translate-y'] = target['camera-y'];
+            entity['translate-z'] = target['camera-z'];
+
+        }else{
+            entity['translate-x'] = target['translate-x'];
+            entity['translate-y'] = target['translate-y'];
+            entity['translate-z'] = target['translate-z'];
+        }
+    }
+
     if(entity['event-range'] > 0){
         const event_position = webgl_get_translation(entity);
 
@@ -2241,22 +2255,6 @@ function webgl_logic_entity(entity){
                 }
             }
         }
-    }
-
-    const target = globalThis[entity['attach-type']][entity['attach-to']];
-    if(target){
-        let x = target['translate-x'];
-        let y = target['translate-y'];
-        let z = target['translate-z'];
-        if(entity_groups['skybox'][entity['id']]){
-            x = target['camera-x'];
-            y = target['camera-y'];
-            z = target['camera-z'];
-        }
-
-        entity['translate-x'] = x;
-        entity['translate-y'] = y;
-        entity['translate-z'] = z;
     }
 
     const old_rotate_x = entity['rotate-x'];
