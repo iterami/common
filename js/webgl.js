@@ -2594,14 +2594,18 @@ function webgl_path_use(args){
       },
     });
 
+    const path = webgl_paths[args['path-id']];
+    if(!path){
+        return;
+    }
+
     const character = webgl_characters[args['id']];
     character['path-id'] = args['path-id'];
 
-    if(args['use-path-properties']
-      && webgl_paths[args['path-id']]){
-        character['path-direction'] = webgl_paths[args['path-id']]['direction'] || 1;
-        character['path-end'] = webgl_paths[args['path-id']]['end'] || '';
-        character['path-point'] = webgl_paths[args['path-id']]['point'] || 0;
+    if(args['use-path-properties']){
+        character['path-direction'] = path['direction'] || 1;
+        character['path-end'] = path['end'] || '';
+        character['path-point'] = path['point'] || 0;
     }
 }
 
