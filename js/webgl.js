@@ -2287,13 +2287,6 @@ function webgl_logic_entity(entity){
 
     if(entity['particle']){
         webgl_logic_particle(entity);
-
-        webgl.bindVertexArray(entity['vao']);
-        webgl_buffer_set({
-          'attribute': webgl_shader_attributes['vec_vertexPosition'],
-          'data': entity['vertices'],
-          'size': 3,
-        });
     }
 
     math_matrix_copy({
@@ -2377,6 +2370,13 @@ function webgl_logic_particle(entity){
           'wrap': true,
         });
     }
+
+    webgl.bindVertexArray(entity['vao']);
+    webgl_buffer_set({
+      'attribute': webgl_shader_attributes['vec_vertexPosition'],
+      'data': vertices,
+      'size': 3,
+    });
 }
 
 // Required args: move
