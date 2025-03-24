@@ -1931,10 +1931,9 @@ function webgl_level_init(args){
         );
     }
 
-    Object.assign(
-      webgl_particles,
-      level['particles']
-    );
+    for(const id in level['particles']){
+        webgl_particle_create(id, level['particles'][id]);
+    }
     Object.assign(
       webgl_paths,
       level['paths']
@@ -2427,6 +2426,26 @@ function webgl_normals(args){
         'number': Math.sin(radians_x) * cos_y,
       }),
     ];
+}
+
+function webgl_particle_create(id, args){
+    webgl_particles[id] = {
+      ...core_args({
+        'args': args,
+        'defaults': {
+          'randomize': true,
+          'speed-x': 0,
+          'speed-y': 0,
+          'speed-z': 0,
+          'x-max': 100,
+          'x-min': -100,
+          'y-max': 100,
+          'y-min': -100,
+          'z-max': 100,
+          'z-min': -100,
+        },
+      }),
+    };
 }
 
 function webgl_path_move(character){
@@ -3275,36 +3294,15 @@ function webgl_primitive_particle(args){
       'args': args,
       'defaults': {
         'character': webgl_character_id,
-        'draw-mode': 'POINTS',
         'entities': [],
         'groups': [],
+        'particle': {},
         'prefix': entity_id_count,
-        'randomize': true,
-        'speed-x': 0,
-        'speed-y': 0,
-        'speed-z': 0,
-        'x-max': 100,
-        'x-min': -100,
-        'y-max': 100,
-        'y-min': -100,
-        'z-max': 100,
-        'z-min': -100,
       },
     });
 
-    webgl_particles[args['id']] = {
-      'draw-mode': args['draw-mode'],
-      'randomize': args['randomize'],
-      'speed-x': args['speed-x'],
-      'speed-y': args['speed-y'],
-      'speed-z': args['speed-z'],
-      'x-max': args['x-max'],
-      'x-min': args['x-min'],
-      'y-max': args['y-max'],
-      'y-min': args['y-min'],
-      'z-max': args['z-max'],
-      'z-min': args['z-min'],
-    };
+    const particle = args['particle'];
+    webgl_particle_create(args['id'], particle);
 
     for(const entity in args['entities']){
         const vertices = [];
@@ -3312,9 +3310,9 @@ function webgl_primitive_particle(args){
         delete args['entities'][entity]['vertex-repeat'];
         for(let vertex = 0; vertex <= vertexcount; vertex++){
             vertices.push(
-              args['x-min'] + Math.random() * (args['x-max'] - args['x-min']),
-              args['y-min'] + Math.random() * (args['y-max'] - args['y-min']),
-              args['z-min'] + Math.random() * (args['z-max'] - args['z-min'])
+              particle['x-min'] + Math.random() * (particle['x-max'] - particle['x-min']),
+              particle['y-min'] + Math.random() * (particle['y-max'] - particle['y-min']),
+              particle['z-min'] + Math.random() * (particle['z-max'] - particle['z-min'])
             );
         }
 
@@ -3326,7 +3324,6 @@ function webgl_primitive_particle(args){
               'attach-to': args['character'],
               'attach-type': 'webgl_characters',
               'collision': false,
-              'draw-mode': webgl_particles[args['id']]['draw-mode'],
               'particle': args['id'],
               'vertex-colors': args['entities'][entity]['vertex-colors'] || webgl_vertexcolorarray({
                 'vertexcount': 1,
