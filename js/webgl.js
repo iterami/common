@@ -1945,10 +1945,7 @@ function webgl_level_init(args){
         webgl_character_init({
           'collides': true,
           'controls': 'rpg',
-          'entities': [],
-          'id': webgl_character_id,
           'level': -1,
-          'speed': 1,
         });
 
     }else if(core_type(args['character']) === 'object'){
