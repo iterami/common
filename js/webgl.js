@@ -203,11 +203,11 @@ function webgl_character_init(args){
         'life-max': 1,
         'lives': -1,
         'lock': {},
+        'model': false,
         'path-direction': 1,
         'path-end': '',
         'path-id': '',
         'path-point': 0,
-        'randomize': false,
         'reticle': '#fff',
         'scale-x': 1,
         'scale-y': 1,
@@ -222,10 +222,10 @@ function webgl_character_init(args){
     });
 
     const entities = args['entities'];
-    const randomize = args['randomize'];
+    const model = args['model'];
     const is_static = args['static'];
     delete args['entities'];
-    delete args['randomize'];
+    delete args['model'];
     delete args['static'];
 
     webgl_characters[args['id']] = {
@@ -299,7 +299,7 @@ function webgl_character_init(args){
         });
     }
 
-    if(randomize){
+    if(model){
         const xz = webgl_characters[args['id']]['collide-range-xz'] * 2;
 
         webgl_primitive_cuboid({
@@ -312,6 +312,7 @@ function webgl_character_init(args){
           'size-x': xz,
           'size-y': webgl_characters[args['id']]['collide-range-y'] * 2,
           'size-z': xz,
+          ...model,
         });
     }
 
