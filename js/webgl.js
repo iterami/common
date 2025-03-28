@@ -2884,39 +2884,6 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    if(args['front']['exclude'] !== true){
-        const properties = {
-          ...prefab_args,
-          'attach-to': args['character'],
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'] + half_size_z,
-          'id': args['prefix'] + '-front',
-          'rotate-x': 90,
-          'vertex-colors': webgl_vertexcolorarray({
-            'colors': args['front']['vertex-colors'],
-          }),
-          'vertices': [
-            vertices_size_x, 0, -vertices_size_y,
-            -vertices_size_x, 0, -vertices_size_y,
-            -vertices_size_x, 0, vertices_size_y,
-            vertices_size_x, 0, vertices_size_y,
-          ],
-        };
-        Object.assign(
-          properties,
-          args['all'],
-          args['front']
-        );
-        webgl_entity_create({
-          'entities': [
-            properties,
-          ],
-          'groups': args['groups'],
-        });
-    }
-
     if(args['back']['exclude'] !== true){
         const properties = {
           ...prefab_args,
@@ -2924,9 +2891,9 @@ function webgl_primitive_cuboid(args){
           'attach-type': 'webgl_characters',
           'attach-x': prefab_args['translate-x'],
           'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'] - half_size_z,
+          'attach-z': prefab_args['translate-z'] + half_size_z,
           'id': args['prefix'] + '-back',
-          'rotate-x': 270,
+          'rotate-x': 90,
           'vertex-colors': webgl_vertexcolorarray({
             'colors': args['back']['vertex-colors'],
           }),
@@ -2941,6 +2908,39 @@ function webgl_primitive_cuboid(args){
           properties,
           args['all'],
           args['back']
+        );
+        webgl_entity_create({
+          'entities': [
+            properties,
+          ],
+          'groups': args['groups'],
+        });
+    }
+
+    if(args['front']['exclude'] !== true){
+        const properties = {
+          ...prefab_args,
+          'attach-to': args['character'],
+          'attach-type': 'webgl_characters',
+          'attach-x': prefab_args['translate-x'],
+          'attach-y': prefab_args['translate-y'],
+          'attach-z': prefab_args['translate-z'] - half_size_z,
+          'id': args['prefix'] + '-front',
+          'rotate-x': 270,
+          'vertex-colors': webgl_vertexcolorarray({
+            'colors': args['front']['vertex-colors'],
+          }),
+          'vertices': [
+            vertices_size_x, 0, -vertices_size_y,
+            -vertices_size_x, 0, -vertices_size_y,
+            -vertices_size_x, 0, vertices_size_y,
+            vertices_size_x, 0, vertices_size_y,
+          ],
+        };
+        Object.assign(
+          properties,
+          args['all'],
+          args['front']
         );
         webgl_entity_create({
           'entities': [
