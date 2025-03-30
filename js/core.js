@@ -1164,7 +1164,9 @@ function core_requestpointerlock(element){
         return;
     }
 
-    element.requestPointerLock();
+    element.requestPointerLock({
+      unadjustedMovement: true,
+    });
 }
 
 // Required args: number
