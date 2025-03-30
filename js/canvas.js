@@ -189,6 +189,8 @@ function canvas_init(args){
 }
 
 function canvas_resize(){
+    const draw = canvas_properties['width-half'];
+
     canvas_properties['height'] = globalThis.innerHeight;
     canvas_properties['height-half'] = canvas_properties['height'] / 2;
     canvas.canvas.height = canvas_properties['height'];
@@ -203,7 +205,7 @@ function canvas_resize(){
     );
 
     globalThis['repo_resizelogic']?.();
-    if(canvas !== 0){
+    if(draw){
         canvas_draw();
     }
 }
