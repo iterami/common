@@ -1791,7 +1791,7 @@ function webgl_level_export(){
             json['textures'] = {};
         }
 
-        json['textures'][id] = uris[id];
+        json['textures'][id] = webgl_uris[id];
     }
 
     return JSON.stringify(json);
@@ -1927,7 +1927,7 @@ function webgl_level_init(args){
 
     if(level['textures'] !== false){
         Object.assign(
-          uris,
+          webgl_uris,
           level['textures']
         );
     }
@@ -3748,7 +3748,7 @@ function webgl_texture_init(args){
         }
         core_image({
           'id': image,
-          'src': uris[image],
+          'src': webgl_uris[image],
           'todo': function(){
               webgl_texture_init({
                 'id': args['id'],
@@ -4105,10 +4105,14 @@ function webgl_vertexcolorarray(args){
 }
 
 globalThis.webgl_default_texture = 'default.png';
+globalThis.webgl_uris = globalThis.uris || {
+  [webgl_default_texture]: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
+};
 core_image({
   'id': webgl_default_texture,
-  'src': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
+  'src': webgl_uris[webgl_default_texture],
 });
+delete globalThis.uris;
 globalThis.webgl = 0;
 globalThis.webgl_character_base_entities = [];
 globalThis.webgl_character_base_properties = {};
