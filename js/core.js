@@ -1547,6 +1547,7 @@ globalThis.core_keys = {};
 globalThis.core_menu_block_events = true;
 globalThis.core_menu_lock = false;
 globalThis.core_menu_open = false;
+globalThis.core_mobile = 'ontouchstart' in globalThis;
 globalThis.core_mode = 0;
 globalThis.core_mouse = {};
 globalThis.core_repo_title = '';
