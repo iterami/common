@@ -1061,7 +1061,7 @@ function webgl_draw_entity(entity){
       entity['point-size']
     );
     webgl.uniformMatrix4fv(
-      webgl_shader_uniforms['mat_cameraMatrix'],
+      webgl_shader_uniforms['cameraMatrix'],
       false,
       math_matrices[entity['id']]
     );
@@ -1264,7 +1264,7 @@ function webgl_entity_init(entity){
     webgl.bindVertexArray(entity['vao']);
 
     webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_vertexColor'],
+      'attribute': webgl_shader_attributes['vertexColor'],
       'data': entity['vertex-colors'],
       'size': 4,
     });
@@ -1273,22 +1273,22 @@ function webgl_entity_init(entity){
         normals.push(...entity['normals']);
     }
     webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_vertexNormal'],
+      'attribute': webgl_shader_attributes['vertexNormal'],
       'data': normals,
       'size': 3,
     });
     webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_pickColor'],
+      'attribute': webgl_shader_attributes['pickColor'],
       'data': pickData,
       'size': 3,
     });
     webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_texturePosition'],
+      'attribute': webgl_shader_attributes['texturePosition'],
       'data': textureData,
       'size': 2,
     });
     webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_vertexPosition'],
+      'attribute': webgl_shader_attributes['vertexPosition'],
       'data': entity['vertices'],
       'size': 3,
     });
@@ -1316,7 +1316,7 @@ function webgl_entity_normals(entity){
     }
     webgl.bindVertexArray(entity['vao']);
     webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_vertexNormal'],
+      'attribute': webgl_shader_attributes['vertexNormal'],
       'data': normals,
       'size': 3,
     });
@@ -1375,7 +1375,7 @@ function webgl_entity_scale(args){
     if(scaled && args['todo']){
         webgl.bindVertexArray(entity['vao']);
         webgl_buffer_set({
-          'attribute': webgl_shader_attributes['vec_vertexPosition'],
+          'attribute': webgl_shader_attributes['vertexPosition'],
           'data': entity['vertices'],
           'size': 3,
         });
@@ -1550,6 +1550,8 @@ function webgl_init(){
         'event-limit': false,
         'event-range': false,
         'event-todo': [],
+        'light-color': [1, 1, 1,],
+        'light-range': 0,
         'normals': [],
         'particle': false,
         'picking': false,
@@ -1579,27 +1581,27 @@ function webgl_init(){
       fragment,
       `#version 300 es
 precision mediump float;
-uniform bool fog;
-uniform float float_fogDensity;
-uniform bool picking;
-uniform sampler2D sampler;
-uniform vec3 vec_clearColor;
-in vec2 vec_textureCoord;
-in vec4 vec_fragmentColor;
-in vec4 vec_lighting;
-in vec4 vec_position;
+in vec2 textureCoord;
+in vec4 fragmentColor;
+in vec4 lighting;
+in vec4 position;
 out vec4 fragColor;
+uniform bool fog;
+uniform bool picking;
+uniform float fogDensity;
+uniform sampler2D sampler;
+uniform vec3 clearColor;
 void main(void){
     if(picking){
-        fragColor = vec_fragmentColor;
+        fragColor = fragmentColor;
     }else{
-        fragColor = vec_fragmentColor * vec_lighting * texture(sampler, vec_textureCoord);
+        fragColor = fragmentColor * lighting * texture(sampler, textureCoord);
         if(fog){
-            float distance = length(vec_position.xyz);
+            float distance = length(position.xyz);
             fragColor.rgb = vec3(mix(
-              vec_clearColor,
+              clearColor,
               fragColor.rgb,
-              clamp(exp(float_fogDensity * distance * -distance), 0.0, 1.0)
+              clamp(exp(fogDensity * distance * -distance), 0.0, 1.0)
             ));
         }
     }
@@ -1610,39 +1612,51 @@ void main(void){
     webgl.shaderSource(
       vertex,
       `#version 300 es
-in vec4 vec_pickColor;
-in vec2 vec_texturePosition;
-in vec3 vec_vertexNormal;
-in vec4 vec_vertexColor;
-in vec3 vec_vertexPosition;
-uniform float alpha;
-uniform float pointSize;
+in vec2 texturePosition;
+in vec3 vertexNormal;
+in vec3 vertexPosition;
+in vec4 pickColor;
+in vec4 vertexColor;
+out vec2 textureCoord;
+out vec4 fragmentColor;
+out vec4 lighting;
+out vec4 position;
 uniform bool directional;
-uniform mat4 mat_cameraMatrix;
-uniform mat4 mat_perspectiveMatrix;
 uniform bool picking;
-uniform vec3 vec_ambientColor;
-uniform vec3 vec_directionalColor;
-uniform vec3 vec_directionalVector;
-out vec2 vec_textureCoord;
-out vec4 vec_fragmentColor;
-out vec4 vec_lighting;
-out vec4 vec_position;
+uniform float alpha;
+uniform float lightRange;
+uniform float pointSize;
+uniform mat4 cameraMatrix;
+uniform mat4 perspectiveMatrix;
+uniform vec3 ambientColor;
+uniform vec3 directionalColor;
+uniform vec3 directionalVector;
+uniform vec3 lightColor;
 void main(void){
-    vec_position = mat_cameraMatrix * vec4(vec_vertexPosition, 1.0);
-    gl_Position = mat_perspectiveMatrix * vec_position;
-    gl_PointSize = pointSize / length(vec_position.xyz);
+    position = cameraMatrix * vec4(vertexPosition, 1.0);
+    gl_Position = perspectiveMatrix * position;
+    gl_PointSize = pointSize / length(position.xyz);
     if(picking){
-        vec_fragmentColor = vec_pickColor;
+        fragmentColor = pickColor;
     }else{
-        vec_textureCoord = vec_texturePosition;
-        vec3 lighting = vec_ambientColor;
+        textureCoord = texturePosition;
+        vec3 light = ambientColor;
         if(directional){
-            vec4 transformedNormal = mat_perspectiveMatrix * vec4(vec_vertexNormal, 1.0);
-            lighting += vec_directionalColor * max(dot(transformedNormal.xyz, normalize(vec_directionalVector)), -0.5);
+            vec4 transformedNormal = perspectiveMatrix * vec4(vertexNormal, 1.0);
+            light += directionalColor * max(dot(transformedNormal.xyz, normalize(directionalVector)), -0.5);
         }
-        vec_lighting = vec4(lighting, alpha);
-        vec_fragmentColor = vec_vertexColor;
+        if(lightRange > 0.0){
+            float distance = length(position.xyz);
+            if(distance < lightRange){
+                light = vec3(mix(
+                  light,
+                  lightColor,
+                  clamp(distance, 0.0, 1.0)
+                ));
+            }
+        }
+        lighting = vec4(light, alpha);
+        fragmentColor = vertexColor;
     }
 }`
     );
@@ -1661,11 +1675,11 @@ void main(void){
     webgl.useProgram(program);
 
     const attributes = [
-      'vec_pickColor',
-      'vec_texturePosition',
-      'vec_vertexColor',
-      'vec_vertexNormal',
-      'vec_vertexPosition',
+      'pickColor',
+      'texturePosition',
+      'vertexColor',
+      'vertexNormal',
+      'vertexPosition',
     ];
     for(const attribute in attributes){
         webgl_shader_attributes[attributes[attribute]] = webgl.getAttribLocation(
@@ -1676,17 +1690,19 @@ void main(void){
     }
     const uniforms = {
       'alpha': 'alpha',
-      'point-size': 'pointSize',
-      'ambient-color': 'vec_ambientColor',
-      'clear-color': 'vec_clearColor',
+      'ambient-color': 'ambientColor',
+      'cameraMatrix': 'cameraMatrix',
+      'clear-color': 'clearColor',
       'directional': 'directional',
-      'directional-color': 'vec_directionalColor',
-      'directional-vector': 'vec_directionalVector',
-      'fog-density': 'float_fogDensity',
+      'directional-color': 'directionalColor',
+      'directional-vector': 'directionalVector',
+      'fog-density': 'fogDensity',
       'fog-state': 'fog',
-      'mat_cameraMatrix': 'mat_cameraMatrix',
-      'mat_perspectiveMatrix': 'mat_perspectiveMatrix',
+      'light-color': 'lightColor',
+      'light-range': 'lightRange',
+      'perspectiveMatrix': 'perspectiveMatrix',
       'picking': 'picking',
+      'point-size': 'pointSize',
       'sampler': 'sampler',
     };
     for(const uniform in uniforms){
@@ -2280,6 +2296,16 @@ function webgl_logic_entity(entity){
         webgl_entity_normals(entity);
     }
 
+    if(entity['light-range'] > 0){
+        webgl.uniform3fv(
+          webgl_shader_uniforms['light-color'],
+          entity['light-color']
+        );
+        webgl.uniform1f(
+          webgl_shader_uniforms['light-range'],
+          entity['light-range']
+        );
+    }
     if(entity['particle']){
         webgl_logic_particle(entity);
     }
@@ -2368,7 +2394,7 @@ function webgl_logic_particle(entity){
 
     webgl.bindVertexArray(entity['vao']);
     webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vec_vertexPosition'],
+      'attribute': webgl_shader_attributes['vertexPosition'],
       'data': vertices,
       'size': 3,
     });
@@ -3498,7 +3524,7 @@ function webgl_resize(){
 
     math_matrices['perspective'][0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
     webgl.uniformMatrix4fv(
-      webgl_shader_uniforms['mat_perspectiveMatrix'],
+      webgl_shader_uniforms['perspectiveMatrix'],
       false,
       math_matrices['perspective']
     );
@@ -3591,7 +3617,7 @@ function webgl_stat_modify(args){
           : webgl_vertexcolorarray();
         webgl.bindVertexArray(args['target']['vao']);
         webgl_buffer_set({
-          'attribute': webgl_shader_attributes['vec_vertexColor'],
+          'attribute': webgl_shader_attributes['vertexColor'],
           'data': webgl_vertexcolorarray({
             'colors': args['target']['vertex-colors'],
             'vertexcount': args['target']['vertices-length'],
