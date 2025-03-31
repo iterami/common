@@ -1635,7 +1635,8 @@ uniform vec3 lightColor;
 void main(void){
     position = cameraMatrix * vec4(vertexPosition, 1.0);
     gl_Position = perspectiveMatrix * position;
-    gl_PointSize = pointSize / length(position.xyz);
+    float distance = length(position.xyz);
+    gl_PointSize = pointSize / distance;
     if(picking){
         fragmentColor = pickColor;
     }else{
@@ -1645,15 +1646,12 @@ void main(void){
             vec4 transformedNormal = perspectiveMatrix * vec4(vertexNormal, 1.0);
             light += directionalColor * max(dot(transformedNormal.xyz, normalize(directionalVector)), -0.5);
         }
-        if(lightRange > 0.0){
-            float distance = length(position.xyz);
-            if(distance < lightRange){
-                light = vec3(mix(
-                  light,
-                  lightColor,
-                  clamp(distance, 0.0, 1.0)
-                ));
-            }
+        if(distance < lightRange){
+            light = vec3(mix(
+              light,
+              lightColor,
+              clamp(distance, 0.0, 1.0)
+            ));
         }
         lighting = vec4(light, alpha);
         fragmentColor = vertexColor;
