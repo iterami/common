@@ -1632,29 +1632,32 @@ uniform vec3 ambientColor;
 uniform vec3 directionalColor;
 uniform vec3 directionalVector;
 uniform vec3 lightColor;
+uniform vec3 lightTranslate;
 void main(void){
     position = cameraMatrix * vec4(vertexPosition, 1.0);
     gl_Position = perspectiveMatrix * position;
-    float distance = length(position.xyz);
-    gl_PointSize = pointSize / distance;
+    gl_PointSize = pointSize / length(position.xyz);
     if(picking){
         fragmentColor = pickColor;
     }else{
+        fragmentColor = vertexColor;
         textureCoord = texturePosition;
         vec3 light = ambientColor;
         if(directional){
             vec4 transformedNormal = perspectiveMatrix * vec4(vertexNormal, 1.0);
             light += directionalColor * max(dot(transformedNormal.xyz, normalize(directionalVector)), -0.5);
         }
-        if(distance < lightRange){
-            light = vec3(mix(
-              light,
-              lightColor,
-              clamp(distance, 0.0, 1.0)
-            ));
+        if(lightRange > 0.0){
+            float distance = length(position.xyz - lightTranslate.xyz);
+            if(distance < lightRange){
+                light = vec3(mix(
+                  light,
+                  lightColor,
+                  clamp(distance, 0.0, 1.0)
+                ));
+            }
         }
         lighting = vec4(light, alpha);
-        fragmentColor = vertexColor;
     }
 }`
     );
@@ -1698,6 +1701,7 @@ void main(void){
       'fog-state': 'fog',
       'light-color': 'lightColor',
       'light-range': 'lightRange',
+      'light-translate': 'lightTranslate',
       'perspectiveMatrix': 'perspectiveMatrix',
       'picking': 'picking',
       'point-size': 'pointSize',
@@ -2302,6 +2306,12 @@ function webgl_logic_entity(entity){
         webgl.uniform1f(
           webgl_shader_uniforms['light-range'],
           entity['light-range']
+        );
+        webgl.uniform3f(
+          webgl_shader_uniforms['light-translate'],
+          entity['translate-x'],
+          entity['translate-y'],
+          entity['translate-z']
         );
     }
     if(entity['particle']){
