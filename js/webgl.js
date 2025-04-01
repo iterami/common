@@ -1582,20 +1582,34 @@ function webgl_init(){
       `#version 300 es
 precision mediump float;
 in vec2 textureCoord;
+in vec3 lighting;
 in vec4 fragmentColor;
-in vec4 lighting;
 in vec4 position;
 out vec4 fragColor;
 uniform bool fog;
 uniform bool picking;
 uniform float fogDensity;
+uniform float lightRange;
 uniform sampler2D sampler;
 uniform vec3 clearColor;
+uniform vec3 lightColor;
+uniform vec3 lightTranslate;
 void main(void){
     if(picking){
         fragColor = fragmentColor;
     }else{
-        fragColor = fragmentColor * lighting * texture(sampler, textureCoord);
+        vec3 light = lighting;
+        if(lightRange > 0.0){
+            float distance = length(position.xyz - lightTranslate.xyz);
+            if(distance < lightRange){
+                light = vec3(mix(
+                  light,
+                  lightColor,
+                  clamp(distance, 0.0, 1.0)
+                ));
+            }
+        }
+        fragColor = fragmentColor * vec4(light, 1.0) * texture(sampler, textureCoord);
         if(fog){
             float distance = length(position.xyz);
             fragColor.rgb = vec3(mix(
@@ -1618,21 +1632,18 @@ in vec3 vertexPosition;
 in vec4 pickColor;
 in vec4 vertexColor;
 out vec2 textureCoord;
+out vec3 lighting;
 out vec4 fragmentColor;
-out vec4 lighting;
 out vec4 position;
 uniform bool directional;
 uniform bool picking;
 uniform float alpha;
-uniform float lightRange;
 uniform float pointSize;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
 uniform vec3 ambientColor;
 uniform vec3 directionalColor;
 uniform vec3 directionalVector;
-uniform vec3 lightColor;
-uniform vec3 lightTranslate;
 void main(void){
     position = cameraMatrix * vec4(vertexPosition, 1.0);
     gl_Position = perspectiveMatrix * position;
@@ -1642,22 +1653,11 @@ void main(void){
     }else{
         fragmentColor = vertexColor;
         textureCoord = texturePosition;
-        vec3 light = ambientColor;
+        lighting = ambientColor;
         if(directional){
             vec4 transformedNormal = perspectiveMatrix * vec4(vertexNormal, 1.0);
-            light += directionalColor * max(dot(transformedNormal.xyz, normalize(directionalVector)), -0.5);
+            lighting += directionalColor * max(dot(transformedNormal.xyz, normalize(directionalVector)), -0.5);
         }
-        if(lightRange > 0.0){
-            float distance = length(position.xyz - lightTranslate.xyz);
-            if(distance < lightRange){
-                light = vec3(mix(
-                  light,
-                  lightColor,
-                  clamp(distance, 0.0, 1.0)
-                ));
-            }
-        }
-        lighting = vec4(light, alpha);
     }
 }`
     );
