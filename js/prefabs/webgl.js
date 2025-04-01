@@ -42,6 +42,9 @@ function prefabs_webgl_cuboid_tree(args){
       'left': {
         'texture-align': '10110100',
       },
+      'position-x': prefab_args['position-x'],
+      'position-y': prefab_args['position-y'] + args['trunk-size-y'] / 2,
+      'position-z': prefab_args['position-z'],
       'prefix': args['prefix'] + '-trunk',
       'right': {
         'texture-align': '10110100',
@@ -52,9 +55,6 @@ function prefabs_webgl_cuboid_tree(args){
       'top': {
         'exclude': true,
       },
-      'translate-x': prefab_args['translate-x'],
-      'translate-y': prefab_args['translate-y'] + args['trunk-size-y'] / 2,
-      'translate-z': prefab_args['translate-z'],
     });
     webgl_primitive_cuboid({
       ...prefab_args,
@@ -64,11 +64,11 @@ function prefabs_webgl_cuboid_tree(args){
         'vertex-colors': args['leaf-color'],
       },
       'character': args['character'],
+      'position-y': prefab_args['position-y'] + args['trunk-size-y'] + args['leaf-size-y'] / 2,
       'prefix': args['prefix'] + '-leaf',
       'size-x': args['leaf-size-x'],
       'size-y': args['leaf-size-y'],
       'size-z': args['leaf-size-z'],
-      'translate-y': prefab_args['translate-y'] + args['trunk-size-y'] + args['leaf-size-y'] / 2,
     });
 }
 
@@ -125,12 +125,12 @@ function prefabs_webgl_frustum_tree(args){
           'color-top': args['leaf-color-top'],
           'length': leaf_height,
           'points': args['leaf-points'],
+          'position-x': prefab_args['position-x'],
+          'position-y': prefab_args['position-y'] + height - leaf_height - (args['leaf-separate'] * i),
+          'position-z': prefab_args['position-z'],
           'prefix': args['prefix'] + '-leaf-' + i,
           'size-bottom': args['leaf-size'],
           'size-top': 0,
-          'translate-x': prefab_args['translate-x'],
-          'translate-y': prefab_args['translate-y'] + height - leaf_height - (args['leaf-separate'] * i),
-          'translate-z': prefab_args['translate-z'],
         });
     }
 }
@@ -200,9 +200,9 @@ function prefabs_webgl_humanoid(args){
               ...prefab_args,
               'attach-to': args['character'],
               'attach-type': 'webgl_characters',
-              'attach-x': prefab_args['translate-x'],
-              'attach-y': prefab_args['translate-y'],
-              'attach-z': prefab_args['translate-z'],
+              'attach-x': prefab_args['position-x'],
+              'attach-y': prefab_args['position-y'],
+              'attach-z': prefab_args['position-z'],
               'draw-mode': 'LINE_STRIP',
               'collision': false,
               'id': args['prefix'] + '-' + part,
@@ -245,15 +245,15 @@ function prefabs_webgl_lines_path(args){
     const vertex_colors = [];
 
     for(const point in webgl_paths[args['path']]['points']){
-        const point_x = webgl_paths[args['path']]['points'][point]['translate-x'];
+        const point_x = webgl_paths[args['path']]['points'][point]['position-x'];
         if(point_x !== void 0){
             x = point_x;
         }
-        const point_y = webgl_paths[args['path']]['points'][point]['translate-y'];
+        const point_y = webgl_paths[args['path']]['points'][point]['position-y'];
         if(point_y !== void 0){
             y = point_y;
         }
-        const point_z = webgl_paths[args['path']]['points'][point]['translate-z'];
+        const point_z = webgl_paths[args['path']]['points'][point]['position-z'];
         if(point_z !== void 0){
             z = point_z;
         }
@@ -359,9 +359,9 @@ function prefabs_webgl_lines_shrub(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'],
           'draw-mode': prefab_args['draw-mode'],
           'collision': false,
           'id': args['prefix'],
@@ -401,9 +401,9 @@ function prefabs_webgl_lines_tree(args){
       ...prefab_args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
-      'attach-x': prefab_args['translate-x'],
-      'attach-y': prefab_args['translate-y'],
-      'attach-z': prefab_args['translate-z'],
+      'attach-x': prefab_args['position-x'],
+      'attach-y': prefab_args['position-y'],
+      'attach-z': prefab_args['position-z'],
       'collision': false,
       'vertex-colors': args['trunk-color'],
     };
@@ -489,9 +489,9 @@ function prefabs_webgl_tree_2d(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'],
           'billboard': prefab_args['billboard'],
           'collision': false,
           'id': args['prefix'] + '-base',
@@ -506,9 +506,9 @@ function prefabs_webgl_tree_2d(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'],
           'billboard': prefab_args['billboard'],
           'collision': false,
           'draw-mode': 'TRIANGLES',

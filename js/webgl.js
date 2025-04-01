@@ -21,26 +21,26 @@ function webgl_audio(args){
 
     const character = webgl_characters[webgl_character_id];
     const radians_y = math_degrees_to_radians(character['rotate-y']);
-    const target = webgl_get_translation(globalThis[args['type']][args['target']]);
+    const target = webgl_get_position(globalThis[args['type']][args['target']]);
     audio_start_at?.({
       'forwardX': Math.sin(-radians_y),
       'forwardY': 0,
       'forwardZ': Math.cos(radians_y),
       'id': args['id'],
-      'positionX': (character['translate-x'] - target['x']) / args['divider-x'],
-      'positionY': (character['translate-y'] - target['y']) / args['divider-y'],
-      'positionZ': (character['translate-z'] - target['z']) / args['divider-z'],
+      'positionX': (character['position-x'] - target['x']) / args['divider-x'],
+      'positionY': (character['position-y'] - target['y']) / args['divider-y'],
+      'positionZ': (character['position-z'] - target['z']) / args['divider-z'],
     });
 }
 
 function webgl_billboard(id){
     const character = webgl_characters[webgl_character_id];
     const entity = entity_entities[id];
-    const translation = webgl_get_translation(entity);
+    const position = webgl_get_position(entity);
 
     entity['rotate-y'] = 360 - math_radians_to_degrees(Math.atan2(
-      translation['z'] - character['camera-z'],
-      translation['x'] - character['camera-x'],
+      position['z'] - character['camera-z'],
+      position['x'] - character['camera-x'],
     ) + 1.5707963267948966);
 }
 
@@ -174,12 +174,12 @@ function webgl_character_hit(args){
     const character = webgl_characters[args['id']];
     const target = webgl_characters[args['target']];
     const angle_xz = Math.atan2(
-      target['translate-z'] - character['translate-z'],
-      target['translate-x'] - character['translate-x']
+      target['position-z'] - character['position-z'],
+      target['position-x'] - character['position-x']
     );
-    target['change-translate-x'] = Math.cos(angle_xz) * args['xz'];
-    target['change-translate-y'] = args['y'];
-    target['change-translate-z'] = Math.sin(angle_xz) * args['xz'];
+    target['change-position-x'] = Math.cos(angle_xz) * args['xz'];
+    target['change-position-y'] = args['y'];
+    target['change-position-z'] = Math.sin(angle_xz) * args['xz'];
 }
 
 function webgl_character_init(args){
@@ -230,18 +230,18 @@ function webgl_character_init(args){
 
     webgl_characters[args['id']] = {
       ...args,
-      'camera-x': 0,
-      'camera-y': 0,
-      'camera-z': 0,
       'camera-rotate-x': 0,
       'camera-rotate-y': 0,
       'camera-rotate-z': 0,
+      'camera-x': 0,
+      'camera-y': 0,
+      'camera-z': 0,
+      'change-position-x': 0,
+      'change-position-y': 0,
+      'change-position-z': 0,
       'change-rotate-x': 0,
       'change-rotate-y': 0,
       'change-rotate-z': 0,
-      'change-translate-x': 0,
-      'change-translate-y': 0,
-      'change-translate-z': 0,
       'camera-zoom': Math.min(
         webgl_properties['camera-zoom-max'],
         Math.max(
@@ -256,12 +256,12 @@ function webgl_character_init(args){
         args['life'],
         1
       ),
+      'position-x': 0,
+      'position-y': 0,
+      'position-z': 0,
       'rotate-x': 0,
       'rotate-y': 0,
       'rotate-z': 0,
-      'translate-x': 0,
-      'translate-y': 0,
-      'translate-z': 0,
       'vehicle': false,
       'vehicle-stats': args['vehicle-stats'] === false
         ? false
@@ -344,7 +344,7 @@ function webgl_character_move(args){
     });
 
     if(args['y']){
-        webgl_characters[args['id']]['change-translate-y'] += args['speed'] * (args['strafe']
+        webgl_characters[args['id']]['change-position-y'] += args['speed'] * (args['strafe']
           ? -1
           : 1);
 
@@ -358,8 +358,8 @@ function webgl_character_move(args){
           'strafe': args['strafe'],
         });
 
-        webgl_characters[args['id']]['change-translate-x'] += movement['x'];
-        webgl_characters[args['id']]['change-translate-z'] += movement['z'];
+        webgl_characters[args['id']]['change-position-x'] += movement['x'];
+        webgl_characters[args['id']]['change-position-z'] += movement['z'];
     }
 }
 
@@ -451,7 +451,7 @@ function webgl_character_spawn(id){
     const axes = 'xyz';
     for(const axis in axes){
         character['change-rotate-' + axes[axis]] = 0;
-        character['change-translate-' + axes[axis]] = 0;
+        character['change-position-' + axes[axis]] = 0;
 
         character['camera-rotate-' + axes[axis]] = 0;
         character['rotate-' + axes[axis]] = 0;
@@ -533,19 +533,19 @@ function webgl_collision(args){
       ? webgl_characters[args['target']['attach-to']]
       : false;
     let collision = '';
-    const collider_position = webgl_get_translation(args['collider']);
+    const collider_position = webgl_get_position(args['collider']);
     const collision_sign = [];
     const diffs = {
-      'x': args['collider']['change-translate-x'] - character?.['change-translate-x'],
-      'y': args['collider']['change-translate-y'] - character?.['change-translate-y'],
-      'z': args['collider']['change-translate-z'] - character?.['change-translate-z'],
+      'x': args['collider']['change-position-x'] - character?.['change-position-x'],
+      'y': args['collider']['change-position-y'] - character?.['change-position-y'],
+      'z': args['collider']['change-position-z'] - character?.['change-position-z'],
     };
     const range = {
       'x': args['collider']['collide-range-xz'] + Math.abs(diffs['x']),
       'y': args['collider']['collide-range-y'] + Math.abs(diffs['y']),
       'z': args['collider']['collide-range-xz'] + Math.abs(diffs['z']),
     };
-    const target_position = webgl_get_translation(args['target']);
+    const target_position = webgl_get_position(args['target']);
 
     let sign = Math.sign(args['target']['normals'][0]);
     if(sign !== 0
@@ -589,20 +589,20 @@ function webgl_collision(args){
     }
 
     for(const axis in collision){
-        const change_translate = character
-          ? character['change-translate-' + collision[axis]]
+        const change_position = character
+          ? character['change-position-' + collision[axis]]
           : 0;
 
-        args['collider']['translate-' + collision[axis]] = target_position[collision[axis]]
+        args['collider']['position-' + collision[axis]] = target_position[collision[axis]]
           + args['collider']['collide-range-' + (collision[axis] === 'y' ? 'y' : 'xz')] * collision_sign[axis]
-          + change_translate;
-        args['collider']['change-translate-' + collision[axis]] = change_translate;
+          + change_position;
+        args['collider']['change-position-' + collision[axis]] = change_position;
 
         if(collision[axis] === 'y'){
             if(!args['collider']['jump-allow']){
                 args['collider']['jump-allow'] = collision_sign[axis] !== Math.sign(webgl_properties['gravity-max']);
 
-                const change = args['collider']['change-translate-' + collision[axis]];
+                const change = args['collider']['change-position-' + collision[axis]];
                 if(webgl_properties['gravity-damage']
                   && args['collider']['level'] >= 0
                   && change < webgl_properties['gravity-max'] / 2){
@@ -615,8 +615,8 @@ function webgl_collision(args){
             }
 
             if(character){
-                args['collider']['change-translate-x'] += character['change-translate-x'];
-                args['collider']['change-translate-z'] += character['change-translate-z'];
+                args['collider']['change-position-x'] += character['change-position-x'];
+                args['collider']['change-position-z'] += character['change-position-z'];
             }
 
         }else if(args['collider']['vehicle-stats']){
@@ -626,7 +626,7 @@ function webgl_collision(args){
 
             args['collider']['vehicle-stats']['speed'] = Math.min(
               args['collider']['vehicle-stats']['speed'],
-              Math.abs(args['collider']['change-translate-' + other_axis])
+              Math.abs(args['collider']['change-position-' + other_axis])
             );
         }
     }
@@ -804,9 +804,9 @@ function webgl_controls_keyboard(character){
         const axes = 'xyz';
         for(const axis in axes){
             character['rotate-' + axes[axis]] = vehicle['rotate-' + axes[axis]];
-            character['translate-' + axes[axis]] = vehicle['translate-' + axes[axis]] + vehicle['change-translate-' + axes[axis]];
+            character['position-' + axes[axis]] = vehicle['position-' + axes[axis]] + vehicle['change-position-' + axes[axis]];
         }
-        character['translate-y'] += character['collide-range-y'];
+        character['position-y'] += character['collide-range-y'];
         return;
     }
 
@@ -877,7 +877,7 @@ function webgl_controls_keyboard(character){
 
             }else{
                 character['jump-allow'] = false;
-                character['change-translate-y'] = character['jump-height'];
+                character['change-position-y'] = character['jump-height'];
             }
         }
 
@@ -1459,21 +1459,21 @@ function webgl_event(args){
     }
 }
 
-function webgl_get_translation(entity){
+function webgl_get_position(entity){
     if(entity['attach-to'] === void 0
       || entity['attach-to'] === false){
         return {
-          'x': entity['translate-x'],
-          'y': entity['translate-y'],
-          'z': entity['translate-z'],
+          'x': entity['position-x'],
+          'y': entity['position-y'],
+          'z': entity['position-z'],
         };
     }
 
     const target = globalThis[entity['attach-type']][entity['attach-to']];
     return {
-      'x': target['translate-x'] + entity['attach-x'],
-      'y': target['translate-y'] + entity['attach-y'],
-      'z': target['translate-z'] + entity['attach-z'],
+      'x': target['position-x'] + entity['attach-x'],
+      'y': target['position-y'] + entity['attach-y'],
+      'z': target['position-z'] + entity['attach-z'],
     };
 }
 
@@ -1556,6 +1556,9 @@ function webgl_init(){
         'particle': false,
         'picking': false,
         'point-size': 500,
+        'position-x': 0,
+        'position-y': 0,
+        'position-z': 0,
         'rotate-x': 0,
         'rotate-y': 0,
         'rotate-z': 0,
@@ -1566,9 +1569,6 @@ function webgl_init(){
         'texture-align': '11010010',
         'texture-x': 1,
         'texture-y': 1,
-        'translate-x': 0,
-        'translate-y': 0,
-        'translate-z': 0,
         'vertices-length': 0,
         'visible': true,
       },
@@ -1594,14 +1594,14 @@ uniform float lightRange;
 uniform sampler2D sampler;
 uniform vec3 clearColor;
 uniform vec3 lightColor;
-uniform vec3 lightTranslate;
+uniform vec3 lightPosition;
 void main(void){
     if(picking){
         fragColor = fragmentColor;
     }else{
         vec3 light = lighting;
         if(lightRange > 0.0){
-            float distance = length(position.xyz - lightTranslate.xyz);
+            float distance = length(position.xyz - lightPosition.xyz);
             if(distance < lightRange){
                 light = vec3(mix(
                   light,
@@ -1700,8 +1700,8 @@ void main(void){
       'fog-density': 'fogDensity',
       'fog-state': 'fog',
       'light-color': 'lightColor',
+      'light-position': 'lightPosition',
       'light-range': 'lightRange',
-      'light-translate': 'lightTranslate',
       'perspectiveMatrix': 'perspectiveMatrix',
       'picking': 'picking',
       'point-size': 'pointSize',
@@ -2101,8 +2101,8 @@ function webgl_logic(){
         }
 
         if(character['gravity'] !== 0){
-            character['change-translate-y'] = Math.max(
-              character['change-translate-y'] + webgl_properties['gravity-acceleration'] * character['gravity'],
+            character['change-position-y'] = Math.max(
+              character['change-position-y'] + webgl_properties['gravity-acceleration'] * character['gravity'],
               webgl_properties['gravity-max'] * character['gravity']
             );
         }
@@ -2123,8 +2123,8 @@ function webgl_logic(){
 
         const axes = 'xyz';
         for(const axis in axes){
-            const translate_axis = 'translate-' + axes[axis];
-            character[translate_axis] += character['change-' + translate_axis];
+            const position_axis = 'position-' + axes[axis];
+            character[position_axis] += character['change-' + position_axis];
         }
 
         Object.assign(
@@ -2133,9 +2133,9 @@ function webgl_logic(){
            webgl_properties['lock']
         );
 
-        const change_translate_x = character['change-translate-x'];
-        const change_translate_z = character['change-translate-z'];
-        if(character['change-translate-y'] !== 0){
+        const change_position_x = character['change-position-x'];
+        const change_position_z = character['change-position-z'];
+        if(character['change-position-y'] !== 0){
             character['jump-allow'] = false;
         }
 
@@ -2154,19 +2154,19 @@ function webgl_logic(){
 
         if(level <= -1
           && character['path-id'].length === 0){
-            character['change-translate-x'] = 0;
-            character['change-translate-y'] = 0;
-            character['change-translate-z'] = 0;
+            character['change-position-x'] = 0;
+            character['change-position-y'] = 0;
+            character['change-position-z'] = 0;
             continue;
         }
 
         if(character['jump-allow']){
-            character['change-translate-x'] -= change_translate_x;
-            character['change-translate-z'] -= change_translate_z;
+            character['change-position-x'] -= change_position_x;
+            character['change-position-z'] -= change_position_z;
         }
 
         if(webgl_properties['y-min'] !== false
-          && character['translate-y'] < webgl_properties['y-min']){
+          && character['position-y'] < webgl_properties['y-min']){
             webgl_stat_modify({
               'set': true,
               'stat': 'life',
@@ -2183,14 +2183,14 @@ function webgl_logic(){
         if(character['camera-zoom'] > 0){
             const zoom_cos_x = character['camera-zoom'] * Math.cos(radians_x);
 
-            character['camera-x'] = character['translate-x'] + Math.sin(-radians_y) * zoom_cos_x;
-            character['camera-y'] = character['translate-y'] + Math.sin(radians_x) * character['camera-zoom'];
-            character['camera-z'] = character['translate-z'] + Math.cos(radians_y) * zoom_cos_x;
+            character['camera-x'] = character['position-x'] + Math.sin(-radians_y) * zoom_cos_x;
+            character['camera-y'] = character['position-y'] + Math.sin(radians_x) * character['camera-zoom'];
+            character['camera-z'] = character['position-z'] + Math.cos(radians_y) * zoom_cos_x;
 
         }else{
-            character['camera-x'] = character['translate-x'];
-            character['camera-y'] = character['translate-y'];
-            character['camera-z'] = character['translate-z'];
+            character['camera-x'] = character['position-x'];
+            character['camera-y'] = character['position-y'];
+            character['camera-z'] = character['position-z'];
         }
     }
 
@@ -2217,14 +2217,14 @@ function webgl_logic_entity(entity){
     const draw_range = entity['draw-range'] || webgl_properties['draw-range'];
     if(draw_range){
         const character = webgl_characters[webgl_character_id];
-        const translation = webgl_get_translation(entity);
+        const position = webgl_get_position(entity);
         entity['visible'] = math_distance({
             'x0': character['camera-x'],
             'y0': character['camera-y'],
             'z0': character['camera-z'],
-            'x1': translation['x'],
-            'y1': translation['y'],
-            'z1': translation['z'],
+            'x1': position['x'],
+            'y1': position['y'],
+            'z1': position['z'],
           }) <= draw_range;
 
     }else{
@@ -2234,19 +2234,19 @@ function webgl_logic_entity(entity){
     const target = globalThis[entity['attach-type']][entity['attach-to']];
     if(target){
         if(entity_groups['skybox'][entity['id']]){
-            entity['translate-x'] = target['camera-x'];
-            entity['translate-y'] = target['camera-y'];
-            entity['translate-z'] = target['camera-z'];
+            entity['position-x'] = target['camera-x'];
+            entity['position-y'] = target['camera-y'];
+            entity['position-z'] = target['camera-z'];
 
         }else{
-            entity['translate-x'] = target['translate-x'];
-            entity['translate-y'] = target['translate-y'];
-            entity['translate-z'] = target['translate-z'];
+            entity['position-x'] = target['position-x'];
+            entity['position-y'] = target['position-y'];
+            entity['position-z'] = target['position-z'];
         }
     }
 
     if(entity['event-range'] > 0){
-        const event_position = webgl_get_translation(entity);
+        const event_position = webgl_get_position(entity);
 
         for(const character in webgl_characters){
             if(character === entity['attach-to']){
@@ -2254,9 +2254,9 @@ function webgl_logic_entity(entity){
             }
 
             if(math_distance({
-                'x0': webgl_characters[character]['translate-x'],
-                'y0': webgl_characters[character]['translate-y'],
-                'z0': webgl_characters[character]['translate-z'],
+                'x0': webgl_characters[character]['position-x'],
+                'y0': webgl_characters[character]['position-y'],
+                'z0': webgl_characters[character]['position-z'],
                 'x1': event_position['x'],
                 'y1': event_position['y'],
                 'z1': event_position['z'],
@@ -2308,10 +2308,10 @@ function webgl_logic_entity(entity){
           entity['light-range']
         );
         webgl.uniform3f(
-          webgl_shader_uniforms['light-translate'],
-          entity['translate-x'],
-          entity['translate-y'],
-          entity['translate-z']
+          webgl_shader_uniforms['light-position'],
+          entity['position-x'],
+          entity['position-y'],
+          entity['position-z']
         );
     }
     if(entity['particle']){
@@ -2324,9 +2324,9 @@ function webgl_logic_entity(entity){
     });
     math_matrix_translate({
       'dimensions': [
-        -entity['translate-x'],
-        -entity['translate-y'],
-        -entity['translate-z'],
+        -entity['position-x'],
+        -entity['position-y'],
+        -entity['position-z'],
       ],
       'id': entity['id'],
     });
@@ -2421,15 +2421,15 @@ function webgl_move_to(args){
     });
 
     if(args['target']){
-        args['move']['translate-x'] = args['target']['translate-x'];
-        args['move']['translate-y'] = args['target']['translate-y'];
-        args['move']['translate-z'] = args['target']['translate-z'];
+        args['move']['position-x'] = args['target']['position-x'];
+        args['move']['position-y'] = args['target']['position-y'];
+        args['move']['position-z'] = args['target']['position-z'];
         return;
     }
 
-    args['move']['translate-x'] = args['x'];
-    args['move']['translate-y'] = args['y'];
-    args['move']['translate-z'] = args['z'];
+    args['move']['position-x'] = args['x'];
+    args['move']['position-y'] = args['y'];
+    args['move']['position-z'] = args['z'];
 }
 
 function webgl_normals(args){
@@ -2490,29 +2490,29 @@ function webgl_path_move(character){
       'args': path['points'][character['path-point']],
       'defaults': {
         'distance': 0,
+        'position-x': character['position-x'],
+        'position-y': character['position-y'],
+        'position-z': character['position-z'],
         'rotate-x': false,
         'rotate-y': false,
         'rotate-z': false,
-        'translate-x': character['translate-x'],
-        'translate-y': character['translate-y'],
-        'translate-z': character['translate-z'],
       },
     });
     const distance = math_distance({
-      'x0': character['translate-x'],
-      'y0': character['translate-y'],
-      'z0': character['translate-z'],
-      'x1': point['translate-x'],
-      'y1': point['translate-y'],
-      'z1': point['translate-z'],
+      'x0': character['position-x'],
+      'y0': character['position-y'],
+      'z0': character['position-z'],
+      'x1': point['position-x'],
+      'y1': point['position-y'],
+      'z1': point['position-z'],
     });
     const speed = point['speed'] || path['speed'] || character['speed'];
 
     if(distance - speed < point['distance']){
         if(point['distance'] === 0){
-            character['translate-x'] = point['translate-x'];
-            character['translate-y'] = point['translate-y'];
-            character['translate-z'] = point['translate-z'];
+            character['position-x'] = point['position-x'];
+            character['position-y'] = point['position-y'];
+            character['position-z'] = point['position-z'];
         }
         webgl_camera_rotate({
           'character': character['id'],
@@ -2545,30 +2545,30 @@ function webgl_path_move(character){
                     const warp = core_args({
                       'args': path['points'][0],
                       'defaults': {
-                        'translate-x': character['translate-x'],
-                        'translate-y': character['translate-y'],
-                        'translate-z': character['translate-z'],
+                        'position-x': character['position-x'],
+                        'position-y': character['position-y'],
+                        'position-z': character['position-z'],
                       },
                     });
-                    character['translate-x'] = warp['translate-x'];
-                    character['translate-y'] = warp['translate-y'];
-                    character['translate-z'] = warp['translate-z'];
+                    character['position-x'] = warp['position-x'];
+                    character['position-y'] = warp['position-y'];
+                    character['position-z'] = warp['position-z'];
 
                 }else{
                     character['path-id'] = '';
                     character['path-point'] = 0;
                     if(character['level'] < -1){
-                        character['change-translate-x'] = 0;
-                        character['change-translate-y'] = 0;
-                        character['change-translate-z'] = 0;
+                        character['change-position-x'] = 0;
+                        character['change-position-y'] = 0;
+                        character['change-position-z'] = 0;
                     }
                 }
 
             }else{
                 character['path-point'] += 1;
-                character['change-translate-x'] = 0;
-                character['change-translate-y'] = 0;
-                character['change-translate-z'] = 0;
+                character['change-position-x'] = 0;
+                character['change-position-y'] = 0;
+                character['change-position-z'] = 0;
             }
 
         }else if(character['path-point'] === 0){
@@ -2585,52 +2585,52 @@ function webgl_path_move(character){
                 const warp = core_args({
                   'args': path['points'][last],
                   'defaults': {
-                    'translate-x': character['translate-x'],
-                    'translate-y': character['translate-y'],
-                    'translate-z': character['translate-z'],
+                    'position-x': character['position-x'],
+                    'position-y': character['position-y'],
+                    'position-z': character['position-z'],
                   },
                 });
-                character['translate-x'] = warp['translate-x'];
-                character['translate-y'] = warp['translate-y'];
-                character['translate-z'] = warp['translate-z'];
+                character['position-x'] = warp['position-x'];
+                character['position-y'] = warp['position-y'];
+                character['position-z'] = warp['position-z'];
 
             }else{
                 character['path-id'] = '';
                 character['path-point'] = 0;
                 if(character['level'] < -1){
-                    character['change-translate-x'] = 0;
-                    character['change-translate-y'] = 0;
-                    character['change-translate-z'] = 0;
+                    character['change-position-x'] = 0;
+                    character['change-position-y'] = 0;
+                    character['change-position-z'] = 0;
                 }
             }
 
         }else{
             character['path-point'] -= 1;
-            character['change-translate-x'] = 0;
-            character['change-translate-y'] = 0;
-            character['change-translate-z'] = 0;
+            character['change-position-x'] = 0;
+            character['change-position-y'] = 0;
+            character['change-position-z'] = 0;
         }
 
         return;
     }
 
     const angle_xz = Math.atan2(
-      point['translate-z'] - character['translate-z'],
-      point['translate-x'] - character['translate-x']
+      point['position-z'] - character['position-z'],
+      point['position-x'] - character['position-x']
     );
-    const angle_y = Math.asin(Math.abs(character['translate-y'] - point['translate-y']) / distance);
+    const angle_y = Math.asin(Math.abs(character['position-y'] - point['position-y']) / distance);
     const cos_y_speed = Math.cos(angle_y) * speed;
-    character['change-translate-x'] = core_round({
+    character['change-position-x'] = core_round({
       'number': Math.cos(angle_xz) * cos_y_speed,
     });
-    let change_translate_y = Math.sin(angle_y) * speed;
-    if(character['translate-y'] > point['translate-y']){
-        change_translate_y *= -1;
+    let change_position_y = Math.sin(angle_y) * speed;
+    if(character['position-y'] > point['position-y']){
+        change_position_y *= -1;
     }
-    character['change-translate-y'] = core_round({
-      'number': change_translate_y,
+    character['change-position-y'] = core_round({
+      'number': change_position_y,
     });
-    character['change-translate-z'] = core_round({
+    character['change-position-z'] = core_round({
       'number': Math.sin(angle_xz) * cos_y_speed,
     });
 }
@@ -2800,9 +2800,9 @@ function webgl_prefab_repeat(args){
               ...args['characters'],
               'id': prefix,
               'spawn': {
-                'translate-x': Math.random() * (args['x-max'] - args['x-min']) + args['x-min'],
-                'translate-y': Math.random() * (args['y-max'] - args['y-min']) + args['y-min'],
-                'translate-z': Math.random() * (args['z-max'] - args['z-min']) + args['z-min'],
+                'position-x': Math.random() * (args['x-max'] - args['x-min']) + args['x-min'],
+                'position-y': Math.random() * (args['y-max'] - args['y-min']) + args['y-min'],
+                'position-z': Math.random() * (args['z-max'] - args['z-min']) + args['z-min'],
                 ...spawn,
               },
             });
@@ -2817,9 +2817,9 @@ function webgl_prefab_repeat(args){
 
     for(let i = 0; i < args['count']; i++){
         args['properties']['prefix'] = args['prefix'] + '-' + i;
-        args['properties']['translate-x'] = Math.random() * (args['x-max'] - args['x-min']) + args['x-min'];
-        args['properties']['translate-y'] = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
-        args['properties']['translate-z'] = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
+        args['properties']['position-x'] = Math.random() * (args['x-max'] - args['x-min']) + args['x-min'];
+        args['properties']['position-y'] = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
+        args['properties']['position-z'] = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
 
         globalThis[args['type']]?.(args['properties']);
     }
@@ -2858,9 +2858,9 @@ function webgl_primitive_cuboid(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'] + half_size_y,
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'] + half_size_y,
+          'attach-z': prefab_args['position-z'],
           'id': args['prefix'] + '-top',
           'vertex-colors': webgl_vertexcolorarray({
             'colors': args['top']['vertex-colors'],
@@ -2890,9 +2890,9 @@ function webgl_primitive_cuboid(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'] - half_size_y,
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'] - half_size_y,
+          'attach-z': prefab_args['position-z'],
           'id': args['prefix'] + '-bottom',
           'rotate-x': 180,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2923,9 +2923,9 @@ function webgl_primitive_cuboid(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'] + half_size_z,
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'] + half_size_z,
           'id': args['prefix'] + '-back',
           'rotate-x': 90,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2956,9 +2956,9 @@ function webgl_primitive_cuboid(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'] - half_size_z,
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'] - half_size_z,
           'id': args['prefix'] + '-front',
           'rotate-x': 270,
           'vertex-colors': webgl_vertexcolorarray({
@@ -2989,9 +2989,9 @@ function webgl_primitive_cuboid(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'] - half_size_x,
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'] - half_size_x,
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'],
           'id': args['prefix'] + '-left',
           'rotate-z': 90,
           'vertex-colors': webgl_vertexcolorarray({
@@ -3022,9 +3022,9 @@ function webgl_primitive_cuboid(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'] + half_size_x,
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'] + half_size_x,
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'],
           'id': args['prefix'] + '-right',
           'rotate-z': 270,
           'vertex-colors': webgl_vertexcolorarray({
@@ -3087,9 +3087,9 @@ function webgl_primitive_ellipsoid(args){
       ...prefab_args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
-      'attach-x': prefab_args['translate-x'],
-      'attach-y': prefab_args['translate-y'],
-      'attach-z': prefab_args['translate-z'],
+      'attach-x': prefab_args['position-x'],
+      'attach-y': prefab_args['position-y'],
+      'attach-z': prefab_args['position-z'],
       'collision': false,
       'draw-mode': 'TRIANGLE_STRIP',
       'id': args['prefix'],
@@ -3176,9 +3176,9 @@ function webgl_primitive_frustum(args){
       ...prefab_args,
       'attach-to': args['character'],
       'attach-type': 'webgl_characters',
-      'attach-x': prefab_args['translate-x'],
-      'attach-y': prefab_args['translate-y'],
-      'attach-z': prefab_args['translate-z'],
+      'attach-x': prefab_args['position-x'],
+      'attach-y': prefab_args['position-y'],
+      'attach-z': prefab_args['position-z'],
       'collision': false,
       'draw-mode': 'TRIANGLE_FAN',
     };
@@ -3408,9 +3408,9 @@ function webgl_primitive_stars(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'],
           'collision': false,
           'draw-mode': 'POINTS',
           'id': args['prefix'],
@@ -3494,9 +3494,9 @@ function webgl_primitive_terrain(args){
           ...prefab_args,
           'attach-to': args['character'],
           'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['translate-x'],
-          'attach-y': prefab_args['translate-y'],
-          'attach-z': prefab_args['translate-z'],
+          'attach-x': prefab_args['position-x'],
+          'attach-y': prefab_args['position-y'],
+          'attach-z': prefab_args['position-z'],
           'collision': false,
           'draw-mode': 'TRIANGLE_STRIP',
           'id': args['prefix'],
@@ -3509,14 +3509,14 @@ function webgl_primitive_terrain(args){
 }
 
 function webgl_random_vertex(entity){
-    const translation = webgl_get_translation(entity);
+    const position = webgl_get_position(entity);
     const vertex = core_random_integer({
       'max': entity['vertices-length'],
     });
     return {
-      'x': translation['x'] + entity['vertices'][vertex * 3],
-      'y': translation['y'] + entity['vertices'][vertex * 3 + 1],
-      'z': translation['z'] + entity['vertices'][vertex * 3 + 2],
+      'x': position['x'] + entity['vertices'][vertex * 3],
+      'y': position['y'] + entity['vertices'][vertex * 3 + 1],
+      'z': position['z'] + entity['vertices'][vertex * 3 + 2],
     };
 }
 
@@ -3666,7 +3666,7 @@ function webgl_stat_modify(args){
                     const axes = 'xyz';
                     for(const axis in axes){
                         args['target']['change-rotate-' + axes[axis]] = 0;
-                        args['target']['change-translate-' + axes[axis]] = 0;
+                        args['target']['change-position-' + axes[axis]] = 0;
                     }
 
                 }else{
@@ -3900,9 +3900,9 @@ function webgl_tiles(args){
     }
 
     const prefab_args = webgl_prefab_args(args);
-    let tile_offset_x = prefab_args['translate-x'];
-    let tile_offset_y = prefab_args['translate-y'];
-    let tile_offset_z = prefab_args['translate-z'];
+    let tile_offset_x = prefab_args['position-x'];
+    let tile_offset_y = prefab_args['position-y'];
+    let tile_offset_z = prefab_args['position-z'];
     let tile_rotate_x = prefab_args['rotate-x'];
     let tile_rotate_y = prefab_args['rotate-y'];
     let tile_rotate_z = prefab_args['rotate-z'];
@@ -3918,14 +3918,14 @@ function webgl_tiles(args){
             const points = args['tiles'][tiles[tile]]['paths'][path]['points'];
             for(const point in points){
                 const point_object = {};
-                if(points[point]['translate-x'] !== void 0){
-                    point_object['translate-x'] = tile_offset_x + points[point]['translate-x'];
+                if(points[point]['position-x'] !== void 0){
+                    point_object['position-x'] = tile_offset_x + points[point]['position-x'];
                 }
-                if(points[point]['translate-y'] !== void 0){
-                    point_object['translate-y'] = tile_offset_y + points[point]['translate-y'];
+                if(points[point]['position-y'] !== void 0){
+                    point_object['position-y'] = tile_offset_y + points[point]['position-y'];
                 }
-                if(points[point]['translate-z'] !== void 0){
-                    point_object['translate-z'] = tile_offset_z + points[point]['translate-z'];
+                if(points[point]['position-z'] !== void 0){
+                    point_object['position-z'] = tile_offset_z + points[point]['position-z'];
                 }
                 path_object['points'].push(point_object);
             }
@@ -3942,9 +3942,9 @@ function webgl_tiles(args){
                 ? prefix + character_object['path-id']
                 : '',
               'spawn': {
-                'translate-x': tile_offset_x + (character_object['translate-x'] || 0),
-                'translate-y': tile_offset_y + (character_object['translate-y'] || 0),
-                'translate-z': tile_offset_z + (character_object['translate-z'] || 0),
+                'position-x': tile_offset_x + (character_object['position-x'] || 0),
+                'position-y': tile_offset_y + (character_object['position-y'] || 0),
+                'position-z': tile_offset_z + (character_object['position-z'] || 0),
                 ...spawn,
               },
             });
@@ -3983,13 +3983,13 @@ function webgl_tiles(args){
                 ? prefix + prefabs[prefab]['properties']['character']
                 : args['character'],
               'prefix': prefix + (prefabs[prefab]['properties']['prefix'] || entity_id_count),
-              'translate-x': (prefabs[prefab]['properties']['translate-x'] || 0) + (attached
+              'position-x': (prefabs[prefab]['properties']['position-x'] || 0) + (attached
                 ? 0
                 : tile_offset_x),
-              'translate-y': (prefabs[prefab]['properties']['translate-y'] || 0) + (attached
+              'position-y': (prefabs[prefab]['properties']['position-y'] || 0) + (attached
                 ? 0
                 : tile_offset_y),
-              'translate-z': (prefabs[prefab]['properties']['translate-z'] || 0) + (attached
+              'position-z': (prefabs[prefab]['properties']['position-z'] || 0) + (attached
                 ? 0
                 : tile_offset_z),
             });
@@ -4098,7 +4098,7 @@ function webgl_vehicle_toggle(args){
         const axes = 'xyz';
         for(const axis in axes){
             webgl_characters[args['id']]['change-rotate-' + axes[axis]] = 0;
-            webgl_characters[args['id']]['change-translate-' + axes[axis]] = 0;
+            webgl_characters[args['id']]['change-position-' + axes[axis]] = 0;
         }
         webgl_characters[args['id']]['camera-rotate-y'] = vehicle['rotate-y'];
     }
