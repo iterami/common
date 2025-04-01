@@ -1588,6 +1588,7 @@ in vec4 position;
 out vec4 fragColor;
 uniform bool fog;
 uniform bool picking;
+uniform float alpha;
 uniform float fogDensity;
 uniform float lightRange;
 uniform sampler2D sampler;
@@ -1609,7 +1610,7 @@ void main(void){
                 ));
             }
         }
-        fragColor = fragmentColor * vec4(light, 1.0) * texture(sampler, textureCoord);
+        fragColor = fragmentColor * vec4(light, alpha) * texture(sampler, textureCoord);
         if(fog){
             float distance = length(position.xyz);
             fragColor.rgb = vec3(mix(
@@ -1637,7 +1638,6 @@ out vec4 fragmentColor;
 out vec4 position;
 uniform bool directional;
 uniform bool picking;
-uniform float alpha;
 uniform float pointSize;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
