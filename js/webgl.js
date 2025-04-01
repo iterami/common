@@ -300,19 +300,9 @@ function webgl_character_init(args){
     }
 
     if(model){
-        const xz = webgl_characters[args['id']]['collide-range-xz'] * 2;
-
-        webgl_primitive_cuboid({
-          'all': {
-            'collision': false,
-            'texture': 'grid.png',
-          },
-          'character': args['id'],
-          'prefix': args['id'],
-          'size-x': xz,
-          'size-y': webgl_characters[args['id']]['collide-range-y'] * 2,
-          'size-z': xz,
-          ...model,
+        webgl_model_create({
+          'id': args['id'],
+          'model': model,
         });
     }
 
@@ -2405,6 +2395,24 @@ function webgl_logic_particle(entity){
       'attribute': webgl_shader_attributes['vertexPosition'],
       'data': vertices,
       'size': 3,
+    });
+}
+
+// Required args: id, model
+function webgl_model_create(args){
+    const xz = webgl_characters[args['id']]['collide-range-xz'] * 2;
+
+    webgl_primitive_cuboid({
+      'all': {
+        'collision': false,
+        'texture': 'grid.png',
+      },
+      'character': args['id'],
+      'prefix': args['id'],
+      'size-x': xz,
+      'size-y': webgl_characters[args['id']]['collide-range-y'] * 2,
+      'size-z': xz,
+      ...args['model'],
     });
 }
 
