@@ -1572,13 +1572,12 @@ function webgl_init(){
       `#version 300 es
 precision mediump float;
 in vec2 textureCoord;
-in vec3 lighting;
 in vec4 fragmentColor;
+in vec4 lighting;
 in vec4 position;
 out vec4 fragColor;
 uniform bool fog;
 uniform bool picking;
-uniform float alpha;
 uniform float fogDensity;
 uniform float lightRange;
 uniform sampler2D sampler;
@@ -1589,25 +1588,25 @@ void main(void){
     if(picking){
         fragColor = fragmentColor;
     }else{
-        vec3 light = lighting;
+        vec4 light = lighting;
         if(lightRange > 0.0){
-            float distance = length(position.xyz - lightPosition.xyz);
+            float distance = length(position.xyz - lightPosition);
             if(distance < lightRange){
-                light = vec3(mix(
-                  light,
+                light.rgb = mix(
+                  light.rgb,
                   lightColor,
                   1.0 - clamp(distance / lightRange, 0.0, 1.0)
-                ));
+                );
             }
         }
-        fragColor = fragmentColor * vec4(light, alpha) * texture(sampler, textureCoord);
+        fragColor = fragmentColor * light * texture(sampler, textureCoord);
         if(fog){
             float distance = length(position.xyz);
-            fragColor.rgb = vec3(mix(
+            fragColor.rgb = mix(
               clearColor,
               fragColor.rgb,
               clamp(exp(fogDensity * distance * -distance), 0.0, 1.0)
-            ));
+            );
         }
     }
 }`
@@ -1623,11 +1622,12 @@ in vec3 vertexPosition;
 in vec4 pickColor;
 in vec4 vertexColor;
 out vec2 textureCoord;
-out vec3 lighting;
 out vec4 fragmentColor;
+out vec4 lighting;
 out vec4 position;
 uniform bool directional;
 uniform bool picking;
+uniform float alpha;
 uniform float pointSize;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
@@ -1643,10 +1643,10 @@ void main(void){
     }else{
         fragmentColor = vertexColor;
         textureCoord = texturePosition;
-        lighting = ambientColor;
+        lighting = vec4(ambientColor, alpha);
         if(directional){
-            vec4 transformedNormal = perspectiveMatrix * vec4(vertexNormal, 1.0);
-            lighting += directionalColor * max(dot(transformedNormal.xyz, normalize(directionalVector)), -0.5);
+            vec4 normal = perspectiveMatrix * vec4(vertexNormal, 1.0);
+            lighting.rgb += directionalColor * max(dot(normal.xyz, normalize(directionalVector)), -0.5);
         }
     }
 }`
