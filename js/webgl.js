@@ -1576,9 +1576,8 @@ in vec4 fragmentColor;
 in vec4 lighting;
 in vec4 position;
 out vec4 fragColor;
-uniform bool fog;
 uniform bool picking;
-uniform float fogDensity;
+uniform float fog;
 uniform float lightRange;
 uniform sampler2D sampler;
 uniform vec3 clearColor;
@@ -1600,12 +1599,12 @@ void main(void){
             }
         }
         fragColor = fragmentColor * light * texture(sampler, textureCoord);
-        if(fog){
+        if(fog > 0.0){
             float distance = length(position.xyz);
             fragColor.rgb = mix(
               clearColor,
               fragColor.rgb,
-              clamp(exp(fogDensity * distance * -distance), 0.0, 1.0)
+              1.0 - clamp(distance / fog, 0.0, 1.0)
             );
         }
     }
@@ -1687,8 +1686,7 @@ void main(void){
       'directional': 'directional',
       'directional-color': 'directionalColor',
       'directional-vector': 'directionalVector',
-      'fog-density': 'fogDensity',
-      'fog-state': 'fog',
+      'fog': 'fog',
       'light-color': 'lightColor',
       'light-position': 'lightPosition',
       'light-range': 'lightRange',
@@ -1876,8 +1874,7 @@ function webgl_level_init(args){
         'directional-state': true,
         'directional-vector': [0, 1, 0],
         'draw-range': false,
-        'fog-density': .0001,
-        'fog-state': false,
+        'fog': 0,
         'gravity-acceleration': -.05,
         'gravity-damage': false,
         'gravity-max': -2,
@@ -1910,8 +1907,7 @@ function webgl_level_init(args){
         'directional-state': level['directional-state'],
         'directional-vector': level['directional-vector'],
         'draw-range': level['draw-range'],
-        'fog-density': level['fog-density'],
-        'fog-state': level['fog-state'],
+        'fog': level['fog'],
         'gravity-acceleration': level['gravity-acceleration'],
         'gravity-damage': level['gravity-damage'],
         'gravity-max': level['gravity-max'],
@@ -4061,12 +4057,8 @@ function webgl_uniform_update(){
       webgl_properties['directional-vector']
     );
     webgl.uniform1f(
-      webgl_shader_uniforms['fog-density'],
-      webgl_properties['fog-density']
-    );
-    webgl.uniform1i(
-      webgl_shader_uniforms['fog-state'],
-      webgl_properties['fog-state']
+      webgl_shader_uniforms['fog'],
+      webgl_properties['fog']
     );
 }
 
