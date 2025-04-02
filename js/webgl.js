@@ -1693,7 +1693,6 @@ void main(void){
       'perspectiveMatrix': 'perspectiveMatrix',
       'picking': 'picking',
       'point-size': 'pointSize',
-      'sampler': 'sampler',
     };
     for(const uniform in uniforms){
         webgl_shader_uniforms[uniform] = webgl.getUniformLocation(
