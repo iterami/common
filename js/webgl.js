@@ -1577,7 +1577,8 @@ in vec4 lighting;
 in vec4 position;
 out vec4 fragColor;
 uniform bool picking;
-uniform float fog;
+uniform float fogEnd;
+uniform float fogStart;
 uniform float lightRange;
 uniform sampler2D sampler;
 uniform vec3 clearColor;
@@ -1599,12 +1600,12 @@ void main(void){
             }
         }
         fragColor = fragmentColor * light * texture(sampler, textureCoord);
-        if(fog > 0.0){
+        if(fogEnd > 0.0){
             float distance = length(position.xyz);
             fragColor.rgb = mix(
               clearColor,
               fragColor.rgb,
-              1.0 - clamp(distance / fog, 0.0, 1.0)
+              1.0 - clamp((distance - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
             );
         }
     }
@@ -1686,7 +1687,8 @@ void main(void){
       'directional': 'directional',
       'directional-color': 'directionalColor',
       'directional-vector': 'directionalVector',
-      'fog': 'fog',
+      'fog-end': 'fogEnd',
+      'fog-start': 'fogStart',
       'light-color': 'lightColor',
       'light-position': 'lightPosition',
       'light-range': 'lightRange',
@@ -1873,7 +1875,8 @@ function webgl_level_init(args){
         'directional-state': true,
         'directional-vector': [0, 1, 0],
         'draw-range': false,
-        'fog': 0,
+        'fog-end': 0,
+        'fog-start': 0,
         'gravity-acceleration': -.05,
         'gravity-damage': false,
         'gravity-max': -2,
@@ -1906,7 +1909,8 @@ function webgl_level_init(args){
         'directional-state': level['directional-state'],
         'directional-vector': level['directional-vector'],
         'draw-range': level['draw-range'],
-        'fog': level['fog'],
+        'fog-end': level['fog-end'],
+        'fog-start': level['fog-start'],
         'gravity-acceleration': level['gravity-acceleration'],
         'gravity-damage': level['gravity-damage'],
         'gravity-max': level['gravity-max'],
@@ -4056,8 +4060,12 @@ function webgl_uniform_update(){
       webgl_properties['directional-vector']
     );
     webgl.uniform1f(
-      webgl_shader_uniforms['fog'],
-      webgl_properties['fog']
+      webgl_shader_uniforms['fog-end'],
+      webgl_properties['fog-end']
+    );
+    webgl.uniform1f(
+      webgl_shader_uniforms['fog-start'],
+      webgl_properties['fog-start']
     );
 }
 
