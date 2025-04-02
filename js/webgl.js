@@ -1596,7 +1596,7 @@ void main(void){
                 light = vec3(mix(
                   light,
                   lightColor,
-                  clamp(distance, 0.0, 1.0)
+                  1.0 - clamp(distance / lightRange, 0.0, 1.0)
                 ));
             }
         }
