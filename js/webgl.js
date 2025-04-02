@@ -314,7 +314,7 @@ function webgl_character_level(character){
         character = webgl_characters[webgl_character_id];
     }
 
-    if(character?.['level']){
+    if(core_type(character['level']) === 'number'){
         return character['level'];
     }
 
