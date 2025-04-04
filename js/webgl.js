@@ -2407,7 +2407,7 @@ function webgl_logic_particle(entity){
 // Required args: id, model
 function webgl_model_create(args){
     const character = webgl_characters[args['id']];
-    const xz = ['collide-xz'] * 2;
+    const xz = character['collide-xz'] * 2;
 
     webgl_primitive_cuboid({
       'all': {
@@ -2417,7 +2417,7 @@ function webgl_model_create(args){
       'character': args['id'],
       'prefix': args['id'],
       'size-x': xz,
-      'size-y': character['collide-bottom'] + charcters['collide-top'],
+      'size-y': character['collide-bottom'] + character['collide-top'],
       'size-z': xz,
       ...args['model'],
     });
