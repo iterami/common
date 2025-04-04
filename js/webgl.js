@@ -189,8 +189,9 @@ function webgl_character_init(args){
         'automove': false,
         'camera-lock': true,
         'camera-zoom': 0,
-        'collide-range-xz': 2,
-        'collide-range-y': 3,
+        'collide-bottom': 3,
+        'collide-top': 3,
+        'collide-xz': 2,
         'collides': false,
         'controls': '',
         'entities': [],
@@ -531,9 +532,10 @@ function webgl_collision(args){
       'z': args['collider']['change-position-z'] - character?.['change-position-z'],
     };
     const range = {
-      'x': args['collider']['collide-range-xz'] + Math.abs(diffs['x']),
-      'y': args['collider']['collide-range-y'] + Math.abs(diffs['y']),
-      'z': args['collider']['collide-range-xz'] + Math.abs(diffs['z']),
+      'x': args['collider']['collide-xz'] + Math.abs(diffs['x']),
+      'y-bottom': args['collider']['collide-bottom'] + Math.abs(diffs['y']),
+      'y-top': args['collider']['collide-top'] + Math.abs(diffs['y']),
+      'z': args['collider']['collide-xz'] + Math.abs(diffs['z']),
     };
     const target_position = webgl_get_position(args['target']);
 
@@ -542,8 +544,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs['x'])
       && collider_position['x'] > target_position['x'] - range['x']
       && collider_position['x'] < target_position['x'] + range['x']
-      && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y']
-      && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y']
+      && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y-bottom']
+      && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y-top']
       && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
       && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
         collision += 'x';
@@ -554,8 +556,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs['z'])
       && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
       && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
-      && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y']
-      && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y']
+      && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y-bottom']
+      && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y-top']
       && collider_position['z'] > target_position['z'] - range['z']
       && collider_position['z'] < target_position['z'] + range['z']){
         collision += 'z';
@@ -566,8 +568,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs['y'])
       && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
       && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
-      && collider_position['y'] > target_position['y'] - range['y']
-      && collider_position['y'] < target_position['y'] + range['y']
+      && collider_position['y'] > target_position['y'] - range['y-bottom']
+      && collider_position['y'] < target_position['y'] + range['y-top']
       && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
       && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
         collision += 'y';
@@ -582,9 +584,14 @@ function webgl_collision(args){
         const change_position = character
           ? character['change-position-' + collision[axis]]
           : 0;
+        const label = collision[axis] !== 'y'
+          ? 'xz'
+          : collision_sign[axis] > 0
+            ? 'bottom'
+            : 'top';
 
         args['collider']['position-' + collision[axis]] = target_position[collision[axis]]
-          + args['collider']['collide-range-' + (collision[axis] === 'y' ? 'y' : 'xz')] * collision_sign[axis]
+          + args['collider']['collide-' + label] * collision_sign[axis]
           + change_position;
         args['collider']['change-position-' + collision[axis]] = change_position;
 
@@ -796,7 +803,7 @@ function webgl_controls_keyboard(character){
             character['rotate-' + axes[axis]] = vehicle['rotate-' + axes[axis]];
             character['position-' + axes[axis]] = vehicle['position-' + axes[axis]] + vehicle['change-position-' + axes[axis]];
         }
-        character['position-y'] += character['collide-range-y'];
+        character['position-y'] += character['collide-bottom'];
         return;
     }
 
@@ -2399,7 +2406,8 @@ function webgl_logic_particle(entity){
 
 // Required args: id, model
 function webgl_model_create(args){
-    const xz = webgl_characters[args['id']]['collide-range-xz'] * 2;
+    const character = webgl_characters[args['id']];
+    const xz = ['collide-xz'] * 2;
 
     webgl_primitive_cuboid({
       'all': {
@@ -2409,7 +2417,7 @@ function webgl_model_create(args){
       'character': args['id'],
       'prefix': args['id'],
       'size-x': xz,
-      'size-y': webgl_characters[args['id']]['collide-range-y'] * 2,
+      'size-y': character['collide-bottom'] + charcters['collide-top'],
       'size-z': xz,
       ...args['model'],
     });
