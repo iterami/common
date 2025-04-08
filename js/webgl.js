@@ -3652,7 +3652,8 @@ function webgl_stat_modify(args){
       },
     });
 
-    if(webgl_character_level(args['target']) < 0
+    const target = args['target'];
+    if(webgl_character_level(target) < 0
       && (args['stat'] === 'level-xp' || args['stat'] === 'life')){
         return;
     }
@@ -3661,7 +3662,7 @@ function webgl_stat_modify(args){
       || args['stat'].startsWith('camera-rotate-')){
         const rotate_args = {
           'camera': args['stat'].startsWith('camera-rotate-'),
-          'character': args['target']['id'],
+          'character': target['id'],
           'mouse': false,
           'set': args['set'],
         };
@@ -3669,63 +3670,67 @@ function webgl_stat_modify(args){
         webgl_camera_rotate(rotate_args);
 
     }else if(args['stat'] === 'vertex-colors'){
-        args['target']['vertex-colors'] = core_type(args['value']) === 'array'
+        target['vertex-colors'] = core_type(args['value']) === 'array'
           ? args['value']
           : webgl_vertexcolorarray();
-        webgl.bindVertexArray(args['target']['vao']);
+        webgl.bindVertexArray(target['vao']);
         webgl_buffer_set({
           'attribute': webgl_shader_attributes['vertexColor'],
           'data': webgl_vertexcolorarray({
-            'colors': args['target']['vertex-colors'],
-            'vertexcount': args['target']['vertices-length'],
+            'colors': target['vertex-colors'],
+            'vertexcount': target['vertices-length'],
           }),
           'size': 4,
         });
 
     }else{
-        if(args['target'][args['stat']] === void 0){
+        if(target[args['stat']] === void 0){
             if(args['has']){
                 return;
             }
 
-            args['target'][args['stat']] = 0;
+            target[args['stat']] = 0;
         }
 
-        args['target'][args['stat']] = (args['set'] || core_type(args['value']) !== 'number')
+        if(args['set'] && target[args['stat']] === args['value']){
+            return;
+        }
+
+        target[args['stat']] = (args['set'] || core_type(args['value']) !== 'number')
           ? args['value']
-          : args['target'][args['stat']] + args['value'];
+          : target[args['stat']] + args['value'];
 
         if(args['stat'] === 'level-xp'){
-            while(args['target']['level-xp'] >= Math.floor(args['target']['level'] + 1) * 1e3){
-                args['target']['level-xp'] -= Math.floor(args['target']['level'] + 1) * 1e3;
-                args['target']['level']++;
+            while(target['level-xp'] >= Math.floor(target['level'] + 1) * 1e3){
+                target['level-xp'] -= Math.floor(target['level'] + 1) * 1e3;
+                target['level']++;
             }
 
         }else if(args['stat'] === 'life'){
-            if(args['target']['life'] <= 0){
-                args['target']['life'] = 0;
+            if(target['life'] <= 0){
+                target['life'] = 0;
 
-                if(args['target']['lives'] > 0){
-                    args['target']['lives']--;
+                if(target['lives'] > 0){
+                    target['lives']--;
                 }
 
-                if(args['target']['lives'] === 0){
-                    args['target']['gravity'] = 0;
+                if(target['lives'] === 0){
+                    target['gravity'] = 0;
 
                     const axes = 'xyz';
                     for(const axis in axes){
-                        args['target']['change-rotate-' + axes[axis]] = 0;
-                        args['target']['change-position-' + axes[axis]] = 0;
+                        target['change-rotate-' + axes[axis]] = 0;
+                        target['change-position-' + axes[axis]] = 0;
                     }
 
                 }else{
-                    webgl_character_spawn(args['target']['id']);
+                    webgl_character_spawn(target['id']);
                 }
 
             }else{
-                args['target']['life'] = Math.min(
-                  args['target']['life'],
-                  args['target']['life-max']
+                target['life'] = Math.min(
+                  target['life'],
+                  target['life-max']
                 );
             }
         }
