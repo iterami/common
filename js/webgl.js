@@ -544,8 +544,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs['x'])
       && collider_position['x'] > target_position['x'] - range['x']
       && collider_position['x'] < target_position['x'] + range['x']
-      && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y-bottom']
-      && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y-top']
+      && collider_position['y'] > target_position['y'] + args['target']['vertices'][3] - range['y-top']
+      && collider_position['y'] < target_position['y'] + args['target']['vertices'][0] + range['y-bottom']
       && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
       && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
         collision += 'x';
@@ -556,8 +556,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs['z'])
       && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
       && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
-      && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y-bottom']
-      && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y-top']
+      && collider_position['y'] > target_position['y'] + args['target']['vertices'][2] - range['y-top']
+      && collider_position['y'] < target_position['y'] + args['target']['vertices'][8] + range['y-bottom']
       && collider_position['z'] > target_position['z'] - range['z']
       && collider_position['z'] < target_position['z'] + range['z']){
         collision += 'z';
@@ -568,8 +568,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs['y'])
       && collider_position['x'] > target_position['x'] + args['target']['vertices'][3] - range['x']
       && collider_position['x'] < target_position['x'] + args['target']['vertices'][0] + range['x']
-      && collider_position['y'] > target_position['y'] - range['y-bottom']
-      && collider_position['y'] < target_position['y'] + range['y-top']
+      && collider_position['y'] > target_position['y'] - range['y-top']
+      && collider_position['y'] < target_position['y'] + range['y-bottom']
       && collider_position['z'] > target_position['z'] + args['target']['vertices'][2] - range['z']
       && collider_position['z'] < target_position['z'] + args['target']['vertices'][8] + range['z']){
         collision += 'y';
@@ -2416,6 +2416,7 @@ function webgl_model_create(args){
       },
       'character': args['id'],
       'prefix': args['id'],
+      'position-y': (character['collide-top'] - character['collide-bottom']) / 2,
       'size-x': xz,
       'size-y': character['collide-bottom'] + character['collide-top'],
       'size-z': xz,
