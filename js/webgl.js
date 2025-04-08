@@ -1457,20 +1457,19 @@ function webgl_event(args){
 }
 
 function webgl_get_position(entity){
-    if(entity['attach-to'] === void 0
-      || entity['attach-to'] === false){
+    if(entity['attach-to']){
+        const target = globalThis[entity['attach-type']][entity['attach-to']];
         return {
-          'x': entity['position-x'],
-          'y': entity['position-y'],
-          'z': entity['position-z'],
+          'x': target['position-x'] + entity['attach-x'],
+          'y': target['position-y'] + entity['attach-y'],
+          'z': target['position-z'] + entity['attach-z'],
         };
     }
 
-    const target = globalThis[entity['attach-type']][entity['attach-to']];
     return {
-      'x': target['position-x'] + entity['attach-x'],
-      'y': target['position-y'] + entity['attach-y'],
-      'z': target['position-z'] + entity['attach-z'],
+      'x': entity['position-x'],
+      'y': entity['position-y'],
+      'z': entity['position-z'],
     };
 }
 
@@ -2227,8 +2226,9 @@ function webgl_logic_entity(entity){
         entity['visible'] = true;
     }
 
-    const target = globalThis[entity['attach-type']][entity['attach-to']];
-    if(target){
+    if(entity['attach-to']){
+        const target = globalThis[entity['attach-type']][entity['attach-to']];
+
         if(entity_groups['skybox'][entity['id']]){
             entity['position-x'] = target['camera-x'];
             entity['position-y'] = target['camera-y'];
