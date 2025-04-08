@@ -2209,23 +2209,6 @@ function webgl_logic(){
 }
 
 function webgl_logic_entity(entity){
-    const draw_range = entity['draw-range'] || webgl_properties['draw-range'];
-    if(draw_range){
-        const character = webgl_characters[webgl_character_id];
-        const position = webgl_get_position(entity);
-        entity['visible'] = math_distance({
-            'x0': character['camera-x'],
-            'y0': character['camera-y'],
-            'z0': character['camera-z'],
-            'x1': position['x'],
-            'y1': position['y'],
-            'z1': position['z'],
-          }) <= draw_range;
-
-    }else{
-        entity['visible'] = true;
-    }
-
     if(entity['attach-to']){
         const target = globalThis[entity['attach-type']][entity['attach-to']];
 
@@ -2299,6 +2282,23 @@ function webgl_logic_entity(entity){
                 }
             }
         }
+    }
+
+    const draw_range = entity['draw-range'] || webgl_properties['draw-range'];
+    if(draw_range){
+        const character = webgl_characters[webgl_character_id];
+        const position = webgl_get_position(entity);
+        entity['visible'] = math_distance({
+            'x0': character['camera-x'],
+            'y0': character['camera-y'],
+            'z0': character['camera-z'],
+            'x1': position['x'],
+            'y1': position['y'],
+            'z1': position['z'],
+          }) <= draw_range;
+
+    }else{
+        entity['visible'] = true;
     }
 
     const old_rotate_x = entity['rotate-x'];
