@@ -2241,28 +2241,61 @@ function webgl_logic_entity(entity){
         }
     }
 
-    if(entity['event-range'] > 0){
+    if(entity['event-range'] !== false
+      && entity['event-range'] !== 0){
         const event_position = webgl_get_position(entity);
 
-        for(const character in webgl_characters){
-            if(character === entity['attach-to']){
-                continue;
+        if(core_type(entity['event-range']) === 'array'){
+            for(const character in webgl_characters){
+                if(character === entity['attach-to']){
+                    continue;
+                }
+
+                if(math_cuboid_overlap({
+                    'depth-0': entity['event-range'][2],
+                    'depth-1': entity['event-range'][2],
+                    'height-0': entity['event-range'][1],
+                    'height-1': entity['event-range'][1],
+                    'width-0': entity['event-range'][0],
+                    'width-1': entity['event-range'][0],
+                    'x-0': webgl_characters[character]['position-x'],
+                    'y-0': webgl_characters[character]['position-y'],
+                    'z-0': webgl_characters[character]['position-z'],
+                    'x-1': event_position['x'],
+                    'y-1': event_position['y'],
+                    'z-1': event_position['z'],
+                  })){
+                    webgl_event({
+                      'parent': entity,
+                      'target': webgl_characters[character],
+                    });
+                    if(!entity_entities[entity['id']]){
+                        return;
+                    }
+                }
             }
 
-            if(math_distance({
-                'x0': webgl_characters[character]['position-x'],
-                'y0': webgl_characters[character]['position-y'],
-                'z0': webgl_characters[character]['position-z'],
-                'x1': event_position['x'],
-                'y1': event_position['y'],
-                'z1': event_position['z'],
-              }) < entity['event-range']){
-                webgl_event({
-                  'parent': entity,
-                  'target': webgl_characters[character],
-                });
-                if(!entity_entities[entity['id']]){
-                    return;
+        }else{
+            for(const character in webgl_characters){
+                if(character === entity['attach-to']){
+                    continue;
+                }
+
+                if(math_distance({
+                    'x0': webgl_characters[character]['position-x'],
+                    'y0': webgl_characters[character]['position-y'],
+                    'z0': webgl_characters[character]['position-z'],
+                    'x1': event_position['x'],
+                    'y1': event_position['y'],
+                    'z1': event_position['z'],
+                  }) < entity['event-range']){
+                    webgl_event({
+                      'parent': entity,
+                      'target': webgl_characters[character],
+                    });
+                    if(!entity_entities[entity['id']]){
+                        return;
+                    }
                 }
             }
         }
