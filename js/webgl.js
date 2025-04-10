@@ -435,10 +435,10 @@ function webgl_character_spawn(id){
 
     const axes = 'xyz';
     for(const axis in axes){
-        character['change-rotate-' + axes[axis]] = 0;
-        character['change-position-' + axes[axis]] = 0;
-
         character['camera-rotate-' + axes[axis]] = 0;
+        character['change-position-' + axes[axis]] = 0;
+        character['change-rotate-' + axes[axis]] = 0;
+        character['position-' + axes[axis]] = 0;
         character['rotate-' + axes[axis]] = 0;
     }
     character['jump-allow'] = false;
