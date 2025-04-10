@@ -215,7 +215,6 @@ function webgl_character_init(args){
         'scale-z': 1,
         'spawn': {},
         'speed': 1,
-        'static': false,
         'turn-speed': 5,
         'vehicle': false,
         'vehicle-stats': false,
@@ -224,13 +223,10 @@ function webgl_character_init(args){
 
     const entities = args['entities'];
     const model = args['model'];
-    const is_static = args['static'];
     delete args['entities'];
     delete args['model'];
-    delete args['static'];
 
     webgl_characters[args['id']] = {
-      ...args,
       'camera-rotate-x': 0,
       'camera-rotate-y': 0,
       'camera-rotate-z': 0,
@@ -277,6 +273,7 @@ function webgl_character_init(args){
               'speed-max': 1,
             },
           }),
+      ...args,
     };
     webgl_character_count++;
 
@@ -285,10 +282,6 @@ function webgl_character_init(args){
       'character': args['id'],
       'entities': entities,
     });
-
-    if(is_static){
-        return;
-    }
 
     if(args['vehicle-stats']
       && args['vehicle-stats']['character']){
@@ -435,6 +428,7 @@ function webgl_character_spawn(id){
     }
     const character = webgl_characters[id];
     if(character === void 0
+      || character['spawn'] === false
       || character['lives'] === 0){
         return;
     }
