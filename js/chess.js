@@ -135,17 +135,27 @@ function chess_move(args){
 }
 
 // Required args: id
+// Optional args: order-black, order-white
 function chess_new(args){
-    const board = [
-      [chess_pieces[1][3], chess_pieces[1][1], chess_pieces[1][2], chess_pieces[1][4], chess_pieces[1][5], chess_pieces[1][2], chess_pieces[1][1], chess_pieces[1][3],],
+    const order_black = args['order-black'] || '31245213';
+    const order_white = args['order-white'] || '31245213';
+
+    const board = [[]];
+    for(const piece in order_black){
+        board[0].push(chess_pieces[1][order_black[piece]]);
+    }
+    board.push(
       [chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0], chess_pieces[1][0],],
       ['', '', '', '', '', '', '', '',],
       ['', '', '', '', '', '', '', '',],
       ['', '', '', '', '', '', '', '',],
       ['', '', '', '', '', '', '', '',],
       [chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0],],
-      [chess_pieces[0][3], chess_pieces[0][1], chess_pieces[0][2], chess_pieces[0][4], chess_pieces[0][5], chess_pieces[0][2], chess_pieces[0][1], chess_pieces[0][3],],
-    ];
+      []
+    );
+    for(const piece in order_white){
+        board[7].push(chess_pieces[0][order_white[piece]]);
+    }
     let threefold = '';
     for(const rank in board){
         for(const square in board[rank]){
