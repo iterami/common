@@ -150,11 +150,19 @@ function chess_new(args){
       [chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0], chess_pieces[0][0],],
       [],
     ];
+    let king_black = 4;
     for(const piece in order_black){
         board[0].push(chess_pieces[1][order_black[piece]]);
+        if(order_black[piece] === '5'){
+            king_black = piece;
+        }
     }
+    let king_white = 4;
     for(const piece in order_white){
         board[7].push(chess_pieces[0][order_white[piece]]);
+        if(order_white[piece] === '5'){
+            king_white = piece;
+        }
     }
 
     let threefold = '';
@@ -178,7 +186,7 @@ function chess_new(args){
         {
           'king-checked': false,
           'king-moved': false,
-          'king-x': 4,
+          'king-x': king_white,
           'king-y': 7,
           'pawn-promote': 4,
           'pieces-taken': '',
@@ -190,7 +198,7 @@ function chess_new(args){
         {
           'king-checked': false,
           'king-moved': false,
-          'king-x': 4,
+          'king-x': king_black,
           'king-y': 0,
           'pawn-promote': 4,
           'pieces-taken': '',
