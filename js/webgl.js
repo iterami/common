@@ -331,20 +331,20 @@ function webgl_character_move(args){
         webgl_characters[args['id']]['change-position-y'] += args['speed'] * (args['strafe']
           ? -1
           : 1);
-
-    }else{
-        const angle = args['angle'] === true
-          ? webgl_characters[args['id']]['rotate-y']
-          : args['angle'];
-        const movement = math_move_3d({
-          'angle': angle,
-          'speed': args['speed'],
-          'strafe': args['strafe'],
-        });
-
-        webgl_characters[args['id']]['change-position-x'] += movement['x'];
-        webgl_characters[args['id']]['change-position-z'] += movement['z'];
+        return;
     }
+
+    const angle = args['angle'] === true
+      ? webgl_characters[args['id']]['rotate-y']
+      : args['angle'];
+    const movement = math_move_3d({
+      'angle': angle,
+      'speed': args['speed'],
+      'strafe': args['strafe'],
+    });
+
+    webgl_characters[args['id']]['change-position-x'] += movement['x'];
+    webgl_characters[args['id']]['change-position-z'] += movement['z'];
 }
 
 function webgl_character_scale(args){
@@ -3555,11 +3555,11 @@ function webgl_random_vertex(entity){
     const position = webgl_get_position(entity);
     const vertex = core_random_integer({
       'max': entity['vertices-length'],
-    });
+    }) * 3;
     return {
-      'x': position['x'] + entity['vertices'][vertex * 3],
-      'y': position['y'] + entity['vertices'][vertex * 3 + 1],
-      'z': position['z'] + entity['vertices'][vertex * 3 + 2],
+      'x': position['x'] + entity['vertices'][vertex],
+      'y': position['y'] + entity['vertices'][vertex + 1],
+      'z': position['z'] + entity['vertices'][vertex + 2],
     };
 }
 
