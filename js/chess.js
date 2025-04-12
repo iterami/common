@@ -584,7 +584,7 @@ function chess_validate(args){
                 fifty_moves = 0;
 
             }else{
-                fifty_moves += 0.5;
+                fifty_moves += .5;
             }
 
             if(castling
