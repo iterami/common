@@ -198,19 +198,22 @@ function core_handle_event(args){
       },
     });
 
-    if(args['key'] in args['object']){
-        if(args['object'][args['key']]['preventDefault']
-          && !core_menu_open){
-            args['event'].preventDefault();
-        }
+    const handler = args['object'][args['key']];
+    if(!handler){
+        return;
+    }
 
-        if(args['state'] !== void 0){
-            args['object'][args['key']]['state'] = args['state'];
-        }
+    if(handler['preventDefault']
+      && !core_menu_open){
+        args['event'].preventDefault();
+    }
 
-        if(args['state'] !== false){
-            return args['object'][args['key']]['todo']?.(args['event']);
-        }
+    if(args['state'] !== void 0){
+        handler['state'] = args['state'];
+    }
+
+    if(args['state'] !== false){
+        return handler['todo']?.(args['event']);
     }
 }
 
