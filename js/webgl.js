@@ -938,12 +938,13 @@ function webgl_controls_mouse(character){
     if(character === void 0){
         character = webgl_characters[webgl_character_id];
     }
-    const level = webgl_character_level(character);
-    if(level < -1){
-        return;
-    }
     const controls = character['controls'];
     if(controls.length === 0){
+        return;
+    }
+    const level = webgl_character_level(character);
+    if(level < -1
+      || (level !== -1 && webgl_properties['paused'])){
         return;
     }
 
@@ -951,20 +952,23 @@ function webgl_controls_mouse(character){
     let mouse_2_down = false;
     let movement_x = 0;
     let movement_y = 0;
+    let shift_key = false;
     if(character['id'] === webgl_character_id){
         mouse_0_down = core_mouse['down-0'];
         mouse_2_down = core_mouse['down-2'];
         movement_x = core_mouse['movement-x'];
         movement_y = core_mouse['movement-y'];
+        shift_key = core_key_shift;
     }
 
-    if(webgl_properties['pointerlock']
-      || mouse_2_down
-      || (mouse_0_down && controls !== 'rts')){
-        if(level !== -1 && webgl_properties['paused']){
-            return;
-        }
+    if(controls === 'rts'
+      && !shift_key){
+        return;
+    }
 
+    if(mouse_0_down
+      || mouse_2_down
+      || webgl_properties['pointerlock']){
         webgl_camera_rotate({
           'character': character['id'],
           'x': movement_y / 10,
