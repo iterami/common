@@ -91,17 +91,30 @@ function core_events_bind(args){
     }
 
     if(args['keybinds'] !== false){
-        core_keys_updatebinds({
-          'clear': args['clearkeys'],
-          'keybinds': args['keybinds'],
-        });
+        if(args['clearkeys']){
+            core_object_reset(core_keys);
+        }
+        for(const keybind in args['keybinds']){
+            core_keys[keybind] = core_args({
+              'args': args['keybinds'][keybind],
+              'defaults': {
+                'preventDefault': false,
+                'state': false,
+              },
+            });
+        }
     }
 
     if(args['mousebinds'] !== false){
-        core_mouse_updatebinds({
-          'clear': args['clearmouse'],
-          'mousebinds': args['mousebinds'],
-        });
+        if(args['clearmouse']){
+            core_object_reset(core_mouse['todo']);
+        }
+        for(const mousebind in args['mousebinds']){
+            core_mouse['todo'][mousebind] = {
+              'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
+              'todo': args['mousebinds'][mousebind]['todo'],
+            };
+        }
         document.onpointerlockchange = core_handle_pointerlockchange;
         globalThis.oncontextmenu = core_handle_contextmenu;
         globalThis.onmousedown = core_handle_mousedown;
@@ -790,51 +803,6 @@ function core_keys_rebind(){
         ...core_key_rebinds,
       },
     });
-}
-
-// Required args: keybinds
-function core_keys_updatebinds(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'clear': false,
-      },
-    });
-
-    if(args['clear']){
-        core_object_reset(core_keys);
-    }
-
-    for(const keybind in args['keybinds']){
-        core_keys[keybind] = core_args({
-          'args': args['keybinds'][keybind],
-          'defaults': {
-            'preventDefault': false,
-            'state': false,
-          },
-        });
-    }
-}
-
-// Required args: mousebinds
-function core_mouse_updatebinds(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'clear': false,
-      },
-    });
-
-    if(args['clear']){
-        core_object_reset(core_mouse['todo']);
-    }
-
-    for(const mousebind in args['mousebinds']){
-        core_mouse['todo'][mousebind] = {
-          'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
-          'todo': args['mousebinds'][mousebind]['todo'],
-        };
-    }
 }
 
 // Required args: number
