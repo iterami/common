@@ -90,10 +90,10 @@ function core_events_bind(args){
         globalThis.onbeforeunload = core_handle_beforeunload;
     }
 
+    if(args['clearkeys']){
+        core_object_reset(core_keys);
+    }
     if(args['keybinds'] !== false){
-        if(args['clearkeys']){
-            core_object_reset(core_keys);
-        }
         for(const keybind in args['keybinds']){
             core_keys[keybind] = core_args({
               'args': args['keybinds'][keybind],
@@ -105,10 +105,10 @@ function core_events_bind(args){
         }
     }
 
+    if(args['clearmouse']){
+        core_object_reset(core_mouse['todo']);
+    }
     if(args['mousebinds'] !== false){
-        if(args['clearmouse']){
-            core_object_reset(core_mouse['todo']);
-        }
         for(const mousebind in args['mousebinds']){
             core_mouse['todo'][mousebind] = {
               'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
