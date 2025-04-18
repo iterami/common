@@ -1212,11 +1212,6 @@ function webgl_entity_init(entity){
       'alpha': entity['alpha'],
       'id': entity['id'],
     });
-    entity['normals'] = webgl_normals({
-      'rotate-x': entity['rotate-x'],
-      'rotate-y': entity['rotate-y'],
-      'rotate-z': entity['rotate-z'],
-    });
     entity['vertices-length'] = entity['vertices'].length / 3;
     entity['vertex-colors'] = webgl_vertexcolorarray({
       'colors': entity['vertex-colors'],
@@ -1256,21 +1251,11 @@ function webgl_entity_init(entity){
     }
 
     entity['vao'] = webgl.createVertexArray();
-    webgl.bindVertexArray(entity['vao']);
-
+    webgl_entity_normals(entity);
     webgl_buffer_set({
       'attribute': webgl_shader_attributes['vertexColor'],
       'data': entity['vertex-colors'],
       'size': 4,
-    });
-    const normals = [];
-    for(let i = 0; i < entity['vertices-length']; i++){
-        normals.push(...entity['normals']);
-    }
-    webgl_buffer_set({
-      'attribute': webgl_shader_attributes['vertexNormal'],
-      'data': normals,
-      'size': 3,
     });
     webgl_buffer_set({
       'attribute': webgl_shader_attributes['pickColor'],
