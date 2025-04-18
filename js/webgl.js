@@ -1514,7 +1514,7 @@ function webgl_init(){
       'properties': {
         'alpha': 1,
         'attach-to': false,
-        'attach-type': 'entity_entities',
+        'attach-type': 'webgl_characters',
         'attach-x': 0,
         'attach-y': 0,
         'attach-z': 0,
