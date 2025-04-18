@@ -2025,12 +2025,7 @@ function webgl_level_unload(){
         const entity = entity_entities[id];
         if(entity['attach-to'] === webgl_character_id
           && entity_groups['skybox'][id] !== true){
-            const properties = {};
-            Object.assign(
-              properties,
-              entity
-            );
-            webgl_character_base_entities.push(properties);
+            webgl_character_base_entities.push(entity);
         }
     }
 
