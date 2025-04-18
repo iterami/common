@@ -3747,7 +3747,7 @@ function webgl_texture_animate(id){
 
     const width = image['width'];
     let offset_x = texture['offset-x'] + texture['speed-x'];
-    if(offset_x <= 0){
+    if(offset_x < 0){
         offset_x = width;
 
     }else if(offset_x >= width){
@@ -3757,7 +3757,7 @@ function webgl_texture_animate(id){
 
     const height = image['height'];
     let offset_y = texture['offset-y'] + texture['speed-y'];
-    if(offset_y <= 0){
+    if(offset_y < 0){
         offset_y = height;
 
     }else if(offset_y >= height){
