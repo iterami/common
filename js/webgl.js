@@ -2827,7 +2827,6 @@ function webgl_prefab_repeat(args){
     if(args['characters']){
         for(let i = 0; i < args['count']; i++){
             const prefix = args['prefix'] + '-' + i;
-            const spawn = args['characters']['spawn'] || {};
             webgl_character_init({
               ...args['characters'],
               'id': prefix,
@@ -2835,7 +2834,7 @@ function webgl_prefab_repeat(args){
                 'position-x': Math.random() * (args['x-max'] - args['x-min']) + args['x-min'],
                 'position-y': Math.random() * (args['y-max'] - args['y-min']) + args['y-min'],
                 'position-z': Math.random() * (args['z-max'] - args['z-min']) + args['z-min'],
-                ...spawn,
+                ...args['characters']['spawn'],
               },
             });
 
