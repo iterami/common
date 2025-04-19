@@ -2002,23 +2002,27 @@ function webgl_level_load(args){
 
     core_interval_pause_all();
     webgl_level_init({
-      'base': webgl_level_unload(),
+      'base': webgl_level_unload(true),
       'character': args['character'],
       'json': args['json'],
     });
     return true;
 }
 
-function webgl_level_unload(){
-    const base = {
-      ...webgl_characters[webgl_character_id],
-      'entities': [],
-    };
-    for(const id in entity_entities){
-        const entity = entity_entities[id];
-        if(entity['attach-to'] === webgl_character_id
-          && entity_groups['skybox'][id] !== true){
-            base['entities'].push(entity);
+function webgl_level_unload(base){
+    const character = {};
+    if(base === true){
+        Object.assign(
+          character,
+          webgl_characters[webgl_character_id]
+        );
+        character['entities'] = [];
+        for(const id in entity_entities){
+            const entity = entity_entities[id];
+            if(entity['attach-to'] === webgl_character_id
+              && entity_groups['skybox'][id] !== true){
+                character['entities'].push(entity);
+            }
         }
     }
 
@@ -2030,7 +2034,7 @@ function webgl_level_unload(){
     core_object_reset(webgl_particles);
     core_object_reset(webgl_paths);
 
-    return base;
+    return character;
 }
 
 function webgl_logic(){
