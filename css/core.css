@@ -90,6 +90,7 @@ button.gridbuttonclickable{
 #core-ui{
     background-color: #111;
     left: 0;
+    max-width: 100%;
     position: absolute;
     text-align: left;
     top: 0;
