@@ -86,7 +86,9 @@ textarea{
 }
 textarea{
     border-color: #999;
+    box-sizing: border-box;
     height: 190px;
+    max-width: 100%;
     width: 490px;
 }
 textarea:read-only{
