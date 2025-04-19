@@ -268,9 +268,10 @@ function webgl_character_init(args){
               'character': false,
               'lock': 0,
               'speed': 0,
-              'speed-acceleration': .1,
-              'speed-deceleration': -.1,
-              'speed-max': 1,
+              'speed-backward': -.1,
+              'speed-forward': .1,
+              'speed-max-backward': -.5,
+              'speed-max-forward': 1,
             },
           }),
       ...args,
@@ -669,13 +670,13 @@ function webgl_controls_keyboard(character){
         let speed = 0;
         if(vehicle['speed'] >= 0){
             speed = Math.max(
-              vehicle['speed'] + vehicle['speed-deceleration'],
+              vehicle['speed'] + vehicle['speed-backward'],
               0
             );
 
         }else{
             speed = Math.min(
-              vehicle['speed'] - vehicle['speed-deceleration'],
+              vehicle['speed'] + vehicle['speed-forward'],
               0
             );
         }
@@ -729,25 +730,25 @@ function webgl_controls_keyboard(character){
         if(vehicle['jump-allow']){
             if(forward || character['automove']){
                 speed = Math.min(
-                  vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-acceleration'],
-                  vehicle['vehicle-stats']['speed-max']
+                  vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-forward'],
+                  vehicle['vehicle-stats']['speed-max-forward']
                 );
 
             }else if(back){
                 speed = Math.max(
-                  vehicle['vehicle-stats']['speed'] - vehicle['vehicle-stats']['speed-acceleration'],
-                  -vehicle['vehicle-stats']['speed-max'] / 2
+                  vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-backward'],
+                  vehicle['vehicle-stats']['speed-max-backward']
                 );
 
             }else if(vehicle['vehicle-stats']['speed'] >= 0){
                 speed = Math.max(
-                  vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-deceleration'],
+                  vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-backward'],
                   0
                 );
 
             }else{
                 speed = Math.min(
-                  vehicle['vehicle-stats']['speed'] - vehicle['vehicle-stats']['speed-deceleration'],
+                  vehicle['vehicle-stats']['speed'] + vehicle['vehicle-stats']['speed-forward'],
                   0
                 );
             }
