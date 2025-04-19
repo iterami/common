@@ -1798,6 +1798,7 @@ function webgl_level_init(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'base': {},
         'json': {},
       },
     });
@@ -1819,7 +1820,7 @@ function webgl_level_init(args){
         webgl_character_id = args['character']['id'];
 
     }else if(args['character'] === 0
-      && webgl_character_base_properties['level'] < -1){
+      && args['base']['level'] < -1){
         return;
     }
 
@@ -1937,8 +1938,6 @@ function webgl_level_init(args){
     );
 
     if(args['character'] === -1){
-        core_object_reset(webgl_character_base_entities);
-        core_object_reset(webgl_character_base_properties);
         webgl_character_init({
           'collides': true,
           'controls': 'rpg',
@@ -1946,15 +1945,10 @@ function webgl_level_init(args){
         });
 
     }else if(core_type(args['character']) === 'object'){
-        core_object_reset(webgl_character_base_entities);
-        core_object_reset(webgl_character_base_properties);
         webgl_character_init(args['character']);
 
     }else{
-        webgl_character_init(webgl_character_base_properties);
-        webgl_entity_create({
-          'entities': webgl_character_base_entities,
-        });
+        webgl_character_init(args['base']);
     }
 
     for(const id in level['characters']){
@@ -2007,8 +2001,8 @@ function webgl_level_load(args){
     }
 
     core_interval_pause_all();
-    webgl_level_unload();
     webgl_level_init({
+      'base': webgl_level_unload(),
       'character': args['character'],
       'json': args['json'],
     });
@@ -2016,16 +2010,15 @@ function webgl_level_load(args){
 }
 
 function webgl_level_unload(){
-    Object.assign(
-      webgl_character_base_properties,
-      webgl_characters[webgl_character_id]
-    );
-    core_object_reset(webgl_character_base_entities);
+    const base = {
+      ...webgl_characters[webgl_character_id],
+      'entities': [],
+    };
     for(const id in entity_entities){
         const entity = entity_entities[id];
         if(entity['attach-to'] === webgl_character_id
           && entity_groups['skybox'][id] !== true){
-            webgl_character_base_entities.push(entity);
+            base['entities'].push(entity);
         }
     }
 
@@ -2036,6 +2029,8 @@ function webgl_level_unload(){
     webgl_character_count = 0;
     core_object_reset(webgl_particles);
     core_object_reset(webgl_paths);
+
+    return base;
 }
 
 function webgl_logic(){
@@ -4179,8 +4174,6 @@ core_image({
 });
 delete globalThis.uris;
 globalThis.webgl = 0;
-globalThis.webgl_character_base_entities = [];
-globalThis.webgl_character_base_properties = {};
 globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
