@@ -249,10 +249,12 @@ function webgl_character_init(args){
         )
       ),
       'jump-allow': false,
+      'keys': false,
       'life': Math.max(
         args['life'],
         1
       ),
+      'mouse': false,
       'position-x': 0,
       'position-y': 0,
       'position-z': 0,
@@ -717,6 +719,25 @@ function webgl_controls_keyboard(character){
         jump = core_keys[core_storage_data['jump']]['state'];
         left = core_keys[core_storage_data['move-←']]['state'];
         right = core_keys[core_storage_data['move-→']]['state'];
+
+    }else{
+        const mouse = character['mouse'];
+        if(mouse){
+            mouse_0_down = mouse['0-down'] || false;
+            mouse_2_down = mouse['2-down'] || false;
+            mouse_x = mouse['x'];
+        }
+
+        const keys = character['keys'];
+        if(keys){
+            back = keys['move-↓'] || false;
+            crouch = keys['crouch'] || false;
+            forward = keys['move-↑']
+              || (mouse_0_down && mouse_2_down);
+            jump = keys['jump'] || false;
+            left = keys['move-←'] || false;
+            right = keys['move-→'] || false;
+        }
     }
 
     if(forward || back){
@@ -954,12 +975,27 @@ function webgl_controls_mouse(character){
     let movement_x = 0;
     let movement_y = 0;
     let shift_key = false;
+
     if(character['id'] === webgl_character_id){
         mouse_0_down = core_mouse['down-0'];
         mouse_2_down = core_mouse['down-2'];
         movement_x = core_mouse['movement-x'];
         movement_y = core_mouse['movement-y'];
         shift_key = core_key_shift;
+
+    }else{
+        const mouse = character['mouse'];
+        if(mouse){
+            mouse_0_down = mouse['down-0'];
+            mouse_2_down = mouse['down-2'];
+            movement_x = mouse['movement-x'];
+            movement_y = mouse['movement-y'];
+        }
+
+        const keys = character['keys'];
+        if(keys){
+            shift_key = keys['shift'];
+        }
     }
 
     if(controls === 'rts'
