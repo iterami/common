@@ -1035,26 +1035,6 @@ function core_repo_init(args){
           'todo': 'after',
         });
     }
-    if(args['storage'] !== false){
-        core_tab_create({
-          'content': args['storage-menu']
-            + '<button id=storage-reset-repo type=button>Reset ' + core_repo_title + ' Settings</button>',
-          'group': 'core-menu',
-          'id': 'repo',
-          'label': core_repo_title,
-        });
-        core_storage_add({
-          'storage': args['storage'],
-        });
-        args['events']['storage-reset-repo'] = {
-          'onclick': function(){
-              core_storage_reset({
-                'label': core_repo_title,
-                'prefix': core_repo_title + '-',
-              });
-          },
-        };
-    }
     Object.assign(
       document.getElementById('core-menu-root'),
       {
@@ -1091,6 +1071,26 @@ function core_repo_init(args){
         core_tab_switch('tab_core-menu_repo');
     }
 
+    if(args['storage'] !== false){
+        core_tab_create({
+          'content': args['storage-menu']
+            + '<button id=storage-reset-repo type=button>Reset ' + core_repo_title + ' Settings</button>',
+          'group': 'core-menu',
+          'id': 'repo',
+          'label': core_repo_title,
+        });
+        core_storage_add({
+          'storage': args['storage'],
+        });
+        args['events']['storage-reset-repo'] = {
+          'onclick': function(){
+              core_storage_reset({
+                'label': core_repo_title,
+                'prefix': core_repo_title + '-',
+              });
+          },
+        };
+    }
     core_storage_update();
 
     if(args['keybinds'] !== false){
