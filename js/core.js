@@ -1078,6 +1078,7 @@ function core_repo_init(args){
           'group': 'core-menu',
           'id': 'repo',
           'label': core_repo_title,
+          'todo': 'prepend',
         });
         core_storage_add({
           'storage': args['storage'],
@@ -1394,6 +1395,7 @@ function core_tab_create(args){
         },
         'textContent': args['label'],
       },
+      'todo': args['todo'],
       'type': 'button',
     });
     core_html({
