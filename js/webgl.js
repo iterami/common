@@ -1892,7 +1892,6 @@ function webgl_level_init(args){
       'args': args['json'],
       'defaults': {
         'ambient-color': [1, 1, 1],
-        'camera-zoom': 25,
         'camera-zoom-max': 50,
         'camera-zoom-min': 0,
         'characters': [],
@@ -1927,7 +1926,6 @@ function webgl_level_init(args){
       webgl_properties,
       {
         'ambient-color': level['ambient-color'],
-        'camera-zoom': level['camera-zoom'],
         'camera-zoom-max': level['camera-zoom-max'],
         'camera-zoom-min': level['camera-zoom-min'],
         'clear-color': level['clear-color'],
