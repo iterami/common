@@ -1067,10 +1067,6 @@ function core_repo_init(args){
             have_default = true;
         }
     }
-    if(!have_default){
-        core_tab_switch('tab_core-menu_repo');
-    }
-
     if(args['storage'] !== false){
         core_tab_create({
           'content': args['storage-menu']
@@ -1094,6 +1090,9 @@ function core_repo_init(args){
     }
     core_storage_update();
 
+    if(!have_default){
+        core_tab_switch('tab_core-menu_repo');
+    }
     if(args['keybinds'] !== false){
         core_key_rebinds = args['keybinds'];
     }
