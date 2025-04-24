@@ -1441,15 +1441,20 @@ function core_type(variable){
 
 // Required args: template, value
 function core_type_convert(args){
-    if(core_type(args['template']) === 'string'){
+    const type = core_type(args['template']);
+    if(type === 'string'){
         return String(args['value']);
+    }
+    if(type === 'array'
+      || type === 'object'){
+        return args['value'];
+    }
+    if(type === 'boolean'
+      && core_type(args['value']) !== 'boolean'){
+        return args['value'] === 'true';
     }
     if(!globalThis.isNaN(Number.parseFloat(args['template']))){
         return Number.parseFloat(args['value']);
-    }
-    if(core_type(args['template']) === 'boolean'
-      && core_type(args['value']) !== 'boolean'){
-        return args['value'] === 'true';
     }
     return args['value'];
 }
