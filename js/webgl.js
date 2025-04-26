@@ -1676,7 +1676,7 @@ void main(void){
     textureCoord = texturePosition;
     lighting = vec4(ambientColor, alpha);
     if(directional){
-        lighting.rgb += directionalColor * max(dot(vec4(vertexNormal, 1.0).xyz, normalize(directionalVector)), -0.5);
+        lighting.rgb += directionalColor * max(dot(vertexNormal, directionalVector), 0.0);
     }
 }`
     );
