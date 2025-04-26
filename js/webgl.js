@@ -1598,19 +1598,18 @@ function webgl_init(){
       `#version 300 es
 precision mediump float;
 in vec2 textureCoord;
-in vec3 position;
 in vec4 fragmentColor;
 in vec4 lighting;
+in vec4 position;
 out vec4 fragColor;
 uniform bool picking;
 uniform float fogEnd;
 uniform float fogStart;
 uniform float lightRange;
 uniform sampler2D sampler;
-uniform vec3 cameraPosition;
 uniform vec3 clearColor;
 uniform vec3 lightColor;
-uniform vec3 lightPosition;
+uniform vec4 lightPosition;
 void main(void){
     if(picking){
         fragColor = fragmentColor;
@@ -1632,14 +1631,10 @@ void main(void){
     }
     fragColor = fragmentColor * light * texture(sampler, textureCoord);
     if(fogEnd > 0.0){
-        float range = distance(
-          cameraPosition,
-          position
-        );
         fragColor.rgb = mix(
           clearColor,
           fragColor.rgb,
-          1.0 - clamp((range - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
+          1.0 - clamp((length(position) - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
         );
     }
 }`
@@ -1655,9 +1650,9 @@ in vec3 vertexPosition;
 in vec4 pickColor;
 in vec4 vertexColor;
 out vec2 textureCoord;
-out vec3 position;
 out vec4 fragmentColor;
 out vec4 lighting;
+out vec4 position;
 uniform bool directional;
 uniform bool picking;
 uniform float alpha;
@@ -1667,8 +1662,8 @@ uniform vec3 ambientColor;
 uniform vec3 directionalColor;
 uniform vec3 directionalVector;
 void main(void){
-    position = vertexPosition;
-    gl_Position = cameraMatrix * vec4(position, 1.0);
+    position = cameraMatrix * vec4(vertexPosition, 1.0);
+    gl_Position = position;
     if(pointSize > 0.0){
         gl_PointSize = pointSize / length(position);
     }
@@ -1716,7 +1711,6 @@ void main(void){
       'alpha': 'alpha',
       'ambient-color': 'ambientColor',
       'cameraMatrix': 'cameraMatrix',
-      'camera-position': 'cameraPosition',
       'clear-color': 'clearColor',
       'directional': 'directional',
       'directional-color': 'directionalColor',
@@ -2228,12 +2222,6 @@ function webgl_logic(){
       ],
       'id': 'camera',
     });
-    webgl.uniform3f(
-      webgl_shader_uniforms['camera-position'],
-      character['camera-x'],
-      character['camera-y'],
-      character['camera-z']
-    );
 }
 
 function webgl_logic_entity(entity){
@@ -2364,11 +2352,12 @@ function webgl_logic_entity(entity){
           webgl_shader_uniforms['light-range'],
           entity['light-range']
         );
-        webgl.uniform3f(
+        webgl.uniform4f(
           webgl_shader_uniforms['light-position'],
           entity['position-x'],
           entity['position-y'],
-          entity['position-z']
+          entity['position-z'],
+          1
         );
     }
     if(entity['particle']){
