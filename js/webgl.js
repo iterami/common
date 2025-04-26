@@ -1598,9 +1598,9 @@ function webgl_init(){
       `#version 300 es
 precision mediump float;
 in vec2 textureCoord;
+in vec3 position;
 in vec4 fragmentColor;
 in vec4 lighting;
-in vec4 position;
 out vec4 fragColor;
 uniform bool picking;
 uniform float fogEnd;
@@ -1613,27 +1613,30 @@ uniform vec3 lightPosition;
 void main(void){
     if(picking){
         fragColor = fragmentColor;
-    }else{
-        vec4 light = lighting;
-        if(lightRange > 0.0){
-            float distance = length(position.xyz - lightPosition);
-            if(distance < lightRange){
-                light.rgb = mix(
-                  light.rgb,
-                  lightColor,
-                  1.0 - clamp(distance / lightRange, 0.0, 1.0)
-                );
-            }
-        }
-        fragColor = fragmentColor * light * texture(sampler, textureCoord);
-        if(fogEnd > 0.0){
-            float distance = length(position.xyz);
-            fragColor.rgb = mix(
-              clearColor,
-              fragColor.rgb,
-              1.0 - clamp((distance - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
+        return;
+    }
+    vec4 light = lighting;
+    if(lightRange > 0.0){
+        float range = distance(
+          lightPosition,
+          position
+        );
+        if(range < lightRange){
+            light.rgb = mix(
+              light.rgb,
+              lightColor,
+              1.0 - clamp(range / lightRange, 0.0, 1.0)
             );
         }
+    }
+    fragColor = fragmentColor * light * texture(sampler, textureCoord);
+    if(fogEnd > 0.0){
+        float range = length(position);
+        fragColor.rgb = mix(
+          clearColor,
+          fragColor.rgb,
+          1.0 - clamp((range - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
+        );
     }
 }`
     );
@@ -1648,9 +1651,9 @@ in vec3 vertexPosition;
 in vec4 pickColor;
 in vec4 vertexColor;
 out vec2 textureCoord;
+out vec3 position;
 out vec4 fragmentColor;
 out vec4 lighting;
-out vec4 position;
 uniform bool directional;
 uniform bool picking;
 uniform float alpha;
@@ -1661,19 +1664,19 @@ uniform vec3 ambientColor;
 uniform vec3 directionalColor;
 uniform vec3 directionalVector;
 void main(void){
-    position = cameraMatrix * vec4(vertexPosition, 1.0);
-    gl_Position = perspectiveMatrix * position;
-    gl_PointSize = pointSize / length(position.xyz);
+    position = vertexPosition;
+    gl_Position = perspectiveMatrix * cameraMatrix * vec4(position, 1.0);
+    gl_PointSize = pointSize / length(position);
     if(picking){
         fragmentColor = pickColor;
-    }else{
-        fragmentColor = vertexColor;
-        textureCoord = texturePosition;
-        lighting = vec4(ambientColor, alpha);
-        if(directional){
-            vec4 normal = perspectiveMatrix * vec4(vertexNormal, 1.0);
-            lighting.rgb += directionalColor * max(dot(normal.xyz, normalize(directionalVector)), -0.5);
-        }
+        return;
+    }
+    fragmentColor = vertexColor;
+    textureCoord = texturePosition;
+    lighting = vec4(ambientColor, alpha);
+    if(directional){
+        vec4 normal = perspectiveMatrix * vec4(vertexNormal, 1.0);
+        lighting.rgb += directionalColor * max(dot(normal.xyz, normalize(directionalVector)), -0.5);
     }
 }`
     );
