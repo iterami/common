@@ -1900,7 +1900,7 @@ function webgl_level_init(args){
         'clear-color': [0, 0, 0],
         'cursor': 'pointer',
         'directional-color': [1, 1, 1],
-        'directional-state': true,
+        'directional-state': false,
         'directional-vector': [0, 1, 0],
         'draw-range': false,
         'fog-end': 0,
