@@ -1607,6 +1607,7 @@ uniform float fogEnd;
 uniform float fogStart;
 uniform float lightRange;
 uniform sampler2D sampler;
+uniform vec3 cameraPosition;
 uniform vec3 clearColor;
 uniform vec3 lightColor;
 uniform vec3 lightPosition;
@@ -1631,7 +1632,10 @@ void main(void){
     }
     fragColor = fragmentColor * light * texture(sampler, textureCoord);
     if(fogEnd > 0.0){
-        float range = length(position);
+        float range = distance(
+          cameraPosition,
+          position
+        );
         fragColor.rgb = mix(
           clearColor,
           fragColor.rgb,
@@ -1712,6 +1716,7 @@ void main(void){
       'alpha': 'alpha',
       'ambient-color': 'ambientColor',
       'cameraMatrix': 'cameraMatrix',
+      'camera-position': 'cameraPosition',
       'clear-color': 'clearColor',
       'directional': 'directional',
       'directional-color': 'directionalColor',
@@ -2223,6 +2228,12 @@ function webgl_logic(){
       ],
       'id': 'camera',
     });
+    webgl.uniform3f(
+      webgl_shader_uniforms['camera-position'],
+      character['camera-x'],
+      character['camera-y'],
+      character['camera-z']
+    );
 }
 
 function webgl_logic_entity(entity){
