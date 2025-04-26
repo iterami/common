@@ -1571,7 +1571,7 @@ function webgl_init(){
         'normals': [],
         'particle': false,
         'picking': false,
-        'point-size': 500,
+        'point-size': 0,
         'position-x': 0,
         'position-y': 0,
         'position-z': 0,
@@ -1666,7 +1666,9 @@ uniform vec3 directionalVector;
 void main(void){
     position = vertexPosition;
     gl_Position = perspectiveMatrix * cameraMatrix * vec4(position, 1.0);
-    gl_PointSize = pointSize / length(position);
+    if(pointSize > 0.0){
+        gl_PointSize = pointSize / length(position);
+    }
     if(picking){
         fragmentColor = pickColor;
         return;
@@ -3439,6 +3441,7 @@ function webgl_primitive_stars(args){
         'color': [1, 1, 1, 1],
         'groups': [],
         'height-limit': 1,
+        'point-size': 500,
         'prefix': entity_id_count,
         'radius': 250,
         'range': 100,
@@ -3477,6 +3480,7 @@ function webgl_primitive_stars(args){
           'collision': false,
           'draw-mode': 'POINTS',
           'id': args['prefix'],
+          'point-size': args['point-size'],
           'vertex-colors': star_colors,
           'vertices': star_points,
         },
