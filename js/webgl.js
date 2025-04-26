@@ -1659,13 +1659,12 @@ uniform bool picking;
 uniform float alpha;
 uniform float pointSize;
 uniform mat4 cameraMatrix;
-uniform mat4 perspectiveMatrix;
 uniform vec3 ambientColor;
 uniform vec3 directionalColor;
 uniform vec3 directionalVector;
 void main(void){
     position = vertexPosition;
-    gl_Position = perspectiveMatrix * cameraMatrix * vec4(position, 1.0);
+    gl_Position = cameraMatrix * vec4(position, 1.0);
     if(pointSize > 0.0){
         gl_PointSize = pointSize / length(position);
     }
@@ -1677,8 +1676,7 @@ void main(void){
     textureCoord = texturePosition;
     lighting = vec4(ambientColor, alpha);
     if(directional){
-        vec4 normal = perspectiveMatrix * vec4(vertexNormal, 1.0);
-        lighting.rgb += directionalColor * max(dot(normal.xyz, normalize(directionalVector)), -0.5);
+        lighting.rgb += directionalColor * max(dot(vec4(vertexNormal, 1.0).xyz, normalize(directionalVector)), -0.5);
     }
 }`
     );
@@ -1723,7 +1721,6 @@ void main(void){
       'light-color': 'lightColor',
       'light-position': 'lightPosition',
       'light-range': 'lightRange',
-      'perspectiveMatrix': 'perspectiveMatrix',
       'picking': 'picking',
       'point-size': 'pointSize',
     };
@@ -2206,7 +2203,10 @@ function webgl_logic(){
         }
     }
 
-    math_matrix_identity('camera');
+    math_matrix_copy({
+      'id': 'perspective',
+      'to': 'camera',
+    });
     math_matrix_rotate({
       'dimensions': [
         radians_x,
@@ -3598,11 +3598,6 @@ function webgl_resize(){
     );
 
     math_matrices['perspective'][0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
-    webgl.uniformMatrix4fv(
-      webgl_shader_uniforms['perspectiveMatrix'],
-      false,
-      math_matrices['perspective']
-    );
 
     if(core_menu_open
       && webgl_textures[webgl_default_texture]){
