@@ -242,7 +242,7 @@ function core_handle_keydown(event){
 
     if(core_menu_open
       && core_menu_block_events
-      && !(event.code === 'Escape' || event.code === core_storage_data['reset'])){
+      && event.code !== 'Escape'){
         return;
     }
 
@@ -516,7 +516,7 @@ function core_init(){
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>'
           + '<div id=core-menu-tabs></div><div id=core-menu-tabcontent></div>'
-          + '<button id=storage-save type=button>Save All Settings</button><button id=mobile-add type=button>Mobile</button><br>',
+          + '<button id=storage-save onclick=core_storage_save() type=button>Save All Settings</button><button id=mobile-add onclick=core_keys_mobile() type=button>Mobile</button><br>',
         'style': 'display:none',
       },
       'store': 'core-menu',
@@ -548,17 +548,6 @@ function core_init(){
     globalThis.onblur = core_handle_blur;
     globalThis.onkeydown = core_handle_keydown;
     globalThis.onkeyup = core_handle_keyup;
-    core_events_bind({
-      'elements': {
-        'mobile-add': {
-          'onclick': core_keys_mobile,
-        },
-        'storage-save': {
-          'onclick': core_storage_save,
-        },
-      },
-    });
-    core_keys_rebind();
 
     globalThis['repo_init']?.();
 }
@@ -738,23 +727,26 @@ function core_keys_mobile(){
 }
 
 function core_keys_rebind(){
+    const keys = {
+      'Escape': {
+        'todo': core_escape,
+      },
+    };
+    for(const id in core_key_rebinds){
+        const key = core_key_rebinds[id];
+        if(core_type(key) !== 'object'){
+            Object.assign(
+              keys,
+              {[core_storage_data[id]]: {},}
+            );
+
+        }else{
+            keys[id] = key;
+        }
+    }
     core_events_bind({
       'clearkeys': true,
-      'keybinds': {
-        'Escape': {
-          'todo': core_escape,
-        },
-        [core_storage_data['crouch']]: {},
-        [core_storage_data['jump']]: {},
-        [core_storage_data['move-←']]: {},
-        [core_storage_data['move-↑']]: {},
-        [core_storage_data['move-→']]: {},
-        [core_storage_data['move-↓']]: {},
-        [core_storage_data['reset']]: {
-          'todo': core_repo_reset,
-        },
-        ...core_key_rebinds,
-      },
+      'keybinds': keys,
     });
 }
 
@@ -962,7 +954,6 @@ function core_repo_init(args){
         'menu-lock': false,
         'mousebinds': false,
         'owner': 'iterami',
-        'reset': false,
         'root': '../index.htm',
         'storage': false,
         'storage-globals': true,
@@ -1050,7 +1041,6 @@ function core_repo_init(args){
             'move-↑': 'KeyW',
             'move-→': 'KeyD',
             'move-↓': 'KeyS',
-            'reset': 'KeyH',
           },
         });
         core_events_bind({
@@ -1071,6 +1061,17 @@ function core_repo_init(args){
             },
           },
         });
+        Object.assign(
+          core_key_rebinds,
+          {
+            'crouch': 'KeyC',
+            'jump': 'Space',
+            'move-←': 'KeyA',
+            'move-↑': 'KeyW',
+            'move-→': 'KeyD',
+            'move-↓': 'KeyS',
+          },
+        );
     }
     if(args['storage'] !== false){
         core_tab_create({
@@ -1094,16 +1095,20 @@ function core_repo_init(args){
         };
     }
     core_storage_update();
-
     if(!have_default){
         core_tab_switch('tab_core-menu_repo');
     }
+
     if(args['keybinds'] !== false){
-        core_key_rebinds = args['keybinds'];
+        Object.assign(
+          core_key_rebinds,
+          args['keybinds'],
+        );
     }
+    core_keys_rebind();
+
     core_menu_block_events = args['menu-block-events'];
     core_menu_lock = args['menu-lock'];
-    core_reset_todo = args['reset'];
     core_events_bind({
       'beforeunload': args['beforeunload'],
       'elements': args['events'],
@@ -1124,12 +1129,6 @@ function core_repo_init(args){
     if(args['menu']
       || args['menu-lock']){
         core_escape(true);
-    }
-}
-
-function core_repo_reset(){
-    if(core_reset_todo !== false){
-        core_reset_todo();
     }
 }
 
@@ -1534,7 +1533,6 @@ globalThis.core_mobile = 'ontouchstart' in globalThis;
 globalThis.core_mode = 0;
 globalThis.core_mouse = {};
 globalThis.core_repo_title = '';
-globalThis.core_reset_todo = false;
 globalThis.core_storage_data = {};
 globalThis.core_storage_info = {};
 globalThis.core_tabs = {};
