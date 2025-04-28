@@ -531,39 +531,6 @@ function core_init(){
       'type': 'span',
     });
 
-    core_tab_create({
-      'content': '<table><tr><td><input class=mini id=audio-volume min=0 step=any type=number><td>Audio Volume'
-        + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
-        + '<tr><td><input class=mini id=jump type=text><td>Jump'
-        + '<tr><td><input class=mini id=mouse-horizontal step=any type=number><td>Mouse Sensitivity<br>Horizontal'
-        + '<tr><td><input class=mini id=mouse-vertical step=any type=number><td>Mouse Sensitivity<br>Vertical'
-        + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
-        + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
-        + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
-        + '<tr><td><input class=mini id=move-→ type=text><td>Move →'
-        + '<tr><td><input class=mini id=reset type=text><td>Reset</table>'
-        + '<button id=storage-reset type=button>Reset Global Settings</button>',
-      'group': 'core-menu',
-      'id': 'global',
-      'label': 'Global',
-    });
-    core_storage_add({
-      'prefix': 'core-',
-      'storage': {
-        'audio-volume': 1,
-        'crouch': 'KeyC',
-        'jump': 'Space',
-        'mouse-horizontal': 1,
-        'mouse-vertical': 1,
-        'move-←': 'KeyA',
-        'move-↑': 'KeyW',
-        'move-→': 'KeyD',
-        'move-↓': 'KeyS',
-        'reset': 'KeyH',
-      },
-    });
-    core_storage_update();
-
     core_mouse = {
       'down-0': false,
       'down-1': false,
@@ -585,20 +552,6 @@ function core_init(){
       'elements': {
         'mobile-add': {
           'onclick': core_keys_mobile,
-        },
-        'storage-reset': {
-          'onclick': function(){
-              const keys = [];
-              for(const key in core_storage_info){
-                  if(core_storage_info[key]['prefix'] === 'core-'){
-                      keys.push(key);
-                  }
-              }
-
-              core_storage_reset({
-                'keys': keys,
-              });
-          },
         },
         'storage-save': {
           'onclick': core_storage_save,
@@ -1012,6 +965,7 @@ function core_repo_init(args){
         'reset': false,
         'root': '../index.htm',
         'storage': false,
+        'storage-globals': true,
         'storage-menu': '',
         'tabs': {},
         'ui': '',
@@ -1066,6 +1020,57 @@ function core_repo_init(args){
             core_tab_switch('tab_' + args['tabs'][tab]['group'] + '_' + tab);
             have_default = true;
         }
+    }
+    if(args['storage-globals']){
+        core_tab_create({
+          'content': '<table><tr><td><input class=mini id=audio-volume min=0 step=any type=number><td>Audio Volume'
+            + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
+            + '<tr><td><input class=mini id=jump type=text><td>Jump'
+            + '<tr><td><input class=mini id=mouse-horizontal step=any type=number><td>Mouse Sensitivity<br>Horizontal'
+            + '<tr><td><input class=mini id=mouse-vertical step=any type=number><td>Mouse Sensitivity<br>Vertical'
+            + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
+            + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
+            + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
+            + '<tr><td><input class=mini id=move-→ type=text><td>Move →'
+            + '<tr><td><input class=mini id=reset type=text><td>Reset</table>'
+            + '<button id=storage-reset type=button>Reset Global Settings</button>',
+          'group': 'core-menu',
+          'id': 'global',
+          'label': 'Global',
+        });
+        core_storage_add({
+          'prefix': 'core-',
+          'storage': {
+            'audio-volume': 1,
+            'crouch': 'KeyC',
+            'jump': 'Space',
+            'mouse-horizontal': 1,
+            'mouse-vertical': 1,
+            'move-←': 'KeyA',
+            'move-↑': 'KeyW',
+            'move-→': 'KeyD',
+            'move-↓': 'KeyS',
+            'reset': 'KeyH',
+          },
+        });
+        core_events_bind({
+          'elements': {
+            'storage-reset': {
+              'onclick': function(){
+                  const keys = [];
+                  for(const key in core_storage_info){
+                      if(core_storage_info[key]['prefix'] === 'core-'){
+                          keys.push(key);
+                      }
+                  }
+
+                  core_storage_reset({
+                    'keys': keys,
+                  });
+              },
+            },
+          },
+        });
     }
     if(args['storage'] !== false){
         core_tab_create({
