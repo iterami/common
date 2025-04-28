@@ -1093,7 +1093,7 @@ function webgl_draw_entity(entity){
       entity['point-size']
     );
     webgl.uniformMatrix4fv(
-      webgl_shader_uniforms['cameraMatrix'],
+      webgl_shader_uniforms['camera'],
       false,
       math_matrices[entity['id']]
     );
@@ -1598,10 +1598,9 @@ function webgl_init(){
       `#version 300 es
 precision mediump float;
 in vec2 textureCoord;
-in vec4 fragmentColor;
-in vec4 lighting;
+in vec4 color;
 in vec4 position;
-out vec4 fragColor;
+out vec4 fragment;
 uniform bool picking;
 uniform float fogEnd;
 uniform float fogStart;
@@ -1611,29 +1610,28 @@ uniform vec3 clearColor;
 uniform vec3 lightColor;
 uniform vec4 lightPosition;
 void main(void){
+    fragment = color;
     if(picking){
-        fragColor = fragmentColor;
         return;
     }
-    vec4 light = lighting;
     if(lightRange > 0.0){
         float range = distance(
           lightPosition,
           position
         );
         if(range < lightRange){
-            light.rgb = mix(
-              light.rgb,
+            fragment.rgb = mix(
+              fragment.rgb,
               lightColor,
               1.0 - clamp(range / lightRange, 0.0, 1.0)
             );
         }
     }
-    fragColor = fragmentColor * light * texture(sampler, textureCoord);
+    fragment *= texture(sampler, textureCoord);
     if(fogEnd > 0.0){
-        fragColor.rgb = mix(
+        fragment.rgb = mix(
           clearColor,
-          fragColor.rgb,
+          fragment.rgb,
           1.0 - clamp((length(position) - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
         );
     }
@@ -1650,33 +1648,33 @@ in vec3 vertexPosition;
 in vec4 pickColor;
 in vec4 vertexColor;
 out vec2 textureCoord;
-out vec4 fragmentColor;
-out vec4 lighting;
+out vec4 color;
 out vec4 position;
 uniform bool directional;
 uniform bool picking;
 uniform float alpha;
 uniform float pointSize;
-uniform mat4 cameraMatrix;
+uniform mat4 camera;
+uniform mat4 perspective;
 uniform vec3 ambientColor;
 uniform vec3 directionalColor;
 uniform vec3 directionalVector;
 void main(void){
-    position = cameraMatrix * vec4(vertexPosition, 1.0);
-    gl_Position = position;
+    position = camera * vec4(vertexPosition, 1.0);
+    gl_Position = perspective * position;
     if(pointSize > 0.0){
         gl_PointSize = pointSize / length(position);
     }
     if(picking){
-        fragmentColor = pickColor;
+        color = pickColor;
         return;
     }
-    fragmentColor = vertexColor;
     textureCoord = texturePosition;
-    lighting = vec4(ambientColor, alpha);
+    vec4 lighting = vec4(ambientColor, alpha);
     if(directional){
         lighting.rgb += directionalColor * max(dot(vertexNormal, directionalVector), 0.0);
     }
+    color = vertexColor * lighting;
 }`
     );
     webgl.compileShader(vertex);
@@ -1710,7 +1708,7 @@ void main(void){
     const uniforms = {
       'alpha': 'alpha',
       'ambient-color': 'ambientColor',
-      'cameraMatrix': 'cameraMatrix',
+      'camera': 'camera',
       'clear-color': 'clearColor',
       'directional': 'directional',
       'directional-color': 'directionalColor',
@@ -1720,6 +1718,7 @@ void main(void){
       'light-color': 'lightColor',
       'light-position': 'lightPosition',
       'light-range': 'lightRange',
+      'perspective': 'perspective',
       'picking': 'picking',
       'point-size': 'pointSize',
     };
@@ -2202,10 +2201,7 @@ function webgl_logic(){
         }
     }
 
-    math_matrix_copy({
-      'id': 'perspective',
-      'to': 'camera',
-    });
+    math_matrix_identity('camera');
     math_matrix_rotate({
       'dimensions': [
         radians_x,
@@ -3598,6 +3594,11 @@ function webgl_resize(){
     );
 
     math_matrices['perspective'][0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
+    webgl.uniformMatrix4fv(
+      webgl_shader_uniforms['perspective'],
+      false,
+      math_matrices['perspective']
+    );
 
     if(core_menu_open
       && webgl_textures[webgl_default_texture]){
