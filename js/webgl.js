@@ -4210,11 +4210,6 @@ globalThis.webgl_default_texture = 'default.png';
 globalThis.webgl_uris = globalThis.uris || {
   [webgl_default_texture]: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
 };
-core_image({
-  'id': webgl_default_texture,
-  'src': webgl_uris[webgl_default_texture],
-});
-delete globalThis.uris;
 globalThis.webgl = 0;
 globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
@@ -4225,3 +4220,11 @@ globalThis.webgl_properties = {};
 globalThis.webgl_shader_attributes = {};
 globalThis.webgl_shader_uniforms = {};
 globalThis.webgl_textures = {};
+
+core_init_todo.push(function(){
+    core_image({
+      'id': webgl_default_texture,
+      'src': webgl_uris[webgl_default_texture],
+    });
+    delete globalThis.uris;
+});

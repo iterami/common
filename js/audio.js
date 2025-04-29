@@ -86,6 +86,36 @@ globalThis.audio_listener = {
   'forwardY': 0,
   'forwardZ': -1,
 };
-audio_create({
-  'boop': true,
+
+core_init_todo.push(function(){
+    core_tab_create({
+      'content': '<table><tr><td><input class=mini id=audio-volume min=0 step=any type=number><td>Audio Volume</table>'
+        + '<button id=audio-storage-reset type=button>Reset Audio Settings</button>',
+      'group': 'core-menu',
+      'id': 'audio',
+      'label': 'Audio',
+    });
+    core_storage_add({
+      'prefix': 'common-audio-',
+      'storage': {
+        'audio-volume': 1,
+      },
+    });
+    core_events_bind({
+      'elements': {
+        'audio-storage-reset': {
+          'onclick': function(){
+              core_storage_reset({
+                'label': 'audio',
+                'keys': ['audio-volume'],
+              });
+          },
+        },
+      },
+    });
+    core_storage_update(['audio-volume']);
+
+    audio_create({
+      'boop': true,
+    });
 });

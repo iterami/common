@@ -549,6 +549,10 @@ function core_init(){
     globalThis.onkeydown = core_handle_keydown;
     globalThis.onkeyup = core_handle_keyup;
 
+    for(const todo in core_init_todo){
+        core_init_todo[todo]();
+    }
+    delete globalThis.core_init_todo;
     globalThis['repo_init']?.();
 }
 
@@ -956,7 +960,7 @@ function core_repo_init(args){
         'owner': 'iterami',
         'root': '../index.htm',
         'storage': false,
-        'storage-globals': true,
+        'storage-controls': false,
         'storage-menu': '',
         'tabs': {},
         'ui': '',
@@ -1012,27 +1016,24 @@ function core_repo_init(args){
             have_default = true;
         }
     }
-    if(args['storage-globals']){
+    if(args['storage-controls']){
         core_tab_create({
-          'content': '<table><tr><td><input class=mini id=audio-volume min=0 step=any type=number><td>Audio Volume'
-            + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
+          'content': '<table><tr><td><input class=mini id=crouch type=text><td>Crouch'
             + '<tr><td><input class=mini id=jump type=text><td>Jump'
             + '<tr><td><input class=mini id=mouse-horizontal step=any type=number><td>Mouse Sensitivity<br>Horizontal'
             + '<tr><td><input class=mini id=mouse-vertical step=any type=number><td>Mouse Sensitivity<br>Vertical'
             + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
             + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
             + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
-            + '<tr><td><input class=mini id=move-→ type=text><td>Move →'
-            + '<tr><td><input class=mini id=reset type=text><td>Reset</table>'
-            + '<button id=storage-reset type=button>Reset Global Settings</button>',
+            + '<tr><td><input class=mini id=move-→ type=text><td>Move →</table>'
+            + '<button id=storage-reset type=button>Reset Controls</button>',
           'group': 'core-menu',
-          'id': 'global',
-          'label': 'Global',
+          'id': 'controls',
+          'label': 'Controls',
         });
         core_storage_add({
           'prefix': 'core-',
           'storage': {
-            'audio-volume': 1,
             'crouch': 'KeyC',
             'jump': 'Space',
             'mouse-horizontal': 1,
@@ -1297,12 +1298,12 @@ function core_storage_reset(args){
       'args': args,
       'defaults': {
         'keys': false,
-        'label': 'global',
+        'label': 'control',
         'prefix': false,
       },
     });
 
-    if(!globalThis.confirm('Reset ' + args['label'] + ' Settings?')){
+    if(!globalThis.confirm('Reset ' + args['label'] + ' settings?')){
         return;
     }
 
@@ -1522,6 +1523,7 @@ function core_uri(args){
 globalThis.core_elements = {};
 globalThis.core_events = {};
 globalThis.core_images = {};
+globalThis.core_init_todo = [];
 globalThis.core_intervals = {};
 globalThis.core_key_rebinds = {};
 globalThis.core_key_shift = false;
