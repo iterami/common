@@ -65,7 +65,8 @@ input:invalid{
 li{
     text-align: left;
 }
-ol{
+ol,
+ul{
     margin: 0;
     padding-left: 30px;
 }
@@ -93,10 +94,6 @@ textarea{
 }
 textarea:read-only{
     border-color: #555;
-}
-ul{
-    margin: 0;
-    padding-left: 20px;
 }
 
 a:focus,
