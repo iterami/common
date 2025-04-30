@@ -115,6 +115,12 @@ button.gridbuttonclickable{
 .hidden{
     display: none;
 }
+input[type=checkbox],
+input[type=radio],
+input[type=range],
+progress{
+    accent-color: #07f;
+}
 input[type=number],
 input[type=range],
 input[type=text]{
