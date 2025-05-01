@@ -298,8 +298,8 @@ function core_handle_mousemove(event){
         return;
     }
 
-    core_mouse['movement-x'] = event.movementX * core_storage_data['mouse-horizontal'];
-    core_mouse['movement-y'] = event.movementY * core_storage_data['mouse-vertical'];
+    core_mouse['movement-x'] = event.movementX * (core_storage_data['mouse-horizontal'] || 1);
+    core_mouse['movement-y'] = event.movementY * (core_storage_data['mouse-vertical'] || 1);
     core_mouse['x'] = event.pageX;
     core_mouse['y'] = event.pageY;
 
@@ -365,8 +365,8 @@ function core_handle_touchmove(event){
     }
 
     const touch = event['touches'][0];
-    core_mouse['movement-x'] = (touch.pageX - core_mouse['x']) * core_storage_data['mouse-horizontal'];
-    core_mouse['movement-y'] = (touch.pageY - core_mouse['y']) * core_storage_data['mouse-vertical'];
+    core_mouse['movement-x'] = (touch.pageX - core_mouse['x']) * (core_storage_data['mouse-horizontal'] || 1);
+    core_mouse['movement-y'] = (touch.pageY - core_mouse['y']) * (core_storage_data['mouse-vertical'] || 1);
     core_mouse['x'] = touch.pageX;
     core_mouse['y'] = touch.pageY;
 
