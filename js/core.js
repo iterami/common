@@ -516,7 +516,7 @@ function core_init(){
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>'
           + '<div id=core-menu-tabs></div><div id=core-menu-tabcontent></div>'
-          + '<button id=storage-save onclick=core_storage_save() type=button>Save All Settings</button><button id=mobile-add onclick=core_keys_mobile() type=button>Mobile</button><br>',
+          + '<button id=storage-save onclick=core_storage_save() type=button>Save All Settings</button>',
         'style': 'display:none',
       },
       'store': 'core-menu',
@@ -672,62 +672,6 @@ function core_interval_sync(args){
       },
       args['interval']
     );
-}
-
-function core_keys_mobile(){
-    const mobile_ui = core_html({
-      'parent': core_elements['core-ui'],
-      'properties': {
-        'id': 'mobile-ui',
-      },
-      'type': 'div',
-    });
-    mobile_ui.style.display = mobile_ui.style.display !== 'inline-block'
-      ? 'inline-block'
-      : 'none';
-
-    const keys = ['KeyA', 'KeyD', 'KeyW', 'KeyS', 'Space', 'KeyC', 'KeyH'];
-    for(const key in core_keys){
-        if(key === 'Escape'
-          || keys.includes(key)){
-            continue;
-        }
-
-        keys.push(key);
-    }
-
-    for(const key in keys){
-        core_html({
-          'parent': mobile_ui,
-          'properties': {
-            'id': 'mobile-ui-' + keys[key],
-            'textContent': keys[key],
-            'onclick': function(){
-                core_keys[keys[key]]['todo']();
-            },
-            'onmousedown': function(){
-                core_keys[keys[key]]['state'] = true;
-            },
-            'onmouseleave': function(){
-                core_keys[keys[key]]['state'] = false;
-            },
-            'onmouseup': function(){
-                core_keys[keys[key]]['state'] = false;
-            },
-            'ontouchcancel': function(){
-                core_keys[keys[key]]['state'] = false;
-            },
-            'ontouchend': function(){
-                core_keys[keys[key]]['state'] = false;
-            },
-            'ontouchstart': function(){
-                core_keys[keys[key]]['state'] = true;
-            },
-            'type': 'button',
-          },
-          'type': 'button',
-        });
-    }
 }
 
 function core_keys_rebind(){
