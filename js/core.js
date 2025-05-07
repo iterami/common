@@ -115,16 +115,21 @@ function core_events_bind(args){
               'todo': args['mousebinds'][mousebind]['todo'],
             };
         }
-        document.onpointerlockchange = core_handle_pointerlockchange;
         globalThis.oncontextmenu = core_handle_contextmenu;
-        globalThis.onmousedown = core_handle_mousedown;
-        globalThis.onmousemove = core_handle_mousemove;
-        globalThis.onmouseup = core_handle_mouseup;
-        globalThis.ontouchcancel = core_handle_touchend;
-        globalThis.ontouchend = core_handle_touchend;
-        globalThis.ontouchmove = core_handle_touchmove;
-        globalThis.ontouchstart = core_handle_touchstart;
-        globalThis.onwheel = core_handle_wheel;
+
+        if(core_mobile){
+            globalThis.ontouchcancel = core_handle_touchend;
+            globalThis.ontouchend = core_handle_touchend;
+            globalThis.ontouchmove = core_handle_touchmove;
+            globalThis.ontouchstart = core_handle_touchstart;
+
+        }else{
+            document.onpointerlockchange = core_handle_pointerlockchange;
+            globalThis.onmousedown = core_handle_mousedown;
+            globalThis.onmousemove = core_handle_mousemove;
+            globalThis.onmouseup = core_handle_mouseup;
+            globalThis.onwheel = core_handle_wheel;
+        }
     }
 
     if(args['elements'] !== false){
