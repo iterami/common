@@ -274,13 +274,15 @@ function core_handle_pointerdown(event){
         return;
     }
 
+    const x = Math.floor(event.pageX);
+    const y = Math.floor(event.pageY);
     core_pointer['movement-x'] = 0;
     core_pointer['movement-y'] = 0;
-    core_pointer['x'] = event.pageX;
-    core_pointer['y'] = event.pageY;
+    core_pointer['x'] = x;
+    core_pointer['y'] = y;
     core_pointer['down-' + event.button] = true;
-    core_pointer['down-x'] = event.pageX;
-    core_pointer['down-y'] = event.pageY;
+    core_pointer['down-x'] = x;
+    core_pointer['down-y'] = y;
 
     core_handle_event({
       'event': event,
@@ -309,8 +311,8 @@ function core_handle_pointermove(event){
     }
     core_pointer['movement-x'] = event.movementX * (core_storage_data['pointer-horizontal'] || 1);
     core_pointer['movement-y'] = event.movementY * (core_storage_data['pointer-vertical'] || 1);
-    core_pointer['x'] = event.pageX;
-    core_pointer['y'] = event.pageY;
+    core_pointer['x'] = Math.floor(event.pageX);
+    core_pointer['y'] = Math.floor(event.pageY);
 
     core_handle_event({
       'event': event,
