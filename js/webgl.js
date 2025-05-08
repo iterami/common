@@ -73,7 +73,7 @@ function webgl_camera_rotate(args){
       'defaults': {
         'camera': true,
         'character': webgl_character_id,
-        'mouse': true,
+        'pointer': true,
         'set': false,
         'x': false,
         'y': false,
@@ -122,20 +122,20 @@ function webgl_camera_rotate(args){
             return;
         }
 
-        let mouse_0_down = false;
-        let mouse_2_down = false;
+        let pointer_0_down = false;
+        let pointer_1_down = false;
         if(args['character'] === webgl_character_id){
-            mouse_0_down = core_mouse['down-0'];
-            mouse_2_down = core_mouse['down-2'];
+            pointer_0_down = core_pointer['down-0'];
+            pointer_1_down = core_pointer['down-1'];
         }
 
         const strafe = webgl_character_strafe(character);
-        const mouse_check = strafe
-          || (!mouse_0_down && !mouse_2_down)
-          || !args['mouse'];
+        const pointer_check = strafe
+          || (!pointer_0_down && !pointer_1_down)
+          || !args['pointer'];
 
         if(character['camera-zoom'] === 0
-          || (mouse_check
+          || (pointer_check
             && webgl_character_level(character) > -2
             && character['life'] > 0)){
             character['rotate-y'] = strafe
@@ -254,7 +254,7 @@ function webgl_character_init(args){
         args['life'],
         1
       ),
-      'mouse': false,
+      'pointer': false,
       'position-x': 0,
       'position-y': 0,
       'position-z': 0,
@@ -478,7 +478,7 @@ function webgl_character_strafe(character){
     }
 
     return checks
-      || core_mouse['down-2'];
+      || core_pointer['down-1'];
 }
 
 function webgl_color_set(args){
@@ -702,30 +702,30 @@ function webgl_controls_keyboard(character){
     let forward = false;
     let jump = false;
     let left = false;
-    let mouse_0_down = false;
-    let mouse_2_down = false;
-    let mouse_x = 0;
+    let pointer_0_down = false;
+    let pointer_1_down = false;
+    let pointer_x = 0;
     let right = false;
 
     if(character['id'] === webgl_character_id){
-        mouse_0_down = core_mouse['down-0'];
-        mouse_2_down = core_mouse['down-2'];
-        mouse_x = core_mouse['x'];
+        pointer_0_down = core_pointer['down-0'];
+        pointer_1_down = core_pointer['down-1'];
+        pointer_x = core_pointer['x'];
 
         back = core_keys[core_storage_data['move-↓']]['state'];
         crouch = core_keys[core_storage_data['crouch']]['state'];
         forward = core_keys[core_storage_data['move-↑']]['state']
-          || (mouse_0_down && mouse_2_down);
+          || (pointer_0_down && pointer_1_down);
         jump = core_keys[core_storage_data['jump']]['state'];
         left = core_keys[core_storage_data['move-←']]['state'];
         right = core_keys[core_storage_data['move-→']]['state'];
 
     }else{
-        const mouse = character['mouse'];
-        if(mouse){
-            mouse_0_down = mouse['0-down'] || false;
-            mouse_2_down = mouse['2-down'] || false;
-            mouse_x = mouse['x'];
+        const pointer = character['pointer'];
+        if(pointer){
+            pointer_0_down = pointer['0-down'] || false;
+            pointer_1_down = pointer['2-down'] || false;
+            pointer_x = pointer['x'];
         }
 
         const keys = character['keys'];
@@ -733,7 +733,7 @@ function webgl_controls_keyboard(character){
             back = keys['move-↓'] || false;
             crouch = keys['crouch'] || false;
             forward = keys['move-↑']
-              || (mouse_0_down && mouse_2_down);
+              || (pointer_0_down && pointer_1_down);
             jump = keys['jump'] || false;
             left = keys['move-←'] || false;
             right = keys['move-→'] || false;
@@ -775,11 +775,11 @@ function webgl_controls_keyboard(character){
             }
             vehicle['vehicle-stats']['speed'] = speed;
 
-            if(mouse_2_down){
+            if(pointer_1_down){
                 const half = webgl.drawingBufferWidth / 2;
                 turn = vehicle['turn-speed'] * Math.max(
                   Math.min(
-                    (mouse_x - half) / half * core_storage_data['mouse-horizontal'],
+                    (pointer_x - half) / half * core_storage_data['pointer-horizontal'],
                     1
                   ),
                   -1
@@ -795,15 +795,15 @@ function webgl_controls_keyboard(character){
             }
         }
         if(turn !== 0
-          || mouse_2_down){
+          || pointer_1_down){
             if(speed < 0){
                 turn *= -1;
             }
             vehicle['rotate-y'] += turn;
-            if(mouse_2_down){
+            if(pointer_1_down){
                 character['camera-rotate-y'] = vehicle['rotate-y'];
 
-            }else if(!mouse_0_down){
+            }else if(!pointer_0_down){
                 character['camera-rotate-y'] += turn;
             }
         }
@@ -831,7 +831,7 @@ function webgl_controls_keyboard(character){
 
         }else{
             webgl_camera_rotate({
-              'camera': !mouse_0_down,
+              'camera': !pointer_0_down,
               'character': character['id'],
               'y': -character['turn-speed'],
             });
@@ -843,7 +843,7 @@ function webgl_controls_keyboard(character){
 
         }else{
             webgl_camera_rotate({
-              'camera': !mouse_0_down,
+              'camera': !pointer_0_down,
               'character': character['id'],
               'y': character['turn-speed'],
             });
@@ -956,7 +956,7 @@ function webgl_controls_keyboard(character){
     }
 }
 
-function webgl_controls_mouse(character){
+function webgl_controls_pointer(character){
     if(character === void 0){
         character = webgl_characters[webgl_character_id];
     }
@@ -970,26 +970,26 @@ function webgl_controls_mouse(character){
         return;
     }
 
-    let mouse_0_down = false;
-    let mouse_2_down = false;
+    let pointer_0_down = false;
+    let pointer_1_down = false;
     let movement_x = 0;
     let movement_y = 0;
     let shift_key = false;
 
     if(character['id'] === webgl_character_id){
-        mouse_0_down = core_mouse['down-0'];
-        mouse_2_down = core_mouse['down-2'];
-        movement_x = core_mouse['movement-x'];
-        movement_y = core_mouse['movement-y'];
+        pointer_0_down = core_pointer['down-0'];
+        pointer_1_down = core_pointer['down-1'];
+        movement_x = core_pointer['movement-x'];
+        movement_y = core_pointer['movement-y'];
         shift_key = core_key_shift;
 
     }else{
-        const mouse = character['mouse'];
-        if(mouse){
-            mouse_0_down = mouse['down-0'];
-            mouse_2_down = mouse['down-2'];
-            movement_x = mouse['movement-x'];
-            movement_y = mouse['movement-y'];
+        const pointer = character['pointer'];
+        if(pointer){
+            pointer_0_down = pointer['down-0'];
+            pointer_1_down = pointer['down-1'];
+            movement_x = pointer['movement-x'];
+            movement_y = pointer['movement-y'];
         }
 
         const keys = character['keys'];
@@ -1003,8 +1003,8 @@ function webgl_controls_mouse(character){
         return;
     }
 
-    if(mouse_0_down
-      || mouse_2_down
+    if(pointer_0_down
+      || pointer_1_down
       || webgl_properties['pointerlock']){
         webgl_camera_rotate({
           'character': character['id'],
@@ -2753,8 +2753,8 @@ function webgl_pick_entity(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'x': core_mouse['x'],
-        'y': core_mouse['y'],
+        'x': core_pointer['x'],
+        'y': core_pointer['y'],
       },
     });
 
@@ -3677,7 +3677,7 @@ function webgl_stat_modify(args){
         const rotate_args = {
           'camera': args['stat'].startsWith('camera-rotate-'),
           'character': target['id'],
-          'mouse': false,
+          'pointer': false,
           'set': args['set'],
         };
         rotate_args[args['stat'].at(-1)] = args['value'];

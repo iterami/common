@@ -78,10 +78,10 @@ function core_events_bind(args){
       'defaults': {
         'beforeunload': false,
         'clearkeys': false,
-        'clearmouse': false,
+        'clearpointer': false,
         'elements': false,
         'keybinds': false,
-        'mousebinds': false,
+        'pointerbinds': false,
       },
     });
 
@@ -105,31 +105,23 @@ function core_events_bind(args){
         }
     }
 
-    if(args['clearmouse']){
-        core_object_reset(core_mouse['todo']);
+    if(args['clearpointer']){
+        core_object_reset(core_pointer['todo']);
     }
-    if(args['mousebinds'] !== false){
-        for(const mousebind in args['mousebinds']){
-            core_mouse['todo'][mousebind] = {
-              'preventDefault': args['mousebinds'][mousebind]['preventDefault'] || false,
-              'todo': args['mousebinds'][mousebind]['todo'],
+    if(args['pointerbinds'] !== false){
+        for(const pointerbind in args['pointerbinds']){
+            core_pointer['todo'][pointerbind] = {
+              'preventDefault': args['pointerbinds'][pointerbind]['preventDefault'] || false,
+              'todo': args['pointerbinds'][pointerbind]['todo'],
             };
         }
         globalThis.oncontextmenu = core_handle_contextmenu;
 
-        if(core_mobile){
-            globalThis.ontouchcancel = core_handle_touchend;
-            globalThis.ontouchend = core_handle_touchend;
-            globalThis.ontouchmove = core_handle_touchmove;
-            globalThis.ontouchstart = core_handle_touchstart;
-
-        }else{
-            document.onpointerlockchange = core_handle_pointerlockchange;
-            globalThis.onmousedown = core_handle_mousedown;
-            globalThis.onmousemove = core_handle_mousemove;
-            globalThis.onmouseup = core_handle_mouseup;
-            globalThis.onwheel = core_handle_wheel;
-        }
+        document.onpointerlockchange = core_handle_pointerlockchange;
+        globalThis.onpointerdown = core_handle_pointerdown;
+        globalThis.onpointermove = core_handle_pointermove;
+        globalThis.onpointerup = core_handle_pointerup;
+        globalThis.onwheel = core_handle_wheel;
     }
 
     if(args['elements'] !== false){
@@ -189,11 +181,11 @@ function core_handle_blur(){
     for(const key in core_keys){
         core_keys[key]['state'] = false;
     }
-    core_mouse['down-0'] = false;
-    core_mouse['down-1'] = false;
-    core_mouse['down-2'] = false;
-    core_mouse['down-3'] = false;
-    core_mouse['down-4'] = false;
+    core_pointer['down-0'] = false;
+    core_pointer['down-1'] = false;
+    core_pointer['down-2'] = false;
+    core_pointer['down-3'] = false;
+    core_pointer['down-4'] = false;
 }
 
 function core_handle_contextmenu(event){
@@ -201,7 +193,7 @@ function core_handle_contextmenu(event){
       && core_handle_event({
         'event': event,
         'key': 'contextmenu',
-        'object': core_mouse['todo'],
+        'object': core_pointer['todo'],
       }) === void 0){
         return false;
     }
@@ -270,7 +262,7 @@ function core_handle_keyup(event){
     });
 }
 
-function core_handle_mousedown(event){
+function core_handle_pointerdown(event){
     if((core_menu_open
         && core_menu_block_events)
       || event.target.id === 'core-toggle'){
@@ -282,60 +274,19 @@ function core_handle_mousedown(event){
         return;
     }
 
-    core_mouse['movement-x'] = 0;
-    core_mouse['movement-y'] = 0;
-    core_mouse['x'] = event.pageX;
-    core_mouse['y'] = event.pageY;
-    core_mouse['down-' + event.button] = true;
-    core_mouse['down-x'] = event.pageX;
-    core_mouse['down-y'] = event.pageY;
+    core_pointer['movement-x'] = 0;
+    core_pointer['movement-y'] = 0;
+    core_pointer['x'] = event.pageX;
+    core_pointer['y'] = event.pageY;
+    core_pointer['down-' + event.button] = true;
+    core_pointer['down-x'] = event.pageX;
+    core_pointer['down-y'] = event.pageY;
 
     core_handle_event({
       'event': event,
-      'key': 'mousedown',
-      'object': core_mouse['todo'],
+      'key': 'pointerdown',
+      'object': core_pointer['todo'],
     });
-}
-
-function core_handle_mousemove(event){
-    if(core_menu_open
-      && core_menu_block_events){
-        return;
-    }
-
-    core_mouse['movement-x'] = event.movementX * (core_storage_data['mouse-horizontal'] || 1);
-    core_mouse['movement-y'] = event.movementY * (core_storage_data['mouse-vertical'] || 1);
-    core_mouse['x'] = event.pageX;
-    core_mouse['y'] = event.pageY;
-
-    core_handle_event({
-      'event': event,
-      'key': 'mousemove',
-      'object': core_mouse['todo'],
-    });
-}
-
-function core_handle_mouseup(event){
-    if(event.pageX < 0 || event.pageY < 0
-      || event.pageX > globalThis.innerWidth
-      || event.pageY > globalThis.innerHeight){
-        core_mouse['down-0'] = false;
-        core_mouse['down-1'] = false;
-        core_mouse['down-2'] = false;
-        core_mouse['down-3'] = false;
-        core_mouse['down-4'] = false;
-
-    }else{
-        core_mouse['down-' + event.button] = false;
-    }
-
-    if(event.target.id !== 'core-toggle'){
-        core_handle_event({
-          'event': event,
-          'key': 'mouseup',
-          'object': core_mouse['todo'],
-        });
-    }
 }
 
 function core_handle_pointerlockchange(){
@@ -347,65 +298,41 @@ function core_handle_pointerlockchange(){
     }
 }
 
-function core_handle_touchend(event){
-    core_mouse['down-0'] = false;
-    core_mouse['down-1'] = false;
-    core_mouse['down-2'] = false;
-    core_mouse['down-3'] = false;
-    core_mouse['down-4'] = false;
-
-    if(event.target.id !== 'core-toggle'){
-        core_handle_event({
-          'event': event,
-          'key': 'mouseup',
-          'object': core_mouse['todo'],
-        });
-    }
-}
-
-function core_handle_touchmove(event){
+function core_handle_pointermove(event){
     if(core_menu_open
       && core_menu_block_events){
         return;
     }
 
-    const touch = event['touches'][0];
-    core_mouse['movement-x'] = (touch.pageX - core_mouse['x']) * (core_storage_data['mouse-horizontal'] || 1);
-    core_mouse['movement-y'] = (touch.pageY - core_mouse['y']) * (core_storage_data['mouse-vertical'] || 1);
-    core_mouse['x'] = touch.pageX;
-    core_mouse['y'] = touch.pageY;
+    for(let i = 0; i < 5; i++){
+        core_pointer['down-' + i] = Boolean(event.buttons & (1 << i));
+    }
+    core_pointer['movement-x'] = event.movementX * (core_storage_data['pointer-horizontal'] || 1);
+    core_pointer['movement-y'] = event.movementY * (core_storage_data['pointer-vertical'] || 1);
+    core_pointer['x'] = event.pageX;
+    core_pointer['y'] = event.pageY;
 
     core_handle_event({
       'event': event,
-      'key': 'mousemove',
-      'object': core_mouse['todo'],
+      'key': 'pointermove',
+      'object': core_pointer['todo'],
     });
 }
 
-function core_handle_touchstart(event){
-    if((core_menu_open
-        && core_menu_block_events)
-      || event.target.id === 'core-toggle'){
-        return;
+function core_handle_pointerup(event){
+    core_pointer['down-0'] = false;
+    core_pointer['down-1'] = false;
+    core_pointer['down-2'] = false;
+    core_pointer['down-3'] = false;
+    core_pointer['down-4'] = false;
+
+    if(event.target.id !== 'core-toggle'){
+        core_handle_event({
+          'event': event,
+          'key': 'pointerup',
+          'object': core_pointer['todo'],
+        });
     }
-
-    const touch = event['touches'][0];
-    core_mouse['movement-x'] = 0;
-    core_mouse['movement-y'] = 0;
-    core_mouse['x'] = touch.pageX;
-    core_mouse['y'] = touch.pageY;
-    core_mouse['down-x'] = touch.pageX;
-    core_mouse['down-y'] = touch.pageY;
-
-    const touches = event['touches'].length;
-    core_mouse['down-0'] = touches !== 2;
-    core_mouse['down-2'] = touches > 1;
-
-    core_handle_event({
-      'event': event,
-      'key': 'mousedown',
-      'object': core_mouse['todo'],
-    });
 }
 
 function core_handle_wheel(event){
@@ -417,7 +344,7 @@ function core_handle_wheel(event){
     core_handle_event({
       'event': event,
       'key': 'wheel',
-      'object': core_mouse['todo'],
+      'object': core_pointer['todo'],
     });
 }
 
@@ -536,7 +463,7 @@ function core_init(){
       'type': 'span',
     });
 
-    core_mouse = {
+    core_pointer = {
       'down-0': false,
       'down-1': false,
       'down-2': false,
@@ -905,8 +832,8 @@ function core_repo_init(args){
         'menu': false,
         'menu-block-events': true,
         'menu-lock': false,
-        'mousebinds': false,
         'owner': 'iterami',
+        'pointerbinds': false,
         'root': '../index.htm',
         'storage': false,
         'storage-controls': false,
@@ -969,8 +896,8 @@ function core_repo_init(args){
         core_tab_create({
           'content': '<table><tr><td><input class=mini id=crouch type=text><td>Crouch'
             + '<tr><td><input class=mini id=jump type=text><td>Jump'
-            + '<tr><td><input class=mini id=mouse-horizontal step=any type=number><td>Mouse Sensitivity<br>Horizontal'
-            + '<tr><td><input class=mini id=mouse-vertical step=any type=number><td>Mouse Sensitivity<br>Vertical'
+            + '<tr><td><input class=mini id=pointer-horizontal step=any type=number><td>Pointer Sensitivity<br>Horizontal'
+            + '<tr><td><input class=mini id=pointer-vertical step=any type=number><td>Pointer Sensitivity<br>Vertical'
             + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
             + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
             + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
@@ -985,12 +912,12 @@ function core_repo_init(args){
           'storage': {
             'crouch': 'KeyC',
             'jump': 'Space',
-            'mouse-horizontal': 1,
-            'mouse-vertical': 1,
             'move-←': 'KeyA',
             'move-↑': 'KeyW',
             'move-→': 'KeyD',
             'move-↓': 'KeyS',
+            'pointer-horizontal': 1,
+            'pointer-vertical': 1,
           },
         });
         core_events_bind({
@@ -1063,7 +990,7 @@ function core_repo_init(args){
       'beforeunload': args['beforeunload'],
       'elements': args['events'],
       'keybinds': args['keybinds'],
-      'mousebinds': args['mousebinds'],
+      'pointerbinds': args['pointerbinds'],
     });
 
     for(const image in args['images']){
@@ -1482,7 +1409,7 @@ globalThis.core_menu_lock = false;
 globalThis.core_menu_open = false;
 globalThis.core_mobile = 'ontouchstart' in globalThis;
 globalThis.core_mode = 0;
-globalThis.core_mouse = {};
+globalThis.core_pointer = {};
 globalThis.core_repo_title = '';
 globalThis.core_storage_data = {};
 globalThis.core_storage_info = {};
