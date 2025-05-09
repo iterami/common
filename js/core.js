@@ -61,9 +61,7 @@ function core_escape(force){
 
     }else{
         core_interval_pause_all();
-        if(document.pointerLockElement){
-            document.exitPointerLock();
-        }
+        core_handle_blur();
         core_elements['repo-ui'].style.display = 'none';
         core_elements['core-ui'].style.userSelect = 'auto';
         core_elements['core-menu'].style.display = 'inline';
@@ -177,6 +175,9 @@ function core_handle_beforeunload(event){
 }
 
 function core_handle_blur(){
+    if(document.pointerLockElement){
+        document.exitPointerLock();
+    }
     core_key_shift = false;
     for(const key in core_keys){
         core_keys[key]['state'] = false;
