@@ -310,10 +310,18 @@ function core_handle_pointermove(event){
     for(let i = 0; i < 5; i++){
         core_pointer['down-' + i] = Boolean(event.buttons & (1 << i));
     }
-    core_pointer['movement-x'] = event.movementX * (core_storage_data['pointer-horizontal'] || 1);
-    core_pointer['movement-y'] = event.movementY * (core_storage_data['pointer-vertical'] || 1);
-    core_pointer['x'] = Math.floor(event.pageX);
-    core_pointer['y'] = Math.floor(event.pageY);
+    const x = Math.floor(event.pageX);
+    const y = Math.floor(event.pageY);
+    if(event.pointerType === 'touch'){
+        core_pointer['movement-x'] = (x - core_pointer['x']) * (core_storage_data['pointer-horizontal'] || 1);
+        core_pointer['movement-y'] = (y - core_pointer['y']) * (core_storage_data['pointer-vertical'] || 1);
+
+    }else{
+        core_pointer['movement-x'] = event.movementX * (core_storage_data['pointer-horizontal'] || 1);
+        core_pointer['movement-y'] = event.movementY * (core_storage_data['pointer-vertical'] || 1);
+    }
+    core_pointer['x'] = x;
+    core_pointer['y'] = y;
 
     core_handle_event({
       'event': event,
