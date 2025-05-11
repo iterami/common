@@ -239,15 +239,6 @@ function webgl_character_init(args){
       'change-rotate-x': 0,
       'change-rotate-y': 0,
       'change-rotate-z': 0,
-      'camera-zoom': Math.min(
-        webgl_properties['camera-zoom-max'],
-        Math.max(
-          args['camera-zoom'],
-          args['level'] === -1
-            ? 0
-            : webgl_properties['camera-zoom-min']
-        )
-      ),
       'jump-allow': false,
       'keys': false,
       'life': Math.max(
@@ -277,6 +268,15 @@ function webgl_character_init(args){
             },
           }),
       ...args,
+      'camera-zoom': Math.min(
+        webgl_properties['camera-zoom-max'],
+        Math.max(
+          args['camera-zoom'],
+          args['level'] === -1
+            ? 0
+            : webgl_properties['camera-zoom-min']
+        )
+      ),
     };
     webgl_character_count++;
 
