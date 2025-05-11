@@ -265,6 +265,10 @@ function core_handle_keyup(event){
 }
 
 function core_handle_pointercancel(event){
+    if(event.isPrimary){
+        return;
+    }
+
     core_pointer['down-0'] = false;
     core_pointer['down-1'] = false;
     core_pointer['down-2'] = false;
