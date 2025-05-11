@@ -89,7 +89,7 @@ globalThis.audio_listener = {
 
 core_init_todo.push(function(){
     core_tab_create({
-      'content': '<table><tr><td><input class=mini id=audio-volume min=0 step=any type=number><td>Audio Volume</table>'
+      'content': '<table><tr><td><input class=mini id=audio-volume min=0 step=.001 type=number><td>Audio Volume</table>'
         + '<button id=audio-storage-reset type=button>Reset Audio Settings</button>',
       'group': 'core-menu',
       'id': 'audio',
