@@ -116,6 +116,7 @@ function core_events_bind(args){
         globalThis.oncontextmenu = core_handle_contextmenu;
 
         document.onpointerlockchange = core_handle_pointerlockchange;
+        globalThis.onpointercancel = core_handle_pointercancel;
         globalThis.onpointerdown = core_handle_pointerdown;
         globalThis.onpointermove = core_handle_pointermove;
         globalThis.onpointerup = core_handle_pointerup;
@@ -261,6 +262,22 @@ function core_handle_keyup(event){
       'object': core_keys,
       'state': false,
     });
+}
+
+function core_handle_pointercancel(event){
+    core_pointer['down-0'] = false;
+    core_pointer['down-1'] = false;
+    core_pointer['down-2'] = false;
+    core_pointer['down-3'] = false;
+    core_pointer['down-4'] = false;
+
+    if(event.target.id !== 'core-toggle'){
+        core_handle_event({
+          'event': event,
+          'key': 'pointercancel',
+          'object': core_pointer['todo'],
+        });
+    }
 }
 
 function core_handle_pointerdown(event){
