@@ -1196,7 +1196,7 @@ function core_storage_add(args){
 function core_storage_element_property(args){
     return core_type(core_storage_info[args['key']]['default']) === 'boolean'
       ? 'checked'
-      : (args['element'].tagName === 'DIV' || args['element'].tagName === 'SPAN'
+      : (core_type(args['element'].value) === 'undefined'
         ? 'textContent'
         : 'value');
 }
@@ -1394,9 +1394,9 @@ function core_ui_update(args){
         }
 
         const element = core_elements[id];
-        element[element.tagName === 'INPUT'
-          ? 'value'
-          : args['todo']] = args['ids'][id];
+        element[core_type(element.value) === 'undefined'
+          ? args['todo']
+          : 'value'] = args['ids'][id];
 
         if(!args['class']){
             continue;
@@ -1404,10 +1404,10 @@ function core_ui_update(args){
 
         const elements = document.getElementsByClassName(id);
         for(let i = 0; i < elements.length; i++){
-             const item = elements.item(i);
-             item[item.tagName === 'INPUT'
-               ? 'value'
-               : args['todo']] = args['ids'][id];
+            const item = elements.item(i);
+            item[core_type(item.value) === 'undefined'
+              ? args['todo']
+              : 'value'] = args['ids'][id];
         }
     }
 }
