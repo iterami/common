@@ -1394,9 +1394,14 @@ function core_ui_update(args){
         }
 
         const element = core_elements[id];
-        element[core_type(element.value) === 'undefined'
-          ? args['todo']
-          : 'value'] = args['ids'][id];
+        if(element.type === 'checkbox'){
+            element.checked = Boolean(args['ids'][id]);
+
+        }else{
+            element[(element.tagName === 'BUTTON' || core_type(element.value) === 'undefined')
+              ? args['todo']
+              : 'value'] = args['ids'][id];
+        }
 
         if(!args['class']){
             continue;
@@ -1405,9 +1410,14 @@ function core_ui_update(args){
         const elements = document.getElementsByClassName(id);
         for(let i = 0; i < elements.length; i++){
             const item = elements.item(i);
-            item[core_type(item.value) === 'undefined'
-              ? args['todo']
-              : 'value'] = args['ids'][id];
+            if(item.type === 'checkbox'){
+                item.checked = Boolean(args['ids'][id]);
+
+            }else{
+                item[(element.tagName === 'BUTTON' || core_type(item.value) === 'undefined')
+                  ? args['todo']
+                  : 'value'] = args['ids'][id];
+            }
         }
     }
 }
