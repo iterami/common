@@ -1436,10 +1436,10 @@ function webgl_event(args){
             }
         }
 
-        if(modify['random-min'] !== 0
-          || modify['random-max'] !== 0){
-            const max = modify['random-max'] || 0;
-            const min = modify['random-min'] || 0;
+        const max = modify['random-max'] || 0;
+        const min = modify['random-min'] || 0;
+        if(min !== 0
+          || max !== 0){
             value += min + core_random_integer({
               'max': max - min,
             });
