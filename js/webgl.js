@@ -1412,8 +1412,6 @@ function webgl_event(args){
 
     for(const todo in args['parent']['event-todo']){
         const modify = args['parent']['event-todo'][todo];
-        let value = modify['value'];
-
         if(modify['limit'] !== void 0){
             if(modify['limit'] <= 0){
                 continue;
@@ -1422,6 +1420,7 @@ function webgl_event(args){
             modify['limit']--;
         }
 
+        let value = modify['value'];
         if(modify['target']){
             if(value === '_target'){
                 value = args['target']['id'];
@@ -1434,15 +1433,16 @@ function webgl_event(args){
                     }
                 }
             }
-        }
 
-        const max = modify['random-max'] || 0;
-        const min = modify['random-min'] || 0;
-        if(min !== 0
-          || max !== 0){
-            value += min + core_random_integer({
-              'max': max - min,
-            });
+        }else{
+            const max = modify['random-max'] || 0;
+            const min = modify['random-min'] || 0;
+            if(min !== 0
+              || max !== 0){
+                value += min + core_random_integer({
+                  'max': max - min,
+                });
+            }
         }
 
         if(modify['type'] === 'function'){
