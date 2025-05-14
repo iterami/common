@@ -1401,7 +1401,7 @@ function webgl_entity_scale(args){
 
 // Required args: parent, target
 function webgl_event(args){
-    if(args['parent']['event-limit'] !== false){
+    if(args['parent']['event-limit']){
         if(args['parent']['event-limit'] <= 0){
             args['parent']['event-range'] = false;
             return;
@@ -1412,6 +1412,7 @@ function webgl_event(args){
 
     for(const todo in args['parent']['event-todo']){
         const modify = args['parent']['event-todo'][todo];
+        let value = modify['value'];
 
         if(modify['limit'] !== void 0){
             if(modify['limit'] <= 0){
@@ -1422,28 +1423,37 @@ function webgl_event(args){
         }
 
         if(modify['target']){
-            if(modify['value'] === '_target'){
-                modify['value'] = args['target']['id'];
+            if(value === '_target'){
+                value = args['target']['id'];
 
-            }else if(core_type(modify['value']) === 'object'
-              || core_type(modify['value']) === 'array'){
-                for(const value in modify['value']){
-                    if(modify['value'][value] === '_target'){
-                        modify['value'][value] = args['target']['id'];
+            }else if(core_type(value) === 'object'
+              || core_type(value) === 'array'){
+                for(const id in value){
+                    if(value[id] === '_target'){
+                        value[id] = args['target']['id'];
                     }
                 }
             }
         }
 
+        if(modify['random-min'] !== 0
+          || modify['random-max'] !== 0){
+            const max = modify['random-max'] || 0;
+            const min = modify['random-min'] || 0;
+            value += min + core_random_integer({
+              'max': max - min,
+            });
+        }
+
         if(modify['type'] === 'function'){
-            globalThis[modify['todo']]?.(modify['value']);
+            globalThis[modify['todo']]?.(value);
 
         }else if(modify['type'] === 'variable'){
             if(modify['set']){
-                globalThis[modify['todo']] = modify['value'];
+                globalThis[modify['todo']] = value;
 
             }else{
-                globalThis[modify['todo']] += modify['value'];
+                globalThis[modify['todo']] += value;
             }
 
         }else if(modify['type'] === 'character'){
@@ -1458,7 +1468,7 @@ function webgl_event(args){
               'set': modify['set'],
               'stat': modify['stat'],
               'target': target,
-              'value': modify['value'],
+              'value': value,
             });
 
         }else{
@@ -1470,7 +1480,7 @@ function webgl_event(args){
               'set': modify['set'],
               'stat': modify['stat'],
               'target': target,
-              'value': modify['value'],
+              'value': value,
             });
         }
     }
