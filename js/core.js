@@ -867,6 +867,7 @@ function core_repo_init(args){
       'args': args,
       'defaults': {
         'beforeunload': false,
+        'blur': false,
         'events': {},
         'globals': {},
         'images': {},
@@ -1032,6 +1033,7 @@ function core_repo_init(args){
     core_menu_lock = args['menu-lock'];
     core_events_bind({
       'beforeunload': args['beforeunload'],
+      'blur': args['blur'],
       'elements': args['events'],
       'keybinds': args['keybinds'],
       'pointerbinds': args['pointerbinds'],
