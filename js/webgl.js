@@ -2246,8 +2246,7 @@ function webgl_logic_entity(entity){
         }
     }
 
-    if(entity['event-range'] !== false
-      && entity['event-range'] !== 0){
+    if(entity['event-range']){
         const event_position = webgl_get_position(entity);
 
         if(core_type(entity['event-range']) === 'array'){
