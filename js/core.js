@@ -172,11 +172,12 @@ function core_getelement(id){
 }
 
 function core_handle_beforeunload(event){
-    core_handle_event({
-      'event': event,
-      'key': 'beforeunload',
-      'object': core_events,
-    });
+    if(core_events['beforeunload']){
+        core_handle_event({
+          'event': event,
+          'handler': core_events['beforeunload'],
+        });
+    }
 }
 
 function core_handle_blur(){
@@ -193,25 +194,26 @@ function core_handle_blur(){
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
 
-    core_handle_event({
-      'event': event,
-      'key': 'blur',
-      'object': core_events,
-    });
+    if(core_events['blur']){
+        core_handle_event({
+          'event': event,
+          'handler': core_events['blur'],
+        });
+    }
 }
 
 function core_handle_contextmenu(event){
     if(!core_menu_open
+      && core_pointer['todo']['contextmenu']
       && core_handle_event({
         'event': event,
-        'key': 'contextmenu',
-        'object': core_pointer['todo'],
+        'handler': core_pointer['todo']['contextmenu'],
       }) === void 0){
         return false;
     }
 }
 
-// Required args: event, key, object
+// Required args: event, handler
 function core_handle_event(args){
     args = core_args({
       'args': args,
@@ -220,22 +222,17 @@ function core_handle_event(args){
       },
     });
 
-    const handler = args['object'][args['key']];
-    if(!handler){
-        return;
-    }
-
-    if(handler['preventDefault']
+    if(args['handler']['preventDefault']
       && !core_menu_open){
         args['event'].preventDefault();
     }
 
     if(args['state'] !== void 0){
-        handler['state'] = args['state'];
+        args['handler']['state'] = args['state'];
     }
 
     if(args['state'] !== false){
-        return handler['todo']?.(args['event']);
+        return args['handler']['todo']?.(args['event']);
     }
 }
 
@@ -255,23 +252,25 @@ function core_handle_keydown(event){
         return;
     }
 
-    core_handle_event({
-      'event': event,
-      'key': event.code,
-      'object': core_keys,
-      'state': true,
-    });
+    if(core_keys[event.code]){
+        core_handle_event({
+          'event': event,
+          'handler': core_keys[event.code],
+          'state': true,
+        });
+    }
 }
 
 function core_handle_keyup(event){
     core_key_shift = event.shiftKey;
 
-    core_handle_event({
-      'event': event,
-      'key': event.code,
-      'object': core_keys,
-      'state': false,
-    });
+    if(core_keys[event.code]){
+        core_handle_event({
+          'event': event,
+          'handler': core_keys[event.code],
+          'state': false,
+        });
+    }
 }
 
 function core_handle_pointercancel(event){
@@ -285,11 +284,11 @@ function core_handle_pointercancel(event){
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
 
-    if(event.target.id !== 'core-toggle'){
+    if(core_pointer['todo']['pointercancel']
+      && event.target.id !== 'core-toggle'){
         core_handle_event({
           'event': event,
-          'key': 'pointercancel',
-          'object': core_pointer['todo'],
+          'handler': core_pointer['todo']['pointercancel'],
         });
     }
 }
@@ -318,11 +317,12 @@ function core_handle_pointerdown(event){
     core_pointer['down-x'] = x;
     core_pointer['down-y'] = y;
 
-    core_handle_event({
-      'event': event,
-      'key': 'pointerdown',
-      'object': core_pointer['todo'],
-    });
+    if(core_pointer['todo']['pointerdown']){
+        core_handle_event({
+          'event': event,
+          'handler': core_pointer['todo']['pointerdown'],
+        });
+    }
 }
 
 function core_handle_pointerlockchange(){
@@ -356,11 +356,12 @@ function core_handle_pointermove(event){
     core_pointer['x'] = x;
     core_pointer['y'] = y;
 
-    core_handle_event({
-      'event': event,
-      'key': 'pointermove',
-      'object': core_pointer['todo'],
-    });
+    if(core_pointer['todo']['pointermove']){
+        core_handle_event({
+          'event': event,
+          'handler': core_pointer['todo']['pointermove'],
+        });
+    }
 }
 
 function core_handle_pointerup(event){
@@ -370,11 +371,11 @@ function core_handle_pointerup(event){
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
 
-    if(event.target.id !== 'core-toggle'){
+    if(core_pointer['todo']['pointerup']
+      && event.target.id !== 'core-toggle'){
         core_handle_event({
           'event': event,
-          'key': 'pointerup',
-          'object': core_pointer['todo'],
+          'handler': core_pointer['todo']['pointerup'],
         });
     }
 }
@@ -385,11 +386,12 @@ function core_handle_wheel(event){
         return;
     }
 
-    core_handle_event({
-      'event': event,
-      'key': 'wheel',
-      'object': core_pointer['todo'],
-    });
+    if(core_pointer['todo']['wheel']){
+        core_handle_event({
+          'event': event,
+          'handler': core_pointer['todo']['wheel'],
+        });
+    }
 }
 
 function core_hex_to_rgb(hex){
