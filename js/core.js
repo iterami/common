@@ -291,7 +291,10 @@ function core_handle_pointerdown(event){
         return;
     }
 
-    if(core_key_shift && event.button === 2){
+    for(let i = 0; i < 5; i++){
+        core_pointer['down-' + i] = Boolean(event.buttons & (1 << i));
+    }
+    if(core_key_shift && core_pointer['down-1']){
         core_handle_blur();
         return;
     }
@@ -302,7 +305,6 @@ function core_handle_pointerdown(event){
     core_pointer['movement-y'] = 0;
     core_pointer['x'] = x;
     core_pointer['y'] = y;
-    core_pointer['down-' + event.button] = true;
     core_pointer['down-x'] = x;
     core_pointer['down-y'] = y;
 
