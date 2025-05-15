@@ -75,6 +75,7 @@ function core_events_bind(args){
       'args': args,
       'defaults': {
         'beforeunload': false,
+        'blur': false,
         'clearkeys': false,
         'clearpointer': false,
         'elements': false,
@@ -86,6 +87,9 @@ function core_events_bind(args){
     if(args['beforeunload'] !== false){
         core_events['beforeunload'] = args['beforeunload'];
         globalThis.onbeforeunload = core_handle_beforeunload;
+    }
+    if(args['blur'] !== false){
+        core_events['blur'] = args['blur'];
     }
 
     if(args['clearkeys']){
@@ -188,6 +192,12 @@ function core_handle_blur(){
     core_pointer['down-2'] = false;
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
+
+    core_handle_event({
+      'event': event,
+      'key': 'blur',
+      'object': core_events,
+    });
 }
 
 function core_handle_contextmenu(event){
