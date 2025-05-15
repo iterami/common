@@ -241,10 +241,6 @@ function webgl_character_init(args){
       'change-rotate-z': 0,
       'jump-allow': false,
       'keys': false,
-      'life': Math.max(
-        args['life'],
-        1
-      ),
       'pointer': false,
       'position-x': 0,
       'position-y': 0,
