@@ -2805,7 +2805,7 @@ function webgl_pick_entity(args){
                   'parent': entity,
                   'target': webgl_characters[webgl_character_id],
                 });
-                return true;
+                return entity;
             }
         }
     }
