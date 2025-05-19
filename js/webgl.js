@@ -2767,7 +2767,11 @@ function webgl_pick_entity(args){
       webgl_shader_uniforms['picking'],
       true
     );
-    webgl_draw();
+    webgl_scissor({
+      'todo': webgl_draw,
+      'x': args['x'],
+      'y': args['y']
+    });
     const color = webgl_pick_color({
       'x': args['x'],
       'y': args['y'],
