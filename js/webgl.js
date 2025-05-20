@@ -1413,7 +1413,7 @@ function webgl_event(args){
     }
 
     for(const todo in args['parent']['event-todo']){
-        const modify = args['parent']['event-todo'][todo];
+        const modify = {...args['parent']['event-todo'][todo]};
         if(modify['limit'] !== void 0){
             if(modify['limit'] <= 0){
                 continue;
@@ -1422,40 +1422,43 @@ function webgl_event(args){
             modify['limit']--;
         }
 
-        let value = modify['value'];
-        if(modify['target']){
-            if(value === '_target'){
-                value = args['target']['id'];
+        for(const property in modify){
+            if(modify[property] === '_target'){
+                modify[property] = args['target']['id'];
 
-            }else if(core_type(value) === 'object'
-              || core_type(value) === 'array'){
-                for(const id in value){
-                    if(value[id] === '_target'){
-                        value[id] = args['target']['id'];
+            }else if(modify[property] === '_self'){
+                modify[property] = args['parent']['id'];
+
+            }else if(core_type(modify[property]) === 'object'
+              || core_type(modify[property]) === 'array'){
+                for(const id in modify[property]){
+                    if(modify[property][id] === '_target'){
+                        modify[property][id] = args['target']['id'];
+
+                    }else if(modify[property][id] === '_self'){
+                       modify[property][id] = args['parent']['id'];
                     }
                 }
             }
+        }
 
-        }else{
-            const max = modify['random-max'] || 0;
-            const min = modify['random-min'] || 0;
-            if(min !== 0
-              || max !== 0){
-                value += min + core_random_integer({
-                  'max': max - min,
-                });
-            }
+        const max = modify['random-max'] || 0;
+        const min = modify['random-min'] || 0;
+        if(min !== 0 || max !== 0){
+            modify['value'] += min + core_random_integer({
+              'max': max - min,
+            });
         }
 
         if(modify['type'] === 'function'){
-            globalThis[modify['todo']]?.(value);
+            globalThis[modify['todo']]?.(modify['value']);
 
         }else if(modify['type'] === 'variable'){
             if(modify['set']){
-                globalThis[modify['todo']] = value;
+                globalThis[modify['todo']] = modify['value'];
 
             }else{
-                globalThis[modify['todo']] += value;
+                globalThis[modify['todo']] += modify['value'];
             }
 
         }else if(modify['type'] === 'character'){
@@ -1470,7 +1473,7 @@ function webgl_event(args){
               'set': modify['set'],
               'stat': modify['stat'],
               'target': target,
-              'value': value,
+              'value': modify['value'],
             });
 
         }else{
@@ -1482,7 +1485,7 @@ function webgl_event(args){
               'set': modify['set'],
               'stat': modify['stat'],
               'target': target,
-              'value': value,
+              'value': modify['value'],
             });
         }
     }
