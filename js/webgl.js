@@ -241,6 +241,7 @@ function webgl_character_init(args){
       'change-rotate-z': 0,
       'jump-allow': false,
       'keys': false,
+      'locked': {},
       'pointer': false,
       'position-x': 0,
       'position-y': 0,
@@ -445,6 +446,7 @@ function webgl_character_spawn(id){
 
     Object.assign(
       character,
+      character['locked'],
       webgl_properties['spawn'],
       character['spawn']
     );
@@ -461,6 +463,19 @@ function webgl_character_spawn(id){
             webgl_character_spawn(driver);
         }
     }
+
+    core_object_reset(character['locked']);
+    const locked = {};
+    for(const property in character['lock']){
+        locked[property] = character[property];
+    }
+    for(const property in webgl_properties['lock']){
+        locked[property] = character[property];
+    }
+    Object.assign(
+      character['locked'],
+      locked
+    );
 }
 
 function webgl_character_strafe(character){
@@ -2051,18 +2066,22 @@ function webgl_level_load(args){
 }
 
 function webgl_level_unload(base){
-    const character = {};
-    if(base === true){
+    const character = webgl_characters[webgl_character_id];
+    const properties = {};
+    if(base && character){
         Object.assign(
+          properties,
           character,
-          webgl_characters[webgl_character_id]
+          character['locked']
         );
-        character['entities'] = [];
+        delete properties['lock'];
+        delete properties['locked'];
+        properties['entities'] = [];
         for(const id in entity_entities){
             const entity = entity_entities[id];
             if(entity['attach-to'] === webgl_character_id
               && entity_groups['skybox'][id] !== true){
-                character['entities'].push(entity);
+                properties['entities'].push(entity);
             }
         }
     }
@@ -2075,7 +2094,7 @@ function webgl_level_unload(base){
     core_object_reset(webgl_particles);
     core_object_reset(webgl_paths);
 
-    return character;
+    return properties;
 }
 
 function webgl_logic(){
