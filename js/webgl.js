@@ -2038,10 +2038,6 @@ function webgl_level_load(args){
       },
     });
 
-    if(args['json'] === null){
-        return false;
-    }
-
     if(args['json'] instanceof File){
         core_file({
           'file': args['json'],
@@ -2054,6 +2050,9 @@ function webgl_level_load(args){
           'type': 'readAsText',
         });
         return true;
+
+    }else if(args['json'] === null){
+        return false;
     }
 
     core_interval_pause_all();
