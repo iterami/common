@@ -514,15 +514,6 @@ function webgl_color_set(args){
         color[0] = args['red'];
     }
 
-    if(args['type'] === 'clear'){
-        webgl.clearColor(
-          color[0],
-          color[1],
-          color[2],
-          1
-        );
-    }
-
     webgl_uniform_update();
 }
 
@@ -4131,9 +4122,16 @@ function webgl_uniform_update(){
       webgl_shader_uniforms['ambient-color'],
       webgl_properties['ambient-color']
     );
+    const clearcolor = webgl_properties['clear-color'];
     webgl.uniform3fv(
       webgl_shader_uniforms['clear-color'],
-      webgl_properties['clear-color']
+      clearcolor
+    );
+    webgl.clearColor(
+      clearcolor[0],
+      clearcolor[1],
+      clearcolor[2],
+      1
     );
     webgl.uniform1i(
       webgl_shader_uniforms['directional'],
