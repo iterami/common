@@ -304,7 +304,7 @@ function webgl_character_init(args){
 }
 
 function webgl_character_level(character){
-    if(character === void 0){
+    if(!character){
         character = webgl_characters[webgl_character_id];
     }
 
@@ -423,11 +423,11 @@ function webgl_character_set(id){
 }
 
 function webgl_character_spawn(id){
-    if(id === void 0){
+    if(!id){
         id = webgl_character_id;
     }
     const character = webgl_characters[id];
-    if(character === void 0
+    if(!character
       || character['spawn'] === false
       || character['lives'] === 0){
         return;
@@ -959,7 +959,7 @@ function webgl_controls_keyboard(character){
 }
 
 function webgl_controls_pointer(character){
-    if(character === void 0){
+    if(!character){
         character = webgl_characters[webgl_character_id];
     }
     const controls = character['controls'];
@@ -1459,7 +1459,7 @@ function webgl_event(args){
             }
 
         }else if(modify['type'] === 'character'){
-            const target = modify['todo'] === void 0
+            const target = !modify['todo']
               ? args['target']
               : webgl_characters[modify['todo']];
             if(webgl_character_level(target) < -1){
@@ -1474,7 +1474,7 @@ function webgl_event(args){
             });
 
         }else{
-            const target = modify['todo'] === void 0
+            const target = !modify['todo']
               ? args['target']
               : entity_entities[modify['todo']];
 
@@ -2557,7 +2557,7 @@ function webgl_particle_create(id, args){
 }
 
 function webgl_path_move(character){
-    if(webgl_paths[character['path-id']] === void 0){
+    if(!webgl_paths[character['path-id']]){
         return;
     }
 
