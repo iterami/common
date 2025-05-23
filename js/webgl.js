@@ -1619,26 +1619,27 @@ out vec4 fragment;
 uniform bool picking;
 uniform float fogEnd;
 uniform float fogStart;
-uniform float lightRange;
+uniform float lightRange[16];
+uniform int lightCount;
 uniform sampler2D sampler;
 uniform vec3 clearColor;
-uniform vec3 lightColor;
-uniform vec4 lightPosition;
+uniform vec3 lightColor[16];
+uniform vec3 lightPosition[16];
 void main(void){
     fragment = color;
     if(picking){
         return;
     }
-    if(lightRange > 0.0){
+    for(int i = 0; i < lightCount; i++) {
         float range = distance(
-          lightPosition,
-          position
+          lightPosition[i],
+          position.xyz
         );
-        if(range < lightRange){
+        if(range < lightRange[i]){
             fragment.rgb = mix(
               fragment.rgb,
-              lightColor,
-              1.0 - clamp(range / lightRange, 0.0, 1.0)
+              lightColor[i],
+              1.0 - clamp(range / lightRange[i], 0.0, 1.0)
             );
         }
     }
@@ -1731,6 +1732,7 @@ void main(void){
       'fog-end': 'fogEnd',
       'fog-start': 'fogStart',
       'light-color': 'lightColor',
+      'light-count': 'lightCount',
       'light-position': 'lightPosition',
       'light-range': 'lightRange',
       'perspective': 'perspective',
@@ -2079,13 +2081,16 @@ function webgl_level_unload(base){
         }
     }
 
+    webgl_character_count = 0;
     entity_remove_all({
       'delete-empty': true,
     });
     core_object_reset(webgl_characters);
-    webgl_character_count = 0;
     core_object_reset(webgl_particles);
     core_object_reset(webgl_paths);
+    core_object_reset(webgl_shader_light_color);
+    core_object_reset(webgl_shader_light_position);
+    core_object_reset(webgl_shader_light_range);
 
     return properties;
 }
@@ -2094,6 +2099,10 @@ function webgl_logic(){
     if(webgl === 0){
         return;
     }
+
+    core_object_reset(webgl_shader_light_color);
+    core_object_reset(webgl_shader_light_position);
+    core_object_reset(webgl_shader_light_range);
 
     if(webgl_properties['pointerlock']){
         core_requestpointerlock(webgl.canvas);
@@ -2236,6 +2245,32 @@ function webgl_logic(){
       ],
       'id': 'camera',
     });
+
+    webgl.uniform1i(
+      webgl_shader_uniforms['light-count'],
+      webgl_shader_light_range.length
+    );
+    while(webgl_shader_light_color.length < 48){
+        webgl_shader_light_color.push(0);
+    }
+    while(webgl_shader_light_position.length < 48){
+        webgl_shader_light_position.push(0);
+    }
+    while(webgl_shader_light_range.length < 16){
+        webgl_shader_light_range.push(0);
+    }
+    webgl.uniform3fv(
+      webgl_shader_uniforms['light-color'],
+      webgl_shader_light_color
+    );
+    webgl.uniform3fv(
+      webgl_shader_uniforms['light-position'],
+      webgl_shader_light_position
+    );
+    webgl.uniform1fv(
+      webgl_shader_uniforms['light-range'],
+      webgl_shader_light_range
+    );
 }
 
 function webgl_logic_entity(entity){
@@ -2357,21 +2392,13 @@ function webgl_logic_entity(entity){
     }
 
     if(entity['light-range'] > 0){
-        webgl.uniform3fv(
-          webgl_shader_uniforms['light-color'],
-          entity['light-color']
-        );
-        webgl.uniform1f(
-          webgl_shader_uniforms['light-range'],
-          entity['light-range']
-        );
-        webgl.uniform4f(
-          webgl_shader_uniforms['light-position'],
+        webgl_shader_light_color.push(...entity['light-color']);
+        webgl_shader_light_position.push(
           entity['position-x'],
           entity['position-y'],
-          entity['position-z'],
-          1
+          entity['position-z']
         );
+        webgl_shader_light_range.push(entity['light-range']);
     }
     if(entity['particle']){
         webgl_logic_particle(entity);
@@ -4246,6 +4273,9 @@ globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
 globalThis.webgl_shader_attributes = {};
+globalThis.webgl_shader_light_color = [];
+globalThis.webgl_shader_light_position = [];
+globalThis.webgl_shader_light_range = [];
 globalThis.webgl_shader_uniforms = {};
 globalThis.webgl_textures = {};
 
