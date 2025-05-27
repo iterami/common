@@ -337,9 +337,8 @@ function core_handle_pointerlockchange(){
 }
 
 function core_handle_pointermove(event){
-    if(event.isPrimary
-      && core_menu_open
-      && core_menu_block_events){
+    if(!event.isPrimary
+      || (core_menu_open && core_menu_block_events)){
         return;
     }
 
