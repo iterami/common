@@ -283,6 +283,8 @@ function core_handle_pointercancel(event){
     core_pointer['down-2'] = false;
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
+    core_pointer['movement-x'] = 0;
+    core_pointer['movement-y'] = 0;
 
     if(core_pointer['todo']['pointercancel']
       && event.target.id !== 'core-toggle'){
