@@ -193,6 +193,7 @@ function core_handle_blur(){
     core_pointer['down-2'] = false;
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
+    core_pointer['id'] = false;
 
     if(core_events['blur']){
         core_handle_event({
@@ -285,6 +286,7 @@ function core_handle_pointercancel(event){
     core_pointer['down-4'] = false;
     core_pointer['movement-x'] = 0;
     core_pointer['movement-y'] = 0;
+    core_pointer['id'] = false;
 
     if(core_pointer['todo']['pointercancel']
       && event.target.id !== 'core-toggle'){
@@ -318,6 +320,9 @@ function core_handle_pointerdown(event){
     core_pointer['y'] = y;
     core_pointer['down-x'] = x;
     core_pointer['down-y'] = y;
+    if(core_pointer['id'] === false){
+        core_pointer['id'] = event.pointerId;
+    }
 
     if(core_pointer['todo']['pointerdown']){
         core_handle_event({
@@ -348,7 +353,7 @@ function core_handle_pointermove(event){
     const x = Math.floor(event.pageX);
     const y = Math.floor(event.pageY);
     if(event.pointerType === 'touch'){
-        if(event.buttons === 1){
+        if(event.pointerId === core_pointer['id']){
             core_pointer['movement-x'] = (x - core_pointer['x']) * (core_storage_data['pointer-horizontal'] || 1);
             core_pointer['movement-y'] = (y - core_pointer['y']) * (core_storage_data['pointer-vertical'] || 1);
         }
@@ -374,6 +379,9 @@ function core_handle_pointerup(event){
     core_pointer['down-2'] = false;
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
+    if(event.pointerId === core_pointer['id']){
+        core_pointer['id'] = false;
+    }
 
     if(core_pointer['todo']['pointerup']
       && event.target.id !== 'core-toggle'){
@@ -521,6 +529,7 @@ function core_init(){
       'down-4': false,
       'down-x': 0,
       'down-y': 0,
+      'id': false,
       'movement-x': 0,
       'movement-y': 0,
       'todo': {},
