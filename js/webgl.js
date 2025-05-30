@@ -1612,9 +1612,10 @@ function webgl_init(){
       fragment,
       `#version 300 es
 precision mediump float;
-in vec2 textureCoord;
+in vec2 positionTexture;
+in vec3 positionVertex;
 in vec4 color;
-in vec4 position;
+in vec4 positionCamera;
 out vec4 fragment;
 uniform bool picking;
 uniform float fogEnd;
@@ -1633,7 +1634,7 @@ void main(void){
     for(int i = 0; i < lightCount; i++) {
         float range = distance(
           lightPosition[i],
-          position.xyz
+          positionVertex
         );
         if(range < lightRange[i]){
             fragment.rgb = mix(
@@ -1643,12 +1644,12 @@ void main(void){
             );
         }
     }
-    fragment *= texture(sampler, textureCoord);
+    fragment *= texture(sampler, positionTexture);
     if(fogEnd > 0.0){
         fragment.rgb = mix(
           clearColor,
           fragment.rgb,
-          1.0 - clamp((length(position) - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
+          1.0 - clamp((length(positionCamera) - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
         );
     }
 }`
@@ -1663,9 +1664,10 @@ in vec3 vertexNormal;
 in vec3 vertexPosition;
 in vec4 pickColor;
 in vec4 vertexColor;
-out vec2 textureCoord;
+out vec2 positionTexture;
+out vec3 positionVertex;
 out vec4 color;
-out vec4 position;
+out vec4 positionCamera;
 uniform bool directional;
 uniform bool picking;
 uniform float alpha;
@@ -1676,16 +1678,17 @@ uniform vec3 ambientColor;
 uniform vec3 directionalColor;
 uniform vec3 directionalVector;
 void main(void){
-    position = camera * vec4(vertexPosition, 1.0);
-    gl_Position = perspective * position;
+    positionVertex = vertexPosition;
+    positionCamera = camera * vec4(vertexPosition, 1.0);
+    gl_Position = positionCamera * perspective;
     if(pointSize > 0.0){
-        gl_PointSize = pointSize / length(position);
+        gl_PointSize = pointSize / length(positionCamera);
     }
     if(picking){
         color = pickColor;
         return;
     }
-    textureCoord = texturePosition;
+    positionTexture = texturePosition;
     vec4 lighting = vec4(ambientColor, alpha);
     if(directional){
         lighting.rgb += directionalColor * max(dot(vertexNormal, directionalVector), 0.0);
