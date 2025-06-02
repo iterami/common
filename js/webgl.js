@@ -2253,6 +2253,9 @@ function webgl_logic(){
       webgl_shader_uniforms['light-count'],
       webgl_shader_light_range.length
     );
+    if(!webgl_shader_light_range.length){
+        return;
+    }
     while(webgl_shader_light_color.length < 48){
         webgl_shader_light_color.push(0);
     }
