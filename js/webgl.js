@@ -1680,7 +1680,7 @@ uniform vec3 directionalVector;
 void main(void){
     positionVertex = vertexPosition;
     positionCamera = camera * vec4(vertexPosition, 1.0);
-    gl_Position = positionCamera * perspective;
+    gl_Position = perspective * positionCamera;
     if(pointSize > 0.0){
         gl_PointSize = pointSize / length(positionCamera);
     }
