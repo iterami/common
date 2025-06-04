@@ -494,9 +494,7 @@ function core_init(){
       'parent': core_elements['core-ui'],
       'properties': {
         'id': 'core-menu',
-        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>'
-          + '<div id=core-menu-tabs></div><div id=core-menu-tabcontent></div>'
-          + '<button id=storage-save onclick=core_storage_save() type=button>Save All Settings</button>',
+        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>',
         'style': 'display:none',
       },
       'store': 'core-menu',
@@ -529,10 +527,6 @@ function core_init(){
     globalThis.onkeydown = core_handle_keydown;
     globalThis.onkeyup = core_handle_keyup;
 
-    for(const todo in core_init_todo){
-        core_init_todo[todo]();
-    }
-    delete globalThis.core_init_todo;
     globalThis['repo_init']?.();
 }
 
@@ -901,12 +895,12 @@ function core_repo_init(args){
     core_repo_title = args['title'];
     if(args['info'].length){
         core_html({
-          'parent': document.getElementById('core-menu-title'),
+          'parent': core_elements['core-menu'],
           'properties': {
             'id': 'core-menu-info',
             'innerHTML': args['info'],
           },
-          'todo': 'after',
+          'todo': 'append',
         });
     }
     Object.assign(
@@ -1020,6 +1014,20 @@ function core_repo_init(args){
           },
         };
     }
+    if(args['storage'] !== false
+      || args['storage-controls']){
+        core_html({
+          'parent': core_elements['core-menu'],
+          'properties': {
+            'id': 'storage-save',
+            'onclick': core_storage_save,
+            'textContent': 'Save All Settings',
+            'type': 'button',
+          },
+          'todo': 'append',
+          'type': 'button',
+        });
+    }
     core_storage_update();
     if(!have_default){
         core_tab_switch('tab_core-menu_repo');
@@ -1052,6 +1060,11 @@ function core_repo_init(args){
     for(const element in args['ui-elements']){
         core_elements[args['ui-elements'][element]] = document.getElementById(args['ui-elements'][element]);
     }
+
+    for(const todo in core_init_todo){
+        core_init_todo[todo]();
+    }
+    delete globalThis.core_init_todo;
 
     if(args['menu']
       || args['menu-lock']){
@@ -1316,8 +1329,26 @@ function core_tab_create(args){
       'group': args['group'],
     };
 
+    let tabs = document.getElementById(args['group'] + '-tabs');
+    if(!tabs){
+        tabs = core_html({
+          'parent': core_elements['core-menu'],
+          'properties': {
+            'id': args['group'] + '-tabs',
+          },
+          'todo': 'append',
+        });
+        core_html({
+          'parent': core_elements['core-menu'],
+          'properties': {
+            'id': args['group'] + '-tabcontent',
+          },
+          'todo': 'append',
+        });
+    }
+
     core_html({
-      'parent': document.getElementById(args['group'] + '-tabs'),
+      'parent': tabs,
       'properties': {
         'id': 'tab_' + args['group'] + '_' + args['id'],
         'onclick': function(){
