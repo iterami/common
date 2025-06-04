@@ -1607,10 +1607,9 @@ function webgl_init(){
       'type': 'opaque',
     });
 
-    const fragment = webgl.createShader(webgl.FRAGMENT_SHADER);
-    webgl.shaderSource(
-      fragment,
-      `#version 300 es
+    webgl_shader({
+      'fragment':
+`#version 300 es
 precision mediump float;
 in vec2 positionTexture;
 in vec3 positionVertex;
@@ -1652,13 +1651,9 @@ void main(void){
           1.0 - clamp((length(positionCamera) - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
         );
     }
-}`
-    );
-    webgl.compileShader(fragment);
-    const vertex = webgl.createShader(webgl.VERTEX_SHADER);
-    webgl.shaderSource(
-      vertex,
-      `#version 300 es
+}`,
+      'vertex':
+`#version 300 es
 in vec2 texturePosition;
 in vec3 vertexNormal;
 in vec3 vertexPosition;
@@ -1695,59 +1690,7 @@ void main(void){
     }
     color = vertexColor * lighting;
 }`
-    );
-    webgl.compileShader(vertex);
-
-    const program = webgl.createProgram();
-    webgl.attachShader(
-      program,
-      fragment
-    );
-    webgl.attachShader(
-      program,
-      vertex
-    );
-    webgl.linkProgram(program);
-    webgl.useProgram(program);
-
-    const attributes = [
-      'pickColor',
-      'texturePosition',
-      'vertexColor',
-      'vertexNormal',
-      'vertexPosition',
-    ];
-    for(const attribute in attributes){
-        webgl_shader_attributes[attributes[attribute]] = webgl.getAttribLocation(
-          program,
-          attributes[attribute]
-        );
-        webgl.enableVertexAttribArray(webgl_shader_attributes[attributes[attribute]]);
-    }
-    const uniforms = {
-      'alpha': 'alpha',
-      'ambient-color': 'ambientColor',
-      'camera': 'camera',
-      'clear-color': 'clearColor',
-      'directional': 'directional',
-      'directional-color': 'directionalColor',
-      'directional-vector': 'directionalVector',
-      'fog-end': 'fogEnd',
-      'fog-start': 'fogStart',
-      'light-color': 'lightColor',
-      'light-count': 'lightCount',
-      'light-position': 'lightPosition',
-      'light-range': 'lightRange',
-      'perspective': 'perspective',
-      'picking': 'picking',
-      'point-size': 'pointSize',
-    };
-    for(const uniform in uniforms){
-        webgl_shader_uniforms[uniform] = webgl.getUniformLocation(
-          program,
-          uniforms[uniform]
-        );
-    }
+    });
 
     webgl_resize();
     globalThis.onresize = webgl_resize;
@@ -3707,6 +3650,72 @@ function webgl_screenshot(args){
       args['type'],
       args['quality']
     );
+}
+
+function webgl_shader(args){
+    const fragment = webgl.createShader(webgl.FRAGMENT_SHADER);
+    webgl.shaderSource(
+      fragment,
+      args['fragment']
+    );
+    webgl.compileShader(fragment);
+    const vertex = webgl.createShader(webgl.VERTEX_SHADER);
+    webgl.shaderSource(
+      vertex,
+      args['vertex'],
+    );
+    webgl.compileShader(vertex);
+
+    const program = webgl.createProgram();
+    webgl.attachShader(
+      program,
+      fragment
+    );
+    webgl.attachShader(
+      program,
+      vertex
+    );
+    webgl.linkProgram(program);
+    webgl.useProgram(program);
+
+    const attributes = [
+      'pickColor',
+      'texturePosition',
+      'vertexColor',
+      'vertexNormal',
+      'vertexPosition',
+    ];
+    for(const attribute in attributes){
+        webgl_shader_attributes[attributes[attribute]] = webgl.getAttribLocation(
+          program,
+          attributes[attribute]
+        );
+        webgl.enableVertexAttribArray(webgl_shader_attributes[attributes[attribute]]);
+    }
+    const uniforms = {
+      'alpha': 'alpha',
+      'ambient-color': 'ambientColor',
+      'camera': 'camera',
+      'clear-color': 'clearColor',
+      'directional': 'directional',
+      'directional-color': 'directionalColor',
+      'directional-vector': 'directionalVector',
+      'fog-end': 'fogEnd',
+      'fog-start': 'fogStart',
+      'light-color': 'lightColor',
+      'light-count': 'lightCount',
+      'light-position': 'lightPosition',
+      'light-range': 'lightRange',
+      'perspective': 'perspective',
+      'picking': 'picking',
+      'point-size': 'pointSize',
+    };
+    for(const uniform in uniforms){
+        webgl_shader_uniforms[uniform] = webgl.getUniformLocation(
+          program,
+          uniforms[uniform]
+        );
+    }
 }
 
 // Required args: stat, target
