@@ -2349,7 +2349,8 @@ function webgl_logic_entity(entity){
         );
         webgl_shader_light_range.push(entity['light-range']);
     }
-    if(entity['particle']){
+    if(entity['particle']
+      && !webgl_properties['paused']){
         webgl_logic_particle(entity);
     }
 
