@@ -46,6 +46,10 @@ function webgl_billboard(id){
 
 // Required args: attribute, data, size
 function webgl_buffer_set(args){
+    if(args['attribute'] < 0){
+        return;
+    }
+
     webgl.bindBuffer(
       webgl.ARRAY_BUFFER,
       webgl.createBuffer()
@@ -3691,7 +3695,6 @@ function webgl_shader(args){
           program,
           attributes[attribute]
         );
-        webgl.enableVertexAttribArray(webgl_shader_attributes[attributes[attribute]]);
     }
     const uniforms = {
       'alpha': 'alpha',
