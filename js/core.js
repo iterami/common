@@ -337,16 +337,22 @@ function core_handle_pointerlockchange(){
 }
 
 function core_handle_pointermove(event){
-    if(!event.isPrimary
-      || (core_menu_open && core_menu_block_events)){
+    if(!event.isPrimary){
+        return;
+    }
+
+    const x = Math.floor(event.pageX);
+    const y = Math.floor(event.pageY);
+    core_pointer['x'] = x;
+    core_pointer['y'] = y;
+
+    if(core_menu_open && core_menu_block_events){
         return;
     }
 
     for(let i = 0; i < 5; i++){
         core_pointer['down-' + i] = Boolean(event.buttons & (1 << i));
     }
-    const x = Math.floor(event.pageX);
-    const y = Math.floor(event.pageY);
     if(event.pointerType === 'touch'){
         core_pointer['movement-x'] = (x - core_pointer['x']) * (core_storage_data['pointer-horizontal'] || 1);
         core_pointer['movement-y'] = (y - core_pointer['y']) * (core_storage_data['pointer-vertical'] || 1);
@@ -355,8 +361,6 @@ function core_handle_pointermove(event){
         core_pointer['movement-x'] = event.movementX * (core_storage_data['pointer-horizontal'] || 1);
         core_pointer['movement-y'] = event.movementY * (core_storage_data['pointer-vertical'] || 1);
     }
-    core_pointer['x'] = x;
-    core_pointer['y'] = y;
 
     if(core_pointer['todo']['pointermove']){
         core_handle_event({
