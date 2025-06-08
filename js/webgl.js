@@ -1048,11 +1048,6 @@ function webgl_controls_wheel(event){
     }
 }
 
-function webgl_cursor(cursor){
-    webgl_properties['cursor'] = cursor;
-    webgl.canvas.style.cursor = cursor;
-}
-
 function webgl_draw(){
     if(webgl === 0){
         return;
@@ -1863,7 +1858,6 @@ function webgl_level_init(args){
         'camera-zoom-min': 0,
         'characters': [],
         'clear-color': [0, 0, 0],
-        'cursor': 'pointer',
         'directional-color': [1, 1, 1],
         'directional-state': false,
         'directional-vector': [0, 1, 0],
@@ -1896,7 +1890,6 @@ function webgl_level_init(args){
         'camera-zoom-max': level['camera-zoom-max'],
         'camera-zoom-min': level['camera-zoom-min'],
         'clear-color': level['clear-color'],
-        'cursor': level['cursor'],
         'directional-color': level['directional-color'],
         'directional-state': level['directional-state'],
         'directional-vector': level['directional-vector'],
@@ -1914,8 +1907,6 @@ function webgl_level_init(args){
         'y-min': level['y-min'],
       }
     );
-
-    webgl_cursor(webgl_properties['cursor']);
 
     level['groups'].unshift(
       'opaque',
