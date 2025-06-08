@@ -1872,6 +1872,7 @@ function webgl_level_init(args){
         'paused': false,
         'particles': {},
         'paths': {},
+        'picking': 0,
         'pointerlock': false,
         'prefabs': [],
         'spawn': {},
@@ -1901,6 +1902,7 @@ function webgl_level_init(args){
         'gravity-max': level['gravity-max'],
         'lock': level['lock'],
         'paused': level['paused'],
+        'picking': level['picking'],
         'pointerlock': level['pointerlock'],
         'spawn': level['spawn'],
         'title': level['title'],
@@ -2186,6 +2188,12 @@ function webgl_logic(){
       ],
       'id': 'camera',
     });
+
+    if(webgl_properties['picking'] === 2){
+        webgl_pick_entity({
+          'cursor': true,
+        });
+    }
 
     webgl.uniform1i(
       webgl_shader_uniforms['light-count'],
@@ -2728,7 +2736,8 @@ function webgl_pick_color(args){
 
 function webgl_pick_entity(args){
     if(core_menu_open
-      || webgl === 0){
+      || webgl === 0
+      || webgl_properties['picking'] < 1){
         return;
     }
 
@@ -2742,6 +2751,7 @@ function webgl_pick_entity(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'cursor': false,
         'x': core_pointer['x'],
         'y': core_pointer['y'],
       },
@@ -2789,13 +2799,22 @@ function webgl_pick_entity(args){
               && color_blue === entity_color[2]
               && color_green === entity_color[1]
               && color_red === entity_color[0]){
-                webgl_event({
-                  'parent': entity,
-                  'target': webgl_characters[webgl_character_id],
-                });
+                if(args['cursor']){
+                    webgl.canvas.style.cursor = 'pointer';
+
+                }else{
+                    webgl_event({
+                      'parent': entity,
+                      'target': webgl_characters[webgl_character_id],
+                    });
+                }
                 return entity;
             }
         }
+    }
+
+    if(args['cursor']){
+        webgl.canvas.style.cursor = 'auto';
     }
 
     return false;
