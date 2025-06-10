@@ -1899,7 +1899,7 @@ function webgl_level_init(args){
     });
 
     if(level['picking'] > 0
-      && webgl_framebuffer === 0){
+      && webgl_renderbuffer_framebuffer === 0){
         webgl_renderbuffer_init();
     }
 
@@ -2780,9 +2780,14 @@ function webgl_pick_entity(args){
     });
 
     webgl_shader_use('picking');
+    webgl.uniformMatrix4fv(
+      webgl_shaders['picking']['uniforms']['perspective'],
+      false,
+      math_matrices['perspective']
+    );
     webgl.bindFramebuffer(
       webgl.FRAMEBUFFER,
-      webgl_framebuffer
+      webgl_renderbuffer_framebuffer
     );
 
     webgl_scissor({
@@ -3622,71 +3627,27 @@ function webgl_random_vertex(entity){
 }
 
 function webgl_renderbuffer_init(){
-    const texture = webgl.createTexture();
-    webgl.bindTexture(
-      webgl.TEXTURE_2D,
-      texture
-    );
-    webgl.texParameteri(
-      webgl.TEXTURE_2D,
-      webgl.TEXTURE_MIN_FILTER,
-      webgl.LINEAR
-    );
-    webgl.texParameteri(
-      webgl.TEXTURE_2D,
-      webgl.TEXTURE_WRAP_S,
-      webgl.CLAMP_TO_EDGE
-    );
-    webgl.texParameteri(
-      webgl.TEXTURE_2D,
-      webgl.TEXTURE_WRAP_T,
-      webgl.CLAMP_TO_EDGE
-    );
-    webgl.bindTexture(
-      webgl.TEXTURE_2D,
-      texture
-    );
-    webgl.texImage2D(
-      webgl.TEXTURE_2D,
-      0,
-      webgl.RGB,
-      globalThis.innerWidth,
-      globalThis.innerHeight,
-      0,
-      webgl.RGB,
-      webgl.UNSIGNED_BYTE,
-      null
-    );
+    webgl_renderbuffer = webgl.createRenderbuffer();
+    webgl_renderbuffer_texture = webgl.createTexture();
+    webgl_renderbuffer_resize();
 
-    const renderbuffer = webgl.createRenderbuffer();
-    webgl.bindRenderbuffer(
-      webgl.RENDERBUFFER,
-      renderbuffer
-    );
-    webgl.renderbufferStorage(
-      webgl.RENDERBUFFER,
-      webgl.DEPTH_COMPONENT16,
-      globalThis.innerWidth,
-      globalThis.innerHeight
-    );
-
-    webgl_framebuffer = webgl.createFramebuffer();
+    webgl_renderbuffer_framebuffer = webgl.createFramebuffer();
     webgl.bindFramebuffer(
       webgl.FRAMEBUFFER,
-      webgl_framebuffer
+      webgl_renderbuffer_framebuffer
     );
     webgl.framebufferTexture2D(
       webgl.FRAMEBUFFER,
       webgl.COLOR_ATTACHMENT0,
       webgl.TEXTURE_2D,
-      texture,
+      webgl_renderbuffer_texture,
       0
     );
     webgl.framebufferRenderbuffer(
       webgl.FRAMEBUFFER,
       webgl.DEPTH_ATTACHMENT,
       webgl.RENDERBUFFER,
-      renderbuffer
+      webgl_renderbuffer
     );
 
     webgl_shader({
@@ -3721,19 +3682,47 @@ void main(void){
         gl_PointSize = pointSize / length(positionCamera);
     }
     color = vec4(pickColor, 1);
-}`
+}`,
     });
-    webgl.uniformMatrix4fv(
-      webgl_shaders['picking']['uniforms']['perspective'],
-      false,
-      math_matrices['perspective']
-    );
 
     webgl.bindFramebuffer(
       webgl.FRAMEBUFFER,
       null
     );
     webgl_shader_use('default');
+}
+
+function webgl_renderbuffer_resize(){
+    if(webgl_renderbuffer === 0){
+        return;
+    }
+
+    webgl.bindTexture(
+      webgl.TEXTURE_2D,
+      webgl_renderbuffer_texture
+    );
+    webgl.texImage2D(
+      webgl.TEXTURE_2D,
+      0,
+      webgl.RGB,
+      globalThis.innerWidth,
+      globalThis.innerHeight,
+      0,
+      webgl.RGB,
+      webgl.UNSIGNED_BYTE,
+      null
+    );
+
+    webgl.bindRenderbuffer(
+      webgl.RENDERBUFFER,
+      webgl_renderbuffer
+    );
+    webgl.renderbufferStorage(
+      webgl.RENDERBUFFER,
+      webgl.DEPTH_COMPONENT16,
+      globalThis.innerWidth,
+      globalThis.innerHeight
+    );
 }
 
 function webgl_resize(){
@@ -3752,13 +3741,7 @@ function webgl_resize(){
       false,
       math_matrices['perspective']
     );
-    if(webgl_shaders['picking']){
-        webgl.uniformMatrix4fv(
-          webgl_shaders['picking']['uniforms']['perspective'],
-          false,
-          math_matrices['perspective']
-        );
-    }
+    webgl_renderbuffer_resize();
 
     if(core_menu_open
       && webgl_textures[webgl_default_texture]){
@@ -4437,7 +4420,9 @@ globalThis.webgl = 0;
 globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
-globalThis.webgl_framebuffer = 0;
+globalThis.webgl_renderbuffer = 0;
+globalThis.webgl_renderbuffer_framebuffer = 0;
+globalThis.webgl_renderbuffer_texture = 0;
 globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
