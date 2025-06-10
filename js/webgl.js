@@ -2879,6 +2879,7 @@ function webgl_pick_entity(args){
       'y': args['y'],
     });
     webgl_shader_use('default');
+    webgl_draw();
 
     const color_blue = core_round({
       'decimals': 3,
