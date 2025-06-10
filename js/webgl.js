@@ -2781,11 +2781,6 @@ function webgl_pick_entity(args){
     });
 
     webgl_shader_use('picking');
-    webgl.bindFramebuffer(
-      webgl.FRAMEBUFFER,
-      webgl_renderbuffer_framebuffer
-    );
-
     webgl_scissor({
       'todo': webgl_draw,
       'x': args['x'],
@@ -2795,11 +2790,6 @@ function webgl_pick_entity(args){
       'x': args['x'],
       'y': args['y'],
     });
-
-    webgl.bindFramebuffer(
-      webgl.FRAMEBUFFER,
-      null
-    );
     webgl_shader_use('default');
 
     const color_blue = core_round({
@@ -3680,7 +3670,6 @@ void main(void){
       webgl.RENDERBUFFER,
       webgl_renderbuffer
     );
-
     webgl.bindFramebuffer(
       webgl.FRAMEBUFFER,
       null
