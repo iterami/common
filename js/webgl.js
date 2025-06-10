@@ -2883,22 +2883,31 @@ function webgl_pick_entity(args){
     webgl_shader_use('default');
     webgl_draw();
 
-    const color_blue = core_round({
-      'decimals': 3,
-      'number': color[2] / 255,
-    });
-    const color_green = core_round({
-      'decimals': 3,
-      'number': color[1] / 255,
-    });
-    const color_red = core_round({
-      'decimals': 3,
-      'number': color[0] / 255,
-    });
+    if(color[0] !== 0
+      || color[1] !== 0
+      || color[2] !== 0){
+        let color_blue = color[2];
+        if(color_blue !== 0){
+            color_blue = core_round({
+              'decimals': 3,
+              'number': color_blue / 255,
+            });
+        }
+        let color_green = color[1];
+        if(color_green !== 0){
+            color_green = core_round({
+              'decimals': 3,
+              'number': color_green / 255,
+            });
+        }
+        let color_red = color[0];
+        if(color_red !== 0){
+            color_red = core_round({
+              'decimals': 3,
+              'number': color_red / 255,
+            });
+        }
 
-    if(color_blue !== 0
-      || color_green !== 0
-      || color_red !== 0){
         for(const id in entity_entities){
             const entity = entity_entities[id];
             const entity_color = entity['picking'];
