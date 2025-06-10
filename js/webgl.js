@@ -2869,14 +2869,16 @@ function webgl_pick_entity(args){
     });
 
     webgl_shader_use('picking');
-    webgl_scissor({
-      'todo': webgl_draw,
+    const color = webgl_scissor({
+      'todo': function(){
+          webgl_draw();
+          return webgl_pick_color({
+            'x': args['x'],
+            'y': args['y'],
+          });
+      },
       'x': args['x'],
       'y': args['y']
-    });
-    const color = webgl_pick_color({
-      'x': args['x'],
-      'y': args['y'],
     });
     webgl_shader_use('default');
     webgl_draw();
