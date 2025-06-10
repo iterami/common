@@ -1528,19 +1528,19 @@ void main(void){
 }`,
     });
 
-    webgl_framebuffer_texture = webgl.createTexture();
+    webgl_framebuffer = webgl.createTexture();
     webgl_framebuffer_resize();
 
-    webgl_framebuffer = webgl.createFramebuffer();
+    const framebuffer = webgl.createFramebuffer();
     webgl.bindFramebuffer(
       webgl.FRAMEBUFFER,
-      webgl_framebuffer
+      framebuffer
     );
     webgl.framebufferTexture2D(
       webgl.FRAMEBUFFER,
       webgl.COLOR_ATTACHMENT0,
       webgl.TEXTURE_2D,
-      webgl_framebuffer_texture,
+      webgl_framebuffer,
       0
     );
     webgl.bindFramebuffer(
@@ -1550,7 +1550,7 @@ void main(void){
 }
 
 function webgl_framebuffer_resize(){
-    if(webgl_framebuffer_texture === 0){
+    if(webgl_framebuffer === 0){
         return;
     }
 
@@ -1558,7 +1558,7 @@ function webgl_framebuffer_resize(){
 
     webgl.bindTexture(
       webgl.TEXTURE_2D,
-      webgl_framebuffer_texture
+      webgl_framebuffer
     );
     webgl.texImage2D(
       webgl.TEXTURE_2D,
@@ -4395,7 +4395,6 @@ globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_framebuffer = 0;
-globalThis.webgl_framebuffer_texture = 0;
 globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_properties = {};
