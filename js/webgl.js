@@ -1446,9 +1446,7 @@ function webgl_event(args){
         const max = modify['random-max'] || 0;
         const min = modify['random-min'] || 0;
         if(min !== 0 || max !== 0){
-            modify['value'] += min + core_random_integer({
-              'max': max - min,
-            });
+            modify['value'] += min + core_random_integer(max - min);
         }
 
         if(modify['type'] === 'function'){
@@ -3702,9 +3700,7 @@ function webgl_primitive_terrain(args){
 
 function webgl_random_vertex(entity){
     const position = webgl_get_position(entity);
-    const vertex = core_random_integer({
-      'max': entity['vertices-length'],
-    }) * 3;
+    const vertex = core_random_integer(entity['vertices-length']) * 3;
     return {
       'x': position['x'] + entity['vertices'][vertex],
       'y': position['y'] + entity['vertices'][vertex + 1],
@@ -4132,21 +4128,15 @@ function webgl_tiles(args){
 
         const tile_count = args['tiles'].length * args['repeat'];
         for(let tile = 0; tile < tile_count; tile++){
-            const random_tile = core_random_integer({
-              'max': all_tiles.length,
-            });
+            const random_tile = core_random_integer(all_tiles.length);
 
             tiles.push(all_tiles.splice(random_tile, 1)[0]);
         }
 
     }else{
-        const tile_count = core_random_integer({
-          'max': args['tiles-max'] - args['tiles-min'] + 1,
-        }) + args['tiles-min'];
+        const tile_count = core_random_integer(args['tiles-max'] - args['tiles-min'] + 1) + args['tiles-min'];
         for(let tile = 0; tile < tile_count; tile++){
-            tiles.push(core_random_integer({
-              'max': args['tiles'].length,
-            }));
+            tiles.push(core_random_integer(args['tiles'].length));
         }
     }
 

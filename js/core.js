@@ -786,45 +786,27 @@ function core_random_hex(){
     return Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
 }
 
-function core_random_integer(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'max': 100,
-        'todo': 'floor',
-      },
-    });
-
-    return Math[args['todo']](Math.random() * args['max']);
+function core_random_integer(max){
+    return Math.floor(Math.random() * max);
 }
 
 function core_random_key(object){
     const keys = Object.keys(object);
 
-    return keys[core_random_integer({
-      'max': keys.length,
-    })];
+    return keys[core_random_integer(keys.length)];
 }
 
 function core_random_rgb(){
     return {
-      'blue': core_random_integer({
-        'max': 256,
-      }),
-      'green': core_random_integer({
-        'max': 256,
-      }),
-      'red': core_random_integer({
-        'max': 256,
-      }),
+      'blue': core_random_integer(256),
+      'green': core_random_integer(256),
+      'red': core_random_integer(256),
     };
 }
 
 function core_random_splice(array){
     return array.splice(
-      core_random_integer({
-        'max': array.length,
-      }),
+      core_random_integer(array.length),
       1
     )[0];
 }
@@ -840,9 +822,7 @@ function core_random_string(args){
 
     let string = '';
     for(let i = 0; i < args['length']; i++){
-        string += args['characters'][core_random_integer({
-          'max': args['characters'].length,
-        })];
+        string += args['characters'][core_random_integer(args['characters'].length)];
     }
     return string;
 }

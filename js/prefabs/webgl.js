@@ -408,9 +408,7 @@ function prefabs_webgl_lines_tree(args){
       'vertex-colors': args['trunk-color'],
     };
 
-    const trunk_count = core_random_integer({
-      'max': args['trunk-count-max'] - args['trunk-count-min'] + 1,
-    }) + args['trunk-count-min'];
+    const trunk_count = core_random_integer(args['trunk-count-max'] - args['trunk-count-min'] + 1) + args['trunk-count-min'];
     let trunk_width = args['trunk-width-max'] / 2;
     const trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
     for(let trunk = 0; trunk < trunk_count; trunk++){
@@ -434,9 +432,7 @@ function prefabs_webgl_lines_tree(args){
         properties['attach-y'] += 10;
         trunk_width -= trunk_width_decrease;
 
-        const branch_count = core_random_integer({
-          'max': args['trunk-branch-max'] - args['trunk-branch-min'] + 1,
-        }) + args['trunk-branch-min'];
+        const branch_count = core_random_integer(args['trunk-branch-max'] - args['trunk-branch-min'] + 1) + args['trunk-branch-min'];
         const branch_length = args['trunk-length'] / 2;
         const branch_width = trunk_width / 2;
         for(let branch = 0; branch < branch_count; branch++){
