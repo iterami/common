@@ -9,41 +9,41 @@ function math_clamp(args){
       },
     });
 
-    if(args['wrap']){
-        if(args['value'] < args['min']){
-            return args['max'] - (args['min'] - args['value']) % (args['max'] - args['min']);
+    if(args.wrap){
+        if(args.value < args.min){
+            return args.max - (args.min - args.value) % (args.max - args.min);
         }
 
-        return args['min'] + (args['value'] - args['min']) % (args['max'] - args['min']);
+        return args.min + (args.value - args.min) % (args.max - args.min);
     }
 
     return Math.min(
       Math.max(
-        args['value'],
-        args['min']
+        args.value,
+        args.min
       ),
-      args['max']
+      args.max
     );
 }
 
-// Required args: height-0, height-1, width-0, width-1, x-0, x-1, y-0, y-1
+// Required args: height0, height1, width0, width1, x0, x1, y0, y1
 function math_cuboid_overlap(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'depth-0': 0,
-        'depth-1': 0,
-        'z-0': 0,
-        'z-1': 0,
+        'depth0': 0,
+        'depth1': 0,
+        'z0': 0,
+        'z1': 0,
       },
     });
 
-    return args['x-0'] <= args['x-1'] + args['width-1']
-      && args['x-0'] >= args['x-1'] - args['width-0']
-      && args['y-0'] <= args['y-1'] + args['height-1']
-      && args['y-0'] >= args['y-1'] - args['height-0']
-      && args['z-0'] <= args['z-1'] + args['depth-1']
-      && args['z-0'] >= args['z-1'] - args['depth-0'];
+    return args.x0 <= args.x1 + args.width1
+      && args.x0 >= args.x1 - args.width0
+      && args.y0 <= args.y1 + args.height1
+      && args.y0 >= args.y1 - args.height0
+      && args.z0 <= args.z1 + args.depth1
+      && args.z0 >= args.z1 - args.depth0;
 }
 
 function math_degrees_to_radians(degrees){
@@ -65,13 +65,13 @@ function math_distance(args){
 
     return Math.sqrt(
       Math.pow(
-        args['x0'] - args['x1'],
+        args.x0 - args.x1,
         2
       ) + Math.pow(
-        args['y0'] - args['y1'],
+        args.y0 - args.y1,
         2
       ) + Math.pow(
-        args['z0'] - args['z1'],
+        args.z0 - args.z1,
         2
       )
     );
@@ -92,25 +92,25 @@ function math_fixed_length_line(args){
     });
 
     const line_distance = math_distance({
-      'x0': args['x0'],
-      'x1': args['x1'],
-      'y0': args['y0'],
-      'y1': args['y1'],
-      'z0': args['z0'],
-      'z1': args['z1'],
+      'x0': args.x0,
+      'x1': args.x1,
+      'y0': args.y0,
+      'y1': args.y1,
+      'z0': args.z0,
+      'z1': args.z1,
     });
 
-    args['x1'] /= line_distance;
-    args['x1'] *= args['length'];
-    args['y1'] /= line_distance;
-    args['y1'] *= args['length'];
-    args['z1'] /= line_distance;
-    args['z1'] *= args['length'];
+    args.x1 /= line_distance;
+    args.x1 *= args.length;
+    args.y1 /= line_distance;
+    args.y1 *= args.length;
+    args.z1 /= line_distance;
+    args.z1 *= args.length;
 
     return {
-      'x': args['x1'],
-      'y': args['y1'],
-      'z': args['z1'],
+      'x': args.x1,
+      'y': args.y1,
+      'z': args.z1,
     };
 }
 
@@ -123,23 +123,23 @@ function math_fraction_reduce(args){
       },
     });
 
-    if(args['denominator'] === false){
-        args['denominator'] = Math.pow(
+    if(args.denominator === false){
+        args.denominator = Math.pow(
           10,
-          String(args['numerator']).length
+          String(args.numerator).length
         );
     }
 
     let done = false;
     while(!done){
         const gcd = math_greatest_common_divisor({
-          'a': args['numerator'],
-          'b': args['denominator'],
+          'a': args.numerator,
+          'b': args.denominator,
         });
 
         if(gcd > 1){
-            args['denominator'] /= gcd;
-            args['numerator'] /= gcd;
+            args.denominator /= gcd;
+            args.numerator /= gcd;
 
         }else{
             done = true;
@@ -147,42 +147,42 @@ function math_fraction_reduce(args){
     }
 
     return {
-      'denominator': args['denominator'],
-      'numerator': args['numerator'],
+      'denominator': args.denominator,
+      'numerator': args.numerator,
     };
 }
 
 // Required args: a, b
 function math_greatest_common_divisor(args){
-    if(args['a'] === 0
-      || globalThis.isNaN(args['a'])){
-        return args['b'];
+    if(args.a === 0
+      || globalThis.isNaN(args.a)){
+        return args.b;
     }
-    if(args['b'] === 0
-      || globalThis.isNaN(args['b'])){
-        return args['a'];
+    if(args.b === 0
+      || globalThis.isNaN(args.b)){
+        return args.a;
     }
 
     return math_greatest_common_divisor({
-      'a': args['b'],
-      'b': args['a'] % args['b'],
+      'a': args.b,
+      'b': args.a % args.b,
     });
 }
 
 // Required args: id, to
 function math_matrix_clone(args){
-    math_matrices[args['to']] = math_matrix_create();
+    math_matrices[args.to] = math_matrix_create();
     math_matrix_copy({
-      'id': args['id'],
-      'to': args['to'],
+      'id': args.id,
+      'to': args.to,
     });
 }
 
 // Required args: id, to
 function math_matrix_copy(args){
     Object.assign(
-      math_matrices[args['to']],
-      math_matrices[args['id']]
+      math_matrices[args.to],
+      math_matrices[args.id]
     );
 }
 
@@ -207,16 +207,16 @@ function math_matrix_identity(id){
 
 // Required args: dimensions, id
 function math_matrix_rotate(args){
-    const cache = math_matrices['cache'];
-    const matrix = math_matrices[args['id']];
+    const cache = math_matrices.cache;
+    const matrix = math_matrices[args.id];
 
     // Rotate X.
     math_matrix_copy({
-      'id': args['id'],
+      'id': args.id,
       'to': 'cache',
     });
-    let cosine = Math.cos(args['dimensions'][0]);
-    let sine = Math.sin(args['dimensions'][0]);
+    let cosine = Math.cos(args.dimensions[0]);
+    let sine = Math.sin(args.dimensions[0]);
 
     matrix[4] = cache[4] * cosine + cache[8] * sine;
     matrix[5] = cache[5] * cosine + cache[9] * sine;
@@ -229,11 +229,11 @@ function math_matrix_rotate(args){
 
     // Rotate Y.
     math_matrix_copy({
-      'id': args['id'],
+      'id': args.id,
       'to': 'cache',
     });
-    cosine = Math.cos(args['dimensions'][1]);
-    sine = Math.sin(args['dimensions'][1]);
+    cosine = Math.cos(args.dimensions[1]);
+    sine = Math.sin(args.dimensions[1]);
 
     matrix[0] = cache[0] * cosine - cache[8] * sine;
     matrix[1] = cache[1] * cosine - cache[9] * sine;
@@ -246,11 +246,11 @@ function math_matrix_rotate(args){
 
     // Rotate Z.
     math_matrix_copy({
-      'id': args['id'],
+      'id': args.id,
       'to': 'cache',
     });
-    cosine = Math.cos(args['dimensions'][2]);
-    sine = Math.sin(args['dimensions'][2]);
+    cosine = Math.cos(args.dimensions[2]);
+    sine = Math.sin(args.dimensions[2]);
 
     matrix[0] = cache[0] * cosine + cache[4] * sine;
     matrix[1] = cache[1] * cosine + cache[5] * sine;
@@ -271,10 +271,10 @@ function math_matrix_round(args){
       },
     });
 
-    const matrix = math_matrices[args['id']];
+    const matrix = math_matrices[args.id];
     for(const key in matrix){
         matrix[key] = core_round({
-          'decimals': args['decimals'],
+          'decimals': args.decimals,
           'number': matrix[key],
         });
     }
@@ -282,11 +282,11 @@ function math_matrix_round(args){
 
 // Required args: dimensions, id
 function math_matrix_translate(args){
-    const matrix = math_matrices[args['id']];
+    const matrix = math_matrices[args.id];
     for(let i = 0; i < 4; i++){
-        matrix[i + 12] -= matrix[i] * args['dimensions'][0]
-          + matrix[i + 4] * args['dimensions'][1]
-          + matrix[i + 8] * args['dimensions'][2];
+        matrix[i + 12] -= matrix[i] * args.dimensions[0]
+          + matrix[i + 4] * args.dimensions[1]
+          + matrix[i + 8] * args.dimensions[2];
     }
 }
 
@@ -300,22 +300,22 @@ function math_move_2d(args){
     });
 
     const angle = Math.atan2(
-      args['y1'] - args['y0'],
-      args['x1'] - args['x0']
+      args.y1 - args.y0,
+      args.x1 - args.x0
     );
     return {
       'angle': angle,
-      'x': Math.cos(angle) * args['speed'],
-      'y': Math.sin(angle) * args['speed'],
+      'x': Math.cos(angle) * args.speed,
+      'y': Math.sin(angle) * args.speed,
     };
 }
 
 // Required args: dx, dy, speed
 function math_move_2d_diagonal(args){
-    const sqrt = Math.sqrt(args['speed']);
+    const sqrt = Math.sqrt(args.speed);
     return {
-      'x': (args['dx'] / args['speed']) * sqrt,
-      'y': args['dy'] > 0
+      'x': (args.dx / args.speed) * sqrt,
+      'y': args.dy > 0
         ? sqrt
         : -sqrt,
     };
@@ -331,13 +331,13 @@ function math_move_3d(args){
       },
     });
 
-    const radians = -math_degrees_to_radians(args['angle'] - (args['strafe']
+    const radians = -math_degrees_to_radians(args.angle - (args.strafe
       ? 90
       : 0
     ));
     return {
-      'x': Math.sin(radians) * args['speed'],
-      'z': Math.cos(radians) * args['speed'],
+      'x': Math.sin(radians) * args.speed,
+      'z': Math.cos(radians) * args.speed,
     };
 }
 
@@ -352,29 +352,29 @@ function math_normalize(args){
 
     const length = Math.sqrt(
       Math.pow(
-        args['x'],
+        args.x,
         2
       ) + Math.pow(
-        args['y'],
+        args.y,
         2
       ) + Math.pow(
-        args['z'],
+        args.z,
         2
       )
     );
 
     if(length === 0){
         return {
-          'x': args['x'],
-          'y': args['y'],
-          'z': args['z'],
+          'x': args.x,
+          'y': args.y,
+          'z': args.z,
         };
     }
 
     return {
-      'x': args['x'] / length,
-      'y': args['y'] / length,
-      'z': args['z'] / length,
+      'x': args.x / length,
+      'y': args.y / length,
+      'z': args.z / length,
     };
 }
 
@@ -414,19 +414,19 @@ function math_quaternion_to_euler(args){
       },
     });
 
-    const y_sine = (args['w'] * args['y'] - args['z'] * args['x']) * 2;
+    const y_sine = (args.w * args.y - args.z * args.x) * 2;
 
     return {
       'x': Math.atan2(
-        (args['w'] * args['x'] + args['y'] * args['z']) * 2,
-        1 - (args['x'] * args['x'] + args['y'] * args['y']) * 2
+        (args.w * args.x + args.y * args.z) * 2,
+        1 - (args.x * args.x + args.y * args.y) * 2
       ),
       'y': y_sine >= 1
         ? 1.5707963267948966 * Math.sign(y_sine)
         : Math.asin(y_sine),
       'z': Math.atan2(
-        (args['w'] * args['z'] + args['x'] * args['y']) * 2,
-        1 - (args['y'] * args['y'] + args['z'] * args['z']) * 2
+        (args.w * args.z + args.x * args.y) * 2,
+        1 - (args.y * args.y + args.z * args.z) * 2
       ),
     };
 }

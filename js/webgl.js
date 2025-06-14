@@ -2360,18 +2360,18 @@ function webgl_logic_entity(entity){
                 }
 
                 if(math_cuboid_overlap({
-                    'depth-0': entity['event-range'][2],
-                    'depth-1': entity['event-range'][2],
-                    'height-0': entity['event-range'][1],
-                    'height-1': entity['event-range'][1],
-                    'width-0': entity['event-range'][0],
-                    'width-1': entity['event-range'][0],
-                    'x-0': webgl_characters[character]['position-x'],
-                    'y-0': webgl_characters[character]['position-y'],
-                    'z-0': webgl_characters[character]['position-z'],
-                    'x-1': event_position['x'],
-                    'y-1': event_position['y'],
-                    'z-1': event_position['z'],
+                    'depth0': entity['event-range'][2],
+                    'depth1': entity['event-range'][2],
+                    'height0': entity['event-range'][1],
+                    'height1': entity['event-range'][1],
+                    'width0': entity['event-range'][0],
+                    'width1': entity['event-range'][0],
+                    'x0': webgl_characters[character]['position-x'],
+                    'y0': webgl_characters[character]['position-y'],
+                    'z0': webgl_characters[character]['position-z'],
+                    'x1': event_position['x'],
+                    'y1': event_position['y'],
+                    'z1': event_position['z'],
                   })){
                     webgl_event({
                       'parent': entity,
