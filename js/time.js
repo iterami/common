@@ -7,13 +7,13 @@ function date_to_timestamp(date){
 
     return new Date(
       Date.UTC(
-        date['year'],
-        date['month'] - 1,
-        date['date'],
-        date['hour'],
-        date['minute'],
-        date['second'],
-        date['millisecond']
+        date.year,
+        date.month - 1,
+        date.date,
+        date.hour,
+        date.minute,
+        date.second,
+        date.millisecond
       )
     ).getTime();
 }
@@ -27,11 +27,11 @@ function time_diff(args){
       },
     });
 
-    if(args['now'] === false){
-        args['now'] = date_to_timestamp();
+    if(args.now === false){
+        args.now = date_to_timestamp();
     }
 
-    let diff = args['target'] - args['now'];
+    let diff = args.target - args.now;
     let prefix = '';
     if(diff < 0){
         diff = -diff;
@@ -54,37 +54,37 @@ function time_format(args){
       },
     });
 
-    if(args['date'] === false){
-        args['date'] = timestamp_to_date();
+    if(args.date === false){
+        args.date = timestamp_to_date();
     }
 
-    if(args['diff']){
-        args['date']['date'] -= 1;
-        args['date']['month'] -= 1;
-        args['date']['year'] -= 1970;
+    if(args.diff){
+        args.date.date -= 1;
+        args.date.month -= 1;
+        args.date.year -= 1970;
     }
 
     return core_digits_min({
-        'number': args['date']['year'],
+        'number': args.date.year,
       }) + '-'
       + core_digits_min({
-        'number': args['date']['month'],
+        'number': args.date.month,
       }) + '-'
       + core_digits_min({
-        'number': args['date']['date'],
+        'number': args.date.date,
       }) + ' '
       + core_digits_min({
-        'number': args['date']['hour'],
+        'number': args.date.hour,
       }) + ':'
       + core_digits_min({
-        'number': args['date']['minute'],
+        'number': args.date.minute,
       }) + ':'
       + core_digits_min({
-        'number': args['date']['second'],
-      }) + (args['milliseconds']
+        'number': args.date.second,
+      }) + (args.milliseconds
         ? '.' + core_digits_min({
             'digits': 3,
-            'number': args['date']['millisecond'],
+            'number': args.date.millisecond,
           })
         : '');
 }
