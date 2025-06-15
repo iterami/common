@@ -16,30 +16,30 @@ function audio_start(id){
     const context = new globalThis.AudioContext();
 
     const gain = context.createGain();
-    gain.gain.value = core_storage_data['audio-volume'];
+    gain.gain.value = core_storage_data.audio_volume;
 
     const oscillator = context.createOscillator();
-    oscillator.frequency.value = audio_audios[id]['frequency'];
-    oscillator.type = audio_audios[id]['type'];
+    oscillator.frequency.value = audio_audios[id].frequency;
+    oscillator.type = audio_audios[id].type;
     oscillator.connect(gain);
 
-    if(audio_audios[id]['panner'] !== false){
+    if(audio_audios[id].panner !== false){
         if(!context.listener.forwardX){
             context.listener.setOrientation(
-              audio_listener['forwardX'],
-              audio_listener['forwardY'],
-              audio_listener['forwardZ'],
+              audio_listener.forwardX,
+              audio_listener.forwardY,
+              audio_listener.forwardZ,
               0, 1, 0
             );
 
         }else{
-            context.listener.forwardX.value = audio_listener['forwardX'];
-            context.listener.forwardY.value = audio_listener['forwardY'];
-            context.listener.forwardZ.value = audio_listener['forwardZ'];
+            context.listener.forwardX.value = audio_listener.forwardX;
+            context.listener.forwardY.value = audio_listener.forwardY;
+            context.listener.forwardZ.value = audio_listener.forwardZ;
         }
         const panner = new PannerNode(
           context,
-          audio_audios[id]['panner']
+          audio_audios[id].panner
         );
         gain.connect(panner).connect(context.destination);
 
@@ -48,7 +48,7 @@ function audio_start(id){
     }
 
     oscillator.start();
-    oscillator.stop(audio_audios[id]['duration']);
+    oscillator.stop(audio_audios[id].duration);
 }
 
 // Required args: id
@@ -56,28 +56,28 @@ function audio_start_at(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'forwardX': audio_listener['forwardX'],
-        'forwardY': audio_listener['forwardY'],
-        'forwardZ': audio_listener['forwardZ'],
+        'forwardX': audio_listener.forwardX,
+        'forwardY': audio_listener.forwardY,
+        'forwardZ': audio_listener.forwardZ,
         'positionX': 0,
         'positionY': 0,
         'positionZ': 0,
       },
     });
 
-    audio_listener['forwardX'] = args['forwardX'];
-    audio_listener['forwardY'] = args['forwardY'];
-    audio_listener['forwardZ'] = args['forwardZ'];
+    audio_listener.forwardX = args.forwardX;
+    audio_listener.forwardY = args.forwardY;
+    audio_listener.forwardZ = args.forwardZ;
 
-    const audio = audio_audios[args['id']];
-    if(!audio['panner']){
-        audio['panner'] = {};
+    const audio = audio_audios[args.id];
+    if(!audio.panner){
+        audio.panner = {};
     }
-    audio['panner']['positionX'] = args['positionX'];
-    audio['panner']['positionY'] = args['positionY'];
-    audio['panner']['positionZ'] = args['positionZ'];
+    audio.panner.positionX = args.positionX;
+    audio.panner.positionY = args.positionY;
+    audio.panner.positionZ = args.positionZ;
 
-    audio_start(args['id']);
+    audio_start(args.id);
 }
 
 globalThis.audio_audios = {};
@@ -89,31 +89,31 @@ globalThis.audio_listener = {
 
 core_init_todo.push(function(){
     core_tab_create({
-      'content': '<table><tr><td><input class=mini id=audio-volume min=0 step=.001 type=number><td>Audio Volume</table>'
-        + '<button id=audio-storage-reset type=button>Reset Audio Settings</button>',
+      'content': '<table><tr><td><input class=mini id=audio_volume min=0 step=.001 type=number><td>Audio Volume</table>'
+        + '<button id=audio_storage_reset type=button>Reset Audio Settings</button>',
       'group': 'core-menu',
       'id': 'audio',
       'label': 'Audio',
     });
     core_storage_add({
-      'prefix': 'common-audio-',
+      'prefix': 'common_audio_',
       'storage': {
-        'audio-volume': 1,
+        'audio_volume': 1,
       },
     });
     core_events_bind({
       'elements': {
-        'audio-storage-reset': {
+        'audio_storage_reset': {
           'onclick': function(){
               core_storage_reset({
                 'label': 'audio',
-                'keys': ['audio-volume'],
+                'keys': ['audio_volume'],
               });
           },
         },
       },
     });
-    core_storage_update(['audio-volume']);
+    core_storage_update(['audio_volume']);
 
     audio_create({
       'boop': true,
