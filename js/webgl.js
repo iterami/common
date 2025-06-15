@@ -2134,7 +2134,7 @@ function webgl_level_unload(base){
 
     webgl_character_count = 0;
     entity_remove_all({
-      'delete-empty': true,
+      'delete_empty': true,
     });
     core_object_reset(webgl_characters);
     core_object_reset(webgl_particles);

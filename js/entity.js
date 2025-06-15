@@ -12,11 +12,11 @@ function entity_attach(args){
       },
     });
 
-    args['entity']['attach-x'] = args['x'];
-    args['entity']['attach-y'] = args['y'];
-    args['entity']['attach-z'] = args['z'];
-    args['entity']['attach-to'] = args['to'];
-    args['entity']['attach-type'] = args['type'];
+    args.entity['attach-x'] = args.x;
+    args.entity['attach-y'] = args.y;
+    args.entity['attach-z'] = args.z;
+    args.entity['attach-to'] = args.to;
+    args.entity['attach-type'] = args.type;
 }
 
 function entity_create(args){
@@ -31,37 +31,37 @@ function entity_create(args){
 
     entity_id_count++;
     const entity = {
-      'id': args['id'],
+      'id': args.id,
     };
 
     for(const type in entity_types_default){
         entity_handle_defaults({
           'entity': entity,
-          'id': args['id'],
+          'id': args.id,
           'type': entity_types_default[type],
         });
     }
 
-    for(const type in args['types']){
+    for(const type in args.types){
         entity_handle_defaults({
           'entity': entity,
-          'id': args['id'],
-          'type': args['types'][type],
+          'id': args.id,
+          'type': args.types[type],
         });
     }
 
     Object.assign(
       entity,
-      args['properties'],
+      args.properties,
     );
 
-    entity_entities[args['id']] = entity;
+    entity_entities[args.id] = entity;
 
     for(const type in entity_types_default){
-        entity_info[entity_types_default[type]]['todo']?.(entity);
+        entity_info[entity_types_default[type]].todo?.(entity);
     }
-    for(const type in args['types']){
-        entity_info[args['types'][type]]['todo']?.(entity);
+    for(const type in args.types){
+        entity_info[args.types[type]].todo?.(entity);
     }
 
     return entity;
@@ -69,35 +69,35 @@ function entity_create(args){
 
 // Required args: entities, group
 function entity_group_add(args){
-    if(!(args['group'] in entity_groups)){
+    if(!(args.group in entity_groups)){
         entity_group_create([
-          args['group'],
+          args.group,
         ]);
     }
 
-    for(const entity in args['entities']){
-        if(entity_groups[args['group']][args['entities'][entity]]){
+    for(const entity in args.entities){
+        if(entity_groups[args.group][args.entities[entity]]){
             return;
         }
 
-        entity_groups[args['group']][args['entities'][entity]] = true;
+        entity_groups[args.group][args.entities[entity]] = true;
 
-        entity_groups['_length'][args['group']]++;
+        entity_groups._length[args.group]++;
     }
 }
 
 function entity_group_create(ids){
     for(const id in ids){
         entity_groups[ids[id]] = {};
-        entity_groups['_length'][ids[id]] = 0;
+        entity_groups._length[ids[id]] = 0;
     }
 }
 
 // Required args: groups, todo
 function entity_group_modify(args){
-    for(const group in args['groups']){
-        for(const entity in entity_groups[args['groups'][group]]){
-            args['todo'](entity_entities[entity]);
+    for(const group in args.groups){
+        for(const entity in entity_groups[args.groups[group]]){
+            args.todo(entity_entities[entity]);
         }
     }
 }
@@ -105,12 +105,12 @@ function entity_group_modify(args){
 // Required args: entities, from, to
 function entity_group_move(args){
     entity_group_remove({
-      'entities': args['entities'],
-      'group': args['from'],
+      'entities': args.entities,
+      'group': args.from,
     });
     entity_group_add({
-      'entities': args['entities'],
-      'group': args['to'],
+      'entities': args.entities,
+      'group': args.to,
     });
 }
 
@@ -119,30 +119,30 @@ function entity_group_remove(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'delete-empty': false,
+        'delete_empty': false,
       },
     });
 
-    if(entity_groups[args['group']] === void 0){
+    if(entity_groups[args.group] === void 0){
         return;
     }
 
-    for(const entity in args['entities']){
-        if(!entity_groups[args['group']][args['entities'][entity]]){
+    for(const entity in args.entities){
+        if(!entity_groups[args.group][args.entities[entity]]){
             continue;
         }
 
-        delete entity_groups[args['group']][args['entities'][entity]];
-        entity_groups['_length'][args['group']]--;
-        if(entity_info[args['group']]){
-            entity_info[args['group']]['count']--;
+        delete entity_groups[args.group][args.entities[entity]];
+        entity_groups._length[args.group]--;
+        if(entity_info[args.group]){
+            entity_info[args.group].count--;
         }
     }
 
-    if(args['delete-empty']
-      && entity_groups['_length'][args['group']] === 0){
-        delete entity_groups[args['group']];
-        delete entity_groups['_length'][args['group']];
+    if(args.delete_empty
+      && entity_groups._length[args.group] === 0){
+        delete entity_groups[args.group];
+        delete entity_groups._length[args.group];
     }
 }
 
@@ -151,7 +151,7 @@ function entity_group_remove_all(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'delete-empty': false,
+        'delete_empty': false,
       },
     });
 
@@ -161,8 +161,8 @@ function entity_group_remove_all(args){
         }
 
         entity_group_remove({
-          'delete-empty': args['delete-empty'],
-          'entities': args['entities'],
+          'delete_empty': args.delete_empty,
+          'entities': args.entities,
           'group': group,
         });
     }
@@ -170,28 +170,28 @@ function entity_group_remove_all(args){
 
 // Required args: id, type
 function entity_handle_defaults(args){
-    args['entity'] = core_args({
-      'args': args['entity'],
-      'defaults': entity_info[args['type']]['default'],
+    args.entity = core_args({
+      'args': args.entity,
+      'defaults': entity_info[args.type].default,
     });
 
-    if(entity_groups[args['type']][args['id']] === void 0){
+    if(entity_groups[args.type][args.id] === void 0){
         entity_group_add({
           'entities': [
-            args['id'],
+            args.id,
           ],
-          'group': args['type'],
+          'group': args.type,
         });
 
-        entity_info[args['type']]['count']++;
+        entity_info[args.type].count++;
     }
 
-    for(const group in entity_info[args['type']]['groups']){
+    for(const group in entity_info[args.type].groups){
         entity_group_add({
           'entities': [
-            args['id'],
+            args.id,
           ],
-          'group': entity_info[args['type']]['groups'][group],
+          'group': entity_info[args.type].groups[group],
         });
     }
 }
@@ -201,17 +201,17 @@ function entity_remove(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'delete-empty': false,
+        'delete_empty': false,
       },
     });
 
     entity_group_remove_all({
-      'delete-empty': args['delete-empty'],
-      'entities': args['entities'],
+      'delete_empty': args.delete_empty,
+      'entities': args.entities,
     });
 
-    for(const entity in args['entities']){
-        delete entity_entities[args['entities'][entity]];
+    for(const entity in args.entities){
+        delete entity_entities[args.entities[entity]];
     }
 }
 
@@ -219,19 +219,19 @@ function entity_remove_all(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'delete-empty': false,
+        'delete_empty': false,
         'group': false,
       },
     });
 
     for(const entity in entity_entities){
-        if(args['group'] !== false
-          && !entity_groups[args['group']][entity]){
+        if(args.group !== false
+          && !entity_groups[args.group][entity]){
             continue;
         }
 
         entity_remove({
-          'delete-empty': args['delete-empty'],
+          'delete_empty': args.delete_empty,
           'entities': [
             entity,
           ],
@@ -250,23 +250,23 @@ function entity_set(args){
       },
     });
 
-    if(entity_info[args['type']]){
+    if(entity_info[args.type]){
         return;
     }
 
-    entity_info[args['type']] = {
+    entity_info[args.type] = {
       'count': 0,
-      'default': args['properties'],
-      'groups': args['groups'],
-      'todo': args['todo'],
+      'default': args.properties,
+      'groups': args.groups,
+      'todo': args.todo,
     };
 
-    if(args['default']){
-        entity_types_default.push(args['type']);
+    if(args.default){
+        entity_types_default.push(args.type);
     }
 
     entity_group_create([
-      args['type'],
+      args.type,
     ]);
 }
 
