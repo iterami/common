@@ -38,14 +38,14 @@ function prefabs_webgl_cuboid_tree(args){
       'bottom': {
         'exclude': true,
       },
-      'character': args['character'],
+      'character': args.character,
       'left': {
         'texture-align': '10110100',
       },
       'position-x': prefab_args['position-x'],
       'position-y': prefab_args['position-y'] + args['trunk-size-y'] / 2,
       'position-z': prefab_args['position-z'],
-      'prefix': args['prefix'] + '-trunk',
+      'prefix': args.prefix + '-trunk',
       'right': {
         'texture-align': '10110100',
       },
@@ -63,9 +63,9 @@ function prefabs_webgl_cuboid_tree(args){
         'texture': args['leaf-texture'],
         'vertex-colors': args['leaf-color'],
       },
-      'character': args['character'],
+      'character': args.character,
       'position-y': prefab_args['position-y'] + args['trunk-size-y'] + args['leaf-size-y'] / 2,
-      'prefix': args['prefix'] + '-leaf',
+      'prefix': args.prefix + '-leaf',
       'size-x': args['leaf-size-x'],
       'size-y': args['leaf-size-y'],
       'size-z': args['leaf-size-z'],
@@ -100,17 +100,17 @@ function prefabs_webgl_frustum_tree(args){
       },
     });
 
-    const height = Math.random() * args['height-range'] + args['height'];
+    const height = Math.random() * args['height-range'] + args.height;
     const prefab_args = webgl_prefab_args(args);
 
     webgl_primitive_frustum({
       ...prefab_args,
-      'character': args['character'],
+      'character': args.character,
       'color-bottom': args['trunk-color'],
       'color-top': args['trunk-color'],
       'length': height,
       'points': args['trunk-points'],
-      'prefix': args['prefix'] + '-trunk',
+      'prefix': args.prefix + '-trunk',
       'size-bottom': args['trunk-size'],
       'size-top': 0,
     });
@@ -119,8 +119,8 @@ function prefabs_webgl_frustum_tree(args){
     for(let i = 0; i < args['leaf-count']; i++){
         webgl_primitive_frustum({
           ...prefab_args,
-          'bottom': args['bottom'],
-          'character': args['character'],
+          'bottom': args.bottom,
+          'character': args.character,
           'color-bottom': args['leaf-color-bottom'],
           'color-top': args['leaf-color-top'],
           'length': leaf_height,
@@ -128,7 +128,7 @@ function prefabs_webgl_frustum_tree(args){
           'position-x': prefab_args['position-x'],
           'position-y': prefab_args['position-y'] + height - leaf_height - (args['leaf-separate'] * i),
           'position-z': prefab_args['position-z'],
-          'prefix': args['prefix'] + '-leaf-' + i,
+          'prefix': args.prefix + '-leaf-' + i,
           'size-bottom': args['leaf-size'],
           'size-top': 0,
         });
@@ -189,7 +189,7 @@ function prefabs_webgl_humanoid(args){
     for(const part in bodyparts){
         for(let vertex = 0; vertex < bodyparts[part].length; vertex++){
             if(vertex === 0 || (vertex + 1) % 3 !== 0){
-                bodyparts[part][vertex] *= args['scale'];
+                bodyparts[part][vertex] *= args.scale;
             }
         }
 
@@ -198,21 +198,21 @@ function prefabs_webgl_humanoid(args){
           'entities': [
             {
               ...prefab_args,
-              'attach-to': args['character'],
+              'attach-to': args.character,
               'attach-type': 'webgl_characters',
               'attach-x': prefab_args['position-x'],
               'attach-y': prefab_args['position-y'],
               'attach-z': prefab_args['position-z'],
               'draw-mode': 'LINE_STRIP',
               'collision': false,
-              'id': args['prefix'] + '-' + part,
+              'id': args.prefix + '-' + part,
               'vertex-colors': webgl_vertexcolorarray({
                 'vertexcount': bodyparts[part].length / 3,
               }),
               'vertices': bodyparts[part],
             },
           ],
-          'groups': args['groups'],
+          'groups': args.groups,
         });
     }
 }
@@ -229,12 +229,12 @@ function prefabs_webgl_lines_path(args){
       },
     });
 
-    if(!webgl_paths[args['path']]){
+    if(!webgl_paths[args.path]){
         return;
     }
 
-    if(args['colors'].length === 0){
-        args['colors'].push([1, 1, 1, 1]);
+    if(args.colors.length === 0){
+        args.colors.push([1, 1, 1, 1]);
     }
 
     let color = -1;
@@ -244,46 +244,46 @@ function prefabs_webgl_lines_path(args){
     const vertices = [];
     const vertex_colors = [];
 
-    for(const point in webgl_paths[args['path']]['points']){
-        const point_x = webgl_paths[args['path']]['points'][point]['position-x'];
+    for(const point in webgl_paths[args.path].points){
+        const point_x = webgl_paths[args.path].points[point]['position-x'];
         if(point_x !== void 0){
             x = point_x;
         }
-        const point_y = webgl_paths[args['path']]['points'][point]['position-y'];
+        const point_y = webgl_paths[args.path].points[point]['position-y'];
         if(point_y !== void 0){
             y = point_y;
         }
-        const point_z = webgl_paths[args['path']]['points'][point]['position-z'];
+        const point_z = webgl_paths[args.path].points[point]['position-z'];
         if(point_z !== void 0){
             z = point_z;
         }
 
         vertices.push(x, y, z);
         color++;
-        if(color >= args['colors'].length){
+        if(color >= args.colors.length){
             color = 0;
         }
-        vertex_colors.push(...args['colors'][color]);
+        vertex_colors.push(...args.colors[color]);
     }
 
     webgl_entity_create({
       'entities': [
         {
           ...webgl_prefab_args(args),
-          'attach-to': args['character'],
+          'attach-to': args.character,
           'attach-type': 'webgl_characters',
           'draw-mode': vertices.length === 3
             ? 'POINTS'
-            : (webgl_paths[args['path']]['end'] !== 'loop'
+            : (webgl_paths[args.path].end !== 'loop'
               ? 'LINE_STRIP'
               : 'LINE_LOOP'),
           'collision': false,
-          'id': args['prefix'],
+          'id': args.prefix,
           'vertex-colors': vertex_colors,
           'vertices': vertices,
         },
       ],
-      'groups': args['groups'],
+      'groups': args.groups,
     });
 }
 
@@ -321,12 +321,12 @@ function prefabs_webgl_lines_shrub(args){
     let y = 0;
     let z = 0;
 
-    for(let i = 1; i < args['points']; i++){
+    for(let i = 1; i < args.points; i++){
         const random_x = Math.random() * (args['x-max'] - args['x-min']) + args['x-min'];
         const random_y = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
         const random_z = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
 
-        if(args['type'] === 'range'){
+        if(args.type === 'range'){
             x = random_x;
             y = random_y;
             z = random_z;
@@ -357,19 +357,19 @@ function prefabs_webgl_lines_shrub(args){
       'entities': [
         {
           ...prefab_args,
-          'attach-to': args['character'],
+          'attach-to': args.character,
           'attach-type': 'webgl_characters',
           'attach-x': prefab_args['position-x'],
           'attach-y': prefab_args['position-y'],
           'attach-z': prefab_args['position-z'],
           'draw-mode': prefab_args['draw-mode'],
           'collision': false,
-          'id': args['prefix'],
+          'id': args.prefix,
           'vertex-colors': colors,
           'vertices': points,
         },
       ],
-      'groups': args['groups'],
+      'groups': args.groups,
     });
 }
 
@@ -399,7 +399,7 @@ function prefabs_webgl_lines_tree(args){
     const prefab_args = webgl_prefab_args(args);
     const properties = {
       ...prefab_args,
-      'attach-to': args['character'],
+      'attach-to': args.character,
       'attach-type': 'webgl_characters',
       'attach-x': prefab_args['position-x'],
       'attach-y': prefab_args['position-y'],
@@ -412,11 +412,11 @@ function prefabs_webgl_lines_tree(args){
     let trunk_width = args['trunk-width-max'] / 2;
     const trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
     for(let trunk = 0; trunk < trunk_count; trunk++){
-        properties['id'] = args['prefix'] + '-trunk-' + trunk;
-        properties['billboard'] = args['billboard'];
+        properties.id = args.prefix + '-trunk-' + trunk;
+        properties.billboard = args.billboard;
         properties['rotate-x'] = 0;
         properties['rotate-z'] = 0;
-        properties['vertices'] = [
+        properties.vertices = [
           trunk_width, args['trunk-length'], 0,
           -trunk_width, args['trunk-length'], 0,
           -trunk_width, 0, 0,
@@ -426,7 +426,7 @@ function prefabs_webgl_lines_tree(args){
           'entities': [
             properties,
           ],
-          'groups': args['groups'],
+          'groups': args.groups,
         });
 
         properties['attach-y'] += 10;
@@ -436,11 +436,11 @@ function prefabs_webgl_lines_tree(args){
         const branch_length = args['trunk-length'] / 2;
         const branch_width = trunk_width / 2;
         for(let branch = 0; branch < branch_count; branch++){
-            properties['id'] = args['prefix'] + '-trunk-' + trunk + '-branch-' + branch;
-            properties['billboard'] = false;
+            properties.id = args.prefix + '-trunk-' + trunk + '-branch-' + branch;
+            properties.billboard = false;
             properties['rotate-x'] = Math.random() * 45 + 90;
             properties['rotate-z'] = Math.random() * 360;
-            properties['vertices'] = [
+            properties.vertices = [
               branch_width, branch_length, 0,
               -branch_width, branch_length, 0,
               -branch_width, 0, 0,
@@ -451,7 +451,7 @@ function prefabs_webgl_lines_tree(args){
               'entities': [
                 properties,
               ],
-              'groups': args['groups'],
+              'groups': args.groups,
             });
         }
     }
@@ -477,20 +477,20 @@ function prefabs_webgl_tree_2d(args){
       },
     });
 
-    const height = Math.random() * args['height-range'] + args['height'];
+    const height = Math.random() * args['height-range'] + args.height;
     const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
       'entities': [
         {
           ...prefab_args,
-          'attach-to': args['character'],
+          'attach-to': args.character,
           'attach-type': 'webgl_characters',
           'attach-x': prefab_args['position-x'],
           'attach-y': prefab_args['position-y'],
           'attach-z': prefab_args['position-z'],
-          'billboard': prefab_args['billboard'],
+          'billboard': prefab_args.billboard,
           'collision': false,
-          'id': args['prefix'] + '-base',
+          'id': args.prefix + '-base',
           'vertex-colors': args['base-color'],
           'vertices': [
             args['width-base'] / 2, 0, -.1,
@@ -500,15 +500,15 @@ function prefabs_webgl_tree_2d(args){
         },
         {
           ...prefab_args,
-          'attach-to': args['character'],
+          'attach-to': args.character,
           'attach-type': 'webgl_characters',
           'attach-x': prefab_args['position-x'],
           'attach-y': prefab_args['position-y'],
           'attach-z': prefab_args['position-z'],
-          'billboard': prefab_args['billboard'],
+          'billboard': prefab_args.billboard,
           'collision': false,
           'draw-mode': 'TRIANGLES',
-          'id': args['prefix'] + '-leaf',
+          'id': args.prefix + '-leaf',
           'vertex-colors': args['leaf-color'],
           'vertices': [
             args['width-leaf'] / 2, height * .1, 0,
@@ -517,6 +517,6 @@ function prefabs_webgl_tree_2d(args){
           ],
         },
       ],
-      'groups': args['groups'],
+      'groups': args.groups,
     });
 }

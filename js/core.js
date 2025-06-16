@@ -2,17 +2,17 @@
 
 // Required args: args, defaults
 function core_args(args){
-    if(args['args'] === void 0){
-        return args['defaults'];
+    if(args.args === void 0){
+        return args.defaults;
     }
 
-    for(const arg in args['defaults']){
-        if(args['args'][arg] === void 0){
-            args['args'][arg] = args['defaults'][arg];
+    for(const arg in args.defaults){
+        if(args.args[arg] === void 0){
+            args.args[arg] = args.defaults[arg];
         }
     }
 
-    return args['args'];
+    return args.args;
 }
 
 // Required args: number
@@ -24,15 +24,15 @@ function core_digits_min(args){
       },
     });
 
-    const sign = args['number'] < 0
+    const sign = args.number < 0
       ? '-'
       : '';
-    let number = Math.abs(args['number']);
+    let number = Math.abs(args.number);
     const fraction = String(core_round({
       'number': number % 1,
     })).substring(1);
     number = String(Math.trunc(number)).padStart(
-      args['digits'],
+      args.digits,
       '0'
     );
 
@@ -67,7 +67,7 @@ function core_escape(force){
         core_elements['core-menu'].style.display = 'inline';
     }
 
-    globalThis['repo_escape']?.();
+    globalThis.repo_escape?.();
 }
 
 function core_events_bind(args){
@@ -84,21 +84,21 @@ function core_events_bind(args){
       },
     });
 
-    if(args['beforeunload'] !== false){
-        core_events['beforeunload'] = args['beforeunload'];
+    if(args.beforeunload !== false){
+        core_events.beforeunload = args.beforeunload;
         globalThis.onbeforeunload = core_handle_beforeunload;
     }
-    if(args['blur'] !== false){
-        core_events['blur'] = args['blur'];
+    if(args.blur !== false){
+        core_events.blur = args.blur;
     }
 
-    if(args['clearkeys']){
+    if(args.clearkeys){
         core_object_reset(core_keys);
     }
-    if(args['keybinds'] !== false){
-        for(const keybind in args['keybinds']){
+    if(args.keybinds !== false){
+        for(const keybind in args.keybinds){
             core_keys[keybind] = core_args({
-              'args': args['keybinds'][keybind],
+              'args': args.keybinds[keybind],
               'defaults': {
                 'preventDefault': false,
                 'state': false,
@@ -107,14 +107,14 @@ function core_events_bind(args){
         }
     }
 
-    if(args['clearpointer']){
-        core_object_reset(core_pointer['todo']);
+    if(args.clearpointer){
+        core_object_reset(core_pointer.todo);
     }
-    if(args['pointerbinds'] !== false){
-        for(const pointerbind in args['pointerbinds']){
-            core_pointer['todo'][pointerbind] = {
-              'preventDefault': args['pointerbinds'][pointerbind]['preventDefault'] || false,
-              'todo': args['pointerbinds'][pointerbind]['todo'],
+    if(args.pointerbinds !== false){
+        for(const pointerbind in args.pointerbinds){
+            core_pointer.todo[pointerbind] = {
+              'preventDefault': args.pointerbinds[pointerbind].preventDefault || false,
+              'todo': args.pointerbinds[pointerbind].todo,
             };
         }
         globalThis.oncontextmenu = core_handle_contextmenu;
@@ -127,11 +127,11 @@ function core_events_bind(args){
         globalThis.onwheel = core_handle_wheel;
     }
 
-    if(args['elements'] !== false){
-        for(const element in args['elements']){
+    if(args.elements !== false){
+        for(const element in args.elements){
             const domelement = core_getelement(element);
-            for(const event in args['elements'][element]){
-                domelement[event] = args['elements'][element][event];
+            for(const event in args.elements[element]){
+                domelement[event] = args.elements[element][event];
             }
         }
     }
@@ -147,8 +147,8 @@ function core_file(args){
     });
 
     const filereader = new FileReader();
-    filereader.onloadend = args['todo'];
-    filereader[args['type']](args['file']);
+    filereader.onloadend = args.todo;
+    filereader[args.type](args.file);
 }
 
 // Required args: a, b
@@ -160,7 +160,7 @@ function core_float_compare(args){
       },
     });
 
-    return Math.abs(args['a'] - args['b']) < args['precision'];
+    return Math.abs(args.a - args.b) < args.precision;
 }
 
 function core_getelement(id){
@@ -172,10 +172,10 @@ function core_getelement(id){
 }
 
 function core_handle_beforeunload(event){
-    if(core_events['beforeunload']){
+    if(core_events.beforeunload){
         core_handle_event({
           'event': event,
-          'handler': core_events['beforeunload'],
+          'handler': core_events.beforeunload,
         });
     }
 }
@@ -186,7 +186,7 @@ function core_handle_blur(){
     }
     core_key_shift = false;
     for(const key in core_keys){
-        core_keys[key]['state'] = false;
+        core_keys[key].state = false;
     }
     core_pointer['down-0'] = false;
     core_pointer['down-1'] = false;
@@ -194,20 +194,20 @@ function core_handle_blur(){
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
 
-    if(core_events['blur']){
+    if(core_events.blur){
         core_handle_event({
           'event': event,
-          'handler': core_events['blur'],
+          'handler': core_events.blur,
         });
     }
 }
 
 function core_handle_contextmenu(event){
     if(!core_menu_open
-      && core_pointer['todo']['contextmenu']
+      && core_pointer.todo.contextmenu
       && core_handle_event({
         'event': event,
-        'handler': core_pointer['todo']['contextmenu'],
+        'handler': core_pointer.todo.contextmenu,
       }) === void 0){
         return false;
     }
@@ -222,17 +222,17 @@ function core_handle_event(args){
       },
     });
 
-    if(args['handler']['preventDefault']
+    if(args.handler.preventDefault
       && !core_menu_open){
-        args['event'].preventDefault();
+        args.event.preventDefault();
     }
 
-    if(args['state'] !== void 0){
-        args['handler']['state'] = args['state'];
+    if(args.state !== void 0){
+        args.handler.state = args.state;
     }
 
-    if(args['state'] !== false){
-        return args['handler']['todo']?.(args['event']);
+    if(args.state !== false){
+        return args.handler.todo?.(args.event);
     }
 }
 
@@ -242,7 +242,7 @@ function core_handle_keydown(event){
     if(event.ctrlKey
       || event.altKey
       || event.metaKey
-      || core_keys[event.code]?.['state']){
+      || core_keys[event.code]?.state){
         return;
     }
 
@@ -286,11 +286,11 @@ function core_handle_pointercancel(event){
     core_pointer['movement-x'] = 0;
     core_pointer['movement-y'] = 0;
 
-    if(core_pointer['todo']['pointercancel']
+    if(core_pointer.todo.pointercancel
       && event.target.id !== 'core-toggle'){
         core_handle_event({
           'event': event,
-          'handler': core_pointer['todo']['pointercancel'],
+          'handler': core_pointer.todo.pointercancel,
         });
     }
 }
@@ -314,15 +314,15 @@ function core_handle_pointerdown(event){
     const y = Math.floor(event.pageY);
     core_pointer['movement-x'] = 0;
     core_pointer['movement-y'] = 0;
-    core_pointer['x'] = x;
-    core_pointer['y'] = y;
+    core_pointer.x = x;
+    core_pointer.y = y;
     core_pointer['down-x'] = x;
     core_pointer['down-y'] = y;
 
-    if(core_pointer['todo']['pointerdown']){
+    if(core_pointer.todo.pointerdown){
         core_handle_event({
           'event': event,
-          'handler': core_pointer['todo']['pointerdown'],
+          'handler': core_pointer.todo.pointerdown,
         });
     }
 }
@@ -343,8 +343,8 @@ function core_handle_pointermove(event){
 
     const x = Math.floor(event.pageX);
     const y = Math.floor(event.pageY);
-    core_pointer['x'] = x;
-    core_pointer['y'] = y;
+    core_pointer.x = x;
+    core_pointer.y = y;
 
     if(core_menu_open && core_menu_block_events){
         return;
@@ -354,18 +354,18 @@ function core_handle_pointermove(event){
         core_pointer['down-' + i] = Boolean(event.buttons & (1 << i));
     }
     if(event.pointerType === 'touch'){
-        core_pointer['movement-x'] = (x - core_pointer['x']) * (core_storage_data['pointer-horizontal'] || 1);
-        core_pointer['movement-y'] = (y - core_pointer['y']) * (core_storage_data['pointer-vertical'] || 1);
+        core_pointer['movement-x'] = (x - core_pointer.x) * (core_storage_data['pointer-horizontal'] || 1);
+        core_pointer['movement-y'] = (y - core_pointer.y) * (core_storage_data['pointer-vertical'] || 1);
 
     }else{
         core_pointer['movement-x'] = event.movementX * (core_storage_data['pointer-horizontal'] || 1);
         core_pointer['movement-y'] = event.movementY * (core_storage_data['pointer-vertical'] || 1);
     }
 
-    if(core_pointer['todo']['pointermove']){
+    if(core_pointer.todo.pointermove){
         core_handle_event({
           'event': event,
-          'handler': core_pointer['todo']['pointermove'],
+          'handler': core_pointer.todo.pointermove,
         });
     }
 }
@@ -377,11 +377,11 @@ function core_handle_pointerup(event){
     core_pointer['down-3'] = false;
     core_pointer['down-4'] = false;
 
-    if(core_pointer['todo']['pointerup']
+    if(core_pointer.todo.pointerup
       && event.target.id !== 'core-toggle'){
         core_handle_event({
           'event': event,
-          'handler': core_pointer['todo']['pointerup'],
+          'handler': core_pointer.todo.pointerup,
         });
     }
 }
@@ -392,10 +392,10 @@ function core_handle_wheel(event){
         return;
     }
 
-    if(core_pointer['todo']['wheel']){
+    if(core_pointer.todo.wheel){
         core_handle_event({
           'event': event,
-          'handler': core_pointer['todo']['wheel'],
+          'handler': core_pointer.todo.wheel,
         });
     }
 }
@@ -429,24 +429,24 @@ function core_html(args){
       },
     });
 
-    if(args['properties']['id']){
-        const existing_element = core_getelement(args['properties']['id']);
+    if(args.properties.id){
+        const existing_element = core_getelement(args.properties.id);
         if(existing_element){
             return existing_element;
         }
     }
 
-    const element = document.createElement(args['type']);
+    const element = document.createElement(args.type);
     Object.assign(
       element,
-      args['properties'],
+      args.properties,
     );
-    if(args['parent'] !== false){
-        args['parent'][args['todo']](element);
+    if(args.parent !== false){
+        args.parent[args.todo](element);
     }
 
-    if(args['store'] !== false){
-        core_elements[args['store']] = element;
+    if(args.store !== false){
+        core_elements[args.store] = element;
     }
 
     return element;
@@ -469,9 +469,9 @@ function core_html_format(string){
 // Required args: id, src
 function core_image(args){
     const image = new Image();
-    image.onload = args['todo'];
-    image.src = args['src'];
-    core_images[args['id']] = image;
+    image.onload = args.todo;
+    image.src = args.src;
+    core_images[args.id] = image;
     return image;
 }
 
@@ -531,11 +531,11 @@ function core_init(){
     globalThis.onkeydown = core_handle_keydown;
     globalThis.onkeyup = core_handle_keyup;
 
-    globalThis['repo_init']?.();
+    globalThis.repo_init?.();
 }
 
 function core_interval_animationFrame(id){
-    core_intervals[id]['var'] = globalThis.requestAnimationFrame(core_intervals[id]['todo']);
+    core_intervals[id].var = globalThis.requestAnimationFrame(core_intervals[id].todo);
 }
 
 // Required args: id, todo
@@ -551,23 +551,23 @@ function core_interval_modify(args){
       },
     });
 
-    if(core_type(args['todo']) !== 'function'){
+    if(core_type(args.todo) !== 'function'){
         return;
     }
 
-    core_interval_pause(args['id']);
+    core_interval_pause(args.id);
 
-    core_intervals[args['id']] = {
-      'animationFrame': args['animationFrame'],
-      'interval': args['interval'],
+    core_intervals[args.id] = {
+      'animationFrame': args.animationFrame,
+      'interval': args.interval,
       'paused': true,
-      'set': args['set'],
-      'sync': args['sync'],
-      'todo': args['todo'],
+      'set': args.set,
+      'sync': args.sync,
+      'todo': args.todo,
     };
 
-    if(!args['paused']){
-        core_interval_resume(args['id']);
+    if(!args.paused){
+        core_interval_resume(args.id);
     }
 }
 
@@ -576,11 +576,11 @@ function core_interval_pause(id){
         return;
     }
 
-    globalThis[core_intervals[id]['animationFrame']
+    globalThis[core_intervals[id].animationFrame
       ? 'cancelAnimationFrame'
-      : 'clearInterval'](core_intervals[id]['var']);
+      : 'clearInterval'](core_intervals[id].var);
 
-    core_intervals[id]['paused'] = true;
+    core_intervals[id].paused = true;
 }
 
 function core_interval_pause_all(){
@@ -602,27 +602,27 @@ function core_interval_remove_all(){
 
 function core_interval_resume(id){
     if(!Object.hasOwn(core_intervals, id)
-      || !core_intervals[id]['paused']){
+      || !core_intervals[id].paused){
         return;
     }
 
-    core_intervals[id]['paused'] = false;
+    core_intervals[id].paused = false;
 
-    if(core_intervals[id]['animationFrame']){
-        core_intervals[id]['var'] = globalThis.requestAnimationFrame(core_intervals[id]['todo']);
+    if(core_intervals[id].animationFrame){
+        core_intervals[id].var = globalThis.requestAnimationFrame(core_intervals[id].todo);
 
-    }else if(core_intervals[id]['sync']){
-        core_intervals[id]['todo']();
+    }else if(core_intervals[id].sync){
+        core_intervals[id].todo();
 
-        core_intervals[id]['var'] = core_interval_sync({
+        core_intervals[id].var = core_interval_sync({
           'id': id,
           'interval': 1000 - new Date().getMilliseconds(),
         });
 
     }else{
-        core_intervals[id]['var'] = globalThis[core_intervals[id]['set']](
-          core_intervals[id]['todo'],
-          core_intervals[id]['interval']
+        core_intervals[id].var = globalThis[core_intervals[id].set](
+          core_intervals[id].todo,
+          core_intervals[id].interval
         );
     }
 }
@@ -635,20 +635,20 @@ function core_interval_resume_all(){
 
 // Required args: id, interval
 function core_interval_sync(args){
-    if(core_intervals[args['id']]['paused']){
+    if(core_intervals[args.id].paused){
         return;
     }
 
     return globalThis.setTimeout(
       function(){
-          core_intervals[args['id']]['todo']();
+          core_intervals[args.id].todo();
 
-          core_intervals[args['id']]['var'] = core_interval_sync({
-            'id': args['id'],
-            'interval': core_intervals[args['id']]['interval'] - (new Date().getMilliseconds() % core_intervals[args['id']]['interval']),
+          core_intervals[args.id].var = core_interval_sync({
+            'id': args.id,
+            'interval': core_intervals[args.id].interval - (new Date().getMilliseconds() % core_intervals[args.id].interval),
           });
       },
-      args['interval']
+      args.interval
     );
 }
 
@@ -696,7 +696,7 @@ function core_number_format(args){
           'maximumFractionDigits': args['decimals-max'],
           'minimumFractionDigits': args['decimals-min'],
         }
-      ).format(args['number']);
+      ).format(args.number);
 }
 
 function core_object_reset(object){
@@ -727,12 +727,12 @@ function core_random_crypto(args){
       },
     });
 
-    if(core_type(args['array']) === 'string'){
-        args['array'] = new globalThis[args['array']](args['length']);
+    if(core_type(args.array) === 'string'){
+        args.array = new globalThis[args.array](args.length);
     }
 
-    globalThis.crypto.getRandomValues(args['array']);
-    return args['array'];
+    globalThis.crypto.getRandomValues(args.array);
+    return args.array;
 }
 
 // Required args: options
@@ -749,16 +749,16 @@ function core_random_drop(args){
     const percentages = [];
     let total = 0;
 
-    for(const option in args['options']){
-        total += args['options'][option];
+    for(const option in args.options){
+        total += args.options[option];
 
         options.push(option);
         percentages.push(total);
     }
 
     if(args['nothing-type'] === 0){
-        if(total < args['nothing']){
-            const remaining = args['nothing'] - total;
+        if(total < args.nothing){
+            const remaining = args.nothing - total;
             total += remaining;
 
             options.push(false);
@@ -766,7 +766,7 @@ function core_random_drop(args){
         }
 
     }else if(args['nothing-type'] === 1){
-        total += args['nothing'];
+        total += args.nothing;
 
         options.push(false);
         percentages.push(total);
@@ -821,22 +821,22 @@ function core_random_string(args){
     });
 
     let string = '';
-    for(let i = 0; i < args['length']; i++){
-        string += args['characters'][core_random_integer(args['characters'].length)];
+    for(let i = 0; i < args.length; i++){
+        string += args.characters[core_random_integer(args.characters.length)];
     }
     return string;
 }
 
 // Required args: patterns, string
 function core_replace(args){
-    let string_value = args['string'];
-    for(const pattern in args['patterns']){
+    let string_value = args.string;
+    for(const pattern in args.patterns){
         string_value = string_value.replace(
           new RegExp(
             pattern,
             'g'
           ),
-          args['patterns'][pattern]
+          args.patterns[pattern]
         );
     }
 
@@ -873,16 +873,16 @@ function core_repo_init(args){
 
     Object.assign(
       globalThis,
-      args['globals']
+      args.globals
     );
 
-    core_repo_title = args['title'];
-    if(args['info'].length){
+    core_repo_title = args.title;
+    if(args.info.length){
         core_html({
           'parent': core_elements['core-menu'],
           'properties': {
             'id': 'core-menu-info',
-            'innerHTML': args['info'],
+            'innerHTML': args.info,
           },
           'todo': 'append',
         });
@@ -890,32 +890,32 @@ function core_repo_init(args){
     Object.assign(
       document.getElementById('core-menu-root'),
       {
-        'href': args['root'],
-        'textContent': args['owner'],
+        'href': args.root,
+        'textContent': args.owner,
       }
     );
     Object.assign(
       document.getElementById('core-menu-title'),
       {
-        'href': args['link'] === false
-          ? 'https://github.com/' + args['owner'] + '/' + core_repo_title
-          : args['link'],
+        'href': args.link === false
+          ? 'https://github.com/' + args.owner + '/' + core_repo_title
+          : args.link,
         'textContent': core_repo_title,
       }
     );
-    core_elements['repo-ui'].innerHTML = args['ui'];
+    core_elements['repo-ui'].innerHTML = args.ui;
 
     let have_default = false;
-    for(const tab in args['tabs']){
+    for(const tab in args.tabs){
         core_tab_create({
-          'content': args['tabs'][tab]['content'],
-          'group': args['tabs'][tab]['group'],
+          'content': args.tabs[tab].content,
+          'group': args.tabs[tab].group,
           'id': tab,
-          'label': args['tabs'][tab]['label'],
+          'label': args.tabs[tab].label,
         });
 
-        if(args['tabs'][tab]['default']){
-            core_tab_switch('tab_' + args['tabs'][tab]['group'] + '_' + tab);
+        if(args.tabs[tab].default){
+            core_tab_switch('tab_' + args.tabs[tab].group + '_' + tab);
             have_default = true;
         }
     }
@@ -953,7 +953,7 @@ function core_repo_init(args){
               'onclick': function(){
                   const keys = [];
                   for(const key in core_storage_info){
-                      if(core_storage_info[key]['prefix'] === 'core-'){
+                      if(core_storage_info[key].prefix === 'core-'){
                           keys.push(key);
                       }
                   }
@@ -977,7 +977,7 @@ function core_repo_init(args){
           },
         );
     }
-    if(args['storage'] !== false){
+    if(args.storage !== false){
         core_tab_create({
           'content': args['storage-menu']
             + '<button id=storage-reset-repo type=button>Reset ' + core_repo_title + ' Settings</button>',
@@ -987,9 +987,9 @@ function core_repo_init(args){
           'todo': 'prepend',
         });
         core_storage_add({
-          'storage': args['storage'],
+          'storage': args.storage,
         });
-        args['events']['storage-reset-repo'] = {
+        args.events['storage-reset-repo'] = {
           'onclick': function(){
               core_storage_reset({
                 'label': core_repo_title,
@@ -998,7 +998,7 @@ function core_repo_init(args){
           },
         };
     }
-    if(args['storage'] !== false
+    if(args.storage !== false
       || args['storage-controls']){
         core_html({
           'parent': core_elements['core-menu'],
@@ -1017,10 +1017,10 @@ function core_repo_init(args){
         core_tab_switch('tab_core-menu_repo');
     }
 
-    if(args['keybinds'] !== false){
+    if(args.keybinds !== false){
         Object.assign(
           core_key_rebinds,
-          args['keybinds'],
+          args.keybinds,
         );
     }
     core_keys_rebind();
@@ -1028,17 +1028,17 @@ function core_repo_init(args){
     core_menu_block_events = args['menu-block-events'];
     core_menu_lock = args['menu-lock'];
     core_events_bind({
-      'beforeunload': args['beforeunload'],
-      'blur': args['blur'],
-      'elements': args['events'],
-      'keybinds': args['keybinds'],
-      'pointerbinds': args['pointerbinds'],
+      'beforeunload': args.beforeunload,
+      'blur': args.blur,
+      'elements': args.events,
+      'keybinds': args.keybinds,
+      'pointerbinds': args.pointerbinds,
     });
 
-    for(const image in args['images']){
+    for(const image in args.images){
         core_image({
           'id': image,
-          'src': args['images'][image],
+          'src': args.images[image],
         });
     }
     for(const element in args['ui-elements']){
@@ -1050,7 +1050,7 @@ function core_repo_init(args){
     }
     delete globalThis.core_init_todo;
 
-    if(args['menu']
+    if(args.menu
       || args['menu-lock']){
         core_escape(true);
     }
@@ -1060,7 +1060,7 @@ function core_requestpointerlock(element){
     if(core_menu_open
       || core_mobile
       || document.pointerLockElement !== null
-      || core_keys['Escape']['state']){
+      || core_keys.Escape.state){
         return;
     }
 
@@ -1078,24 +1078,24 @@ function core_round(args){
       },
     });
 
-    const eIndex = String(args['number']).indexOf('e');
+    const eIndex = String(args.number).indexOf('e');
     let eString = '';
     if(eIndex >= 0){
-        eString = String(args['number']).slice(eIndex);
-        args['number'] = String(args['number']).slice(
+        eString = String(args.number).slice(eIndex);
+        args.number = String(args.number).slice(
           0,
           eIndex
         );
 
         const power = Number(eString.slice(2));
-        if(power === args['decimals']){
+        if(power === args.decimals){
             eString = 'e-' + (power + 1);
         }
     }
 
     let result = Number(
-      Math.round(args['number'] + 'e+' + args['decimals'])
-        + 'e-' + args['decimals']
+      Math.round(args.number + 'e+' + args.decimals)
+        + 'e-' + args.decimals
     );
 
     if(eString.length){
@@ -1103,7 +1103,7 @@ function core_round(args){
     }
 
     if(globalThis.isNaN(result)
-      || Math.abs(result) < Number('1e-' + args['decimals'])){
+      || Math.abs(result) < Number('1e-' + args.decimals)){
         return 0;
     }
 
@@ -1120,12 +1120,12 @@ function core_sort_custom(args){
       },
     });
 
-    const target_array = args['clone']
-      ? [...args['array']]
-      : args['array'];
+    const target_array = args.clone
+      ? [...args.array]
+      : args.array;
 
-    target_array.sort(args['todo']);
-    if(args['reverse']){
+    target_array.sort(args.todo);
+    if(args.reverse){
         target_array.reverse();
     }
 
@@ -1135,9 +1135,9 @@ function core_sort_custom(args){
 // Required args: array
 function core_sort_numbers(args){
     return core_sort_custom({
-      'array': args['array'],
-      'clone': args['clone'],
-      'reverse': args['reverse'],
+      'array': args.array,
+      'clone': args.clone,
+      'reverse': args.reverse,
       'todo': function(a, b){
           return a - b;
       },
@@ -1147,14 +1147,14 @@ function core_sort_numbers(args){
 // Required args: array, property
 function core_sort_property(args){
     return core_sort_custom({
-      'array': args['array'],
-      'clone': args['clone'],
-      'reverse': args['reverse'],
+      'array': args.array,
+      'clone': args.clone,
+      'reverse': args.reverse,
       'todo': function(a, b){
-          if(a[args['property']] > b[args['property']]){
+          if(a[args.property] > b[args.property]){
               return 1;
           }
-          if(a[args['property']] < b[args['property']]){
+          if(a[args.property] < b[args.property]){
               return -1;
           }
           return 0;
@@ -1164,8 +1164,8 @@ function core_sort_property(args){
 
 function core_sort_random(args){
     return core_sort_custom({
-      'array': args['array'],
-      'clone': args['clone'],
+      'array': args.array,
+      'clone': args.clone,
       'todo': function(a, b){
           return core_random_boolean(.5);
       },
@@ -1175,9 +1175,9 @@ function core_sort_random(args){
 // Required args: array
 function core_sort_strings(args){
     return core_sort_custom({
-      'array': args['array'],
-      'clone': args['clone'],
-      'reverse': args['reverse'],
+      'array': args.array,
+      'clone': args.clone,
+      'reverse': args.reverse,
       'todo': new Intl.Collator().compare,
     });
 }
@@ -1191,16 +1191,16 @@ function core_storage_add(args){
       },
     });
 
-    for(const key in args['storage']){
+    for(const key in args.storage){
         core_storage_info[key] = {
-          'default': args['storage'][key],
-          'prefix': args['prefix'],
+          'default': args.storage[key],
+          'prefix': args.prefix,
         };
-        const value = globalThis.localStorage.getItem(args['prefix'] + key);
+        const value = globalThis.localStorage.getItem(args.prefix + key);
         core_storage_data[key] = value === null
-          ? core_storage_info[key]['default']
+          ? core_storage_info[key].default
           : core_type_convert({
-              'template': core_storage_info[key]['default'],
+              'template': core_storage_info[key].default,
               'value': value,
             });
         core_elements[key] = document.getElementById(key);
@@ -1209,9 +1209,9 @@ function core_storage_add(args){
 
 // Required args: element, key
 function core_storage_element_property(args){
-    return core_type(core_storage_info[args['key']]['default']) === 'boolean'
+    return core_type(core_storage_info[args.key].default) === 'boolean'
       ? 'checked'
-      : (core_type(args['element'].value) === 'undefined'
+      : (core_type(args.element.value) === 'undefined'
         ? 'textContent'
         : 'value');
 }
@@ -1226,30 +1226,30 @@ function core_storage_reset(args){
       },
     });
 
-    if(!globalThis.confirm('Reset ' + args['label'] + ' settings?')){
+    if(!globalThis.confirm('Reset ' + args.label + ' settings?')){
         return;
     }
 
     let keys = [];
 
-    if(args['prefix'] !== false){
+    if(args.prefix !== false){
         for(const key in core_storage_info){
-            if(core_storage_info[key]['prefix'] === args['prefix']){
+            if(core_storage_info[key].prefix === args.prefix){
                 keys.push(key);
             }
         }
 
     }else{
-        keys = args['keys'] === false
+        keys = args.keys === false
           ? Object.keys(core_storage_data)
-          : args['keys'];
+          : args.keys;
     }
 
     for(const keyid in keys){
         const key = keys[keyid];
 
-        core_storage_data[key] = core_storage_info[key]['default'];
-        globalThis.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
+        core_storage_data[key] = core_storage_info[key].default;
+        globalThis.localStorage.removeItem(core_storage_info[key].prefix + key);
     }
 
     core_storage_update();
@@ -1265,7 +1265,7 @@ function core_storage_save(keys){
 
         const element = core_elements[key];
         const data = core_type_convert({
-          'template': core_storage_info[key]['default'],
+          'template': core_storage_info[key].default,
           'value': element[core_storage_element_property({
             'element': element,
             'key': key,
@@ -1276,14 +1276,14 @@ function core_storage_save(keys){
         if(data !== void 0
           && !Number.isNaN(data)
           && String(data).length
-          && data !== core_storage_info[key]['default']){
+          && data !== core_storage_info[key].default){
             globalThis.localStorage.setItem(
-              core_storage_info[key]['prefix'] + key,
+              core_storage_info[key].prefix + key,
               data
             );
 
         }else{
-            globalThis.localStorage.removeItem(core_storage_info[key]['prefix'] + key);
+            globalThis.localStorage.removeItem(core_storage_info[key].prefix + key);
         }
     }
 
@@ -1308,24 +1308,24 @@ function core_storage_update(keys){
 
 // Required args: content, group, id, label
 function core_tab_create(args){
-    core_tabs[args['id']] = {
-      'content': args['content'],
-      'group': args['group'],
+    core_tabs[args.id] = {
+      'content': args.content,
+      'group': args.group,
     };
 
-    let tabs = document.getElementById(args['group'] + '-tabs');
+    let tabs = document.getElementById(args.group + '-tabs');
     if(!tabs){
         tabs = core_html({
           'parent': core_elements['core-menu'],
           'properties': {
-            'id': args['group'] + '-tabs',
+            'id': args.group + '-tabs',
           },
           'todo': 'append',
         });
         core_html({
           'parent': core_elements['core-menu'],
           'properties': {
-            'id': args['group'] + '-tabcontent',
+            'id': args.group + '-tabcontent',
           },
           'todo': 'append',
         });
@@ -1334,20 +1334,20 @@ function core_tab_create(args){
     core_html({
       'parent': tabs,
       'properties': {
-        'id': 'tab_' + args['group'] + '_' + args['id'],
+        'id': 'tab_' + args.group + '_' + args.id,
         'onclick': function(){
             core_tab_switch(this.id);
         },
-        'textContent': args['label'],
+        'textContent': args.label,
       },
-      'todo': args['todo'],
+      'todo': args.todo,
       'type': 'button',
     });
     core_html({
-      'parent': document.getElementById(args['group'] + '-tabcontent'),
+      'parent': document.getElementById(args.group + '-tabcontent'),
       'properties': {
-        'id': 'tabcontent-' + args['id'],
-        'innerHTML': args['content'],
+        'id': 'tabcontent-' + args.id,
+        'innerHTML': args.content,
         'style': 'display:none',
       },
     });
@@ -1355,7 +1355,7 @@ function core_tab_create(args){
 
 function core_tab_reset_group(id){
     for(const tab in core_tabs){
-        if(core_tabs[tab]['group'] === id){
+        if(core_tabs[tab].group === id){
             document.getElementById('tabcontent-' + tab).style.display = 'none';
         }
     }
@@ -1387,22 +1387,22 @@ function core_type(variable){
 
 // Required args: template, value
 function core_type_convert(args){
-    const type = core_type(args['template']);
+    const type = core_type(args.template);
     if(type === 'string'){
-        return String(args['value']);
+        return String(args.value);
     }
     if(type === 'array'
       || type === 'object'){
-        return args['value'];
+        return args.value;
     }
     if(type === 'boolean'
-      && core_type(args['value']) !== 'boolean'){
-        return args['value'] === 'true';
+      && core_type(args.value) !== 'boolean'){
+        return args.value === 'true';
     }
-    if(!globalThis.isNaN(Number.parseFloat(args['template']))){
-        return Number.parseFloat(args['value']);
+    if(!globalThis.isNaN(Number.parseFloat(args.template))){
+        return Number.parseFloat(args.value);
     }
-    return args['value'];
+    return args.value;
 }
 
 function core_ui_update(args){
@@ -1415,12 +1415,12 @@ function core_ui_update(args){
       },
     });
 
-    for(const id in args['ids']){
-        if(core_ui_values[id] === args['ids'][id]){
+    for(const id in args.ids){
+        if(core_ui_values[id] === args.ids[id]){
             continue;
         }
 
-        core_ui_values[id] = args['ids'][id];
+        core_ui_values[id] = args.ids[id];
 
         if(!Object.hasOwn(core_elements, id)){
             core_elements[id] = document.getElementById(id);
@@ -1428,15 +1428,15 @@ function core_ui_update(args){
 
         const element = core_elements[id];
         if(element.type === 'checkbox'){
-            element.checked = Boolean(args['ids'][id]);
+            element.checked = Boolean(args.ids[id]);
 
         }else{
             element[(element.tagName === 'BUTTON' || core_type(element.value) === 'undefined')
-              ? args['todo']
-              : 'value'] = args['ids'][id];
+              ? args.todo
+              : 'value'] = args.ids[id];
         }
 
-        if(!args['class']){
+        if(!args.class){
             continue;
         }
 
@@ -1444,12 +1444,12 @@ function core_ui_update(args){
         for(let i = 0; i < elements.length; i++){
             const item = elements.item(i);
             if(item.type === 'checkbox'){
-                item.checked = Boolean(args['ids'][id]);
+                item.checked = Boolean(args.ids[id]);
 
             }else{
                 item[(element.tagName === 'BUTTON' || core_type(item.value) === 'undefined')
-                  ? args['todo']
-                  : 'value'] = args['ids'][id];
+                  ? args.todo
+                  : 'value'] = args.ids[id];
             }
         }
     }
@@ -1465,9 +1465,9 @@ function core_uri(args){
       },
     });
 
-    return args['element'].toDataURL(
-      args['type'],
-      args['quality']
+    return args.element.toDataURL(
+      args.type,
+      args.quality
     );
 }
 

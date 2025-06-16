@@ -15,7 +15,7 @@ function prefabs_canvas_fence_2d(args){
 
     const fence = [
       {
-        'color': args['color'],
+        'color': args.color,
         'vertices': [
           [
             'moveTo',
@@ -38,14 +38,14 @@ function prefabs_canvas_fence_2d(args){
             -15,
           ],
         ],
-        'x': args['x'],
-        'y': args['y'],
+        'x': args.x,
+        'y': args.y,
       },
     ];
 
-    for(let i = 0; i < args['length-half'] * 2; i += args['frequency']){
+    for(let i = 0; i < args['length-half'] * 2; i += args.frequency){
         fence.push({
-          'color': args['color'],
+          'color': args.color,
           'vertices': [
             [
               'moveTo',
@@ -68,8 +68,8 @@ function prefabs_canvas_fence_2d(args){
               0,
             ],
           ],
-          'y': args['y'],
-          'x': args['x'] - args['length-half'] + i,
+          'y': args.y,
+          'x': args.x - args['length-half'] + i,
         });
     }
 
@@ -120,8 +120,8 @@ function prefabs_canvas_tree_2d(args){
             0,
           ],
         ],
-        'x': args['x'],
-        'y': args['y'],
+        'x': args.x,
+        'y': args.y,
       },
       {
         'color': args['color-leaf'],
@@ -147,8 +147,8 @@ function prefabs_canvas_tree_2d(args){
             0,
           ],
         ],
-        'x': args['x'],
-        'y': args['y'] - args['height-base'],
+        'x': args.x,
+        'y': args.y - args['height-base'],
       },
     ];
 }
