@@ -53,7 +53,7 @@ function core_escape(force){
     }
 
     if(!core_menu_open){
-        core_elements['core_toggle'].blur();
+        core_elements.core_toggle.blur();
         core_elements['core-menu'].style.display = 'none';
         core_elements.core_ui.style.userSelect = 'none';
         core_elements.repo_ui.style.display = 'inline';
