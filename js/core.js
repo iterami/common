@@ -53,17 +53,17 @@ function core_escape(force){
     }
 
     if(!core_menu_open){
-        core_elements['core-toggle'].blur();
+        core_elements['core_toggle'].blur();
         core_elements['core-menu'].style.display = 'none';
-        core_elements['core-ui'].style.userSelect = 'none';
-        core_elements['repo-ui'].style.display = 'inline';
+        core_elements.core_ui.style.userSelect = 'none';
+        core_elements.repo_ui.style.display = 'inline';
         core_interval_resume_all();
 
     }else{
         core_interval_pause_all();
         core_handle_blur();
-        core_elements['repo-ui'].style.display = 'none';
-        core_elements['core-ui'].style.userSelect = 'auto';
+        core_elements.repo_ui.style.display = 'none';
+        core_elements.core_ui.style.userSelect = 'auto';
         core_elements['core-menu'].style.display = 'inline';
     }
 
@@ -287,7 +287,7 @@ function core_handle_pointercancel(event){
     core_pointer['movement-y'] = 0;
 
     if(core_pointer.todo.pointercancel
-      && event.target.id !== 'core-toggle'){
+      && event.target.id !== 'core_toggle'){
         core_handle_event({
           'event': event,
           'handler': core_pointer.todo.pointercancel,
@@ -298,7 +298,7 @@ function core_handle_pointercancel(event){
 function core_handle_pointerdown(event){
     if(!event.isPrimary
       || (core_menu_open && core_menu_block_events)
-      || event.target.id === 'core-toggle'){
+      || event.target.id === 'core_toggle'){
         return;
     }
 
@@ -378,7 +378,7 @@ function core_handle_pointerup(event){
     core_pointer['down-4'] = false;
 
     if(core_pointer.todo.pointerup
-      && event.target.id !== 'core-toggle'){
+      && event.target.id !== 'core_toggle'){
         core_handle_event({
           'event': event,
           'handler': core_pointer.todo.pointerup,
@@ -479,23 +479,23 @@ function core_init(){
     core_html({
       'parent': document.body,
       'properties': {
-        'id': 'core-ui',
+        'id': 'core_ui',
       },
-      'store': 'core-ui',
+      'store': 'core_ui',
       'todo': 'prepend',
     });
     core_html({
-      'parent': core_elements['core-ui'],
+      'parent': core_elements.core_ui,
       'properties': {
-        'id': 'core-toggle',
+        'id': 'core_toggle',
         'onclick': core_escape,
         'textContent': '☰',
       },
-      'store': 'core-toggle',
+      'store': 'core_toggle',
       'type': 'button',
     });
     core_html({
-      'parent': core_elements['core-ui'],
+      'parent': core_elements.core_ui,
       'properties': {
         'id': 'core-menu',
         'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>',
@@ -505,11 +505,11 @@ function core_init(){
       'type': 'span',
     });
     core_html({
-      'parent': core_elements['core-ui'],
+      'parent': core_elements.core_ui,
       'properties': {
-        'id': 'repo-ui',
+        'id': 'repo_ui',
       },
-      'store': 'repo-ui',
+      'store': 'repo_ui',
       'type': 'span',
     });
 
@@ -903,7 +903,7 @@ function core_repo_init(args){
         'textContent': core_repo_title,
       }
     );
-    core_elements['repo-ui'].innerHTML = args.ui;
+    core_elements.repo_ui.innerHTML = args.ui;
 
     let have_default = false;
     for(const tab in args.tabs){

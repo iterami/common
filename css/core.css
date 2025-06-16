@@ -87,7 +87,7 @@ button.gridbuttonclickable{
 #core-menu-tabcontent{
     padding: 8px;
 }
-#core-ui{
+#core_ui{
     background-color: #111;
     left: 0;
     max-width: 100%;
@@ -96,7 +96,7 @@ button.gridbuttonclickable{
     top: 0;
     z-index: 9;
 }
-#core-ui table,
+#core_ui table,
 ol,
 ul{
     margin: 0;

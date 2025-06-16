@@ -4045,7 +4045,7 @@ function webgl_texture_init(args){
         const id = 'texture-' + args.id;
         core_html({
           'parent': core_html({
-            'parent': core_elements['repo-ui'],
+            'parent': core_elements.repo_ui,
             'properties': {
               'className': 'hidden',
               'id': 'webgl-animated-textures',
