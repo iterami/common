@@ -929,7 +929,7 @@ function core_repo_init(args){
             + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
             + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
             + '<tr><td><input class=mini id=move-→ type=text><td>Move →</table>'
-            + '<button id=storage-reset type=button>Reset Controls</button>',
+            + '<button id=storage_reset type=button>Reset Controls</button>',
           'group': 'core-menu',
           'id': 'controls',
           'label': 'Controls',
@@ -947,24 +947,20 @@ function core_repo_init(args){
             'pointer-vertical': 1,
           },
         });
-        core_events_bind({
-          'elements': {
-            'storage-reset': {
-              'onclick': function(){
-                  const keys = [];
-                  for(const key in core_storage_info){
-                      if(core_storage_info[key].prefix === 'core-'){
-                          keys.push(key);
-                      }
+        args.events.storage_reset = {
+          'onclick': function(){
+              const keys = [];
+              for(const key in core_storage_info){
+                  if(core_storage_info[key].prefix === 'core-'){
+                      keys.push(key);
                   }
+              }
 
-                  core_storage_reset({
-                    'keys': keys,
-                  });
-              },
-            },
+              core_storage_reset({
+                'keys': keys,
+              });
           },
-        });
+        };
         Object.assign(
           core_key_rebinds,
           {
@@ -980,7 +976,7 @@ function core_repo_init(args){
     if(args.storage !== false){
         core_tab_create({
           'content': args['storage-menu']
-            + '<button id=storage-reset-repo type=button>Reset ' + core_repo_title + ' Settings</button>',
+            + '<button id=storage_reset_repo type=button>Reset ' + core_repo_title + ' Settings</button>',
           'group': 'core-menu',
           'id': 'repo',
           'label': core_repo_title,
@@ -989,7 +985,7 @@ function core_repo_init(args){
         core_storage_add({
           'storage': args.storage,
         });
-        args.events['storage-reset-repo'] = {
+        args.events.storage_reset_repo = {
           'onclick': function(){
               core_storage_reset({
                 'label': core_repo_title,
