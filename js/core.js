@@ -741,7 +741,7 @@ function core_random_drop(args){
       'args': args,
       'defaults': {
         'nothing': 1,
-        'nothing-type': 0,
+        'nothing_type': 0,
       },
     });
 
@@ -756,7 +756,7 @@ function core_random_drop(args){
         percentages.push(total);
     }
 
-    if(args['nothing-type'] === 0){
+    if(args.nothing_type === 0){
         if(total < args.nothing){
             const remaining = args.nothing - total;
             total += remaining;
@@ -765,7 +765,7 @@ function core_random_drop(args){
             percentages.push(total);
         }
 
-    }else if(args['nothing-type'] === 1){
+    }else if(args.nothing_type === 1){
         total += args.nothing;
 
         options.push(false);
