@@ -7,7 +7,7 @@ function canvas_context_lost(event){
 }
 
 function canvas_context_restored(){
-    canvas_init(canvas_properties['args']);
+    canvas_init(canvas_properties.args);
     if(canvas !== 0){
         canvas_draw();
     }
@@ -18,27 +18,27 @@ function canvas_context_restored(){
 }
 
 function canvas_draw(){
-    if(canvas_properties['clearColor'] === '#000'){
+    if(canvas_properties.clearColor === '#000'){
         canvas.clearRect(
           0,
           0,
-          canvas_properties['width'],
-          canvas_properties['height']
+          canvas_properties.width,
+          canvas_properties.height
         );
 
     }else{
         canvas_setproperties({
-          'fillStyle': canvas_properties['clearColor'],
+          'fillStyle': canvas_properties.clearColor,
         });
         canvas.fillRect(
           0,
           0,
-          canvas_properties['width'],
-          canvas_properties['height']
+          canvas_properties.width,
+          canvas_properties.height
         );
     }
 
-    globalThis['repo_drawlogic']?.();
+    globalThis.repo_drawlogic?.();
 }
 
 function canvas_drawloop(){
@@ -52,32 +52,32 @@ function canvas_draw_path(args){
       'args': args,
       'defaults': {
         'properties': {},
-        'style': canvas_properties['style'],
+        'style': canvas_properties.style,
         'translate': false,
         'x': 0,
         'y': 0,
       },
     });
 
-    if(args['translate']){
+    if(args.translate){
         canvas.save();
         canvas.translate(
-          args['x'],
-          args['y']
+          args.x,
+          args.y
         );
     }
 
     canvas.beginPath();
-    for(const vertex in args['vertices']){
-        const data = [...args['vertices'][vertex]];
+    for(const vertex in args.vertices){
+        const data = [...args.vertices[vertex]];
         canvas[data.shift()](...data);
     }
     canvas.closePath();
 
-    canvas_setproperties(args['properties']);
-    canvas[args['style']]();
+    canvas_setproperties(args.properties);
+    canvas[args.style]();
 
-    if(args['translate']){
+    if(args.translate){
         canvas.restore();
     }
 }
@@ -91,11 +91,11 @@ function canvas_gradient(args){
       },
     });
 
-    const gradient = canvas[args['type']](...args['args']);
-    for(const step in args['stops']){
+    const gradient = canvas[args.type](...args.args);
+    for(const step in args.stops){
         gradient.addColorStop(
-          args['stops'][step]['offset'] || 0,
-          args['stops'][step]['color'] || '#000'
+          args.stops[step].offset || 0,
+          args.stops[step].color || '#000'
         );
     }
     return gradient;
@@ -129,8 +129,8 @@ function canvas_init(args){
     const properties = {
       'id': 'canvas',
     };
-    if(!args['contextmenu']){
-        properties['oncontextmenu'] = function(){
+    if(!args.contextmenu){
+        properties.oncontextmenu = function(){
             return false;
         };
     }
@@ -155,7 +155,7 @@ function canvas_init(args){
         'alpha': false,
       }
     );
-    canvas.canvas.style.cursor = args['cursor'];
+    canvas.canvas.style.cursor = args.cursor;
 
     globalThis.onresize = canvas_resize;
     canvas_resize();
@@ -169,11 +169,11 @@ function canvas_init(args){
       'type': 'canvas',
     });
 
-    if(args['interval']){
+    if(args.interval){
         core_interval_modify({
           'id': 'canvas-interval',
           'paused': true,
-          'todo': globalThis['repo_logic'],
+          'todo': globalThis.repo_logic,
         });
         core_interval_modify({
           'animationFrame': true,
@@ -189,22 +189,22 @@ function canvas_init(args){
 }
 
 function canvas_resize(){
-    const draw = canvas !== 0 && canvas_properties['width-half'];
+    const draw = canvas !== 0 && canvas_properties.width_half;
 
-    canvas_properties['height'] = globalThis.innerHeight;
-    canvas_properties['height-half'] = canvas_properties['height'] / 2;
-    canvas.canvas.height = canvas_properties['height'];
+    canvas_properties.height = globalThis.innerHeight;
+    canvas_properties.height_half = canvas_properties.height / 2;
+    canvas.canvas.height = canvas_properties.height;
 
-    canvas_properties['width'] = globalThis.innerWidth;
-    canvas_properties['width-half'] = canvas_properties['width'] / 2;
-    canvas.canvas.width = canvas_properties['width'];
+    canvas_properties.width = globalThis.innerWidth;
+    canvas_properties.width_half = canvas_properties.width / 2;
+    canvas.canvas.width = canvas_properties.width;
 
     Object.assign(
       canvas,
       canvas_properties
     );
 
-    globalThis['repo_resizelogic']?.();
+    globalThis.repo_resizelogic?.();
     if(draw){
         canvas_draw();
     }
@@ -218,7 +218,7 @@ function canvas_setmode(mode){
       ? 0
       : mode;
 
-    globalThis['load_data']?.(core_mode);
+    globalThis.load_data?.(core_mode);
 
     if(core_menu_open){
         core_escape();
