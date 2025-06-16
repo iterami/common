@@ -354,12 +354,12 @@ function core_handle_pointermove(event){
         core_pointer['down-' + i] = Boolean(event.buttons & (1 << i));
     }
     if(event.pointerType === 'touch'){
-        core_pointer['movement-x'] = (x - core_pointer.x) * (core_storage_data['pointer-horizontal'] || 1);
-        core_pointer['movement-y'] = (y - core_pointer.y) * (core_storage_data['pointer-vertical'] || 1);
+        core_pointer['movement-x'] = (x - core_pointer.x) * (core_storage_data.pointer_horizontal || 1);
+        core_pointer['movement-y'] = (y - core_pointer.y) * (core_storage_data.pointer_vertical || 1);
 
     }else{
-        core_pointer['movement-x'] = event.movementX * (core_storage_data['pointer-horizontal'] || 1);
-        core_pointer['movement-y'] = event.movementY * (core_storage_data['pointer-vertical'] || 1);
+        core_pointer['movement-x'] = event.movementX * (core_storage_data.pointer_horizontal || 1);
+        core_pointer['movement-y'] = event.movementY * (core_storage_data.pointer_vertical || 1);
     }
 
     if(core_pointer.todo.pointermove){
@@ -923,8 +923,8 @@ function core_repo_init(args){
         core_tab_create({
           'content': '<table><tr><td><input class=mini id=crouch type=text><td>Crouch'
             + '<tr><td><input class=mini id=jump type=text><td>Jump'
-            + '<tr><td><input class=mini id=pointer-horizontal step=any type=number><td>Pointer Sensitivity<br>Horizontal'
-            + '<tr><td><input class=mini id=pointer-vertical step=any type=number><td>Pointer Sensitivity<br>Vertical'
+            + '<tr><td><input class=mini id=pointer_horizontal step=any type=number><td>Pointer Sensitivity<br>Horizontal'
+            + '<tr><td><input class=mini id=pointer_vertical step=any type=number><td>Pointer Sensitivity<br>Vertical'
             + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
             + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
             + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
@@ -943,8 +943,8 @@ function core_repo_init(args){
             'move-↑': 'KeyW',
             'move-→': 'KeyD',
             'move-↓': 'KeyS',
-            'pointer-horizontal': 1,
-            'pointer-vertical': 1,
+            'pointer_horizontal': 1,
+            'pointer_vertical': 1,
           },
         });
         args.events.storage_reset = {
