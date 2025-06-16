@@ -681,20 +681,20 @@ function core_number_format(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'decimals-max': 7,
-        'decimals-min': 7,
+        'decimals_max': 7,
+        'decimals_min': 7,
       },
     });
 
-    if(args['decimals-max'] < args['decimals-min']){
-        args['decimals-min'] = args['decimals-max'];
+    if(args.decimals_max < args.decimals_min){
+        args.decimals_min = args.decimals_max;
     }
 
     return new Intl.NumberFormat(
         void 0,
         {
-          'maximumFractionDigits': args['decimals-max'],
-          'minimumFractionDigits': args['decimals-min'],
+          'maximumFractionDigits': args.decimals_max,
+          'minimumFractionDigits': args.decimals_min,
         }
       ).format(args.number);
 }
