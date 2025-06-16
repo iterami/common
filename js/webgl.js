@@ -785,7 +785,7 @@ function webgl_controls_keyboard(character){
                 const half = webgl.drawingBufferWidth / 2;
                 turn = vehicle['turn-speed'] * Math.max(
                   Math.min(
-                    (pointer_x - half) / half * core_storage_data['pointer-horizontal'],
+                    (pointer_x - half) / half,
                     1
                   ),
                   -1
