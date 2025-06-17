@@ -999,7 +999,7 @@ function core_repo_init(args){
         core_html({
           'parent': core_elements['core-menu'],
           'properties': {
-            'id': 'storage-save',
+            'id': 'storage_save',
             'onclick': core_storage_save,
             'textContent': 'Save All Settings',
             'type': 'button',
