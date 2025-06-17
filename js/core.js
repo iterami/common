@@ -773,7 +773,7 @@ function core_random_drop(args){
     }
 
     const random = Math.random() * total;
-    for(let option = 0; option < options.length; option++){
+    for(const option of options){
         if(random < percentages[option]){
             return options[option];
         }
@@ -1437,8 +1437,7 @@ function core_ui_update(args){
         }
 
         const elements = document.getElementsByClassName(id);
-        for(let i = 0; i < elements.length; i++){
-            const item = elements.item(i);
+        for(const item of elements){
             if(item.type === 'checkbox'){
                 item.checked = Boolean(args.ids[id]);
 
