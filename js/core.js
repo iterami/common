@@ -745,37 +745,29 @@ function core_random_drop(args){
       },
     });
 
-    const options = [];
-    const percentages = [];
+    const options = {};
     let total = 0;
 
     for(const option in args.options){
         total += args.options[option];
-
-        options.push(option);
-        percentages.push(total);
+        options[option] = total;
     }
 
     if(args.nothing_type === 0){
         if(total < args.nothing){
-            const remaining = args.nothing - total;
-            total += remaining;
-
-            options.push(false);
-            percentages.push(total);
+            total += args.nothing - total;
+            options[option] = total;
         }
 
     }else if(args.nothing_type === 1){
         total += args.nothing;
-
-        options.push(false);
-        percentages.push(total);
+        options[option] = total;
     }
 
     const random = Math.random() * total;
-    for(const option of options){
-        if(random < percentages[option]){
-            return options[option];
+    for(const option in options){
+        if(random < options[option]){
+            return option;
         }
     }
 
