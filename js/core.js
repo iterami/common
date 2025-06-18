@@ -927,7 +927,7 @@ function core_repo_init(args){
           'label': 'Controls',
         });
         core_storage_add({
-          'prefix': 'core-',
+          'prefix': 'controls_',
           'storage': {
             'crouch': 'KeyC',
             'jump': 'Space',
@@ -941,15 +941,9 @@ function core_repo_init(args){
         });
         args.events.storage_reset = {
           'onclick': function(){
-              const keys = [];
-              for(const key in core_storage_info){
-                  if(core_storage_info[key].prefix === 'core-'){
-                      keys.push(key);
-                  }
-              }
-
               core_storage_reset({
-                'keys': keys,
+                'label': 'controls',
+                'prefix': 'controls_',
               });
           },
         };
@@ -981,7 +975,7 @@ function core_repo_init(args){
           'onclick': function(){
               core_storage_reset({
                 'label': core_repo_title,
-                'prefix': core_repo_title + '-',
+                'prefix': core_repo_title + '_',
               });
           },
         };
@@ -1175,7 +1169,7 @@ function core_storage_add(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'prefix': core_repo_title + '-',
+        'prefix': core_repo_title + '_',
       },
     });
 
@@ -1204,35 +1198,19 @@ function core_storage_element_property(args){
         : 'value');
 }
 
-function core_storage_reset(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'keys': false,
-        'label': 'control',
-        'prefix': false,
-      },
-    });
 
+// Required args: label, prefix
+function core_storage_reset(args){
     if(!globalThis.confirm('Reset ' + args.label + ' settings?')){
         return;
     }
 
     let keys = [];
-
-    if(args.prefix !== false){
-        for(const key in core_storage_info){
-            if(core_storage_info[key].prefix === args.prefix){
-                keys.push(key);
-            }
+    for(const key in core_storage_info){
+        if(core_storage_info[key].prefix === args.prefix){
+            keys.push(key);
         }
-
-    }else{
-        keys = args.keys === false
-          ? Object.keys(core_storage_data)
-          : args.keys;
     }
-
     for(const key of keys){
         core_storage_data[key] = core_storage_info[key].default;
         globalThis.localStorage.removeItem(core_storage_info[key].prefix + key);

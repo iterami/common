@@ -96,7 +96,7 @@ core_init_todo.push(function(){
       'label': 'Audio',
     });
     core_storage_add({
-      'prefix': 'common_audio_',
+      'prefix': 'audio_',
       'storage': {
         'audio_volume': 1,
       },
@@ -107,7 +107,7 @@ core_init_todo.push(function(){
           'onclick': function(){
               core_storage_reset({
                 'label': 'audio',
-                'keys': ['audio_volume'],
+                'prefix': 'audio_',
               });
           },
         },
