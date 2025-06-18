@@ -849,7 +849,7 @@ function core_repo_init(args){
         'keybinds': false,
         'link': false,
         'menu': false,
-        'menu-block-events': true,
+        'menu_block_events': true,
         'menu-lock': false,
         'owner': 'iterami',
         'pointerbinds': false,
@@ -1007,7 +1007,7 @@ function core_repo_init(args){
     }
     core_keys_rebind();
 
-    core_menu_block_events = args['menu-block-events'];
+    core_menu_block_events = args.menu_block_events;
     core_menu_lock = args['menu-lock'];
     core_events_bind({
       'beforeunload': args.beforeunload,
