@@ -1346,13 +1346,15 @@ function core_tab_reset_group(id){
 function core_tab_switch(id){
     const info = id.split('_');
 
-    const element = document.getElementById('tabcontent-' + info[2]);
+    const element = document.getElementById('tabcontent-' + info.splice(info.length - 1, 1)[0]);
     if(!element){
         return;
     }
 
+    info.splice(0, 1);
+
     const state = element.style.display === 'block';
-    core_tab_reset_group(info[1]);
+    core_tab_reset_group(info.join(''));
     element.style.display = state
       ? 'none'
       : 'block';
