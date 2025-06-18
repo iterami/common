@@ -1029,12 +1029,12 @@ function core_repo_init(args){
           'src': args.images[image],
         });
     }
-    for(const element in args['ui-elements']){
-        core_elements[args['ui-elements'][element]] = document.getElementById(args['ui-elements'][element]);
+    for(const element of args['ui-elements']){
+        core_elements[element] = document.getElementById(element);
     }
 
-    for(const todo in core_init_todo){
-        core_init_todo[todo]();
+    for(const todo of core_init_todo){
+        todo();
     }
     delete globalThis.core_init_todo;
 
@@ -1233,9 +1233,7 @@ function core_storage_reset(args){
           : args.keys;
     }
 
-    for(const keyid in keys){
-        const key = keys[keyid];
-
+    for(const key of keys){
         core_storage_data[key] = core_storage_info[key].default;
         globalThis.localStorage.removeItem(core_storage_info[key].prefix + key);
     }
@@ -1248,9 +1246,7 @@ function core_storage_save(keys){
         keys = Object.keys(core_storage_data);
     }
 
-    for(const keyid in keys){
-        const key = keys[keyid];
-
+    for(const key of keys){
         const element = core_elements[key];
         const data = core_type_convert({
           'template': core_storage_info[key].default,
@@ -1283,9 +1279,7 @@ function core_storage_update(keys){
         keys = Object.keys(core_storage_data);
     }
 
-    for(const keyid in keys){
-        const key = keys[keyid];
-
+    for(const key of keys){
         const element = core_elements[key];
         element[core_storage_element_property({
           'element': element,
