@@ -4048,7 +4048,7 @@ function webgl_texture_init(args){
             'parent': core_elements.repo_ui,
             'properties': {
               'className': 'hidden',
-              'id': 'webgl-animated-textures',
+              'id': 'webgl_animated_textures',
             },
             'type': 'div',
           }),
