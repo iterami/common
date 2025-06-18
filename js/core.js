@@ -850,7 +850,7 @@ function core_repo_init(args){
         'link': false,
         'menu': false,
         'menu_block_events': true,
-        'menu-lock': false,
+        'menu_lock': false,
         'owner': 'iterami',
         'pointerbinds': false,
         'root': '../index.htm',
@@ -1008,7 +1008,7 @@ function core_repo_init(args){
     core_keys_rebind();
 
     core_menu_block_events = args.menu_block_events;
-    core_menu_lock = args['menu-lock'];
+    core_menu_lock = args.menu_lock;
     core_events_bind({
       'beforeunload': args.beforeunload,
       'blur': args.blur,
@@ -1033,7 +1033,7 @@ function core_repo_init(args){
     delete globalThis.core_init_todo;
 
     if(args.menu
-      || args['menu-lock']){
+      || args.menu_lock){
         core_escape(true);
     }
 }
