@@ -91,7 +91,7 @@ core_init_todo.push(function(){
     core_tab_create({
       'content': '<table><tr><td><input class=mini id=audio_volume min=0 step=.001 type=number><td>Audio Volume</table>'
         + '<button id=audio_storage_reset type=button>Reset Audio Settings</button>',
-      'group': 'core-menu',
+      'group': 'core_menu',
       'id': 'audio',
       'label': 'Audio',
     });

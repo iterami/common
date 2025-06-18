@@ -83,8 +83,8 @@ button.gridbuttonclickable{
     position: fixed;
     top: 0;
 }
-#core-menu-info,
-#core-menu-tabcontent{
+#core_menu_info,
+#core_menu_tabcontent{
     padding: 8px;
 }
 #core_ui{

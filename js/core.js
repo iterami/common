@@ -54,7 +54,7 @@ function core_escape(force){
 
     if(!core_menu_open){
         core_elements.core_toggle.blur();
-        core_elements['core-menu'].style.display = 'none';
+        core_elements.core_menu.style.display = 'none';
         core_elements.core_ui.style.userSelect = 'none';
         core_elements.repo_ui.style.display = 'inline';
         core_interval_resume_all();
@@ -64,7 +64,7 @@ function core_escape(force){
         core_handle_blur();
         core_elements.repo_ui.style.display = 'none';
         core_elements.core_ui.style.userSelect = 'auto';
-        core_elements['core-menu'].style.display = 'inline';
+        core_elements.core_menu.style.display = 'inline';
     }
 
     globalThis.repo_escape?.();
@@ -497,11 +497,11 @@ function core_init(){
     core_html({
       'parent': core_elements.core_ui,
       'properties': {
-        'id': 'core-menu',
-        'innerHTML': '<a id=core-menu-root></a>/<a class=external id=core-menu-title rel=noreferrer></a>',
+        'id': 'core_menu',
+        'innerHTML': '<a id=core_menu_root></a>/<a class=external id=core_menu_title rel=noreferrer></a>',
         'style': 'display:none',
       },
-      'store': 'core-menu',
+      'store': 'core_menu',
       'type': 'span',
     });
     core_html({
@@ -871,23 +871,23 @@ function core_repo_init(args){
     core_repo_title = args.title;
     if(args.info.length){
         core_html({
-          'parent': core_elements['core-menu'],
+          'parent': core_elements.core_menu,
           'properties': {
-            'id': 'core-menu-info',
+            'id': 'core_menu_info',
             'innerHTML': args.info,
           },
           'todo': 'append',
         });
     }
     Object.assign(
-      document.getElementById('core-menu-root'),
+      document.getElementById('core_menu_root'),
       {
         'href': args.root,
         'textContent': args.owner,
       }
     );
     Object.assign(
-      document.getElementById('core-menu-title'),
+      document.getElementById('core_menu_title'),
       {
         'href': args.link === false
           ? 'https://github.com/' + args.owner + '/' + core_repo_title
@@ -922,7 +922,7 @@ function core_repo_init(args){
             + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
             + '<tr><td><input class=mini id=move-→ type=text><td>Move →</table>'
             + '<button id=storage_reset type=button>Reset Controls</button>',
-          'group': 'core-menu',
+          'group': 'core_menu',
           'id': 'controls',
           'label': 'Controls',
         });
@@ -969,7 +969,7 @@ function core_repo_init(args){
         core_tab_create({
           'content': args['storage-menu']
             + '<button id=storage_reset_repo type=button>Reset ' + core_repo_title + ' Settings</button>',
-          'group': 'core-menu',
+          'group': 'core_menu',
           'id': 'repo',
           'label': core_repo_title,
           'todo': 'prepend',
@@ -989,7 +989,7 @@ function core_repo_init(args){
     if(args.storage !== false
       || args['storage-controls']){
         core_html({
-          'parent': core_elements['core-menu'],
+          'parent': core_elements.core_menu,
           'properties': {
             'id': 'storage_save',
             'onclick': core_storage_save,
@@ -1002,7 +1002,7 @@ function core_repo_init(args){
     }
     core_storage_update();
     if(!have_default){
-        core_tab_switch('tab_core-menu_repo');
+        core_tab_switch('tab_core_menu_repo');
     }
 
     if(args.keybinds !== false){
@@ -1295,19 +1295,19 @@ function core_tab_create(args){
       'group': args.group,
     };
 
-    let tabs = document.getElementById(args.group + '-tabs');
+    let tabs = document.getElementById(args.group + '_tabs');
     if(!tabs){
         tabs = core_html({
-          'parent': core_elements['core-menu'],
+          'parent': core_elements.core_menu,
           'properties': {
-            'id': args.group + '-tabs',
+            'id': args.group + '_tabs',
           },
           'todo': 'append',
         });
         core_html({
-          'parent': core_elements['core-menu'],
+          'parent': core_elements.core_menu,
           'properties': {
-            'id': args.group + '-tabcontent',
+            'id': args.group + '_tabcontent',
           },
           'todo': 'append',
         });
@@ -1326,9 +1326,9 @@ function core_tab_create(args){
       'type': 'button',
     });
     core_html({
-      'parent': document.getElementById(args.group + '-tabcontent'),
+      'parent': document.getElementById(args.group + '_tabcontent'),
       'properties': {
-        'id': 'tabcontent-' + args.id,
+        'id': 'tabcontent_' + args.id,
         'innerHTML': args.content,
         'style': 'display:none',
       },
@@ -1338,7 +1338,7 @@ function core_tab_create(args){
 function core_tab_reset_group(id){
     for(const tab in core_tabs){
         if(core_tabs[tab].group === id){
-            document.getElementById('tabcontent-' + tab).style.display = 'none';
+            document.getElementById('tabcontent_' + tab).style.display = 'none';
         }
     }
 }
@@ -1346,7 +1346,7 @@ function core_tab_reset_group(id){
 function core_tab_switch(id){
     const info = id.split('_');
 
-    const element = document.getElementById('tabcontent-' + info.splice(info.length - 1, 1)[0]);
+    const element = document.getElementById('tabcontent_' + info.splice(info.length - 1, 1)[0]);
     if(!element){
         return;
     }
@@ -1354,7 +1354,7 @@ function core_tab_switch(id){
     info.splice(0, 1);
 
     const state = element.style.display === 'block';
-    core_tab_reset_group(info.join(''));
+    core_tab_reset_group(info.join('_'));
     element.style.display = state
       ? 'none'
       : 'block';
