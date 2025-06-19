@@ -855,7 +855,7 @@ function core_repo_init(args){
         'pointerbinds': false,
         'root': '../index.htm',
         'storage': false,
-        'storage-controls': false,
+        'storage_controls': false,
         'storage-menu': '',
         'tabs': {},
         'ui': '',
@@ -911,7 +911,7 @@ function core_repo_init(args){
             have_default = true;
         }
     }
-    if(args['storage-controls']){
+    if(args.storage_controls){
         core_tab_create({
           'content': '<table><tr><td><input class=mini id=crouch type=text><td>Crouch'
             + '<tr><td><input class=mini id=jump type=text><td>Jump'
@@ -981,7 +981,7 @@ function core_repo_init(args){
         };
     }
     if(args.storage !== false
-      || args['storage-controls']){
+      || args.storage_controls){
         core_html({
           'parent': core_elements.core_menu,
           'properties': {
