@@ -859,7 +859,7 @@ function core_repo_init(args){
         'storage-menu': '',
         'tabs': {},
         'ui': '',
-        'ui-elements': [],
+        'ui_elements': [],
       },
     });
 
@@ -1023,7 +1023,7 @@ function core_repo_init(args){
           'src': args.images[image],
         });
     }
-    for(const element of args['ui-elements']){
+    for(const element of args.ui_elements){
         core_elements[element] = document.getElementById(element);
     }
 
