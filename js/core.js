@@ -188,11 +188,11 @@ function core_handle_blur(){
     for(const key in core_keys){
         core_keys[key].state = false;
     }
-    core_pointer['down-0'] = false;
-    core_pointer['down-1'] = false;
-    core_pointer['down-2'] = false;
-    core_pointer['down-3'] = false;
-    core_pointer['down-4'] = false;
+    core_pointer.down_0 = false;
+    core_pointer.down_1 = false;
+    core_pointer.down_2 = false;
+    core_pointer.down_3 = false;
+    core_pointer.down_4 = false;
 
     if(core_events.blur){
         core_handle_event({
@@ -278,13 +278,13 @@ function core_handle_pointercancel(event){
         return;
     }
 
-    core_pointer['down-0'] = false;
-    core_pointer['down-1'] = false;
-    core_pointer['down-2'] = false;
-    core_pointer['down-3'] = false;
-    core_pointer['down-4'] = false;
-    core_pointer['movement-x'] = 0;
-    core_pointer['movement-y'] = 0;
+    core_pointer.down_0 = false;
+    core_pointer.down_1 = false;
+    core_pointer.down_2 = false;
+    core_pointer.down_3 = false;
+    core_pointer.down_4 = false;
+    core_pointer.movement_x = 0;
+    core_pointer.movement_y = 0;
 
     if(core_pointer.todo.pointercancel
       && event.target.id !== 'core_toggle'){
@@ -303,21 +303,21 @@ function core_handle_pointerdown(event){
     }
 
     for(let i = 0; i < 5; i++){
-        core_pointer['down-' + i] = Boolean(event.buttons & (1 << i));
+        core_pointer['down_' + i] = Boolean(event.buttons & (1 << i));
     }
-    if(core_key_shift && core_pointer['down-1']){
+    if(core_key_shift && core_pointer.down_1){
         core_handle_blur();
         return;
     }
 
     const x = Math.floor(event.pageX);
     const y = Math.floor(event.pageY);
-    core_pointer['movement-x'] = 0;
-    core_pointer['movement-y'] = 0;
+    core_pointer.movement_x = 0;
+    core_pointer.movement_y = 0;
     core_pointer.x = x;
     core_pointer.y = y;
-    core_pointer['down-x'] = x;
-    core_pointer['down-y'] = y;
+    core_pointer.down_x = x;
+    core_pointer.down_y = y;
 
     if(core_pointer.todo.pointerdown){
         core_handle_event({
@@ -351,15 +351,15 @@ function core_handle_pointermove(event){
     }
 
     for(let i = 0; i < 5; i++){
-        core_pointer['down-' + i] = Boolean(event.buttons & (1 << i));
+        core_pointer['down_' + i] = Boolean(event.buttons & (1 << i));
     }
     if(event.pointerType === 'touch'){
-        core_pointer['movement-x'] = (x - core_pointer.x) * (core_storage_data.pointer_horizontal || 1);
-        core_pointer['movement-y'] = (y - core_pointer.y) * (core_storage_data.pointer_vertical || 1);
+        core_pointer.movement_x = (x - core_pointer.x) * (core_storage_data.pointer_horizontal || 1);
+        core_pointer.movement_y = (y - core_pointer.y) * (core_storage_data.pointer_vertical || 1);
 
     }else{
-        core_pointer['movement-x'] = event.movementX * (core_storage_data.pointer_horizontal || 1);
-        core_pointer['movement-y'] = event.movementY * (core_storage_data.pointer_vertical || 1);
+        core_pointer.movement_x = event.movementX * (core_storage_data.pointer_horizontal || 1);
+        core_pointer.movement_y = event.movementY * (core_storage_data.pointer_vertical || 1);
     }
 
     if(core_pointer.todo.pointermove){
@@ -371,11 +371,11 @@ function core_handle_pointermove(event){
 }
 
 function core_handle_pointerup(event){
-    core_pointer['down-0'] = false;
-    core_pointer['down-1'] = false;
-    core_pointer['down-2'] = false;
-    core_pointer['down-3'] = false;
-    core_pointer['down-4'] = false;
+    core_pointer.down_0 = false;
+    core_pointer.down_1 = false;
+    core_pointer.down_2 = false;
+    core_pointer.down_3 = false;
+    core_pointer.down_4 = false;
 
     if(core_pointer.todo.pointerup
       && event.target.id !== 'core_toggle'){
@@ -514,15 +514,15 @@ function core_init(){
     });
 
     core_pointer = {
-      'down-0': false,
-      'down-1': false,
-      'down-2': false,
-      'down-3': false,
-      'down-4': false,
-      'down-x': 0,
-      'down-y': 0,
-      'movement-x': 0,
-      'movement-y': 0,
+      'down_0': false,
+      'down_1': false,
+      'down_2': false,
+      'down_3': false,
+      'down_4': false,
+      'down_x': 0,
+      'down_y': 0,
+      'movement_x': 0,
+      'movement_y': 0,
       'todo': {},
       'x': 0,
       'y': 0,

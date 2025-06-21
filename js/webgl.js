@@ -129,8 +129,8 @@ function webgl_camera_rotate(args){
         let pointer_0_down = false;
         let pointer_1_down = false;
         if(args.character === webgl_character_id){
-            pointer_0_down = core_pointer['down-0'];
-            pointer_1_down = core_pointer['down-1'];
+            pointer_0_down = core_pointer.down_0;
+            pointer_1_down = core_pointer.down_1;
         }
 
         const strafe = webgl_character_strafe(character);
@@ -493,7 +493,7 @@ function webgl_character_strafe(character){
     }
 
     return checks
-      || core_pointer['down-1'];
+      || core_pointer.down_1;
 }
 
 function webgl_color_set(args){
@@ -714,8 +714,8 @@ function webgl_controls_keyboard(character){
     let right = false;
 
     if(character.id === webgl_character_id){
-        pointer_0_down = core_pointer['down-0'];
-        pointer_1_down = core_pointer['down-1'];
+        pointer_0_down = core_pointer.down_0;
+        pointer_1_down = core_pointer.down_1;
         pointer_x = core_pointer.x;
 
         back = core_keys[core_storage_data['move-↓']].state;
@@ -983,10 +983,10 @@ function webgl_controls_pointer(character){
     let shift_key = false;
 
     if(character.id === webgl_character_id){
-        pointer_0_down = core_pointer['down-0'];
-        pointer_1_down = core_pointer['down-1'];
-        movement_x = core_pointer['movement-x'];
-        movement_y = core_pointer['movement-y'];
+        pointer_0_down = core_pointer.down_0;
+        pointer_1_down = core_pointer.down_1;
+        movement_x = core_pointer.movement_x;
+        movement_y = core_pointer.movement_y;
         shift_key = core_key_shift;
 
     }else{
