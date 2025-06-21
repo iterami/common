@@ -856,7 +856,7 @@ function core_repo_init(args){
         'root': '../index.htm',
         'storage': false,
         'storage_controls': false,
-        'storage-menu': '',
+        'storage_menu': '',
         'tabs': {},
         'ui': '',
         'ui_elements': [],
@@ -961,7 +961,7 @@ function core_repo_init(args){
     }
     if(args.storage !== false){
         core_tab_create({
-          'content': args['storage-menu']
+          'content': args.storage_menu
             + '<button id=storage_reset_repo type=button>Reset ' + core_repo_title + ' Settings</button>',
           'group': 'core_menu',
           'id': 'repo',
