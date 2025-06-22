@@ -1673,6 +1673,7 @@ function webgl_init(){
         'normals': [],
         'particle': false,
         'picking': false,
+        'picking_range': 0,
         'point-size': 0,
         'position-x': 0,
         'position-y': 0,
@@ -2851,10 +2852,11 @@ function webgl_pick_entity(args){
         return;
     }
 
-    const level = webgl_character_level();
+    const character = webgl_characters[webgl_character_id];
+    const level = webgl_character_level(character);
     if(level < -1
       || (level >= 0 && webgl_properties.paused)
-      || webgl_characters[webgl_character_id].life <= 0){
+      || character.life <= 0){
         return false;
     }
 
@@ -2915,6 +2917,21 @@ function webgl_pick_entity(args){
               && color_blue === entity_color[2]
               && color_green === entity_color[1]
               && color_red === entity_color[0]){
+                if(entity.picking_range > 0){
+                    const position = webgl_get_position(entity);
+                    const distance = math_distance({
+                      'x0': character['position-x'],
+                      'y0': character['position-y'],
+                      'z0': character['position-z'],
+                      'x1': position.x,
+                      'y1': position.y,
+                      'z1': position.z,
+                    });
+                    if(distance > entity.picking_range){
+                        break;
+                    }
+                }
+
                 if(args.cursor){
                     webgl.canvas.style.cursor = 'pointer';
 
