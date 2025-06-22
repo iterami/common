@@ -756,12 +756,10 @@ function core_random_drop(args){
     if(args.nothing_type === 0){
         if(total < args.nothing){
             total += args.nothing - total;
-            options[option] = total;
         }
 
     }else if(args.nothing_type === 1){
         total += args.nothing;
-        options[option] = total;
     }
 
     const random = Math.random() * total;
