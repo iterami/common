@@ -718,13 +718,13 @@ function webgl_controls_keyboard(character){
         pointer_1_down = core_pointer.down_1;
         pointer_x = core_pointer.x;
 
-        back = core_keys[core_storage_data['move-↓']].state;
+        back = core_keys[core_storage_data.move_down].state;
         crouch = core_keys[core_storage_data.crouch].state;
-        forward = core_keys[core_storage_data['move-↑']].state
+        forward = core_keys[core_storage_data.move_up].state
           || (pointer_0_down && pointer_1_down);
         jump = core_keys[core_storage_data.jump].state;
-        left = core_keys[core_storage_data['move-←']].state;
-        right = core_keys[core_storage_data['move-→']].state;
+        left = core_keys[core_storage_data.move_left].state;
+        right = core_keys[core_storage_data.move_right].state;
 
     }else{
         const pointer = character.pointer;
@@ -992,10 +992,10 @@ function webgl_controls_pointer(character){
     }else{
         const pointer = character.pointer;
         if(pointer){
-            pointer_0_down = pointer['down-0'];
-            pointer_1_down = pointer['down-1'];
-            movement_x = pointer['movement-x'];
-            movement_y = pointer['movement-y'];
+            pointer_0_down = pointer.down_0;
+            pointer_1_down = pointer.down_1;
+            movement_x = pointer.movement_x;
+            movement_y = pointer.movement_y;
         }
 
         const keys = character.keys;

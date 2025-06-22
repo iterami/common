@@ -915,10 +915,10 @@ function core_repo_init(args){
             + '<tr><td><input class=mini id=jump type=text><td>Jump'
             + '<tr><td><input class=mini id=pointer_horizontal step=any type=number><td>Pointer Sensitivity<br>Horizontal'
             + '<tr><td><input class=mini id=pointer_vertical step=any type=number><td>Pointer Sensitivity<br>Vertical'
-            + '<tr><td><input class=mini id=move-↑ type=text><td>Move ↑'
-            + '<tr><td><input class=mini id=move-← type=text><td>Move ←'
-            + '<tr><td><input class=mini id=move-↓ type=text><td>Move ↓'
-            + '<tr><td><input class=mini id=move-→ type=text><td>Move →</table>'
+            + '<tr><td><input class=mini id=move_up type=text><td>Move ↑'
+            + '<tr><td><input class=mini id=move_left type=text><td>Move ←'
+            + '<tr><td><input class=mini id=move_down type=text><td>Move ↓'
+            + '<tr><td><input class=mini id=move_right type=text><td>Move →</table>'
             + '<button id=storage_reset type=button>Reset Controls</button>',
           'group': 'core_menu',
           'id': 'controls',
@@ -929,10 +929,10 @@ function core_repo_init(args){
           'storage': {
             'crouch': 'KeyC',
             'jump': 'Space',
-            'move-←': 'KeyA',
-            'move-↑': 'KeyW',
-            'move-→': 'KeyD',
-            'move-↓': 'KeyS',
+            'move_down': 'KeyS',
+            'move_left': 'KeyA',
+            'move_right': 'KeyD',
+            'move_up': 'KeyW',
             'pointer_horizontal': 1,
             'pointer_vertical': 1,
           },
@@ -950,10 +950,10 @@ function core_repo_init(args){
           {
             'crouch': 'KeyC',
             'jump': 'Space',
-            'move-←': 'KeyA',
-            'move-↑': 'KeyW',
-            'move-→': 'KeyD',
-            'move-↓': 'KeyS',
+            'move_down': 'KeyS',
+            'move_left': 'KeyA',
+            'move_right': 'KeyD',
+            'move_up': 'KeyW',
           },
         );
     }
