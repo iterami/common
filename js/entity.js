@@ -12,11 +12,11 @@ function entity_attach(args){
       },
     });
 
-    args.entity['attach-x'] = args.x;
-    args.entity['attach-y'] = args.y;
-    args.entity['attach-z'] = args.z;
-    args.entity['attach-to'] = args.to;
-    args.entity['attach-type'] = args.type;
+    args.entity.attach_x = args.x;
+    args.entity.attach_y = args.y;
+    args.entity.attach_z = args.z;
+    args.entity.attach_to = args.to;
+    args.entity.attach_type = args.type;
 }
 
 function entity_create(args){

@@ -6,9 +6,9 @@ function webgl_audio(args){
       'args': args,
       'defaults': {
         'audio': false,
-        'divider-x': 50,
-        'divider-y': 50,
-        'divider-z': 50,
+        'divider_x': 50,
+        'divider_y': 50,
+        'divider_z': 50,
         'type': 'webgl_characters',
       },
     });
@@ -20,16 +20,16 @@ function webgl_audio(args){
     }
 
     const character = webgl_characters[webgl_character_id];
-    const radians_y = math_degrees_to_radians(character['rotate-y']);
+    const radians_y = math_degrees_to_radians(character.rotate_y);
     const target = webgl_get_position(globalThis[args.type][args.target]);
     audio_start_at?.({
       'forwardX': Math.sin(-radians_y),
       'forwardY': 0,
       'forwardZ': Math.cos(radians_y),
       'id': args.id,
-      'positionX': (character['position-x'] - target.x) / args['divider-x'],
-      'positionY': (character['position-y'] - target.y) / args['divider-y'],
-      'positionZ': (character['position-z'] - target.z) / args['divider-z'],
+      'positionX': (character.position_x - target.x) / args.divider_x,
+      'positionY': (character.position_y - target.y) / args.divider_y,
+      'positionZ': (character.position_z - target.z) / args.divider_z,
     });
 }
 
@@ -38,9 +38,9 @@ function webgl_billboard(id){
     const entity = entity_entities[id];
     const position = webgl_get_position(entity);
 
-    entity['rotate-y'] = 360 - math_radians_to_degrees(Math.atan2(
-      position.z - character['camera-z'],
-      position.x - character['camera-x'],
+    entity.rotate_y = 360 - math_radians_to_degrees(Math.atan2(
+      position.z - character.camera_z,
+      position.x - character.camera_x,
     ) + 1.5707963267948966);
 }
 
@@ -88,8 +88,8 @@ function webgl_camera_rotate(args){
     const axes = 'xyz';
     const character = webgl_characters[args.character];
     const prefix = args.camera
-      ? 'camera-rotate-'
-      : 'rotate-';
+      ? 'camera_rotate_'
+      : 'rotate_';
     for(const axis in axes){
         let axis_value = args[axes[axis]];
         if(axis_value === false){
@@ -113,13 +113,13 @@ function webgl_camera_rotate(args){
 
     let normals = false;
     if(args.camera){
-        const max = character['camera-rotate-x'] > 180
+        const max = character.camera_rotate_x > 180
           ? 360
           : 90;
-        character['camera-rotate-x'] = math_clamp({
+        character.camera_rotate_x = math_clamp({
           'max': max,
           'min': max - 90,
-          'value': character['camera-rotate-x'],
+          'value': character.camera_rotate_x,
         });
 
         if(args.y === false){
@@ -138,15 +138,15 @@ function webgl_camera_rotate(args){
           || (!pointer_0_down && !pointer_1_down)
           || !args.pointer;
 
-        if(character['camera-zoom'] === 0
+        if(character.camera_zoom === 0
           || (pointer_check
             && webgl_character_level(character) > -2
             && character.life > 0)){
-            character['rotate-y'] = strafe
-              ? character['camera-rotate-y']
+            character.rotate_y = strafe
+              ? character.camera_rotate_y
               : args.set
                 ? args.y
-                : character['rotate-y'] + args.y;
+                : character.rotate_y + args.y;
             normals = true;
         }
 
@@ -178,12 +178,12 @@ function webgl_character_hit(args){
     const character = webgl_characters[args.id];
     const target = webgl_characters[args.target];
     const angle_xz = Math.atan2(
-      target['position-z'] - character['position-z'],
-      target['position-x'] - character['position-x']
+      target.position_z - character.position_z,
+      target.position_x - character.position_x
     );
-    target['change-position-x'] = Math.cos(angle_xz) * args.xz;
-    target['change-position-y'] = args.y;
-    target['change-position-z'] = Math.sin(angle_xz) * args.xz;
+    target.change_position_x = Math.cos(angle_xz) * args.xz;
+    target.change_position_y = args.y;
+    target.change_position_z = Math.sin(angle_xz) * args.xz;
 }
 
 function webgl_character_init(args){
@@ -191,37 +191,37 @@ function webgl_character_init(args){
       'args': args,
       'defaults': {
         'automove': false,
-        'camera-lock': true,
-        'camera-zoom': 0,
-        'collide-bottom': 3,
-        'collide-top': 3,
-        'collide-xz': 2,
+        'camera_lock': true,
+        'camera_zoom': 0,
+        'collide_bottom': 3,
+        'collide_top': 3,
+        'collide_xz': 2,
         'collides': false,
         'controls': '',
         'entities': [],
         'gravity': 0,
         'id': webgl_character_id,
-        'jump-height': 1,
+        'jump_height': 1,
         'level': -2,
-        'level-xp': 0,
+        'level_xp': 0,
         'life': 1,
-        'life-max': 1,
+        'life_max': 1,
         'lives': -1,
         'lock': {},
         'model': false,
-        'path-direction': 1,
-        'path-end': '',
-        'path-id': '',
-        'path-point': 0,
+        'path_direction': 1,
+        'path_end': '',
+        'path_id': '',
+        'path_point': 0,
         'reticle': '#fff',
-        'scale-x': 1,
-        'scale-y': 1,
-        'scale-z': 1,
+        'scale_x': 1,
+        'scale_y': 1,
+        'scale_z': 1,
         'spawn': {},
         'speed': 1,
-        'turn-speed': 5,
+        'turn_speed': 5,
         'vehicle': false,
-        'vehicle-stats': false,
+        'vehicle_stats': false,
       },
     });
 
@@ -231,51 +231,51 @@ function webgl_character_init(args){
     delete args.model;
 
     webgl_characters[args.id] = {
-      'camera-rotate-x': 0,
-      'camera-rotate-y': 0,
-      'camera-rotate-z': 0,
-      'camera-x': 0,
-      'camera-y': 0,
-      'camera-z': 0,
-      'change-position-x': 0,
-      'change-position-y': 0,
-      'change-position-z': 0,
-      'change-rotate-x': 0,
-      'change-rotate-y': 0,
-      'change-rotate-z': 0,
-      'jump-allow': false,
+      'camera_rotate_x': 0,
+      'camera_rotate_y': 0,
+      'camera_rotate_z': 0,
+      'camera_x': 0,
+      'camera_y': 0,
+      'camera_z': 0,
+      'change_position_x': 0,
+      'change_position_y': 0,
+      'change_position_z': 0,
+      'change_rotate_x': 0,
+      'change_rotate_y': 0,
+      'change_rotate_z': 0,
+      'jump_allow': false,
       'keys': false,
       'locked': {},
       'pointer': false,
-      'position-x': 0,
-      'position-y': 0,
-      'position-z': 0,
-      'rotate-x': 0,
-      'rotate-y': 0,
-      'rotate-z': 0,
+      'position_x': 0,
+      'position_y': 0,
+      'position_z': 0,
+      'rotate_x': 0,
+      'rotate_y': 0,
+      'rotate_z': 0,
       'vehicle': false,
-      'vehicle-stats': args['vehicle-stats'] === false
+      'vehicle_stats': args.vehicle_stats === false
         ? false
         : core_args({
-            'args': args['vehicle-stats'],
+            'args': args.vehicle_stats,
             'defaults': {
               'character': false,
               'lock': 0,
               'speed': 0,
-              'speed-backward': -.1,
-              'speed-forward': .1,
-              'speed-max-backward': -.5,
-              'speed-max-forward': 1,
+              'speed_backward': -.1,
+              'speed_forward': .1,
+              'speed_max_backward': -.5,
+              'speed_max_forward': 1,
             },
           }),
       ...args,
-      'camera-zoom': Math.min(
-        webgl_properties['camera-zoom-max'],
+      'camera_zoom': Math.min(
+        webgl_properties.camera_zoom_max,
         Math.max(
-          args['camera-zoom'],
+          args.camera_zoom,
           args.level === -1
             ? 0
-            : webgl_properties['camera-zoom-min']
+            : webgl_properties.camera_zoom_min
         )
       ),
     };
@@ -287,10 +287,10 @@ function webgl_character_init(args){
       'entities': entities,
     });
 
-    if(args['vehicle-stats']
-      && args['vehicle-stats'].character){
-        const character = webgl_characters[args.id]['vehicle-stats'].character;
-        webgl_characters[args.id]['vehicle-stats'].character = false;
+    if(args.vehicle_stats
+      && args.vehicle_stats.character){
+        const character = webgl_characters[args.id].vehicle_stats.character;
+        webgl_characters[args.id].vehicle_stats.character = false;
         webgl_vehicle_toggle({
           'id': character,
           'vehicle': args.id,
@@ -332,14 +332,14 @@ function webgl_character_move(args){
     });
 
     if(args.y){
-        webgl_characters[args.id]['change-position-y'] += args.speed * (args.strafe
+        webgl_characters[args.id].change_position_y += args.speed * (args.strafe
           ? -1
           : 1);
         return;
     }
 
     const angle = args.angle === true
-      ? webgl_characters[args.id]['rotate-y']
+      ? webgl_characters[args.id].rotate_y
       : args.angle;
     const movement = math_move_3d({
       'angle': angle,
@@ -347,8 +347,8 @@ function webgl_character_move(args){
       'strafe': args.strafe,
     });
 
-    webgl_characters[args.id]['change-position-x'] += movement.x;
-    webgl_characters[args.id]['change-position-z'] += movement.z;
+    webgl_characters[args.id].change_position_x += movement.x;
+    webgl_characters[args.id].change_position_z += movement.z;
 }
 
 function webgl_character_scale(args){
@@ -373,11 +373,11 @@ function webgl_character_scale(args){
         }
 
         if(!args.set){
-            axis_value += character['scale-' + axes[axis]];
+            axis_value += character['scale_' + axes[axis]];
         }
-        if(character['scale-' + axes[axis]] !== axis_value){
+        if(character['scale_' + axes[axis]] !== axis_value){
             scaled = true;
-            character['scale-' + axes[axis]] = axis_value;
+            character['scale_' + axes[axis]] = axis_value;
         }
     }
 
@@ -398,9 +398,9 @@ function webgl_character_scale(args){
             'entity': entity.id,
             'set': true,
             'update': false,
-            'x': entity['scale-x'] * character['scale-x'],
-            'y': entity['scale-y'] * character['scale-y'],
-            'z': entity['scale-z'] * character['scale-z'],
+            'x': entity.scale_x * character.scale_x,
+            'y': entity.scale_y * character.scale_y,
+            'z': entity.scale_z * character.scale_z,
           });
       },
     });
@@ -418,10 +418,10 @@ function webgl_character_set(id){
             'entities': [
               entity.id,
             ],
-            'from': 'webgl_characters_' + entity['attach-to'],
+            'from': 'webgl_characters_' + entity.attach_to,
             'to': 'webgl_characters_' + webgl_character_id,
           });
-          entity['attach-to'] = webgl_character_id;
+          entity.attach_to = webgl_character_id;
       },
     });
 }
@@ -439,14 +439,14 @@ function webgl_character_spawn(id){
 
     const axes = 'xyz';
     for(const axis in axes){
-        character['camera-rotate-' + axes[axis]] = 0;
-        character['change-position-' + axes[axis]] = 0;
-        character['change-rotate-' + axes[axis]] = 0;
-        character['position-' + axes[axis]] = 0;
-        character['rotate-' + axes[axis]] = 0;
+        character['camera_rotate_' + axes[axis]] = 0;
+        character['change_position_' + axes[axis]] = 0;
+        character['change_rotate_' + axes[axis]] = 0;
+        character['position_' + axes[axis]] = 0;
+        character['rotate_' + axes[axis]] = 0;
     }
-    character['jump-allow'] = false;
-    character.life = character['life-max'];
+    character.jump_allow = false;
+    character.life = character.life_max;
 
     Object.assign(
       character,
@@ -454,15 +454,15 @@ function webgl_character_spawn(id){
       webgl_properties.spawn,
       character.spawn
     );
-    if(character.spawn['path-id']){
+    if(character.spawn.path_id){
         webgl_path_use({
           'id': id,
-          'path-id': character['path-id'],
+          'path_id': character.path_id,
         });
     }
-    if(character['vehicle-stats']){
-        character['vehicle-stats'].speed = 0;
-        const driver = character['vehicle-stats'].character;
+    if(character.vehicle_stats){
+        character.vehicle_stats.speed = 0;
+        const driver = character.vehicle_stats.character;
         if(driver){
             webgl_character_spawn(driver);
         }
@@ -484,7 +484,7 @@ function webgl_character_spawn(id){
 
 function webgl_character_strafe(character){
     const checks = webgl_properties.pointerlock
-      || character['camera-zoom'] === 0
+      || character.camera_zoom === 0
       || character.controls === 'arpg'
       || character.controls === 'rts';
 
@@ -507,7 +507,7 @@ function webgl_color_set(args){
       },
     });
 
-    const color = webgl_properties[args.type + '-color'];
+    const color = webgl_properties[args.type + '_color'];
     if(args.blue !== false){
         color[2] = args.blue;
     }
@@ -523,22 +523,22 @@ function webgl_color_set(args){
 
 // Required args: collider, target
 function webgl_collision(args){
-    const character = args.target['attach-to']
-      ? webgl_characters[args.target['attach-to']]
+    const character = args.target.attach_to
+      ? webgl_characters[args.target.attach_to]
       : false;
     let collision = '';
     const collider_position = webgl_get_position(args.collider);
     const collision_sign = [];
     const diffs = {
-      'x': args.collider['change-position-x'] - character?.['change-position-x'],
-      'y': args.collider['change-position-y'] - character?.['change-position-y'],
-      'z': args.collider['change-position-z'] - character?.['change-position-z'],
+      'x': args.collider.change_position_x - character?.change_position_x,
+      'y': args.collider.change_position_y - character?.change_position_y,
+      'z': args.collider.change_position_z - character?.change_position_z,
     };
     const range = {
-      'x': args.collider['collide-xz'] + Math.abs(diffs.x),
-      'y-bottom': args.collider['collide-bottom'] + Math.abs(diffs.y),
-      'y-top': args.collider['collide-top'] + Math.abs(diffs.y),
-      'z': args.collider['collide-xz'] + Math.abs(diffs.z),
+      'x': args.collider.collide_xz + Math.abs(diffs.x),
+      'y_bottom': args.collider.collide_bottom + Math.abs(diffs.y),
+      'y_top': args.collider.collide_top + Math.abs(diffs.y),
+      'z': args.collider.collide_xz + Math.abs(diffs.z),
     };
     const target_position = webgl_get_position(args.target);
 
@@ -547,8 +547,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs.x)
       && collider_position.x > target_position.x - range.x
       && collider_position.x < target_position.x + range.x
-      && collider_position.y > target_position.y + args.target.vertices[3] - range['y-top']
-      && collider_position.y < target_position.y + args.target.vertices[0] + range['y-bottom']
+      && collider_position.y > target_position.y + args.target.vertices[3] - range.y_top
+      && collider_position.y < target_position.y + args.target.vertices[0] + range.y_bottom
       && collider_position.z > target_position.z + args.target.vertices[2] - range.z
       && collider_position.z < target_position.z + args.target.vertices[8] + range.z){
         collision += 'x';
@@ -559,8 +559,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs.z)
       && collider_position.x > target_position.x + args.target.vertices[3] - range.x
       && collider_position.x < target_position.x + args.target.vertices[0] + range.x
-      && collider_position.y > target_position.y + args.target.vertices[2] - range['y-top']
-      && collider_position.y < target_position.y + args.target.vertices[8] + range['y-bottom']
+      && collider_position.y > target_position.y + args.target.vertices[2] - range.y_top
+      && collider_position.y < target_position.y + args.target.vertices[8] + range.y_bottom
       && collider_position.z > target_position.z - range.z
       && collider_position.z < target_position.z + range.z){
         collision += 'z';
@@ -571,8 +571,8 @@ function webgl_collision(args){
       && sign !== Math.sign(diffs.y)
       && collider_position.x > target_position.x + args.target.vertices[3] - range.x
       && collider_position.x < target_position.x + args.target.vertices[0] + range.x
-      && collider_position.y > target_position.y - range['y-top']
-      && collider_position.y < target_position.y + range['y-bottom']
+      && collider_position.y > target_position.y - range.y_top
+      && collider_position.y < target_position.y + range.y_bottom
       && collider_position.z > target_position.z + args.target.vertices[2] - range.z
       && collider_position.z < target_position.z + args.target.vertices[8] + range.z){
         collision += 'y';
@@ -585,7 +585,7 @@ function webgl_collision(args){
 
     for(const axis in collision){
         const change_position = character
-          ? character['change-position-' + collision[axis]]
+          ? character['change_position_' + collision[axis]]
           : 0;
         const label = collision[axis] !== 'y'
           ? 'xz'
@@ -593,45 +593,45 @@ function webgl_collision(args){
             ? 'bottom'
             : 'top';
 
-        args.collider['position-' + collision[axis]] = target_position[collision[axis]]
-          + args.collider['collide-' + label] * collision_sign[axis]
+        args.collider['position_' + collision[axis]] = target_position[collision[axis]]
+          + args.collider['collide_' + label] * collision_sign[axis]
           + change_position;
-        args.collider['change-position-' + collision[axis]] = change_position;
+        args.collider['change_position_' + collision[axis]] = change_position;
 
         if(collision[axis] === 'y'){
-            if(!args.collider['jump-allow']){
-                args.collider['jump-allow'] = collision_sign[axis] !== Math.sign(webgl_properties['gravity-max']);
+            if(!args.collider.jump_allow){
+                args.collider.jump_allow = collision_sign[axis] !== Math.sign(webgl_properties.gravity_max);
 
-                const change = args.collider['change-position-' + collision[axis]];
-                if(webgl_properties['gravity-damage']
+                const change = args.collider['change_position_' + collision[axis]];
+                if(webgl_properties.gravity_damage
                   && args.collider.level >= 0
-                  && change < webgl_properties['gravity-max'] / 2){
+                  && change < webgl_properties.gravity_max / 2){
                     webgl_stat_modify({
                       'stat': 'life',
                       'target': args.collider,
-                      'value': Math.floor((change - webgl_properties['gravity-max'] / 2) * 10),
+                      'value': Math.floor((change - webgl_properties.gravity_max / 2) * 10),
                     });
                 }
             }
 
             if(character){
-                args.collider['change-position-x'] += character['change-position-x'];
-                args.collider['change-position-z'] += character['change-position-z'];
+                args.collider.change_position_x += character.change_position_x;
+                args.collider.change_position_z += character.change_position_z;
             }
 
-        }else if(args.collider['vehicle-stats']){
+        }else if(args.collider.vehicle_stats){
             const other_axis = collision[axis] === 'x'
               ? 'z'
               : 'x';
 
-            args.collider['vehicle-stats'].speed = Math.min(
-              args.collider['vehicle-stats'].speed,
-              Math.abs(args.collider['change-position-' + other_axis])
+            args.collider.vehicle_stats.speed = Math.min(
+              args.collider.vehicle_stats.speed,
+              Math.abs(args.collider['change_position_' + other_axis])
             );
         }
     }
 
-    if(args.target['event-range'] === 0){
+    if(args.target.event_range === 0){
         webgl_event({
           'parent': args.target,
           'target': args.collider,
@@ -665,26 +665,26 @@ function webgl_controls_keyboard(character){
     const level = webgl_character_level(character);
     if(level < -1
       || character.life <= 0
-      || character['path-id'].length !== 0){
+      || character.path_id.length !== 0){
         return;
     }
 
-    if(character['vehicle-stats']){
-        const vehicle = character['vehicle-stats'];
+    if(character.vehicle_stats){
+        const vehicle = character.vehicle_stats;
         if(vehicle.character
-          || !character['jump-allow']){
+          || !character.jump_allow){
             return;
         }
         let speed = 0;
         if(vehicle.speed >= 0){
             speed = Math.max(
-              vehicle.speed + vehicle['speed-backward'],
+              vehicle.speed + vehicle.speed_backward,
               0
             );
 
         }else{
             speed = Math.min(
-              vehicle.speed + vehicle['speed-forward'],
+              vehicle.speed + vehicle.speed_forward,
               0
             );
         }
@@ -729,20 +729,20 @@ function webgl_controls_keyboard(character){
     }else{
         const pointer = character.pointer;
         if(pointer){
-            pointer_0_down = pointer['0-down'] || false;
-            pointer_1_down = pointer['2-down'] || false;
+            pointer_0_down = pointer.down_0 || false;
+            pointer_1_down = pointer.down_1 || false;
             pointer_x = pointer.x;
         }
 
         const keys = character.keys;
         if(keys){
-            back = keys['move-↓'] || false;
+            back = keys.move_down || false;
             crouch = keys.crouch || false;
-            forward = keys['move-↑']
+            forward = keys.move_up
               || (pointer_0_down && pointer_1_down);
             jump = keys.jump || false;
-            left = keys['move-←'] || false;
-            right = keys['move-→'] || false;
+            left = keys.move_left || false;
+            right = keys.move_right || false;
         }
     }
 
@@ -754,36 +754,36 @@ function webgl_controls_keyboard(character){
         const vehicle = webgl_characters[character.vehicle];
         let speed = 0;
         let turn = 0;
-        if(vehicle['jump-allow']){
+        if(vehicle.jump_allow){
             if(forward || character.automove){
                 speed = Math.min(
-                  vehicle['vehicle-stats'].speed + vehicle['vehicle-stats']['speed-forward'],
-                  vehicle['vehicle-stats']['speed-max-forward']
+                  vehicle.vehicle_stats.speed + vehicle.vehicle_stats.speed_forward,
+                  vehicle.vehicle_stats.speed_max_forward
                 );
 
             }else if(back){
                 speed = Math.max(
-                  vehicle['vehicle-stats'].speed + vehicle['vehicle-stats']['speed-backward'],
-                  vehicle['vehicle-stats']['speed-max-backward']
+                  vehicle.vehicle_stats.speed + vehicle.vehicle_stats.speed_backward,
+                  vehicle.vehicle_stats.speed_max_backward
                 );
 
-            }else if(vehicle['vehicle-stats'].speed >= 0){
+            }else if(vehicle.vehicle_stats.speed >= 0){
                 speed = Math.max(
-                  vehicle['vehicle-stats'].speed + vehicle['vehicle-stats']['speed-backward'],
+                  vehicle.vehicle_stats.speed + vehicle.vehicle_stats.speed_backward,
                   0
                 );
 
             }else{
                 speed = Math.min(
-                  vehicle['vehicle-stats'].speed + vehicle['vehicle-stats']['speed-forward'],
+                  vehicle.vehicle_stats.speed + vehicle.vehicle_stats.speed_forward,
                   0
                 );
             }
-            vehicle['vehicle-stats'].speed = speed;
+            vehicle.vehicle_stats.speed = speed;
 
             if(pointer_1_down){
                 const half = webgl.drawingBufferWidth / 2;
-                turn = vehicle['turn-speed'] * Math.max(
+                turn = vehicle.turn_speed * Math.max(
                   Math.min(
                     (pointer_x - half) / half,
                     1
@@ -793,10 +793,10 @@ function webgl_controls_keyboard(character){
 
             }else{
                 if(left){
-                    turn -= vehicle['turn-speed'];
+                    turn -= vehicle.turn_speed;
                 }
                 if(right){
-                    turn += vehicle['turn-speed'];
+                    turn += vehicle.turn_speed;
                 }
             }
         }
@@ -805,12 +805,12 @@ function webgl_controls_keyboard(character){
             if(speed < 0){
                 turn *= -1;
             }
-            vehicle['rotate-y'] += turn;
+            vehicle.rotate_y += turn;
             if(pointer_1_down){
-                character['camera-rotate-y'] = vehicle['rotate-y'];
+                character.camera_rotate_y = vehicle.rotate_y;
 
             }else if(!pointer_0_down){
-                character['camera-rotate-y'] += turn;
+                character.camera_rotate_y += turn;
             }
         }
         if(speed !== 0){
@@ -822,10 +822,10 @@ function webgl_controls_keyboard(character){
 
         const axes = 'xyz';
         for(const axis in axes){
-            character['rotate-' + axes[axis]] = vehicle['rotate-' + axes[axis]];
-            character['position-' + axes[axis]] = vehicle['position-' + axes[axis]] + vehicle['change-position-' + axes[axis]];
+            character['rotate_' + axes[axis]] = vehicle['rotate_' + axes[axis]];
+            character['position_' + axes[axis]] = vehicle['position_' + axes[axis]] + vehicle['change_position_' + axes[axis]];
         }
-        character['position-y'] += character['collide-bottom'];
+        character.position_y += character.collide_bottom;
         return;
     }
 
@@ -839,7 +839,7 @@ function webgl_controls_keyboard(character){
             webgl_camera_rotate({
               'camera': !pointer_0_down,
               'character': character.id,
-              'y': -character['turn-speed'],
+              'y': -character.turn_speed,
             });
         }
     }
@@ -851,12 +851,12 @@ function webgl_controls_keyboard(character){
             webgl_camera_rotate({
               'camera': !pointer_0_down,
               'character': character.id,
-              'y': character['turn-speed'],
+              'y': character.turn_speed,
             });
         }
     }
 
-    if(level === -1 || character['jump-allow']){
+    if(level === -1 || character.jump_allow){
         let forwardback = 0;
         if(forward || character.automove){
             forwardback = -1;
@@ -895,8 +895,8 @@ function webgl_controls_keyboard(character){
                 });
 
             }else{
-                character['jump-allow'] = false;
-                character['change-position-y'] = character['jump-height'];
+                character.jump_allow = false;
+                character.change_position_y = character.jump_height;
             }
         }
 
@@ -957,7 +957,7 @@ function webgl_controls_keyboard(character){
             }else{
                 angle = 180;
             }
-            character['rotate-y'] = angle;
+            character.rotate_y = angle;
         }
     }
 }
@@ -1027,22 +1027,22 @@ function webgl_controls_wheel(event){
     }
 
     if(event.deltaY > 0){
-        character['camera-zoom'] = core_key_shift
-          ? webgl_properties['camera-zoom-max']
+        character.camera_zoom = core_key_shift
+          ? webgl_properties.camera_zoom_max
           : Math.min(
-              character['camera-zoom'] + 1,
-              webgl_properties['camera-zoom-max']
+              character.camera_zoom + 1,
+              webgl_properties.camera_zoom_max
             );
 
     }else{
         const min = character.level === -1
           ? 0
-          : webgl_properties['camera-zoom-min'];
+          : webgl_properties.camera_zoom_min;
 
-        character['camera-zoom'] = core_key_shift
+        character.camera_zoom = core_key_shift
           ? min
           : Math.max(
-              character['camera-zoom'] - 1,
+              character.camera_zoom - 1,
               min
             );
     }
@@ -1091,8 +1091,8 @@ function webgl_draw_entity(entity){
       entity.alpha
     );
     webgl.uniform1f(
-      uniforms['point-size'],
-      entity['point-size']
+      uniforms.point_size,
+      entity.point_size
     );
     webgl.uniformMatrix4fv(
       uniforms.camera,
@@ -1101,7 +1101,7 @@ function webgl_draw_entity(entity){
     );
     if(webgl_shader_id === 'picking'){
         webgl.uniform3fv(
-          uniforms.pickColor,
+          uniforms.pick_color,
           entity.picking === false
            ? [0, 0, 0]
            : entity.picking
@@ -1109,9 +1109,9 @@ function webgl_draw_entity(entity){
     }
 
     webgl.drawArrays(
-      webgl[entity['draw-mode']],
+      webgl[entity.draw_mode],
       0,
-      entity['vertices-length']
+      entity.vertices_length
     );
 }
 
@@ -1199,50 +1199,50 @@ function webgl_entity_create(args){
               ],
               'group': 'transparent',
             });
-            entity['attach-to'] = webgl_character_id;
-            entity['attach-type'] = 'webgl_characters';
+            entity.attach_to = webgl_character_id;
+            entity.attach_type = 'webgl_characters';
 
         }else if(args.character){
-            entity['attach-to'] = args.character;
-            entity['attach-type'] = 'webgl_characters';
+            entity.attach_to = args.character;
+            entity.attach_type = 'webgl_characters';
         }
 
-        if(entity['scale-x'] !== 1
-          || entity['scale-y'] !== 1
-          || entity['scale-z'] !== 1){
+        if(entity.scale_x !== 1
+          || entity.scale_y !== 1
+          || entity.scale_z !== 1){
             webgl_entity_scale({
               'init': true,
               'entity': entity.id,
               'set': true,
-              'x': entity['scale-x'],
-              'y': entity['scale-y'],
-              'z': entity['scale-z'],
+              'x': entity.scale_x,
+              'y': entity.scale_y,
+              'z': entity.scale_z,
             });
         }
 
-        if(entity['attach-to']){
+        if(entity.attach_to){
             entity_attach({
               'entity': entity,
-              'to': entity['attach-to'],
-              'type': entity['attach-type'],
-              'x': entity['attach-x'],
-              'y': entity['attach-y'],
-              'z': entity['attach-z'],
+              'to': entity.attach_to,
+              'type': entity.attach_type,
+              'x': entity.attach_x,
+              'y': entity.attach_y,
+              'z': entity.attach_z,
             });
             entity_group_add({
               'entities': [
                 entity.id,
               ],
-              'group': 'webgl_characters_' + entity['attach-to'],
+              'group': 'webgl_characters_' + entity.attach_to,
             });
-            const character = webgl_characters[entity['attach-to']];
+            const character = webgl_characters[entity.attach_to];
             webgl_entity_scale({
               'entity': entity.id,
               'set': true,
               'update': false,
-              'x': entity['scale-x'] * character['scale-x'],
-              'y': entity['scale-y'] * character['scale-y'],
-              'z': entity['scale-z'] * character['scale-z'],
+              'x': entity.scale_x * character.scale_x,
+              'y': entity.scale_y * character.scale_y,
+              'z': entity.scale_z * character.scale_z,
             });
         }
     }
@@ -1259,10 +1259,10 @@ function webgl_entity_init(entity){
       'alpha': entity.alpha,
       'id': entity.id,
     });
-    entity['vertices-length'] = entity.vertices.length / 3;
-    entity['vertex-colors'] = webgl_vertexcolorarray({
-      'colors': entity['vertex-colors'],
-      'vertexcount': entity['vertices-length'],
+    entity.vertices_length = entity.vertices.length / 3;
+    entity.vertex_colors = webgl_vertexcolorarray({
+      'colors': entity.vertex_colors,
+      'vertexcount': entity.vertices_length,
     });
 
     if(entity.picking === true){
@@ -1281,16 +1281,16 @@ function webgl_entity_init(entity){
           }),
         ];
     }
-    const texture_align = entity['texture-align'];
+    const texture_align = entity.texture_align;
     const textureData = [];
     const half_length = texture_align.length / 2;
-    for(let i = 0; i < entity['vertices-length']; i++){
+    for(let i = 0; i < entity.vertices_length; i++){
         const align = i < half_length
           ? i * 2
           : (i % half_length) * 2;
         textureData.push(
-          texture_align[align] * entity['texture-x'],
-          texture_align[align + 1] * entity['texture-y']
+          texture_align[align] * entity.texture_x,
+          texture_align[align + 1] * entity.texture_y
         );
     }
 
@@ -1299,7 +1299,7 @@ function webgl_entity_init(entity){
     webgl_entity_normals(entity);
     webgl_buffer_set({
       'attribute': attributes.vertexColor,
-      'data': entity['vertex-colors'],
+      'data': entity.vertex_colors,
       'size': 4,
     });
     webgl_buffer_set({
@@ -1315,23 +1315,23 @@ function webgl_entity_init(entity){
 }
 
 function webgl_entity_normals(entity){
-    let rotate_x = entity['rotate-x'];
-    let rotate_y = entity['rotate-y'];
-    let rotate_z = entity['rotate-z'];
-    if(entity['attach-to']){
-        const attached_to = globalThis[entity['attach-type']][entity['attach-to']];
-        rotate_x += attached_to['rotate-x'];
-        rotate_y += attached_to['rotate-y'];
-        rotate_z += attached_to['rotate-z'];
+    let rotate_x = entity.rotate_x;
+    let rotate_y = entity.rotate_y;
+    let rotate_z = entity.rotate_z;
+    if(entity.attach_to){
+        const attached_to = globalThis[entity.attach_type][entity.attach_to];
+        rotate_x += attached_to.rotate_x;
+        rotate_y += attached_to.rotate_y;
+        rotate_z += attached_to.rotate_z;
     }
     entity.normals = webgl_normals({
-      'rotate-x': rotate_x,
-      'rotate-y': rotate_y,
-      'rotate-z': rotate_z,
+      'rotate_x': rotate_x,
+      'rotate_y': rotate_y,
+      'rotate_z': rotate_z,
     });
 
     const normals = [];
-    for(let i = 0; i < entity['vertices-length']; i++){
+    for(let i = 0; i < entity.vertices_length; i++){
         normals.push(...entity.normals);
     }
     webgl.bindVertexArray(entity.vao);
@@ -1366,7 +1366,7 @@ function webgl_entity_scale(args){
             continue;
         }
 
-        const old_scale = entity['scale-' + axes[axis]];
+        const old_scale = entity['scale_' + axes[axis]];
         if(!args.set){
             axis_value += old_scale;
         }
@@ -1374,20 +1374,20 @@ function webgl_entity_scale(args){
             scaled = true;
 
             if(args.update){
-                entity['scale-' + axes[axis]] = axis_value;
+                entity['scale_' + axes[axis]] = axis_value;
             }
 
-            for(let i = Number(axis); i < entity['vertices-length'] * 3; i += 3){
+            for(let i = Number(axis); i < entity.vertices_length * 3; i += 3){
                 if(!args.init){
                     entity.vertices[i] /= old_scale;
                 }
                 entity.vertices[i] *= axis_value;
             }
-            if(entity['attach-to']){
+            if(entity.attach_to){
                 if(!args.init){
-                    entity['attach-' + axes[axis]] /= old_scale;
+                    entity['attach_' + axes[axis]] /= old_scale;
                 }
-                entity['attach-' + axes[axis]] *= axis_value;
+                entity['attach_' + axes[axis]] *= axis_value;
             }
         }
     }
@@ -1404,17 +1404,17 @@ function webgl_entity_scale(args){
 
 // Required args: parent, target
 function webgl_event(args){
-    if(args.parent['event-limit']){
-        if(args.parent['event-limit'] <= 0){
-            args.parent['event-range'] = false;
+    if(args.parent.event_limit){
+        if(args.parent.event_limit <= 0){
+            args.parent.event_range = false;
             return;
         }
 
-        args.parent['event-limit']--;
+        args.parent.event_limit--;
     }
 
-    for(const todo in args.parent['event-todo']){
-        const modify = {...args.parent['event-todo'][todo]};
+    for(const todo in args.parent.event_todo){
+        const modify = {...args.parent.event_todo[todo]};
         if(modify.limit !== void 0){
             if(modify.limit <= 0){
                 continue;
@@ -1443,8 +1443,8 @@ function webgl_event(args){
             }
         }
 
-        const max = modify['random-max'] || 0;
-        const min = modify['random-min'] || 0;
+        const max = modify.random_max || 0;
+        const min = modify.random_min || 0;
         if(min !== 0 || max !== 0){
             modify.value += min + core_random_integer(max - min);
         }
@@ -1494,12 +1494,12 @@ function webgl_framebuffer_init(){
     webgl_shader({
       'id': 'picking',
       'attributes': [],
-      'uniforms': {
-        'camera': 'camera',
-        'perspective': 'perspective',
-        'pickColor': 'pickColor',
-        'point-size': 'pointSize',
-      },
+      'uniforms': [
+        'camera',
+        'perspective',
+        'pick_color',
+        'point_size',
+      ],
       'fragment':
 `#version 300 es
 precision mediump float;
@@ -1512,17 +1512,17 @@ void main(void){
 `#version 300 es
 layout (location = 0) in vec3 vertexPosition;
 out vec4 color;
-uniform float pointSize;
+uniform float point_size;
 uniform mat4 camera;
 uniform mat4 perspective;
-uniform vec3 pickColor;
+uniform vec3 pick_color;
 void main(void){
     vec4 positionCamera = camera * vec4(vertexPosition, 1.0);
     gl_Position = perspective * positionCamera;
-    if(pointSize > 0.0){
-        gl_PointSize = pointSize / length(positionCamera);
+    if(point_size > 0.0){
+        gl_PointSize = point_size / length(positionCamera);
     }
-    color = vec4(pickColor, 1);
+    color = vec4(pick_color, 1);
 }`,
     });
 
@@ -1579,19 +1579,19 @@ function webgl_framebuffer_resize(){
 }
 
 function webgl_get_position(entity){
-    if(entity['attach-to']){
-        const target = globalThis[entity['attach-type']][entity['attach-to']];
+    if(entity.attach_to){
+        const target = globalThis[entity.attach_type][entity.attach_to];
         return {
-          'x': target['position-x'] + entity['attach-x'],
-          'y': target['position-y'] + entity['attach-y'],
-          'z': target['position-z'] + entity['attach-z'],
+          'x': target.position_x + entity.attach_x,
+          'y': target.position_y + entity.attach_y,
+          'z': target.position_z + entity.attach_z,
         };
     }
 
     return {
-      'x': entity['position-x'],
-      'y': entity['position-y'],
-      'z': entity['position-z'],
+      'x': entity.position_x,
+      'y': entity.position_y,
+      'z': entity.position_z,
     };
 }
 
@@ -1652,43 +1652,43 @@ function webgl_init(){
       'default': true,
       'properties': {
         'alpha': 1,
-        'attach-to': false,
-        'attach-type': 'webgl_characters',
-        'attach-x': 0,
-        'attach-y': 0,
-        'attach-z': 0,
+        'attach_to': false,
+        'attach_type': 'webgl_characters',
+        'attach_x': 0,
+        'attach_y': 0,
+        'attach_z': 0,
         'billboard': false,
-        'change-rotate-x': 0,
-        'change-rotate-y': 0,
-        'change-rotate-z': 0,
+        'change_rotate_x': 0,
+        'change_rotate_y': 0,
+        'change_rotate_z': 0,
         'collision': true,
         'draw': true,
-        'draw-mode': 'TRIANGLE_FAN',
-        'draw-range': false,
-        'event-limit': false,
-        'event-range': false,
-        'event-todo': [],
-        'light-color': [1, 1, 1,],
-        'light-range': 0,
+        'draw_mode': 'TRIANGLE_FAN',
+        'draw_range': false,
+        'event_limit': false,
+        'event_range': false,
+        'event_todo': [],
+        'light_color': [1, 1, 1,],
+        'light_range': 0,
         'normals': [],
         'particle': false,
         'picking': false,
         'picking_range': 0,
-        'point-size': 0,
-        'position-x': 0,
-        'position-y': 0,
-        'position-z': 0,
-        'rotate-x': 0,
-        'rotate-y': 0,
-        'rotate-z': 0,
-        'scale-x': 1,
-        'scale-y': 1,
-        'scale-z': 1,
+        'point_size': 0,
+        'position_x': 0,
+        'position_y': 0,
+        'position_z': 0,
+        'rotate_x': 0,
+        'rotate_y': 0,
+        'rotate_z': 0,
+        'scale_x': 1,
+        'scale_y': 1,
+        'scale_z': 1,
         'texture': webgl_default_texture,
-        'texture-align': '11010010',
-        'texture-x': 1,
-        'texture-y': 1,
-        'vertices-length': 0,
+        'texture_align': '11010010',
+        'texture_x': 1,
+        'texture_y': 1,
+        'vertices_length': 0,
         'visible': true,
       },
       'todo': webgl_entity_init,
@@ -1703,23 +1703,23 @@ function webgl_init(){
         'vertexNormal',
         'texturePosition',
       ],
-      'uniforms': {
-        'alpha': 'alpha',
-        'ambient-color': 'ambientColor',
-        'camera': 'camera',
-        'clear-color': 'clearColor',
-        'directional': 'directional',
-        'directional-color': 'directionalColor',
-        'directional-vector': 'directionalVector',
-        'fog-end': 'fogEnd',
-        'fog-start': 'fogStart',
-        'light-color': 'lightColor',
-        'light-count': 'lightCount',
-        'light-position': 'lightPosition',
-        'light-range': 'lightRange',
-        'perspective': 'perspective',
-        'point-size': 'pointSize',
-      },
+      'uniforms': [
+        'alpha',
+        'ambient_color',
+        'camera',
+        'clear_color',
+        'directional',
+        'directional_color',
+        'directional_vector',
+        'fog_end',
+        'fog_start',
+        'light_color',
+        'light_count',
+        'light_position',
+        'light_range',
+        'perspective',
+        'point_size',
+      ],
       'fragment':
 `#version 300 es
 precision mediump float;
@@ -1728,35 +1728,35 @@ in vec3 positionVertex;
 in vec4 color;
 in vec4 positionCamera;
 out vec4 fragment;
-uniform float fogEnd;
-uniform float fogStart;
-uniform float lightRange[16];
-uniform int lightCount;
+uniform float fog_end;
+uniform float fog_start;
+uniform float light_range[16];
+uniform int light_count;
 uniform sampler2D sampler;
-uniform vec3 clearColor;
-uniform vec3 lightColor[16];
-uniform vec3 lightPosition[16];
+uniform vec3 clear_color;
+uniform vec3 light_color[16];
+uniform vec3 light_position[16];
 void main(void){
     fragment = color;
-    for(int i = 0; i < lightCount; i++) {
+    for(int i = 0; i < light_count; i++) {
         float range = distance(
-          lightPosition[i],
+          light_position[i],
           positionVertex
         );
-        if(range < lightRange[i]){
+        if(range < light_range[i]){
             fragment.rgb = mix(
               fragment.rgb,
-              lightColor[i],
-              1.0 - clamp(range / lightRange[i], 0.0, 1.0)
+              light_color[i],
+              1.0 - clamp(range / light_range[i], 0.0, 1.0)
             );
         }
     }
     fragment *= texture(sampler, positionTexture);
-    if(fogEnd > 0.0){
+    if(fog_end > 0.0){
         fragment.rgb = mix(
-          clearColor,
+          clear_color,
           fragment.rgb,
-          1.0 - clamp((length(positionCamera) - fogStart) / (fogEnd - fogStart), 0.0, 1.0)
+          1.0 - clamp((length(positionCamera) - fog_start) / (fog_end - fog_start), 0.0, 1.0)
         );
     }
 }`,
@@ -1772,23 +1772,23 @@ out vec4 color;
 out vec4 positionCamera;
 uniform bool directional;
 uniform float alpha;
-uniform float pointSize;
+uniform float point_size;
 uniform mat4 camera;
 uniform mat4 perspective;
-uniform vec3 ambientColor;
-uniform vec3 directionalColor;
-uniform vec3 directionalVector;
+uniform vec3 ambient_color;
+uniform vec3 directional_color;
+uniform vec3 directional_vector;
 void main(void){
     positionVertex = vertexPosition;
     positionCamera = camera * vec4(vertexPosition, 1.0);
     gl_Position = perspective * positionCamera;
-    if(pointSize > 0.0){
-        gl_PointSize = pointSize / length(positionCamera);
+    if(point_size > 0.0){
+        gl_PointSize = point_size / length(positionCamera);
     }
     positionTexture = texturePosition;
-    vec4 lighting = vec4(ambientColor, alpha);
+    vec4 lighting = vec4(ambient_color, alpha);
     if(directional){
-        lighting.rgb += directionalColor * max(dot(vertexNormal, directionalVector), 0.0);
+        lighting.rgb += directional_color * max(dot(vertexNormal, directional_vector), 0.0);
     }
     color = vertexColor * lighting;
 }`,
@@ -1860,7 +1860,7 @@ function webgl_level_export(){
         };
         delete entity_json.normals;
         delete entity_json.vao;
-        delete entity_json['vertices-length'];
+        delete entity_json.vertices_length;
         for(const property in entity_json){
             if(entity_json[property] === entity_info.opaque.default[property]){
                 delete entity_json[property];
@@ -1879,7 +1879,7 @@ function webgl_level_export(){
             entity_json.groups.push(groups[group]);
         }
 
-        json.characters[entity_json['attach-to']].entities.push(entity_json);
+        json.characters[entity_json.attach_to].entities.push(entity_json);
     }
     for(const id in webgl_textures){
         if(id === 'default.png'){
@@ -1930,7 +1930,7 @@ function webgl_level_init(args){
     const randomized = args.json.randomized;
     if(randomized){
         for(const i in randomized){
-            const randomized = Math.random() * (randomized[i].max - randomized[i].min) + randomized[i].min;
+            const random = Math.random() * (randomized[i].max - randomized[i].min) + randomized[i].min;
 
             for(const id in randomized[i].ids){
                 const targets = args.json[randomized[i].character
@@ -1942,7 +1942,7 @@ function webgl_level_init(args){
                         if(!targets[target][randomized[i].property]){
                             targets[target][randomized[i].property] = 0;
                         }
-                        targets[target][randomized[i].property] += randomized;
+                        targets[target][randomized[i].property] += random;
 
                         break;
                     }
@@ -1958,20 +1958,20 @@ function webgl_level_init(args){
     const level = core_args({
       'args': args.json,
       'defaults': {
-        'ambient-color': [1, 1, 1],
-        'camera-zoom-max': 50,
-        'camera-zoom-min': 0,
+        'ambient_color': [1, 1, 1],
+        'camera_zoom_max': 50,
+        'camera_zoom_min': 0,
         'characters': [],
-        'clear-color': [0, 0, 0],
-        'directional-color': [1, 1, 1],
-        'directional-state': false,
-        'directional-vector': [0, 1, 0],
-        'draw-range': false,
-        'fog-end': 0,
-        'fog-start': 0,
-        'gravity-acceleration': -.05,
-        'gravity-damage': false,
-        'gravity-max': -2,
+        'clear_color': [0, 0, 0],
+        'directional_color': [1, 1, 1],
+        'directional_state': false,
+        'directional_vector': [0, 1, 0],
+        'draw_range': false,
+        'fog_end': 0,
+        'fog_start': 0,
+        'gravity_acceleration': -.05,
+        'gravity_damage': false,
+        'gravity_max': -2,
         'groups': [],
         'lock': {},
         'paused': false,
@@ -1983,7 +1983,7 @@ function webgl_level_init(args){
         'spawn': {},
         'textures': false,
         'title': false,
-        'y-min': false,
+        'y_min': false,
       },
     });
 
@@ -1997,26 +1997,26 @@ function webgl_level_init(args){
     Object.assign(
       webgl_properties,
       {
-        'ambient-color': level['ambient-color'],
-        'camera-zoom-max': level['camera-zoom-max'],
-        'camera-zoom-min': level['camera-zoom-min'],
-        'clear-color': level['clear-color'],
-        'directional-color': level['directional-color'],
-        'directional-state': level['directional-state'],
-        'directional-vector': level['directional-vector'],
-        'draw-range': level['draw-range'],
-        'fog-end': level['fog-end'],
-        'fog-start': level['fog-start'],
-        'gravity-acceleration': level['gravity-acceleration'],
-        'gravity-damage': level['gravity-damage'],
-        'gravity-max': level['gravity-max'],
+        'ambient_color': level.ambient_color,
+        'camera_zoom_max': level.camera_zoom_max,
+        'camera_zoom_min': level.camera_zoom_min,
+        'clear_color': level.clear_color,
+        'directional_color': level.directional_color,
+        'directional_state': level.directional_state,
+        'directional_vector': level.directional_vector,
+        'draw_range': level.draw_range,
+        'fog_end': level.fog_end,
+        'fog_start': level.fog_start,
+        'gravity_acceleration': level.gravity_acceleration,
+        'gravity_damage': level.gravity_damage,
+        'gravity_max': level.gravity_max,
         'lock': level.lock,
         'paused': level.paused,
         'picking': level.picking,
         'pointerlock': level.pointerlock,
         'spawn': level.spawn,
         'title': level.title,
-        'y-min': level['y-min'],
+        'y_min': level.y_min,
       }
     );
 
@@ -2064,9 +2064,9 @@ function webgl_level_init(args){
     }
 
     webgl_color_set({
-      'blue': webgl_properties['clear-color'][2],
-      'green': webgl_properties['clear-color'][1],
-      'red': webgl_properties['clear-color'][0],
+      'blue': webgl_properties.clear_color[2],
+      'green': webgl_properties.clear_color[1],
+      'red': webgl_properties.clear_color[0],
     });
     globalThis.repo_level_load?.();
 
@@ -2127,7 +2127,7 @@ function webgl_level_unload(base){
         properties.entities = [];
         for(const id in entity_entities){
             const entity = entity_entities[id];
-            if(entity['attach-to'] === webgl_character_id
+            if(entity.attach_to === webgl_character_id
               && entity_groups.skybox[id] !== true){
                 properties.entities.push(entity);
             }
@@ -2188,30 +2188,30 @@ function webgl_logic(){
         }
 
         if(character.gravity !== 0){
-            character['change-position-y'] = Math.max(
-              character['change-position-y'] + webgl_properties['gravity-acceleration'] * character.gravity,
-              webgl_properties['gravity-max'] * character.gravity
+            character.change_position_y = Math.max(
+              character.change_position_y + webgl_properties.gravity_acceleration * character.gravity,
+              webgl_properties.gravity_max * character.gravity
             );
         }
 
         webgl_path_move(character);
 
-        if(character['change-rotate-x'] !== 0
-          || character['change-rotate-y'] !== 0
-          || character['change-rotate-z'] !== 0){
+        if(character.change_rotate_x !== 0
+          || character.change_rotate_y !== 0
+          || character.change_rotate_z !== 0){
             webgl_camera_rotate({
               'camera': false,
               'character': id,
-              'x': character['change-rotate-x'],
-              'y': character['change-rotate-y'],
-              'z': character['change-rotate-z'],
+              'x': character.change_rotate_x,
+              'y': character.change_rotate_y,
+              'z': character.change_rotate_z,
             });
         }
 
         const axes = 'xyz';
         for(const axis in axes){
-            const position_axis = 'position-' + axes[axis];
-            character[position_axis] += character['change-' + position_axis];
+            const position_axis = 'position_' + axes[axis];
+            character[position_axis] += character['change_' + position_axis];
         }
 
         Object.assign(
@@ -2220,14 +2220,14 @@ function webgl_logic(){
            webgl_properties.lock
         );
 
-        const change_position_x = character['change-position-x'];
-        const change_position_z = character['change-position-z'];
-        if(character['change-position-y'] !== 0){
-            character['jump-allow'] = false;
+        const change_position_x = character.change_position_x;
+        const change_position_z = character.change_position_z;
+        if(character.change_position_y !== 0){
+            character.jump_allow = false;
         }
 
         if(character.collides
-          && webgl_paths[character['path-id']]?.collision !== false){
+          && webgl_paths[character.path_id]?.collision !== false){
             for(const id in entity_entities){
                 const entity = entity_entities[id];
                 if(entity.collision){
@@ -2240,20 +2240,20 @@ function webgl_logic(){
         }
 
         if(level <= -1
-          && character['path-id'].length === 0){
-            character['change-position-x'] = 0;
-            character['change-position-y'] = 0;
-            character['change-position-z'] = 0;
+          && character.path_id.length === 0){
+            character.change_position_x = 0;
+            character.change_position_y = 0;
+            character.change_position_z = 0;
             continue;
         }
 
-        if(character['jump-allow']){
-            character['change-position-x'] -= change_position_x;
-            character['change-position-z'] -= change_position_z;
+        if(character.jump_allow){
+            character.change_position_x -= change_position_x;
+            character.change_position_z -= change_position_z;
         }
 
-        if(webgl_properties['y-min'] !== false
-          && character['position-y'] < webgl_properties['y-min']){
+        if(webgl_properties.y_min !== false
+          && character.position_y < webgl_properties.y_min){
             webgl_stat_modify({
               'set': true,
               'stat': 'life',
@@ -2264,20 +2264,20 @@ function webgl_logic(){
     }
 
     const character = webgl_characters[webgl_character_id];
-    const radians_x = math_degrees_to_radians(character['camera-rotate-x']);
-    const radians_y = math_degrees_to_radians(character['camera-rotate-y']);
-    if(character['camera-lock']){
-        if(character['camera-zoom'] > 0){
-            const zoom_cos_x = character['camera-zoom'] * Math.cos(radians_x);
+    const radians_x = math_degrees_to_radians(character.camera_rotate_x);
+    const radians_y = math_degrees_to_radians(character.camera_rotate_y);
+    if(character.camera_lock){
+        if(character.camera_zoom > 0){
+            const zoom_cos_x = character.camera_zoom * Math.cos(radians_x);
 
-            character['camera-x'] = character['position-x'] + Math.sin(-radians_y) * zoom_cos_x;
-            character['camera-y'] = character['position-y'] + Math.sin(radians_x) * character['camera-zoom'];
-            character['camera-z'] = character['position-z'] + Math.cos(radians_y) * zoom_cos_x;
+            character.camera_x = character.position_x + Math.sin(-radians_y) * zoom_cos_x;
+            character.camera_y = character.position_y + Math.sin(radians_x) * character.camera_zoom;
+            character.camera_z = character.position_z + Math.cos(radians_y) * zoom_cos_x;
 
         }else{
-            character['camera-x'] = character['position-x'];
-            character['camera-y'] = character['position-y'];
-            character['camera-z'] = character['position-z'];
+            character.camera_x = character.position_x;
+            character.camera_y = character.position_y;
+            character.camera_z = character.position_z;
         }
     }
 
@@ -2286,15 +2286,15 @@ function webgl_logic(){
       'dimensions': [
         radians_x,
         radians_y,
-        math_degrees_to_radians(character['camera-rotate-z']),
+        math_degrees_to_radians(character.camera_rotate_z),
       ],
       'id': 'camera',
     });
     math_matrix_translate({
       'dimensions': [
-        character['camera-x'],
-        character['camera-y'],
-        character['camera-z'],
+        character.camera_x,
+        character.camera_y,
+        character.camera_z,
       ],
       'id': 'camera',
     });
@@ -2307,7 +2307,7 @@ function webgl_logic(){
 
     const uniforms = webgl_shaders.default.uniforms;
     webgl.uniform1i(
-      uniforms['light-count'],
+      uniforms.light_count,
       webgl_shader_light_range.length
     );
     if(!webgl_shader_light_range.length){
@@ -2323,54 +2323,54 @@ function webgl_logic(){
         webgl_shader_light_range.push(0);
     }
     webgl.uniform3fv(
-      uniforms['light-color'],
+      uniforms.light_color,
       webgl_shader_light_color
     );
     webgl.uniform3fv(
-      uniforms['light-position'],
+      uniforms.light_position,
       webgl_shader_light_position
     );
     webgl.uniform1fv(
-      uniforms['light-range'],
+      uniforms.light_range,
       webgl_shader_light_range
     );
 }
 
 function webgl_logic_entity(entity){
-    if(entity['attach-to']){
-        const target = globalThis[entity['attach-type']][entity['attach-to']];
+    if(entity.attach_to){
+        const target = globalThis[entity.attach_type][entity.attach_to];
 
         if(entity_groups.skybox[entity.id]){
-            entity['position-x'] = target['camera-x'];
-            entity['position-y'] = target['camera-y'];
-            entity['position-z'] = target['camera-z'];
+            entity.position_x = target.camera_x;
+            entity.position_y = target.camera_y;
+            entity.position_z = target.camera_z;
 
         }else{
-            entity['position-x'] = target['position-x'];
-            entity['position-y'] = target['position-y'];
-            entity['position-z'] = target['position-z'];
+            entity.position_x = target.position_x;
+            entity.position_y = target.position_y;
+            entity.position_z = target.position_z;
         }
     }
 
-    if(entity['event-range']){
+    if(entity.event_range){
         const event_position = webgl_get_position(entity);
 
-        if(core_type(entity['event-range']) === 'array'){
+        if(core_type(entity.event_range) === 'array'){
             for(const character in webgl_characters){
-                if(character === entity['attach-to']){
+                if(character === entity.attach_to){
                     continue;
                 }
 
                 if(math_cuboid_overlap({
-                    'depth0': entity['event-range'][2],
-                    'depth1': entity['event-range'][2],
-                    'height0': entity['event-range'][1],
-                    'height1': entity['event-range'][1],
-                    'width0': entity['event-range'][0],
-                    'width1': entity['event-range'][0],
-                    'x0': webgl_characters[character]['position-x'],
-                    'y0': webgl_characters[character]['position-y'],
-                    'z0': webgl_characters[character]['position-z'],
+                    'depth0': entity.event_range[2],
+                    'depth1': entity.event_range[2],
+                    'height0': entity.event_range[1],
+                    'height1': entity.event_range[1],
+                    'width0': entity.event_range[0],
+                    'width1': entity.event_range[0],
+                    'x0': webgl_characters[character].position_x,
+                    'y0': webgl_characters[character].position_y,
+                    'z0': webgl_characters[character].position_z,
                     'x1': event_position.x,
                     'y1': event_position.y,
                     'z1': event_position.z,
@@ -2387,18 +2387,18 @@ function webgl_logic_entity(entity){
 
         }else{
             for(const character in webgl_characters){
-                if(character === entity['attach-to']){
+                if(character === entity.attach_to){
                     continue;
                 }
 
                 if(math_distance({
-                    'x0': webgl_characters[character]['position-x'],
-                    'y0': webgl_characters[character]['position-y'],
-                    'z0': webgl_characters[character]['position-z'],
+                    'x0': webgl_characters[character].position_x,
+                    'y0': webgl_characters[character].position_y,
+                    'z0': webgl_characters[character].position_z,
                     'x1': event_position.x,
                     'y1': event_position.y,
                     'z1': event_position.z,
-                  }) < entity['event-range']){
+                  }) < entity.event_range){
                     webgl_event({
                       'parent': entity,
                       'target': webgl_characters[character],
@@ -2411,14 +2411,14 @@ function webgl_logic_entity(entity){
         }
     }
 
-    const draw_range = entity['draw-range'] || webgl_properties['draw-range'];
+    const draw_range = entity.draw_range || webgl_properties.draw_range;
     if(draw_range){
         const character = webgl_characters[webgl_character_id];
         const position = webgl_get_position(entity);
         entity.visible = math_distance({
-            'x0': character['camera-x'],
-            'y0': character['camera-y'],
-            'z0': character['camera-z'],
+            'x0': character.camera_x,
+            'y0': character.camera_y,
+            'z0': character.camera_z,
             'x1': position.x,
             'y1': position.y,
             'z1': position.z,
@@ -2428,40 +2428,40 @@ function webgl_logic_entity(entity){
         entity.visible = true;
     }
 
-    const old_rotate_x = entity['rotate-x'];
-    const old_rotate_y = entity['rotate-y'];
-    const old_rotate_z = entity['rotate-z'];
+    const old_rotate_x = entity.rotate_x;
+    const old_rotate_y = entity.rotate_y;
+    const old_rotate_z = entity.rotate_z;
     const axes = 'xyz';
     for(const axis in axes){
-        const rotate_axis = 'rotate-' + axes[axis];
-        if(entity['change-' + rotate_axis] === 0){
+        const rotate_axis = 'rotate_' + axes[axis];
+        if(entity['change_' + rotate_axis] === 0){
             continue;
         }
 
         entity[rotate_axis] = math_clamp({
           'max': 360,
           'min': 0,
-          'value': entity[rotate_axis] + entity['change-' + rotate_axis],
+          'value': entity[rotate_axis] + entity['change_' + rotate_axis],
           'wrap': true,
         });
     }
     if(entity.billboard){
         webgl_billboard(entity.id);
     }
-    if(entity['rotate-x'] !== old_rotate_x
-      || entity['rotate-y'] !== old_rotate_y
-      || entity['rotate-z'] !== old_rotate_z){
+    if(entity.rotate_x !== old_rotate_x
+      || entity.rotate_y !== old_rotate_y
+      || entity.rotate_z !== old_rotate_z){
         webgl_entity_normals(entity);
     }
 
-    if(entity['light-range'] > 0){
-        webgl_shader_light_color.push(...entity['light-color']);
+    if(entity.light_range > 0){
+        webgl_shader_light_color.push(...entity.light_color);
         webgl_shader_light_position.push(
-          entity['position-x'],
-          entity['position-y'],
-          entity['position-z']
+          entity.position_x,
+          entity.position_y,
+          entity.position_z
         );
-        webgl_shader_light_range.push(entity['light-range']);
+        webgl_shader_light_range.push(entity.light_range);
     }
     if(entity.particle
       && !webgl_properties.paused){
@@ -2474,38 +2474,38 @@ function webgl_logic_entity(entity){
     });
     math_matrix_translate({
       'dimensions': [
-        -entity['position-x'],
-        -entity['position-y'],
-        -entity['position-z'],
+        -entity.position_x,
+        -entity.position_y,
+        -entity.position_z,
       ],
       'id': entity.id,
     });
-    if(entity['attach-to']){
+    if(entity.attach_to){
         if(entity_groups.skybox[entity.id] !== true){
-            const target = globalThis[entity['attach-type']][entity['attach-to']];
+            const target = globalThis[entity.attach_type][entity.attach_to];
             math_matrix_rotate({
               'dimensions': [
-                math_degrees_to_radians(target['rotate-x']),
-                math_degrees_to_radians(-target['rotate-y']),
-                math_degrees_to_radians(target['rotate-z']),
+                math_degrees_to_radians(target.rotate_x),
+                math_degrees_to_radians(-target.rotate_y),
+                math_degrees_to_radians(target.rotate_z),
               ],
               'id': entity.id,
             });
         }
         math_matrix_translate({
           'dimensions': [
-            -entity['attach-x'],
-            -entity['attach-y'],
-            -entity['attach-z'],
+            -entity.attach_x,
+            -entity.attach_y,
+            -entity.attach_z,
           ],
           'id': entity.id,
         });
     }
     math_matrix_rotate({
       'dimensions': [
-        math_degrees_to_radians(entity['rotate-x']),
-        math_degrees_to_radians(entity['rotate-y']),
-        math_degrees_to_radians(entity['rotate-z']),
+        math_degrees_to_radians(entity.rotate_x),
+        math_degrees_to_radians(entity.rotate_y),
+        math_degrees_to_radians(entity.rotate_z),
       ],
       'id': entity.id,
     });
@@ -2513,39 +2513,38 @@ function webgl_logic_entity(entity){
 
 function webgl_logic_particle(entity){
     const particle = webgl_particles[entity.particle];
-    const repeat = entity['vertices-length'] * 3;
-    const vertices = entity.vertices;
+    const repeat = entity.vertices_length * 3;
 
     if(particle.randomize){
         for(let vertex = 0; vertex < repeat; vertex += 3){
-            const y_vertex = vertices[vertex + 1] + particle['speed-y'];
-            if(y_vertex < particle['y-min']
-              || y_vertex > particle['y-max']){
-                vertices[vertex] = particle['x-min']
-                  + Math.random() * (particle['x-max'] - particle['x-min']);
-                vertices[vertex + 2] = particle['z-min']
-                  + Math.random() * (particle['z-max'] - particle['z-min']);
+            const y_vertex = entity.vertices[vertex + 1] + particle.speed_y;
+            if(y_vertex < particle.y_min
+              || y_vertex > particle.y_max){
+                entity.vertices[vertex] = particle.x_min
+                  + Math.random() * (particle.x_max - particle.x_min);
+                entity.vertices[vertex + 2] = particle.z_min
+                  + Math.random() * (particle.z_max - particle.z_min);
             }
         }
     }
 
     for(let vertex = 0; vertex < repeat; vertex += 3){
-        vertices[vertex] = math_clamp({
-          'max': particle['x-max'],
-          'min': particle['x-min'],
-          'value': vertices[vertex] + particle['speed-x'],
+        entity.vertices[vertex] = math_clamp({
+          'max': particle.x_max,
+          'min': particle.x_min,
+          'value': entity.vertices[vertex] + particle.speed_x,
           'wrap': true,
         });
-        vertices[vertex + 1] = math_clamp({
-          'max': particle['y-max'],
-          'min': particle['y-min'],
-          'value': vertices[vertex + 1] + particle['speed-y'],
+        entity.vertices[vertex + 1] = math_clamp({
+          'max': particle.y_max,
+          'min': particle.y_min,
+          'value': entity.vertices[vertex + 1] + particle.speed_y,
           'wrap': true,
         });
-        vertices[vertex + 2] = math_clamp({
-          'max': particle['z-max'],
-          'min': particle['z-min'],
-          'value': vertices[vertex + 2] + particle['speed-z'],
+        entity.vertices[vertex + 2] = math_clamp({
+          'max': particle.z_max,
+          'min': particle.z_min,
+          'value': entity.vertices[vertex + 2] + particle.speed_z,
           'wrap': true,
         });
     }
@@ -2553,7 +2552,7 @@ function webgl_logic_particle(entity){
     webgl.bindVertexArray(entity.vao);
     webgl_buffer_set({
       'attribute': webgl_shaders.default.attributes.vertexPosition,
-      'data': vertices,
+      'data': entity.vertices,
       'size': 3,
     });
 }
@@ -2561,7 +2560,7 @@ function webgl_logic_particle(entity){
 // Required args: id, model
 function webgl_model_create(args){
     const character = webgl_characters[args.id];
-    const xz = character['collide-xz'] * 2;
+    const xz = character.collide_xz * 2;
 
     webgl_primitive_cuboid({
       'all': {
@@ -2570,10 +2569,10 @@ function webgl_model_create(args){
       },
       'character': args.id,
       'prefix': args.id,
-      'position-y': (character['collide-top'] - character['collide-bottom']) / 2,
-      'size-x': xz,
-      'size-y': character['collide-bottom'] + character['collide-top'],
-      'size-z': xz,
+      'position_y': (character.collide_top - character.collide_bottom) / 2,
+      'size_x': xz,
+      'size_y': character.collide_bottom + character.collide_top,
+      'size_z': xz,
       ...args.model,
     });
 }
@@ -2591,30 +2590,30 @@ function webgl_move_to(args){
     });
 
     if(args.target){
-        args.move['position-x'] = args.target['position-x'];
-        args.move['position-y'] = args.target['position-y'];
-        args.move['position-z'] = args.target['position-z'];
+        args.move.position_x = args.target.position_x;
+        args.move.position_y = args.target.position_y;
+        args.move.position_z = args.target.position_z;
         return;
     }
 
-    args.move['position-x'] = args.x;
-    args.move['position-y'] = args.y;
-    args.move['position-z'] = args.z;
+    args.move.position_x = args.x;
+    args.move.position_y = args.y;
+    args.move.position_z = args.z;
 }
 
 function webgl_normals(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'rotate-x': 0,
-        'rotate-y': 0,
-        'rotate-z': 0,
+        'rotate_x': 0,
+        'rotate_y': 0,
+        'rotate_z': 0,
       },
     });
 
-    const radians_x = math_degrees_to_radians(args['rotate-x']);
-    const radians_y = math_degrees_to_radians(args['rotate-y']);
-    const radians_z = -math_degrees_to_radians(args['rotate-z']);
+    const radians_x = math_degrees_to_radians(args.rotate_x);
+    const radians_y = math_degrees_to_radians(args.rotate_y);
+    const radians_z = -math_degrees_to_radians(args.rotate_z);
     const cos_y = Math.cos(radians_y);
 
     return [
@@ -2636,171 +2635,171 @@ function webgl_particle_create(id, args){
         'args': args,
         'defaults': {
           'randomize': true,
-          'speed-x': 0,
-          'speed-y': 0,
-          'speed-z': 0,
-          'x-max': 100,
-          'x-min': -100,
-          'y-max': 100,
-          'y-min': -100,
-          'z-max': 100,
-          'z-min': -100,
+          'speed_x': 0,
+          'speed_y': 0,
+          'speed_z': 0,
+          'x_max': 100,
+          'x_min': -100,
+          'y_max': 100,
+          'y_min': -100,
+          'z_max': 100,
+          'z_min': -100,
         },
       }),
     };
 }
 
 function webgl_path_move(character){
-    if(!webgl_paths[character['path-id']]){
+    if(!webgl_paths[character.path_id]){
         return;
     }
 
-    const path = globalThis.structuredClone(webgl_paths[character['path-id']]);
+    const path = globalThis.structuredClone(webgl_paths[character.path_id]);
     const point = core_args({
-      'args': path.points[character['path-point']],
+      'args': path.points[character.path_point],
       'defaults': {
         'distance': 0,
-        'position-x': character['position-x'],
-        'position-y': character['position-y'],
-        'position-z': character['position-z'],
-        'rotate-x': false,
-        'rotate-y': false,
-        'rotate-z': false,
+        'position_x': character.position_x,
+        'position_y': character.position_y,
+        'position_z': character.position_z,
+        'rotate_x': false,
+        'rotate_y': false,
+        'rotate_z': false,
       },
     });
     const distance = math_distance({
-      'x0': character['position-x'],
-      'y0': character['position-y'],
-      'z0': character['position-z'],
-      'x1': point['position-x'],
-      'y1': point['position-y'],
-      'z1': point['position-z'],
+      'x0': character.position_x,
+      'y0': character.position_y,
+      'z0': character.position_z,
+      'x1': point.position_x,
+      'y1': point.position_y,
+      'z1': point.position_z,
     });
     const speed = point.speed || path.speed || character.speed;
 
     if(distance - speed < point.distance){
         if(point.distance === 0){
-            character['position-x'] = point['position-x'];
-            character['position-y'] = point['position-y'];
-            character['position-z'] = point['position-z'];
+            character.position_x = point.position_x;
+            character.position_y = point.position_y;
+            character.position_z = point.position_z;
         }
         webgl_camera_rotate({
           'character': character.id,
           'set': true,
-          'x': point['rotate-x'],
-          'y': point['rotate-y'],
-          'z': point['rotate-z'],
+          'x': point.rotate_x,
+          'y': point.rotate_y,
+          'z': point.rotate_z,
         });
-        if(point['event-todo'] !== void 0){
+        if(point.event_todo !== void 0){
             webgl_event({
-              'parent': webgl_paths[character['path-id']].points[character['path-point']],
+              'parent': webgl_paths[character.path_id].points[character.path_point],
               'target': character,
             });
         }
 
-        const path_end = character['path-end'] === ''
+        const path_end = character.path_end === ''
           ? path.end
-          : character['path-end'];
-        if(character['path-direction'] > 0){
-            if(character['path-point'] >= path.points.length - 1){
+          : character.path_end;
+        if(character.path_direction > 0){
+            if(character.path_point >= path.points.length - 1){
                 if(path_end === 'loop'){
-                    character['path-point'] = 0;
+                    character.path_point = 0;
 
                 }else if(path_end === 'reverse'){
-                    character['path-direction'] = -1;
-                    character['path-point'] -= 1;
+                    character.path_direction = -1;
+                    character.path_point -= 1;
 
                 }else if(path_end === 'warp'){
-                    character['path-point'] = 1;
+                    character.path_point = 1;
                     const warp = core_args({
                       'args': path.points[0],
                       'defaults': {
-                        'position-x': character['position-x'],
-                        'position-y': character['position-y'],
-                        'position-z': character['position-z'],
+                        'position_x': character.position_x,
+                        'position_y': character.position_y,
+                        'position_z': character.position_z,
                       },
                     });
-                    character['position-x'] = warp['position-x'];
-                    character['position-y'] = warp['position-y'];
-                    character['position-z'] = warp['position-z'];
+                    character.position_x = warp.position_x;
+                    character.position_y = warp.position_y;
+                    character.position_z = warp.position_z;
 
                 }else{
-                    character['path-id'] = '';
-                    character['path-point'] = 0;
+                    character.path_id = '';
+                    character.path_point = 0;
                     if(character.level < -1){
-                        character['change-position-x'] = 0;
-                        character['change-position-y'] = 0;
-                        character['change-position-z'] = 0;
+                        character.change_position_x = 0;
+                        character.change_position_y = 0;
+                        character.change_position_z = 0;
                     }
                 }
 
             }else{
-                character['path-point'] += 1;
-                character['change-position-x'] = 0;
-                character['change-position-y'] = 0;
-                character['change-position-z'] = 0;
+                character.path_point += 1;
+                character.change_position_x = 0;
+                character.change_position_y = 0;
+                character.change_position_z = 0;
             }
 
-        }else if(character['path-point'] === 0){
+        }else if(character.path_point === 0){
             if(path_end === 'loop'){
-                character['path-point'] = path.points.length - 1;
+                character.path_point = path.points.length - 1;
 
             }else if(path_end === 'reverse'){
-                character['path-direction'] = 1;
-                character['path-point'] = 1;
+                character.path_direction = 1;
+                character.path_point = 1;
 
             }else if(path_end === 'warp'){
                 const last = path.points.length - 1;
-                character['path-point'] = last - 1;
+                character.path_point = last - 1;
                 const warp = core_args({
                   'args': path.points[last],
                   'defaults': {
-                    'position-x': character['position-x'],
-                    'position-y': character['position-y'],
-                    'position-z': character['position-z'],
+                    'position_x': character.position_x,
+                    'position_y': character.position_y,
+                    'position_z': character.position_z,
                   },
                 });
-                character['position-x'] = warp['position-x'];
-                character['position-y'] = warp['position-y'];
-                character['position-z'] = warp['position-z'];
+                character.position_x = warp.position_x;
+                character.position_y = warp.position_y;
+                character.position_z = warp.position_z;
 
             }else{
-                character['path-id'] = '';
-                character['path-point'] = 0;
+                character.path_id = '';
+                character.path_point = 0;
                 if(character.level < -1){
-                    character['change-position-x'] = 0;
-                    character['change-position-y'] = 0;
-                    character['change-position-z'] = 0;
+                    character.change_position_x = 0;
+                    character.change_position_y = 0;
+                    character.change_position_z = 0;
                 }
             }
 
         }else{
-            character['path-point'] -= 1;
-            character['change-position-x'] = 0;
-            character['change-position-y'] = 0;
-            character['change-position-z'] = 0;
+            character.path_point -= 1;
+            character.change_position_x = 0;
+            character.change_position_y = 0;
+            character.change_position_z = 0;
         }
 
         return;
     }
 
     const angle_xz = Math.atan2(
-      point['position-z'] - character['position-z'],
-      point['position-x'] - character['position-x']
+      point.position_z - character.position_z,
+      point.position_x - character.position_x
     );
-    const angle_y = Math.asin(Math.abs(character['position-y'] - point['position-y']) / distance);
+    const angle_y = Math.asin(Math.abs(character.position_y - point.position_y) / distance);
     const cos_y_speed = Math.cos(angle_y) * speed;
-    character['change-position-x'] = core_round({
+    character.change_position_x = core_round({
       'number': Math.cos(angle_xz) * cos_y_speed,
     });
     let change_position_y = Math.sin(angle_y) * speed;
-    if(character['position-y'] > point['position-y']){
+    if(character.position_y > point.position_y){
         change_position_y *= -1;
     }
-    character['change-position-y'] = core_round({
+    character.change_position_y = core_round({
       'number': change_position_y,
     });
-    character['change-position-z'] = core_round({
+    character.change_position_z = core_round({
       'number': Math.sin(angle_xz) * cos_y_speed,
     });
 }
@@ -2810,23 +2809,23 @@ function webgl_path_use(args){
       'args': args,
       'defaults': {
         'id': webgl_character_id,
-        'path-id': '',
-        'use-path-properties': true,
+        'path_id': '',
+        'use_path_properties': true,
       },
     });
 
-    const path = webgl_paths[args['path-id']];
+    const path = webgl_paths[args.path_id];
     if(!path){
         return;
     }
 
     const character = webgl_characters[args.id];
-    character['path-id'] = args['path-id'];
+    character.path_id = args.path_id;
 
-    if(args['use-path-properties']){
-        character['path-direction'] = path.direction || 1;
-        character['path-end'] = path.end || '';
-        character['path-point'] = path.point || 0;
+    if(args.use_path_properties){
+        character.path_direction = path.direction || 1;
+        character.path_end = path.end || '';
+        character.path_point = path.point || 0;
     }
 }
 
@@ -2915,9 +2914,9 @@ function webgl_pick_entity(args){
                 if(entity.picking_range > 0){
                     const position = webgl_get_position(entity);
                     const distance = math_distance({
-                      'x0': character['position-x'],
-                      'y0': character['position-y'],
-                      'z0': character['position-z'],
+                      'x0': character.position_x,
+                      'y0': character.position_y,
+                      'z0': character.position_z,
                       'x1': position.x,
                       'y1': position.y,
                       'z1': position.z,
@@ -2991,25 +2990,25 @@ function webgl_prefab_repeat(args){
         'count': 1,
         'prefix': entity_id_count,
         'properties': {},
-        'x-max': 0,
-        'x-min': 0,
-        'y-max': 0,
-        'y-min': 0,
-        'z-max': 0,
-        'z-min': 0,
+        'x_max': 0,
+        'x_min': 0,
+        'y_max': 0,
+        'y_min': 0,
+        'z_max': 0,
+        'z_min': 0,
       },
     });
 
     if(args.characters){
         for(let i = 0; i < args.count; i++){
-            const prefix = args.prefix + '-' + i;
+            const prefix = args.prefix + '_' + i;
             webgl_character_init({
               ...args.characters,
               'id': prefix,
               'spawn': {
-                'position-x': Math.random() * (args['x-max'] - args['x-min']) + args['x-min'],
-                'position-y': Math.random() * (args['y-max'] - args['y-min']) + args['y-min'],
-                'position-z': Math.random() * (args['z-max'] - args['z-min']) + args['z-min'],
+                'position_x': Math.random() * (args.x_max - args.x_min) + args.x_min,
+                'position_y': Math.random() * (args.y_max - args.y_min) + args.y_min,
+                'position_z': Math.random() * (args.z_max - args.z_min) + args.z_min,
                 ...args.characters.spawn,
               },
             });
@@ -3017,16 +3016,16 @@ function webgl_prefab_repeat(args){
             args.properties.character = prefix;
             args.properties.prefix = prefix;
 
-            globalThis[args.type](args.properties);
+            globalThis[args.type]?.(args.properties);
         }
         return;
     }
 
     for(let i = 0; i < args.count; i++){
-        args.properties.prefix = args.prefix + '-' + i;
-        args.properties['position-x'] = Math.random() * (args['x-max'] - args['x-min']) + args['x-min'];
-        args.properties['position-y'] = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
-        args.properties['position-z'] = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
+        args.properties.prefix = args.prefix + '_' + i;
+        args.properties.position_x = Math.random() * (args.x_max - args.x_min) + args.x_min;
+        args.properties.position_y = Math.random() * (args.y_max - args.y_min) + args.y_min;
+        args.properties.position_z = Math.random() * (args.z_max - args.z_min) + args.z_min;
 
         globalThis[args.type](args.properties);
     }
@@ -3045,16 +3044,16 @@ function webgl_primitive_cuboid(args){
         'left': {},
         'prefix': entity_id_count,
         'right': {},
-        'size-x': 1,
-        'size-y': 1,
-        'size-z': 1,
+        'size_x': 1,
+        'size_y': 1,
+        'size_z': 1,
         'top': {},
       },
     });
 
-    const half_size_x = args['size-x'] / 2;
-    const half_size_y = args['size-y'] / 2;
-    const half_size_z = args['size-z'] / 2;
+    const half_size_x = args.size_x / 2;
+    const half_size_y = args.size_y / 2;
+    const half_size_z = args.size_z / 2;
     const vertices_size_x = Math.abs(half_size_x);
     const vertices_size_y = Math.abs(half_size_y);
     const vertices_size_z = Math.abs(half_size_z);
@@ -3063,14 +3062,14 @@ function webgl_primitive_cuboid(args){
     if(args.top.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'] + half_size_y,
-          'attach-z': prefab_args['position-z'],
-          'id': args.prefix + '-top',
-          'vertex-colors': webgl_vertexcolorarray({
-            'colors': args.top['vertex-colors'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y + half_size_y,
+          'attach_z': prefab_args.position_z,
+          'id': args.prefix + '_top',
+          'vertex_colors': webgl_vertexcolorarray({
+            'colors': args.top.vertex_colors,
           }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
@@ -3095,15 +3094,15 @@ function webgl_primitive_cuboid(args){
     if(args.bottom.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'] - half_size_y,
-          'attach-z': prefab_args['position-z'],
-          'id': args.prefix + '-bottom',
-          'rotate-x': 180,
-          'vertex-colors': webgl_vertexcolorarray({
-            'colors': args.bottom['vertex-colors'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y - half_size_y,
+          'attach_z': prefab_args.position_z,
+          'id': args.prefix + '_bottom',
+          'rotate_x': 180,
+          'vertex_colors': webgl_vertexcolorarray({
+            'colors': args.bottom.vertex_colors,
           }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
@@ -3128,15 +3127,15 @@ function webgl_primitive_cuboid(args){
     if(args.back.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'] + half_size_z,
-          'id': args.prefix + '-back',
-          'rotate-x': 90,
-          'vertex-colors': webgl_vertexcolorarray({
-            'colors': args.back['vertex-colors'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z + half_size_z,
+          'id': args.prefix + '_back',
+          'rotate_x': 90,
+          'vertex_colors': webgl_vertexcolorarray({
+            'colors': args.back.vertex_colors,
           }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
@@ -3161,15 +3160,15 @@ function webgl_primitive_cuboid(args){
     if(args.front.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'] - half_size_z,
-          'id': args.prefix + '-front',
-          'rotate-x': 270,
-          'vertex-colors': webgl_vertexcolorarray({
-            'colors': args.front['vertex-colors'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z - half_size_z,
+          'id': args.prefix + '_front',
+          'rotate_x': 270,
+          'vertex_colors': webgl_vertexcolorarray({
+            'colors': args.front.vertex_colors,
           }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
@@ -3194,15 +3193,15 @@ function webgl_primitive_cuboid(args){
     if(args.left.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'] - half_size_x,
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'],
-          'id': args.prefix + '-left',
-          'rotate-z': 90,
-          'vertex-colors': webgl_vertexcolorarray({
-            'colors': args.left['vertex-colors'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x - half_size_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z,
+          'id': args.prefix + '_left',
+          'rotate_z': 90,
+          'vertex_colors': webgl_vertexcolorarray({
+            'colors': args.left.vertex_colors,
           }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
@@ -3227,15 +3226,15 @@ function webgl_primitive_cuboid(args){
     if(args.right.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'] + half_size_x,
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'],
-          'id': args.prefix + '-right',
-          'rotate-z': 270,
-          'vertex-colors': webgl_vertexcolorarray({
-            'colors': args.right['vertex-colors'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x + half_size_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z,
+          'id': args.prefix + '_right',
+          'rotate_z': 270,
+          'vertex_colors': webgl_vertexcolorarray({
+            'colors': args.right.vertex_colors,
           }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
@@ -3267,11 +3266,11 @@ function webgl_primitive_ellipsoid(args){
         'color1': [],
         'groups': [],
         'prefix': entity_id_count,
-        'radius-x': 5,
-        'radius-y': 5,
-        'radius-z': 5,
-        'slices-latitude': 10,
-        'slices-longitude': 10,
+        'radius_x': 5,
+        'radius_y': 5,
+        'radius_z': 5,
+        'slices_latitude': 10,
+        'slices_longitude': 10,
       },
     });
 
@@ -3286,45 +3285,45 @@ function webgl_primitive_ellipsoid(args){
         });
     }
 
-    const latitude_angles = math_degrees_to_radians(360 / args['slices-latitude']);
-    const longitude_angles = math_degrees_to_radians(180 / args['slices-longitude']);
+    const latitude_angles = math_degrees_to_radians(360 / args.slices_latitude);
+    const longitude_angles = math_degrees_to_radians(180 / args.slices_longitude);
     const prefab_args = webgl_prefab_args(args);
 
     const properties = {
       ...prefab_args,
-      'attach-to': args.character,
-      'attach-type': 'webgl_characters',
-      'attach-x': prefab_args['position-x'],
-      'attach-y': prefab_args['position-y'],
-      'attach-z': prefab_args['position-z'],
+      'attach_to': args.character,
+      'attach_type': 'webgl_characters',
+      'attach_x': prefab_args.position_x,
+      'attach_y': prefab_args.position_y,
+      'attach_z': prefab_args.position_z,
       'collision': false,
-      'draw-mode': 'TRIANGLE_STRIP',
+      'draw_mode': 'TRIANGLE_STRIP',
       'id': args.prefix,
-      'vertex-colors': [],
+      'vertex_colors': [],
       'vertices': [],
     };
-    for(let longitude = 0; longitude < args['slices-longitude']; longitude++){
-        if(longitude === args['slices-longitude'] / 2){
+    for(let longitude = 0; longitude < args.slices_longitude; longitude++){
+        if(longitude === args.slices_longitude / 2){
             [args.color0, args.color1] = [args.color1, args.color0];
         }
 
         const longitude_bottom = -1.5707963267948966 + longitude * longitude_angles;
         const longitude_top = -1.5707963267948966 + (longitude + 1) * longitude_angles;
         const cos_bottom = Math.cos(longitude_bottom);
-        const cos_bottom_x = args['radius-x'] * cos_bottom;
-        const cos_bottom_z = args['radius-z'] * cos_bottom;
+        const cos_bottom_x = args.radius_x * cos_bottom;
+        const cos_bottom_z = args.radius_z * cos_bottom;
         const cos_top = Math.cos(longitude_top);
-        const cos_top_x = args['radius-x'] * cos_top;
-        const cos_top_z = args['radius-z'] * cos_top;
-        const sin_bottom = args['radius-y'] * Math.sin(longitude_bottom);
-        const sin_top = args['radius-y'] * Math.sin(longitude_top);
+        const cos_top_x = args.radius_x * cos_top;
+        const cos_top_z = args.radius_z * cos_top;
+        const sin_bottom = args.radius_y * Math.sin(longitude_bottom);
+        const sin_top = args.radius_y * Math.sin(longitude_top);
 
-        for(let latitude = 0; latitude <= args['slices-latitude']; latitude++){
+        for(let latitude = 0; latitude <= args.slices_latitude; latitude++){
             const rotation = latitude * latitude_angles;
             const cos_rotation = Math.cos(rotation);
             const sin_rotation = Math.sin(rotation);
 
-            properties['vertex-colors'].push(
+            properties.vertex_colors.push(
               ...args.color0,
               ...args.color1
             );
@@ -3353,26 +3352,26 @@ function webgl_primitive_frustum(args){
       'defaults': {
         'bottom': true,
         'character': webgl_character_id,
-        'color-bottom': [],
-        'color-top': [],
+        'color_bottom': [],
+        'color_top': [],
         'groups': [],
         'length': 2,
         'middle': true,
         'points': 8,
         'prefix': entity_id_count,
-        'size-bottom': 2,
-        'size-top': 1,
+        'size_bottom': 2,
+        'size_top': 1,
         'top': true,
       },
     });
 
-    if(args['color-bottom'].length === 0){
-        args['color-bottom'] = webgl_vertexcolorarray({
+    if(args.color_bottom.length === 0){
+        args.color_bottom = webgl_vertexcolorarray({
           'vertexcount': 1,
         });
     }
-    if(args['color-top'].length === 0){
-        args['color-top'] = webgl_vertexcolorarray({
+    if(args.color_top.length === 0){
+        args.color_top = webgl_vertexcolorarray({
           'vertexcount': 1,
         });
     }
@@ -3381,22 +3380,22 @@ function webgl_primitive_frustum(args){
     const prefab_args = webgl_prefab_args(args);
     const properties = {
       ...prefab_args,
-      'attach-to': args.character,
-      'attach-type': 'webgl_characters',
-      'attach-x': prefab_args['position-x'],
-      'attach-y': prefab_args['position-y'],
-      'attach-z': prefab_args['position-z'],
+      'attach_to': args.character,
+      'attach_type': 'webgl_characters',
+      'attach_x': prefab_args.position_x,
+      'attach_y': prefab_args.position_y,
+      'attach_z': prefab_args.position_z,
       'collision': false,
-      'draw-mode': 'TRIANGLE_FAN',
+      'draw_mode': 'TRIANGLE_FAN',
     };
 
     if(args.points === 1
-      || (args['size-bottom'] === 0 && args['size-top'] === 0)){
-        properties['draw-mode'] = 'LINES';
+      || (args.size_bottom === 0 && args.size_top === 0)){
+        properties.draw_mode = 'LINES';
         properties.id = args.prefix;
-        properties['vertex-colors'] = [
-          args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3],
-          args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3],
+        properties.vertex_colors = [
+          args.color_top[0], args.color_top[1], args.color_top[2], args.color_top[3],
+          args.color_bottom[0], args.color_bottom[1], args.color_bottom[2], args.color_bottom[3],
         ];
         properties.vertices = [
           0, args.length, 0,
@@ -3413,9 +3412,9 @@ function webgl_primitive_frustum(args){
     }
 
     if(args.bottom){
-        properties.id = args.prefix + '-bottom';
-        properties['vertex-colors'] = [
-          args['color-bottom'][0], args['color-bottom'][1], args['color-bottom'][2], args['color-bottom'][3],
+        properties.id = args.prefix + '_bottom';
+        properties.vertex_colors = [
+          args.color_bottom[0], args.color_bottom[1], args.color_bottom[2], args.color_bottom[3],
         ];
         properties.vertices = [
           0, 0, 0,
@@ -3425,20 +3424,20 @@ function webgl_primitive_frustum(args){
             const cos_rotation = Math.cos(point_rotation);
             const sin_rotation = Math.sin(point_rotation);
 
-            if(args['size-bottom'] === 0){
-                properties['vertex-colors'].push(...args['color-top']);
+            if(args.size_bottom === 0){
+                properties.vertex_colors.push(...args.color_top);
                 properties.vertices.push(
-                  args['size-top'] * sin_rotation,
+                  args.size_top * sin_rotation,
                   args.length,
-                  args['size-top'] * cos_rotation
+                  args.size_top * cos_rotation
                 );
 
             }else{
-                properties['vertex-colors'].push(...args['color-bottom']);
+                properties.vertex_colors.push(...args.color_bottom);
                 properties.vertices.push(
-                  args['size-bottom'] * sin_rotation,
+                  args.size_bottom * sin_rotation,
                   0,
-                  args['size-bottom'] * cos_rotation
+                  args.size_bottom * cos_rotation
                 );
             }
         }
@@ -3451,9 +3450,9 @@ function webgl_primitive_frustum(args){
     }
 
     if(args.top){
-        properties.id = args.prefix + '-top';
-        properties['vertex-colors'] = [
-          args['color-top'][0], args['color-top'][1], args['color-top'][2], args['color-top'][3],
+        properties.id = args.prefix + '_top';
+        properties.vertex_colors = [
+          args.color_top[0], args.color_top[1], args.color_top[2], args.color_top[3],
         ];
         properties.vertices = [
           0, args.length, 0,
@@ -3463,20 +3462,20 @@ function webgl_primitive_frustum(args){
             const cos_rotation = Math.cos(point_rotation);
             const sin_rotation = Math.sin(point_rotation);
 
-            if(args['size-top'] === 0){
-                properties['vertex-colors'].push(...args['color-bottom']);
+            if(args.size_top === 0){
+                properties.vertex_colors.push(...args.color_bottom);
                 properties.vertices.push(
-                  args['size-bottom'] * sin_rotation,
+                  args.size_bottom * sin_rotation,
                   0,
-                  args['size-bottom'] * cos_rotation
+                  args.size_bottom * cos_rotation
                 );
 
             }else{
-                properties['vertex-colors'].push(...args['color-top']);
+                properties.vertex_colors.push(...args.color_top);
                 properties.vertices.push(
-                  args['size-top'] * sin_rotation,
+                  args.size_top * sin_rotation,
                   args.length,
-                  args['size-top'] * cos_rotation
+                  args.size_top * cos_rotation
                 );
             }
         }
@@ -3489,33 +3488,33 @@ function webgl_primitive_frustum(args){
     }
 
     if(args.middle
-      && args['size-bottom'] !== 0
-      && args['size-top'] !== 0){
-        properties['draw-mode'] = 'TRIANGLE_STRIP';
-        properties.id = args.prefix + '-middle';
-        properties['vertex-colors'] = [
-          args['color-top'][0], args['color-top'][1], args['color-top'][2],args['color-top'][3],
+      && args.size_bottom !== 0
+      && args.size_top !== 0){
+        properties.draw_mode = 'TRIANGLE_STRIP';
+        properties.id = args.prefix + '_middle';
+        properties.vertex_colors = [
+          args.color_top[0], args.color_top[1], args.color_top[2], args.color_top[3],
         ];
         properties.vertices = [
-          args['size-top'] * Math.sin(rotation),
+          args.size_top * Math.sin(rotation),
           args.length,
-          args['size-top'] * Math.cos(rotation),
+          args.size_top * Math.cos(rotation),
         ];
         for(let i = 0; i <= args.points; i++){
             const point_rotation = i * rotation;
             const next_rotation = (i + 1) * rotation;
 
-            properties['vertex-colors'].push(
-              ...args['color-bottom'],
-              ...args['color-top']
+            properties.vertex_colors.push(
+              ...args.color_bottom,
+              ...args.color_top
             );
             properties.vertices.push(
-              args['size-bottom'] * Math.sin(point_rotation),
+              args.size_bottom * Math.sin(point_rotation),
               0,
-              args['size-bottom'] * Math.cos(point_rotation),
-              args['size-top'] * Math.sin(next_rotation),
+              args.size_bottom * Math.cos(point_rotation),
+              args.size_top * Math.sin(next_rotation),
               args.length,
-              args['size-top'] * Math.cos(next_rotation)
+              args.size_top * Math.cos(next_rotation)
             );
         }
         webgl_entity_create({
@@ -3543,15 +3542,15 @@ function webgl_primitive_particle(args){
     const particle = args.particle;
     webgl_particle_create(args.id, particle);
 
-    for(const entity in args.entities){
+    for(const entity of args.entities){
         const vertices = [];
-        const vertexcount = args.entities[entity]['vertex-repeat'];
-        delete args.entities[entity]['vertex-repeat'];
+        const vertexcount = entity.vertex_repeat;
+        delete entity.vertex_repeat;
         for(let vertex = 0; vertex <= vertexcount; vertex++){
             vertices.push(
-              particle['x-min'] + Math.random() * (particle['x-max'] - particle['x-min']),
-              particle['y-min'] + Math.random() * (particle['y-max'] - particle['y-min']),
-              particle['z-min'] + Math.random() * (particle['z-max'] - particle['z-min'])
+              particle.x_min + Math.random() * (particle.x_max - particle.x_min),
+              particle.y_min + Math.random() * (particle.y_max - particle.y_min),
+              particle.z_min + Math.random() * (particle.z_max - particle.z_min)
             );
         }
 
@@ -3559,12 +3558,12 @@ function webgl_primitive_particle(args){
           'entities': [
             {
               ...webgl_prefab_args(args),
-              ...args.entities[entity],
-              'attach-to': args.character,
-              'attach-type': 'webgl_characters',
+              ...entity,
+              'attach_to': args.character,
+              'attach_type': 'webgl_characters',
               'collision': false,
               'particle': args.id,
-              'vertex-colors': args.entities[entity]['vertex-colors'] || webgl_vertexcolorarray({
+              'vertex_colors': entity.vertex_colors || webgl_vertexcolorarray({
                 'vertexcount': 1,
               }),
               'vertices': vertices,
@@ -3582,8 +3581,8 @@ function webgl_primitive_stars(args){
         'character': webgl_character_id,
         'color': [1, 1, 1, 1],
         'groups': [],
-        'height-limit': 1,
-        'point-size': 500,
+        'height_limit': 1,
+        'point_size': 500,
         'prefix': entity_id_count,
         'radius': 250,
         'range': 100,
@@ -3599,7 +3598,7 @@ function webgl_primitive_stars(args){
         const sin_phi = Math.sin(phi);
         const radius = args.radius - Math.random() * args.range;
         const star_y = radius * sin_phi * Math.sin(theta);
-        if(star_y < radius - radius * 2 * args['height-limit']){
+        if(star_y < radius - radius * 2 * args.height_limit){
             continue;
         }
         star_points.push(
@@ -3614,16 +3613,16 @@ function webgl_primitive_stars(args){
       'entities': [
         {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z,
           'collision': false,
-          'draw-mode': 'POINTS',
+          'draw_mode': 'POINTS',
           'id': args.prefix,
-          'point-size': args['point-size'],
-          'vertex-colors': star_colors,
+          'point_size': args.point_size,
+          'vertex_colors': star_colors,
           'vertices': star_points,
         },
       ],
@@ -3638,53 +3637,53 @@ function webgl_primitive_terrain(args){
         'character': webgl_character_id,
         'colors': [],
         'groups': [],
-        'height-random': 10,
+        'height_random': 10,
         'heights': [],
         'prefix': entity_id_count,
-        'tiles-x': 10,
-        'tiles-x-size': 10,
-        'tiles-z': 10,
-        'tiles-z-size': 10,
+        'tiles_x': 10,
+        'tiles_x_size': 10,
+        'tiles_z': 10,
+        'tiles_z_size': 10,
       },
     });
 
-    const color_count = args['tiles-x'] * (args['tiles-z'] + 1) * 4 + 1;
+    const color_count = args.tiles_x * (args.tiles_z + 1) * 4 + 1;
     while(args.colors.length < color_count){
         args.colors.push(...webgl_vertexcolorarray({
           'vertexcount': 1,
         }));
     }
-    const height_count = args['tiles-x'] * args['tiles-z'] + args['tiles-x'] + 1;
+    const height_count = args.tiles_x * args.tiles_z + args.tiles_x + 1;
     while(args.heights.length < height_count){
-        args.heights.push(Math.random() * args['height-random']);
+        args.heights.push(Math.random() * args.height_random);
     }
 
     let x_direction = -1;
     const points = [];
     const point_colors = [];
-    const z_start = -args['tiles-z-size'] * (args['tiles-z'] + 2) / 2;
+    const z_start = -args.tiles_z_size * (args.tiles_z + 2) / 2;
 
-    for(let tile_z = 0; tile_z <= args['tiles-z']; tile_z++){
-        const z_tile = tile_z * args['tiles-z'] * 4;
-        const x_start = args['tiles-x-size'] * args['tiles-x'] * x_direction / 2;
-        const z_offset = z_start + tile_z * args['tiles-z-size'];
+    for(let tile_z = 0; tile_z <= args.tiles_z; tile_z++){
+        const z_tile = tile_z * args.tiles_z * 4;
+        const x_start = args.tiles_x_size * args.tiles_x * x_direction / 2;
+        const z_offset = z_start + tile_z * args.tiles_z_size;
         point_colors.push(
           args.colors[z_tile], args.colors[z_tile + 1], args.colors[z_tile + 2], args.colors[z_tile + 3],
           args.colors[z_tile], args.colors[z_tile + 1], args.colors[z_tile + 2], args.colors[z_tile + 3],
         );
 
-        for(let tile_x = 0; tile_x <= args['tiles-x']; tile_x++){
+        for(let tile_x = 0; tile_x <= args.tiles_x; tile_x++){
             const x_tile = z_tile + tile_x * 4;
-            const x_offset = x_start + args['tiles-x-size'] * tile_x * -x_direction;
+            const x_offset = x_start + args.tiles_x_size * tile_x * -x_direction;
             if(x_direction === 1){
                 points.push(
-                  x_offset, args.heights[tile_z * args['tiles-z'] + tile_x], z_offset + args['tiles-z-size'],
-                  x_offset, args.heights[(tile_z - 1) * args['tiles-z'] + tile_x], z_offset,
+                  x_offset, args.heights[tile_z * args.tiles_z + tile_x], z_offset + args.tiles_z_size,
+                  x_offset, args.heights[(tile_z - 1) * args.tiles_z + tile_x], z_offset,
                 );
             }else{
                 points.push(
-                  x_offset, args.heights[tile_z * args['tiles-z'] - tile_x], z_offset,
-                  x_offset, args.heights[(tile_z + 1) * args['tiles-z'] - tile_x], z_offset + args['tiles-z-size'],
+                  x_offset, args.heights[tile_z * args.tiles_z - tile_x], z_offset,
+                  x_offset, args.heights[(tile_z + 1) * args.tiles_z - tile_x], z_offset + args.tiles_z_size,
                 );
             }
             point_colors.push(
@@ -3701,15 +3700,15 @@ function webgl_primitive_terrain(args){
       'entities': [
         {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z,
           'collision': false,
-          'draw-mode': 'TRIANGLE_STRIP',
+          'draw_mode': 'TRIANGLE_STRIP',
           'id': args.prefix,
-          'vertex-colors': point_colors,
+          'vertex_colors': point_colors,
           'vertices': points,
         },
       ],
@@ -3719,7 +3718,7 @@ function webgl_primitive_terrain(args){
 
 function webgl_random_vertex(entity){
     const position = webgl_get_position(entity);
-    const vertex = core_random_integer(entity['vertices-length']) * 3;
+    const vertex = core_random_integer(entity.vertices_length) * 3;
     return {
       'x': position.x + entity.vertices[vertex],
       'y': position.y + entity.vertices[vertex + 1],
@@ -3841,7 +3840,7 @@ function webgl_shader(args){
     }
     const uniforms = webgl_shaders[args.id].uniforms;
     for(const uniform in args.uniforms){
-        uniforms[uniform] = webgl.getUniformLocation(
+        uniforms[args.uniforms[uniform]] = webgl.getUniformLocation(
           program,
           args.uniforms[uniform]
         );
@@ -3866,14 +3865,14 @@ function webgl_stat_modify(args){
 
     const target = args.target;
     if(webgl_character_level(target) < 0
-      && (args.stat === 'level-xp' || args.stat === 'life')){
+      && (args.stat === 'level_xp' || args.stat === 'life')){
         return;
     }
 
-    if(args.stat.startsWith('rotate-')
-      || args.stat.startsWith('camera-rotate-')){
+    if(args.stat.startsWith('rotate_')
+      || args.stat.startsWith('camera_rotate_')){
         const rotate_args = {
-          'camera': args.stat.startsWith('camera-rotate-'),
+          'camera': args.stat.startsWith('camera_rotate_'),
           'character': target.id,
           'pointer': false,
           'set': args.set,
@@ -3881,16 +3880,16 @@ function webgl_stat_modify(args){
         rotate_args[args.stat.at(-1)] = args.value;
         webgl_camera_rotate(rotate_args);
 
-    }else if(args.stat === 'vertex-colors'){
-        target['vertex-colors'] = core_type(args.value) === 'array'
+    }else if(args.stat === 'vertex_colors'){
+        target.vertex_colors = core_type(args.value) === 'array'
           ? args.value
           : webgl_vertexcolorarray();
         webgl.bindVertexArray(target.vao);
         webgl_buffer_set({
           'attribute': webgl_shaders.default.attributes.vertexColor,
           'data': webgl_vertexcolorarray({
-            'colors': target['vertex-colors'],
-            'vertexcount': target['vertices-length'],
+            'colors': target.vertex_colors,
+            'vertexcount': target.vertices_length,
           }),
           'size': 4,
         });
@@ -3912,9 +3911,9 @@ function webgl_stat_modify(args){
           ? args.value
           : target[args.stat] + args.value;
 
-        if(args.stat === 'level-xp'){
-            while(target['level-xp'] >= Math.floor(target.level + 1) * 1e3){
-                target['level-xp'] -= Math.floor(target.level + 1) * 1e3;
+        if(args.stat === 'level_xp'){
+            while(target.level_xp >= Math.floor(target.level + 1) * 1e3){
+                target.level_xp -= Math.floor(target.level + 1) * 1e3;
                 target.level++;
             }
 
@@ -3931,8 +3930,8 @@ function webgl_stat_modify(args){
 
                     const axes = 'xyz';
                     for(const axis in axes){
-                        target['change-rotate-' + axes[axis]] = 0;
-                        target['change-position-' + axes[axis]] = 0;
+                        target['change_rotate_' + axes[axis]] = 0;
+                        target['change_position_' + axes[axis]] = 0;
                     }
 
                 }else{
@@ -3942,7 +3941,7 @@ function webgl_stat_modify(args){
             }else{
                 target.life = Math.min(
                   target.life,
-                  target['life-max']
+                  target.life_max
                 );
             }
         }
@@ -3960,26 +3959,26 @@ function webgl_texture_animate(id){
     const image = core_images[texture.image];
 
     const width = image.width;
-    let offset_x = texture['offset-x'] + texture['speed-x'];
+    let offset_x = texture.offset_x + texture.speed_x;
     if(offset_x < 0){
         offset_x = width;
 
     }else if(offset_x >= width){
         offset_x = 0;
     }
-    texture['offset-x'] = offset_x;
+    texture.offset_x = offset_x;
 
     const height = image.height;
-    let offset_y = texture['offset-y'] + texture['speed-y'];
+    let offset_y = texture.offset_y + texture.speed_y;
     if(offset_y < 0){
         offset_y = height;
 
     }else if(offset_y >= height){
         offset_y = 0;
     }
-    texture['offset-y'] = offset_y;
+    texture.offset_y = offset_y;
 
-    const canvas = core_elements['texture-' + id].getContext('2d');
+    const canvas = core_elements['texture_' + id].getContext('2d');
     canvas.save();
     canvas.fillStyle = canvas.createPattern(
       image,
@@ -4013,7 +4012,7 @@ function webgl_texture_animate(id){
       webgl.RGBA,
       webgl.RGBA,
       webgl.UNSIGNED_BYTE,
-      core_elements['texture-' + id]
+      core_elements['texture_' + id]
     );
     webgl.generateMipmap(webgl.TEXTURE_2D);
 }
@@ -4060,7 +4059,7 @@ function webgl_texture_init(args){
     }
 
     if(split.length > 1){
-        const id = 'texture-' + args.id;
+        const id = 'texture_' + args.id;
         core_html({
           'parent': core_html({
             'parent': core_elements.repo_ui,
@@ -4079,10 +4078,10 @@ function webgl_texture_init(args){
           'type': 'canvas',
         });
         texture.image = image;
-        texture['offset-x'] = 0;
-        texture['offset-y'] = 0;
-        texture['speed-x'] = 0;
-        texture['speed-y'] = 0;
+        texture.offset_x = 0;
+        texture.offset_y = 0;
+        texture.speed_x = 0;
+        texture.speed_y = 0;
         texture.ready = true;
     }
 
@@ -4113,8 +4112,8 @@ function webgl_texture_init(args){
 
     if(texture.ready === true){
         webgl_texture_animate(args.id);
-        texture['speed-x'] = Number(split[1]);
-        texture['speed-y'] = split.length > 2 ? Number(split[2]) : 0;
+        texture.speed_x = Number(split[1]);
+        texture.speed_y = split.length > 2 ? Number(split[2]) : 0;
     }
 }
 
@@ -4125,8 +4124,8 @@ function webgl_tiles(args){
       'defaults': {
         'order': false,
         'repeat': false,
-        'tiles-max': 5,
-        'tiles-min': 1,
+        'tiles_max': 5,
+        'tiles_min': 1,
       },
     });
 
@@ -4153,22 +4152,22 @@ function webgl_tiles(args){
         }
 
     }else{
-        const tile_count = core_random_integer(args['tiles-max'] - args['tiles-min'] + 1) + args['tiles-min'];
+        const tile_count = core_random_integer(args.tiles_max - args.tiles_min + 1) + args.tiles_min;
         for(let tile = 0; tile < tile_count; tile++){
             tiles.push(core_random_integer(args.tiles.length));
         }
     }
 
     const prefab_args = webgl_prefab_args(args);
-    let tile_offset_x = prefab_args['position-x'];
-    let tile_offset_y = prefab_args['position-y'];
-    let tile_offset_z = prefab_args['position-z'];
-    let tile_rotate_x = prefab_args['rotate-x'];
-    let tile_rotate_y = prefab_args['rotate-y'];
-    let tile_rotate_z = prefab_args['rotate-z'];
+    let tile_offset_x = prefab_args.position_x;
+    let tile_offset_y = prefab_args.position_y;
+    let tile_offset_z = prefab_args.position_z;
+    let tile_rotate_x = prefab_args.rotate_x;
+    let tile_rotate_y = prefab_args.rotate_y;
+    let tile_rotate_z = prefab_args.rotate_z;
 
     for(const tile in tiles){
-        const prefix = args.prefix + '-' + tile + '-';
+        const prefix = args.prefix + '_' + tile + '_';
 
         for(const path in args.tiles[tiles[tile]].paths){
             const path_object = {
@@ -4178,14 +4177,14 @@ function webgl_tiles(args){
             const points = args.tiles[tiles[tile]].paths[path].points;
             for(const point in points){
                 const point_object = {};
-                if(points[point]['position-x'] !== void 0){
-                    point_object['position-x'] = tile_offset_x + points[point]['position-x'];
+                if(points[point].position_x !== void 0){
+                    point_object.position_x = tile_offset_x + points[point].position_x;
                 }
-                if(points[point]['position-y'] !== void 0){
-                    point_object['position-y'] = tile_offset_y + points[point]['position-y'];
+                if(points[point].position_y !== void 0){
+                    point_object.position_y = tile_offset_y + points[point].position_y;
                 }
-                if(points[point]['position-z'] !== void 0){
-                    point_object['position-z'] = tile_offset_z + points[point]['position-z'];
+                if(points[point].position_z !== void 0){
+                    point_object.position_z = tile_offset_z + points[point].position_z;
                 }
                 path_object.points.push(point_object);
             }
@@ -4198,13 +4197,13 @@ function webgl_tiles(args){
             webgl_character_init({
               ...character_object,
               'id': prefix + character_object.id,
-              'path-id': character_object['path-id'] !== ''
-                ? prefix + character_object['path-id']
+              'path_id': character_object.path_id !== ''
+                ? prefix + character_object.path_id
                 : '',
               'spawn': {
-                'position-x': tile_offset_x + (character_object['position-x'] || 0),
-                'position-y': tile_offset_y + (character_object['position-y'] || 0),
-                'position-z': tile_offset_z + (character_object['position-z'] || 0),
+                'position_x': tile_offset_x + (character_object.position_x || 0),
+                'position_y': tile_offset_y + (character_object.position_y || 0),
+                'position_z': tile_offset_z + (character_object.position_z || 0),
                 ...spawn,
               },
             });
@@ -4217,14 +4216,14 @@ function webgl_tiles(args){
                 {
                   ...prefab_args,
                   ...entities[entity],
-                  'attach-to': args.character,
-                  'attach-type': 'webgl_characters',
-                  'attach-x': tile_offset_x + (entities[entity]['attach-x'] || 0),
-                  'attach-y': tile_offset_y + (entities[entity]['attach-y'] || 0),
-                  'attach-z': tile_offset_z + (entities[entity]['attach-z'] || 0),
+                  'attach_to': args.character,
+                  'attach_type': 'webgl_characters',
+                  'attach_x': tile_offset_x + (entities[entity].attach_x || 0),
+                  'attach_y': tile_offset_y + (entities[entity].attach_y || 0),
+                  'attach_z': tile_offset_z + (entities[entity].attach_z || 0),
                   'id': prefix + entity,
-                  'path-id': entities[entity]['path-id'] !== ''
-                    ? prefix + entities[entity]['path-id']
+                  'path_id': entities[entity].path_id !== ''
+                    ? prefix + entities[entity].path_id
                     : '',
                 },
               ],
@@ -4243,49 +4242,49 @@ function webgl_tiles(args){
                 ? prefix + prefabs[prefab].properties.character
                 : args.character,
               'prefix': prefix + (prefabs[prefab].properties.prefix || entity_id_count),
-              'position-x': (prefabs[prefab].properties['position-x'] || 0) + (attached
+              'position_x': (prefabs[prefab].properties.position_x || 0) + (attached
                 ? 0
                 : tile_offset_x),
-              'position-y': (prefabs[prefab].properties['position-y'] || 0) + (attached
+              'position_y': (prefabs[prefab].properties.position_y || 0) + (attached
                 ? 0
                 : tile_offset_y),
-              'position-z': (prefabs[prefab].properties['position-z'] || 0) + (attached
+              'position_z': (prefabs[prefab].properties.position_z || 0) + (attached
                 ? 0
                 : tile_offset_z),
             });
         }
 
-        if(args.tiles[tiles[tile]]['attach-x'] !== void 0){
-            tile_offset_x += args.tiles[tiles[tile]]['attach-x'];
+        if(args.tiles[tiles[tile]].attach_x !== void 0){
+            tile_offset_x += args.tiles[tiles[tile]].attach_x;
         }
-        if(args.tiles[tiles[tile]]['attach-y'] !== void 0){
-            tile_offset_y += args.tiles[tiles[tile]]['attach-y'];
+        if(args.tiles[tiles[tile]].attach_y !== void 0){
+            tile_offset_y += args.tiles[tiles[tile]].attach_y;
         }
-        if(args.tiles[tiles[tile]]['attach-z'] !== void 0){
-            tile_offset_z += args.tiles[tiles[tile]]['attach-z'];
+        if(args.tiles[tiles[tile]].attach_z !== void 0){
+            tile_offset_z += args.tiles[tiles[tile]].attach_z;
         }
-        if(args.tiles[tiles[tile]]['attach-rotate-x'] !== void 0){
+        if(args.tiles[tiles[tile]].attach_rotate_x !== void 0){
             const max = tile_rotate_x > 180
               ? 360
               : 90;
             tile_rotate_x = math_clamp({
               'max': max,
               'min': max - 90,
-              'value': tile_rotate_x + args.tiles[tiles[tile]]['attach-rotate-x'],
+              'value': tile_rotate_x + args.tiles[tiles[tile]].attach_rotate_x,
             });
         }
-        if(args.tiles[tiles[tile]]['attach-rotate-y'] !== void 0){
+        if(args.tiles[tiles[tile]].attach_rotate_y !== void 0){
             tile_rotate_y = math_clamp({
               'max': 360,
               'min': 0,
-              'value': tile_rotate_y + args.tiles[tiles[tile]]['attach-rotate-y'],
+              'value': tile_rotate_y + args.tiles[tiles[tile]].attach_rotate_y,
             });
         }
-        if(args.tiles[tiles[tile]]['attach-rotate-z'] !== void 0){
+        if(args.tiles[tiles[tile]].attach_rotate_z !== void 0){
             tile_rotate_z = math_clamp({
               'max': 360,
               'min': 0,
-              'value': tile_rotate_z + args.tiles[tiles[tile]]['attach-rotate-z'],
+              'value': tile_rotate_z + args.tiles[tiles[tile]].attach_rotate_z,
             });
         }
     }
@@ -4294,39 +4293,39 @@ function webgl_tiles(args){
 function webgl_uniform_update(){
     const uniforms = webgl_shaders.default.uniforms;
     webgl.uniform3fv(
-      uniforms['ambient-color'],
-      webgl_properties['ambient-color']
+      uniforms.ambient_color,
+      webgl_properties.ambient_color
     );
-    const clearcolor = webgl_properties['clear-color'];
+    const clear_color = webgl_properties.clear_color;
     webgl.uniform3fv(
-      uniforms['clear-color'],
-      clearcolor
+      uniforms.clear_color,
+      clear_color
     );
     webgl.clearColor(
-      clearcolor[0],
-      clearcolor[1],
-      clearcolor[2],
+      clear_color[0],
+      clear_color[1],
+      clear_color[2],
       1
     );
     webgl.uniform1i(
       uniforms.directional,
-      webgl_properties['directional-state']
+      webgl_properties.directional_state
     );
     webgl.uniform3fv(
-      uniforms['directional-color'],
-      webgl_properties['directional-color']
+      uniforms.directional_color,
+      webgl_properties.directional_color
     );
     webgl.uniform3fv(
-      uniforms['directional-vector'],
-      webgl_properties['directional-vector']
+      uniforms.directional_vector,
+      webgl_properties.directional_vector
     );
     webgl.uniform1f(
-      uniforms['fog-end'],
-      webgl_properties['fog-end']
+      uniforms.fog_end,
+      webgl_properties.fog_end
     );
     webgl.uniform1f(
-      uniforms['fog-start'],
-      webgl_properties['fog-start']
+      uniforms.fog_start,
+      webgl_properties.fog_start
     );
 }
 
@@ -4340,35 +4339,35 @@ function webgl_vehicle_toggle(args){
     });
 
     const vehicle = webgl_characters[args.vehicle];
-    if(vehicle?.['vehicle-stats'].lock === 3){
+    if(vehicle?.vehicle_stats.lock === 3){
         return;
     }
 
     const current = webgl_characters[args.id].vehicle;
     if(current){
-        if(webgl_characters[current]['vehicle-stats'].lock === 2){
+        if(webgl_characters[current].vehicle_stats.lock === 2){
             return;
         }
         webgl_characters[args.id].vehicle = false;
-        vehicle['vehicle-stats'].character = false;
-        webgl_characters[args.id]['camera-rotate-y'] = webgl_characters[args.id]['rotate-y'];
+        vehicle.vehicle_stats.character = false;
+        webgl_characters[args.id].camera_rotate_y = webgl_characters[args.id].rotate_y;
     }
     if(current !== args.vehicle){
         if(args.vehicle === false
-          || vehicle['vehicle-stats'] === false
-          || vehicle['vehicle-stats'].lock === 1
-          || vehicle['vehicle-stats'].character){
+          || vehicle.vehicle_stats === false
+          || vehicle.vehicle_stats.lock === 1
+          || vehicle.vehicle_stats.character){
             return;
         }
 
         webgl_characters[args.id].vehicle = args.vehicle;
-        vehicle['vehicle-stats'].character = args.id;
+        vehicle.vehicle_stats.character = args.id;
         const axes = 'xyz';
         for(const axis in axes){
-            webgl_characters[args.id]['change-rotate-' + axes[axis]] = 0;
-            webgl_characters[args.id]['change-position-' + axes[axis]] = 0;
+            webgl_characters[args.id]['change_rotate_' + axes[axis]] = 0;
+            webgl_characters[args.id]['change_position_' + axes[axis]] = 0;
         }
-        webgl_characters[args.id]['camera-rotate-y'] = vehicle['rotate-y'];
+        webgl_characters[args.id].camera_rotate_y = vehicle.rotate_y;
     }
 }
 

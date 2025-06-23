@@ -6,23 +6,23 @@ function prefabs_webgl_cuboid_tree(args){
       'defaults': {
         'character': webgl_character_id,
         'groups': [],
-        'leaf-collision': true,
-        'leaf-color': [
+        'leaf_collision': true,
+        'leaf_color': [
           0, 1, 0, 1,
         ],
-        'leaf-size-x': 10,
-        'leaf-size-y': 10,
-        'leaf-size-z': 10,
-        'leaf-texture': 'lavaleaf.png',
+        'leaf_size_x': 10,
+        'leaf_size_y': 10,
+        'leaf_size_z': 10,
+        'leaf_texture': 'lavaleaf.png',
         'prefix': entity_id_count,
-        'trunk-collision': true,
-        'trunk-color': [
+        'trunk_collision': true,
+        'trunk_color': [
           .8, .4, 0, 1,
         ],
-        'trunk-size-x': 2,
-        'trunk-size-y': 10,
-        'trunk-size-z': 2,
-        'trunk-texture': 'wood.png',
+        'trunk_size_x': 2,
+        'trunk_size_y': 10,
+        'trunk_size_z': 2,
+        'trunk_texture': 'wood.png',
       },
     });
 
@@ -30,28 +30,28 @@ function prefabs_webgl_cuboid_tree(args){
     webgl_primitive_cuboid({
       ...prefab_args,
       'all': {
-        'collision': args['trunk-collision'],
-        'texture': args['trunk-texture'],
-        'texture-y': 2,
-        'vertex-colors': args['trunk-color'],
+        'collision': args.trunk_collision,
+        'texture': args.trunk_texture,
+        'texture_y': 2,
+        'vertex_colors': args.trunk_color,
       },
       'bottom': {
         'exclude': true,
       },
       'character': args.character,
       'left': {
-        'texture-align': '10110100',
+        'texture_align': '10110100',
       },
-      'position-x': prefab_args['position-x'],
-      'position-y': prefab_args['position-y'] + args['trunk-size-y'] / 2,
-      'position-z': prefab_args['position-z'],
-      'prefix': args.prefix + '-trunk',
+      'position_x': prefab_args.position_x,
+      'position_y': prefab_args.position_y + args.trunk_size_y / 2,
+      'position_z': prefab_args.position_z,
+      'prefix': args.prefix + '_trunk',
       'right': {
-        'texture-align': '10110100',
+        'texture_align': '10110100',
       },
-      'size-x': args['trunk-size-x'],
-      'size-y': args['trunk-size-y'],
-      'size-z': args['trunk-size-z'],
+      'size_x': args.trunk_size_x,
+      'size_y': args.trunk_size_y,
+      'size_z': args.trunk_size_z,
       'top': {
         'exclude': true,
       },
@@ -59,16 +59,16 @@ function prefabs_webgl_cuboid_tree(args){
     webgl_primitive_cuboid({
       ...prefab_args,
       'all': {
-        'collision': args['leaf-collision'],
-        'texture': args['leaf-texture'],
-        'vertex-colors': args['leaf-color'],
+        'collision': args.leaf_collision,
+        'texture': args.leaf_texture,
+        'vertex_colors': args.leaf_color,
       },
       'character': args.character,
-      'position-y': prefab_args['position-y'] + args['trunk-size-y'] + args['leaf-size-y'] / 2,
-      'prefix': args.prefix + '-leaf',
-      'size-x': args['leaf-size-x'],
-      'size-y': args['leaf-size-y'],
-      'size-z': args['leaf-size-z'],
+      'position_y': prefab_args.position_y + args.trunk_size_y + args.leaf_size_y / 2,
+      'prefix': args.prefix + '_leaf',
+      'size_x': args.leaf_size_x,
+      'size_y': args.leaf_size_y,
+      'size_z': args.leaf_size_z,
     });
 }
 
@@ -80,57 +80,57 @@ function prefabs_webgl_frustum_tree(args){
         'character': webgl_character_id,
         'groups': [],
         'height': 20,
-        'height-range': 0,
-        'leaf-color-bottom': [
+        'height_range': 0,
+        'leaf_color_bottom': [
           .05, .15, .05, 1,
         ],
-        'leaf-color-top': [
+        'leaf_color_top': [
           .1, .3, .1, 1,
         ],
-        'leaf-count': 3,
-        'leaf-points': 3,
-        'leaf-separate': 4,
-        'leaf-size': 4,
+        'leaf_count': 3,
+        'leaf_points': 3,
+        'leaf_separate': 4,
+        'leaf_size': 4,
         'prefix': entity_id_count,
-        'trunk-color': [
+        'trunk_color': [
           .4, .2, 0, 1,
         ],
-        'trunk-points': 4,
-        'trunk-size': 1,
+        'trunk_points': 4,
+        'trunk_size': 1,
       },
     });
 
-    const height = Math.random() * args['height-range'] + args.height;
+    const height = Math.random() * args.height_range + args.height;
     const prefab_args = webgl_prefab_args(args);
 
     webgl_primitive_frustum({
       ...prefab_args,
       'character': args.character,
-      'color-bottom': args['trunk-color'],
-      'color-top': args['trunk-color'],
+      'color_bottom': args.trunk_color,
+      'color_top': args.trunk_color,
       'length': height,
-      'points': args['trunk-points'],
-      'prefix': args.prefix + '-trunk',
-      'size-bottom': args['trunk-size'],
-      'size-top': 0,
+      'points': args.trunk_points,
+      'prefix': args.prefix + '_trunk',
+      'size_bottom': args.trunk_size,
+      'size_top': 0,
     });
 
-    const leaf_height = height / args['leaf-count'];
-    for(let i = 0; i < args['leaf-count']; i++){
+    const leaf_height = height / args.leaf_count;
+    for(let i = 0; i < args.leaf_count; i++){
         webgl_primitive_frustum({
           ...prefab_args,
           'bottom': args.bottom,
           'character': args.character,
-          'color-bottom': args['leaf-color-bottom'],
-          'color-top': args['leaf-color-top'],
+          'color_bottom': args.leaf_color_bottom,
+          'color_top': args.leaf_color_top,
           'length': leaf_height,
-          'points': args['leaf-points'],
-          'position-x': prefab_args['position-x'],
-          'position-y': prefab_args['position-y'] + height - leaf_height - (args['leaf-separate'] * i),
-          'position-z': prefab_args['position-z'],
-          'prefix': args.prefix + '-leaf-' + i,
-          'size-bottom': args['leaf-size'],
-          'size-top': 0,
+          'points': args.leaf_points,
+          'position_x': prefab_args.position_x,
+          'position_y': prefab_args.position_y + height - leaf_height - (args.leaf_separate * i),
+          'position_z': prefab_args.position_z,
+          'prefix': args.prefix + '_leaf_' + i,
+          'size_bottom': args.leaf_size,
+          'size_top': 0,
         });
     }
 }
@@ -161,25 +161,25 @@ function prefabs_webgl_humanoid(args){
         -2, 11, 0,
         2, 11, 0,
       ],
-      'arm-left': [
+      'arm_left': [
         -3, 17, 0,
         -3, 14, 1,
         -3, 13, 3,
         -3, 12, 4,
       ],
-      'arm-right': [
+      'arm_right': [
         3, 17, 0,
         3, 14, 1,
         3, 13, 3,
         3, 12, 4,
       ],
-      'leg-left': [
+      'leg_left': [
         -2, 11, 0,
         -2, 6, 1,
         -2, 0, 0,
         -2, 0, 1,
       ],
-      'leg-right': [
+      'leg_right': [
         2, 11, 0,
         2, 6, 1,
         2, 0, 0,
@@ -198,15 +198,15 @@ function prefabs_webgl_humanoid(args){
           'entities': [
             {
               ...prefab_args,
-              'attach-to': args.character,
-              'attach-type': 'webgl_characters',
-              'attach-x': prefab_args['position-x'],
-              'attach-y': prefab_args['position-y'],
-              'attach-z': prefab_args['position-z'],
-              'draw-mode': 'LINE_STRIP',
+              'attach_to': args.character,
+              'attach_type': 'webgl_characters',
+              'attach_x': prefab_args.position_x,
+              'attach_y': prefab_args.position_y,
+              'attach_z': prefab_args.position_z,
+              'draw_mode': 'LINE_STRIP',
               'collision': false,
-              'id': args.prefix + '-' + part,
-              'vertex-colors': webgl_vertexcolorarray({
+              'id': args.prefix + '_' + part,
+              'vertex_colors': webgl_vertexcolorarray({
                 'vertexcount': bodyparts[part].length / 3,
               }),
               'vertices': bodyparts[part],
@@ -245,15 +245,15 @@ function prefabs_webgl_lines_path(args){
     const vertex_colors = [];
 
     for(const point in webgl_paths[args.path].points){
-        const point_x = webgl_paths[args.path].points[point]['position-x'];
+        const point_x = webgl_paths[args.path].points[point].position_x;
         if(point_x !== void 0){
             x = point_x;
         }
-        const point_y = webgl_paths[args.path].points[point]['position-y'];
+        const point_y = webgl_paths[args.path].points[point].position_y;
         if(point_y !== void 0){
             y = point_y;
         }
-        const point_z = webgl_paths[args.path].points[point]['position-z'];
+        const point_z = webgl_paths[args.path].points[point].position_z;
         if(point_z !== void 0){
             z = point_z;
         }
@@ -270,16 +270,16 @@ function prefabs_webgl_lines_path(args){
       'entities': [
         {
           ...webgl_prefab_args(args),
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'draw-mode': vertices.length === 3
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'draw_mode': vertices.length === 3
             ? 'POINTS'
             : (webgl_paths[args.path].end !== 'loop'
               ? 'LINE_STRIP'
               : 'LINE_LOOP'),
           'collision': false,
           'id': args.prefix,
-          'vertex-colors': vertex_colors,
+          'vertex_colors': vertex_colors,
           'vertices': vertices,
         },
       ],
@@ -291,29 +291,29 @@ function prefabs_webgl_lines_shrub(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'base-color': [
+        'base_color': [
           0, 0, 0, 1,
         ],
         'character': webgl_character_id,
-        'draw-mode': 'LINE_STRIP',
+        'draw_mode': 'LINE_STRIP',
         'groups': [],
-        'leaf-color': [
+        'leaf_color': [
           1, 1, 1, 1,
         ],
-        'leaf-distance': .5,
+        'leaf_distance': .5,
         'points': 10,
         'prefix': entity_id_count,
         'type': 'range',
-        'x-max': 1,
-        'x-min': -1,
-        'y-max': 1,
-        'y-min': -1,
-        'z-max': 1,
-        'z-min': -1,
+        'x_max': 1,
+        'x_min': -1,
+        'y_max': 1,
+        'y_min': -1,
+        'z_max': 1,
+        'z_min': -1,
       },
     });
 
-    const colors = [...args['base-color']];
+    const colors = [...args.base_color];
     const points = [
       0, 0, 0,
     ];
@@ -322,9 +322,9 @@ function prefabs_webgl_lines_shrub(args){
     let z = 0;
 
     for(let i = 1; i < args.points; i++){
-        const random_x = Math.random() * (args['x-max'] - args['x-min']) + args['x-min'];
-        const random_y = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
-        const random_z = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
+        const random_x = Math.random() * (args.x_max - args.x_min) + args.x_min;
+        const random_y = Math.random() * (args.y_max - args.y_min) + args.y_min;
+        const random_z = Math.random() * (args.z_max - args.z_min) + args.z_min;
 
         if(args.type === 'range'){
             x = random_x;
@@ -344,11 +344,11 @@ function prefabs_webgl_lines_shrub(args){
             'x1': x,
             'y1': y,
             'z1': z,
-          }) < args['leaf-distance']){
-            colors.push(...args['base-color']);
+          }) < args.leaf_distance){
+            colors.push(...args.base_color);
 
         }else{
-            colors.push(...args['leaf-color']);
+            colors.push(...args.leaf_color);
         }
     }
 
@@ -357,15 +357,15 @@ function prefabs_webgl_lines_shrub(args){
       'entities': [
         {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'],
-          'draw-mode': prefab_args['draw-mode'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z,
+          'draw_mode': prefab_args.draw_mode,
           'collision': false,
           'id': args.prefix,
-          'vertex-colors': colors,
+          'vertex_colors': colors,
           'vertices': points,
         },
       ],
@@ -379,46 +379,46 @@ function prefabs_webgl_lines_tree(args){
       'defaults': {
         'character': webgl_character_id,
         'groups': [],
-        'leaf-color': [
+        'leaf_color': [
           0, .5, 0, 1,
         ],
         'prefix': entity_id_count,
-        'trunk-branch-max': 4,
-        'trunk-branch-min': 0,
-        'trunk-color': [
+        'trunk_branch_max': 4,
+        'trunk_branch_min': 0,
+        'trunk_color': [
           .4, .2, 0, 1,
         ],
-        'trunk-count-max': 10,
-        'trunk-count-min': 1,
-        'trunk-length': 10,
-        'trunk-width-max': 2,
-        'trunk-width-min': 1,
+        'trunk_count_max': 10,
+        'trunk_count_min': 1,
+        'trunk_length': 10,
+        'trunk_width_max': 2,
+        'trunk_width_min': 1,
       },
     });
 
     const prefab_args = webgl_prefab_args(args);
     const properties = {
       ...prefab_args,
-      'attach-to': args.character,
-      'attach-type': 'webgl_characters',
-      'attach-x': prefab_args['position-x'],
-      'attach-y': prefab_args['position-y'],
-      'attach-z': prefab_args['position-z'],
+      'attach_to': args.character,
+      'attach_type': 'webgl_characters',
+      'attach_x': prefab_args.position_x,
+      'attach_y': prefab_args.position_y,
+      'attach_z': prefab_args.position_z,
       'collision': false,
-      'vertex-colors': args['trunk-color'],
+      'vertex_colors': args.trunk_color,
     };
 
-    const trunk_count = core_random_integer(args['trunk-count-max'] - args['trunk-count-min'] + 1) + args['trunk-count-min'];
-    let trunk_width = args['trunk-width-max'] / 2;
-    const trunk_width_decrease = (trunk_width - args['trunk-width-min'] / 2) / (trunk_count / 2);
+    const trunk_count = core_random_integer(args.trunk_count_max - args.trunk_count_min + 1) + args.trunk_count_min;
+    let trunk_width = args.trunk_width_max / 2;
+    const trunk_width_decrease = (trunk_width - args.trunk_width_min / 2) / (trunk_count / 2);
     for(let trunk = 0; trunk < trunk_count; trunk++){
-        properties.id = args.prefix + '-trunk-' + trunk;
+        properties.id = args.prefix + '_trunk_' + trunk;
         properties.billboard = args.billboard;
-        properties['rotate-x'] = 0;
-        properties['rotate-z'] = 0;
+        properties.rotate_x = 0;
+        properties.rotate_z = 0;
         properties.vertices = [
-          trunk_width, args['trunk-length'], 0,
-          -trunk_width, args['trunk-length'], 0,
+          trunk_width, args.trunk_length, 0,
+          -trunk_width, args.trunk_length, 0,
           -trunk_width, 0, 0,
           trunk_width, 0, 0,
         ];
@@ -429,17 +429,17 @@ function prefabs_webgl_lines_tree(args){
           'groups': args.groups,
         });
 
-        properties['attach-y'] += 10;
+        properties.attach_y += 10;
         trunk_width -= trunk_width_decrease;
 
-        const branch_count = core_random_integer(args['trunk-branch-max'] - args['trunk-branch-min'] + 1) + args['trunk-branch-min'];
-        const branch_length = args['trunk-length'] / 2;
+        const branch_count = core_random_integer(args.trunk_branch_max - args.trunk_branch_min + 1) + args.trunk_branch_min;
+        const branch_length = args.trunk_length / 2;
         const branch_width = trunk_width / 2;
         for(let branch = 0; branch < branch_count; branch++){
-            properties.id = args.prefix + '-trunk-' + trunk + '-branch-' + branch;
+            properties.id = args.prefix + '_trunk_' + trunk + '_branch_' + branch;
             properties.billboard = false;
-            properties['rotate-x'] = Math.random() * 45 + 90;
-            properties['rotate-z'] = Math.random() * 360;
+            properties.rotate_x = Math.random() * 45 + 90;
+            properties.rotate_z = Math.random() * 360;
             properties.vertices = [
               branch_width, branch_length, 0,
               -branch_width, branch_length, 0,
@@ -461,59 +461,59 @@ function prefabs_webgl_tree_2d(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'base-color': [
+        'base_color': [
           .4, .2, 0, 1,
         ],
         'character': webgl_character_id,
         'groups': [],
         'height': 5,
-        'height-range': 0,
-        'leaf-color': [
+        'height_range': 0,
+        'leaf_color': [
           .1, .3, .1, 1,
         ],
         'prefix': entity_id_count,
-        'width-base': 1,
-        'width-leaf': 6,
+        'width_base': 1,
+        'width_leaf': 6,
       },
     });
 
-    const height = Math.random() * args['height-range'] + args.height;
+    const height = Math.random() * args.height_range + args.height;
     const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
       'entities': [
         {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z,
           'billboard': prefab_args.billboard,
           'collision': false,
-          'id': args.prefix + '-base',
-          'vertex-colors': args['base-color'],
+          'id': args.prefix + '_base',
+          'vertex_colors': args.base_color,
           'vertices': [
-            args['width-base'] / 2, 0, -.1,
+            args.width_base / 2, 0, -.1,
             0, height * .9, -.1,
-            -args['width-base'] / 2, 0, -.1,
+            -args.width_base / 2, 0, -.1,
           ],
         },
         {
           ...prefab_args,
-          'attach-to': args.character,
-          'attach-type': 'webgl_characters',
-          'attach-x': prefab_args['position-x'],
-          'attach-y': prefab_args['position-y'],
-          'attach-z': prefab_args['position-z'],
+          'attach_to': args.character,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z,
           'billboard': prefab_args.billboard,
           'collision': false,
-          'draw-mode': 'TRIANGLES',
-          'id': args.prefix + '-leaf',
-          'vertex-colors': args['leaf-color'],
+          'draw_mode': 'TRIANGLES',
+          'id': args.prefix + '_leaf',
+          'vertex_colors': args.leaf_color,
           'vertices': [
-            args['width-leaf'] / 2, height * .1, 0,
+            args.width_leaf / 2, height * .1, 0,
             0, height, 0,
-            -args['width-leaf'] / 2, height * .1, 0,
+            -args.width_leaf / 2, height * .1, 0,
           ],
         },
       ],
