@@ -2060,7 +2060,7 @@ function webgl_level_init(args){
         webgl_character_init(level.characters[id]);
     }
     for(const prefab in level.prefabs){
-        globalThis[level.prefabs[prefab].type]?.(level.prefabs[prefab].properties);
+        globalThis[level.prefabs[prefab].type](level.prefabs[prefab].properties);
     }
 
     webgl_color_set({
@@ -2979,9 +2979,10 @@ function webgl_prefab_remake(args){
         }
     }
 
-    globalThis[args.prefab.type]?.(args.prefab.properties);
+    globalThis[args.prefab.type](args.prefab.properties);
 }
 
+// Required args: type
 function webgl_prefab_repeat(args){
     args = core_args({
       'args': args,
@@ -2990,7 +2991,6 @@ function webgl_prefab_repeat(args){
         'count': 1,
         'prefix': entity_id_count,
         'properties': {},
-        'type': '',
         'x-max': 0,
         'x-min': 0,
         'y-max': 0,
@@ -3017,7 +3017,7 @@ function webgl_prefab_repeat(args){
             args.properties.character = prefix;
             args.properties.prefix = prefix;
 
-            globalThis[args.type]?.(args.properties);
+            globalThis[args.type](args.properties);
         }
         return;
     }
@@ -3028,7 +3028,7 @@ function webgl_prefab_repeat(args){
         args.properties['position-y'] = Math.random() * (args['y-max'] - args['y-min']) + args['y-min'];
         args.properties['position-z'] = Math.random() * (args['z-max'] - args['z-min']) + args['z-min'];
 
-        globalThis[args.type]?.(args.properties);
+        globalThis[args.type](args.properties);
     }
 }
 
@@ -4236,7 +4236,7 @@ function webgl_tiles(args){
         for(const prefab in prefabs){
             const attached = prefabs[prefab].properties.character !== void 0;
 
-            globalThis[prefabs[prefab].type]?.({
+            globalThis[prefabs[prefab].type]({
               ...prefab_args,
               ...prefabs[prefab].properties,
               'character': attached
