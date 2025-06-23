@@ -2868,6 +2868,7 @@ function webgl_pick_entity(args){
         'y': core_pointer.y,
       },
     });
+    let returned = false;
 
     webgl_shader_use('picking');
     const color = webgl_scissor({
@@ -2881,42 +2882,36 @@ function webgl_pick_entity(args){
       'x': args.x,
       'y': args.y
     });
-    webgl_shader_use('default');
-    webgl_draw();
 
     if(color[0] !== 0
       || color[1] !== 0
       || color[2] !== 0){
-        let color_blue = color[2];
-        if(color_blue !== 0){
-            color_blue = core_round({
+        const color_blue = color[2] === 0
+          ? 0
+          : core_round({
               'decimals': 3,
-              'number': color_blue / 255,
+              'number': color[2] / 255,
             });
-        }
-        let color_green = color[1];
-        if(color_green !== 0){
-            color_green = core_round({
+        const color_green = color[1] === 0
+          ? 0
+          : core_round({
               'decimals': 3,
-              'number': color_green / 255,
+              'number': color[1] / 255,
             });
-        }
-        let color_red = color[0];
-        if(color_red !== 0){
-            color_red = core_round({
+        const color_red = color[0] === 0
+          ? 0
+          : core_round({
               'decimals': 3,
-              'number': color_red / 255,
+              'number': color[0] / 255,
             });
-        }
 
         for(const id in entity_entities){
             const entity = entity_entities[id];
-            const entity_color = entity.picking;
 
-            if(entity_color
-              && color_blue === entity_color[2]
-              && color_green === entity_color[1]
-              && color_red === entity_color[0]){
+            if(entity.picking
+              && color_blue === entity.picking[2]
+              && color_green === entity.picking[1]
+              && color_red === entity.picking[0]){
                 if(entity.picking_range > 0){
                     const position = webgl_get_position(entity);
                     const distance = math_distance({
@@ -2932,25 +2927,31 @@ function webgl_pick_entity(args){
                     }
                 }
 
-                if(args.cursor){
-                    webgl.canvas.style.cursor = 'pointer';
-
-                }else{
-                    webgl_event({
-                      'parent': entity,
-                      'target': webgl_characters[webgl_character_id],
-                    });
-                }
-                return entity;
+                returned = entity;
+                break;
             }
         }
     }
 
-    if(args.cursor){
+    if(returned !== false){
+        if(args.cursor){
+            webgl.canvas.style.cursor = 'pointer';
+
+        }else{
+            webgl_event({
+              'parent': returned,
+              'target': webgl_characters[webgl_character_id],
+            });
+        }
+
+    }else if(args.cursor){
         webgl.canvas.style.cursor = 'auto';
     }
 
-    return false;
+    webgl_shader_use('default');
+    webgl_draw();
+
+    return returned;
 }
 
 function webgl_prefab_args(args){
