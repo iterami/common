@@ -53,16 +53,16 @@ function test_function(args){
 function test_run(args){
     let results = '<tr class=header><td>Function<td>Args<td>Expected<td>Result<td>Test';
 
-    for(const test in args.tests){
+    for(const test of args.tests){
         const test_args = {};
         Object.assign(
           test_args,
-          args.tests[test]
+          test
         );
-        const args_type = core_type(args.tests[test].args);
+        const args_type = core_type(test.args);
         let args_json = '';
         if(args_type === 'object'){
-            test_args.args = {...args.tests[test].args};
+            test_args.args = {...test.args};
             const args_object = {};
             for(const arg in test_args.args){
                 if(core_type(test_args.args[arg]) === 'function'){
@@ -86,7 +86,7 @@ function test_run(args){
             args_json = test_trim(test_args.args.toString());
 
         }else{
-            test_args.args = args.tests[test].args;
+            test_args.args = test.args;
             args_json = JSON.stringify(
               test_args.args,
               void 0,
@@ -94,10 +94,10 @@ function test_run(args){
             );
         }
         const result = test_function(test_args);
-        const expect = core_type(args.tests[test].expect) === 'function'
-          ? test_trim(args.tests[test].expect.toString())
+        const expect = core_type(test.expect) === 'function'
+          ? test_trim(test.expect.toString())
           : JSON.stringify(
-            args.tests[test].expect,
+            test.expect,
             void 0,
             2
           );
@@ -108,7 +108,7 @@ function test_run(args){
         );
 
         results += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
-          + '<td><a href=' + args.link + args.tests[test].function + '.htm>' + args.tests[test].function + '()</a>'
+          + '<td><a href=' + args.link + test.function + '.htm>' + test.function + '()</a>'
           + '<td><pre>' + args_json
           + '</pre><td><pre>' + expect
           + '</pre><td><pre>' + result_json

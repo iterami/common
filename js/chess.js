@@ -166,11 +166,11 @@ function chess_new(args){
     }
 
     let threefold = '';
-    for(const rank in board){
-        for(const square in board[rank]){
-            threefold += board[rank][square].length === 0
+    for(const rank of board){
+        for(const square of rank){
+            threefold += square.length === 0
               ? ' '
-              : board[rank][square];
+              : square;
         }
     }
 
@@ -609,11 +609,11 @@ function chess_validate(args){
         }
 
         let threefold_string = '';
-        for(const rank in chess_test){
-            for(const square in chess_test[rank]){
-                threefold_string += chess_test[rank][square].length === 0
+        for(const rank of chess_test){
+            for(const square of rank){
+                threefold_string += square.length === 0
                   ? ' '
-                  : chess_test[rank][square];
+                  : square;
             }
         }
         if(game.threefold[threefold_string] === void 0){

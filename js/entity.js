@@ -34,19 +34,19 @@ function entity_create(args){
       'id': args.id,
     };
 
-    for(const type in entity_types_default){
+    for(const type of entity_types_default){
         entity_handle_defaults({
           'entity': entity,
           'id': args.id,
-          'type': entity_types_default[type],
+          'type': type,
         });
     }
 
-    for(const type in args.types){
+    for(const type of args.types){
         entity_handle_defaults({
           'entity': entity,
           'id': args.id,
-          'type': args.types[type],
+          'type': type,
         });
     }
 
@@ -57,11 +57,11 @@ function entity_create(args){
 
     entity_entities[args.id] = entity;
 
-    for(const type in entity_types_default){
-        entity_info[entity_types_default[type]].todo?.(entity);
+    for(const type of entity_types_default){
+        entity_info[type].todo?.(entity);
     }
-    for(const type in args.types){
-        entity_info[args.types[type]].todo?.(entity);
+    for(const type of args.types){
+        entity_info[type].todo?.(entity);
     }
 
     return entity;
@@ -75,28 +75,28 @@ function entity_group_add(args){
         ]);
     }
 
-    for(const entity in args.entities){
-        if(entity_groups[args.group][args.entities[entity]]){
+    for(const entity of args.entities){
+        if(entity_groups[args.group][entity]){
             return;
         }
 
-        entity_groups[args.group][args.entities[entity]] = true;
+        entity_groups[args.group][entity] = true;
 
         entity_groups._length[args.group]++;
     }
 }
 
 function entity_group_create(ids){
-    for(const id in ids){
-        entity_groups[ids[id]] = {};
-        entity_groups._length[ids[id]] = 0;
+    for(const id of ids){
+        entity_groups[id] = {};
+        entity_groups._length[id] = 0;
     }
 }
 
 // Required args: groups, todo
 function entity_group_modify(args){
-    for(const group in args.groups){
-        for(const entity in entity_groups[args.groups[group]]){
+    for(const group of args.groups){
+        for(const entity in entity_groups[group]){
             args.todo(entity_entities[entity]);
         }
     }
@@ -127,12 +127,12 @@ function entity_group_remove(args){
         return;
     }
 
-    for(const entity in args.entities){
-        if(!entity_groups[args.group][args.entities[entity]]){
+    for(const entity of args.entities){
+        if(!entity_groups[args.group][entity]){
             continue;
         }
 
-        delete entity_groups[args.group][args.entities[entity]];
+        delete entity_groups[args.group][entity];
         entity_groups._length[args.group]--;
         if(entity_info[args.group]){
             entity_info[args.group].count--;
@@ -186,12 +186,12 @@ function entity_handle_defaults(args){
         entity_info[args.type].count++;
     }
 
-    for(const group in entity_info[args.type].groups){
+    for(const group of entity_info[args.type].groups){
         entity_group_add({
           'entities': [
             args.id,
           ],
-          'group': entity_info[args.type].groups[group],
+          'group': group,
         });
     }
 }
@@ -210,8 +210,8 @@ function entity_remove(args){
       'entities': args.entities,
     });
 
-    for(const entity in args.entities){
-        delete entity_entities[args.entities[entity]];
+    for(const entity of args.entities){
+        delete entity_entities[entity];
     }
 }
 

@@ -68,8 +68,8 @@ function canvas_draw_path(args){
     }
 
     canvas.beginPath();
-    for(const vertex in args.vertices){
-        const data = [...args.vertices[vertex]];
+    for(const vertex of args.vertices){
+        const data = [...vertex];
         canvas[data.shift()](...data);
     }
     canvas.closePath();
@@ -92,10 +92,10 @@ function canvas_gradient(args){
     });
 
     const gradient = canvas[args.type](...args.args);
-    for(const step in args.stops){
+    for(const step of args.stops){
         gradient.addColorStop(
-          args.stops[step].offset || 0,
-          args.stops[step].color || '#000'
+          step.offset || 0,
+          step.color || '#000'
         );
     }
     return gradient;

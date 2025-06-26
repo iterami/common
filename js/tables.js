@@ -44,9 +44,9 @@ function tables_format_number(value){
 function tables_init(){
     const tables = document.getElementsByTagName('table');
 
-    for(let i = 0; i < tables.length; i++){
-        if(!tables[i].classList.contains('tables-nosort')){
-            tables_add(tables[i]);
+    for(const table of tables){
+        if(!table.classList.contains('tables-nosort')){
+            tables_add(table);
         }
     }
 }
@@ -77,8 +77,8 @@ function tables_sort(element, column, direction, type){
     let sorted_html = '';
     const used_rows = [];
 
-    for(const row in rows){
-        column_content.push(rows[row].children[column].innerText);
+    for(const row of rows){
+        column_content.push(row.children[column].innerText);
     }
 
     let sort_function = 0;
@@ -108,13 +108,13 @@ function tables_sort(element, column, direction, type){
     }
     column_content.sort(sort_function);
 
-    for(const sorted in column_content){
-        for(const row in rows){
-            const parent = rows[row].children;
+    for(const sorted of column_content){
+        for(const row of rows){
+            const parent = row.children;
 
-            if(parent[column].innerText === column_content[sorted]
+            if(parent[column].innerText === sorted
               && !used_rows.includes(parent[main_column].innerText)){
-                sorted_html += rows[row].outerHTML;
+                sorted_html += row.outerHTML;
                 used_rows.push(parent[main_column].innerText);
 
                 break;

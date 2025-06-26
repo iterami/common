@@ -338,15 +338,13 @@ function webgl_character_move(args){
         return;
     }
 
-    const angle = args.angle === true
-      ? webgl_characters[args.id].rotate_y
-      : args.angle;
     const movement = math_move_3d({
-      'angle': angle,
+      'angle': args.angle === true
+        ? webgl_characters[args.id].rotate_y
+        : args.angle,
       'speed': args.speed,
       'strafe': args.strafe,
     });
-
     webgl_characters[args.id].change_position_x += movement.x;
     webgl_characters[args.id].change_position_z += movement.z;
 }
@@ -1162,11 +1160,11 @@ function webgl_entity_create(args){
       },
     });
 
-    for(const id in args.entities){
+    for(const id of args.entities){
         const entity = entity_create({
-          'id': args.entities[id].id,
-          'properties': args.entities[id],
-          'types': args.entities[id].types,
+          'id': id.id,
+          'properties': id,
+          'types': id.types,
         });
         math_matrices[entity.id] = math_matrix_create();
 
@@ -1177,12 +1175,12 @@ function webgl_entity_create(args){
             groups.push(entity.groups);
             delete entity.groups;
         }
-        for(const group in groups){
+        for(const group of groups){
             entity_group_add({
               'entities': [
                 entity.id,
               ],
-              'group': groups[group],
+              'group': group,
             });
         }
 
@@ -1413,8 +1411,8 @@ function webgl_event(args){
         args.parent.event_limit--;
     }
 
-    for(const todo in args.parent.event_todo){
-        const modify = {...args.parent.event_todo[todo]};
+    for(const todo of args.parent.event_todo){
+        const modify = {...todo};
         if(modify.limit !== void 0){
             if(modify.limit <= 0){
                 continue;
@@ -3832,17 +3830,17 @@ function webgl_shader(args){
     };
 
     const attributes = webgl_shaders[args.id].attributes;
-    for(const attribute in args.attributes){
-        attributes[args.attributes[attribute]] = webgl.getAttribLocation(
+    for(const attribute of args.attributes){
+        attributes[attribute] = webgl.getAttribLocation(
           program,
-          args.attributes[attribute]
+          attribute
         );
     }
     const uniforms = webgl_shaders[args.id].uniforms;
-    for(const uniform in args.uniforms){
-        uniforms[args.uniforms[uniform]] = webgl.getUniformLocation(
+    for(const uniform of args.uniforms){
+        uniforms[uniform] = webgl.getUniformLocation(
           program,
-          args.uniforms[uniform]
+          uniform
         );
     }
 }
