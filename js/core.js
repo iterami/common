@@ -286,8 +286,7 @@ function core_handle_pointercancel(event){
     core_pointer.movement_x = 0;
     core_pointer.movement_y = 0;
 
-    if(core_pointer.todo.pointercancel
-      && event.target.id !== 'core_toggle'){
+    if(core_pointer.todo.pointercancel){
         core_handle_event({
           'event': event,
           'handler': core_pointer.todo.pointercancel,
