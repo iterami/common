@@ -535,7 +535,7 @@ function core_init(){
     globalThis.onkeydown = core_handle_keydown;
     globalThis.onkeyup = core_handle_keyup;
 
-    globalThis.repo_init?.();
+    globalThis.repo_init();
 }
 
 function core_interval_animationFrame(id){
