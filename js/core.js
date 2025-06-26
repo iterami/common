@@ -407,9 +407,11 @@ function core_hex_to_rgb(hex){
         hex = hex.slice(1);
     }
     if(hex.length === 3){
-        hex = hex[0] + hex[0]
-          + hex[1] + hex[1]
-          + hex[2] + hex[2];
+        return {
+          'blue': '0x' + hex[2] + hex[2] | 0,
+          'green': '0x' + hex[1] + hex[1] | 0,
+          'red': '0x' + hex[0] + hex[0] | 0,
+        };
     }
 
     return {
