@@ -2298,9 +2298,7 @@ function webgl_logic(){
     });
 
     if(webgl_properties.picking === 2){
-        webgl_pick_entity({
-          'cursor': true,
-        });
+        webgl_pick_entity(true);
     }
 
     const uniforms = webgl_shaders.default.uniforms;
@@ -2842,9 +2840,8 @@ function webgl_pick_color(args){
     return pixelarray;
 }
 
-function webgl_pick_entity(args){
+function webgl_pick_entity(cursor){
     if(core_menu_open
-      || webgl === 0
       || webgl_properties.picking < 1){
         return;
     }
@@ -2857,14 +2854,8 @@ function webgl_pick_entity(args){
         return false;
     }
 
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'cursor': false,
-        'x': core_pointer.x,
-        'y': core_pointer.y,
-      },
-    });
+    const x = webgl_properties.pointerlock ? globalThis.innerWidth / 2 : core_pointer.x;
+    const y = webgl_properties.pointerlock ? globalThis.innerHeight / 2 : core_pointer.y;
     let returned = false;
 
     webgl_shader_use('picking');
@@ -2872,12 +2863,12 @@ function webgl_pick_entity(args){
       'todo': function(){
           webgl_draw();
           return webgl_pick_color({
-            'x': args.x,
-            'y': args.y,
+            'x': x,
+            'y': y,
           });
       },
-      'x': args.x,
-      'y': args.y
+      'x': x,
+      'y': y
     });
 
     if(color[0] !== 0
@@ -2931,7 +2922,7 @@ function webgl_pick_entity(args){
     }
 
     if(returned !== false){
-        if(args.cursor){
+        if(cursor === true){
             webgl.canvas.style.cursor = 'pointer';
 
         }else{
@@ -2941,7 +2932,7 @@ function webgl_pick_entity(args){
             });
         }
 
-    }else if(args.cursor){
+    }else if(cursor === true){
         webgl.canvas.style.cursor = 'auto';
     }
 
