@@ -1977,6 +1977,7 @@ function webgl_level_init(args){
         'picking': 0,
         'pointerlock': false,
         'prefabs': [],
+        'reticle': false,
         'spawn': {},
         'textures': false,
         'title': false,
@@ -2066,6 +2067,21 @@ function webgl_level_init(args){
       'red': webgl_properties.clear_color[0],
     });
     globalThis.repo_level_load?.();
+
+    if(level.reticle){
+        const reticle = core_html({
+          'parent': core_elements.repo_ui,
+          'properties': {
+            'id': 'reticle',
+            'style': 'background:#fff;height:3px;left:50%;position:fixed;top:50%;transform:translate(-50%,-50%);width:3px;',
+          },
+          'store': 'reticle',
+        });
+        reticle.style.display = '';
+
+    }else if(core_elements.reticle){
+        core_elements.reticle.style.display = 'none';
+    }
 
     if(core_menu_open){
         core_escape();
@@ -2923,6 +2939,10 @@ function webgl_pick_entity(cursor){
     if(returned !== false){
         if(cursor === true){
             webgl.canvas.style.cursor = 'pointer';
+            if(core_elements.reticle){
+                core_elements.reticle.style.height = '6px';
+                core_elements.reticle.style.width = '6px';
+            }
 
         }else{
             webgl_event({
@@ -2933,6 +2953,10 @@ function webgl_pick_entity(cursor){
 
     }else if(cursor === true){
         webgl.canvas.style.cursor = 'auto';
+        if(core_elements.reticle){
+            core_elements.reticle.style.height = '3px';
+            core_elements.reticle.style.width = '3px';
+        }
     }
 
     webgl_shader_use('default');
