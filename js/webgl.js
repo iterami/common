@@ -213,7 +213,6 @@ function webgl_character_init(args){
         'path_end': '',
         'path_id': '',
         'path_point': 0,
-        'reticle': '#fff',
         'scale_x': 1,
         'scale_y': 1,
         'scale_z': 1,
