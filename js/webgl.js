@@ -2073,7 +2073,7 @@ function webgl_level_init(args){
           'parent': core_elements.repo_ui,
           'properties': {
             'id': 'reticle',
-            'style': 'background:#fff;height:3px;left:50%;position:fixed;top:50%;transform:translate(-50%,-50%);width:3px;',
+            'style': 'background:#fff;height:4px;left:50%;position:fixed;top:50%;transform:translate(-50%,-50%);width:4px;',
           },
           'store': 'reticle',
         });
@@ -2954,8 +2954,8 @@ function webgl_pick_entity(cursor){
     }else if(cursor === true){
         webgl.canvas.style.cursor = 'auto';
         if(core_elements.reticle){
-            core_elements.reticle.style.height = '3px';
-            core_elements.reticle.style.width = '3px';
+            core_elements.reticle.style.height = '4px';
+            core_elements.reticle.style.width = '4px';
         }
     }
 
