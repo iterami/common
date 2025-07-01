@@ -90,16 +90,16 @@ function webgl_camera_rotate(args){
     const prefix = args.camera
       ? 'camera_rotate_'
       : 'rotate_';
-    for(const axis in axes){
-        let axis_value = args[axes[axis]];
+    for(const axis of axes){
+        let axis_value = args[axis];
         if(axis_value === false){
             continue;
         }
 
         if(!args.set){
-            axis_value += character[prefix + axes[axis]];
+            axis_value += character[prefix + axis];
         }
-        character[prefix + axes[axis]] = math_clamp({
+        character[prefix + axis] = math_clamp({
           'max': 360,
           'min': 0,
           'value': axis_value,
@@ -363,18 +363,18 @@ function webgl_character_scale(args){
     const axes = 'xyz';
     const character = webgl_characters[args.id];
     let scaled = false;
-    for(const axis in axes){
-        let axis_value = args[axes[axis]];
+    for(const axis of axes){
+        let axis_value = args[axis];
         if(axis_value === false){
             continue;
         }
 
         if(!args.set){
-            axis_value += character['scale_' + axes[axis]];
+            axis_value += character['scale_' + axis];
         }
-        if(character['scale_' + axes[axis]] !== axis_value){
+        if(character['scale_' + axis] !== axis_value){
             scaled = true;
-            character['scale_' + axes[axis]] = axis_value;
+            character['scale_' + axis] = axis_value;
         }
     }
 
@@ -435,12 +435,12 @@ function webgl_character_spawn(id){
     }
 
     const axes = 'xyz';
-    for(const axis in axes){
-        character['camera_rotate_' + axes[axis]] = 0;
-        character['change_position_' + axes[axis]] = 0;
-        character['change_rotate_' + axes[axis]] = 0;
-        character['position_' + axes[axis]] = 0;
-        character['rotate_' + axes[axis]] = 0;
+    for(const axis of axes){
+        character['camera_rotate_' + axis] = 0;
+        character['change_position_' + axis] = 0;
+        character['change_rotate_' + axis] = 0;
+        character['position_' + axis] = 0;
+        character['rotate_' + axis] = 0;
     }
     character.jump_allow = false;
     character.life = character.life_max;
@@ -818,9 +818,9 @@ function webgl_controls_keyboard(character){
         }
 
         const axes = 'xyz';
-        for(const axis in axes){
-            character['rotate_' + axes[axis]] = vehicle['rotate_' + axes[axis]];
-            character['position_' + axes[axis]] = vehicle['position_' + axes[axis]] + vehicle['change_position_' + axes[axis]];
+        for(const axis of axes){
+            character['rotate_' + axis] = vehicle['rotate_' + axis];
+            character['position_' + axis] = vehicle['position_' + axis] + vehicle['change_position_' + axis];
         }
         character.position_y += character.collide_bottom;
         return;
@@ -1352,14 +1352,15 @@ function webgl_entity_scale(args){
 
     const axes = 'xyz';
     const entity = entity_entities[args.entity];
+    let offset = 0;
     let scaled = args.init;
-    for(const axis in axes){
-        let axis_value = args[axes[axis]];
+    for(const axis of axes){
+        let axis_value = args[axis];
         if(axis_value === false){
             continue;
         }
 
-        const old_scale = entity['scale_' + axes[axis]];
+        const old_scale = entity['scale_' + axis];
         if(!args.set){
             axis_value += old_scale;
         }
@@ -1367,10 +1368,10 @@ function webgl_entity_scale(args){
             scaled = true;
 
             if(args.update){
-                entity['scale_' + axes[axis]] = axis_value;
+                entity['scale_' + axis] = axis_value;
             }
 
-            for(let i = Number(axis); i < entity.vertices_length * 3; i += 3){
+            for(let i = offset++; i < entity.vertices_length * 3; i += 3){
                 if(!args.init){
                     entity.vertices[i] /= old_scale;
                 }
@@ -1378,9 +1379,9 @@ function webgl_entity_scale(args){
             }
             if(entity.attach_to){
                 if(!args.init){
-                    entity['attach_' + axes[axis]] /= old_scale;
+                    entity['attach_' + axis] /= old_scale;
                 }
-                entity['attach_' + axes[axis]] *= axis_value;
+                entity['attach_' + axis] *= axis_value;
             }
         }
     }
@@ -2234,8 +2235,8 @@ function webgl_logic(){
         }
 
         const axes = 'xyz';
-        for(const axis in axes){
-            const position_axis = 'position_' + axes[axis];
+        for(const axis of axes){
+            const position_axis = 'position_' + axis;
             character[position_axis] += character['change_' + position_axis];
         }
 
@@ -2455,8 +2456,8 @@ function webgl_logic_entity(entity){
     const old_rotate_y = entity.rotate_y;
     const old_rotate_z = entity.rotate_z;
     const axes = 'xyz';
-    for(const axis in axes){
-        const rotate_axis = 'rotate_' + axes[axis];
+    for(const axis of axes){
+        const rotate_axis = 'rotate_' + axis;
         if(entity['change_' + rotate_axis] === 0){
             continue;
         }
@@ -3977,9 +3978,9 @@ function webgl_stat_modify(args){
                     target.gravity = 0;
 
                     const axes = 'xyz';
-                    for(const axis in axes){
-                        target['change_rotate_' + axes[axis]] = 0;
-                        target['change_position_' + axes[axis]] = 0;
+                    for(const axis of axes){
+                        target['change_rotate_' + axis] = 0;
+                        target['change_position_' + axis] = 0;
                     }
 
                 }else{
@@ -4411,9 +4412,9 @@ function webgl_vehicle_toggle(args){
         webgl_characters[args.id].vehicle = args.vehicle;
         vehicle.vehicle_stats.character = args.id;
         const axes = 'xyz';
-        for(const axis in axes){
-            webgl_characters[args.id]['change_rotate_' + axes[axis]] = 0;
-            webgl_characters[args.id]['change_position_' + axes[axis]] = 0;
+        for(const axis of axes){
+            webgl_characters[args.id]['change_rotate_' + axis] = 0;
+            webgl_characters[args.id]['change_position_' + axis] = 0;
         }
         webgl_characters[args.id].camera_rotate_y = vehicle.rotate_y;
     }
