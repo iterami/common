@@ -1046,10 +1046,6 @@ function webgl_controls_wheel(event){
 }
 
 function webgl_draw(){
-    if(webgl === 0){
-        return;
-    }
-
     webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
 
     webgl.disable(webgl.DEPTH_TEST);
