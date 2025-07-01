@@ -2874,11 +2874,13 @@ function webgl_pick_entity(cursor){
     }
 
     const character = webgl_characters[webgl_character_id];
+    if(character.life <= 0){
+        return;
+    }
+
     const level = webgl_character_level(character);
-    if(level < -1
-      || (level >= 0 && webgl_properties.paused)
-      || character.life <= 0){
-        return false;
+    if(level < -1 || (level >= 0 && webgl_properties.paused)){
+        return;
     }
 
     const x = webgl_properties.pointerlock ? globalThis.innerWidth / 2 : core_pointer.x;
@@ -2897,7 +2899,7 @@ function webgl_pick_entity(cursor){
       'y': y
     });
 
-    const returned = {};
+    const picked = {};
     if(color[0] !== 0
       || color[1] !== 0
       || color[2] !== 0){
@@ -2942,13 +2944,13 @@ function webgl_pick_entity(cursor){
                     }
                 }
 
-                returned.entity = entity;
+                picked.entity = entity;
                 break;
             }
         }
     }
 
-    if(returned.entity){
+    if(picked.entity){
         if(cursor === true){
             webgl.canvas.style.cursor = 'pointer';
             if(core_elements.reticle){
@@ -2957,13 +2959,13 @@ function webgl_pick_entity(cursor){
             }
 
         }else{
-            if(returned.entity.picking_xyz){
+            if(picked.entity.picking_xyz){
                 webgl.uniform1i(
                   webgl_shaders.picking.uniforms.xyz,
                   true
                 );
                 webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
-                webgl_draw_entity(returned.entity);
+                webgl_draw_entity(picked.entity);
                 const xyz = webgl_pick_color({
                   'x': x,
                   'y': y,
@@ -2973,14 +2975,14 @@ function webgl_pick_entity(cursor){
                   false
                 );
 
-                const position = webgl_get_position(returned.entity);
-                returned.x = position.x + (xyz[0] / 255 - .5) * (returned.entity.vertices[0] - returned.entity.vertices[3]);
-                returned.y = position.y + (xyz[1] / 255 - .5) * (returned.entity.vertices[1] - returned.entity.vertices[7]);
-                returned.z = position.z + (xyz[2] / 255 - .5) * (returned.entity.vertices[8] - returned.entity.vertices[2]);
+                const position = webgl_get_position(picked.entity);
+                picked.x = position.x + (xyz[0] / 255 - .5) * (picked.entity.vertices[0] - picked.entity.vertices[3]);
+                picked.y = position.y + (xyz[1] / 255 - .5) * (picked.entity.vertices[1] - picked.entity.vertices[7]);
+                picked.z = position.z + (xyz[2] / 255 - .5) * (picked.entity.vertices[8] - picked.entity.vertices[2]);
             }
 
             webgl_event({
-              'parent': returned.entity,
+              'parent': picked.entity,
               'target': webgl_characters[webgl_character_id],
             });
         }
@@ -2996,7 +2998,7 @@ function webgl_pick_entity(cursor){
     webgl_shader_use('default');
     webgl_draw();
 
-    return returned;
+    return picked;
 }
 
 function webgl_prefab_args(args){
