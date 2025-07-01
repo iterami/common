@@ -1270,7 +1270,7 @@ function webgl_entity_init(entity){
           }),
           core_round({
             'decimals': 3,
-            'number': Math.floor(entity_id_count / 65536) / 255,
+            'number': Math.floor(entity_id_count / 65025) / 255,
           }),
         ];
     }
