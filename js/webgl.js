@@ -2900,7 +2900,7 @@ function webgl_pick_entity(cursor){
       'y': y
     });
 
-    const picked = {};
+    let picked = false;
     if(color[0] !== 0
       || color[1] !== 0
       || color[2] !== 0){
@@ -2945,13 +2945,35 @@ function webgl_pick_entity(cursor){
                     }
                 }
 
-                picked.entity = entity;
+                picked = entity;
                 break;
             }
         }
     }
 
-    if(picked.entity){
+    if(picked){
+        if(picked.picking_xyz){
+            webgl.uniform1i(
+              webgl_shaders.picking.uniforms.xyz,
+              true
+            );
+            webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
+            webgl_draw_entity(picked);
+            const xyz = webgl_pick_color({
+              'x': x,
+              'y': y,
+            });
+            webgl.uniform1i(
+              webgl_shaders.picking.uniforms.xyz,
+              false
+            );
+
+            const position = webgl_get_position(picked);
+            webgl_picked_x = position.x + (xyz[0] / 255 - .5) * (picked.vertices[0] - picked.vertices[3]);
+            webgl_picked_y = position.y + (xyz[1] / 255 - .5) * (picked.vertices[1] - picked.vertices[7]);
+            webgl_picked_z = position.z + (xyz[2] / 255 - .5) * (picked.vertices[8] - picked.vertices[2]);
+        }
+
         if(cursor === true){
             webgl.canvas.style.cursor = 'pointer';
             if(core_elements.reticle){
@@ -2960,30 +2982,8 @@ function webgl_pick_entity(cursor){
             }
 
         }else{
-            if(picked.entity.picking_xyz){
-                webgl.uniform1i(
-                  webgl_shaders.picking.uniforms.xyz,
-                  true
-                );
-                webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
-                webgl_draw_entity(picked.entity);
-                const xyz = webgl_pick_color({
-                  'x': x,
-                  'y': y,
-                });
-                webgl.uniform1i(
-                  webgl_shaders.picking.uniforms.xyz,
-                  false
-                );
-
-                const position = webgl_get_position(picked.entity);
-                picked.x = position.x + (xyz[0] / 255 - .5) * (picked.entity.vertices[0] - picked.entity.vertices[3]);
-                picked.y = position.y + (xyz[1] / 255 - .5) * (picked.entity.vertices[1] - picked.entity.vertices[7]);
-                picked.z = position.z + (xyz[2] / 255 - .5) * (picked.entity.vertices[8] - picked.entity.vertices[2]);
-            }
-
             webgl_event({
-              'parent': picked.entity,
+              'parent': picked,
               'target': webgl_characters[webgl_character_id],
             });
         }
@@ -4465,6 +4465,9 @@ globalThis.webgl_characters = {};
 globalThis.webgl_framebuffer = 0;
 globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
+globalThis.webgl_picked_x = 0;
+globalThis.webgl_picked_y = 0;
+globalThis.webgl_picked_z = 0;
 globalThis.webgl_properties = {};
 globalThis.webgl_shader_id = 'default';
 globalThis.webgl_shader_light_color = [];
