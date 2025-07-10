@@ -1297,13 +1297,10 @@ function webgl_entity_init(entity){
 
 function webgl_entity_normals(entity){
     const attached_to = globalThis[entity.attach_type][entity.attach_to];
-    let rotate_x = entity.rotate_x + attached_to.rotate_x;
-    let rotate_y = entity.rotate_y + attached_to.rotate_y;
-    let rotate_z = entity.rotate_z + attached_to.rotate_z;
     entity.normals = webgl_normals({
-      'rotate_x': rotate_x,
-      'rotate_y': rotate_y,
-      'rotate_z': rotate_z,
+      'rotate_x': entity.rotate_x + attached_to.rotate_x,
+      'rotate_y': entity.rotate_y + attached_to.rotate_y,
+      'rotate_z': entity.rotate_z + attached_to.rotate_z,
     });
 
     const normals = [];
