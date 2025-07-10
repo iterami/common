@@ -195,10 +195,10 @@ function prefabs_webgl_humanoid(args){
 
         const prefab_args = webgl_prefab_args(args);
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             {
               ...prefab_args,
-              'attach_to': args.character,
               'attach_type': 'webgl_characters',
               'attach_x': prefab_args.position_x,
               'attach_y': prefab_args.position_y,
@@ -267,10 +267,10 @@ function prefabs_webgl_lines_path(args){
     }
 
     webgl_entity_create({
+      'character': args.character,
       'entities': [
         {
           ...webgl_prefab_args(args),
-          'attach_to': args.character,
           'attach_type': 'webgl_characters',
           'draw_mode': vertices.length === 3
             ? 'POINTS'
@@ -354,10 +354,10 @@ function prefabs_webgl_lines_shrub(args){
 
     const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
+      'character': args.character,
       'entities': [
         {
           ...prefab_args,
-          'attach_to': args.character,
           'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
@@ -399,7 +399,6 @@ function prefabs_webgl_lines_tree(args){
     const prefab_args = webgl_prefab_args(args);
     const properties = {
       ...prefab_args,
-      'attach_to': args.character,
       'attach_type': 'webgl_characters',
       'attach_x': prefab_args.position_x,
       'attach_y': prefab_args.position_y,
@@ -423,6 +422,7 @@ function prefabs_webgl_lines_tree(args){
           trunk_width, 0, 0,
         ];
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -448,6 +448,7 @@ function prefabs_webgl_lines_tree(args){
             ];
 
             webgl_entity_create({
+              'character': args.character,
               'entities': [
                 properties,
               ],
@@ -480,10 +481,10 @@ function prefabs_webgl_tree_2d(args){
     const height = Math.random() * args.height_range + args.height;
     const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
+      'character': args.character,
       'entities': [
         {
           ...prefab_args,
-          'attach_to': args.character,
           'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
@@ -500,7 +501,6 @@ function prefabs_webgl_tree_2d(args){
         },
         {
           ...prefab_args,
-          'attach_to': args.character,
           'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,

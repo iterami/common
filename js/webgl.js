@@ -520,16 +520,14 @@ function webgl_color_set(args){
 
 // Required args: collider, target
 function webgl_collision(args){
-    const character = args.target.attach_to
-      ? webgl_characters[args.target.attach_to]
-      : false;
+    const character = webgl_characters[args.target.attach_to];
     let collision = '';
     const collider_position = webgl_get_position(args.collider);
     const collision_sign = [];
     const diffs = {
-      'x': args.collider.change_position_x - character?.change_position_x,
-      'y': args.collider.change_position_y - character?.change_position_y,
-      'z': args.collider.change_position_z - character?.change_position_z,
+      'x': args.collider.change_position_x - character.change_position_x,
+      'y': args.collider.change_position_y - character.change_position_y,
+      'z': args.collider.change_position_z - character.change_position_z,
     };
     const range = {
       'x': args.collider.collide_xz + Math.abs(diffs.x),
@@ -581,9 +579,7 @@ function webgl_collision(args){
     }
 
     for(const axis in collision){
-        const change_position = character
-          ? character['change_position_' + collision[axis]]
-          : 0;
+        const change_position = character['change_position_' + collision[axis]];
         const label = collision[axis] !== 'y'
           ? 'xz'
           : collision_sign[axis] > 0
@@ -611,10 +607,8 @@ function webgl_collision(args){
                 }
             }
 
-            if(character){
-                args.collider.change_position_x += character.change_position_x;
-                args.collider.change_position_z += character.change_position_z;
-            }
+            args.collider.change_position_x += character.change_position_x;
+            args.collider.change_position_z += character.change_position_z;
 
         }else if(args.collider.vehicle_stats){
             const other_axis = collision[axis] === 'x'
@@ -1145,17 +1139,18 @@ function webgl_entity_alpha(args){
     }
 }
 
+// Required args: character
 function webgl_entity_create(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': false,
         'entities': [],
         'groups': [],
       },
     });
 
     for(const id of args.entities){
+        id.attach_to = args.character;
         const entity = entity_create({
           'id': id.id,
           'properties': id,
@@ -1193,11 +1188,6 @@ function webgl_entity_create(args){
               'group': 'transparent',
             });
             entity.attach_to = webgl_character_id;
-            entity.attach_type = 'webgl_characters';
-
-        }else if(args.character){
-            entity.attach_to = args.character;
-            entity.attach_type = 'webgl_characters';
         }
 
         if(entity.scale_x !== 1
@@ -1213,31 +1203,29 @@ function webgl_entity_create(args){
             });
         }
 
-        if(entity.attach_to){
-            entity_attach({
-              'entity': entity,
-              'to': entity.attach_to,
-              'type': entity.attach_type,
-              'x': entity.attach_x,
-              'y': entity.attach_y,
-              'z': entity.attach_z,
-            });
-            entity_group_add({
-              'entities': [
-                entity.id,
-              ],
-              'group': 'webgl_characters_' + entity.attach_to,
-            });
-            const character = webgl_characters[entity.attach_to];
-            webgl_entity_scale({
-              'entity': entity.id,
-              'set': true,
-              'update': false,
-              'x': entity.scale_x * character.scale_x,
-              'y': entity.scale_y * character.scale_y,
-              'z': entity.scale_z * character.scale_z,
-            });
-        }
+        entity_attach({
+          'entity': entity,
+          'to': entity.attach_to,
+          'type': entity.attach_type,
+          'x': entity.attach_x,
+          'y': entity.attach_y,
+          'z': entity.attach_z,
+        });
+        entity_group_add({
+          'entities': [
+            entity.id,
+          ],
+          'group': 'webgl_characters_' + entity.attach_to,
+        });
+        const character = webgl_characters[entity.attach_to];
+        webgl_entity_scale({
+          'entity': entity.id,
+          'set': true,
+          'update': false,
+          'x': entity.scale_x * character.scale_x,
+          'y': entity.scale_y * character.scale_y,
+          'z': entity.scale_z * character.scale_z,
+        });
     }
 }
 
@@ -1308,15 +1296,10 @@ function webgl_entity_init(entity){
 }
 
 function webgl_entity_normals(entity){
-    let rotate_x = entity.rotate_x;
-    let rotate_y = entity.rotate_y;
-    let rotate_z = entity.rotate_z;
-    if(entity.attach_to){
-        const attached_to = globalThis[entity.attach_type][entity.attach_to];
-        rotate_x += attached_to.rotate_x;
-        rotate_y += attached_to.rotate_y;
-        rotate_z += attached_to.rotate_z;
-    }
+    const attached_to = globalThis[entity.attach_type][entity.attach_to];
+    let rotate_x = entity.rotate_x + attached_to.rotate_x;
+    let rotate_y = entity.rotate_y + attached_to.rotate_y;
+    let rotate_z = entity.rotate_z + attached_to.rotate_z;
     entity.normals = webgl_normals({
       'rotate_x': rotate_x,
       'rotate_y': rotate_y,
@@ -1377,12 +1360,10 @@ function webgl_entity_scale(args){
                 }
                 entity.vertices[i] *= axis_value;
             }
-            if(entity.attach_to){
-                if(!args.init){
-                    entity['attach_' + axis] /= old_scale;
-                }
-                entity['attach_' + axis] *= axis_value;
+            if(!args.init){
+                entity['attach_' + axis] /= old_scale;
             }
+            entity['attach_' + axis] *= axis_value;
         }
     }
 
@@ -1588,19 +1569,19 @@ function webgl_framebuffer_resize(){
 }
 
 function webgl_get_position(entity){
-    if(entity.attach_to){
-        const target = globalThis[entity.attach_type][entity.attach_to];
+    if(!entity.attach_to){
         return {
-          'x': target.position_x + entity.attach_x,
-          'y': target.position_y + entity.attach_y,
-          'z': target.position_z + entity.attach_z,
+          'x': entity.position_x,
+          'y': entity.position_y,
+          'z': entity.position_z,
         };
     }
 
+    const target = globalThis[entity.attach_type][entity.attach_to];
     return {
-      'x': entity.position_x,
-      'y': entity.position_y,
-      'z': entity.position_z,
+      'x': target.position_x + entity.attach_x,
+      'y': target.position_y + entity.attach_y,
+      'z': target.position_z + entity.attach_z,
     };
 }
 
@@ -1661,7 +1642,7 @@ function webgl_init(){
       'default': true,
       'properties': {
         'alpha': 1,
-        'attach_to': false,
+        'attach_to': webgl_character_id,
         'attach_type': 'webgl_characters',
         'attach_x': 0,
         'attach_y': 0,
@@ -2361,19 +2342,17 @@ function webgl_logic(){
 }
 
 function webgl_logic_entity(entity){
-    if(entity.attach_to){
-        const target = globalThis[entity.attach_type][entity.attach_to];
+    const target = globalThis[entity.attach_type][entity.attach_to];
 
-        if(entity_groups.skybox[entity.id]){
-            entity.position_x = target.camera_x;
-            entity.position_y = target.camera_y;
-            entity.position_z = target.camera_z;
+    if(entity_groups.skybox[entity.id]){
+        entity.position_x = target.camera_x;
+        entity.position_y = target.camera_y;
+        entity.position_z = target.camera_z;
 
-        }else{
-            entity.position_x = target.position_x;
-            entity.position_y = target.position_y;
-            entity.position_z = target.position_z;
-        }
+    }else{
+        entity.position_x = target.position_x;
+        entity.position_y = target.position_y;
+        entity.position_z = target.position_z;
     }
 
     if(entity.event_range){
@@ -2504,27 +2483,25 @@ function webgl_logic_entity(entity){
       ],
       'id': entity.id,
     });
-    if(entity.attach_to){
-        if(entity_groups.skybox[entity.id] !== true){
-            const target = globalThis[entity.attach_type][entity.attach_to];
-            math_matrix_rotate({
-              'dimensions': [
-                math_degrees_to_radians(target.rotate_x),
-                math_degrees_to_radians(-target.rotate_y),
-                math_degrees_to_radians(target.rotate_z),
-              ],
-              'id': entity.id,
-            });
-        }
-        math_matrix_translate({
+    if(entity_groups.skybox[entity.id] !== true){
+        const target = globalThis[entity.attach_type][entity.attach_to];
+        math_matrix_rotate({
           'dimensions': [
-            -entity.attach_x,
-            -entity.attach_y,
-            -entity.attach_z,
+            math_degrees_to_radians(target.rotate_x),
+            math_degrees_to_radians(-target.rotate_y),
+            math_degrees_to_radians(target.rotate_z),
           ],
           'id': entity.id,
         });
     }
+    math_matrix_translate({
+      'dimensions': [
+        -entity.attach_x,
+        -entity.attach_y,
+        -entity.attach_z,
+      ],
+      'id': entity.id,
+    });
     math_matrix_rotate({
       'dimensions': [
         math_degrees_to_radians(entity.rotate_x),
@@ -3111,8 +3088,6 @@ function webgl_primitive_cuboid(args){
     if(args.top.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach_to': args.character,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y + half_size_y,
           'attach_z': prefab_args.position_z,
@@ -3133,6 +3108,7 @@ function webgl_primitive_cuboid(args){
           args.top
         );
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3143,8 +3119,6 @@ function webgl_primitive_cuboid(args){
     if(args.bottom.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach_to': args.character,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y - half_size_y,
           'attach_z': prefab_args.position_z,
@@ -3166,6 +3140,7 @@ function webgl_primitive_cuboid(args){
           args.bottom
         );
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3176,8 +3151,6 @@ function webgl_primitive_cuboid(args){
     if(args.back.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach_to': args.character,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z + half_size_z,
@@ -3199,6 +3172,7 @@ function webgl_primitive_cuboid(args){
           args.back
         );
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3209,8 +3183,6 @@ function webgl_primitive_cuboid(args){
     if(args.front.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach_to': args.character,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z - half_size_z,
@@ -3232,6 +3204,7 @@ function webgl_primitive_cuboid(args){
           args.front
         );
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3242,8 +3215,6 @@ function webgl_primitive_cuboid(args){
     if(args.left.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach_to': args.character,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x - half_size_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z,
@@ -3265,6 +3236,7 @@ function webgl_primitive_cuboid(args){
           args.left
         );
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3275,8 +3247,6 @@ function webgl_primitive_cuboid(args){
     if(args.right.exclude !== true){
         const properties = {
           ...prefab_args,
-          'attach_to': args.character,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x + half_size_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z,
@@ -3298,6 +3268,7 @@ function webgl_primitive_cuboid(args){
           args.right
         );
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3340,8 +3311,6 @@ function webgl_primitive_ellipsoid(args){
 
     const properties = {
       ...prefab_args,
-      'attach_to': args.character,
-      'attach_type': 'webgl_characters',
       'attach_x': prefab_args.position_x,
       'attach_y': prefab_args.position_y,
       'attach_z': prefab_args.position_z,
@@ -3388,6 +3357,7 @@ function webgl_primitive_ellipsoid(args){
     }
 
     webgl_entity_create({
+      'character': args.character,
       'entities': [
         properties,
       ],
@@ -3429,8 +3399,6 @@ function webgl_primitive_frustum(args){
     const prefab_args = webgl_prefab_args(args);
     const properties = {
       ...prefab_args,
-      'attach_to': args.character,
-      'attach_type': 'webgl_characters',
       'attach_x': prefab_args.position_x,
       'attach_y': prefab_args.position_y,
       'attach_z': prefab_args.position_z,
@@ -3452,6 +3420,7 @@ function webgl_primitive_frustum(args){
         ];
 
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3491,6 +3460,7 @@ function webgl_primitive_frustum(args){
             }
         }
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3529,6 +3499,7 @@ function webgl_primitive_frustum(args){
             }
         }
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3567,6 +3538,7 @@ function webgl_primitive_frustum(args){
             );
         }
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             properties,
           ],
@@ -3604,12 +3576,11 @@ function webgl_primitive_particle(args){
         }
 
         webgl_entity_create({
+          'character': args.character,
           'entities': [
             {
               ...webgl_prefab_args(args),
               ...entity,
-              'attach_to': args.character,
-              'attach_type': 'webgl_characters',
               'collision': false,
               'particle': args.id,
               'vertex_colors': entity.vertex_colors || webgl_vertexcolorarray({
@@ -3659,11 +3630,10 @@ function webgl_primitive_stars(args){
     }
     const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
+      'character': args.character,
       'entities': [
         {
           ...prefab_args,
-          'attach_to': args.character,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z,
@@ -3746,11 +3716,10 @@ function webgl_primitive_terrain(args){
 
     const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
+      'character': args.character,
       'entities': [
         {
           ...prefab_args,
-          'attach_to': args.character,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z,
@@ -4261,12 +4230,11 @@ function webgl_tiles(args){
         const entities = args.tiles[tiles[tile]].entities;
         for(const entity in entities){
             webgl_entity_create({
+              'character': args.character,
               'entities': [
                 {
                   ...prefab_args,
                   ...entities[entity],
-                  'attach_to': args.character,
-                  'attach_type': 'webgl_characters',
                   'attach_x': tile_offset_x + (entities[entity].attach_x || 0),
                   'attach_y': tile_offset_y + (entities[entity].attach_y || 0),
                   'attach_z': tile_offset_z + (entities[entity].attach_z || 0),
