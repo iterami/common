@@ -1107,6 +1107,58 @@ function webgl_drawloop(){
     core_interval_animationFrame('webgl-animationFrame');
 }
 
+function webgl_draw_picked(args){
+    webgl.uniform1i(
+      webgl_shaders.picking.uniforms.xyz,
+      true
+    );
+    webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
+    webgl_draw_entity(args.picked);
+    const rgb = webgl_pick_color({
+      'x': args.x,
+      'y': args.y,
+    });
+    webgl.uniform1i(
+      webgl_shaders.picking.uniforms.xyz,
+      false
+    );
+
+    return rgb;
+}
+
+function webgl_draw_picking(){
+    webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
+
+    webgl.disable(webgl.DEPTH_TEST);
+    entity_group_modify({
+      'groups': [
+        'skybox',
+      ],
+      'todo': function(entity){
+          if(entity.picking_exclude){
+              return;
+          }
+
+          webgl_draw_entity(entity);
+      },
+    });
+    webgl.enable(webgl.DEPTH_TEST);
+
+    entity_group_modify({
+      'groups': [
+        'opaque',
+        'transparent',
+      ],
+      'todo': function(entity){
+          if(entity.picking_exclude){
+              return;
+          }
+
+          webgl_draw_entity(entity);
+      },
+    });
+}
+
 // Required args: id
 function webgl_entity_alpha(args){
     args = core_args({
@@ -1660,6 +1712,7 @@ function webgl_init(){
         'normals': [],
         'particle': false,
         'picking': false,
+        'picking_exclude': false,
         'picking_range': 0,
         'picking_xyz': false,
         'point_size': 0,
@@ -2864,7 +2917,7 @@ function webgl_pick_entity(cursor){
     webgl_shader_use('picking');
     const color = webgl_scissor({
       'todo': function(){
-          webgl_draw();
+          webgl_draw_picking();
           return webgl_pick_color({
             'x': x,
             'y': y,
@@ -2927,25 +2980,16 @@ function webgl_pick_entity(cursor){
 
     if(picked){
         if(picked.picking_xyz){
-            webgl.uniform1i(
-              webgl_shaders.picking.uniforms.xyz,
-              true
-            );
-            webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
-            webgl_draw_entity(picked);
-            const xyz = webgl_pick_color({
+            const rgb = webgl_draw_picked({
+              'picked': picked,
               'x': x,
               'y': y,
             });
-            webgl.uniform1i(
-              webgl_shaders.picking.uniforms.xyz,
-              false
-            );
 
             const position = webgl_get_position(picked);
-            webgl_picked_x = position.x + (xyz[0] / 255 - .5) * (picked.vertices[0] - picked.vertices[3]);
-            webgl_picked_y = position.y + (xyz[1] / 255 - .5) * (picked.vertices[1] - picked.vertices[7]);
-            webgl_picked_z = position.z + (xyz[2] / 255 - .5) * (picked.vertices[8] - picked.vertices[2]);
+            webgl_picked_x = position.x + (rgb[0] / 255 - .5) * (picked.vertices[0] - picked.vertices[3]);
+            webgl_picked_y = position.y + (rgb[1] / 255 - .5) * (picked.vertices[1] - picked.vertices[7]);
+            webgl_picked_z = position.z + (rgb[2] / 255 - .5) * (picked.vertices[8] - picked.vertices[2]);
         }
 
         if(cursor === true){
