@@ -1790,9 +1790,6 @@ void main(void){
     webgl_resize();
     globalThis.onresize = webgl_resize;
 
-    webgl_texture_init({
-      'id': webgl_default_texture,
-    });
     entity_set({
       'default': true,
       'properties': {
@@ -3807,7 +3804,7 @@ function webgl_resize(){
     webgl_framebuffer_resize();
 
     if(core_menu_open
-      && webgl_textures[webgl_default_texture]){
+      && webgl !== 0){
         webgl_draw();
     }
 }
@@ -4089,7 +4086,9 @@ function webgl_texture_init(args){
     });
 
     if(!webgl_textures[args.id]){
-        webgl_textures[args.id] = {};
+        webgl_textures[args.id] = {
+          'gl': webgl.createTexture(),
+        };
     }
     const texture = webgl_textures[args.id];
     const split = args.id.split(',');
@@ -4140,7 +4139,6 @@ function webgl_texture_init(args){
         texture.ready = true;
     }
 
-    texture.gl = webgl.createTexture();
     webgl.bindTexture(
       webgl.TEXTURE_2D,
       texture.gl
@@ -4463,6 +4461,7 @@ globalThis.webgl_default_texture = 'default.png';
 globalThis.webgl_uris = globalThis.uris || {
   [webgl_default_texture]: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
 };
+delete globalThis.uris;
 globalThis.webgl = 0;
 globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
@@ -4480,11 +4479,3 @@ globalThis.webgl_shader_light_position = [];
 globalThis.webgl_shader_light_range = [];
 globalThis.webgl_shaders = {};
 globalThis.webgl_textures = {};
-
-core_init_todo.push(function(){
-    core_image({
-      'id': webgl_default_texture,
-      'src': webgl_uris[webgl_default_texture],
-    });
-    delete globalThis.uris;
-});
