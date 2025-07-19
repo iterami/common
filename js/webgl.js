@@ -1687,55 +1687,6 @@ function webgl_init(){
       webgl.FASTEST
     );
 
-    entity_set({
-      'default': true,
-      'properties': {
-        'alpha': 1,
-        'attach_to': webgl_character_id,
-        'attach_type': 'webgl_characters',
-        'attach_x': 0,
-        'attach_y': 0,
-        'attach_z': 0,
-        'billboard': false,
-        'change_rotate_x': 0,
-        'change_rotate_y': 0,
-        'change_rotate_z': 0,
-        'collision': true,
-        'draw': true,
-        'draw_mode': 'TRIANGLE_FAN',
-        'draw_range': false,
-        'event_limit': false,
-        'event_range': false,
-        'event_todo': [],
-        'light_color': [1, 1, 1,],
-        'light_range': 0,
-        'normals': [],
-        'particle': false,
-        'picking': false,
-        'picking_exclude': false,
-        'picking_range': 0,
-        'picking_xyz': false,
-        'point_size': 0,
-        'position_x': 0,
-        'position_y': 0,
-        'position_z': 0,
-        'rotate_x': 0,
-        'rotate_y': 0,
-        'rotate_z': 0,
-        'scale_x': 1,
-        'scale_y': 1,
-        'scale_z': 1,
-        'texture': webgl_default_texture,
-        'texture_align': '11010010',
-        'texture_x': 1,
-        'texture_y': 1,
-        'vertices_length': 0,
-        'visible': true,
-      },
-      'todo': webgl_entity_init,
-      'type': 'opaque',
-    });
-
     webgl_shader({
       'id': 'default',
       'attributes': [
@@ -1838,6 +1789,58 @@ void main(void){
 
     webgl_resize();
     globalThis.onresize = webgl_resize;
+
+    webgl_texture_init({
+      'id': webgl_default_texture,
+    });
+    entity_set({
+      'default': true,
+      'properties': {
+        'alpha': 1,
+        'attach_to': webgl_character_id,
+        'attach_type': 'webgl_characters',
+        'attach_x': 0,
+        'attach_y': 0,
+        'attach_z': 0,
+        'billboard': false,
+        'change_rotate_x': 0,
+        'change_rotate_y': 0,
+        'change_rotate_z': 0,
+        'collision': true,
+        'draw': true,
+        'draw_mode': 'TRIANGLE_FAN',
+        'draw_range': false,
+        'event_limit': false,
+        'event_range': false,
+        'event_todo': [],
+        'light_color': [1, 1, 1,],
+        'light_range': 0,
+        'normals': [],
+        'particle': false,
+        'picking': false,
+        'picking_exclude': false,
+        'picking_range': 0,
+        'picking_xyz': false,
+        'point_size': 0,
+        'position_x': 0,
+        'position_y': 0,
+        'position_z': 0,
+        'rotate_x': 0,
+        'rotate_y': 0,
+        'rotate_z': 0,
+        'scale_x': 1,
+        'scale_y': 1,
+        'scale_z': 1,
+        'texture': webgl_default_texture,
+        'texture_align': '11010010',
+        'texture_x': 1,
+        'texture_y': 1,
+        'vertices_length': 0,
+        'visible': true,
+      },
+      'todo': webgl_entity_init,
+      'type': 'opaque',
+    });
 
     core_interval_modify({
       'id': 'webgl-interval',
@@ -4089,18 +4092,11 @@ function webgl_texture_init(args){
         webgl_textures[args.id] = {};
     }
     const texture = webgl_textures[args.id];
-
     const split = args.id.split(',');
     const image = split[0];
-    let texture_complete = false;
-    let texture_id = webgl_default_texture;
-    if(core_images[image]?.complete){
-        texture_complete = true;
-        texture_id = image;
-    }
 
-    if(!texture_complete
-      && !args.loading){
+    if(!args.loading
+      && core_images[image]?.complete !== true){
         if(split.length > 1){
             texture.ready = false;
         }
