@@ -1283,9 +1283,7 @@ function webgl_entity_create(args){
 
 function webgl_entity_init(entity){
     if(!webgl_textures[entity.texture]){
-        webgl_texture_init({
-          'id': entity.texture,
-        });
+        webgl_texture_init(entity.texture);
     }
 
     webgl_entity_alpha({
@@ -4076,44 +4074,31 @@ function webgl_texture_animate(id){
     webgl.generateMipmap(webgl.TEXTURE_2D);
 }
 
-// Required args: id
-function webgl_texture_init(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'loading': false,
-      },
-    });
-
-    if(!webgl_textures[args.id]){
-        webgl_textures[args.id] = {
-          'gl': webgl.createTexture(),
-        };
-    }
-    const texture = webgl_textures[args.id];
-    const split = args.id.split(',');
+function webgl_texture_init(id){
+    const split = id.split(',');
     const image = split[0];
 
-    if(!args.loading
-      && core_images[image]?.complete !== true){
+    if(!webgl_textures[id]){
+        webgl_textures[id] = {
+          'gl': webgl.createTexture(),
+        };
         if(split.length > 1){
-            texture.ready = false;
+            webgl_textures[id].ready = false;
         }
         core_image({
           'id': image,
           'src': webgl_uris[image],
           'todo': function(){
-              webgl_texture_init({
-                'id': args.id,
-                'loading': true,
-              });
+              webgl_texture_init(id);
           },
         });
         return;
     }
 
+    const texture = webgl_textures[id];
+
     if(split.length > 1){
-        const id = 'texture_' + args.id;
+        const texture_id = 'texture_' + id;
         core_html({
           'parent': core_html({
             'parent': core_elements.repo_ui,
@@ -4125,10 +4110,10 @@ function webgl_texture_init(args){
           }),
           'properties': {
             'height': core_images[image].height,
-            'id': id,
+            'id': texture_id,
             'width': core_images[image].width,
           },
-          'store': id,
+          'store': texture_id,
           'type': 'canvas',
         });
         texture.image = image;
@@ -4164,7 +4149,7 @@ function webgl_texture_init(args){
     webgl.generateMipmap(webgl.TEXTURE_2D);
 
     if(texture.ready === true){
-        webgl_texture_animate(args.id);
+        webgl_texture_animate(id);
         texture.speed_x = Number(split[1]);
         texture.speed_y = split.length > 2 ? Number(split[2]) : 0;
     }
