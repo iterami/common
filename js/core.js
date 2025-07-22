@@ -685,7 +685,7 @@ function core_number_format(args){
       'args': args,
       'defaults': {
         'decimals_max': 7,
-        'decimals_min': 7,
+        'decimals_min': 0,
       },
     });
 
