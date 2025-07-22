@@ -4087,7 +4087,7 @@ function webgl_texture_init(id){
         }
         core_image({
           'id': image,
-          'src': webgl_uris[image],
+          'src': webgl_uris[image] || webgl_uris[webgl_default_texture],
           'todo': function(){
               webgl_texture_init(id);
           },
