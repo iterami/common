@@ -1426,7 +1426,7 @@ function webgl_entity_scale(args){
 
 // Required args: parent, target
 function webgl_event(args){
-    if(args.parent.event_limit){
+    if(args.parent.event_limit !== false){
         if(args.parent.event_limit <= 0){
             args.parent.event_range = false;
             return;
