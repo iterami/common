@@ -1061,6 +1061,7 @@ function core_round(args){
       },
     });
 
+    let returned = 0;
     const result = Number(
       Math.round(args.number + 'e+' + args.decimals)
         + 'e-' + args.decimals
@@ -1082,19 +1083,16 @@ function core_round(args){
             }
         }
 
-        const new_result = Number(
-          Math.round(args.number + 'e+' + args.decimals)
-            + 'e-' + args.decimals
-        );
+        returned = Number(Number(Math.round(args.number + 'e+' + args.decimals) + 'e-' + args.decimals) + eString);
 
-        return Number(new_result + eString);
+    }else{
+        returned = result;
     }
 
-    if(Math.abs(result) < Number('1e-' + args.decimals)){
+    if(Math.abs(returned) < Number('1e-' + args.decimals)){
         return 0;
     }
-
-    return result;
+    return returned;
 }
 
 // Required args: array, todo
