@@ -1061,32 +1061,36 @@ function core_round(args){
       },
     });
 
-    const eIndex = String(args.number).indexOf('e');
-    let eString = '';
-    if(eIndex >= 0){
-        eString = String(args.number).slice(eIndex);
-        args.number = String(args.number).slice(
-          0,
-          eIndex
-        );
-
-        const power = Number(eString.slice(2));
-        if(power === args.decimals){
-            eString = 'e-' + (power + 1);
-        }
-    }
-
-    let result = Number(
+    const result = Number(
       Math.round(args.number + 'e+' + args.decimals)
         + 'e-' + args.decimals
     );
 
-    if(eString.length){
-        result = Number(result + eString);
+    if(globalThis.isNaN(result)){
+        const eIndex = String(args.number).indexOf('e');
+        let eString = '';
+        if(eIndex >= 0){
+            eString = String(args.number).slice(eIndex);
+            args.number = String(args.number).slice(
+              0,
+              eIndex
+            );
+
+            const power = Number(eString.slice(2));
+            if(power === args.decimals){
+                eString = 'e-' + (power + 1);
+            }
+        }
+
+        const new_result = Number(
+          Math.round(args.number + 'e+' + args.decimals)
+            + 'e-' + args.decimals
+        );
+
+        return Number(new_result + eString);
     }
 
-    if(globalThis.isNaN(result)
-      || Math.abs(result) < Number('1e-' + args.decimals)){
+    if(Math.abs(result) < Number('1e-' + args.decimals)){
         return 0;
     }
 
