@@ -1081,6 +1081,10 @@ function webgl_draw_entity(entity){
       uniforms.point_size,
       entity.point_size
     );
+    webgl.uniform3fv(
+      uniforms.normals,
+      entity.normals
+    );
     webgl.uniformMatrix4fv(
       uniforms.camera,
       false,
@@ -1295,6 +1299,7 @@ function webgl_entity_init(entity){
       'colors': entity.vertex_colors,
       'vertexcount': entity.vertices_length,
     });
+    webgl_entity_normals(entity);
 
     if(entity.picking === true){
         entity.picking = [
@@ -1327,7 +1332,7 @@ function webgl_entity_init(entity){
 
     const attributes = webgl_shaders.default.attributes;
     entity.vao = webgl.createVertexArray();
-    webgl_entity_normals(entity);
+    webgl.bindVertexArray(entity.vao);
     webgl_buffer_set({
       'attribute': attributes.vertexColor,
       'data': entity.vertex_colors,
@@ -1347,22 +1352,22 @@ function webgl_entity_init(entity){
 
 function webgl_entity_normals(entity){
     const attached_to = globalThis[entity.attach_type][entity.attach_to];
-    entity.normals = webgl_normals({
-      'rotate_x': entity.rotate_x + attached_to.rotate_x,
-      'rotate_y': entity.rotate_y + attached_to.rotate_y,
-      'rotate_z': entity.rotate_z + attached_to.rotate_z,
-    });
+    const radians_x = math_degrees_to_radians(entity.rotate_x + attached_to.rotate_x);
+    const radians_y = math_degrees_to_radians(entity.rotate_y + attached_to.rotate_y);
+    const radians_z = -math_degrees_to_radians(entity.rotate_z + attached_to.rotate_z);
+    const cos_y = Math.cos(radians_y);
 
-    const normals = [];
-    for(let i = 0; i < entity.vertices_length; i++){
-        normals.push(...entity.normals);
-    }
-    webgl.bindVertexArray(entity.vao);
-    webgl_buffer_set({
-      'attribute': webgl_shaders.default.attributes.vertexNormal,
-      'data': normals,
-      'size': 3,
-    });
+    entity.normals = [
+      core_round({
+        'number': Math.sin(radians_z) * cos_y,
+      }),
+      core_round({
+        'number': Math.cos(radians_x) * Math.cos(radians_z),
+      }),
+      core_round({
+        'number': Math.sin(radians_x) * cos_y,
+      }),
+    ];
 }
 
 // Required args: entity
@@ -1690,7 +1695,6 @@ function webgl_init(){
       'attributes': [
         'vertexPosition',
         'vertexColor',
-        'vertexNormal',
         'texturePosition',
       ],
       'uniforms': [
@@ -1707,6 +1711,7 @@ function webgl_init(){
         'light_count',
         'light_position',
         'light_range',
+        'normals',
         'perspective',
         'point_size',
       ],
@@ -1753,7 +1758,6 @@ void main(void){
       'vertex':
 `#version 300 es
 in vec2 texturePosition;
-in vec3 vertexNormal;
 layout (location = 0) in vec3 vertexPosition;
 layout (location = 1) in vec4 vertexColor;
 out vec2 positionTexture;
@@ -1768,6 +1772,7 @@ uniform mat4 perspective;
 uniform vec3 ambient_color;
 uniform vec3 directional_color;
 uniform vec3 directional_vector;
+uniform vec3 normals;
 void main(void){
     positionVertex = vertexPosition;
     positionCamera = camera * vec4(vertexPosition, 1.0);
@@ -1778,7 +1783,7 @@ void main(void){
     positionTexture = texturePosition;
     vec4 lighting = vec4(ambient_color, alpha);
     if(directional){
-        lighting.rgb += directional_color * max(dot(vertexNormal, directional_vector), 0.0);
+        lighting.rgb += directional_color * max(dot(normals, directional_vector), 0.0);
     }
     color = vertexColor * lighting;
 }`,
@@ -2648,34 +2653,6 @@ function webgl_move_to(args){
     args.move.position_x = args.x;
     args.move.position_y = args.y;
     args.move.position_z = args.z;
-}
-
-function webgl_normals(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'rotate_x': 0,
-        'rotate_y': 0,
-        'rotate_z': 0,
-      },
-    });
-
-    const radians_x = math_degrees_to_radians(args.rotate_x);
-    const radians_y = math_degrees_to_radians(args.rotate_y);
-    const radians_z = -math_degrees_to_radians(args.rotate_z);
-    const cos_y = Math.cos(radians_y);
-
-    return [
-      core_round({
-        'number': Math.sin(radians_z) * cos_y,
-      }),
-      core_round({
-        'number': Math.cos(radians_x) * Math.cos(radians_z),
-      }),
-      core_round({
-        'number': Math.sin(radians_x) * cos_y,
-      }),
-    ];
 }
 
 function webgl_particle_create(id, args){
