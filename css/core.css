@@ -82,6 +82,7 @@ button.gridbuttonclickable{
     left: 0;
     position: fixed;
     top: 0;
+    user-select: none;
 }
 #core_menu_info,
 #core_menu_tabcontent{
