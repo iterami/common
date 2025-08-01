@@ -429,9 +429,12 @@ function webgl_character_spawn(id){
     }
     const character = webgl_characters[id];
     if(!character
-      || character.spawn === false
-      || character.lives === 0){
+      || character.spawn === false){
         return;
+    }
+
+    if(character.lives !== 0){
+        character.life = character.life_max;
     }
 
     const axes = 'xyz';
@@ -443,7 +446,6 @@ function webgl_character_spawn(id){
         character['rotate_' + axis] = 0;
     }
     character.jump_allow = false;
-    character.life = character.life_max;
 
     Object.assign(
       character,
