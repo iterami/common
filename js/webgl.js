@@ -578,6 +578,8 @@ function webgl_collision(args){
         return;
     }
 
+    const change_position_y = args.collider.change_position_y;
+
     for(const axis in collision){
         const change_position = character['change_position_' + collision[axis]];
         const label = collision[axis] !== 'y'
@@ -591,26 +593,7 @@ function webgl_collision(args){
           + change_position;
         args.collider['change_position_' + collision[axis]] = change_position;
 
-        if(collision[axis] === 'y'){
-            if(!args.collider.jump_allow){
-                args.collider.jump_allow = collision_sign[axis] !== Math.sign(webgl_properties.gravity_max);
-
-                const change = args.collider['change_position_' + collision[axis]];
-                if(webgl_properties.gravity_damage
-                  && args.collider.level >= 0
-                  && change < webgl_properties.gravity_max / 2){
-                    webgl_stat_modify({
-                      'stat': 'life',
-                      'target': args.collider,
-                      'value': Math.floor((change - webgl_properties.gravity_max / 2) * 10),
-                    });
-                }
-            }
-
-            args.collider.change_position_x += character.change_position_x;
-            args.collider.change_position_z += character.change_position_z;
-
-        }else if(args.collider.vehicle_stats){
+        if(args.collider.vehicle_stats){
             const other_axis = collision[axis] === 'x'
               ? 'z'
               : 'x';
@@ -620,6 +603,25 @@ function webgl_collision(args){
               Math.abs(args.collider['change_position_' + other_axis])
             );
         }
+    }
+
+    if(args.target.normals[1] > .5){
+        if(!args.collider.jump_allow){
+            args.collider.jump_allow = true;
+
+            if(webgl_properties.gravity_damage
+              && args.collider.level >= 0
+              && change_position_y < webgl_properties.gravity_max / 2){
+                webgl_stat_modify({
+                  'stat': 'life',
+                  'target': args.collider,
+                  'value': Math.floor((change_position_y - webgl_properties.gravity_max / 2) * 10),
+                });
+            }
+        }
+
+        args.collider.change_position_x += character.change_position_x;
+        args.collider.change_position_z += character.change_position_z;
     }
 
     if(args.target.event_range === 0){
