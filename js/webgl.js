@@ -523,10 +523,11 @@ function webgl_color_set(args){
 // Required args: collider, target
 function webgl_collision(args){
     const character = webgl_characters[args.target.attach_to];
-    let collision = '';
     const collider_position = webgl_get_position(args.collider);
-    const collision_modifier = [];
-    const collision_sign = [];
+    const target_position = webgl_get_position(args.target);
+    let collision = '';
+    let collision_modifier = 0;
+    let collision_sign = 0;
     const diffs = {
       'x': args.collider.change_position_x - character.change_position_x,
       'y': args.collider.change_position_y - character.change_position_y,
@@ -538,7 +539,6 @@ function webgl_collision(args){
       'y_top': args.collider.collide_top + Math.abs(diffs.y),
       'z': args.collider.collide_xz + Math.abs(diffs.z),
     };
-    const target_position = webgl_get_position(args.target);
 
     const normal_x = 1 - Math.abs(args.target.normals[0]);
     const normal_y = 1 - Math.abs(args.target.normals[1]);
@@ -575,9 +575,9 @@ function webgl_collision(args){
         if(collider_position.x > range_x_min && collider_position.x < range_x_max
           && collider_position.y > range_y_min && collider_position.y < range_y_max
           && collider_position.z > range_z_min && collider_position.z < range_z_max){
-            collision += 'y';
-            collision_sign.push(Math.sign(args.target.normals[1]));
-            collision_modifier.push(y_modifier);
+            collision = 'y';
+            collision_sign = Math.sign(args.target.normals[1]);
+            collision_modifier = y_modifier;
         }
 
     }else if(normal_x !== 1){
@@ -611,9 +611,9 @@ function webgl_collision(args){
         if(collider_position.x > range_x_min && collider_position.x < range_x_max
           && collider_position.y > range_y_min && collider_position.y < range_y_max
           && collider_position.z > range_z_min && collider_position.z < range_z_max){
-            collision += 'x';
-            collision_sign.push(Math.sign(args.target.normals[0]));
-            collision_modifier.push(x_modifier);
+            collision = 'x';
+            collision_sign = Math.sign(args.target.normals[0]);
+            collision_modifier = x_modifier;
         }
 
     }else if(normal_z !== 1){
@@ -647,9 +647,9 @@ function webgl_collision(args){
         if(collider_position.x > range_x_min && collider_position.x < range_x_max
           && collider_position.y > range_y_min && collider_position.y < range_y_max
           && collider_position.z > range_z_min && collider_position.z < range_z_max){
-            collision += 'z';
-            collision_sign.push(Math.sign(args.target.normals[2]));
-            collision_modifier.push(z_modifier);
+            collision = 'z';
+            collision_sign = Math.sign(args.target.normals[2]);
+            collision_modifier = z_modifier;
         }
     }
 
@@ -659,29 +659,27 @@ function webgl_collision(args){
 
     const change_position_y = args.collider.change_position_y;
 
-    for(const axis in collision){
-        const change_position = character['change_position_' + collision[axis]];
-        const label = collision[axis] !== 'y'
-          ? 'xz'
-          : collision_sign[axis] > 0
-            ? 'bottom'
-            : 'top';
+    const change_label = 'change_position_' + collision;
+    const collide_label = 'collide_' + (collision !== 'y'
+      ? 'xz'
+      : collision_sign > 0
+        ? 'bottom'
+        : 'top');
 
-        args.collider['position_' + collision[axis]] = target_position[collision[axis]]
-          + args.collider['collide_' + label] * collision_sign[axis]
-          + change_position - collision_modifier[axis];
-        args.collider['change_position_' + collision[axis]] = change_position;
+    args.collider['position_' + collision] = target_position[collision]
+      + args.collider[collide_label] * collision_sign
+      + character[change_label] - collision_modifier;
+    args.collider[change_label] = character[change_label];
 
-        if(args.collider.vehicle_stats){
-            const other_axis = collision[axis] === 'x'
-              ? 'z'
-              : 'x';
+    if(args.collider.vehicle_stats){
+        const other_axis = collision === 'x'
+          ? 'z'
+          : 'x';
 
-            args.collider.vehicle_stats.speed = Math.min(
-              args.collider.vehicle_stats.speed,
-              Math.abs(args.collider['change_position_' + other_axis])
-            );
-        }
+        args.collider.vehicle_stats.speed = Math.min(
+          args.collider.vehicle_stats.speed,
+          Math.abs(args.collider['change_position_' + other_axis])
+        );
     }
 
     if(args.target.normals[1] > .5){
