@@ -671,7 +671,8 @@ function webgl_collision(args){
       + character[change_label] - collision_modifier;
     args.collider[change_label] = character[change_label];
 
-    if(args.collider.vehicle_stats){
+    if(collision !== 'y'
+      && args.collider.vehicle_stats){
         const other_axis = collision === 'x'
           ? 'z'
           : 'x';
