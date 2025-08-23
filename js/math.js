@@ -171,23 +171,18 @@ function math_greatest_common_divisor(args){
 
 // Required args: id, to
 function math_matrix_clone(args){
-    math_matrices[args.to] = math_matrix_create();
-    math_matrix_copy({
-      'id': args.id,
-      'to': args.to,
-    });
+    math_matrices[args.to] = math_matrix_create(math_matrices[args.id]);
 }
 
-// Required args: id, to
-function math_matrix_copy(args){
+function math_matrix_copy(id, to){
     Object.assign(
-      math_matrices[args.to],
-      math_matrices[args.id]
+      math_matrices[to],
+      math_matrices[id]
     );
 }
 
-function math_matrix_create(){
-    return new Float32Array(16);
+function math_matrix_create(length){
+    return new Float32Array(length || 16);
 }
 
 function math_matrix_delete(ids){
@@ -211,10 +206,7 @@ function math_matrix_rotate(args){
     const matrix = math_matrices[args.id];
 
     // Rotate X.
-    math_matrix_copy({
-      'id': args.id,
-      'to': 'cache',
-    });
+    math_matrix_copy(args.id, 'cache');
     let cosine = Math.cos(args.dimensions[0]);
     let sine = Math.sin(args.dimensions[0]);
 
@@ -228,10 +220,7 @@ function math_matrix_rotate(args){
     matrix[11] = cache[11] * cosine - cache[7] * sine;
 
     // Rotate Y.
-    math_matrix_copy({
-      'id': args.id,
-      'to': 'cache',
-    });
+    math_matrix_copy(args.id, 'cache');
     cosine = Math.cos(args.dimensions[1]);
     sine = Math.sin(args.dimensions[1]);
 
@@ -245,10 +234,7 @@ function math_matrix_rotate(args){
     matrix[11] = cache[11] * cosine + cache[3] * sine;
 
     // Rotate Z.
-    math_matrix_copy({
-      'id': args.id,
-      'to': 'cache',
-    });
+    math_matrix_copy(args.id, 'cache');
     cosine = Math.cos(args.dimensions[2]);
     sine = Math.sin(args.dimensions[2]);
 

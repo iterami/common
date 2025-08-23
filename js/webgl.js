@@ -56,7 +56,7 @@ function webgl_buffer_set(args){
     );
     webgl.bufferData(
       webgl.ARRAY_BUFFER,
-      new Float32Array(args.data),
+      math_matrix_create(args.data),
       webgl.STATIC_DRAW
     );
 
@@ -2604,10 +2604,7 @@ function webgl_logic_entity(entity){
         webgl_logic_particle(entity);
     }
 
-    math_matrix_copy({
-      'id': 'camera',
-      'to': entity.id,
-    });
+    math_matrix_copy('camera', entity.id);
     math_matrix_translate({
       'dimensions': [
         -entity.position_x,
