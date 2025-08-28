@@ -482,7 +482,7 @@ function webgl_character_spawn(id){
 }
 
 function webgl_character_strafe(character){
-    const checks = webgl_properties.pointerlock
+    const checks = core_getpointerlock()
       || character.camera_zoom === 0
       || character.controls === 'arpg'
       || character.controls === 'rts';
@@ -1082,7 +1082,7 @@ function webgl_controls_pointer(character){
 
     if(pointer_0_down
       || pointer_1_down
-      || webgl_properties.pointerlock){
+      || core_getpointerlock()){
         webgl_camera_rotate({
           'character': character.id,
           'x': movement_y / 10,
@@ -2963,8 +2963,9 @@ function webgl_pick_entity(cursor){
         return;
     }
 
-    const x = webgl_properties.pointerlock ? globalThis.innerWidth / 2 : core_pointer.x;
-    const y = webgl_properties.pointerlock ? globalThis.innerHeight / 2 : core_pointer.y;
+    const locked = core_getpointerlock();
+    const x = locked ? globalThis.innerWidth / 2 : core_pointer.x;
+    const y = locked ? globalThis.innerHeight / 2 : core_pointer.y;
 
     webgl_shader_use('picking');
     const color = webgl_scissor({

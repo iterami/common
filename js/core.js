@@ -171,6 +171,10 @@ function core_getelement(id){
     return document.getElementById(id);
 }
 
+function core_getpointerlock(){
+    return document.pointerLockElement !== null;
+}
+
 function core_handle_beforeunload(event){
     if(core_events.beforeunload){
         core_handle_event({
@@ -181,7 +185,7 @@ function core_handle_beforeunload(event){
 }
 
 function core_handle_blur(){
-    if(document.pointerLockElement){
+    if(core_getpointerlock()){
         document.exitPointerLock();
     }
     core_key_shift = false;
@@ -330,7 +334,7 @@ function core_handle_pointerlockchange(){
     if(core_menu_open){
         document.exitPointerLock();
 
-    }else if(document.pointerLockElement === null){
+    }else if(!core_getpointerlock()){
         core_escape(true);
     }
 }
@@ -1041,8 +1045,7 @@ function core_repo_init(args){
 
 function core_requestpointerlock(element){
     if(core_menu_open
-      || core_mobile
-      || document.pointerLockElement !== null
+      || core_getpointerlock()
       || core_keys.Escape.state){
         return;
     }
