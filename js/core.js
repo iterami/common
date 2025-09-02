@@ -365,6 +365,10 @@ function core_handle_pointermove(event){
     }else{
         core_pointer.movement_x = event.movementX * (core_storage_data.pointer_horizontal || 1);
         core_pointer.movement_y = event.movementY * (core_storage_data.pointer_vertical || 1);
+
+        if(!core_pointer.down_0){
+            core_mobile = false;
+        }
     }
 
     if(core_pointer.todo.pointermove){
@@ -1045,6 +1049,7 @@ function core_repo_init(args){
 
 function core_requestpointerlock(element){
     if(core_menu_open
+      || core_mobile
       || core_getpointerlock()
       || core_keys.Escape.state){
         return;
