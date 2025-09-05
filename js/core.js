@@ -1052,9 +1052,7 @@ function core_requestpointerlock(element){
         return;
     }
 
-    element.requestPointerLock({
-      unadjustedMovement: true,
-    });
+    element.requestPointerLock();
 }
 
 // Required args: number
