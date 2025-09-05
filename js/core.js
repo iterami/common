@@ -365,10 +365,7 @@ function core_handle_pointermove(event){
     }else{
         core_pointer.movement_x = event.movementX * (core_storage_data.pointer_horizontal || 1);
         core_pointer.movement_y = event.movementY * (core_storage_data.pointer_vertical || 1);
-
-        if(!core_pointer.down_0){
-            core_mobile = false;
-        }
+        core_mobile = false;
     }
 
     if(core_pointer.todo.pointermove){
