@@ -84,6 +84,7 @@ button.gridbuttonclickable{
     top: 0;
     touch-action: none;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 #core_menu_info,
 #core_menu_tabcontent{
