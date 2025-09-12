@@ -986,20 +986,6 @@ function core_repo_init(args){
           },
         };
     }
-    if(args.storage !== false
-      || args.storage_controls){
-        core_html({
-          'parent': core_elements.core_menu,
-          'properties': {
-            'id': 'storage_save',
-            'onclick': core_storage_save,
-            'textContent': 'Save All Settings',
-            'type': 'button',
-          },
-          'todo': 'append',
-          'type': 'button',
-        });
-    }
     core_storage_update();
     if(!have_default){
         core_tab_switch('tab_core_menu_repo');
@@ -1192,6 +1178,20 @@ function core_storage_add(args){
               'value': value,
             });
         core_elements[key] = document.getElementById(key);
+    }
+
+    if(!document.getElementById('storage_save')){
+        core_html({
+          'parent': core_elements.core_menu,
+          'properties': {
+            'id': 'storage_save',
+            'onclick': core_storage_save,
+            'textContent': 'Save All Settings',
+            'type': 'button',
+          },
+          'todo': 'append',
+          'type': 'button',
+        });
     }
 }
 
