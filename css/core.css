@@ -128,7 +128,8 @@ progress{
 }
 input[type=number],
 input[type=range],
-input[type=text]{
+input[type=text],
+progress{
     width: 200px;
 }
 input:invalid{
