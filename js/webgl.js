@@ -525,9 +525,6 @@ function webgl_collision(args){
     const character = webgl_characters[args.target.attach_to];
     const collider_position = webgl_get_position(args.collider);
     const target_position = webgl_get_position(args.target);
-    let collision = '';
-    let collision_modifier = 0;
-    let collision_sign = 0;
     const diffs = {
       'x': args.collider.change_position_x - character.change_position_x,
       'y': args.collider.change_position_y - character.change_position_y,
@@ -543,117 +540,113 @@ function webgl_collision(args){
     const normal_x = 1 - Math.abs(args.target.normals[0]);
     const normal_y = 1 - Math.abs(args.target.normals[1]);
     const normal_z = 1 - Math.abs(args.target.normals[2]);
+    let range_x_max = target_position.x + range.x;
+    let range_x_min = target_position.x - range.x;
+    let range_y_max = target_position.y + range.y_bottom;
+    let range_y_min = target_position.y - range.y_top;
+    let range_z_max = target_position.z + range.z;
+    let range_z_min = target_position.z - range.z;
+    let collision = '';
+    let collision_modifier = 0;
+    let collision_sign = 0;
 
     if(normal_y !== 1){
-        let range_x_max = target_position.x + args.target.vertices[0] + range.x;
-        let range_x_min = target_position.x + args.target.vertices[3] - range.x;
-        let range_y_max = target_position.y + range.y_bottom;
-        let range_y_min = target_position.y - range.y_top;
-        let range_z_max = target_position.z + args.target.vertices[8] + range.z;
-        let range_z_min = target_position.z + args.target.vertices[2] - range.z;
+        range_x_max += args.target.vertices[0];
+        range_x_min += args.target.vertices[3];
+        range_z_max += args.target.vertices[8];
+        range_z_min += args.target.vertices[2];
 
-        let y_modifier = 0;
         if(normal_y !== 0){
             if(normal_x !== 1){
                 const radians_z = math_degrees_to_radians(args.target.rotate_z);
                 const cos = 1 - Math.cos(radians_z);
                 range_x_max -= args.target.vertices[0] * cos;
                 range_x_min -= args.target.vertices[3] * cos;
-                y_modifier = (collider_position.x - target_position.x) * -Math.tan(radians_z);
+                collision_modifier = (collider_position.x - target_position.x) * -Math.tan(radians_z);
 
             }else if(normal_z !== 1){
                 const radians_x = math_degrees_to_radians(args.target.rotate_x);
                 const cos = 1 - Math.cos(radians_x);
                 range_z_max -= args.target.vertices[8] * cos;
                 range_z_min -= args.target.vertices[2] * cos;
-                y_modifier = (collider_position.z - target_position.z) * Math.tan(radians_x);
+                collision_modifier = (collider_position.z - target_position.z) * Math.tan(radians_x);
             }
-            range_y_max -= y_modifier;
-            range_y_min -= y_modifier;
+            range_y_max -= collision_modifier;
+            range_y_min -= collision_modifier;
+
+        }else if(args.collider.change_position_y === 0){
+            return;
         }
 
-        if(collider_position.x > range_x_min && collider_position.x < range_x_max
-          && collider_position.y > range_y_min && collider_position.y < range_y_max
-          && collider_position.z > range_z_min && collider_position.z < range_z_max){
-            collision = 'y';
-            collision_sign = Math.sign(args.target.normals[1]);
-            collision_modifier = y_modifier;
-        }
+        collision = 'y';
+        collision_sign = Math.sign(args.target.normals[1]);
 
     }else if(normal_x !== 1){
-        let range_x_max = target_position.x + range.x;
-        let range_x_min = target_position.x - range.x;
-        let range_y_max = target_position.y + args.target.vertices[0] + range.y_bottom;
-        let range_y_min = target_position.y + args.target.vertices[3] - range.y_top;
-        let range_z_max = target_position.z + args.target.vertices[8] + range.z;
-        let range_z_min = target_position.z + args.target.vertices[2] - range.z;
+        range_y_max += args.target.vertices[0];
+        range_y_min += args.target.vertices[3];
+        range_z_max += args.target.vertices[8];
+        range_z_min += args.target.vertices[2];
 
-        let x_modifier = 0;
         if(normal_x !== 0){
             if(normal_y !== 1){
                 const radians_z = math_degrees_to_radians(args.target.rotate_z);
                 const cos = 1 - Math.cos(radians_z);
                 range_y_max -= args.target.vertices[0] * cos;
                 range_y_min -= args.target.vertices[3] * cos;
-                x_modifier = (collider_position.y - target_position.y) * -Math.tan(radians_z);
+                collision_modifier = (collider_position.y - target_position.y) * -Math.tan(radians_z);
 
             }else if(normal_z !== 1){
                 const radians_y = math_degrees_to_radians(args.target.rotate_y);
                 const cos = 1 - Math.cos(radians_y);
                 range_z_max -= args.target.vertices[8] * cos;
                 range_z_min -= args.target.vertices[2] * cos;
-                x_modifier = (collider_position.z - target_position.z) * Math.tan(radians_y);
+                collision_modifier = (collider_position.z - target_position.z) * Math.tan(radians_y);
             }
-            range_x_max -= x_modifier;
-            range_x_min -= x_modifier;
+            range_x_max -= collision_modifier;
+            range_x_min -= collision_modifier;
+
+        }else if(args.collider.change_position_x === 0){
+            return;
         }
 
-        if(collider_position.x > range_x_min && collider_position.x < range_x_max
-          && collider_position.y > range_y_min && collider_position.y < range_y_max
-          && collider_position.z > range_z_min && collider_position.z < range_z_max){
-            collision = 'x';
-            collision_sign = Math.sign(args.target.normals[0]);
-            collision_modifier = x_modifier;
-        }
+        collision = 'x';
+        collision_sign = Math.sign(args.target.normals[0]);
 
     }else if(normal_z !== 1){
-        let range_x_max = target_position.x + args.target.vertices[0] + range.x;
-        let range_x_min = target_position.x + args.target.vertices[3] - range.x;
-        let range_y_max = target_position.y + args.target.vertices[8] + range.y_bottom;
-        let range_y_min = target_position.y + args.target.vertices[2] - range.y_top;
-        let range_z_max = target_position.z + range.z;
-        let range_z_min = target_position.z - range.z;
+        range_x_max += args.target.vertices[0];
+        range_x_min += args.target.vertices[3];
+        range_y_max += args.target.vertices[8];
+        range_y_min += args.target.vertices[2];
 
-        let z_modifier = 0;
         if(normal_z !== 0){
             if(normal_x !== 1){
                 const radians_y = math_degrees_to_radians(args.target.rotate_y);
                 const cos = 1 - Math.cos(radians_y);
                 range_x_max -= args.target.vertices[0] * cos;
                 range_x_min -= args.target.vertices[3] * cos;
-                z_modifier = (collider_position.x - target_position.x) * Math.tan(radians_y);
+                collision_modifier = (collider_position.x - target_position.x) * Math.tan(radians_y);
 
             }else if(normal_y !== 1){
                 const radians_x = math_degrees_to_radians(args.target.rotate_x);
                 const cos = 1 - Math.cos(radians_x);
                 range_y_max -= args.target.vertices[8] * cos;
                 range_y_min -= args.target.vertices[2] * cos;
-                z_modifier = (collider_position.y - target_position.y) * Math.tan(radians_x);
+                collision_modifier = (collider_position.y - target_position.y) * Math.tan(radians_x);
             }
-            range_z_max -= z_modifier;
-            range_z_min -= z_modifier;
+            range_z_max -= collision_modifier;
+            range_z_min -= collision_modifier;
+
+        }else if(args.collider.change_position_z === 0){
+            return;
         }
 
-        if(collider_position.x > range_x_min && collider_position.x < range_x_max
-          && collider_position.y > range_y_min && collider_position.y < range_y_max
-          && collider_position.z > range_z_min && collider_position.z < range_z_max){
-            collision = 'z';
-            collision_sign = Math.sign(args.target.normals[2]);
-            collision_modifier = z_modifier;
-        }
+        collision = 'z';
+        collision_sign = Math.sign(args.target.normals[2]);
     }
 
-    if(collision.length === 0){
+    if(collider_position.x <= range_x_min || collider_position.x >= range_x_max
+      || collider_position.y <= range_y_min || collider_position.y >= range_y_max
+      || collider_position.z <= range_z_min || collider_position.z >= range_z_max){
         return;
     }
 
