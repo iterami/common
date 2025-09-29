@@ -551,11 +551,6 @@ function webgl_collision(args){
     let collision_sign = 0;
 
     if(normal_y !== 1){
-        range_x_max += args.target.vertices[0];
-        range_x_min += args.target.vertices[3];
-        range_z_max += args.target.vertices[8];
-        range_z_min += args.target.vertices[2];
-
         if(normal_y !== 0){
             if(normal_x !== 1){
                 const radians_z = math_degrees_to_radians(args.target.rotate_z);
@@ -580,13 +575,12 @@ function webgl_collision(args){
 
         collision = 'y';
         collision_sign = Math.sign(args.target.normals[1]);
-
-    }else if(normal_x !== 1){
-        range_y_max += args.target.vertices[0];
-        range_y_min += args.target.vertices[3];
+        range_x_max += args.target.vertices[0];
+        range_x_min += args.target.vertices[3];
         range_z_max += args.target.vertices[8];
         range_z_min += args.target.vertices[2];
 
+    }else if(normal_x !== 1){
         if(normal_x !== 0){
             if(normal_y !== 1){
                 const radians_z = math_degrees_to_radians(args.target.rotate_z);
@@ -611,13 +605,12 @@ function webgl_collision(args){
 
         collision = 'x';
         collision_sign = Math.sign(args.target.normals[0]);
+        range_y_max += args.target.vertices[0];
+        range_y_min += args.target.vertices[3];
+        range_z_max += args.target.vertices[8];
+        range_z_min += args.target.vertices[2];
 
     }else if(normal_z !== 1){
-        range_x_max += args.target.vertices[0];
-        range_x_min += args.target.vertices[3];
-        range_y_max += args.target.vertices[8];
-        range_y_min += args.target.vertices[2];
-
         if(normal_z !== 0){
             if(normal_x !== 1){
                 const radians_y = math_degrees_to_radians(args.target.rotate_y);
@@ -642,6 +635,10 @@ function webgl_collision(args){
 
         collision = 'z';
         collision_sign = Math.sign(args.target.normals[2]);
+        range_x_max += args.target.vertices[0];
+        range_x_min += args.target.vertices[3];
+        range_y_max += args.target.vertices[8];
+        range_y_min += args.target.vertices[2];
     }
 
     if(collider_position.x <= range_x_min || collider_position.x >= range_x_max
