@@ -647,8 +647,6 @@ function webgl_collision(args){
         return;
     }
 
-    const change_position_y = args.collider.change_position_y;
-
     const change_label = 'change_position_' + collision;
     const collide_label = 'collide_' + (collision !== 'y'
       ? 'xz'
@@ -679,11 +677,11 @@ function webgl_collision(args){
 
             if(webgl_properties.gravity_damage
               && args.collider.level >= 0
-              && change_position_y < webgl_properties.gravity_max / 2){
+              && args.collider.change_position_y < webgl_properties.gravity_max / 2){
                 webgl_stat_modify({
                   'stat': 'life',
                   'target': args.collider,
-                  'value': Math.floor((change_position_y - webgl_properties.gravity_max / 2) * 10),
+                  'value': Math.floor((args.collider.change_position_y - webgl_properties.gravity_max / 2) * 10),
                 });
             }
         }
