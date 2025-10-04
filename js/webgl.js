@@ -2189,7 +2189,7 @@ function webgl_level_init(args){
           'parent': core_elements.core_ui,
           'properties': {
             'id': 'reticle',
-            'style': 'background:#fff;height:4px;left:50%;position:fixed;top:50%;transform:translate(-50%,-50%);width:4px;',
+            'style': 'background:#fff;height:4px;left:50%;pointer-events:none;position:fixed;top:50%;transform:translate(-50%,-50%);width:4px;',
           },
           'store': 'reticle',
         });
