@@ -2186,7 +2186,7 @@ function webgl_level_init(args){
 
     if(level.reticle){
         const reticle = core_html({
-          'parent': core_elements.repo_ui,
+          'parent': core_elements.core_ui,
           'properties': {
             'id': 'reticle',
             'style': 'background:#fff;height:4px;left:50%;position:fixed;top:50%;transform:translate(-50%,-50%);width:4px;',
