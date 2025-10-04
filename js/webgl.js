@@ -2189,10 +2189,15 @@ function webgl_level_init(args){
           'parent': core_elements.core_ui,
           'properties': {
             'id': 'reticle',
-            'style': 'background:#fff;height:4px;left:50%;pointer-events:none;position:fixed;top:50%;transform:translate(-50%,-50%);width:4px;',
           },
           'store': 'reticle',
         });
+        reticle.setAttribute(
+          'style',
+          'left:50%;pointer-events:none;position:fixed;top:50%;transform:translate(-50%,-50%);' + (level.reticle === true
+            ? 'background:#fff;height:4px;width:4px;'
+            : level.reticle)
+        );
         reticle.style.display = '';
 
     }else if(core_elements.reticle){
