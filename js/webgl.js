@@ -2198,6 +2198,14 @@ function webgl_level_init(args){
             ? 'background:#fff;height:4px;width:4px;'
             : level.reticle)
         );
+        reticle.setAttribute(
+          'data-height',
+          reticle.offsetHeight
+        );
+        reticle.setAttribute(
+          'data-width',
+          reticle.offsetWidth
+        );
         reticle.style.display = '';
 
     }else if(core_elements.reticle){
@@ -3050,8 +3058,8 @@ function webgl_pick_entity(cursor){
         if(cursor === true){
             webgl.canvas.style.cursor = 'pointer';
             if(core_elements.reticle){
-                core_elements.reticle.style.height = '6px';
-                core_elements.reticle.style.width = '6px';
+                core_elements.reticle.style.height = Math.ceil(core_elements.reticle.dataset.height * 1.5) + 'px';
+                core_elements.reticle.style.width = Math.ceil(core_elements.reticle.dataset.width * 1.5) + 'px';
             }
 
         }else{
@@ -3064,8 +3072,8 @@ function webgl_pick_entity(cursor){
     }else if(cursor === true){
         webgl.canvas.style.cursor = 'auto';
         if(core_elements.reticle){
-            core_elements.reticle.style.height = '4px';
-            core_elements.reticle.style.width = '4px';
+            core_elements.reticle.style.height = core_elements.reticle.dataset.height + 'px';
+            core_elements.reticle.style.width = core_elements.reticle.dataset.width + 'px';
         }
     }
 
