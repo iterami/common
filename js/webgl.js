@@ -581,28 +581,6 @@ function webgl_collision(args){
         range_z_min += args.target.vertices[2];
 
     }else if(normal_x !== 1){
-        if(normal_x !== 0){
-            if(normal_y !== 1){
-                const radians_z = math_degrees_to_radians(args.target.rotate_z);
-                const cos = 1 - Math.cos(radians_z);
-                range_y_max -= args.target.vertices[0] * cos;
-                range_y_min -= args.target.vertices[3] * cos;
-                collision_modifier = (collider_position.y - target_position.y) * -Math.tan(radians_z);
-
-            }else if(normal_z !== 1){
-                const radians_y = math_degrees_to_radians(args.target.rotate_y);
-                const cos = 1 - Math.cos(radians_y);
-                range_z_max -= args.target.vertices[8] * cos;
-                range_z_min -= args.target.vertices[2] * cos;
-                collision_modifier = (collider_position.z - target_position.z) * Math.tan(radians_y);
-            }
-            range_x_max -= collision_modifier;
-            range_x_min -= collision_modifier;
-
-        }else if(args.collider.change_position_x === 0){
-            return;
-        }
-
         collision = 'x';
         collision_sign = Math.sign(args.target.normals[0]);
         range_y_max += args.target.vertices[0];
@@ -611,28 +589,6 @@ function webgl_collision(args){
         range_z_min += args.target.vertices[2];
 
     }else if(normal_z !== 1){
-        if(normal_z !== 0){
-            if(normal_x !== 1){
-                const radians_y = math_degrees_to_radians(args.target.rotate_y);
-                const cos = 1 - Math.cos(radians_y);
-                range_x_max -= args.target.vertices[0] * cos;
-                range_x_min -= args.target.vertices[3] * cos;
-                collision_modifier = (collider_position.x - target_position.x) * Math.tan(radians_y);
-
-            }else if(normal_y !== 1){
-                const radians_x = math_degrees_to_radians(args.target.rotate_x);
-                const cos = 1 - Math.cos(radians_x);
-                range_y_max -= args.target.vertices[8] * cos;
-                range_y_min -= args.target.vertices[2] * cos;
-                collision_modifier = (collider_position.y - target_position.y) * Math.tan(radians_x);
-            }
-            range_z_max -= collision_modifier;
-            range_z_min -= collision_modifier;
-
-        }else if(args.collider.change_position_z === 0){
-            return;
-        }
-
         collision = 'z';
         collision_sign = Math.sign(args.target.normals[2]);
         range_x_max += args.target.vertices[0];
@@ -659,8 +615,33 @@ function webgl_collision(args){
       + character[change_label] - collision_modifier;
     args.collider[change_label] = character[change_label];
 
-    if(collision !== 'y'
-      && args.collider.vehicle_stats){
+    if(collision === 'y'){
+        if(args.target.normals[1] > .5){
+            if(!args.collider.jump_allow){
+                args.collider.jump_allow = true;
+
+                if(webgl_properties.gravity_damage
+                  && args.collider.level >= 0
+                  && args.collider.change_position_y < webgl_properties.gravity_max / 2){
+                    webgl_stat_modify({
+                      'stat': 'life',
+                      'target': args.collider,
+                      'value': Math.floor((args.collider.change_position_y - webgl_properties.gravity_max / 2) * 10),
+                    });
+                }
+            }
+
+            args.collider.change_position_x += character.change_position_x;
+            args.collider.change_position_z += character.change_position_z;
+
+        }else if(args.target.normals[0] !== 0){
+            args.collider.change_position_x = 0;
+
+        }else if(args.target.normals[2] !== 0){
+            args.collider.change_position_z = 0;
+        }
+
+    }else if(args.collider.vehicle_stats){
         const other_axis = collision === 'x'
           ? 'z'
           : 'x';
@@ -669,25 +650,6 @@ function webgl_collision(args){
           args.collider.vehicle_stats.speed,
           Math.abs(args.collider['change_position_' + other_axis])
         );
-    }
-
-    if(args.target.normals[1] > .5){
-        if(!args.collider.jump_allow){
-            args.collider.jump_allow = true;
-
-            if(webgl_properties.gravity_damage
-              && args.collider.level >= 0
-              && args.collider.change_position_y < webgl_properties.gravity_max / 2){
-                webgl_stat_modify({
-                  'stat': 'life',
-                  'target': args.collider,
-                  'value': Math.floor((args.collider.change_position_y - webgl_properties.gravity_max / 2) * 10),
-                });
-            }
-        }
-
-        args.collider.change_position_x += character.change_position_x;
-        args.collider.change_position_z += character.change_position_z;
     }
 
     if(args.target.event_range === 0){
