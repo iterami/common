@@ -643,10 +643,10 @@ function webgl_collision(args){
             args.change.z -= character.change_position_z;
 
         }else if(args.target.normals[0] !== 0){
-            args.collider.change_position_x = 0;
+            args.collider.change_position_x = Math.sign(args.target.normals[0]) * .2;
 
         }else if(args.target.normals[2] !== 0){
-            args.collider.change_position_z = 0;
+            args.collider.change_position_z = Math.sign(args.target.normals[2]) * .2;
         }
 
     }else{
