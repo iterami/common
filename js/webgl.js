@@ -1383,20 +1383,26 @@ function webgl_entity_init(entity){
 
 function webgl_entity_normals(entity){
     const attached_to = globalThis[entity.attach_type][entity.attach_to];
-    const radians_x = math_degrees_to_radians(entity.rotate_x + attached_to.rotate_x);
+    const degrees_x = entity.rotate_x + attached_to.rotate_x;
+    const degrees_z = entity.rotate_z + attached_to.rotate_z;
+    const radians_x = math_degrees_to_radians(degrees_x);
     const radians_y = math_degrees_to_radians(entity.rotate_y + attached_to.rotate_y);
-    const radians_z = -math_degrees_to_radians(entity.rotate_z + attached_to.rotate_z);
+    const radians_z = -math_degrees_to_radians(degrees_z);
     const cos_y = Math.cos(radians_y);
 
     entity.normals = [
       core_round({
-        'number': Math.sin(radians_z) * cos_y,
+        'number': (degrees_x === 90 || degrees_x === 270)
+          ? Math.sin(radians_y)
+          : Math.sin(radians_z) * cos_y,
       }),
       core_round({
         'number': Math.cos(radians_x) * Math.cos(radians_z),
       }),
       core_round({
-        'number': Math.sin(radians_x) * cos_y,
+        'number': (degrees_z === 90 || degrees_z === 270)
+          ? Math.sin(radians_y)
+          : Math.sin(radians_x) * cos_y,
       }),
     ];
 }
