@@ -520,7 +520,7 @@ function webgl_color_set(args){
     webgl_uniform_update();
 }
 
-// Required args: collider, target
+// Required args: change, collider, target
 function webgl_collision(args){
     const character = webgl_characters[args.target.attach_to];
     const collider_position = webgl_get_position(args.collider);
@@ -639,8 +639,8 @@ function webgl_collision(args){
                 }
             }
 
-            args.collider.change_position_x += character.change_position_x;
-            args.collider.change_position_z += character.change_position_z;
+            args.change.x -= character.change_position_x;
+            args.change.z -= character.change_position_z;
 
         }else if(args.target.normals[0] !== 0){
             args.collider.change_position_x = 0;
@@ -649,15 +649,19 @@ function webgl_collision(args){
             args.collider.change_position_z = 0;
         }
 
-    }else if(args.collider.vehicle_stats){
-        const other_axis = collision === 'x'
-          ? 'z'
-          : 'x';
+    }else{
+        args.change[collision] = 0;
 
-        args.collider.vehicle_stats.speed = Math.min(
-          args.collider.vehicle_stats.speed,
-          Math.abs(args.collider['change_position_' + other_axis])
-        );
+        if(args.collider.vehicle_stats){
+            const other_axis = collision === 'x'
+              ? 'z'
+              : 'x';
+
+            args.collider.vehicle_stats.speed = Math.min(
+              args.collider.vehicle_stats.speed,
+              Math.abs(args.collider['change_position_' + other_axis])
+            );
+        }
     }
 
     if(args.target.event_range === 0){
@@ -666,6 +670,8 @@ function webgl_collision(args){
           'target': args.collider,
         });
     }
+
+    return args.change;
 }
 
 function webgl_context_lost(event){
@@ -2338,8 +2344,8 @@ function webgl_logic(){
            webgl_properties.lock
         );
 
-        const change_position_x = character.change_position_x;
-        const change_position_z = character.change_position_z;
+        let change_position_x = character.change_position_x;
+        let change_position_z = character.change_position_z;
         if(character.change_position_y !== 0){
             character.jump_allow = false;
         }
@@ -2349,10 +2355,18 @@ function webgl_logic(){
             for(const id in entity_entities){
                 const entity = entity_entities[id];
                 if(entity.collision){
-                    webgl_collision({
+                    const change = webgl_collision({
                       'collider': character,
+                      'change': {
+                        'x': change_position_x,
+                        'z': change_position_z,
+                      },
                       'target': entity,
                     });
+                    if(change){
+                        change_position_x = change.x;
+                        change_position_z = change.z;
+                    }
                 }
             }
         }
