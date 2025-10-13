@@ -569,7 +569,7 @@ function webgl_collision(args){
             range_y_max -= collision_modifier;
             range_y_min -= collision_modifier;
 
-        }else if(args.collider.change_position_y === 0){
+        }else if(diffs.y === 0){
             return;
         }
 
@@ -581,6 +581,10 @@ function webgl_collision(args){
         range_z_min += args.target.vertices[2];
 
     }else if(normal_x !== 1){
+        if(diffs.x === 0){
+            return;
+        }
+
         collision = 'x';
         collision_sign = Math.sign(args.target.normals[0]);
         range_y_max += args.target.vertices[0];
@@ -589,6 +593,10 @@ function webgl_collision(args){
         range_z_min += args.target.vertices[2];
 
     }else if(normal_z !== 1){
+        if(diffs.z === 0){
+            return;
+        }
+
         collision = 'z';
         collision_sign = Math.sign(args.target.normals[2]);
         range_x_max += args.target.vertices[0];
