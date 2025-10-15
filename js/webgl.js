@@ -551,6 +551,8 @@ function webgl_collision(args){
     let collision_sign = 0;
 
     if(normal_y !== 1){
+        collision_sign = Math.sign(args.target.normals[1]);
+
         if(normal_y !== 0){
             if(normal_x !== 1){
                 const radians_z = math_degrees_to_radians(args.target.rotate_z);
@@ -569,36 +571,40 @@ function webgl_collision(args){
             range_y_max -= collision_modifier;
             range_y_min -= collision_modifier;
 
-        }else if(diffs.y === 0){
+        }else if(diffs.y === 0
+          || Math.sign(diffs.y) === collision_sign){
             return;
         }
 
         collision = 'y';
-        collision_sign = Math.sign(args.target.normals[1]);
         range_x_max += args.target.vertices[0];
         range_x_min += args.target.vertices[3];
         range_z_max += args.target.vertices[8];
         range_z_min += args.target.vertices[2];
 
     }else if(normal_x !== 1){
-        if(diffs.x === 0){
+        collision_sign = Math.sign(args.target.normals[0]);
+
+        if(diffs.x === 0
+          || Math.sign(diffs.x) === collision_sign){
             return;
         }
 
         collision = 'x';
-        collision_sign = Math.sign(args.target.normals[0]);
         range_y_max += args.target.vertices[0];
         range_y_min += args.target.vertices[3];
         range_z_max += args.target.vertices[8];
         range_z_min += args.target.vertices[2];
 
     }else if(normal_z !== 1){
-        if(diffs.z === 0){
+        collision_sign = Math.sign(args.target.normals[2]);
+
+        if(diffs.z === 0
+          || Math.sign(diffs.z) === collision_sign){
             return;
         }
 
         collision = 'z';
-        collision_sign = Math.sign(args.target.normals[2]);
         range_x_max += args.target.vertices[0];
         range_x_min += args.target.vertices[3];
         range_y_max += args.target.vertices[8];
