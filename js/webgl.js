@@ -544,11 +544,6 @@ function webgl_collision(args){
     if(normal_y !== 1){
         collision_sign = Math.sign(args.target.normals[1]);
 
-        if(diffs_y === 0
-          || Math.sign(diffs_y) === collision_sign){
-            return;
-        }
-
         if(normal_y !== 0){
             if(normal_x !== 1){
                 const radians_z = math_degrees_to_radians(args.target.rotate_z);
@@ -566,6 +561,10 @@ function webgl_collision(args){
             }
             range_y_max -= collision_modifier;
             range_y_min -= collision_modifier;
+
+        }else if(diffs_y === 0
+          || Math.sign(diffs_y) === collision_sign){
+            return;
         }
 
         collision = 'y';
