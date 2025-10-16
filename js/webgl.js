@@ -525,33 +525,29 @@ function webgl_collision(args){
     const character = webgl_characters[args.target.attach_to];
     const collider_position = webgl_get_position(args.collider);
     const target_position = webgl_get_position(args.target);
-    const diffs = {
-      'x': args.collider.change_position_x - character.change_position_x,
-      'y': args.collider.change_position_y - character.change_position_y,
-      'z': args.collider.change_position_z - character.change_position_z,
-    };
-    const range = {
-      'x': args.collider.collide_xz + Math.abs(diffs.x),
-      'y_bottom': args.collider.collide_bottom + Math.abs(diffs.y),
-      'y_top': args.collider.collide_top + Math.abs(diffs.y),
-      'z': args.collider.collide_xz + Math.abs(diffs.z),
-    };
-
+    const diffs_x = args.collider.change_position_x - character.change_position_x;
+    const diffs_y = args.collider.change_position_y - character.change_position_y;
+    const diffs_z = args.collider.change_position_z - character.change_position_z;
     const normal_x = 1 - Math.abs(args.target.normals[0]);
     const normal_y = 1 - Math.abs(args.target.normals[1]);
     const normal_z = 1 - Math.abs(args.target.normals[2]);
-    let range_x_max = target_position.x + range.x;
-    let range_x_min = target_position.x - range.x;
-    let range_y_max = target_position.y + range.y_bottom;
-    let range_y_min = target_position.y - range.y_top;
-    let range_z_max = target_position.z + range.z;
-    let range_z_min = target_position.z - range.z;
+    let range_x_max = 0;
+    let range_x_min = 0;
+    let range_y_max = 0;
+    let range_y_min = 0;
+    let range_z_max = 0;
+    let range_z_min = 0;
     let collision = '';
     let collision_modifier = 0;
     let collision_sign = 0;
 
     if(normal_y !== 1){
         collision_sign = Math.sign(args.target.normals[1]);
+
+        if(diffs_y === 0
+          || Math.sign(diffs_y) === collision_sign){
+            return;
+        }
 
         if(normal_y !== 0){
             if(normal_x !== 1){
@@ -570,10 +566,6 @@ function webgl_collision(args){
             }
             range_y_max -= collision_modifier;
             range_y_min -= collision_modifier;
-
-        }else if(diffs.y === 0
-          || Math.sign(diffs.y) === collision_sign){
-            return;
         }
 
         collision = 'y';
@@ -585,8 +577,8 @@ function webgl_collision(args){
     }else if(normal_x !== 1){
         collision_sign = Math.sign(args.target.normals[0]);
 
-        if(diffs.x === 0
-          || Math.sign(diffs.x) === collision_sign){
+        if(diffs_x === 0
+          || Math.sign(diffs_x) === collision_sign){
             return;
         }
 
@@ -599,8 +591,8 @@ function webgl_collision(args){
     }else if(normal_z !== 1){
         collision_sign = Math.sign(args.target.normals[2]);
 
-        if(diffs.z === 0
-          || Math.sign(diffs.z) === collision_sign){
+        if(diffs_z === 0
+          || Math.sign(diffs_z) === collision_sign){
             return;
         }
 
@@ -610,6 +602,17 @@ function webgl_collision(args){
         range_y_max += args.target.vertices[8];
         range_y_min += args.target.vertices[2];
     }
+
+    const range_x = args.collider.collide_xz + Math.abs(diffs_x);
+    const range_y_bottom = args.collider.collide_bottom + Math.abs(diffs_y);
+    const range_y_top = args.collider.collide_top + Math.abs(diffs_y);
+    const range_z = args.collider.collide_xz + Math.abs(diffs_z);
+    range_x_max += target_position.x + range_x;
+    range_x_min += target_position.x - range_x;
+    range_y_max += target_position.y + range_y_bottom;
+    range_y_min += target_position.y - range_y_top;
+    range_z_max += target_position.z + range_z;
+    range_z_min += target_position.z - range_z;
 
     if(collider_position.x <= range_x_min || collider_position.x >= range_x_max
       || collider_position.y <= range_y_min || collider_position.y >= range_y_max
