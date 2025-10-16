@@ -2964,6 +2964,7 @@ function webgl_pick_entity(cursor){
         return;
     }
 
+    let picked = false;
     const x = webgl_properties.pointerlock ? Math.floor(globalThis.innerWidth / 2) : core_pointer.x;
     const y = webgl_properties.pointerlock ? Math.floor(globalThis.innerHeight / 2) : core_pointer.y;
 
@@ -2979,17 +2980,7 @@ function webgl_pick_entity(cursor){
       'x': x,
       'y': y
     });
-    webgl_shader_use('default');
-    const clear_color = webgl_properties.clear_color;
-    webgl.clearColor(
-      clear_color[0],
-      clear_color[1],
-      clear_color[2],
-      1
-    );
-    webgl_draw();
 
-    let picked = false;
     if(color[0] !== 0
       || color[1] !== 0
       || color[2] !== 0){
@@ -3076,6 +3067,15 @@ function webgl_pick_entity(cursor){
         }
     }
 
+    webgl_shader_use('default');
+    const clear_color = webgl_properties.clear_color;
+    webgl.clearColor(
+      clear_color[0],
+      clear_color[1],
+      clear_color[2],
+      1
+    );
+    webgl_draw();
     return picked;
 }
 
