@@ -53,7 +53,8 @@ function tables_init(){
 
 function tables_sort(element, column, direction, type){
     const table = element.closest('table');
-    const tbody = table.getElementsByTagName('tbody')[0];
+    const tbodys = table.getElementsByTagName('tbody');
+    const tbody = tbodys[tbodys.length - 1];
     if(!tbody){
         return;
     }
