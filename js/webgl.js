@@ -1792,6 +1792,13 @@ uniform vec3 light_color[16];
 uniform vec3 light_position[16];
 void main(void){
     fragment = color;
+    if(fog_end > 0.0){
+        fragment.rgb = mix(
+          fragment.rgb,
+          clear_color,
+          clamp((length(positionCamera) - fog_start) / (fog_end - fog_start), 0.0, 1.0)
+        );
+    }
     for(int i = 0; i < light_count; i++) {
         float range = distance(
           light_position[i],
@@ -1806,13 +1813,6 @@ void main(void){
         }
     }
     fragment *= texture(sampler, positionTexture);
-    if(fog_end > 0.0){
-        fragment.rgb = mix(
-          fragment.rgb,
-          clear_color,
-          clamp((length(positionCamera) - fog_start) / (fog_end - fog_start), 0.0, 1.0)
-        );
-    }
 }`,
       'vertex':
 `#version 300 es
