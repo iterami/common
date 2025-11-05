@@ -1801,7 +1801,7 @@ void main(void){
             fragment.rgb = mix(
               light_color[i],
               fragment.rgb,
-              range / light_range[i]
+              clamp(range / light_range[i], 0.0, 1.0)
             );
         }
     }
@@ -1810,7 +1810,7 @@ void main(void){
         fragment.rgb = mix(
           fragment.rgb,
           clear_color,
-          (length(positionCamera) - fog_start) / (fog_end - fog_start)
+          clamp((length(positionCamera) - fog_start) / (fog_end - fog_start), 0.0, 1.0)
         );
     }
 }`,
