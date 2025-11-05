@@ -1799,18 +1799,18 @@ void main(void){
         );
         if(range < light_range[i]){
             fragment.rgb = mix(
-              fragment.rgb,
               light_color[i],
-              1.0 - clamp(range / light_range[i], 0.0, 1.0)
+              fragment.rgb,
+              range / light_range[i]
             );
         }
     }
     fragment *= texture(sampler, positionTexture);
     if(fog_end > 0.0){
         fragment.rgb = mix(
-          clear_color,
           fragment.rgb,
-          1.0 - clamp((length(positionCamera) - fog_start) / (fog_end - fog_start), 0.0, 1.0)
+          clear_color,
+          (length(positionCamera) - fog_start) / (fog_end - fog_start)
         );
     }
 }`,
@@ -2242,6 +2242,7 @@ function webgl_level_load(args){
       'character': args.character,
       'json': args.json,
     });
+
     return true;
 }
 
@@ -3075,6 +3076,7 @@ function webgl_pick_entity(cursor){
       1
     );
     webgl_draw();
+
     return picked;
 }
 
@@ -3884,9 +3886,9 @@ function webgl_scissor(args){
       args.width,
       args.height
     );
-
     const result = args.todo();
     webgl.disable(webgl.SCISSOR_TEST);
+
     return result;
 }
 
