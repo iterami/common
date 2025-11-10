@@ -22,7 +22,9 @@ function test_consts(args){
 // Required args: args, expect, function
 function test_function(args){
     let test = false;
-    const result = globalThis[args.function](args.args);
+    const result = globalThis[args.function]
+      ? globalThis[args.function](args.args)
+      : 'undefined function';
     const type = core_type(args.expect);
 
     if(type === 'function'){
