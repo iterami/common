@@ -4034,6 +4034,7 @@ function webgl_stat_modify(args){
             while(target.level_xp >= Math.floor(target.level + 1) * 1e3){
                 target.level_xp -= Math.floor(target.level + 1) * 1e3;
                 target.level++;
+                args.stat = 'level';
             }
 
         }else if(args.stat === 'life'){
