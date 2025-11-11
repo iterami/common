@@ -726,23 +726,6 @@ function core_random_boolean(chance){
     return Math.random() < chance;
 }
 
-function core_random_crypto(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'array': 'Uint8Array',
-        'length': 1,
-      },
-    });
-
-    if(core_type(args.array) === 'string'){
-        args.array = new globalThis[args.array](args.length);
-    }
-
-    globalThis.crypto.getRandomValues(args.array);
-    return args.array;
-}
-
 // Required args: options
 function core_random_drop(args){
     args = core_args({
