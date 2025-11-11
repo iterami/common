@@ -2,8 +2,13 @@
 
 // Required args: consts
 function test_consts(args){
-    let results = '<tr class=header><td>Const<td>Value<td>Test';
+    let passed = 0;
+    let results = '';
+    let total = 0;
+
     for(const id in args.consts){
+        total++;
+
         const label = args.consts[id];
         let result = false;
         let value = '';
@@ -15,8 +20,13 @@ function test_consts(args){
           + '<td>' + label
           + '<td>' + value
           + '<td>' + result;
+
+        if(result){
+            passed++;
+        }
     }
-    return results;
+
+    return '<tr class=header><td>Constants ' + passed + '/' + total + '<td>Value<td>Test' + results;
 }
 
 // Required args: args, expect, function
@@ -53,9 +63,13 @@ function test_function(args){
 
 // Required args: link, tests
 function test_run(args){
-    let results = '<tr class=header><td>Function<td>Args<td>Expected<td>Result<td>Test';
+    let passed = 0;
+    let results = '';
+    let total = 0;
 
     for(const test of args.tests){
+        total++;
+
         const test_args = {};
         Object.assign(
           test_args,
@@ -115,9 +129,13 @@ function test_run(args){
           + '</pre><td><pre>' + expect
           + '</pre><td><pre>' + result_json
           + '</pre><td>' + result.test;
+
+        if(result.test){
+            passed++;
+        }
     }
 
-    return results;
+    return '<tr class=header><td>Functions ' + passed + '/' + total + '<td>Args<td>Expected<td>Result<td>Test' + results;
 }
 
 // Required args: function
