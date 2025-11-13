@@ -3977,6 +3977,7 @@ function webgl_stat_modify(args){
       'args': args,
       'defaults': {
         'has': true,
+        'round': false,
         'set': false,
         'value': 1,
       },
@@ -4028,7 +4029,12 @@ function webgl_stat_modify(args){
 
         target[args.stat] = (args.set || core_type(args.value) !== 'number')
           ? args.value
-          : target[args.stat] + args.value;
+          : (args.round === false
+            ? target[args.stat] + args.value
+            : core_round({
+                'decimals': args.round,
+                'number': target[args.stat] + args.value,
+              }));
 
         if(args.stat === 'level_xp'){
             while(target.level_xp >= Math.floor(target.level + 1) * 1e3){
