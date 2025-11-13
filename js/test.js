@@ -124,10 +124,9 @@ function test_run(args){
         );
 
         results += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
-          + '<td><a href=' + args.link + test.function + '.htm>' + test.function + '()</a>'
-          + '<td><textarea>' + args_json
-          + '</textarea><td><pre>' + expect
-          + '</pre><td><pre>' + result_json
+          + '<td><a href=' + args.link + test.function + '.htm>' + test.function + '()</a><br><textarea readonly>' + args_json
+          + '</textarea><td><pre>' + result_json
+          + '</pre><td><pre>' + expect
           + '</pre><td>' + result.test;
 
         if(result.test){
@@ -135,7 +134,7 @@ function test_run(args){
         }
     }
 
-    return '<tr class=header><td>Functions ' + passed + '/' + total + '<td>Args<td>Expected<td>Result<td>Test' + results;
+    return '<tr class=header><td>Functions ' + passed + '/' + total + '<td>Result<td>Expected<td>Test' + results;
 }
 
 // Required args: function
