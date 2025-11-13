@@ -3,7 +3,7 @@
 // Required args: consts
 function test_consts(args){
     let passed = 0;
-    let results = '';
+    let table = '';
     let total = 0;
 
     for(const id in args.consts){
@@ -16,7 +16,7 @@ function test_consts(args){
             value = eval(label);
             result = value !== void 0;
         }catch{}
-        results += '<tr ' + (!result ? ' style=background-color:#600' : '') + '>'
+        table += '<tr ' + (!result ? ' style=background-color:#600' : '') + '>'
           + '<td>' + label
           + '<td>' + value
           + '<td>' + result;
@@ -26,37 +26,37 @@ function test_consts(args){
         }
     }
 
-    return '<tr class=header><td>Constants ' + passed + '/' + total + '<td>Value<td>Test' + results;
+    return '<tr class=header><td>Constants ' + passed + '/' + total + '<td>Value<td>Test' + table;
 }
 
 // Required args: args, expect, function
 function test_function(args){
     let test = false;
-    const result = globalThis[args.function]
+    const returned = globalThis[args.function]
       ? globalThis[args.function](args.args)
       : 'undefined function';
     const type = core_type(args.expect);
 
     if(type === 'function'){
-        test = args.expect(result);
+        test = args.expect(returned);
 
     }else if(type === 'array'
       || type === 'object'){
         test = true;
-        for(const item in result){
+        for(const item in returned){
             if(args.expect[item] === void 0
-              || result[item] !== args.expect[item]){
+              || returned[item] !== args.expect[item]){
                 test = false;
                 break;
             }
         }
 
     }else{
-        test = result === args.expect;
+        test = returned === args.expect;
     }
 
     return {
-      'result': result,
+      'returned': returned,
       'test': test,
     };
 }
@@ -64,7 +64,7 @@ function test_function(args){
 // Required args: link, tests
 function test_run(args){
     let passed = 0;
-    let results = '';
+    let table = '';
     let total = 0;
 
     for(const test of args.tests){
@@ -117,15 +117,15 @@ function test_run(args){
             void 0,
             2
           );
-        const result_json = JSON.stringify(
-          result.result,
+        const returned_json = JSON.stringify(
+          result.returned,
           void 0,
           2
         );
 
-        results += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
+        table += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
           + '<td><a href=' + args.link + test.function + '.htm>' + test.function + '()</a><br><textarea readonly>' + args_json
-          + '</textarea><td><pre>' + result_json
+          + '</textarea><td><pre>' + returned_json
           + '</pre><td><pre>' + expect
           + '</pre><td>' + result.test;
 
@@ -134,7 +134,7 @@ function test_run(args){
         }
     }
 
-    return '<tr class=header><td>Functions ' + passed + '/' + total + '<td>Result<td>Expected<td>Test' + results;
+    return '<tr class=header><td>Functions ' + passed + '/' + total + '<td>Returned<td>Expected<td>Test' + table;
 }
 
 // Required args: function
