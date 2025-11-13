@@ -125,8 +125,8 @@ function test_run(args){
 
         results += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
           + '<td><a href=' + args.link + test.function + '.htm>' + test.function + '()</a>'
-          + '<td><pre>' + args_json
-          + '</pre><td><pre>' + expect
+          + '<td><textarea>' + args_json
+          + '</textarea><td><pre>' + expect
           + '</pre><td><pre>' + result_json
           + '</pre><td>' + result.test;
 
