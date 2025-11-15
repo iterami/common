@@ -18,15 +18,14 @@ function test_consts(args){
         }catch{}
         table += '<tr ' + (!result ? ' style=background-color:#600' : '') + '>'
           + '<td>' + label
-          + '<td>' + value
-          + '<td>' + result;
+          + '<td>' + (value || 'undefined');
 
         if(result){
             passed++;
         }
     }
 
-    return '<tr class=header><td>Constants ' + passed + '/' + total + '<td>Value<td>Test' + table;
+    return '<tr class=header><td>Constants ' + passed + '/' + total + '<td>Value' + table;
 }
 
 // Required args: args, expect, function
@@ -124,17 +123,18 @@ function test_run(args){
         );
 
         table += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
-          + '<td><a href=' + args.link + test.function + '.htm>' + test.function + '()</a><br><textarea readonly>' + args_json
+          + '<td><a href=' + args.link + test.function + '.htm>' + test.function + '()</a>: ' + result.test
+          + '<br><textarea readonly>' + args_json
           + '</textarea><td><pre>' + returned_json
           + '</pre><td><pre>' + expect
-          + '</pre><td>' + result.test;
+          + '</pre>';
 
         if(result.test){
             passed++;
         }
     }
 
-    return '<tr class=header><td>Functions ' + passed + '/' + total + '<td>Returned<td>Expected<td>Test' + table;
+    return '<tr class=header><td>Functions ' + passed + '/' + total + '<td>Returned<td>Expected' + table;
 }
 
 // Required args: function
