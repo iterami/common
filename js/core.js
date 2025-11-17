@@ -46,6 +46,9 @@ function core_escape(force){
         return;
     }
     if(core_type(force) === 'boolean'){
+        if(core_menu_open === force){
+            return;
+        }
         core_menu_open = force;
 
     }else{
