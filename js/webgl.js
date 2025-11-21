@@ -1490,7 +1490,13 @@ function webgl_entity_scale(args){
 
 // Required args: parent, target
 function webgl_event(args){
-    if(args.parent.event_limit !== false){
+    const array = core_type(args.parent) === 'array';
+    const event_todo = array
+      ? args.parent
+      : args.parent.event_todo;
+
+    if(!array
+      && args.parent.event_limit !== false){
         if(args.parent.event_limit <= 0){
             args.parent.event_range = false;
             return;
@@ -1499,31 +1505,36 @@ function webgl_event(args){
         args.parent.event_limit--;
     }
 
-    for(const todo of args.parent.event_todo){
+    for(const todo of event_todo){
         const modify = {...todo};
         if(modify.limit !== void 0){
             if(modify.limit <= 0){
                 continue;
             }
 
-            modify.limit--;
+            todo.limit--;
         }
 
-        for(const property in modify){
-            if(modify[property] === '_target'){
-                modify[property] = args.target.id;
+        if(!array){
+            for(const property in modify){
+                if(modify[property] === '_target'){
+                    modify[property] = args.target.id;
 
-            }else if(modify[property] === '_self'){
-                modify[property] = args.parent.id;
+                }else if(modify[property] === '_self'){
+                    modify[property] = args.parent.id;
 
-            }else if(core_type(modify[property]) === 'object'
-              || core_type(modify[property]) === 'array'){
-                for(const id in modify[property]){
-                    if(modify[property][id] === '_target'){
-                        modify[property][id] = args.target.id;
+                }else{
+                    const type = core_type(modify[property]);
 
-                    }else if(modify[property][id] === '_self'){
-                       modify[property][id] = args.parent.id;
+                    if(type === 'object' || type === 'array'){
+                        for(const id in modify[property]){
+                            if(modify[property][id] === '_target'){
+                                modify[property][id] = args.target.id;
+
+                            }else if(modify[property][id] === '_self'){
+                                modify[property][id] = args.parent.id;
+                            }
+                        }
                     }
                 }
             }
