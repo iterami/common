@@ -4442,10 +4442,11 @@ function webgl_timer_add(args){
 }
 
 function webgl_timer_handle(timer){
-    if(timer.active){
-        timer.frames--;
+    if(!timer.active){
+        return;
     }
 
+    timer.frames--;
     if(timer.frames > 0){
         return;
     }
