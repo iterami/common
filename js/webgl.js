@@ -2097,6 +2097,7 @@ function webgl_level_init(args){
         'reticle': false,
         'spawn': {},
         'textures': false,
+        'timers': {},
         'title': false,
         'y_min': false,
       },
@@ -2156,6 +2157,9 @@ function webgl_level_init(args){
       webgl_paths,
       level.paths
     );
+    for(const timer in level.timers){
+        webgl_timer_add(level.timers[timer]);
+    }
 
     if(args.character === -1){
         webgl_character_init({
@@ -2278,7 +2282,6 @@ function webgl_level_unload(base){
         }
     }
 
-    webgl_character_count = 0;
     entity_remove_all({
       'delete_empty': true,
     });
@@ -2288,6 +2291,10 @@ function webgl_level_unload(base){
     core_object_reset(webgl_shader_light_color);
     core_object_reset(webgl_shader_light_position);
     core_object_reset(webgl_shader_light_range);
+    core_object_reset(webgl_timers);
+
+    webgl_character_count = 0;
+    webgl_timer_count = 0;
 
     return properties;
 }
@@ -2300,6 +2307,10 @@ function webgl_logic(){
     core_object_reset(webgl_shader_light_color);
     core_object_reset(webgl_shader_light_position);
     core_object_reset(webgl_shader_light_range);
+
+    for(const timer in webgl_timers){
+        webgl_timer_handle(webgl_timers[timer]);
+    }
 
     if(webgl_properties.pointerlock){
         core_requestpointerlock(webgl.canvas);
@@ -4407,6 +4418,72 @@ function webgl_tiles(args){
     }
 }
 
+// Optional args: id
+function webgl_timer_add(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'active': true,
+        'event_end': void 0,
+        'event_repeat': void 0,
+        'frames_max': 100,
+        'frames_random': 0,
+        'repeat': 0,
+      },
+    });
+
+    const id = args.id || webgl_timer_count;
+    webgl_timers[id] = {
+      'frames': args.frames_max + Math.floor(Math.random() * args.frames_random),
+      'id': id,
+      ...args,
+    };
+    webgl_timer_count++;
+}
+
+function webgl_timer_handle(timer){
+    if(timer.active){
+        timer.frames--;
+    }
+
+    if(timer.frames > 0){
+        return;
+    }
+
+    if(timer.repeat !== 0){
+        if(timer.repeat > 0){
+            timer.repeat--;
+        }
+        let max = timer.frames_max;
+        if(timer.frames_random){
+            max += Math.floor(Math.random() * timer.frames_random);
+        }
+        timer.frames = max;
+
+        if(timer.event_repeat){
+            webgl_event({
+              'parent': timer.event_repeat,
+            });
+        }
+
+    }else{
+        if(timer.event_end){
+            webgl_event({
+              'parent': timer.event_end,
+            });
+        }
+        delete webgl_timers[timer.id];
+    }
+}
+
+function webgl_timer_toggle(id){
+    if(!webgl_timers[id]){
+        return;
+    }
+
+    webgl_timers[id].active = !webgl_timers[id].active;
+}
+
 function webgl_uniform_update(){
     const uniforms = webgl_shaders.default.uniforms;
     webgl.uniform3fv(
@@ -4544,3 +4621,5 @@ globalThis.webgl_shader_light_position = [];
 globalThis.webgl_shader_light_range = [];
 globalThis.webgl_shaders = {};
 globalThis.webgl_textures = {};
+globalThis.webgl_timer_count = 0;
+globalThis.webgl_timers = {};
