@@ -2089,15 +2089,15 @@ function webgl_level_init(args){
         'groups': [],
         'lock': {},
         'paused': false,
-        'particles': {},
-        'paths': {},
+        'particles': [],
+        'paths': [],
         'picking': 0,
         'pointerlock': false,
         'prefabs': [],
         'reticle': false,
         'spawn': {},
         'textures': false,
-        'timers': {},
+        'timers': [],
         'title': false,
         'y_min': false,
       },
@@ -2151,12 +2151,14 @@ function webgl_level_init(args){
     }
 
     for(const id in level.particles){
-        webgl_particle_create(id, level.particles[id]);
+        webgl_particle_create(level.particles[id]);
     }
-    Object.assign(
-      webgl_paths,
-      level.paths
-    );
+    for(const id in level.paths){
+        const path = level.paths[id];
+        webgl_paths[path.id] = {
+          ...path,
+        };
+    }
     for(const timer in level.timers){
         webgl_timer_add(level.timers[timer]);
     }
@@ -2755,10 +2757,10 @@ function webgl_move_to(args){
     args.move.position_z = args.z;
 }
 
-function webgl_particle_create(id, args){
-    webgl_particles[id] = {
+function webgl_particle_create(particle){
+    webgl_particles[particle.id] = {
       ...core_args({
-        'args': args,
+        'args': particle,
         'defaults': {
           'randomize': true,
           'speed_x': 0,
@@ -3683,8 +3685,11 @@ function webgl_primitive_particle(args){
       },
     });
 
-    const particle = args.particle;
-    webgl_particle_create(args.id, particle);
+    const particle = {
+      'id': args.id,
+      ...args.particle,
+    };
+    webgl_particle_create(particle);
 
     for(const entity of args.entities){
         const vertices = [];
@@ -4317,7 +4322,7 @@ function webgl_tiles(args){
                 }
                 path_object.points.push(point_object);
             }
-            webgl_paths[prefix + path] = path_object;
+            webgl_paths[prefix + path_object.id] = path_object;
         }
 
         for(const character in args.tiles[tiles[tile]].characters){
