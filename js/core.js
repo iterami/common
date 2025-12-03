@@ -930,6 +930,7 @@ function core_repo_init(args){
                 'label': 'controls',
                 'prefix': 'controls_',
               });
+              core_keys_rebind();
           },
         };
         Object.assign(
