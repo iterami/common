@@ -933,12 +933,13 @@ function core_repo_init(args){
         Object.assign(
           core_key_rebinds,
           {
-            'crouch': 'KeyC',
-            'jump': 'Space',
-            'move_down': 'KeyS',
-            'move_left': 'KeyA',
-            'move_right': 'KeyD',
-            'move_up': 'KeyW',
+            'crouch': true,
+            'jump': true,
+            'move_down': true,
+            'move_left': true,
+            'move_right': true,
+            'move_up': true,
+            ...args.storage_controls,
           },
         );
     }
