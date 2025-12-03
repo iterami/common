@@ -982,7 +982,6 @@ function core_repo_init(args){
       'beforeunload': args.beforeunload,
       'blur': args.blur,
       'elements': args.events,
-      'keybinds': args.keybinds,
       'pointerbinds': args.pointerbinds,
     });
 
