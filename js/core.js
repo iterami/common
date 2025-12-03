@@ -670,16 +670,7 @@ function core_keys_rebind(){
       },
     };
     for(const id in core_key_rebinds){
-        const key = core_key_rebinds[id];
-        if(core_type(key) !== 'object'){
-            Object.assign(
-              keys,
-              {[core_storage_data[id]]: {},}
-            );
-
-        }else{
-            keys[id] = key;
-        }
+        keys[core_storage_data[id]] = globalThis.structuredClone(core_keys[id]);
     }
     core_events_bind({
       'clearkeys': true,
