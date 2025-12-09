@@ -906,7 +906,7 @@ function core_repo_init(args){
             + '<tr><td><input class=mini id=move_left type=text><td>Move Left'
             + '<tr><td><input class=mini id=move_down type=text><td>Move Down/Back'
             + '<tr><td><input class=mini id=move_right type=text><td>Move Right</table>'
-            + '<button id=storage_reset type=button>Reset Controls</button>',
+            + '<button id=storage_reset_controls type=button>Reset Controls</button>',
           'group': 'core_menu',
           'id': 'controls',
           'label': 'Controls',
@@ -924,7 +924,7 @@ function core_repo_init(args){
             'pointer_vertical': 1,
           },
         });
-        args.events.storage_reset = {
+        args.events.storage_reset_controls = {
           'onclick': function(){
               core_storage_reset({
                 'label': 'controls',

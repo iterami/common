@@ -90,7 +90,7 @@ globalThis.audio_listener = {
 core_init_todo.push(function(){
     core_tab_create({
       'content': '<table><tr><td><input class=mini id=audio_volume min=0 step=.001 type=number><td>Audio Volume</table>'
-        + '<button id=audio_storage_reset type=button>Reset Audio Settings</button>',
+        + '<button id=storage_reset_audio type=button>Reset Audio Settings</button>',
       'group': 'core_menu',
       'id': 'audio',
       'label': 'Audio',
@@ -103,7 +103,7 @@ core_init_todo.push(function(){
     });
     core_events_bind({
       'elements': {
-        'audio_storage_reset': {
+        'storage_reset_audio': {
           'onclick': function(){
               core_storage_reset({
                 'label': 'audio',
