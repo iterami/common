@@ -241,14 +241,14 @@ function math_matrix_rotate(matrix, dimensions){
     return matrix;
 }
 
-// Required args: dimensions, id
-function math_matrix_translate(args){
-    const matrix = math_matrices[args.id];
+function math_matrix_translate(matrix, dimensions){
     for(let i = 0; i < 4; i++){
-        matrix[i + 12] -= matrix[i] * args.dimensions[0]
-          + matrix[i + 4] * args.dimensions[1]
-          + matrix[i + 8] * args.dimensions[2];
+        matrix[i + 12] -= matrix[i] * dimensions[0]
+          + matrix[i + 4] * dimensions[1]
+          + matrix[i + 8] * dimensions[2];
     }
+
+    return matrix;
 }
 
 // Required args: x0, x1, y0, y1

@@ -2370,14 +2370,14 @@ function webgl_logic(){
         math_degrees_to_radians(character.camera_rotate_z),
       ]
     );
-    math_matrix_translate({
-      'dimensions': [
+    math_matrix_translate(
+      math_matrices.camera,
+      [
         character.camera_x,
         character.camera_y,
         character.camera_z,
-      ],
-      'id': 'camera',
-    });
+      ]
+    );
 
     if(webgl_properties.picking === 2){
         webgl_pick_entity(true);
@@ -2548,14 +2548,14 @@ function webgl_logic_entity(entity){
       math_matrices[entity.id],
       math_matrices.camera
     );
-    math_matrix_translate({
-      'dimensions': [
+    math_matrix_translate(
+      math_matrices[entity.id],
+      [
         -entity.position_x,
         -entity.position_y,
         -entity.position_z,
-      ],
-      'id': entity.id,
-    });
+      ]
+    );
     if(entity_groups.skybox[entity.id] !== true){
         const target = globalThis[entity.attach_type][entity.attach_to];
         math_matrix_rotate(
@@ -2567,14 +2567,14 @@ function webgl_logic_entity(entity){
           ]
         );
     }
-    math_matrix_translate({
-      'dimensions': [
+    math_matrix_translate(
+      math_matrices[entity.id],
+      [
         -entity.attach_x,
         -entity.attach_y,
         -entity.attach_z,
-      ],
-      'id': entity.id,
-    });
+      ]
+    );
     math_matrix_rotate(
       math_matrices[entity.id],
       [
