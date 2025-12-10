@@ -169,11 +169,6 @@ function math_greatest_common_divisor(args){
     });
 }
 
-// Required args: id, to
-function math_matrix_clone(args){
-    math_matrices[args.to] = math_matrix_create(math_matrices[args.id]);
-}
-
 function math_matrix_copy(id, to){
     Object.assign(
       math_matrices[to],
@@ -183,12 +178,6 @@ function math_matrix_copy(id, to){
 
 function math_matrix_create(length){
     return new Float32Array(length || 16);
-}
-
-function math_matrix_delete(ids){
-    for(const id in ids){
-        delete math_matrices[ids[id]];
-    }
 }
 
 function math_matrix_identity(id){
@@ -246,24 +235,6 @@ function math_matrix_rotate(args){
     matrix[5] = cache[5] * cosine - cache[1] * sine;
     matrix[6] = cache[6] * cosine - cache[2] * sine;
     matrix[7] = cache[7] * cosine - cache[3] * sine;
-}
-
-// Required args: id
-function math_matrix_round(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': 7,
-      },
-    });
-
-    const matrix = math_matrices[args.id];
-    for(const key in matrix){
-        matrix[key] = core_round({
-          'decimals': args.decimals,
-          'number': matrix[key],
-        });
-    }
 }
 
 // Required args: dimensions, id
