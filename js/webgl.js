@@ -2361,7 +2361,7 @@ function webgl_logic(){
         }
     }
 
-    math_matrix_identity('camera');
+    math_matrix_identity(math_matrices.camera);
     math_matrix_rotate({
       'dimensions': [
         radians_x,

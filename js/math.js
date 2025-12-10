@@ -173,13 +173,15 @@ function math_matrix_create(length){
     return new Float32Array(length || 16);
 }
 
-function math_matrix_identity(id){
-    for(const key in math_matrices[id]){
-        math_matrices[id][key] =
+function math_matrix_identity(matrix){
+    for(const key in matrix){
+        matrix[key] =
           key % 5 === 0
             ? 1
             : 0;
     }
+
+    return matrix;
 }
 
 // Required args: dimensions, id
