@@ -169,13 +169,6 @@ function math_greatest_common_divisor(args){
     });
 }
 
-function math_matrix_copy(id, to){
-    Object.assign(
-      math_matrices[to],
-      math_matrices[id]
-    );
-}
-
 function math_matrix_create(length){
     return new Float32Array(length || 16);
 }
@@ -195,7 +188,10 @@ function math_matrix_rotate(args){
     const matrix = math_matrices[args.id];
 
     // Rotate X.
-    math_matrix_copy(args.id, 'cache');
+    Object.assign(
+      math_matrices.cache,
+      math_matrices[args.id]
+    );
     let cosine = Math.cos(args.dimensions[0]);
     let sine = Math.sin(args.dimensions[0]);
 
@@ -209,7 +205,10 @@ function math_matrix_rotate(args){
     matrix[11] = cache[11] * cosine - cache[7] * sine;
 
     // Rotate Y.
-    math_matrix_copy(args.id, 'cache');
+    Object.assign(
+      math_matrices.cache,
+      math_matrices[args.id]
+    );
     cosine = Math.cos(args.dimensions[1]);
     sine = Math.sin(args.dimensions[1]);
 
@@ -223,7 +222,10 @@ function math_matrix_rotate(args){
     matrix[11] = cache[11] * cosine + cache[3] * sine;
 
     // Rotate Z.
-    math_matrix_copy(args.id, 'cache');
+    Object.assign(
+      math_matrices.cache,
+      math_matrices[args.id]
+    );
     cosine = Math.cos(args.dimensions[2]);
     sine = Math.sin(args.dimensions[2]);
 

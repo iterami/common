@@ -2544,7 +2544,10 @@ function webgl_logic_entity(entity){
         webgl_logic_particle(entity);
     }
 
-    math_matrix_copy('camera', entity.id);
+    Object.assign(
+      math_matrices[entity.id],
+      math_matrices.camera
+    );
     math_matrix_translate({
       'dimensions': [
         -entity.position_x,
