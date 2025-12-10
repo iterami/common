@@ -1140,7 +1140,7 @@ function webgl_draw_entity(entity){
     webgl.uniformMatrix4fv(
       uniforms.camera,
       false,
-      math_matrices[entity.id]
+      webgl_matrices[entity.id]
     );
     if(webgl_shader_id === 'picking'){
         webgl.uniform3fv(
@@ -1265,7 +1265,7 @@ function webgl_entity_create(args){
           'properties': id,
           'types': id.types,
         });
-        math_matrices[entity.id] = math_matrix_create();
+        webgl_matrices[entity.id] = math_matrix_create();
 
         const groups = [
           ...args.groups,
@@ -1680,7 +1680,7 @@ function webgl_framebuffer_resize(){
     webgl.uniformMatrix4fv(
       webgl_shaders.picking.uniforms.perspective,
       false,
-      math_matrices.perspective
+      webgl_matrices.perspective
     );
     webgl.uniform1i(
       webgl_shaders.picking.uniforms.xyz,
@@ -1740,13 +1740,13 @@ function webgl_init(){
       }
     );
 
-    math_matrices.cache = math_matrix_create();
-    math_matrices.camera = math_matrix_create();
-    math_matrices.perspective = math_matrix_create();
-    math_matrices.perspective[5] = 1;
-    math_matrices.perspective[10] = -1;
-    math_matrices.perspective[11] = -1;
-    math_matrices.perspective[14] = -2;
+    webgl_matrices.cache = math_matrix_create();
+    webgl_matrices.camera = math_matrix_create();
+    webgl_matrices.perspective = math_matrix_create();
+    webgl_matrices.perspective[5] = 1;
+    webgl_matrices.perspective[10] = -1;
+    webgl_matrices.perspective[11] = -1;
+    webgl_matrices.perspective[14] = -2;
 
     webgl.enable(webgl.BLEND);
     webgl.blendFunc(
@@ -2361,9 +2361,9 @@ function webgl_logic(){
         }
     }
 
-    math_matrix_identity(math_matrices.camera);
+    math_matrix_identity(webgl_matrices.camera);
     math_matrix_rotate(
-      math_matrices.camera,
+      webgl_matrices.camera,
       [
         radians_x,
         radians_y,
@@ -2371,7 +2371,7 @@ function webgl_logic(){
       ]
     );
     math_matrix_translate(
-      math_matrices.camera,
+      webgl_matrices.camera,
       [
         character.camera_x,
         character.camera_y,
@@ -2545,11 +2545,11 @@ function webgl_logic_entity(entity){
     }
 
     Object.assign(
-      math_matrices[entity.id],
-      math_matrices.camera
+      webgl_matrices[entity.id],
+      webgl_matrices.camera
     );
     math_matrix_translate(
-      math_matrices[entity.id],
+      webgl_matrices[entity.id],
       [
         -entity.position_x,
         -entity.position_y,
@@ -2559,7 +2559,7 @@ function webgl_logic_entity(entity){
     if(entity_groups.skybox[entity.id] !== true){
         const target = globalThis[entity.attach_type][entity.attach_to];
         math_matrix_rotate(
-          math_matrices[entity.id],
+          webgl_matrices[entity.id],
           [
             math_degrees_to_radians(target.rotate_x),
             math_degrees_to_radians(-target.rotate_y),
@@ -2568,7 +2568,7 @@ function webgl_logic_entity(entity){
         );
     }
     math_matrix_translate(
-      math_matrices[entity.id],
+      webgl_matrices[entity.id],
       [
         -entity.attach_x,
         -entity.attach_y,
@@ -2576,7 +2576,7 @@ function webgl_logic_entity(entity){
       ]
     );
     math_matrix_rotate(
-      math_matrices[entity.id],
+      webgl_matrices[entity.id],
       [
         math_degrees_to_radians(entity.rotate_x),
         math_degrees_to_radians(entity.rotate_y),
@@ -3800,11 +3800,11 @@ function webgl_resize(){
       webgl.drawingBufferHeight
     );
 
-    math_matrices.perspective[0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
+    webgl_matrices.perspective[0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
     webgl.uniformMatrix4fv(
       webgl_shaders.default.uniforms.perspective,
       false,
-      math_matrices.perspective
+      webgl_matrices.perspective
     );
     webgl_framebuffer_resize();
 
@@ -4533,6 +4533,7 @@ globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
 globalThis.webgl_characters = {};
 globalThis.webgl_framebuffer = 0;
+globalThis.webgl_matrices = {};
 globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_picked_x = 0;

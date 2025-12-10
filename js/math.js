@@ -185,13 +185,9 @@ function math_matrix_identity(matrix){
 }
 
 function math_matrix_rotate(matrix, dimensions){
-    const cache = math_matrices.cache;
+    const cache = math_matrix_create(matrix);
 
     // Rotate X.
-    Object.assign(
-      math_matrices.cache,
-      matrix
-    );
     let cosine = Math.cos(dimensions[0]);
     let sine = Math.sin(dimensions[0]);
 
@@ -206,7 +202,7 @@ function math_matrix_rotate(matrix, dimensions){
 
     // Rotate Y.
     Object.assign(
-      math_matrices.cache,
+      cache,
       matrix
     );
     cosine = Math.cos(dimensions[1]);
@@ -223,7 +219,7 @@ function math_matrix_rotate(matrix, dimensions){
 
     // Rotate Z.
     Object.assign(
-      math_matrices.cache,
+      cache,
       matrix
     );
     cosine = Math.cos(dimensions[2]);
@@ -395,5 +391,3 @@ function math_quaternion_to_euler(args){
 function math_radians_to_degrees(radians){
     return radians * 57.29577951308232;
 }
-
-globalThis.math_matrices = {};
