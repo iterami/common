@@ -184,18 +184,16 @@ function math_matrix_identity(matrix){
     return matrix;
 }
 
-// Required args: dimensions, id
-function math_matrix_rotate(args){
+function math_matrix_rotate(matrix, dimensions){
     const cache = math_matrices.cache;
-    const matrix = math_matrices[args.id];
 
     // Rotate X.
     Object.assign(
       math_matrices.cache,
-      math_matrices[args.id]
+      matrix
     );
-    let cosine = Math.cos(args.dimensions[0]);
-    let sine = Math.sin(args.dimensions[0]);
+    let cosine = Math.cos(dimensions[0]);
+    let sine = Math.sin(dimensions[0]);
 
     matrix[4] = cache[4] * cosine + cache[8] * sine;
     matrix[5] = cache[5] * cosine + cache[9] * sine;
@@ -209,10 +207,10 @@ function math_matrix_rotate(args){
     // Rotate Y.
     Object.assign(
       math_matrices.cache,
-      math_matrices[args.id]
+      matrix
     );
-    cosine = Math.cos(args.dimensions[1]);
-    sine = Math.sin(args.dimensions[1]);
+    cosine = Math.cos(dimensions[1]);
+    sine = Math.sin(dimensions[1]);
 
     matrix[0] = cache[0] * cosine - cache[8] * sine;
     matrix[1] = cache[1] * cosine - cache[9] * sine;
@@ -226,10 +224,10 @@ function math_matrix_rotate(args){
     // Rotate Z.
     Object.assign(
       math_matrices.cache,
-      math_matrices[args.id]
+      matrix
     );
-    cosine = Math.cos(args.dimensions[2]);
-    sine = Math.sin(args.dimensions[2]);
+    cosine = Math.cos(dimensions[2]);
+    sine = Math.sin(dimensions[2]);
 
     matrix[0] = cache[0] * cosine + cache[4] * sine;
     matrix[1] = cache[1] * cosine + cache[5] * sine;
@@ -239,6 +237,8 @@ function math_matrix_rotate(args){
     matrix[5] = cache[5] * cosine - cache[1] * sine;
     matrix[6] = cache[6] * cosine - cache[2] * sine;
     matrix[7] = cache[7] * cosine - cache[3] * sine;
+
+    return matrix;
 }
 
 // Required args: dimensions, id
