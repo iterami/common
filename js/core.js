@@ -969,7 +969,7 @@ function core_repo_init(args){
     }
     core_storage_update();
     if(!have_default){
-        core_tab_switch('tab_core_menu_repo');
+        core_tab_switch('tab_repo');
     }
 
     if(args.keybinds !== false){
