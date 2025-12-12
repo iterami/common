@@ -87,7 +87,7 @@ button.gridbuttonclickable{
     -webkit-tap-highlight-color: transparent;
 }
 #core_menu_info,
-#core_menu_tabcontent{
+.tabcontents div{
     padding: 8px;
 }
 #core_ui{

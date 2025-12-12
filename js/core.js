@@ -892,7 +892,7 @@ function core_repo_init(args){
         });
 
         if(args.tabs[tab].default){
-            core_tab_switch('tab_' + args.tabs[tab].group + '_' + tab);
+            core_tab_switch('tab_' + tab);
             have_default = true;
         }
     }
@@ -1254,11 +1254,6 @@ function core_storage_update(keys){
 
 // Required args: content, group, id, label
 function core_tab_create(args){
-    core_tabs[args.id] = {
-      'content': args.content,
-      'group': args.group,
-    };
-
     const tabs_id = 'tabs_' + args.group;
     const tabcontents_id = 'tabcontents_' + args.group;
 
@@ -1274,6 +1269,7 @@ function core_tab_create(args){
         core_html({
           'parent': core_elements.core_menu,
           'properties': {
+            'className': 'tabcontents',
             'id': tabcontents_id,
           },
           'todo': 'append',
@@ -1283,7 +1279,7 @@ function core_tab_create(args){
     core_html({
       'parent': tabs,
       'properties': {
-        'id': 'tab_' + args.group + '_' + args.id,
+        'id': 'tab_' + args.id,
         'onclick': function(){
             core_tab_switch(this.id);
         },
@@ -1302,27 +1298,18 @@ function core_tab_create(args){
     });
 }
 
-function core_tab_reset_group(id){
-    for(const tab in core_tabs){
-        if(core_tabs[tab].group === id){
-            document.getElementById('tabcontent_' + tab).style.display = 'none';
-        }
-    }
-}
-
 function core_tab_switch(id){
-    const info = id.split('_');
-
-    const element = document.getElementById('tabcontent_' + info.splice(info.length - 1, 1)[0]);
-    if(!element){
+    const tab = document.getElementById('tabcontent_' + id.substring(4));
+    if(!tab){
         return;
     }
 
-    info.splice(0, 1);
-
-    const state = element.style.display === 'block';
-    core_tab_reset_group(info.join('_'));
-    element.style.display = state
+    const state = tab.style.display === 'block';
+    const tabs = tab.parentElement.children;
+    for(let tab = 0; tab < tabs.length; tab++){
+        tabs[tab].style.display = 'none';
+    }
+    tab.style.display = state
       ? 'none'
       : 'block';
 }
@@ -1438,7 +1425,6 @@ globalThis.core_pointer = {};
 globalThis.core_repo_title = '';
 globalThis.core_storage_data = {};
 globalThis.core_storage_info = {};
-globalThis.core_tabs = {};
 globalThis.core_ui_values = {};
 
 globalThis.onload = core_init;
