@@ -1259,19 +1259,22 @@ function core_tab_create(args){
       'group': args.group,
     };
 
-    let tabs = document.getElementById(args.group + '_tabs');
+    const tabs_id = 'tabs_' + args.group;
+    const tabcontents_id = 'tabcontents_' + args.group;
+
+    let tabs = document.getElementById(tabs_id);
     if(!tabs){
         tabs = core_html({
           'parent': core_elements.core_menu,
           'properties': {
-            'id': args.group + '_tabs',
+            'id': tabs_id,
           },
           'todo': 'append',
         });
         core_html({
           'parent': core_elements.core_menu,
           'properties': {
-            'id': args.group + '_tabcontent',
+            'id': tabcontents_id,
           },
           'todo': 'append',
         });
@@ -1290,7 +1293,7 @@ function core_tab_create(args){
       'type': 'button',
     });
     core_html({
-      'parent': document.getElementById(args.group + '_tabcontent'),
+      'parent': document.getElementById(tabcontents_id),
       'properties': {
         'id': 'tabcontent_' + args.id,
         'innerHTML': args.content,
