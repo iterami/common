@@ -448,10 +448,17 @@ function core_html(args){
     }
 
     const element = document.createElement(args.type);
-    Object.assign(
-      element,
-      args.properties,
-    );
+    for(const property in args.properties){
+        if(property.startsWith('data-')){
+            element.setAttribute(
+              property,
+              args.properties[property]
+            );
+
+        }else{
+            element[property] = args.properties[property];
+        }
+    }
     if(args.parent !== false){
         args.parent[args.todo](element);
     }
