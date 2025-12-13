@@ -449,7 +449,7 @@ function core_html(args){
 
     const element = document.createElement(args.type);
     for(const property in args.properties){
-        if(property.startsWith('data-')){
+        if(element[property] === void 0){
             element.setAttribute(
               property,
               args.properties[property]
