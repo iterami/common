@@ -1740,7 +1740,6 @@ function webgl_init(){
       }
     );
 
-    webgl_matrices.cache = math_matrix_create();
     webgl_matrices.camera = math_matrix_create();
     webgl_matrices.perspective = math_matrix_create();
     webgl_matrices.perspective[5] = 1;
