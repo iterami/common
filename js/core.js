@@ -103,7 +103,6 @@ function core_events_bind(args){
             core_keys[keybind] = core_args({
               'args': args.keybinds[keybind],
               'defaults': {
-                'preventDefault': false,
                 'state': false,
               },
             });
@@ -115,10 +114,9 @@ function core_events_bind(args){
     }
     if(args.pointerbinds !== false){
         for(const pointerbind in args.pointerbinds){
-            core_pointer.todo[pointerbind] = {
-              'preventDefault': args.pointerbinds[pointerbind].preventDefault || false,
-              'todo': args.pointerbinds[pointerbind].todo,
-            };
+            core_pointer.todo[pointerbind] = core_args({
+              'args': args.pointerbinds[pointerbind],
+            });
         }
         globalThis.oncontextmenu = core_handle_contextmenu;
 
@@ -229,8 +227,8 @@ function core_handle_event(args){
       },
     });
 
-    if(args.handler.preventDefault
-      && !core_menu_open){
+    if(!core_menu_open
+      && event.cancelable !== false){
         args.event.preventDefault();
     }
 
