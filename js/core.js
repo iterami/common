@@ -229,6 +229,7 @@ function core_handle_event(args){
 
     if(!core_menu_open
       && event.cancelable !== false){
+        args.event.stopPropagation();
         args.event.preventDefault();
     }
 
