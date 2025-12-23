@@ -227,10 +227,12 @@ function core_handle_event(args){
       },
     });
 
-    if(!core_menu_open
-      && event.cancelable !== false){
+    if(!core_menu_open){
         args.event.stopPropagation();
-        args.event.preventDefault();
+
+        if(event.cancelable !== false){
+            args.event.preventDefault();
+        }
     }
 
     if(args.state !== void 0){
