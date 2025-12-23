@@ -118,7 +118,9 @@ function core_events_bind(args){
               'args': args.pointerbinds[pointerbind],
             });
         }
-        globalThis.oncontextmenu = core_handle_contextmenu;
+        if(args.pointerbinds.contextmenu){
+            globalThis.oncontextmenu = core_handle_contextmenu;
+        }
 
         document.onpointerlockchange = core_handle_pointerlockchange;
         globalThis.onpointercancel = core_handle_pointercancel;
