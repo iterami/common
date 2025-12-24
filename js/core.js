@@ -232,7 +232,7 @@ function core_handle_event(args){
     if(!core_menu_open){
         args.event.stopPropagation();
 
-        if(event.cancelable !== false){
+        if(args.event.cancelable !== false){
             args.event.preventDefault();
         }
     }
