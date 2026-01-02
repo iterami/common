@@ -1924,6 +1924,34 @@ void main(void){
     });
 }
 
+// Required args: todo
+function webgl_json_function(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'args': void 0,
+        'spread': true,
+      },
+    });
+
+    const split = args.todo.split('.');
+
+    let todo = globalThis[split[0]];
+    for(let i = 1; i < split.length; i++){
+        todo = todo[split[i]];
+    }
+
+    if(!args?.args){
+        todo();
+
+    }else if(args.spread){
+        todo(...args.args);
+
+    }else{
+        todo(args.args);
+    }
+}
+
 // Required args: character
 function webgl_level_init(args){
     args = core_args({
