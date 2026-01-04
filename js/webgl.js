@@ -4009,9 +4009,14 @@ function webgl_stat_modify(args){
               }));
 
         if(args.stat === 'level_xp'){
+            let levels = 0;
             while(target.level_xp >= Math.floor(target.level + 1) * 1e3){
                 target.level_xp -= Math.floor(target.level + 1) * 1e3;
                 target.level++;
+                levels++;
+            }
+            if(levels){
+                args.levels = levels;
                 args.stat = 'level';
             }
 
