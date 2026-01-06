@@ -185,7 +185,6 @@ function core_getpointerlock(){
 
 function core_handle_beforeunload(event){
     if(core_events.beforeunload){
-        core_handle_prevent(event);
         core_events.beforeunload.todo?.(event);
     }
 }
