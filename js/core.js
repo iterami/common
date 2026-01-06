@@ -89,7 +89,7 @@ function core_events_bind(args){
 
     if(args.beforeunload !== false){
         core_events.beforeunload = args.beforeunload;
-        globalThis.onbeforeunload = core_handle_beforeunload;
+        globalThis.addEventListener('beforeunload', core_handle_beforeunload);
     }
     if(args.blur !== false){
         core_events.blur = args.blur;
@@ -119,15 +119,20 @@ function core_events_bind(args){
             });
         }
         if(args.pointerbinds.contextmenu){
-            globalThis.oncontextmenu = core_handle_contextmenu;
+            globalThis.addEventListener('contextmenu', core_handle_contextmenu);
         }
 
-        document.onpointerlockchange = core_handle_pointerlockchange;
-        globalThis.onpointercancel = core_handle_pointercancel;
-        globalThis.onpointerdown = core_handle_pointerdown;
-        globalThis.onpointermove = core_handle_pointermove;
-        globalThis.onpointerup = core_handle_pointerup;
-        globalThis.onwheel = core_handle_wheel;
+        document.addEventListener('pointerlockchange', core_handle_pointerlockchange);
+        globalThis.addEventListener('pointercancel', core_handle_pointercancel, {'passive': false});
+        globalThis.addEventListener('pointerdown', core_handle_pointerdown, {'passive': false});
+        globalThis.addEventListener('pointermove', core_handle_pointermove, {'passive': false});
+        globalThis.addEventListener('pointerup', core_handle_pointerup, {'passive': false});
+        globalThis.addEventListener('wheel', core_handle_wheel, {'passive': false});
+
+        globalThis.addEventListener('touchcancel', core_handle_prevent, {'passive': false});
+        globalThis.addEventListener('touchend', core_handle_prevent, {'passive': false});
+        globalThis.addEventListener('touchmove', core_handle_prevent, {'passive': false});
+        globalThis.addEventListener('touchstart', core_handle_prevent, {'passive': false});
     }
 
     if(args.elements !== false){
@@ -180,10 +185,8 @@ function core_getpointerlock(){
 
 function core_handle_beforeunload(event){
     if(core_events.beforeunload){
-        core_handle_event({
-          'event': event,
-          'handler': core_events.beforeunload,
-        });
+        core_handle_prevent(event);
+        core_events.beforeunload.todo?.(event);
     }
 }
 
@@ -202,47 +205,17 @@ function core_handle_blur(){
     core_pointer.down_4 = false;
 
     if(core_events.blur){
-        core_handle_event({
-          'event': event,
-          'handler': core_events.blur,
-        });
+        core_handle_prevent(event);
+        core_events.blur.todo?.(event);
     }
 }
 
 function core_handle_contextmenu(event){
     if(!core_menu_open
-      && core_pointer.todo.contextmenu
-      && core_handle_event({
-        'event': event,
-        'handler': core_pointer.todo.contextmenu,
-      }) === void 0){
+      && core_pointer.todo.contextmenu){
+        core_handle_prevent(event);
+        core_pointer.todo.contextmenu.todo?.(event);
         return false;
-    }
-}
-
-// Required args: event, handler
-function core_handle_event(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'state': void 0,
-      },
-    });
-
-    if(!core_menu_open){
-        args.event.stopPropagation();
-
-        if(args.event.cancelable !== false){
-            args.event.preventDefault();
-        }
-    }
-
-    if(args.state !== void 0){
-        args.handler.state = args.state;
-    }
-
-    if(args.state !== false){
-        return args.handler.todo?.(args.event);
     }
 }
 
@@ -263,11 +236,9 @@ function core_handle_keydown(event){
     }
 
     if(core_keys[event.code]){
-        core_handle_event({
-          'event': event,
-          'handler': core_keys[event.code],
-          'state': true,
-        });
+        core_handle_prevent(event);
+        core_keys[event.code].state = true;
+        core_keys[event.code].todo?.(event);
     }
 }
 
@@ -275,11 +246,8 @@ function core_handle_keyup(event){
     core_key_shift = event.shiftKey;
 
     if(core_keys[event.code]){
-        core_handle_event({
-          'event': event,
-          'handler': core_keys[event.code],
-          'state': false,
-        });
+        core_handle_prevent(event);
+        core_keys[event.code].state = false;
     }
 }
 
@@ -297,10 +265,8 @@ function core_handle_pointercancel(event){
     core_pointer.movement_y = 0;
 
     if(core_pointer.todo.pointercancel){
-        core_handle_event({
-          'event': event,
-          'handler': core_pointer.todo.pointercancel,
-        });
+        core_handle_prevent(event);
+        core_pointer.todo.pointercancel.todo?.(event);
     }
 }
 
@@ -329,10 +295,8 @@ function core_handle_pointerdown(event){
     core_pointer.down_y = y;
 
     if(core_pointer.todo.pointerdown){
-        core_handle_event({
-          'event': event,
-          'handler': core_pointer.todo.pointerdown,
-        });
+        core_handle_prevent(event);
+        core_pointer.todo.pointerdown.todo?.(event);
     }
 }
 
@@ -375,10 +339,8 @@ function core_handle_pointermove(event){
     }
 
     if(core_pointer.todo.pointermove){
-        core_handle_event({
-          'event': event,
-          'handler': core_pointer.todo.pointermove,
-        });
+        core_handle_prevent(event);
+        core_pointer.todo.pointermove.todo?.(event);
     }
 }
 
@@ -391,10 +353,16 @@ function core_handle_pointerup(event){
 
     if(core_pointer.todo.pointerup
       && event.target.id !== 'core_toggle'){
-        core_handle_event({
-          'event': event,
-          'handler': core_pointer.todo.pointerup,
-        });
+        core_handle_prevent(event);
+        core_pointer.todo.pointerup.todo?.(event);
+    }
+}
+
+function core_handle_prevent(event){
+    event.stopPropagation();
+
+    if(event.cancelable !== false){
+        event.preventDefault();
     }
 }
 
@@ -405,10 +373,8 @@ function core_handle_wheel(event){
     }
 
     if(core_pointer.todo.wheel){
-        core_handle_event({
-          'event': event,
-          'handler': core_pointer.todo.wheel,
-        });
+        core_handle_prevent(event);
+        core_pointer.todo.wheel.todo?.(event);
     }
 }
 
@@ -548,9 +514,9 @@ function core_init(){
       'x': 0,
       'y': 0,
     };
-    globalThis.onblur = core_handle_blur;
-    globalThis.onkeydown = core_handle_keydown;
-    globalThis.onkeyup = core_handle_keyup;
+    globalThis.addEventListener('blur', core_handle_blur);
+    globalThis.addEventListener('keydown', core_handle_keydown);
+    globalThis.addEventListener('keyup', core_handle_keyup);
 
     globalThis.repo_init();
 }
