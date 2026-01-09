@@ -129,10 +129,10 @@ function core_events_bind(args){
         globalThis.addEventListener('pointerup', core_handle_pointerup, {'passive': false});
         globalThis.addEventListener('wheel', core_handle_wheel, {'passive': false});
 
-        globalThis.addEventListener('touchcancel', core_handle_prevent, {'passive': false});
-        globalThis.addEventListener('touchend', core_handle_prevent, {'passive': false});
-        globalThis.addEventListener('touchmove', core_handle_prevent, {'passive': false});
-        globalThis.addEventListener('touchstart', core_handle_prevent, {'passive': false});
+        globalThis.addEventListener('touchcancel', core_handle_touch, {'passive': false});
+        globalThis.addEventListener('touchend', core_handle_touch, {'passive': false});
+        globalThis.addEventListener('touchmove', core_handle_touch, {'passive': false});
+        globalThis.addEventListener('touchstart', core_handle_touch, {'passive': false});
     }
 
     if(args.elements !== false){
@@ -363,6 +363,15 @@ function core_handle_prevent(event){
     if(event.cancelable !== false){
         event.preventDefault();
     }
+}
+
+function core_handle_touch(event){
+    if((core_menu_open && core_menu_block_events)
+      || event.target.id === 'core_toggle'){
+        return;
+    }
+
+    core_handle_prevent(event);
 }
 
 function core_handle_wheel(event){
