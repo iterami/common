@@ -79,9 +79,8 @@ button.gridbuttonclickable{
     width: 50px;
 }
 #canvas{
-    left: 0;
+    inset: 0;
     position: fixed;
-    top: 0;
     touch-action: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
