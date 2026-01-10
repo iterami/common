@@ -223,8 +223,7 @@ function core_handle_keydown(event){
 
     if(event.ctrlKey
       || event.altKey
-      || event.metaKey
-      || core_keys[event.code]?.state){
+      || event.metaKey){
         return;
     }
 
@@ -234,19 +233,25 @@ function core_handle_keydown(event){
         return;
     }
 
-    if(core_keys[event.code]){
+    const key = core_keys[event.code];
+    if(key?.state){
+        return;
+    }
+    if(key){
         core_handle_prevent(event);
-        core_keys[event.code].state = true;
-        core_keys[event.code].todo?.(event);
+        key.state = true;
+        key.down?.(event);
     }
 }
 
 function core_handle_keyup(event){
     core_key_shift = event.shiftKey;
 
-    if(core_keys[event.code]){
+    const key = core_keys[event.code];
+    if(key){
         core_handle_prevent(event);
-        core_keys[event.code].state = false;
+        key.state = false;
+        key.up?.(event);
     }
 }
 
@@ -650,7 +655,7 @@ function core_interval_sync(args){
 function core_keys_rebind(){
     const keys = {
       'Escape': {
-        'todo': core_escape,
+        'down': core_escape,
       },
     };
     for(const id in core_key_rebinds){
