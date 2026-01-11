@@ -217,7 +217,7 @@ function canvas_setmode(mode){
       ? 0
       : mode;
 
-    globalThis.load_data?.(core_mode);
+    globalThis.repo_load?.(core_mode);
 
     if(core_menu_open){
         core_escape();
