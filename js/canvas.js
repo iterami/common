@@ -212,7 +212,6 @@ function canvas_resize(){
 
 function canvas_setmode(mode){
     entity_remove_all();
-    core_storage_save();
 
     core_mode = mode === void 0
       ? 0
