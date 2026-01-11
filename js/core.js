@@ -1194,12 +1194,19 @@ function core_storage_reset(args){
     core_storage_update();
 }
 
-function core_storage_save(keys){
-    if(core_type(keys) !== 'array'){
-        keys = Object.keys(core_storage_data);
-    }
+function core_storage_save(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'keys': false,
+        'rebind': true,
+      },
+    });
 
-    for(const key of keys){
+    if(core_type(args.keys) !== 'array'){
+        args.keys = Object.keys(core_storage_data);
+    }
+    for(const key of args.keys){
         const element = core_elements[key];
         const data = core_type_convert({
           'template': core_storage_info[key].default,
@@ -1224,7 +1231,9 @@ function core_storage_save(keys){
         }
     }
 
-    core_keys_rebind();
+    if(args.rebind){
+        core_keys_rebind();
+    }
 }
 
 function core_storage_update(keys){
