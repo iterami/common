@@ -2368,6 +2368,15 @@ function webgl_logic(){
               'target': character,
               'value': 0,
             });
+            if(character.lives === 0){
+                character.gravity = 0;
+
+                const axes = 'xyz';
+                for(const axis of axes){
+                    character['change_rotate_' + axis] = 0;
+                    character['change_position_' + axis] = 0;
+                }
+            }
         }
     }
 
@@ -4029,16 +4038,7 @@ function webgl_stat_modify(args){
                     target.lives--;
                 }
 
-                if(target.lives === 0){
-                    target.gravity = 0;
-
-                    const axes = 'xyz';
-                    for(const axis of axes){
-                        target['change_rotate_' + axis] = 0;
-                        target['change_position_' + axis] = 0;
-                    }
-
-                }else{
+                if(target.lives !== 0){
                     webgl_character_spawn(target.id);
                 }
 
