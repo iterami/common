@@ -168,17 +168,12 @@ function webgl_character_die(id){
     if(!id){
         id = webgl_character_id;
     }
-    const dead = webgl_characters[id];
-    dead.life = 0;
-
-    if(dead.lives > 0){
-        dead.lives--;
-    }
-
-    if(dead.lives !== 0){
-        dead.life = dead.life_max;
-        webgl_character_spawn(id);
-    }
+    webgl_stat_modify({
+      'set': true,
+      'stat': 'life',
+      'target': webgl_characters[id],
+      'value': 0,
+    });
 }
 
 function webgl_character_hit(args){
@@ -4041,7 +4036,16 @@ function webgl_stat_modify(args){
 
         }else if(args.stat === 'life'){
             if(target.life <= 0){
-                webgl_character_die(target.id);
+                target.life = 0;
+
+                if(target.lives > 0){
+                    target.lives--;
+                }
+
+                if(target.lives !== 0){
+                    target.life = target.life_max;
+                    webgl_character_spawn(target.id);
+                }
 
             }else{
                 target.life = Math.min(
