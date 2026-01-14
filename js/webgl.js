@@ -164,6 +164,23 @@ function webgl_camera_rotate(args){
     }
 }
 
+function webgl_character_die(id){
+    if(!id){
+        id = webgl_character_id;
+    }
+    const dead = webgl_characters[id];
+    dead.life = 0;
+
+    if(dead.lives > 0){
+        dead.lives--;
+    }
+
+    if(dead.lives !== 0){
+        dead.life = dead.life_max;
+        webgl_character_spawn(id);
+    }
+}
+
 function webgl_character_hit(args){
     args = core_args({
       'args': args,
@@ -204,7 +221,6 @@ function webgl_character_init(args){
         'jump_height': 1,
         'level': -2,
         'level_xp': 0,
-        'life': 1,
         'life_max': 1,
         'lives': -1,
         'lock': {},
@@ -244,6 +260,7 @@ function webgl_character_init(args){
       'change_rotate_z': 0,
       'jump_allow': false,
       'keys': false,
+      'life': args.life_max,
       'locked': {},
       'pointer': false,
       'position_x': 0,
@@ -431,10 +448,6 @@ function webgl_character_spawn(id){
     if(!character
       || character.spawn === false){
         return;
-    }
-
-    if(character.lives !== 0){
-        character.life = character.life_max;
     }
 
     const axes = 'xyz';
@@ -2362,12 +2375,8 @@ function webgl_logic(){
 
         if(webgl_properties.y_min !== false
           && character.position_y < webgl_properties.y_min){
-            webgl_stat_modify({
-              'set': true,
-              'stat': 'life',
-              'target': character,
-              'value': 0,
-            });
+            webgl_character_die(character.id);
+
             if(character.lives === 0){
                 character.gravity = 0;
 
@@ -4032,15 +4041,7 @@ function webgl_stat_modify(args){
 
         }else if(args.stat === 'life'){
             if(target.life <= 0){
-                target.life = 0;
-
-                if(target.lives > 0){
-                    target.lives--;
-                }
-
-                if(target.lives !== 0){
-                    webgl_character_spawn(target.id);
-                }
+                webgl_character_die(target.id);
 
             }else{
                 target.life = Math.min(
