@@ -17,7 +17,7 @@ function audio_start(id){
         audio_context = new globalThis.AudioContext();
     }
 
-    const start = audio_context.currentTime;
+    const start = audio_context.currentTime + audio_context.outputLatency;
     const duration = start + audio_audios[id].duration;
 
     const gain = audio_context.createGain();
