@@ -3,7 +3,7 @@
 function audio_create(audios){
     for(const audio in audios){
         audio_audios[audio] = {
-          'duration': .1,
+          'duration': .15,
           'frequency': 100,
           'panner': false,
           'type': 'sine',
@@ -13,19 +13,25 @@ function audio_create(audios){
 }
 
 function audio_start(id){
-    const context = new globalThis.AudioContext();
+    if(audio_context === 0){
+        audio_context = new globalThis.AudioContext();
+    }
 
-    const gain = context.createGain();
+    const start = audio_context.currentTime;
+    const duration = start + audio_audios[id].duration;
+
+    const gain = audio_context.createGain();
     gain.gain.value = core_storage_data.audio_volume;
+    gain.gain.linearRampToValueAtTime(0, duration);
 
-    const oscillator = context.createOscillator();
-    oscillator.frequency.value = audio_audios[id].frequency;
+    const oscillator = audio_context.createOscillator();
     oscillator.type = audio_audios[id].type;
+    oscillator.frequency.value = audio_audios[id].frequency;
     oscillator.connect(gain);
 
     if(audio_audios[id].panner !== false){
-        if(!context.listener.forwardX){
-            context.listener.setOrientation(
+        if(!audio_context.listener.forwardX){
+            audio_context.listener.setOrientation(
               audio_listener.forwardX,
               audio_listener.forwardY,
               audio_listener.forwardZ,
@@ -33,22 +39,22 @@ function audio_start(id){
             );
 
         }else{
-            context.listener.forwardX.value = audio_listener.forwardX;
-            context.listener.forwardY.value = audio_listener.forwardY;
-            context.listener.forwardZ.value = audio_listener.forwardZ;
+            audio_context.listener.forwardX.value = audio_listener.forwardX;
+            audio_context.listener.forwardY.value = audio_listener.forwardY;
+            audio_context.listener.forwardZ.value = audio_listener.forwardZ;
         }
         const panner = new PannerNode(
-          context,
+          audio_context,
           audio_audios[id].panner
         );
-        gain.connect(panner).connect(context.destination);
+        gain.connect(panner).connect(audio_context.destination);
 
     }else{
-        gain.connect(context.destination);
+        gain.connect(audio_context.destination);
     }
 
-    oscillator.start();
-    oscillator.stop(audio_audios[id].duration);
+    oscillator.start(start);
+    oscillator.stop(duration);
 }
 
 // Required args: id
@@ -81,6 +87,7 @@ function audio_start_at(args){
 }
 
 globalThis.audio_audios = {};
+globalThis.audio_context = 0;
 globalThis.audio_listener = {
   'forwardX': 0,
   'forwardY': 0,
