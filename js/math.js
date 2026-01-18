@@ -9,6 +9,11 @@ function math_clamp(args){
       },
     });
 
+    if(args.value > args.min
+      && args.value < args.max){
+        return args.value;
+    }
+
     if(args.wrap){
         if(args.value < args.min){
             return args.max - (args.min - args.value) % (args.max - args.min);

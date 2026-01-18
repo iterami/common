@@ -121,22 +121,18 @@ function webgl_camera_rotate(args){
           'min': max - 90,
           'value': character.camera_rotate_x,
         });
-        if(character.camera_rotate_y < 0 || character.camera_rotate_y > 360){
-            character.camera_rotate_y = math_clamp({
-              'max': 360,
-              'min': 0,
-              'value': character.camera_rotate_y,
-              'wrap': true,
-            });
-        }
-        if(character.camera_rotate_z < 0 || character.camera_rotate_z > 360){
-            character.camera_rotate_z = math_clamp({
-              'max': 360,
-              'min': 0,
-              'value': character.camera_rotate_z,
-              'wrap': true,
-            });
-        }
+        character.camera_rotate_y = math_clamp({
+          'max': 360,
+          'min': 0,
+          'value': character.camera_rotate_y,
+          'wrap': true,
+        });
+        character.camera_rotate_z = math_clamp({
+          'max': 360,
+          'min': 0,
+          'value': character.camera_rotate_z,
+          'wrap': true,
+        });
 
         if(args.y === false){
             return;
@@ -1432,14 +1428,12 @@ function webgl_entity_normals(entity){
     const axes = 'xyz';
     for(const axis of axes){
         const rotate = 'rotate_' + axis;
-        if(entity[rotate] < 0 || entity[rotate] > 360){
-            entity[rotate] = math_clamp({
-              'max': 360,
-              'min': 0,
-              'value': entity[rotate],
-              'wrap': true,
-            });
-        }
+        entity[rotate] = math_clamp({
+          'max': 360,
+          'min': 0,
+          'value': entity[rotate],
+          'wrap': true,
+        });
     }
 
     const attached_to = globalThis[entity.attach_type][entity.attach_to];
@@ -2351,14 +2345,12 @@ function webgl_logic(){
             character[position_axis] += character['change_' + position_axis];
 
             const rotate = 'rotate_' + axis;
-            if(character[rotate] < 0 || character[rotate] > 360){
-                character[rotate] = math_clamp({
-                  'max': 360,
-                  'min': 0,
-                  'value': character[rotate],
-                  'wrap': true,
-                });
-            }
+            character[rotate] = math_clamp({
+              'max': 360,
+              'min': 0,
+              'value': character[rotate],
+              'wrap': true,
+            });
         }
 
         Object.assign(
