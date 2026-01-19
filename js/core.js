@@ -749,7 +749,7 @@ function core_random_drop(args){
 }
 
 function core_random_hex(){
-    return Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
+    return core_random_integer(0xffffff).toString(16).padStart(6, '0');
 }
 
 function core_random_integer(max){
@@ -1105,6 +1105,7 @@ function core_sort_property(args){
     });
 }
 
+// Required args: array
 function core_sort_random(args){
     return core_sort_custom({
       'array': args.array,

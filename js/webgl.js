@@ -4421,7 +4421,7 @@ function webgl_timer_add(args){
 
     const id = args.id || webgl_timer_count;
     webgl_timers[id] = {
-      'frames': args.frames_max + Math.floor(Math.random() * args.frames_random),
+      'frames': args.frames_max + core_random_integer(args.frames_random),
       'id': id,
       ...args,
     };
@@ -4444,7 +4444,7 @@ function webgl_timer_handle(timer){
         }
         let max = timer.frames_max;
         if(timer.frames_random){
-            max += Math.floor(Math.random() * timer.frames_random);
+            max += core_random_integer(timer.frames_random);
         }
         timer.frames = max;
 
