@@ -4061,23 +4061,30 @@ function webgl_stat_modify(args){
                 args.stat = 'level';
             }
 
-        }else if(args.stat === 'life' || args.stat === 'life_max'){
-            target.life = Math.min(
-              target.life,
-              target.life_max
+        }else if((args.stat + '_max') in target){
+            target[args.stat] = Math.min(
+              target[args.stat],
+              target[args.stat + '_max']
             );
 
-            if(target.life <= 0){
-                target.life = 0;
+        }else if(args.stat.endsWith('_max')){
+            const stat = args.stat.substring(0, args.stat.length - 4);
+            target[stat] = Math.min(
+              target[stat],
+              target[args.stat]
+            );
+        }
 
-                if(target.lives > 0){
-                    target.lives--;
-                }
+        if(target.life <= 0){
+            target.life = 0;
 
-                if(target.lives !== 0){
-                    target.life = target.life_max;
-                    webgl_character_spawn(target.id);
-                }
+            if(target.lives > 0){
+                target.lives--;
+            }
+
+            if(target.lives !== 0){
+                target.life = target.life_max;
+                webgl_character_spawn(target.id);
             }
         }
     }
