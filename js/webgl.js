@@ -3996,9 +3996,10 @@ function webgl_stat_modify(args){
     });
 
     const target = args.target;
-    if(webgl_character_level(target) < 0
-      && (args.stat === 'level_xp' || args.stat === 'life')){
-        return;
+    if(args.stat === 'level_xp' || args.stat === 'life' || args.stat === 'life_max'){
+        if(webgl_character_level(target) < 0){
+            return;
+        }
     }
 
     if(args.stat.startsWith('rotate_')
@@ -4060,7 +4061,12 @@ function webgl_stat_modify(args){
                 args.stat = 'level';
             }
 
-        }else if(args.stat === 'life'){
+        }else if(args.stat === 'life' || args.stat === 'life_max'){
+            target.life = Math.min(
+              target.life,
+              target.life_max
+            );
+
             if(target.life <= 0){
                 target.life = 0;
 
@@ -4072,12 +4078,6 @@ function webgl_stat_modify(args){
                     target.life = target.life_max;
                     webgl_character_spawn(target.id);
                 }
-
-            }else{
-                target.life = Math.min(
-                  target.life,
-                  target.life_max
-                );
             }
         }
     }
