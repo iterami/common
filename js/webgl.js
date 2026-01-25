@@ -243,7 +243,6 @@ function webgl_character_init(args){
         'spawn': {},
         'speed': 1,
         'turn_speed': 5,
-        'vehicle': false,
         'vehicle_stats': false,
       },
     });
@@ -277,7 +276,6 @@ function webgl_character_init(args){
       'rotate_x': 0,
       'rotate_y': 0,
       'rotate_z': 0,
-      'vehicle': false,
       'vehicle_stats': args.vehicle_stats === false
         ? false
         : core_args({
@@ -302,6 +300,7 @@ function webgl_character_init(args){
             : webgl_properties.camera_zoom_min
         )
       ),
+      'vehicle': false,
     };
     webgl_character_count++;
     if(args.base){
