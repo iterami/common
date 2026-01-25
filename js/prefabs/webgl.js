@@ -4,7 +4,7 @@ function prefabs_webgl_cuboid_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'groups': [],
         'leaf_collision': true,
         'leaf_color': [
@@ -77,7 +77,7 @@ function prefabs_webgl_frustum_tree(args){
       'args': args,
       'defaults': {
         'bottom': false,
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'groups': [],
         'height': 20,
         'height_range': 0,
@@ -139,7 +139,7 @@ function prefabs_webgl_humanoid(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'groups': [],
         'prefix': entity_id_count,
         'scale': 1,
@@ -222,7 +222,7 @@ function prefabs_webgl_lines_path(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'colors': [],
         'groups': [],
         'prefix': entity_id_count,
@@ -294,7 +294,7 @@ function prefabs_webgl_lines_shrub(args){
         'base_color': [
           0, 0, 0, 1,
         ],
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'draw_mode': 'LINE_STRIP',
         'groups': [],
         'leaf_color': [
@@ -377,7 +377,7 @@ function prefabs_webgl_lines_tree(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'groups': [],
         'leaf_color': [
           0, .5, 0, 1,
@@ -465,7 +465,7 @@ function prefabs_webgl_tree_2d(args){
         'base_color': [
           .4, .2, 0, 1,
         ],
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'groups': [],
         'height': 5,
         'height_range': 0,

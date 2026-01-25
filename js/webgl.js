@@ -215,6 +215,7 @@ function webgl_character_init(args){
       'args': args,
       'defaults': {
         'automove': false,
+        'base': false,
         'camera_lock': true,
         'camera_zoom': 0,
         'collide_bottom': 3,
@@ -303,6 +304,9 @@ function webgl_character_init(args){
       ),
     };
     webgl_character_count++;
+    if(args.base){
+        webgl_character_base = args.id;
+    }
 
     entity_group_create(['webgl_characters_' + args.id]);
     webgl_entity_create({
@@ -1269,11 +1273,11 @@ function webgl_entity_alpha(args){
     }
 }
 
-// Required args: character
 function webgl_entity_create(args){
     args = core_args({
       'args': args,
       'defaults': {
+        'character': webgl_character_base,
         'entities': [],
         'groups': [],
       },
@@ -2014,6 +2018,7 @@ function webgl_level_init(args){
       && args.base.level < -1){
         return;
     }
+    webgl_character_base = webgl_character_id;
 
     const randomized = args.json.randomized;
     if(randomized){
@@ -3174,7 +3179,7 @@ function webgl_primitive_cuboid(args){
         'all': {},
         'back': {},
         'bottom': {},
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'front': {},
         'groups': [],
         'left': {},
@@ -3391,7 +3396,7 @@ function webgl_primitive_ellipsoid(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'color0': [],
         'color1': [],
         'groups': [],
@@ -3480,7 +3485,7 @@ function webgl_primitive_frustum(args){
       'args': args,
       'defaults': {
         'bottom': true,
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'color_bottom': [],
         'color_top': [],
         'groups': [],
@@ -3662,7 +3667,7 @@ function webgl_primitive_particle(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'entities': [],
         'groups': [],
         'particle': {},
@@ -3711,7 +3716,7 @@ function webgl_primitive_stars(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'color': [1, 1, 1, 1],
         'groups': [],
         'height_limit': 1,
@@ -3766,7 +3771,7 @@ function webgl_primitive_terrain(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'character': webgl_character_id,
+        'character': webgl_character_base,
         'colors': [],
         'groups': [],
         'height_random': 10,
@@ -4602,6 +4607,7 @@ delete globalThis.uris;
 globalThis.webgl = 0;
 globalThis.webgl_character_count = 0;
 globalThis.webgl_character_id = '_me';
+globalThis.webgl_character_base = webgl_character_id;
 globalThis.webgl_characters = {};
 globalThis.webgl_framebuffer = 0;
 globalThis.webgl_matrices = {};
