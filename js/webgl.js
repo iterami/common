@@ -1188,6 +1188,7 @@ function webgl_drawloop(){
 }
 
 function webgl_draw_picked(args){
+    webgl_shader_use('picking');
     webgl.uniform1i(
       webgl_shaders.picking.uniforms.xyz,
       true
@@ -1202,6 +1203,7 @@ function webgl_draw_picked(args){
       webgl_shaders.picking.uniforms.xyz,
       false
     );
+    webgl_shader_use('default');
 
     return rgb;
 }
@@ -2993,6 +2995,7 @@ function webgl_pick_entity(cursor){
       'x': x,
       'y': y
     });
+    webgl_shader_use('default');
 
     if(color[0] !== 0
       || color[1] !== 0
@@ -3080,7 +3083,6 @@ function webgl_pick_entity(cursor){
         }
     }
 
-    webgl_shader_use('default');
     const clear_color = webgl_properties.clear_color;
     webgl.clearColor(
       clear_color[0],
