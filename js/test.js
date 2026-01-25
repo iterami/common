@@ -77,7 +77,7 @@ function test_run(args){
         const args_type = core_type(test.args);
         let args_json = '';
         if(args_type === 'object'){
-            test_args.args = {...test.args};
+            test_args.args = globalThis.structuredClone(test.args);
             const args_object = {};
             for(const arg in test_args.args){
                 if(core_type(test_args.args[arg]) === 'function'){

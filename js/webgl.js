@@ -1542,7 +1542,7 @@ function webgl_event(args){
     }
 
     for(const todo of event_todo){
-        const modify = {...todo};
+        const modify = globalThis.structuredClone(todo);
         if(modify.limit !== void 0){
             if(modify.limit <= 0){
                 continue;
@@ -3095,7 +3095,7 @@ function webgl_pick_entity(cursor){
 }
 
 function webgl_prefab_args(args){
-    const prefab_args = {...args};
+    const prefab_args = globalThis.structuredClone(args);
     for(const arg in prefab_args){
         if(entity_info.opaque.default[arg] === void 0){
             delete prefab_args[arg];
