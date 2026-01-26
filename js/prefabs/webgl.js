@@ -458,6 +458,116 @@ function prefabs_webgl_lines_tree(args){
     }
 }
 
+function prefabs_webgl_trap(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_base,
+        'color_active': [1, 0, 0, 1,],
+        'color_inactive': [0, 0, 1, 1,],
+        'groups': [],
+        'prefix': entity_id_count,
+      },
+    });
+
+    const prefab_args = webgl_prefab_args(args);
+    const length = core_random_integer(10) + 5;
+    const width = core_random_integer(10) + 5;
+
+    const id_trap = args.prefix + '_trap';
+    webgl_entity_create({
+      'character': args.character,
+      'entities': [
+        {
+          ...prefab_args,
+          'id': id_trap,
+          'attach_type': 'webgl_characters',
+          'attach_x': prefab_args.position_x,
+          'attach_y': prefab_args.position_y,
+          'attach_z': prefab_args.position_z,
+          'event_todo': [
+            {
+              'todo': 'webgl_json_function',
+              'type': 'function',
+              'value': {
+                'args': 'Hit by trap: ' + id_trap,
+                'spread': false,
+                'todo': 'console.log',
+              },
+            },
+          ],
+          'texture': 'grid.png',
+          'vertex_colors': args.color_inactive,
+          'vertices': [
+            width, 0, -length,
+            -width, 0, -length,
+            -width, 0, length,
+            width, 0, length
+          ],
+        },
+      ],
+      'groups': args.groups,
+    });
+
+    const id_active = args.prefix + '_active';
+    const id_inactive = args.prefix + '_inactive';
+    webgl_timer_add({
+      'id': id_inactive,
+      'frames_max': core_random_integer(100) + 200,
+      'repeat': -1,
+      'event_repeat': [
+        {
+          'todo': 'webgl_timer_toggle',
+          'type': 'function',
+          'value': id_inactive,
+        },
+        {
+          'stat': 'event_range',
+          'todo': id_trap,
+          'value': [width, 10, length,],
+        },
+        {
+          'stat': 'vertex_colors',
+          'todo': id_trap,
+          'value': args.color_active,
+        },
+        {
+          'todo': 'webgl_timer_toggle',
+          'type': 'function',
+          'value': id_active,
+        },
+      ],
+    });
+    webgl_timer_add({
+      'id': id_active,
+      'active': false,
+      'frames_max': core_random_integer(50) + 25,
+      'repeat': -1,
+      'event_repeat': [
+        {
+          'todo': 'webgl_timer_toggle',
+          'type': 'function',
+          'value': id_active,
+        },
+        {
+          'stat': 'event_range',
+          'todo': id_trap,
+          'value': false,
+        },
+        {
+          'stat': 'vertex_colors',
+          'todo': id_trap,
+          'value': args.color_inactive,
+        },
+        {
+          'todo': 'webgl_timer_toggle',
+          'type': 'function',
+          'value': id_inactive,
+        },
+      ],
+    });
+}
+
 function prefabs_webgl_tree_2d(args){
     args = core_args({
       'args': args,
