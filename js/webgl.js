@@ -4418,7 +4418,6 @@ function webgl_tiles(args){
     }
 }
 
-// Optional args: id
 function webgl_timer_add(args){
     args = core_args({
       'args': args,
@@ -4428,14 +4427,17 @@ function webgl_timer_add(args){
         'event_repeat': void 0,
         'frames_max': 100,
         'frames_random': 0,
+        'id': webgl_timer_count,
         'repeat': 0,
       },
     });
 
-    const id = args.id || webgl_timer_count;
-    webgl_timers[id] = {
-      'frames': args.frames_max + core_random_integer(args.frames_random),
-      'id': id,
+    let max = args.frames_max;
+    if(args.frames_random){
+        max += core_random_integer(args.frames_random);
+    }
+    webgl_timers[args.id] = {
+      'frames': max,
       ...args,
     };
     webgl_timer_count++;
