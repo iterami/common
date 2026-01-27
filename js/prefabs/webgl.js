@@ -465,16 +465,23 @@ function prefabs_webgl_trap(args){
         'character': webgl_character_base,
         'color_active': [1, 0, 0, 1,],
         'color_inactive': [0, 0, 1, 1,],
+        'frames_max_active': 50,
+        'frames_max_inactive': 150,
+        'frames_random_active': 0,
+        'frames_random_inactive': 0,
         'groups': [],
         'prefix': entity_id_count,
+        'size_x': 10,
+        'size_y': 10,
+        'size_z': 10,
       },
     });
 
     const prefab_args = webgl_prefab_args(args);
-    const length = core_random_integer(10) + 5;
-    const width = core_random_integer(10) + 5;
 
     const id_trap = args.prefix + '_trap';
+    const half_x = args.size_x / 2;
+    const half_z = args.size_z / 2;
     webgl_entity_create({
       'character': args.character,
       'entities': [
@@ -487,22 +494,18 @@ function prefabs_webgl_trap(args){
           'attach_z': prefab_args.position_z,
           'event_todo': [
             {
-              'todo': 'webgl_json_function',
-              'type': 'function',
-              'value': {
-                'args': 'Hit by trap: ' + id_trap,
-                'spread': false,
-                'todo': 'console.log',
-              },
+              'stat': 'life',
+              'todo': '_target',
+              'type': 'character',
+              'value': -1,
             },
           ],
-          'texture': 'grid.png',
           'vertex_colors': args.color_inactive,
           'vertices': [
-            width, 0, -length,
-            -width, 0, -length,
-            -width, 0, length,
-            width, 0, length
+            half_x, 0, -half_z,
+            -half_x, 0, -half_z,
+            -half_x, 0, half_z,
+            half_x, 0, half_z
           ],
         },
       ],
@@ -513,7 +516,8 @@ function prefabs_webgl_trap(args){
     const id_inactive = args.prefix + '_inactive';
     webgl_timer_add({
       'id': id_inactive,
-      'frames_max': core_random_integer(100) + 200,
+      'frames_max': args.frames_max_inactive,
+      'frames_random': args.frames_random_inactive,
       'repeat': -1,
       'event_repeat': [
         {
@@ -524,7 +528,7 @@ function prefabs_webgl_trap(args){
         {
           'stat': 'event_range',
           'todo': id_trap,
-          'value': [width, 10, length,],
+          'value': [half_x, args.size_y, half_z],
         },
         {
           'stat': 'vertex_colors',
@@ -541,7 +545,8 @@ function prefabs_webgl_trap(args){
     webgl_timer_add({
       'id': id_active,
       'active': false,
-      'frames_max': core_random_integer(50) + 25,
+      'frames_max': args.frames_max_active,
+      'frames_random': args.frames_random_active,
       'repeat': -1,
       'event_repeat': [
         {
