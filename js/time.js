@@ -5,17 +5,15 @@ function date_to_timestamp(date){
         date = timestamp_to_date();
     }
 
-    return new Date(
-      Date.UTC(
-        date.year,
-        date.month - 1,
-        date.date,
-        date.hour,
-        date.minute,
-        date.second,
-        date.millisecond
-      )
-    ).getTime();
+    return Date.UTC(
+      date.year,
+      date.month - 1,
+      date.date,
+      date.hour,
+      date.minute,
+      date.second,
+      date.millisecond
+    );
 }
 
 // Required args: target
@@ -119,11 +117,9 @@ function time_from_inputs(){
 }
 
 function timestamp_to_date(timestamp){
-    timestamp = timestamp !== void 0
-      ? new Date(timestamp).getTime()
-      : new Date().getTime();
-
-    const date = new Date(timestamp);
+    const date = timestamp === void 0
+      ? new Date()
+      : new Date(timestamp);
     return {
       'date': date.getUTCDate(),
       'day': date.getUTCDay(),
@@ -132,7 +128,7 @@ function timestamp_to_date(timestamp){
       'minute': date.getUTCMinutes(),
       'month': date.getUTCMonth() + 1,
       'second': date.getUTCSeconds(),
-      'timestamp': timestamp,
+      'timestamp': date.getTime(),
       'year': date.getUTCFullYear(),
     };
 }
