@@ -25,8 +25,8 @@ function prefabs_webgl_cuboid_tree(args){
         'trunk_texture': 'wood.png',
       },
     });
-
     const prefab_args = webgl_prefab_args(args);
+
     webgl_primitive_cuboid({
       ...prefab_args,
       'all': {
@@ -99,10 +99,9 @@ function prefabs_webgl_frustum_tree(args){
         'trunk_size': 1,
       },
     });
-
-    const height = Math.random() * args.height_range + args.height;
     const prefab_args = webgl_prefab_args(args);
 
+    const height = Math.random() * args.height_range + args.height;
     webgl_primitive_frustum({
       ...prefab_args,
       'character': args.character,
@@ -145,6 +144,7 @@ function prefabs_webgl_humanoid(args){
         'scale': 1,
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     const bodyparts = {
       'head': [
@@ -193,7 +193,6 @@ function prefabs_webgl_humanoid(args){
             }
         }
 
-        const prefab_args = webgl_prefab_args(args);
         webgl_entity_create({
           'character': args.character,
           'entities': [
@@ -312,6 +311,7 @@ function prefabs_webgl_lines_shrub(args){
         'z_min': -5,
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     const colors = [...args.base_color];
     const points = [
@@ -352,7 +352,6 @@ function prefabs_webgl_lines_shrub(args){
         }
     }
 
-    const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
       'character': args.character,
       'entities': [
@@ -395,8 +394,8 @@ function prefabs_webgl_lines_tree(args){
         'trunk_width_min': 1,
       },
     });
-
     const prefab_args = webgl_prefab_args(args);
+
     const properties = {
       ...prefab_args,
       'attach_type': 'webgl_characters',
@@ -406,10 +405,10 @@ function prefabs_webgl_lines_tree(args){
       'collision': false,
       'vertex_colors': args.trunk_color,
     };
-
     const trunk_count = core_random_integer(args.trunk_count_max - args.trunk_count_min + 1) + args.trunk_count_min;
     let trunk_width = args.trunk_width_max / 2;
     const trunk_width_decrease = (trunk_width - args.trunk_width_min / 2) / (trunk_count / 2);
+
     for(let trunk = 0; trunk < trunk_count; trunk++){
         properties.id = args.prefix + '_trunk_' + trunk;
         properties.billboard = args.billboard;
@@ -476,7 +475,6 @@ function prefabs_webgl_trap(args){
         'size_z': 10,
       },
     });
-
     const prefab_args = webgl_prefab_args(args);
 
     const id_trap = args.prefix + '_trap';
@@ -592,9 +590,9 @@ function prefabs_webgl_tree_2d(args){
         'width_leaf': 6,
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     const height = Math.random() * args.height_range + args.height;
-    const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
       'character': args.character,
       'entities': [

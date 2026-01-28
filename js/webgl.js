@@ -3192,6 +3192,7 @@ function webgl_primitive_cuboid(args){
         'top': {},
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     const half_size_x = args.size_x / 2;
     const half_size_y = args.size_y / 2;
@@ -3199,7 +3200,6 @@ function webgl_primitive_cuboid(args){
     const vertices_size_x = Math.abs(half_size_x);
     const vertices_size_y = Math.abs(half_size_y);
     const vertices_size_z = Math.abs(half_size_z);
-    const prefab_args = webgl_prefab_args(args);
 
     if(args.top.exclude !== true){
         const properties = {
@@ -3409,6 +3409,7 @@ function webgl_primitive_ellipsoid(args){
         'slices_longitude': 10,
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     if(args.color0.length === 0){
         args.color0 = webgl_vertexcolorarray({
@@ -3423,7 +3424,6 @@ function webgl_primitive_ellipsoid(args){
 
     const latitude_angles = math_degrees_to_radians(360 / args.slices_latitude);
     const longitude_angles = math_degrees_to_radians(180 / args.slices_longitude);
-    const prefab_args = webgl_prefab_args(args);
 
     const properties = {
       ...prefab_args,
@@ -3499,6 +3499,7 @@ function webgl_primitive_frustum(args){
         'top': true,
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     if(args.color_bottom.length === 0){
         args.color_bottom = webgl_vertexcolorarray({
@@ -3512,7 +3513,6 @@ function webgl_primitive_frustum(args){
     }
 
     const rotation = math_degrees_to_radians(360 / args.points);
-    const prefab_args = webgl_prefab_args(args);
     const properties = {
       ...prefab_args,
       'attach_x': prefab_args.position_x,
@@ -3728,6 +3728,7 @@ function webgl_primitive_stars(args){
         'stars': 100,
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     const star_colors = [];
     const star_points = [];
@@ -3747,7 +3748,6 @@ function webgl_primitive_stars(args){
         );
         star_colors.push(...args.color);
     }
-    const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
       'character': args.character,
       'entities': [
@@ -3784,6 +3784,7 @@ function webgl_primitive_terrain(args){
         'tiles_z_size': 10,
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     const color_count = args.tiles_x * (args.tiles_z + 1) * 4 + 1;
     while(args.colors.length < color_count){
@@ -3833,7 +3834,6 @@ function webgl_primitive_terrain(args){
         x_direction *= -1;
     }
 
-    const prefab_args = webgl_prefab_args(args);
     webgl_entity_create({
       'character': args.character,
       'entities': [
@@ -4257,6 +4257,7 @@ function webgl_tiles(args){
         'tiles_min': 1,
       },
     });
+    const prefab_args = webgl_prefab_args(args);
 
     const tiles = [];
     if(args.order){
@@ -4287,7 +4288,6 @@ function webgl_tiles(args){
         }
     }
 
-    const prefab_args = webgl_prefab_args(args);
     let tile_offset_x = prefab_args.position_x;
     let tile_offset_y = prefab_args.position_y;
     let tile_offset_z = prefab_args.position_z;
