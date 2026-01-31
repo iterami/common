@@ -589,17 +589,6 @@ function core_interval_pause_all(){
     }
 }
 
-function core_interval_remove(id){
-    core_interval_pause(id);
-    delete core_intervals[id];
-}
-
-function core_interval_remove_all(){
-    for(const interval in core_intervals){
-        core_interval_remove(interval);
-    }
-}
-
 function core_interval_resume(id){
     if(!Object.hasOwn(core_intervals, id)
       || !core_intervals[id].paused){
