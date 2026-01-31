@@ -189,12 +189,12 @@ function math_matrix_identity(matrix){
     return matrix;
 }
 
-function math_matrix_rotate(matrix, dimensions){
+function math_matrix_rotate(matrix, x, y, z){
     const cache = math_matrix_create(matrix);
 
     // Rotate X.
-    let cosine = Math.cos(dimensions[0]);
-    let sine = Math.sin(dimensions[0]);
+    let cosine = Math.cos(x);
+    let sine = Math.sin(x);
 
     matrix[4] = cache[4] * cosine + cache[8] * sine;
     matrix[5] = cache[5] * cosine + cache[9] * sine;
@@ -210,8 +210,8 @@ function math_matrix_rotate(matrix, dimensions){
       cache,
       matrix
     );
-    cosine = Math.cos(dimensions[1]);
-    sine = Math.sin(dimensions[1]);
+    cosine = Math.cos(y);
+    sine = Math.sin(y);
 
     matrix[0] = cache[0] * cosine - cache[8] * sine;
     matrix[1] = cache[1] * cosine - cache[9] * sine;
@@ -227,8 +227,8 @@ function math_matrix_rotate(matrix, dimensions){
       cache,
       matrix
     );
-    cosine = Math.cos(dimensions[2]);
-    sine = Math.sin(dimensions[2]);
+    cosine = Math.cos(z);
+    sine = Math.sin(z);
 
     matrix[0] = cache[0] * cosine + cache[4] * sine;
     matrix[1] = cache[1] * cosine + cache[5] * sine;
