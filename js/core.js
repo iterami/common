@@ -1064,7 +1064,7 @@ function core_sort_custom(args){
     });
 
     const target_array = args.clone
-      ? [...args.array]
+      ? globalThis.structuredClone(args.array)
       : args.array;
 
     target_array.sort(args.todo);
