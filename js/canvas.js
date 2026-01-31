@@ -43,7 +43,7 @@ function canvas_draw(){
 
 function canvas_drawloop(){
     canvas_draw();
-    core_interval_animationFrame('canvas-animationFrame');
+    core_interval_animationFrame('canvas_drawloop');
 }
 
 // Required args: vertices
@@ -171,13 +171,13 @@ function canvas_init(args){
 
     if(args.interval){
         core_interval_modify({
-          'id': 'canvas-interval',
+          'id': 'repo_logic',
           'paused': true,
           'todo': globalThis.repo_logic,
         });
         core_interval_modify({
           'animationFrame': true,
-          'id': 'canvas-animationFrame',
+          'id': 'canvas_drawloop',
           'paused': true,
           'todo': canvas_drawloop,
         });

@@ -1184,7 +1184,7 @@ function webgl_draw_entity(entity){
 
 function webgl_drawloop(){
     webgl_draw();
-    core_interval_animationFrame('webgl-animationFrame');
+    core_interval_animationFrame('webgl_drawloop');
 }
 
 function webgl_draw_picked(args){
@@ -1949,13 +1949,13 @@ void main(void){
     });
 
     core_interval_modify({
-      'id': 'webgl-interval',
+      'id': 'webgl_logic',
       'paused': true,
       'todo': webgl_logic,
     });
     core_interval_modify({
       'animationFrame': true,
-      'id': 'webgl-animationFrame',
+      'id': 'webgl_drawloop',
       'paused': true,
       'todo': webgl_drawloop,
     });
