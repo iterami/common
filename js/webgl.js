@@ -2448,11 +2448,9 @@ function webgl_logic(){
     );
     math_matrix_translate(
       webgl_matrices.camera,
-      [
-        character.camera_x,
-        character.camera_y,
-        character.camera_z,
-      ]
+      character.camera_x,
+      character.camera_y,
+      character.camera_z
     );
 
     if(webgl_properties.picking === 2){
@@ -2621,11 +2619,9 @@ function webgl_logic_entity(entity){
     );
     math_matrix_translate(
       webgl_matrices[entity.id],
-      [
-        -entity.position_x,
-        -entity.position_y,
-        -entity.position_z,
-      ]
+      -entity.position_x,
+      -entity.position_y,
+      -entity.position_z
     );
     if(entity_groups.skybox[entity.id] !== true){
         const target = globalThis[entity.attach_type][entity.attach_to];
@@ -2638,11 +2634,9 @@ function webgl_logic_entity(entity){
     }
     math_matrix_translate(
       webgl_matrices[entity.id],
-      [
-        -entity.attach_x,
-        -entity.attach_y,
-        -entity.attach_z,
-      ]
+      -entity.attach_x,
+      -entity.attach_y,
+      -entity.attach_z
     );
     math_matrix_rotate(
       webgl_matrices[entity.id],

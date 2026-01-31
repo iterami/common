@@ -242,11 +242,11 @@ function math_matrix_rotate(matrix, x, y, z){
     return matrix;
 }
 
-function math_matrix_translate(matrix, dimensions){
+function math_matrix_translate(matrix, x, y, z){
     for(let i = 0; i < 4; i++){
-        matrix[i + 12] -= matrix[i] * dimensions[0]
-          + matrix[i + 4] * dimensions[1]
-          + matrix[i + 8] * dimensions[2];
+        matrix[i + 12] -= matrix[i] * x
+          + matrix[i + 4] * y
+          + matrix[i + 8] * z;
     }
 
     return matrix;
