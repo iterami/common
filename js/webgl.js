@@ -2584,11 +2584,12 @@ function webgl_logic_entity(entity){
     const axes = 'xyz';
     for(const axis of axes){
         const rotate_axis = 'rotate_' + axis;
-        if(entity['change_' + rotate_axis] === 0){
+        const rotation = entity['change_' + rotate_axis];
+        if(rotation === 0){
             continue;
         }
 
-        entity[rotate_axis] += entity['change_' + rotate_axis];
+        entity[rotate_axis] += rotation;
     }
     if(entity.billboard){
         webgl_billboard(entity.id);
