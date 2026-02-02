@@ -540,7 +540,7 @@ function core_interval_animationFrame(id){
 }
 
 function core_interval_lock(id){
-    const interval = core_interval[id];
+    const interval = core_intervals[id];
     interval.lock = true;
 
     if(!interval.paused){
