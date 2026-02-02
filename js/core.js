@@ -566,7 +566,9 @@ function core_interval_modify(args){
         return;
     }
 
-    core_interval_pause(args.id);
+    if(core_intervals[args.id]){
+        core_interval_pause(args.id);
+    }
 
     core_intervals[args.id] = {
       'animationFrame': args.animationFrame,
@@ -584,9 +586,6 @@ function core_interval_modify(args){
 }
 
 function core_interval_pause(id){
-    if(!Object.hasOwn(core_intervals, id)){
-        return;
-    }
     const interval = core_intervals[id];
     interval.paused = true;
 
@@ -602,9 +601,6 @@ function core_interval_pause_all(){
 }
 
 function core_interval_resume(id){
-    if(!Object.hasOwn(core_intervals, id)){
-        return;
-    }
     const interval = core_intervals[id];
     if(!interval.paused){
         return;
