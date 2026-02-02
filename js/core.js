@@ -535,7 +535,17 @@ function core_init(){
 }
 
 function core_interval_animationFrame(id){
-    core_intervals[id].var = globalThis.requestAnimationFrame(core_intervals[id].todo);
+    const interval = core_intervals[id];
+    interval.var = globalThis.requestAnimationFrame(interval.todo);
+}
+
+function core_interval_lock(id){
+    const interval = core_interval[id];
+    interval.lock = true;
+
+    if(!interval.paused){
+        core_interval_pause(id);
+    }
 }
 
 // Required args: id, todo
@@ -545,6 +555,7 @@ function core_interval_modify(args){
       'defaults': {
         'animationFrame': false,
         'interval': 25,
+        'lock': false,
         'paused': false,
         'set': 'setInterval',
         'sync': false,
@@ -560,6 +571,7 @@ function core_interval_modify(args){
     core_intervals[args.id] = {
       'animationFrame': args.animationFrame,
       'interval': args.interval,
+      'lock': args.lock,
       'paused': true,
       'set': args.set,
       'sync': args.sync,
@@ -575,12 +587,12 @@ function core_interval_pause(id){
     if(!Object.hasOwn(core_intervals, id)){
         return;
     }
+    const interval = core_intervals[id];
+    interval.paused = true;
 
-    globalThis[core_intervals[id].animationFrame
+    globalThis[interval.animationFrame
       ? 'cancelAnimationFrame'
-      : 'clearInterval'](core_intervals[id].var);
-
-    core_intervals[id].paused = true;
+      : 'clearInterval'](interval.var);
 }
 
 function core_interval_pause_all(){
@@ -590,34 +602,42 @@ function core_interval_pause_all(){
 }
 
 function core_interval_resume(id){
-    if(!Object.hasOwn(core_intervals, id)
-      || !core_intervals[id].paused){
+    if(!Object.hasOwn(core_intervals, id)){
+        return;
+    }
+    const interval = core_intervals[id];
+    if(!interval.paused){
         return;
     }
 
-    core_intervals[id].paused = false;
+    interval.lock = false;
+    interval.paused = false;
 
-    if(core_intervals[id].animationFrame){
-        core_intervals[id].var = globalThis.requestAnimationFrame(core_intervals[id].todo);
+    if(interval.animationFrame){
+        interval.var = globalThis.requestAnimationFrame(interval.todo);
 
-    }else if(core_intervals[id].sync){
-        core_intervals[id].todo();
+    }else if(interval.sync){
+        interval.todo();
 
-        core_intervals[id].var = core_interval_sync({
+        interval.var = core_interval_sync({
           'id': id,
           'interval': 1000 - new Date().getMilliseconds(),
         });
 
     }else{
-        core_intervals[id].var = globalThis[core_intervals[id].set](
-          core_intervals[id].todo,
-          core_intervals[id].interval
+        interval.var = globalThis[interval.set](
+          interval.todo,
+          interval.interval
         );
     }
 }
 
 function core_interval_resume_all(){
     for(const interval in core_intervals){
+        if(core_intervals[interval].lock){
+            continue;
+        }
+
         core_interval_resume(interval);
     }
 }
