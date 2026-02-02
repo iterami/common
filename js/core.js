@@ -562,10 +562,6 @@ function core_interval_modify(args){
       },
     });
 
-    if(core_type(args.todo) !== 'function'){
-        return;
-    }
-
     if(core_intervals[args.id]){
         core_interval_pause(args.id);
     }
