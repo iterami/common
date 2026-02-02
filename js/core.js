@@ -644,17 +644,18 @@ function core_interval_resume_all(){
 
 // Required args: id, interval
 function core_interval_sync(args){
-    if(core_intervals[args.id].paused){
+    const interval = core_intervals[args.id];
+    if(interval.paused){
         return;
     }
 
     return globalThis.setTimeout(
       function(){
-          core_intervals[args.id].todo();
+          interval.todo();
 
-          core_intervals[args.id].var = core_interval_sync({
+          interval.var = core_interval_sync({
             'id': args.id,
-            'interval': core_intervals[args.id].interval - (new Date().getMilliseconds() % core_intervals[args.id].interval),
+            'interval': interval.interval - (new Date().getMilliseconds() % interval.interval),
           });
       },
       args.interval
