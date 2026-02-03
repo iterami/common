@@ -304,7 +304,11 @@ function math_normalize(args){
       },
     });
 
-    const length = Math.sqrt(args.x * args.x + args.y * args.y + args.z * args.z);
+    const length = math_distance({
+      'x0': args.x,
+      'y0': args.y,
+      'z0': args.z,
+    });
 
     if(length === 0){
         return {
