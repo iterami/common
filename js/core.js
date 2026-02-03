@@ -562,11 +562,7 @@ function core_interval_modify(args){
       },
     });
 
-    if(core_intervals[args.id]){
-        core_interval_pause(args.id);
-    }
-
-    core_intervals[args.id] = {
+    const properties = {
       'animationFrame': args.animationFrame,
       'interval': args.interval,
       'lock': args.lock,
@@ -575,6 +571,18 @@ function core_interval_modify(args){
       'sync': args.sync,
       'todo': args.todo,
     };
+
+    if(core_intervals[args.id]){
+        core_interval_pause(args.id);
+
+        Object.assign(
+          core_intervals[args.id],
+          properties
+        );
+
+    }else{
+        core_intervals[args.id] = properties;
+    }
 
     if(!args.paused){
         core_interval_resume(args.id);
