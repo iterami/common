@@ -68,18 +68,10 @@ function math_distance(args){
       },
     });
 
-    return Math.sqrt(
-      Math.pow(
-        args.x0 - args.x1,
-        2
-      ) + Math.pow(
-        args.y0 - args.y1,
-        2
-      ) + Math.pow(
-        args.z0 - args.z1,
-        2
-      )
-    );
+    const x = args.x0 - args.x1;
+    const y = args.y0 - args.y1;
+    const z = args.z0 - args.z1;
+    return Math.sqrt(x * x + y * y + z * z);
 }
 
 function math_fixed_length_line(args){
@@ -312,18 +304,7 @@ function math_normalize(args){
       },
     });
 
-    const length = Math.sqrt(
-      Math.pow(
-        args.x,
-        2
-      ) + Math.pow(
-        args.y,
-        2
-      ) + Math.pow(
-        args.z,
-        2
-      )
-    );
+    const length = Math.sqrt(args.x * args.x + args.y * args.y + args.z * args.z);
 
     if(length === 0){
         return {
