@@ -251,6 +251,10 @@ function webgl_character_init(args){
     const model = args.model;
     delete args.entities;
     delete args.model;
+    if(args.base){
+        webgl_character_base = args.id;
+    }
+    delete args.base;
 
     webgl_characters[args.id] = {
       'camera_rotate_x': 0,
@@ -303,9 +307,6 @@ function webgl_character_init(args){
       'vehicle': false,
     };
     webgl_character_count++;
-    if(args.base){
-        webgl_character_base = args.id;
-    }
 
     entity_group_create(['webgl_characters_' + args.id]);
     webgl_entity_create({
