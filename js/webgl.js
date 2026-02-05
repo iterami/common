@@ -248,8 +248,8 @@ function webgl_character_init(args){
     });
 
     const entities = args.entities;
-    const model = args.model;
     delete args.entities;
+    const model = args.model;
     delete args.model;
     if(args.base){
         webgl_character_base = args.id;
@@ -280,6 +280,17 @@ function webgl_character_init(args){
       'rotate_x': 0,
       'rotate_y': 0,
       'rotate_z': 0,
+      ...args,
+      'camera_zoom': Math.min(
+        webgl_properties.camera_zoom_max,
+        Math.max(
+          args.camera_zoom,
+          args.level === -1
+            ? 0
+            : webgl_properties.camera_zoom_min
+        )
+      ),
+      'vehicle': false,
       'vehicle_stats': args.vehicle_stats === false
         ? false
         : core_args({
@@ -294,17 +305,6 @@ function webgl_character_init(args){
               'speed_max_forward': 1,
             },
           }),
-      ...args,
-      'camera_zoom': Math.min(
-        webgl_properties.camera_zoom_max,
-        Math.max(
-          args.camera_zoom,
-          args.level === -1
-            ? 0
-            : webgl_properties.camera_zoom_min
-        )
-      ),
-      'vehicle': false,
     };
     webgl_character_count++;
 
