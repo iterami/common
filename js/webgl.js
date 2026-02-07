@@ -397,12 +397,13 @@ function webgl_character_scale(args){
             continue;
         }
 
+        const scale = 'scale_' + axis;
         if(!args.set){
-            axis_value += character['scale_' + axis];
+            axis_value += character[scale];
         }
-        if(character['scale_' + axis] !== axis_value){
+        if(character[scale] !== axis_value){
             scaled = true;
-            character['scale_' + axis] = axis_value;
+            character[scale] = axis_value;
         }
     }
 
@@ -1493,7 +1494,8 @@ function webgl_entity_scale(args){
             continue;
         }
 
-        const old_scale = entity['scale_' + axis];
+        const scale = 'scale_' + axis;
+        const old_scale = entity[scale];
         if(!args.set){
             axis_value += old_scale;
         }
@@ -1501,7 +1503,7 @@ function webgl_entity_scale(args){
             scaled = true;
 
             if(args.update){
-                entity['scale_' + axis] = axis_value;
+                entity[scale] = axis_value;
             }
 
             for(let i = offset++; i < entity.vertices_length * 3; i += 3){
@@ -1510,10 +1512,11 @@ function webgl_entity_scale(args){
                 }
                 entity.vertices[i] *= axis_value;
             }
+            const attach = 'attach_' + axis;
             if(!args.init){
-                entity['attach_' + axis] /= old_scale;
+                entity[attach] /= old_scale;
             }
-            entity['attach_' + axis] *= axis_value;
+            entity[attach] *= axis_value;
         }
     }
 
@@ -2349,8 +2352,8 @@ function webgl_logic(){
 
         const axes = 'xyz';
         for(const axis of axes){
-            const position_axis = 'position_' + axis;
-            character[position_axis] += character['change_' + position_axis];
+            const position = 'position_' + axis;
+            character[position] += character['change_' + position];
 
             const rotate = 'rotate_' + axis;
             character[rotate] = math_clamp({
@@ -2585,13 +2588,13 @@ function webgl_logic_entity(entity){
     const old_rotate_z = entity.rotate_z;
     const axes = 'xyz';
     for(const axis of axes){
-        const rotate_axis = 'rotate_' + axis;
-        const rotation = entity['change_' + rotate_axis];
+        const rotate = 'rotate_' + axis;
+        const rotation = entity['change_' + rotate];
         if(rotation === 0){
             continue;
         }
 
-        entity[rotate_axis] += rotation;
+        entity[rotate] += rotation;
     }
     if(entity.billboard){
         webgl_billboard(entity.id);
