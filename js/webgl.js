@@ -764,8 +764,8 @@ function webgl_controls_keyboard(character){
             });
         }
         return;
-
     }
+
     const controls = character.controls;
     if(controls.length === 0){
         return;
@@ -816,6 +816,9 @@ function webgl_controls_keyboard(character){
 
     if(forward || back){
         character.automove = false;
+
+    }else if(character.automove){
+        forward = true;
     }
 
     if(character.vehicle){
@@ -823,7 +826,7 @@ function webgl_controls_keyboard(character){
         let speed = 0;
         let turn = 0;
         if(vehicle.jump_allow){
-            if(forward || character.automove){
+            if(forward){
                 speed = Math.min(
                   vehicle.vehicle_stats.speed + vehicle.vehicle_stats.speed_forward,
                   vehicle.vehicle_stats.speed_max_forward
@@ -868,8 +871,8 @@ function webgl_controls_keyboard(character){
                 }
             }
         }
-        if(turn !== 0
-          || pointer_1_down){
+        if(pointer_1_down
+          || turn !== 0){
             if(speed < 0){
                 turn *= -1;
             }
@@ -890,8 +893,10 @@ function webgl_controls_keyboard(character){
 
         const axes = 'xyz';
         for(const axis of axes){
-            character['rotate_' + axis] = vehicle['rotate_' + axis];
-            character['position_' + axis] = vehicle['position_' + axis] + vehicle['change_position_' + axis];
+            const rotate = 'rotate_' + axis;
+            const position = 'position_' + axis;
+            character[rotate] = vehicle[rotate];
+            character[position] = vehicle[position] + vehicle['change_position_' + axis];
         }
         character.position_y += character.collide_bottom;
         return;
@@ -924,109 +929,105 @@ function webgl_controls_keyboard(character){
         }
     }
 
-    if(level === -1 || character.jump_allow){
-        let forwardback = 0;
-        if(forward || character.automove){
-            forwardback = -1;
+    if(level > -1 && !character.jump_allow){
+        return;
+    }
+
+    const arpg = controls === 'arpg';
+    let forwardback = forward
+      ? -1
+      : 0;
+    if(back){
+        if(arpg || level === -1){
+            forwardback += 1;
+
+        }else{
+            forwardback = forwardback ? 0 : .5;
+            leftright *= .5;
         }
-        if(back){
-            if(level === -1
-              || controls === 'arpg'){
-                forwardback += 1;
-
-            }else{
-                forwardback = forwardback ? 0 : .5;
-                leftright *= .5;
-            }
-        }
-
-        if(crouch){
-            if(level === -1){
-                webgl_character_move({
-                  'id': character.id,
-                  'speed': character.speed,
-                  'strafe': true,
-                  'y': true,
-                });
-
-            }else{
-                forwardback *= .1;
-                leftright *= .1;
-            }
-        }
-        if(jump){
-            if(level === -1){
-                webgl_character_move({
-                  'id': character.id,
-                  'speed': character.speed,
-                  'y': true,
-                });
-
-            }else{
-                character.jump_allow = false;
-                character.change_position_y = character.jump_height;
-            }
-        }
-
-        if(level !== -1
-          && leftright !== 0
-          && forwardback !== 0){
-            forwardback *= .7;
-            leftright *= .7;
-        }
-
-        if(leftright !== 0){
+    }
+    if(crouch){
+        if(level === -1){
             webgl_character_move({
-              'angle': controls === 'arpg'
-                ? 0
-                : true,
               'id': character.id,
-              'speed': leftright * character.speed,
+              'speed': character.speed,
               'strafe': true,
+              'y': true,
             });
+
+        }else{
+            forwardback *= .1;
+            leftright *= .1;
         }
-        if(forwardback !== 0){
+    }
+    if(jump){
+        if(level === -1){
             webgl_character_move({
-              'angle': controls === 'arpg'
-                ? 0
-                : true,
               'id': character.id,
-              'speed': forwardback * character.speed,
+              'speed': character.speed,
+              'y': true,
             });
+
+        }else{
+            character.jump_allow = false;
+            character.change_position_y = character.jump_height;
         }
+    }
 
-        if(controls === 'arpg'){
-            let angle = 0;
-            if(forwardback === 0){
-                if(leftright > 0){
-                    angle = 90;
+    if(level > -1
+      && leftright !== 0
+      && forwardback !== 0){
+        forwardback *= .7;
+        leftright *= .7;
+    }
 
-                }else if(leftright < 0){
-                    angle = 270;
+    if(leftright !== 0){
+        webgl_character_move({
+          'angle': arpg ? 0 : true,
+          'id': character.id,
+          'speed': leftright * character.speed,
+          'strafe': true,
+        });
+    }
+    if(forwardback !== 0){
+        webgl_character_move({
+          'angle': arpg ? 0 : true,
+          'id': character.id,
+          'speed': forwardback * character.speed,
+        });
+    }
 
-                }else{
-                    return;
-                }
-
-            }else if(forwardback < 0){
-                if(leftright > 0){
-                    angle = 45;
-
-                }else if(leftright < 0){
-                    angle = 315;
-                }
-
-            }else if(leftright > 0){
-                angle = 135;
+    if(arpg){
+        let angle = 0;
+        if(forwardback === 0){
+            if(leftright > 0){
+                angle = 90;
 
             }else if(leftright < 0){
-                angle = 225;
+                angle = 270;
 
             }else{
-                angle = 180;
+                return;
             }
-            character.rotate_y = angle;
+
+        }else if(forwardback < 0){
+            if(leftright > 0){
+                angle = 45;
+
+            }else if(leftright < 0){
+                angle = 315;
+            }
+
+        }else if(leftright > 0){
+            angle = 135;
+
+        }else if(leftright < 0){
+            angle = 225;
+
+        }else{
+            angle = 180;
         }
+        character.rotate_y = angle;
     }
 }
 
