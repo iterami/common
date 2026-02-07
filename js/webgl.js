@@ -3703,6 +3703,45 @@ function webgl_primitive_particle(args){
     }
 }
 
+// Required args: character
+function webgl_primitive_projectile(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'groups': [],
+        'prefix': entity_id_count,
+      },
+    });
+    const prefab_args = webgl_prefab_args(args);
+
+    const character = webgl_characters[args.character];
+    const properties = {
+      'collides': true,
+      'gravity': 1,
+      'id': args.prefix,
+      'level': 0,
+      'position_x': character.position_x,
+      'position_y': character.position_y,
+      'position_z': character.position_z,
+      'rotate_y': character.rotate_y,
+      'spawn': false,
+      'entities': [
+        {
+          'id': args.prefix,
+          'billboard': true,
+          'collision': false,
+          'vertices': [
+            1, 1, 0,
+            -1, 1, 0,
+            -1, -1, 0,
+            1, -1, 0,
+          ],
+        },
+      ],
+    };
+    webgl_character_init(properties);
+}
+
 function webgl_primitive_stars(args){
     args = core_args({
       'args': args,
@@ -3841,6 +3880,32 @@ function webgl_primitive_terrain(args){
       ],
       'groups': args.groups,
     });
+}
+
+// Required args: projectile
+function webgl_projectile(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'character': webgl_character_id,
+      },
+    });
+
+    if(core_type(args.projectile) === 'string'){
+        const character = webgl_characters[args.character];
+        const projectile = webgl_characters[args.projectile];
+
+        webgl_move_to({
+          'move': projectile,
+          'target': character,
+        });
+        projectile.rotate_y = character.rotate_y;
+
+    }else{
+        webgl_primitive_projectile({
+          'character': args.character,
+        });
+    }
 }
 
 function webgl_random_vertex(entity){
