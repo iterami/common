@@ -142,7 +142,7 @@ function test_time(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'function-args': void 0,
+        'function_args': void 0,
         'runs': 100,
       },
     });
@@ -154,7 +154,7 @@ function test_time(args){
 
     while(runs_done < args.runs){
         const time_before = globalThis.performance.now();
-        args.function(args.function-args);
+        args.function(args.function_args);
         const time_after = globalThis.performance.now();
 
         const diff = time_after - time_before;
