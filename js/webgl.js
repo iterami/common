@@ -1448,7 +1448,7 @@ function webgl_entity_normals(entity){
     const degrees_x = entity.rotate_x + attached_to.rotate_x;
     const degrees_z = entity.rotate_z + attached_to.rotate_z;
     const radians_x = math_degrees_to_radians(degrees_x);
-    const radians_y = math_degrees_to_radians(entity.rotate_y + attached_to.rotate_y);
+    const radians_y = math_degrees_to_radians(entity.rotate_y + (entity.billboard ? 0 : attached_to.rotate_y));
     const radians_z = -math_degrees_to_radians(degrees_z);
     const cos_y = Math.cos(radians_y);
 
@@ -2634,7 +2634,7 @@ function webgl_logic_entity(entity){
         math_matrix_rotate(
           webgl_matrices[entity.id],
           math_degrees_to_radians(target.rotate_x),
-          math_degrees_to_radians(-target.rotate_y),
+          entity.billboard ? 0 : math_degrees_to_radians(-target.rotate_y),
           math_degrees_to_radians(target.rotate_z)
         );
     }
