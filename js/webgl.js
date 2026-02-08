@@ -3721,7 +3721,7 @@ function webgl_primitive_projectile(args){
     const character = webgl_characters[args.character];
     const properties = {
       'collides': true,
-      'gravity': 1,
+      'gravity': 0,
       'id': args.prefix,
       'level': 0,
       'position_x': character.position_x,
@@ -3744,6 +3744,13 @@ function webgl_primitive_projectile(args){
       ],
     };
     webgl_character_init(properties);
+
+    const projectile = webgl_characters[args.prefix];
+    webgl_character_move({
+      'angle': projectile.rotate_y,
+      'id': projectile.id,
+      'speed': -projectile.speed,
+    });
 }
 
 function webgl_primitive_stars(args){
