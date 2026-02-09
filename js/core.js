@@ -548,13 +548,11 @@ function core_interval_lock(id){
     }
 }
 
-// Required args: id, todo
+// Required args: id, interval, todo
 function core_interval_modify(args){
     args = core_args({
       'args': args,
       'defaults': {
-        'animationFrame': false,
-        'interval': 25,
         'lock': false,
         'paused': false,
         'set': 'setInterval',
@@ -563,7 +561,6 @@ function core_interval_modify(args){
     });
 
     const properties = {
-      'animationFrame': args.animationFrame,
       'interval': args.interval,
       'lock': args.lock,
       'paused': true,
@@ -593,7 +590,7 @@ function core_interval_pause(id){
     const interval = core_intervals[id];
     interval.paused = true;
 
-    globalThis[interval.animationFrame
+    globalThis[interval.interval < 0
       ? 'cancelAnimationFrame'
       : 'clearInterval'](interval.var);
 }
@@ -613,7 +610,7 @@ function core_interval_resume(id){
     interval.lock = false;
     interval.paused = false;
 
-    if(interval.animationFrame){
+    if(interval.interval < 0){
         interval.var = globalThis.requestAnimationFrame(interval.todo);
 
     }else if(interval.sync){

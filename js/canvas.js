@@ -172,12 +172,13 @@ function canvas_init(args){
     if(args.interval){
         core_interval_modify({
           'id': 'repo_logic',
+          'interval': 25,
           'paused': true,
           'todo': globalThis.repo_logic,
         });
         core_interval_modify({
-          'animationFrame': true,
           'id': 'canvas_drawloop',
+          'interval': -1,
           'paused': true,
           'todo': canvas_drawloop,
         });

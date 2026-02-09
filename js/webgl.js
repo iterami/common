@@ -1955,12 +1955,13 @@ void main(void){
 
     core_interval_modify({
       'id': 'webgl_logic',
+      'interval': 25,
       'paused': true,
       'todo': webgl_logic,
     });
     core_interval_modify({
-      'animationFrame': true,
       'id': 'webgl_drawloop',
+      'interval': -1,
       'paused': true,
       'todo': webgl_drawloop,
     });
