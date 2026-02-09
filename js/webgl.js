@@ -241,8 +241,8 @@ function webgl_character_init(args){
         'scale_y': 1,
         'scale_z': 1,
         'spawn': {},
-        'speed': 1,
-        'turn_speed': 5,
+        'speed': .66,
+        'turn_speed': 3,
         'vehicle_stats': false,
       },
     });
