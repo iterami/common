@@ -2069,7 +2069,7 @@ function webgl_level_init(args){
         'draw_range': false,
         'fog_end': 0,
         'fog_start': 0,
-        'gravity_acceleration': -.05,
+        'gravity_acceleration': -.04,
         'gravity_damage': false,
         'gravity_max': -2,
         'groups': [],
