@@ -1955,7 +1955,7 @@ void main(void){
 
     core_interval_modify({
       'id': 'webgl_logic',
-      'interval': 25,
+      'interval': 1000 / 60,
       'paused': true,
       'todo': webgl_logic,
     });
