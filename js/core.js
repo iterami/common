@@ -556,7 +556,6 @@ function core_interval_modify(args){
         'lock': false,
         'paused': false,
         'set': 'setInterval',
-        'sync': false,
       },
     });
 
@@ -565,7 +564,6 @@ function core_interval_modify(args){
       'lock': args.lock,
       'paused': true,
       'set': args.set,
-      'sync': args.sync,
       'todo': args.todo,
     };
 
@@ -610,10 +608,10 @@ function core_interval_resume(id){
     interval.lock = false;
     interval.paused = false;
 
-    if(interval.interval < 0){
+    if(interval.interval === -1){
         interval.var = globalThis.requestAnimationFrame(interval.todo);
 
-    }else if(interval.sync){
+    }else if(interval.interval === -2){
         interval.todo();
 
         interval.var = core_interval_sync({
@@ -652,7 +650,7 @@ function core_interval_sync(args){
 
           interval.var = core_interval_sync({
             'id': args.id,
-            'interval': interval.interval - (new Date().getMilliseconds() % interval.interval),
+            'interval': 1000 - (new Date().getMilliseconds() % 1000),
           });
       },
       args.interval
