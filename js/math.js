@@ -325,6 +325,39 @@ function math_normalize(args){
     };
 }
 
+// Required args: value
+function math_oscillate(args){
+    args = core_args({
+      'args': args,
+      'defaults': {
+        'limit': 5,
+        'max': 10,
+        'min': -10,
+      },
+    });
+
+    const half = (Math.abs(args.max) + Math.abs(args.min)) / 2;
+    const distance_min = args.value - args.min;
+    const distance_max = args.max - args.value;
+    let limit_down = args.limit;
+    let limit_up = args.limit;
+
+    if(distance_max > distance_min){
+        limit_down *= Math.max(
+          distance_min / half,
+          0
+        );
+
+    }else if(distance_max < distance_min){
+        limit_up *= Math.max(
+          distance_max / half,
+          0
+        );
+    }
+
+    return Math.random() * (limit_down + limit_up) + (args.value - limit_down);
+}
+
 function math_radians_to_degrees(radians){
     return radians * 57.29577951308232;
 }
