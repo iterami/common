@@ -1558,28 +1558,13 @@ function webgl_event(args){
         }
 
         if(!array){
-            for(const property in modify){
-                if(modify[property] === '_target'){
-                    modify[property] = args.target.id;
-
-                }else if(modify[property] === '_self'){
-                    modify[property] = args.parent.id;
-
-                }else{
-                    const type = core_type(modify[property]);
-
-                    if(type === 'object' || type === 'array'){
-                        for(const id in modify[property]){
-                            if(modify[property][id] === '_target'){
-                                modify[property][id] = args.target.id;
-
-                            }else if(modify[property][id] === '_self'){
-                                modify[property][id] = args.parent.id;
-                            }
-                        }
-                    }
-                }
-            }
+            webgl_event_replace(
+              modify,
+              {
+                '_self': args.parent.id,
+                '_target': args.target.id,
+              }
+            );
         }
 
         const max = modify.random_max || 0;
@@ -1625,6 +1610,20 @@ function webgl_event(args){
               'target': target,
               'value': modify.value,
             });
+        }
+    }
+}
+
+function webgl_event_replace(modify, replace){
+    for(const property in modify){
+        if(replace[modify[property]]){
+            modify[property] = replace[modify[property]];
+            continue;
+        }
+
+        const type = core_type(modify[property]);
+        if(type === 'object' || type === 'array'){
+            webgl_event_replace(modify[property], replace);
         }
     }
 }
