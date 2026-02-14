@@ -449,9 +449,10 @@ function core_html_format(string){
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
-        '\'': '&#39;',
-        '"': '&#34;',
+        '\'': '&apos;',
+        '"': '&quot;',
         '\n\r': '<br>',
+        '\n': '<br>',
       },
       'string': string,
     });
