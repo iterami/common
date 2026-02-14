@@ -580,7 +580,7 @@ function core_interval_pause(id){
     const interval = core_intervals[id];
     interval.paused = true;
 
-    globalThis[interval.interval < 0
+    globalThis[interval.interval === -1
       ? 'cancelAnimationFrame'
       : 'clearInterval'](interval.var);
 }
