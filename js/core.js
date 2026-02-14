@@ -642,7 +642,7 @@ function core_interval_sync(args){
 
           interval.var = core_interval_sync({
             'id': args.id,
-            'interval': 1000 - (new Date().getMilliseconds() % 1000),
+            'interval': 1000 - new Date().getMilliseconds(),
           });
       },
       args.interval
