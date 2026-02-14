@@ -123,7 +123,7 @@ function test_run(args){
         );
 
         table += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
-          + '<td><a href=' + args.link + test.function + '.htm>' + test.function + '()</a>: ' + result.test
+          + '<td><a href=' + args.link + test.function + '.htm target=_blank>' + test.function + '()</a>: ' + result.test
           + '<br><textarea readonly>' + args_json
           + '</textarea><td><pre>' + returned_json
           + '</pre><td><pre>' + expect
