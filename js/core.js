@@ -329,17 +329,17 @@ function core_handle_pointermove(event){
         return;
     }
 
+    core_mobile = event.pointerType !== 'mouse';
     for(let i = 0; i < 5; i++){
         core_pointer['down_' + i] = Boolean(event.buttons & (1 << i));
     }
-    if(event.pointerType === 'touch'){
+    if(core_mobile){
         core_pointer.movement_x = (x - old_x) * (core_storage_data.pointer_horizontal || 1);
         core_pointer.movement_y = (y - old_y) * (core_storage_data.pointer_vertical || 1);
 
     }else{
         core_pointer.movement_x = event.movementX * (core_storage_data.pointer_horizontal || 1);
         core_pointer.movement_y = event.movementY * (core_storage_data.pointer_vertical || 1);
-        core_mobile = false;
     }
 
     if(core_pointer.todo.pointermove){
