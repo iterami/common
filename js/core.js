@@ -24,19 +24,10 @@ function core_digits_min(args){
       },
     });
 
-    const sign = args.number < 0
-      ? '-'
-      : '';
-    let number = Math.abs(args.number);
-    const fraction = String(core_round({
-      'number': number % 1,
-    })).substring(1);
-    number = String(Math.trunc(number)).padStart(
-      args.digits,
-      '0'
-    );
-
-    return sign + number + fraction;
+    const sign = args.number < 0 ? '-' : '';
+    const number = String(Math.abs(args.number)).split('.');
+    const formatted = number[0].padStart(args.digits, '0');
+    return sign + formatted + (number.length === 2 ? '.' + number[1] : '');
 }
 
 function core_escape(force){
