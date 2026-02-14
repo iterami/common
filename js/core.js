@@ -605,11 +605,7 @@ function core_interval_resume(id){
 
     }else if(interval.interval === -2){
         interval.todo();
-
-        interval.var = core_interval_sync({
-          'id': id,
-          'interval': 1000 - new Date().getMilliseconds(),
-        });
+        interval.var = core_interval_sync(interval);
 
     }else{
         interval.var = globalThis[interval.set](
@@ -629,9 +625,7 @@ function core_interval_resume_all(){
     }
 }
 
-// Required args: id, interval
-function core_interval_sync(args){
-    const interval = core_intervals[args.id];
+function core_interval_sync(interval){
     if(interval.paused){
         return;
     }
@@ -639,13 +633,9 @@ function core_interval_sync(args){
     return globalThis.setTimeout(
       function(){
           interval.todo();
-
-          interval.var = core_interval_sync({
-            'id': args.id,
-            'interval': 1000 - new Date().getMilliseconds(),
-          });
+          interval.var = core_interval_sync(interval);
       },
-      args.interval
+      1000 - new Date().getMilliseconds(),
     );
 }
 
