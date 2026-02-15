@@ -24,8 +24,12 @@ function core_digits_min(args){
       },
     });
 
-    const sign = args.number < 0 ? '-' : '';
     const number = String(Math.abs(args.number)).split('.');
+    if(number[0].length >= args.digits){
+        return String(args.number);
+    }
+
+    const sign = args.number < 0 ? '-' : '';
     const formatted = number[0].padStart(args.digits, '0');
     return sign + formatted + (number.length === 2 ? '.' + number[1] : '');
 }
