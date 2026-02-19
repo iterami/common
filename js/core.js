@@ -544,6 +544,12 @@ function core_interval_lock(id){
     }
 }
 
+function core_interval_lock_all(){
+    for(const interval in core_intervals){
+        core_interval_lock(interval);
+    }
+}
+
 // Required args: id, interval, todo
 function core_interval_modify(args){
     args = core_args({
