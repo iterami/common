@@ -890,9 +890,7 @@ function core_repo_init(args){
             + '<tr><td><input class=mini id=move_right type=text><td>Move Right'
             + '<tr><td><input class=mini id=jump type=text><td>Jump'
             + '<tr><td><input class=mini id=crouch type=text><td>Crouch'
-            + '<tr><td><input class=mini id=pointer_horizontal step=any type=number><td>Pointer Sensitivity<br>Horizontal'
-            + '<tr><td><input class=mini id=pointer_vertical step=any type=number><td>Pointer Sensitivity<br>Vertical</table>'
-            + '<button id=storage_reset_controls type=button>Reset Controls</button>',
+            + '<tr><td><input class=mini id=pointer_horizontal step=any type=number>x<br><input class=mini id=pointer_vertical step=any type=number>y<td>Pointer<br>Sensitivity</table><button id=storage_reset_controls type=button>Reset Controls</button>',
           'group': 'core_menu',
           'id': 'controls',
           'label': 'Controls',
