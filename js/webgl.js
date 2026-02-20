@@ -1084,8 +1084,8 @@ function webgl_controls_pointer(character){
       || core_getpointerlock()){
         webgl_camera_rotate({
           'character': character.id,
-          'x': movement_y / 10,
-          'y': movement_x / 10,
+          'x': movement_y / 10 * core_storage_data.pointer_vertical,
+          'y': movement_x / 10 * core_storage_data.pointer_horizontal,
         });
     }
 }
