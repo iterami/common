@@ -3714,12 +3714,16 @@ function webgl_primitive_projectile(args){
       'defaults': {
         'groups': [],
         'prefix': entity_id_count,
+        'speed': 1,
       },
     });
     const prefab_args = webgl_prefab_args(args);
 
     const character = webgl_characters[args.character];
     const properties = {
+      'camera_rotate_x': character.camera_rotate_x,
+      'camera_rotate_y': character.camera_rotate_y,
+      'camera_rotate_z': character.camera_rotate_z,
       'collides': true,
       'gravity': 0,
       'id': args.prefix,
@@ -3727,18 +3731,22 @@ function webgl_primitive_projectile(args){
       'position_x': character.position_x,
       'position_y': character.position_y,
       'position_z': character.position_z,
+      'rotate_x': character.rotate_x,
       'rotate_y': character.rotate_y,
+      'rotate_z': character.rotate_z,
       'spawn': false,
+      'speed': args.speed,
       'entities': [
         {
+          ...prefab_args,
           'id': args.prefix,
           'billboard': true,
           'collision': false,
           'vertices': [
-            1, 1, 0,
-            -1, 1, 0,
-            -1, -1, 0,
-            1, -1, 0,
+            .5, .5, 0,
+            -.5, .5, 0,
+            -.5, -.5, 0,
+            .5, -.5, 0,
           ],
         },
       ],
