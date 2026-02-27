@@ -1,15 +1,16 @@
 'use strict';
 
-// Required args: consts
-function test_consts(args){
+function test_consts({
+  consts,
+} = {}){
     let passed = 0;
     let table = '';
     let total = 0;
 
-    for(const id in args.consts){
+    for(const id in consts){
         total++;
 
-        const label = args.consts[id];
+        const label = consts[id];
         let result = false;
         let value = '';
         try{
@@ -28,30 +29,33 @@ function test_consts(args){
     return '<tr class=header><td>Constants ' + passed + '/' + total + '<td>Value' + table;
 }
 
-// Required args: args, expect, function
-function test_function(args){
+function test_function({
+  args,
+  expect,
+  todo,
+} = {}){
     let test = false;
-    const returned = globalThis[args.function]
-      ? globalThis[args.function](args.args)
+    const returned = globalThis[todo]
+      ? globalThis[todo](args)
       : 'undefined function';
-    const type = core_type(args.expect);
+    const type = core_type(expect);
 
     if(type === 'function'){
-        test = args.expect(returned);
+        test = expect(returned);
 
     }else if(type === 'array'
       || type === 'object'){
         test = true;
         for(const item in returned){
-            if(args.expect[item] === void 0
-              || returned[item] !== args.expect[item]){
+            if(expect[item] === void 0
+              || returned[item] !== expect[item]){
                 test = false;
                 break;
             }
         }
 
     }else{
-        test = returned === args.expect;
+        test = returned === expect;
     }
 
     return {
@@ -60,13 +64,15 @@ function test_function(args){
     };
 }
 
-// Required args: link, tests
-function test_run(args){
+function test_run({
+  link,
+  tests,
+} = {}){
     let passed = 0;
     let table = '';
     let total = 0;
 
-    for(const test of args.tests){
+    for(const test of tests){
         total++;
 
         const test_args = {};
@@ -123,7 +129,7 @@ function test_run(args){
         );
 
         table += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
-          + '<td><a href=' + args.link + test.function + '.htm target=_blank>' + test.function + '()</a>: ' + result.test
+          + '<td><a href=' + link + test.todo + '.htm target=_blank>' + test.todo + '()</a>: ' + result.test
           + '<br><textarea readonly>' + args_json
           + '</textarea><td><pre>' + returned_json
           + '</pre><td><pre>' + expect
@@ -137,24 +143,19 @@ function test_run(args){
     return '<tr class=header><td>Functions ' + passed + '/' + total + '<td>Returned<td>Expected' + table;
 }
 
-// Required args: function
-function test_time(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'function_args': void 0,
-        'runs': 100,
-      },
-    });
-
+function test_time({
+  args = void 0,
+  runs = 100,
+  todo,
+} = {}){
     let runs_done = 0;
     let time_max = 0;
     let time_min = 0;
     let time_total = 0;
 
-    while(runs_done < args.runs){
+    while(runs_done < runs){
         const time_before = globalThis.performance.now();
-        args.function(args.function_args);
+        todo(args);
         const time_after = globalThis.performance.now();
 
         const diff = time_after - time_before;
@@ -171,10 +172,10 @@ function test_time(args){
     }
 
     return {
-      'average': time_total / args.runs,
+      'average': time_total / runs,
       'max': time_max,
       'min': time_min,
-      'runs': args.runs,
+      'runs': runs,
       'total': time_total,
     };
 }

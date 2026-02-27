@@ -1,142 +1,126 @@
 'use strict';
 
-// Required args: max, min, value
-function math_clamp(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'wrap': false,
-      },
-    });
-
-    if(args.value > args.min
-      && args.value < args.max){
-        return args.value;
+function math_clamp({
+  max,
+  min,
+  value,
+  wrap = false,
+} = {}){
+    if(value > min
+      && value < max){
+        return value;
     }
 
-    if(args.wrap){
-        if(args.value < args.min){
-            return args.max - (args.min - args.value) % (args.max - args.min);
+    if(wrap){
+        if(value < min){
+            return max - (min - value) % (max - min);
         }
 
-        return args.min + (args.value - args.min) % (args.max - args.min);
+        return min + (value - min) % (max - min);
     }
 
     return Math.min(
       Math.max(
-        args.value,
-        args.min
+        value,
+        min
       ),
-      args.max
+      max
     );
 }
 
-// Required args: height0, height1, width0, width1, x0, x1, y0, y1
-function math_cuboid_overlap(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'depth0': 0,
-        'depth1': 0,
-        'z0': 0,
-        'z1': 0,
-      },
-    });
-
-    return args.x0 <= args.x1 + args.width1
-      && args.x0 >= args.x1 - args.width0
-      && args.y0 <= args.y1 + args.height1
-      && args.y0 >= args.y1 - args.height0
-      && args.z0 <= args.z1 + args.depth1
-      && args.z0 >= args.z1 - args.depth0;
+function math_cuboid_overlap({
+  depth0 = 0,
+  depth1 = 0,
+  height0,
+  height1,
+  width0,
+  width1,
+  x0,
+  x1,
+  y0,
+  y1,
+  z0 = 0,
+  z1 = 0,
+} = {}){
+    return x0 <= x1 + width1
+      && x0 >= x1 - width0
+      && y0 <= y1 + height1
+      && y0 >= y1 - height0
+      && z0 <= z1 + depth1
+      && z0 >= z1 - depth0;
 }
 
 function math_degrees_to_radians(degrees){
     return degrees * .017453292519943295;
 }
 
-function math_distance(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'x0': 0,
-        'x1': 0,
-        'y0': 0,
-        'y1': 0,
-        'z0': 0,
-        'z1': 0,
-      },
-    });
-
-    const x = args.x0 - args.x1;
-    const y = args.y0 - args.y1;
-    const z = args.z0 - args.z1;
+function math_distance({
+  x0 = 0,
+  x1 = 0,
+  y0 = 0,
+  y1 = 0,
+  z0 = 0,
+  z1 = 0,
+} = {}){
+    const x = x0 - x1;
+    const y = y0 - y1;
+    const z = z0 - z1;
     return Math.sqrt(x * x + y * y + z * z);
 }
 
-function math_fixed_length_line(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'length': 1,
-        'x0': 0,
-        'x1': 0,
-        'y0': 0,
-        'y1': 0,
-        'z0': 0,
-        'z1': 0,
-      },
-    });
-
+function math_fixed_length_line({
+  length = 1,
+  x0 = 0,
+  x1 = 0,
+  y0 = 0,
+  y1 = 0,
+  z0 = 0,
+  z1 = 0,
+} = {}){
     const line_distance = math_distance({
-      'x0': args.x0,
-      'x1': args.x1,
-      'y0': args.y0,
-      'y1': args.y1,
-      'z0': args.z0,
-      'z1': args.z1,
+      'x0': x0,
+      'x1': x1,
+      'y0': y0,
+      'y1': y1,
+      'z0': z0,
+      'z1': z1,
     });
 
-    args.x1 /= line_distance;
-    args.x1 *= args.length;
-    args.y1 /= line_distance;
-    args.y1 *= args.length;
-    args.z1 /= line_distance;
-    args.z1 *= args.length;
+    x1 /= line_distance;
+    x1 *= length;
+    y1 /= line_distance;
+    y1 *= length;
+    z1 /= line_distance;
+    z1 *= length;
 
     return {
-      'x': args.x1,
-      'y': args.y1,
-      'z': args.z1,
+      'x': x1,
+      'y': y1,
+      'z': z1,
     };
 }
 
-// Required args: numerator
-function math_fraction_reduce(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'denominator': false,
-      },
-    });
-
-    if(args.denominator === false){
-        args.denominator = Math.pow(
+function math_fraction_reduce({
+  denominator = false,
+  numerator,
+} = {}){
+    if(denominator === false){
+        denominator = Math.pow(
           10,
-          String(args.numerator).length
+          String(numerator).length
         );
     }
 
     let done = false;
     while(!done){
         const gcd = math_greatest_common_divisor({
-          'a': args.numerator,
-          'b': args.denominator,
+          'a': numerator,
+          'b': denominator,
         });
 
         if(gcd > 1){
-            args.denominator /= gcd;
-            args.numerator /= gcd;
+            denominator /= gcd;
+            numerator /= gcd;
 
         }else{
             done = true;
@@ -144,25 +128,27 @@ function math_fraction_reduce(args){
     }
 
     return {
-      'denominator': args.denominator,
-      'numerator': args.numerator,
+      'denominator': denominator,
+      'numerator': numerator,
     };
 }
 
-// Required args: a, b
-function math_greatest_common_divisor(args){
-    if(args.a === 0
-      || globalThis.isNaN(args.a)){
-        return args.b;
+function math_greatest_common_divisor({
+  a,
+  b,
+} = {}){
+    if(a === 0
+      || globalThis.isNaN(a)){
+        return b;
     }
-    if(args.b === 0
-      || globalThis.isNaN(args.b)){
-        return args.a;
+    if(b === 0
+      || globalThis.isNaN(b)){
+        return a;
     }
 
     return math_greatest_common_divisor({
-      'a': args.b,
-      'b': args.a % args.b,
+      'a': b,
+      'b': a % b,
     });
 }
 
@@ -244,103 +230,90 @@ function math_matrix_translate(matrix, x, y, z){
     return matrix;
 }
 
-// Required args: x0, x1, y0, y1
-function math_move_2d(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'speed': 1,
-      },
-    });
-
+function math_move_2d({
+  speed = 1,
+  x0,
+  x1,
+  y0,
+  y1,
+} = {}){
     const angle = Math.atan2(
-      args.y1 - args.y0,
-      args.x1 - args.x0
+      y1 - y0,
+      x1 - x0
     );
     return {
       'angle': angle,
-      'x': Math.cos(angle) * args.speed,
-      'y': Math.sin(angle) * args.speed,
+      'x': Math.cos(angle) * speed,
+      'y': Math.sin(angle) * speed,
     };
 }
 
-// Required args: dx, dy, speed
-function math_move_2d_diagonal(args){
-    const sqrt = Math.sqrt(args.speed);
+function math_move_2d_diagonal({
+  dx,
+  dy,
+  speed,
+} = {}){
+    const sqrt = Math.sqrt(speed);
     return {
-      'x': (args.dx / args.speed) * sqrt,
-      'y': args.dy > 0
+      'x': (dx / speed) * sqrt,
+      'y': dy > 0
         ? sqrt
         : -sqrt,
     };
 }
 
-// Required args; angle
-function math_move_3d(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'speed': 1,
-        'strafe': false,
-      },
-    });
-
-    const radians = -math_degrees_to_radians(args.angle - (args.strafe
+function math_move_3d({
+  angle,
+  speed = 1,
+  strafe = false,
+} = {}){
+    const radians = -math_degrees_to_radians(angle - (strafe
       ? 90
       : 0
     ));
     return {
-      'x': Math.sin(radians) * args.speed,
-      'z': Math.cos(radians) * args.speed,
+      'x': Math.sin(radians) * speed,
+      'z': Math.cos(radians) * speed,
     };
 }
 
-// Required args: x, y
-function math_normalize(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'z': 0,
-      },
-    });
-
+function math_normalize({
+  x,
+  y,
+  z = 0,
+} = {}){
     const length = math_distance({
-      'x0': args.x,
-      'y0': args.y,
-      'z0': args.z,
+      'x0': x,
+      'y0': y,
+      'z0': z,
     });
 
     if(length === 0){
         return {
-          'x': args.x,
-          'y': args.y,
-          'z': args.z,
+          'x': x,
+          'y': y,
+          'z': z,
         };
     }
 
     return {
-      'x': args.x / length,
-      'y': args.y / length,
-      'z': args.z / length,
+      'x': x / length,
+      'y': y / length,
+      'z': z / length,
     };
 }
 
-// Required args: value
-function math_oscillate(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'limit': 5,
-        'max': 10,
-        'min': -10,
-      },
-    });
-
-    const half = (Math.abs(args.max) + Math.abs(args.min)) / 2;
-    const distance_min = args.value - args.min;
-    const distance_max = args.max - args.value;
-    let limit_down = args.limit;
-    let limit_up = args.limit;
+function math_oscillate({
+  limit = 5,
+  max = 10,
+  min = 10,
+  value,
+} = {}){
+    const half = (Math.abs(max) + Math.abs(min)) / 2;
+    const distance_min = value - min;
+    const distance_max = max - value;
+    let limit_down = limit;
+    let limit_up = limit;
 
     if(distance_max > distance_min){
         limit_down *= Math.max(
@@ -355,7 +328,7 @@ function math_oscillate(args){
         );
     }
 
-    return Math.random() * (limit_down + limit_up) + (args.value - limit_down);
+    return Math.random() * (limit_down + limit_up) + (value - limit_down);
 }
 
 function math_radians_to_degrees(radians){

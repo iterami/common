@@ -16,20 +16,15 @@ function date_to_timestamp(date){
     );
 }
 
-// Required args: target
-function time_diff(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'now': false,
-      },
-    });
-
-    if(args.now === false){
-        args.now = date_to_timestamp();
+function time_diff({
+  now = false,
+  target,
+} = {}){
+    if(now === false){
+        now = date_to_timestamp();
     }
 
-    let diff = args.target - args.now;
+    let diff = target - now;
     let prefix = '';
     if(diff < 0){
         diff = -diff;
@@ -42,47 +37,42 @@ function time_diff(args){
     });
 }
 
-function time_format(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'date': false,
-        'diff': false,
-        'milliseconds': false,
-      },
-    });
-
-    if(args.date === false){
-        args.date = timestamp_to_date();
+function time_format({
+  date = false,
+  diff = false,
+  milliseconds = false,
+} = {}){
+    if(date === false){
+        date = timestamp_to_date();
     }
 
-    if(args.diff){
-        args.date.date -= 1;
-        args.date.month -= 1;
-        args.date.year -= 1970;
+    if(diff){
+        date.date -= 1;
+        date.month -= 1;
+        date.year -= 1970;
     }
 
     return core_digits_min({
-        'number': args.date.year,
+        'number': date.year,
       }) + '-'
       + core_digits_min({
-        'number': args.date.month,
+        'number': date.month,
       }) + '-'
       + core_digits_min({
-        'number': args.date.date,
+        'number': date.date,
       }) + ' '
       + core_digits_min({
-        'number': args.date.hour,
+        'number': date.hour,
       }) + ':'
       + core_digits_min({
-        'number': args.date.minute,
+        'number': date.minute,
       }) + ':'
       + core_digits_min({
-        'number': args.date.second,
-      }) + (args.milliseconds
+        'number': date.second,
+      }) + (milliseconds
         ? '.' + core_digits_min({
             'digits': 3,
-            'number': args.date.millisecond,
+            'number': date.millisecond,
           })
         : '');
 }

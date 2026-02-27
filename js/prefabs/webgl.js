@@ -1,8 +1,8 @@
 'use strict';
 
 function prefabs_webgl_cuboid_tree(args){
-    args = core_args({
-      'args': args,
+    core_object_defaults({
+      'object': args,
       'defaults': {
         'character': webgl_character_base,
         'groups': [],
@@ -73,8 +73,8 @@ function prefabs_webgl_cuboid_tree(args){
 }
 
 function prefabs_webgl_frustum_tree(args){
-    args = core_args({
-      'args': args,
+    core_object_defaults({
+      'object': args,
       'defaults': {
         'bottom': false,
         'character': webgl_character_base,
@@ -135,8 +135,8 @@ function prefabs_webgl_frustum_tree(args){
 }
 
 function prefabs_webgl_humanoid(args){
-    args = core_args({
-      'args': args,
+    core_object_defaults({
+      'object': args,
       'defaults': {
         'character': webgl_character_base,
         'groups': [],
@@ -218,8 +218,8 @@ function prefabs_webgl_humanoid(args){
 
 // Required args: path
 function prefabs_webgl_lines_path(args){
-    args = core_args({
-      'args': args,
+    core_object_defaults({
+      'object': args,
       'defaults': {
         'character': webgl_character_base,
         'colors': [],
@@ -227,10 +227,7 @@ function prefabs_webgl_lines_path(args){
         'prefix': entity_id_count,
       },
     });
-
-    if(!webgl_paths[args.path]){
-        return;
-    }
+    const prefab_args = webgl_prefab_args(args);
 
     if(args.colors.length === 0){
         args.colors.push([1, 1, 1, 1]);
@@ -269,7 +266,7 @@ function prefabs_webgl_lines_path(args){
       'character': args.character,
       'entities': [
         {
-          ...webgl_prefab_args(args),
+          ...prefab_args,
           'attach_type': 'webgl_characters',
           'draw_mode': vertices.length === 3
             ? 'POINTS'
@@ -287,8 +284,8 @@ function prefabs_webgl_lines_path(args){
 }
 
 function prefabs_webgl_lines_shrub(args){
-    args = core_args({
-      'args': args,
+    core_object_defaults({
+      'object': args,
       'defaults': {
         'base_color': [
           .3, .15, 0, 1,
@@ -373,8 +370,8 @@ function prefabs_webgl_lines_shrub(args){
 }
 
 function prefabs_webgl_lines_tree(args){
-    args = core_args({
-      'args': args,
+    core_object_defaults({
+      'object': args,
       'defaults': {
         'character': webgl_character_base,
         'groups': [],
@@ -458,8 +455,8 @@ function prefabs_webgl_lines_tree(args){
 }
 
 function prefabs_webgl_trap(args){
-    args = core_args({
-      'args': args,
+    core_object_defaults({
+      'object': args,
       'defaults': {
         'character': webgl_character_base,
         'color_active': [1, 0, 0, 1,],
@@ -572,8 +569,8 @@ function prefabs_webgl_trap(args){
 }
 
 function prefabs_webgl_tree_2d(args){
-    args = core_args({
-      'args': args,
+    core_object_defaults({
+      'object': args,
       'defaults': {
         'base_color': [
           .4, .2, 0, 1,

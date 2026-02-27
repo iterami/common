@@ -57,33 +57,28 @@ function audio_start(id){
     oscillator.stop(duration);
 }
 
-// Required args: id
-function audio_start_at(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'forwardX': audio_listener.forwardX,
-        'forwardY': audio_listener.forwardY,
-        'forwardZ': audio_listener.forwardZ,
-        'positionX': 0,
-        'positionY': 0,
-        'positionZ': 0,
-      },
-    });
+function audio_start_at({
+  forwardX = audio_listener.forwardX,
+  forwardY = audio_listener.forwardY,
+  forwardZ = audio_listener.forwardZ,
+  id,
+  positionX = 0,
+  positionY = 0,
+  positionZ = 0,
+} = {}){
+    audio_listener.forwardX = forwardX;
+    audio_listener.forwardY = forwardY;
+    audio_listener.forwardZ = forwardZ;
 
-    audio_listener.forwardX = args.forwardX;
-    audio_listener.forwardY = args.forwardY;
-    audio_listener.forwardZ = args.forwardZ;
-
-    const audio = audio_audios[args.id];
+    const audio = audio_audios[id];
     if(!audio.panner){
         audio.panner = {};
     }
-    audio.panner.positionX = args.positionX;
-    audio.panner.positionY = args.positionY;
-    audio.panner.positionZ = args.positionZ;
+    audio.panner.positionX = positionX;
+    audio.panner.positionY = positionY;
+    audio.panner.positionZ = positionZ;
 
-    audio_start(args.id);
+    audio_start(id);
 }
 
 globalThis.audio_audios = {};

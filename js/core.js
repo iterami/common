@@ -1,37 +1,17 @@
 'use strict';
 
-// Required args: args, defaults
-function core_args(args){
-    if(args.args === void 0){
-        return args.defaults;
+function core_digits_min({
+  digits = 2,
+  number,
+} = {}){
+    const value = String(Math.abs(number)).split('.');
+    if(value[0].length >= digits){
+        return String(number);
     }
 
-    for(const arg in args.defaults){
-        if(args.args[arg] === void 0){
-            args.args[arg] = args.defaults[arg];
-        }
-    }
-
-    return args.args;
-}
-
-// Required args: number
-function core_digits_min(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'digits': 2,
-      },
-    });
-
-    const number = String(Math.abs(args.number)).split('.');
-    if(number[0].length >= args.digits){
-        return String(args.number);
-    }
-
-    const sign = args.number < 0 ? '-' : '';
-    const formatted = number[0].padStart(args.digits, '0');
-    return sign + formatted + (number.length === 2 ? '.' + number[1] : '');
+    const sign = number < 0 ? '-' : '';
+    const formatted = value[0].padStart(digits, '0');
+    return sign + formatted + (value.length === 2 ? '.' + value[1] : '');
 }
 
 function core_escape(force){
@@ -68,35 +48,30 @@ function core_escape(force){
     globalThis.repo_escape?.();
 }
 
-function core_events_bind(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'beforeunload': false,
-        'blur': false,
-        'clearkeys': false,
-        'clearpointer': false,
-        'elements': false,
-        'keybinds': false,
-        'pointerbinds': false,
-      },
-    });
-
-    if(args.beforeunload !== false){
-        core_events.beforeunload = args.beforeunload;
+function core_events_bind({
+  beforeunload = false,
+  blur = false,
+  clearkeys = false,
+  clearpointer = false,
+  elements = false,
+  keybinds = false,
+  pointerbinds = false,
+} = {}){
+    if(beforeunload !== false){
+        core_events.beforeunload = beforeunload;
         globalThis.addEventListener('beforeunload', core_handle_beforeunload);
     }
-    if(args.blur !== false){
-        core_events.blur = args.blur;
+    if(blur !== false){
+        core_events.blur = blur;
     }
 
-    if(args.clearkeys){
+    if(clearkeys){
         core_object_reset(core_keys);
     }
-    if(args.keybinds !== false){
-        for(const keybind in args.keybinds){
-            core_keys[keybind] = core_args({
-              'args': args.keybinds[keybind],
+    if(keybinds !== false){
+        for(const keybind in keybinds){
+            core_keys[keybind] = core_object_defaults({
+              'object': keybinds[keybind],
               'defaults': {
                 'state': false,
               },
@@ -104,16 +79,14 @@ function core_events_bind(args){
         }
     }
 
-    if(args.clearpointer){
+    if(clearpointer){
         core_object_reset(core_pointer.todo);
     }
-    if(args.pointerbinds !== false){
-        for(const pointerbind in args.pointerbinds){
-            core_pointer.todo[pointerbind] = core_args({
-              'args': args.pointerbinds[pointerbind],
-            });
+    if(pointerbinds !== false){
+        for(const pointerbind in pointerbinds){
+            core_pointer.todo[pointerbind] = {...pointerbinds[pointerbind]};
         }
-        if(args.pointerbinds.contextmenu){
+        if(pointerbinds.contextmenu){
             globalThis.addEventListener('contextmenu', core_handle_contextmenu);
         }
 
@@ -130,40 +103,32 @@ function core_events_bind(args){
         globalThis.addEventListener('touchstart', core_handle_touch, {'passive': false});
     }
 
-    if(args.elements !== false){
-        for(const element in args.elements){
+    if(elements !== false){
+        for(const element in elements){
             const domelement = core_getelement(element);
-            for(const event in args.elements[element]){
-                domelement[event] = args.elements[element][event];
+            for(const event in elements[element]){
+                domelement[event] = elements[element][event];
             }
         }
     }
 }
 
-// Required args: file, todo
-function core_file(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'type': 'readAsDataURL',
-      },
-    });
-
+function core_file({
+  file,
+  todo,
+  type = 'readAsDataURL',
+} = {}){
     const filereader = new FileReader();
-    filereader.onloadend = args.todo;
-    filereader[args.type](args.file);
+    filereader.onloadend = todo;
+    filereader[type](file);
 }
 
-// Required args: a, b
-function core_float_compare(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'precision': Number.EPSILON,
-      },
-    });
-
-    return Math.abs(args.a - args.b) < args.precision;
+function core_float_compare({
+  a,
+  b,
+  precision = Number.EPSILON,
+} = {}){
+    return Math.abs(a - b) < precision;
 }
 
 function core_getelement(id){
@@ -405,43 +370,38 @@ function core_hex_to_rgb(hex){
     };
 }
 
-function core_html(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'parent': false,
-        'properties': {},
-        'store': false,
-        'todo': 'append',
-        'type': 'div',
-      },
-    });
-
-    if(args.properties.id){
-        const existing_element = core_getelement(args.properties.id);
+function core_html({
+  parent = false,
+  properties = {},
+  store = false,
+  todo = 'append',
+  type = 'div',
+} = {}){
+    if(properties.id){
+        const existing_element = core_getelement(properties.id);
         if(existing_element){
             return existing_element;
         }
     }
 
-    const element = document.createElement(args.type);
-    for(const property in args.properties){
+    const element = document.createElement(type);
+    for(const property in properties){
         if(element[property] === void 0){
             element.setAttribute(
               property,
-              args.properties[property]
+              properties[property]
             );
 
         }else{
-            element[property] = args.properties[property];
+            element[property] = properties[property];
         }
     }
-    if(args.parent !== false){
-        args.parent[args.todo](element);
+    if(parent !== false){
+        parent[todo](element);
     }
 
-    if(args.store !== false){
-        core_elements[args.store] = element;
+    if(store !== false){
+        core_elements[store] = element;
     }
 
     return element;
@@ -462,12 +422,15 @@ function core_html_format(string){
     });
 }
 
-// Required args: id, src
-function core_image(args){
+function core_image({
+  id,
+  src,
+  todo,
+} = {}){
     const image = new Image();
-    image.onload = args.todo;
-    image.src = args.src;
-    core_images[args.id] = image;
+    image.onload = todo;
+    image.src = src;
+    core_images[id] = image;
     return image;
 }
 
@@ -550,39 +513,36 @@ function core_interval_lock_all(){
     }
 }
 
-// Required args: id, interval, todo
-function core_interval_modify(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'lock': false,
-        'paused': false,
-        'set': 'setInterval',
-      },
-    });
-
+function core_interval_modify({
+  id,
+  interval,
+  lock = false,
+  paused = false,
+  set = 'setInterval',
+  todo,
+} = {}){
     const properties = {
-      'interval': args.interval,
-      'lock': args.lock,
+      'interval': interval,
+      'lock': lock,
       'paused': true,
-      'set': args.set,
-      'todo': args.todo,
+      'set': set,
+      'todo': todo,
     };
 
-    if(core_intervals[args.id]){
-        core_interval_pause(args.id);
+    if(core_intervals[id]){
+        core_interval_pause(id);
 
         Object.assign(
-          core_intervals[args.id],
+          core_intervals[id],
           properties
         );
 
     }else{
-        core_intervals[args.id] = properties;
+        core_intervals[id] = properties;
     }
 
-    if(!args.paused){
-        core_interval_resume(args.id);
+    if(!paused){
+        core_interval_resume(id);
     }
 }
 
@@ -666,27 +626,38 @@ function core_keys_rebind(){
     });
 }
 
-// Required args: number
-function core_number_format(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals_max': 7,
-        'decimals_min': 0,
-      },
-    });
-
-    if(args.decimals_max < args.decimals_min){
-        args.decimals_min = args.decimals_max;
+function core_number_format({
+  decimals_max = 7,
+  decimals_min = 0,
+  number,
+} = {}){
+    if(decimals_max < decimals_min){
+        decimals_min = decimals_max;
     }
 
     return new Intl.NumberFormat(
         void 0,
         {
-          'maximumFractionDigits': args.decimals_max,
-          'minimumFractionDigits': args.decimals_min,
+          'maximumFractionDigits': decimals_max,
+          'minimumFractionDigits': decimals_min,
         }
-      ).format(args.number);
+      ).format(number);
+}
+
+function core_object_defaults({
+  defaults = {},
+  object,
+} = {}){
+    if(object === void 0){
+        return defaults;
+    }
+
+    for(const property in defaults){
+        if(object[property] === void 0){
+            object[property] = defaults[property];
+        }
+    }
+    return object;
 }
 
 function core_object_reset(object){
@@ -708,36 +679,31 @@ function core_random_boolean(chance){
     return Math.random() < chance;
 }
 
-// Required args: options
-function core_random_drop(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'nothing': 1,
-        'nothing_type': 0,
-      },
-    });
-
-    const options = {};
+function core_random_drop({
+  nothing = 1,
+  nothing_type = 0,
+  options,
+} = {}){
+    const totals = {};
     let total = 0;
 
-    for(const option in args.options){
-        total += args.options[option];
-        options[option] = total;
+    for(const option in options){
+        total += options[option];
+        totals[option] = total;
     }
 
-    if(args.nothing_type === 0){
-        if(total < args.nothing){
-            total += args.nothing - total;
+    if(nothing_type === 0){
+        if(total < nothing){
+            total += nothing - total;
         }
 
-    }else if(args.nothing_type === 1){
-        total += args.nothing;
+    }else if(nothing_type === 1){
+        total += nothing;
     }
 
     const random = Math.random() * total;
-    for(const option in options){
-        if(random < options[option]){
+    for(const option in totals){
+        if(random < totals[option]){
             return option;
         }
     }
@@ -774,78 +740,70 @@ function core_random_splice(array){
     )[0];
 }
 
-function core_random_string(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'characters': '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
-        'length': 100,
-      },
-    });
-
+function core_random_string({
+  characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  length = 100,
+} = {}){
     let string = '';
-    for(let i = 0; i < args.length; i++){
-        string += args.characters[core_random_integer(args.characters.length)];
+    for(let i = 0; i < length; i++){
+        string += characters[core_random_integer(characters.length)];
     }
     return string;
 }
 
-// Required args: patterns, string
-function core_replace(args){
-    let string_value = args.string;
-    for(const pattern in args.patterns){
+function core_replace({
+  patterns,
+  string,
+} = {}){
+    let string_value = string;
+    for(const pattern in patterns){
         string_value = string_value.replace(
           new RegExp(
             pattern,
             'g'
           ),
-          args.patterns[pattern]
+          patterns[pattern]
         );
     }
 
     return string_value;
 }
 
-// Required args: title
-function core_repo_init(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'beforeunload': false,
-        'blur': false,
-        'events': {},
-        'globals': {},
-        'images': {},
-        'info': '',
-        'keybinds': false,
-        'link': false,
-        'menu': false,
-        'menu_block_events': true,
-        'menu_lock': false,
-        'owner': 'iterami',
-        'pointerbinds': false,
-        'root': '../index.htm',
-        'storage': false,
-        'storage_controls': false,
-        'storage_menu': '',
-        'tabs': {},
-        'ui': '',
-        'ui_elements': [],
-      },
-    });
-
+function core_repo_init({
+  beforeunload = false,
+  blur = false,
+  events = {},
+  globals = {},
+  images = {},
+  info = '',
+  keybinds = false,
+  link = false,
+  menu = false,
+  menu_block_events = true,
+  menu_lock = false,
+  owner = 'iterami',
+  pointerbinds = false,
+  root = '../index.htm',
+  storage = false,
+  storage_controls = false,
+  storage_menu = '',
+  tabs = {},
+  title,
+  ui = '',
+  ui_elements = [],
+} = {}){
     Object.assign(
       globalThis,
-      args.globals
+      globals
     );
 
-    core_repo_title = args.title;
-    if(args.info.length){
+    core_repo_title = title;
+    if(info.length){
         core_html({
           'parent': core_elements.core_menu,
           'properties': {
             'id': 'core_menu_info',
-            'innerHTML': args.info,
+            'innerHTML': info,
           },
           'todo': 'append',
         });
@@ -853,36 +811,36 @@ function core_repo_init(args){
     Object.assign(
       document.getElementById('core_menu_root'),
       {
-        'href': args.root,
-        'textContent': args.owner,
+        'href': root,
+        'textContent': owner,
       }
     );
     Object.assign(
       document.getElementById('core_menu_title'),
       {
-        'href': args.link === false
-          ? 'https://github.com/' + args.owner + '/' + core_repo_title
-          : args.link,
+        'href': link === false
+          ? 'https://github.com/' + owner + '/' + core_repo_title
+          : link,
         'textContent': core_repo_title,
       }
     );
-    core_elements.repo_ui.innerHTML = args.ui;
+    core_elements.repo_ui.innerHTML = ui;
 
     let have_default = false;
-    for(const tab in args.tabs){
+    for(const tab in tabs){
         core_tab_create({
-          'content': args.tabs[tab].content,
-          'group': args.tabs[tab].group,
+          'content': tabs[tab].content,
+          'group': tabs[tab].group,
           'id': tab,
-          'label': args.tabs[tab].label,
+          'label': tabs[tab].label,
         });
 
-        if(args.tabs[tab].default){
+        if(tabs[tab].default){
             core_tab_switch('tab_' + tab);
             have_default = true;
         }
     }
-    if(args.storage_controls){
+    if(storage_controls){
         core_tab_create({
           'content': '<table><tr><td><input class=mini id=move_up type=text><td>Move Up/Forward'
             + '<tr><td><input class=mini id=move_left type=text><td>Move Left'
@@ -908,7 +866,7 @@ function core_repo_init(args){
             'pointer_vertical': 1,
           },
         });
-        args.events.storage_reset_controls = {
+        events.storage_reset_controls = {
           'onclick': function(){
               core_storage_reset({
                 'label': 'controls',
@@ -926,13 +884,13 @@ function core_repo_init(args){
             'move_left': true,
             'move_right': true,
             'move_up': true,
-            ...args.storage_controls,
+            ...storage_controls,
           },
         );
     }
-    if(args.storage !== false){
+    if(storage !== false){
         core_tab_create({
-          'content': args.storage_menu
+          'content': storage_menu
             + '<button id=storage_reset_repo type=button>Reset ' + core_repo_title + ' Settings</button>',
           'group': 'core_menu',
           'id': 'repo',
@@ -940,9 +898,9 @@ function core_repo_init(args){
           'todo': 'prepend',
         });
         core_storage_add({
-          'storage': args.storage,
+          'storage': storage,
         });
-        args.events.storage_reset_repo = {
+        events.storage_reset_repo = {
           'onclick': function(){
               core_storage_reset({
                 'label': core_repo_title,
@@ -956,30 +914,30 @@ function core_repo_init(args){
         core_tab_switch('tab_repo');
     }
 
-    if(args.keybinds !== false){
+    if(keybinds !== false){
         Object.assign(
           core_key_rebinds,
-          args.keybinds,
+          keybinds,
         );
     }
     core_keys_rebind();
 
-    core_menu_block_events = args.menu_block_events;
-    core_menu_lock = args.menu_lock;
+    core_menu_block_events = menu_block_events;
+    core_menu_lock = menu_lock;
     core_events_bind({
-      'beforeunload': args.beforeunload,
-      'blur': args.blur,
-      'elements': args.events,
-      'pointerbinds': args.pointerbinds,
+      'beforeunload': beforeunload,
+      'blur': blur,
+      'elements': events,
+      'pointerbinds': pointerbinds,
     });
 
-    for(const image in args.images){
+    for(const image in images){
         core_image({
           'id': image,
-          'src': args.images[image],
+          'src': images[image],
         });
     }
-    for(const element of args.ui_elements){
+    for(const element of ui_elements){
         core_elements[element] = document.getElementById(element);
     }
 
@@ -988,8 +946,8 @@ function core_repo_init(args){
     }
     delete globalThis.core_init_todo;
 
-    if(args.menu
-      || args.menu_lock){
+    if(menu
+      || menu_lock){
         core_escape(true);
     }
 }
@@ -1005,94 +963,92 @@ function core_requestpointerlock(element){
     element.requestPointerLock();
 }
 
-// Required args: number
-function core_round(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'decimals': 7,
-      },
-    });
-
+function core_round({
+  decimals = 7,
+  number,
+} = {}){
     let returned = 0;
     const result = Number(
-      Math.round(args.number + 'e+' + args.decimals)
-        + 'e-' + args.decimals
+      Math.round(number + 'e+' + decimals)
+        + 'e-' + decimals
     );
 
     if(globalThis.isNaN(result)){
-        const eIndex = String(args.number).indexOf('e');
+        const eIndex = String(number).indexOf('e');
         let eString = '';
         if(eIndex >= 0){
-            eString = String(args.number).slice(eIndex);
-            args.number = String(args.number).slice(
+            eString = String(number).slice(eIndex);
+            number = String(number).slice(
               0,
               eIndex
             );
 
             const power = Number(eString.slice(2));
-            if(power === args.decimals){
+            if(power === decimals){
                 eString = 'e-' + (power + 1);
             }
         }
 
-        returned = Number(Number(Math.round(args.number + 'e+' + args.decimals) + 'e-' + args.decimals) + eString);
+        returned = Number(Number(Math.round(number + 'e+' + decimals) + 'e-' + decimals) + eString);
 
     }else{
         returned = result;
     }
 
-    if(Math.abs(returned) < Number('1e-' + args.decimals)){
+    if(Math.abs(returned) < Number('1e-' + decimals)){
         return 0;
     }
     return returned;
 }
 
-// Required args: array, todo
-function core_sort_custom(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'clone': true,
-        'reverse': false,
-      },
-    });
+function core_sort_custom({
+  array,
+  clone = true,
+  reverse = false,
+  todo,
+} = {}){
+    const target_array = clone
+      ? globalThis.structuredClone(array)
+      : array;
 
-    const target_array = args.clone
-      ? globalThis.structuredClone(args.array)
-      : args.array;
-
-    target_array.sort(args.todo);
-    if(args.reverse){
+    target_array.sort(todo);
+    if(reverse){
         target_array.reverse();
     }
 
     return target_array;
 }
 
-// Required args: array
-function core_sort_numbers(args){
+function core_sort_numbers({
+  array,
+  clone,
+  reverse,
+} = {}){
     return core_sort_custom({
-      'array': args.array,
-      'clone': args.clone,
-      'reverse': args.reverse,
+      'array': array,
+      'clone': clone,
+      'reverse': reverse,
       'todo': function(a, b){
           return a - b;
       },
     });
 }
 
-// Required args: array, property
-function core_sort_property(args){
+function core_sort_property({
+  array,
+  clone,
+  property,
+  reverse,
+} = {}){
     return core_sort_custom({
-      'array': args.array,
-      'clone': args.clone,
-      'reverse': args.reverse,
+      'array': array,
+      'clone': clone,
+      'reverse': reverse,
       'todo': function(a, b){
-          if(a[args.property] > b[args.property]){
+          if(a[property] > b[property]){
               return 1;
           }
-          if(a[args.property] < b[args.property]){
+          if(a[property] < b[property]){
               return -1;
           }
           return 0;
@@ -1100,42 +1056,42 @@ function core_sort_property(args){
     });
 }
 
-// Required args: array
-function core_sort_random(args){
+function core_sort_random({
+  array,
+  clone,
+} = {}){
     return core_sort_custom({
-      'array': args.array,
-      'clone': args.clone,
+      'array': array,
+      'clone': clone,
       'todo': function(a, b){
           return core_random_boolean(.5);
       },
     });
 }
 
-// Required args: array
-function core_sort_strings(args){
+function core_sort_strings({
+  array,
+  clone,
+  reverse,
+} = {}){
     return core_sort_custom({
-      'array': args.array,
-      'clone': args.clone,
-      'reverse': args.reverse,
+      'array': array,
+      'clone': clone,
+      'reverse': reverse,
       'todo': new Intl.Collator().compare,
     });
 }
 
-// Required args: storage
-function core_storage_add(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'prefix': core_repo_title + '_',
-      },
-    });
-
-    for(const key in args.storage){
+function core_storage_add({
+  prefix = core_repo_title + '_',
+  storage,
+} = {}){
+    for(const key in storage){
         core_storage_info[key] = {
-          'default': args.storage[key],
-          'prefix': args.prefix,
+          'default': storage[key],
+          'prefix': prefix,
         };
-        const value = globalThis.localStorage.getItem(args.prefix + key);
+        const value = globalThis.localStorage.getItem(prefix + key);
         core_storage_data[key] = value === null
           ? core_storage_info[key].default
           : core_type_convert({
@@ -1160,25 +1116,29 @@ function core_storage_add(args){
     }
 }
 
-// Required args: element, key
-function core_storage_element_property(args){
-    return core_type(core_storage_info[args.key].default) === 'boolean'
+function core_storage_element_property({
+  element,
+  key,
+} = {}){
+    return core_type(core_storage_info[key].default) === 'boolean'
       ? 'checked'
-      : (core_type(args.element.value) === 'undefined'
+      : (core_type(element.value) === 'undefined'
         ? 'textContent'
         : 'value');
 }
 
 
-// Required args: label, prefix
-function core_storage_reset(args){
-    if(!globalThis.confirm('Reset ' + args.label + ' settings?')){
+function core_storage_reset({
+  label,
+  prefix,
+} = {}){
+    if(!globalThis.confirm('Reset ' + label + ' settings?')){
         return;
     }
 
     let keys = [];
     for(const key in core_storage_info){
-        if(core_storage_info[key].prefix === args.prefix){
+        if(core_storage_info[key].prefix === prefix){
             keys.push(key);
         }
     }
@@ -1190,19 +1150,14 @@ function core_storage_reset(args){
     core_storage_update();
 }
 
-function core_storage_save(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'keys': false,
-        'rebind': true,
-      },
-    });
-
-    if(core_type(args.keys) !== 'array'){
-        args.keys = Object.keys(core_storage_data);
+function core_storage_save({
+  keys = false,
+  rebind = true,
+} = {}){
+    if(core_type(keys) !== 'array'){
+        keys = Object.keys(core_storage_data);
     }
-    for(const key of args.keys){
+    for(const key of keys){
         const element = core_elements[key];
         const data = core_type_convert({
           'template': core_storage_info[key].default,
@@ -1227,7 +1182,7 @@ function core_storage_save(args){
         }
     }
 
-    if(args.rebind){
+    if(rebind){
         core_keys_rebind();
     }
 }
@@ -1246,10 +1201,15 @@ function core_storage_update(keys){
     }
 }
 
-// Required args: content, group, id, label
-function core_tab_create(args){
-    const tabs_id = 'tabs_' + args.group;
-    const tabcontents_id = 'tabcontents_' + args.group;
+function core_tab_create({
+  content,
+  group,
+  id,
+  label,
+  todo,
+} = {}){
+    const tabs_id = 'tabs_' + group;
+    const tabcontents_id = 'tabcontents_' + group;
 
     let tabs = document.getElementById(tabs_id);
     if(!tabs){
@@ -1273,20 +1233,20 @@ function core_tab_create(args){
     core_html({
       'parent': tabs,
       'properties': {
-        'id': 'tab_' + args.id,
+        'id': 'tab_' + id,
         'onclick': function(){
             core_tab_switch(this.id);
         },
-        'textContent': args.label,
+        'textContent': label,
       },
-      'todo': args.todo,
+      'todo': todo,
       'type': 'button',
     });
     core_html({
       'parent': document.getElementById(tabcontents_id),
       'properties': {
-        'id': 'tabcontent_' + args.id,
-        'innerHTML': args.content,
+        'id': 'tabcontent_' + id,
+        'innerHTML': content,
         'style': 'display:none',
       },
     });
@@ -1317,42 +1277,39 @@ function core_type(variable){
     return variable.constructor.name.toLowerCase();
 }
 
-// Required args: template, value
-function core_type_convert(args){
-    const type = core_type(args.template);
+function core_type_convert({
+  template,
+  value,
+} = {}){
+    const type = core_type(template);
     if(type === 'string'){
-        return String(args.value);
+        return String(value);
     }
     if(type === 'array'
       || type === 'object'){
-        return args.value;
+        return value;
     }
     if(type === 'boolean'
-      && core_type(args.value) !== 'boolean'){
-        return args.value === 'true';
+      && core_type(value) !== 'boolean'){
+        return value === 'true';
     }
-    if(!globalThis.isNaN(Number.parseFloat(args.template))){
-        return Number.parseFloat(args.value);
+    if(!globalThis.isNaN(Number.parseFloat(template))){
+        return Number.parseFloat(value);
     }
-    return args.value;
+    return value;
 }
 
-function core_ui_update(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'class': false,
-        'ids': {},
-        'todo': 'textContent',
-      },
-    });
-
-    for(const id in args.ids){
-        if(core_ui_values[id] === args.ids[id]){
+function core_ui_update({
+  classname = false,
+  ids = {},
+  todo = 'textContent',
+} = {}){
+    for(const id in ids){
+        if(core_ui_values[id] === ids[id]){
             continue;
         }
 
-        core_ui_values[id] = args.ids[id];
+        core_ui_values[id] = ids[id];
 
         if(!Object.hasOwn(core_elements, id)){
             core_elements[id] = document.getElementById(id);
@@ -1360,45 +1317,40 @@ function core_ui_update(args){
 
         const element = core_elements[id];
         if(element.type === 'checkbox'){
-            element.checked = Boolean(args.ids[id]);
+            element.checked = Boolean(ids[id]);
 
         }else{
             element[(element.tagName === 'BUTTON' || core_type(element.value) === 'undefined')
-              ? args.todo
-              : 'value'] = args.ids[id];
+              ? todo
+              : 'value'] = ids[id];
         }
 
-        if(!args.class){
+        if(!classname){
             continue;
         }
 
         const elements = document.getElementsByClassName(id);
         for(const item of elements){
             if(item.type === 'checkbox'){
-                item.checked = Boolean(args.ids[id]);
+                item.checked = Boolean(ids[id]);
 
             }else{
                 item[(element.tagName === 'BUTTON' || core_type(item.value) === 'undefined')
-                  ? args.todo
-                  : 'value'] = args.ids[id];
+                  ? todo
+                  : 'value'] = ids[id];
             }
         }
     }
 }
 
-// Required args: element
-function core_uri(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'quality': 1,
-        'type': 'image/png',
-      },
-    });
-
-    return args.element.toDataURL(
-      args.type,
-      args.quality
+function core_uri({
+  element,
+  quality = 1,
+  type = 'image/png',
+} = {}){
+    return element.toDataURL(
+      type,
+      quality
     );
 }
 

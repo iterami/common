@@ -46,53 +46,44 @@ function canvas_drawloop(){
     core_interval_animationFrame('canvas_drawloop');
 }
 
-// Required args: vertices
-function canvas_draw_path(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'properties': {},
-        'style': canvas_properties.style,
-        'translate': false,
-        'x': 0,
-        'y': 0,
-      },
-    });
-
-    if(args.translate){
+function canvas_draw_path({
+  vertices,
+  properties = {},
+  style = canvas_properties.style,
+  translate = false,
+  x = 0,
+  y = 0,
+} = {}){
+    if(translate){
         canvas.save();
         canvas.translate(
-          args.x,
-          args.y
+          x,
+          y
         );
     }
 
     canvas.beginPath();
-    for(const vertex of args.vertices){
+    for(const vertex of vertices){
         const data = [...vertex];
         canvas[data.shift()](...data);
     }
     canvas.closePath();
 
-    canvas_setproperties(args.properties);
-    canvas[args.style]();
+    canvas_setproperties(properties);
+    canvas[style]();
 
-    if(args.translate){
+    if(translate){
         canvas.restore();
     }
 }
 
-// Required args: args, stops
-function canvas_gradient(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'type': 'createLinearGradient',
-      },
-    });
-
-    const gradient = canvas[args.type](...args.args);
-    for(const step of args.stops){
+function canvas_gradient({
+  args,
+  stops,
+  type = 'createLinearGradient',
+} = {}){
+    const gradient = canvas[type](...args);
+    for(const step of stops){
         gradient.addColorStop(
           step.offset || 0,
           step.color || '#000'
@@ -101,18 +92,12 @@ function canvas_gradient(args){
     return gradient;
 }
 
-function canvas_init(args){
-    args = core_args({
-      'args': args,
-      'defaults': {
-        'contextmenu': true,
-        'cursor': 'default',
-        'interval': true,
-      },
-    });
-
+function canvas_init({
+  contextmenu = true,
+  cursor = 'default',
+  interval = true,
+} = {}){
     canvas_setproperties({
-      'args': {...args},
       'clearColor': '#000',
       'fillStyle': '#fff',
       'font': '200% monospace',
@@ -129,7 +114,7 @@ function canvas_init(args){
     const properties = {
       'id': 'canvas',
     };
-    if(!args.contextmenu){
+    if(!contextmenu){
         properties.oncontextmenu = function(){
             return false;
         };
@@ -155,13 +140,13 @@ function canvas_init(args){
         'alpha': false,
       }
     );
-    canvas.canvas.style.cursor = args.cursor;
+    canvas.canvas.style.cursor = cursor;
 
     globalThis.onresize = canvas_resize;
     canvas_resize();
 
     entity_set({
-      'default': true,
+      'defaults': true,
       'properties': {
         'x': 0,
         'y': 0,
@@ -169,7 +154,7 @@ function canvas_init(args){
       'type': 'canvas',
     });
 
-    if(args.interval){
+    if(interval){
         core_interval_modify({
           'id': 'repo_logic',
           'interval': 1000 / 60,
