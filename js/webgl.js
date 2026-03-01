@@ -1956,7 +1956,6 @@ function webgl_json_function({
     }
 }
 
-// Required args: character
 function webgl_level_init({
   base = {},
   character,

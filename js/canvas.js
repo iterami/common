@@ -47,10 +47,10 @@ function canvas_drawloop(){
 }
 
 function canvas_draw_path({
-  vertices,
   properties = {},
   style = canvas_properties.style,
   translate = false,
+  vertices,
   x = 0,
   y = 0,
 } = {}){
