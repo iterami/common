@@ -52,7 +52,6 @@ input[type=color]:enabled,
 input[type=date]:enabled,
 input[type=datetime-local]:enabled,
 input[type=file]:enabled,
-input[type=radio]:enabled,
 input[type=range]:enabled,
 input[type=time]:enabled,
 label,
@@ -120,7 +119,6 @@ ul{
     display: none;
 }
 input[type=checkbox],
-input[type=radio],
 input[type=range],
 progress{
     accent-color: #07f;
@@ -134,9 +132,6 @@ input[type=range],
 input[type=text],
 progress{
     width: 200px;
-}
-input[type=radio]{
-    vertical-align: baseline;
 }
 input:invalid{
     border-color: #f00;
