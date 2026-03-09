@@ -149,7 +149,7 @@ function core_handle_beforeunload(event){
     }
 }
 
-function core_handle_blur(){
+function core_handle_blur(event){
     if(core_getpointerlock()){
         document.exitPointerLock();
     }
@@ -323,6 +323,10 @@ function core_handle_pointerup(event){
 }
 
 function core_handle_prevent(event){
+    if(!event){
+        return;
+    }
+
     event.stopPropagation();
 
     if(event.cancelable !== false){
