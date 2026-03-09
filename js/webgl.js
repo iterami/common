@@ -2162,7 +2162,7 @@ function webgl_level_init({
     }
 
     if(core_menu_open){
-        core_escape();
+        core_escape(false);
 
     }else{
         core_interval_resume_all();
