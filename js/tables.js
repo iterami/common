@@ -65,7 +65,7 @@ function tables_sort(element, column, direction){
     for(const row of rows){
         const row_text = row.children[column].innerText;
 
-        if(globalThis.isNaN(row_text)){
+        if(globalThis.isNaN(tables_format_number(row_text))){
             text.push(row_text);
 
         }else{
