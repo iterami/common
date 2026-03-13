@@ -57,8 +57,9 @@ function tables_sort(element, column, direction){
     if(rows.length === 0){
         return;
     }
-    const header = rows[0].classList.contains('header');
-    const header_row = header ? rows.shift() : '';
+    const header = rows[0].classList.contains('header')
+      ? rows.shift().outerHTML
+      : '';
 
     const numeric = [];
     const text = [];
@@ -112,17 +113,20 @@ function tables_sort(element, column, direction){
         for(const row of rows){
             const parent = row.children;
 
-            if(parent[column].innerText === sorted
-              && !used_rows.includes(parent[main_column].innerText)){
+            if(parent[column].innerText !== sorted){
+                continue;
+            }
+
+            const text = parent[main_column].innerText;
+            if(!used_rows.includes(text)){
+                used_rows.push(text);
                 sorted_html += row.outerHTML;
-                used_rows.push(parent[main_column].innerText);
 
                 break;
             }
         }
     }
-
-    tbody.innerHTML = (header ? header_row.outerHTML : '') + sorted_html;
+    tbody.innerHTML = header + sorted_html;
 }
 
 tables_init();
