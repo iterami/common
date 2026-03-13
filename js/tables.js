@@ -10,7 +10,6 @@ function tables_add(table){
     const headers = Array.from(table.firstElementChild.firstElementChild.children);
     for(const header in headers){
         const classList = headers[header].classList;
-
         if(classList.contains('tables-nosort')){
             continue;
 
@@ -37,7 +36,6 @@ function tables_format_number(value){
 
 function tables_init(){
     const tables = document.getElementsByTagName('table');
-
     for(const table of tables){
         if(!table.classList.contains('tables-nosort')){
             tables_add(table);
@@ -107,7 +105,7 @@ function tables_sort(element, column, direction){
         }
     }
 
-    let sorted_html = '';
+    let sorted_rows = '';
     const used_rows = [];
     for(const sorted of column_content){
         for(const row of rows){
@@ -120,13 +118,13 @@ function tables_sort(element, column, direction){
             const text = parent[main_column].innerText;
             if(!used_rows.includes(text)){
                 used_rows.push(text);
-                sorted_html += row.outerHTML;
+                sorted_rows += row.outerHTML;
 
                 break;
             }
         }
     }
-    tbody.innerHTML = header + sorted_html;
+    tbody.innerHTML = header + sorted_rows;
 }
 
 tables_init();
