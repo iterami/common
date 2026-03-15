@@ -13,6 +13,10 @@ function audio_create(audios){
 }
 
 function audio_start(id){
+    if(!core_storage_data.audio_enabled){
+        return;
+    }
+
     if(audio_context === 0){
         audio_context = new globalThis.AudioContext();
     }
@@ -91,7 +95,8 @@ globalThis.audio_listener = {
 
 core_init_todo.push(function(){
     core_tab_create({
-      'content': '<table><tr><td><input class=mini id=audio_volume min=0 step=.001 type=number><td>Audio Volume</table>'
+      'content': '<table><tr><td class=right><input id=audio_enabled type=checkbox><td>Audio Enabled'
+        + '<tr><td><input class=mini id=audio_volume min=0 step=.001 type=number><td>Audio Volume</table>'
         + '<button id=storage_reset_audio type=button>Reset Audio Settings</button>',
       'group': 'core_menu',
       'id': 'audio',
@@ -100,6 +105,7 @@ core_init_todo.push(function(){
     core_storage_add({
       'prefix': 'audio_',
       'storage': {
+        'audio_enabled': true,
         'audio_volume': 1,
       },
     });
@@ -115,7 +121,10 @@ core_init_todo.push(function(){
         },
       },
     });
-    core_storage_update(['audio_volume']);
+    core_storage_update([
+      'audio_enabled',
+      'audio_volume',
+    ]);
 
     audio_create({
       'boop': true,
