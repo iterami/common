@@ -461,7 +461,7 @@ function core_init(){
       'parent': core_elements.core_ui,
       'properties': {
         'id': 'core_menu',
-        'innerHTML': '<a id=core_menu_root></a>/<a class=external id=core_menu_title rel=noreferrer></a>',
+        'innerHTML': '<a id=core_menu_root></a>/<a class=external id=core_menu_title rel=noreferrer target=_blank></a>',
         'style': 'display:none',
       },
       'store': 'core_menu',
