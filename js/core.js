@@ -1163,20 +1163,19 @@ function core_storage_save({
     }
     for(const key of keys){
         const element = core_elements[key];
+        const property = core_storage_element_property({
+          'element': element,
+          'key': key,
+        });
+
         if(element.validity && !element.validity.valid){
-            element[core_storage_element_property({
-              'element': element,
-              'key': key,
-            })] = core_storage_data[key];
+            element[property] = core_storage_data[key];
             continue;
         }
 
         const data = core_type_convert({
           'template': core_storage_info[key].default,
-          'value': element[core_storage_element_property({
-            'element': element,
-            'key': key,
-          })],
+          'value': element[property],
         });
         core_storage_data[key] = data;
 
