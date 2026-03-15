@@ -1163,7 +1163,11 @@ function core_storage_save({
     }
     for(const key of keys){
         const element = core_elements[key];
-        if(!element.validity.valid){
+        if(element.validity && !element.validity.valid){
+            element[core_storage_element_property({
+              'element': element,
+              'key': key,
+            })] = core_storage_data[key];
             continue;
         }
 
