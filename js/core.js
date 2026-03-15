@@ -1163,6 +1163,10 @@ function core_storage_save({
     }
     for(const key of keys){
         const element = core_elements[key];
+        if(!element.validity.valid){
+            continue;
+        }
+
         const data = core_type_convert({
           'template': core_storage_info[key].default,
           'value': element[core_storage_element_property({
