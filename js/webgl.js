@@ -2194,7 +2194,7 @@ function webgl_level_load({
     webgl_level_init({
       'base': webgl_level_unload(true),
       'character': character,
-      'json': json,
+      'json': globalThis.structuredClone(json),
     });
 
     return true;
