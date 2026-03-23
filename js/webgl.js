@@ -3335,8 +3335,10 @@ function webgl_primitive_ellipsoid(args){
       'object': args,
       'defaults': {
         'character': webgl_character_base,
-        'color0': [],
-        'color1': [],
+        'color_bottom0': [],
+        'color_bottom1': [],
+        'color_top0': [],
+        'color_top1': [],
         'groups': [],
         'prefix': entity_id_count,
         'radius_x': 5,
@@ -3348,15 +3350,21 @@ function webgl_primitive_ellipsoid(args){
     });
     const prefab_args = webgl_prefab_args(args);
 
-    if(args.color0.length === 0){
-        args.color0 = webgl_vertexcolorarray({
+    if(args.color_top0.length === 0){
+        args.color_top0 = webgl_vertexcolorarray({
           'vertexcount': 1,
         });
     }
-    if(args.color1.length === 0){
-        args.color1 = webgl_vertexcolorarray({
+    if(args.color_bottom0.length === 0){
+        args.color_bottom0 = [...args.color_top0];
+    }
+    if(args.color_top1.length === 0){
+        args.color_top1 = webgl_vertexcolorarray({
           'vertexcount': 1,
         });
+    }
+    if(args.color_bottom1.length === 0){
+        args.color_bottom1 = [...args.color_top1];
     }
 
     const latitude_angles = math_degrees_to_radians(360 / args.slices_latitude);
@@ -3374,10 +3382,6 @@ function webgl_primitive_ellipsoid(args){
       'vertices': [],
     };
     for(let longitude = 0; longitude < args.slices_longitude; longitude++){
-        if(longitude === args.slices_longitude / 2){
-            [args.color0, args.color1] = [args.color1, args.color0];
-        }
-
         const longitude_bottom = -1.5707963267948966 + longitude * longitude_angles;
         const longitude_top = -1.5707963267948966 + (longitude + 1) * longitude_angles;
         const cos_bottom = Math.cos(longitude_bottom);
@@ -3388,16 +3392,25 @@ function webgl_primitive_ellipsoid(args){
         const cos_top_z = args.radius_z * cos_top;
         const sin_bottom = args.radius_y * Math.sin(longitude_bottom);
         const sin_top = args.radius_y * Math.sin(longitude_top);
+        const top = longitude >= args.slices_longitude / 2;
 
         for(let latitude = 0; latitude <= args.slices_latitude; latitude++){
             const rotation = latitude * latitude_angles;
             const cos_rotation = Math.cos(rotation);
             const sin_rotation = Math.sin(rotation);
 
-            properties.vertex_colors.push(
-              ...args.color0,
-              ...args.color1
-            );
+            if(top){
+                properties.vertex_colors.push(
+                  ...args.color_top0,
+                  ...args.color_top1
+                );
+
+            }else{
+                properties.vertex_colors.push(
+                  ...args.color_bottom1,
+                  ...args.color_bottom0
+                );
+            }
             properties.vertices.push(
               cos_top_x * sin_rotation,
               sin_top,
