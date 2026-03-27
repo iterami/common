@@ -1005,6 +1005,17 @@ function core_round({
     return returned;
 }
 
+
+function core_script({
+  src,
+  todo,
+} = {}){
+    const element = document.createElement('script');
+    element.src = src;
+    element.onload = todo;
+    document.head.appendChild(element);
+}
+
 function core_sort_custom({
   array,
   clone = true,
