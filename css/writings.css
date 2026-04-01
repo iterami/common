@@ -92,6 +92,7 @@ textarea{
     max-width: 100%;
     width: 490px;
 }
+input:read-only,
 textarea:read-only{
     border-color: #555;
 }
