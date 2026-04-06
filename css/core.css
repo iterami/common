@@ -107,6 +107,7 @@ ul{
 }
 .external::after{
     content: "↗";
+    line-height: 1;
 }
 .header{
     background-color: #333;

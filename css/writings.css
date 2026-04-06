@@ -42,6 +42,7 @@ code{
 }
 .external::after{
     content: "↗";
+    line-height: 1;
 }
 .gold{
     background-color: #540;
