@@ -46,11 +46,11 @@ function tables_init(){
 function tables_sort(element, column, direction){
     const table = element.closest('table');
     const tbodys = table.getElementsByTagName('tbody');
-    const tbody = tbodys[tbodys.length - 1];
-    if(!tbody){
+    if(tbodys.length === 0){
         return;
     }
 
+    const tbody = tbodys[tbodys.length - 1];
     const rows = Array.from(tbody.children);
     if(rows.length === 0){
         return;
