@@ -2920,8 +2920,8 @@ function webgl_pick_entity(cursor){
     }
 
     let picked = false;
-    const x = webgl_properties.pointerlock ? Math.floor(globalThis.innerWidth / 2) : core_pointer.x;
-    const y = webgl_properties.pointerlock ? Math.floor(globalThis.innerHeight / 2) : core_pointer.y;
+    const x = webgl_properties.pointerlock ? globalThis.innerWidth / 2 : core_pointer.x;
+    const y = webgl_properties.pointerlock ? globalThis.innerHeight / 2 : core_pointer.y;
 
     webgl_shader_use('picking');
     const color = webgl_scissor({

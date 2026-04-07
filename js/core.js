@@ -249,14 +249,12 @@ function core_handle_pointerdown(event){
         return;
     }
 
-    const x = Math.floor(event.pageX);
-    const y = Math.floor(event.pageY);
     core_pointer.movement_x = 0;
     core_pointer.movement_y = 0;
-    core_pointer.x = x;
-    core_pointer.y = y;
-    core_pointer.down_x = x;
-    core_pointer.down_y = y;
+    core_pointer.x = event.pageX;
+    core_pointer.y = event.pageY;
+    core_pointer.down_x = event.pageX;
+    core_pointer.down_y = event.pageY;
 
     if(core_pointer.todo.pointerdown){
         core_handle_prevent(event);
@@ -278,12 +276,10 @@ function core_handle_pointermove(event){
         return;
     }
 
-    const x = Math.floor(event.pageX);
-    const y = Math.floor(event.pageY);
     const old_x = core_pointer.x;
     const old_y = core_pointer.y;
-    core_pointer.x = x;
-    core_pointer.y = y;
+    core_pointer.x = event.pageX;
+    core_pointer.y = event.pageY;
 
     if(core_menu_open && core_menu_block_events){
         return;
@@ -294,8 +290,8 @@ function core_handle_pointermove(event){
         core_pointer['down_' + i] = Boolean(event.buttons & (1 << i));
     }
     if(core_mobile){
-        core_pointer.movement_x = (x - old_x) * (core_storage_data.pointer_horizontal || 1);
-        core_pointer.movement_y = (y - old_y) * (core_storage_data.pointer_vertical || 1);
+        core_pointer.movement_x = (core_pointer.x - old_x) * (core_storage_data.pointer_horizontal || 1);
+        core_pointer.movement_y = (core_pointer.y - old_y) * (core_storage_data.pointer_vertical || 1);
 
     }else{
         core_pointer.movement_x = event.movementX * (core_storage_data.pointer_horizontal || 1);
