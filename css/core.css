@@ -180,6 +180,9 @@ textarea:focus{
 a:hover{
     color: #07f;
 }
+a:hover::after{
+    color: #f00;
+}
 tr:hover{
     background-color: #111;
 }
