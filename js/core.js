@@ -90,17 +90,21 @@ function core_events_bind({
             globalThis.addEventListener('contextmenu', core_handle_contextmenu);
         }
 
-        document.addEventListener('pointerlockchange', core_handle_pointerlockchange);
-        globalThis.addEventListener('pointercancel', core_handle_pointercancel, {'passive': false});
-        globalThis.addEventListener('pointerdown', core_handle_pointerdown, {'passive': false});
-        globalThis.addEventListener('pointermove', core_handle_pointermove, {'passive': false});
-        globalThis.addEventListener('pointerup', core_handle_pointerup, {'passive': false});
-        globalThis.addEventListener('wheel', core_handle_wheel, {'passive': false});
+        const options = {
+          'passive': false,
+        };
 
-        globalThis.addEventListener('touchcancel', core_handle_touch, {'passive': false});
-        globalThis.addEventListener('touchend', core_handle_touch, {'passive': false});
-        globalThis.addEventListener('touchmove', core_handle_touch, {'passive': false});
-        globalThis.addEventListener('touchstart', core_handle_touch, {'passive': false});
+        document.addEventListener('pointerlockchange', core_handle_pointerlockchange);
+        globalThis.addEventListener('pointercancel', core_handle_pointercancel, options);
+        globalThis.addEventListener('pointerdown', core_handle_pointerdown, options);
+        globalThis.addEventListener('pointermove', core_handle_pointermove, options);
+        globalThis.addEventListener('pointerup', core_handle_pointerup, options);
+        globalThis.addEventListener('wheel', core_handle_wheel, options);
+
+        globalThis.addEventListener('touchcancel', core_handle_touch, options);
+        globalThis.addEventListener('touchend', core_handle_touch, options);
+        globalThis.addEventListener('touchmove', core_handle_touch, options);
+        globalThis.addEventListener('touchstart', core_handle_touch, options);
     }
 
     if(elements !== false){
