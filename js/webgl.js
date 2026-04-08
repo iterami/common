@@ -171,6 +171,14 @@ function webgl_camera_rotate({
     }
 }
 
+function webgl_character_automove(id){
+    if(!id){
+        id = webgl_character_id;
+    }
+    const character = webgl_characters[id];
+    character.automove = !character.automove;
+}
+
 function webgl_character_die(id){
     if(!id){
         id = webgl_character_id;
