@@ -1976,8 +1976,8 @@ function webgl_level_init({
         }
 
         let id = 0;
-        for(const player in json.characters){
-            if(json.characters[player].id === webgl_character_id){
+        for(const player of json.characters){
+            if(player.id === webgl_character_id){
                 id = player;
                 break;
             }
@@ -1993,20 +1993,20 @@ function webgl_level_init({
 
     const randomized = json.randomized;
     if(randomized){
-        for(const i in randomized){
-            const random = Math.random() * (randomized[i].max - randomized[i].min) + randomized[i].min;
+        for(const random of randomized){
+            const value = Math.random() * (random.max - random.min) + random.min;
 
-            for(const id in randomized[i].ids){
-                const targets = json[randomized[i].character
+            for(const id of random.ids){
+                const targets = json[random.character
                   ? 'characters'
                   : 'entities'];
 
                 for(const target in targets){
-                    if(targets[target].id === randomized[i].ids[id]){
-                        if(!targets[target][randomized[i].property]){
-                            targets[target][randomized[i].property] = 0;
+                    if(targets[target].id === id){
+                        if(!targets[target][random.property]){
+                            targets[target][random.property] = 0;
                         }
-                        targets[target][randomized[i].property] += random;
+                        targets[target][random.property] += value;
 
                         break;
                     }
@@ -2100,8 +2100,8 @@ function webgl_level_init({
         );
     }
 
-    for(const id in json.particles){
-        webgl_particle_create(json.particles[id]);
+    for(const properties of json.particles){
+        webgl_particle_create(properties);
     }
     for(const id in json.paths){
         const path = json.paths[id];
@@ -2109,8 +2109,8 @@ function webgl_level_init({
           ...path,
         };
     }
-    for(const timer in json.timers){
-        webgl_timer_add(json.timers[timer]);
+    for(const timer of json.timers){
+        webgl_timer_add(timer);
     }
 
     if(character === -1){
@@ -2127,11 +2127,11 @@ function webgl_level_init({
         webgl_character_init(base);
     }
 
-    for(const id in json.characters){
-        webgl_character_init(json.characters[id]);
+    for(const properties of json.characters){
+        webgl_character_init(properties);
     }
-    for(const prefab in json.prefabs){
-        globalThis[json.prefabs[prefab].type](json.prefabs[prefab].properties);
+    for(const prefab of json.prefabs){
+        globalThis[prefab.type](prefab.properties);
     }
 
     webgl_color_set({
@@ -4295,8 +4295,8 @@ function webgl_tiles(args){
 
     const tiles = [];
     if(args.order){
-        for(const tile in args.order){
-            tiles.push(args.order[tile]);
+        for(const tile of args.order){
+            tiles.push(tile);
         }
 
     }else if(args.repeat){
@@ -4329,124 +4329,133 @@ function webgl_tiles(args){
     let tile_rotate_y = prefab_args.rotate_y;
     let tile_rotate_z = prefab_args.rotate_z;
 
-    for(const tile in tiles){
-        const prefix = args.prefix + '_' + tile + '_';
+    for(const id in tiles){
+        const prefix = args.prefix + '_' + id + '_';
+        const tile = args.tiles[tiles[id]];
 
-        for(const path in args.tiles[tiles[tile]].paths){
-            const path_object = {
-              ...args.tiles[tiles[tile]].paths[path],
-              'points': [],
-            };
-            const points = args.tiles[tiles[tile]].paths[path].points;
-            for(const point in points){
-                const point_object = {};
-                if(points[point].position_x !== void 0){
-                    point_object.position_x = tile_offset_x + points[point].position_x;
+        const paths = tile.paths;
+        if(paths){
+            for(const path of paths){
+                const path_object = {
+                  ...path,
+                  'points': [],
+                };
+                const points = path.points;
+                for(const point of points){
+                    const point_object = {};
+                    if(point.position_x !== void 0){
+                        point_object.position_x = tile_offset_x + point.position_x;
+                    }
+                    if(point.position_y !== void 0){
+                        point_object.position_y = tile_offset_y + point.position_y;
+                    }
+                    if(point.position_z !== void 0){
+                        point_object.position_z = tile_offset_z + point.position_z;
+                    }
+                    path_object.points.push(point_object);
                 }
-                if(points[point].position_y !== void 0){
-                    point_object.position_y = tile_offset_y + points[point].position_y;
-                }
-                if(points[point].position_z !== void 0){
-                    point_object.position_z = tile_offset_z + points[point].position_z;
-                }
-                path_object.points.push(point_object);
+                webgl_paths[prefix + path_object.id] = path_object;
             }
-            webgl_paths[prefix + path_object.id] = path_object;
         }
 
-        for(const character in args.tiles[tiles[tile]].characters){
-            const character_object = args.tiles[tiles[tile]].characters[character];
-            const spawn = character_object.spawn || {};
-            webgl_character_init({
-              ...character_object,
-              'id': prefix + character_object.id,
-              'path_id': character_object.path_id !== ''
-                ? prefix + character_object.path_id
-                : '',
-              'spawn': {
-                'position_x': tile_offset_x + (character_object.position_x || 0),
-                'position_y': tile_offset_y + (character_object.position_y || 0),
-                'position_z': tile_offset_z + (character_object.position_z || 0),
-                ...spawn,
-              },
-            });
-        }
-
-        const entities = args.tiles[tiles[tile]].entities;
-        for(const entity in entities){
-            webgl_entity_create({
-              'character': args.character,
-              'entities': [
-                {
-                  ...prefab_args,
-                  ...entities[entity],
-                  'attach_x': tile_offset_x + (entities[entity].attach_x || 0),
-                  'attach_y': tile_offset_y + (entities[entity].attach_y || 0),
-                  'attach_z': tile_offset_z + (entities[entity].attach_z || 0),
-                  'id': prefix + entity,
-                  'path_id': entities[entity].path_id !== ''
-                    ? prefix + entities[entity].path_id
+        const characters = tile.characters;
+        if(characters){
+            for(const character of characters){
+                const spawn = character.spawn || {};
+                webgl_character_init({
+                  ...character,
+                  'id': prefix + character.id,
+                  'path_id': character.path_id !== ''
+                    ? prefix + character.path_id
                     : '',
-                },
-              ],
-              'groups': args.groups,
-            });
+                  'spawn': {
+                    'position_x': tile_offset_x + (character.position_x || 0),
+                    'position_y': tile_offset_y + (character.position_y || 0),
+                    'position_z': tile_offset_z + (character.position_z || 0),
+                    ...spawn,
+                  },
+                });
+            }
         }
 
-        const prefabs = args.tiles[tiles[tile]].prefabs;
-        for(const prefab in prefabs){
-            const attached = prefabs[prefab].properties.character !== void 0;
-
-            globalThis[prefabs[prefab].type]({
-              ...prefab_args,
-              ...prefabs[prefab].properties,
-              'character': attached
-                ? prefix + prefabs[prefab].properties.character
-                : args.character,
-              'prefix': prefix + (prefabs[prefab].properties.prefix || entity_id_count),
-              'position_x': (prefabs[prefab].properties.position_x || 0) + (attached
-                ? 0
-                : tile_offset_x),
-              'position_y': (prefabs[prefab].properties.position_y || 0) + (attached
-                ? 0
-                : tile_offset_y),
-              'position_z': (prefabs[prefab].properties.position_z || 0) + (attached
-                ? 0
-                : tile_offset_z),
-            });
+        const entities = tile.entities;
+        if(entities){
+            for(const entity in entities){
+                webgl_entity_create({
+                  'character': args.character,
+                  'entities': [
+                    {
+                      ...prefab_args,
+                      ...entities[entity],
+                      'attach_x': tile_offset_x + (entities[entity].attach_x || 0),
+                      'attach_y': tile_offset_y + (entities[entity].attach_y || 0),
+                      'attach_z': tile_offset_z + (entities[entity].attach_z || 0),
+                      'id': prefix + entity,
+                      'path_id': entities[entity].path_id !== ''
+                        ? prefix + entities[entity].path_id
+                        : '',
+                    },
+                  ],
+                  'groups': args.groups,
+                });
+            }
         }
 
-        if(args.tiles[tiles[tile]].attach_x !== void 0){
-            tile_offset_x += args.tiles[tiles[tile]].attach_x;
+        const prefabs = tile.prefabs;
+        if(prefabs){
+            for(const prefab of prefabs){
+                const attached = prefab.properties.character !== void 0;
+                globalThis[prefab.type]({
+                  ...prefab_args,
+                  ...prefab.properties,
+                  'character': attached
+                    ? prefix + prefab.properties.character
+                    : args.character,
+                  'prefix': prefix + (prefab.properties.prefix || entity_id_count),
+                  'position_x': (prefab.properties.position_x || 0) + (attached
+                    ? 0
+                    : tile_offset_x),
+                  'position_y': (prefab.properties.position_y || 0) + (attached
+                    ? 0
+                    : tile_offset_y),
+                  'position_z': (prefab.properties.position_z || 0) + (attached
+                    ? 0
+                    : tile_offset_z),
+                });
+            }
         }
-        if(args.tiles[tiles[tile]].attach_y !== void 0){
-            tile_offset_y += args.tiles[tiles[tile]].attach_y;
+
+        if(tile.attach_x !== void 0){
+            tile_offset_x += tile.attach_x;
         }
-        if(args.tiles[tiles[tile]].attach_z !== void 0){
-            tile_offset_z += args.tiles[tiles[tile]].attach_z;
+        if(tile.attach_y !== void 0){
+            tile_offset_y += tile.attach_y;
         }
-        if(args.tiles[tiles[tile]].attach_rotate_x !== void 0){
+        if(tile.attach_z !== void 0){
+            tile_offset_z += tile.attach_z;
+        }
+        if(tile.attach_rotate_x !== void 0){
             const max = tile_rotate_x > 180
               ? 360
               : 90;
             tile_rotate_x = math_clamp({
               'max': max,
               'min': max - 90,
-              'value': tile_rotate_x + args.tiles[tiles[tile]].attach_rotate_x,
+              'value': tile_rotate_x + tile.attach_rotate_x,
             });
         }
-        if(args.tiles[tiles[tile]].attach_rotate_y !== void 0){
+        if(tile.attach_rotate_y !== void 0){
             tile_rotate_y = math_clamp({
               'max': 360,
               'min': 0,
-              'value': tile_rotate_y + args.tiles[tiles[tile]].attach_rotate_y,
+              'value': tile_rotate_y + tile.attach_rotate_y,
             });
         }
-        if(args.tiles[tiles[tile]].attach_rotate_z !== void 0){
+        if(tile.attach_rotate_z !== void 0){
             tile_rotate_z = math_clamp({
               'max': 360,
               'min': 0,
-              'value': tile_rotate_z + args.tiles[tiles[tile]].attach_rotate_z,
+              'value': tile_rotate_z + tile.attach_rotate_z,
             });
         }
     }
