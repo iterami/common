@@ -1754,6 +1754,7 @@ function webgl_init(){
         'premultipliedAlpha': false,
         'preserveDrawingBuffer': false,
         'stencil': false,
+        'xrCompatible': false,
       }
     );
 
