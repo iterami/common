@@ -12,6 +12,30 @@ function audio_create(audios){
     }
 }
 
+function audio_file({
+  id,
+  path,
+} = {}){
+    const audio = new Audio(path);
+    audio.oncanplay = function(event){
+        audio_audios[id] = {
+          'element': audio,
+        }
+    }
+}
+
+function audio_play(id){
+    if(!core_storage_data.audio_enabled){
+        return;
+    }
+
+    const audio = audio_audios[id].element;
+    audio.pause();
+    audio.currentTime = 0;
+    audio.volume = core_storage_data.audio_volume;
+    audio.play().catch(error => {});
+}
+
 function audio_start(id){
     if(!core_storage_data.audio_enabled){
         return;
