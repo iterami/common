@@ -1,13 +1,13 @@
 'use strict';
 
 function audio_create(audios){
-    for(const audio in audios){
-        audio_audios[audio] = {
+    for(const id in audios){
+        audio_audios[id] = {
           'duration': .15,
           'frequency': 100,
           'panner': false,
           'type': 'sine',
-          ...audios[audio],
+          ...audios[id],
         };
     }
 }
@@ -21,19 +21,20 @@ function audio_start(id){
         audio_context = new globalThis.AudioContext();
     }
 
+    const audio = audio_audios[id];
     const start = audio_context.currentTime + audio_context.outputLatency;
-    const duration = start + audio_audios[id].duration;
+    const duration = start + audio.duration;
 
     const gain = audio_context.createGain();
     gain.gain.value = core_storage_data.audio_volume;
     gain.gain.linearRampToValueAtTime(0, duration);
 
     const oscillator = audio_context.createOscillator();
-    oscillator.type = audio_audios[id].type;
-    oscillator.frequency.value = audio_audios[id].frequency;
+    oscillator.type = audio.type;
+    oscillator.frequency.value = audio.frequency;
     oscillator.connect(gain);
 
-    if(audio_audios[id].panner !== false){
+    if(audio.panner !== false){
         if(!audio_context.listener.forwardX){
             audio_context.listener.setOrientation(
               audio_listener.forwardX,
@@ -49,7 +50,7 @@ function audio_start(id){
         }
         const panner = new PannerNode(
           audio_context,
-          audio_audios[id].panner
+          audio.panner
         );
         gain.connect(panner).connect(audio_context.destination);
 
