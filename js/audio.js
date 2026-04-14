@@ -20,19 +20,22 @@ function audio_file({
     audio.oncanplay = function(event){
         audio_audios[id] = {
           'element': audio,
-        }
-    }
+        };
+    };
 }
 
-function audio_play(id){
+function audio_play(id, music){
     if(!core_storage_data.audio_enabled){
         return;
     }
 
     const audio = audio_audios[id].element;
     audio.pause();
+
     audio.currentTime = 0;
+    audio.loop = music === true;
     audio.volume = core_storage_data.audio_volume;
+
     audio.play().catch(error => {});
 }
 
