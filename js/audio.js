@@ -113,6 +113,34 @@ function audio_start_at({
     audio_start(id);
 }
 
+function audio_toggle(state){
+    for(const id in audio_audios){
+        const audio = audio_audios[id];
+        if(audio.element){
+            const element = audio.element;
+            if(element.ended
+              || element.currentTime === 0){
+                continue;
+            }
+
+            if(state){
+                element.pause();
+
+            }else{
+                element.play().catch(error => {});
+            }
+
+        }else if(audio_context !== 0){
+            if(state){
+                audio_context.suspend();
+
+            }else{
+                audio_context.resume();
+            }
+        }
+    }
+}
+
 globalThis.audio_audios = {};
 globalThis.audio_context = 0;
 globalThis.audio_listener = {
