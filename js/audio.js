@@ -116,30 +116,36 @@ function audio_start_at({
     audio_start(id);
 }
 
-function audio_toggle(state){
+function audio_state(id, state){
+    const element = audio_audios[id].element;
+
+    if(element.ended
+      || element.currentTime === 0){
+        return;
+    }
+
+    if(state){
+        element.play().catch(error => {});
+
+    }else{
+        element.pause();
+    }
+}
+
+function audio_state_all(state){
+    if(audio_context !== 0){
+        if(state){
+            audio_context.resume();
+
+        }else{
+            audio_context.suspend();
+        }
+    }
+
     for(const id in audio_audios){
         const audio = audio_audios[id];
         if(audio.element){
-            const element = audio.element;
-            if(element.ended
-              || element.currentTime === 0){
-                continue;
-            }
-
-            if(state){
-                element.pause();
-
-            }else{
-                element.play().catch(error => {});
-            }
-
-        }else if(audio_context !== 0){
-            if(state){
-                audio_context.suspend();
-
-            }else{
-                audio_context.resume();
-            }
+            audio_state(id, state);
         }
     }
 }
