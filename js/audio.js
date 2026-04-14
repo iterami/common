@@ -46,6 +46,9 @@ function audio_start(id){
 
     if(audio_context === 0){
         audio_context = new globalThis.AudioContext();
+
+    }else if(audio_context.state === 'suspended'){
+        return;
     }
 
     const audio = audio_audios[id];
