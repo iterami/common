@@ -124,7 +124,8 @@ function audio_state(id, state){
         return;
     }
 
-    if(state){
+    if(state
+      && core_storage_data.audio_enabled){
         element.play().catch(error => {});
 
     }else{
@@ -134,7 +135,8 @@ function audio_state(id, state){
 
 function audio_state_all(state){
     if(audio_context !== 0){
-        if(state){
+        if(state
+          && core_storage_data.audio_enabled){
             audio_context.resume();
 
         }else{
