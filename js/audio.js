@@ -24,19 +24,25 @@ function audio_file({
     };
 }
 
-function audio_play(id, music){
-    if(!core_storage_data.audio_enabled){
-        return;
-    }
-
+function audio_play({
+  id,
+  loop = false,
+  time = 0,
+} = {}){
     const audio = audio_audios[id].element;
     audio.pause();
 
-    audio.currentTime = 0;
-    audio.loop = music === true;
+    if(loop !== 0){
+        audio.loop = loop;
+    }
+    if(time >= 0){
+        audio.currentTime = time;
+    }
     audio.volume = core_storage_data.audio_volume;
 
-    audio.play().catch(error => {});
+    if(core_storage_data.audio_enabled){
+        audio.play().catch(error => {});
+    }
 }
 
 function audio_start(id){
@@ -124,9 +130,12 @@ function audio_state(id, state){
         return;
     }
 
-    if(state
-      && core_storage_data.audio_enabled){
-        element.play().catch(error => {});
+    if(state){
+        audio_play({
+          'id': id,
+          'loop': 0,
+          'time': -1,
+        });
 
     }else{
         element.pause();
