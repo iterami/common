@@ -72,6 +72,121 @@ function prefabs_webgl_cuboid_tree(args){
     });
 }
 
+function prefabs_webgl_football_pitch(args){
+    core_object_defaults({
+      'object': args,
+      'defaults': {
+        'character': webgl_character_base,
+        'grass_color': [0, .3, 0, 1],
+        'groups': [],
+        'line_color': [1, 1, 1, 1],
+        'line_width': .12,
+        'penalty_length': 16.5,
+        'penalty_width': 40.32,
+        'pitch_length': 105,
+        'pitch_width': 64,
+        'prefix': entity_id_count,
+        'scaling': 1,
+      },
+    });
+    const prefab_args = webgl_prefab_args(args);
+
+    const half_length = (args.pitch_length / 2) * args.scaling;
+    const half_width = (args.pitch_width / 2) * args.scaling;
+    const line_width = args.line_width * args.scaling;
+    const line_width_half = line_width / 2;
+    const penalty_length = args.penalty_length * args.scaling;
+    const penalty_width_half = (args.penalty_width / 2) * args.scaling;
+
+    webgl_entity_create({
+      'character': args.character,
+      'entities': [
+        {
+          ...prefab_args,
+          'id': args.prefix + '_grass',
+          'attach_type': 'webgl_characters',
+          'vertex_colors': args.grass_color,
+          'vertices': [
+            half_length, 0, -half_width,
+            -half_length, 0, -half_width,
+            -half_length, 0, half_width,
+            half_length, 0, half_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_half',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'vertex_colors': args.line_color,
+          'vertices': [
+            line_width_half, .01, -half_width + line_width,
+            -line_width_half, .01, -half_width + line_width,
+            -line_width_half, .01, half_width - line_width,
+            line_width_half, .01, half_width - line_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_outer',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            half_length - line_width, .01, -half_width + line_width,
+            half_length, .01, -half_width,
+            -half_length + line_width, .01, -half_width + line_width,
+            -half_length, .01, -half_width,
+            -half_length + line_width, .01, half_width - line_width,
+            -half_length, .01, half_width,
+            half_length - line_width, .01, half_width - line_width,
+            half_length, .01, half_width,
+            half_length - line_width, .01, -half_width + line_width,
+            half_length, .01, -half_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_penalty_0',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            -half_length + line_width, .01, -penalty_width_half,
+            -half_length + line_width, .01, -penalty_width_half + line_width,
+            -half_length + penalty_length, .01, -penalty_width_half,
+            -half_length + penalty_length - line_width, .01, -penalty_width_half + line_width,
+            -half_length + penalty_length, .01, penalty_width_half,
+            -half_length + penalty_length - line_width, .01, penalty_width_half - line_width,
+            -half_length + line_width, .01, penalty_width_half,
+            -half_length + line_width, .01, penalty_width_half - line_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_penalty_1',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            half_length - line_width, .01, -penalty_width_half + line_width,
+            half_length - line_width, .01, -penalty_width_half,
+            half_length - penalty_length + line_width, .01, -penalty_width_half + line_width,
+            half_length - penalty_length, .01, -penalty_width_half,
+            half_length - penalty_length + line_width, .01, penalty_width_half - line_width,
+            half_length - penalty_length, .01, penalty_width_half,
+            half_length - line_width, .01, penalty_width_half - line_width,
+            half_length - line_width, .01, penalty_width_half,
+          ],
+        },
+      ],
+      'groups': args.groups,
+    });
+}
+
 function prefabs_webgl_frustum_tree(args){
     core_object_defaults({
       'object': args,
