@@ -96,9 +96,7 @@ input{
     top: 0;
     z-index: 9;
 }
-#core_ui table,
-ol,
-ul{
+#core_ui table{
     margin: 0;
 }
 .external{
@@ -143,9 +141,6 @@ input[type=color],
 }
 .left{
     text-align: left;
-}
-li{
-    margin-bottom: 4px;
 }
 .medium{
     font-size: 150%;
