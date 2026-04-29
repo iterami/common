@@ -66,6 +66,9 @@ input:read-only,
 textarea:read-only{
     border-color: #555;
 }
+li{
+    margin-bottom: 4px;
+}
 ol,
 ul{
     margin: 0;

@@ -144,6 +144,9 @@ input[type=color],
 .left{
     text-align: left;
 }
+li{
+    margin-bottom: 4px;
+}
 .medium{
     font-size: 150%;
 }
