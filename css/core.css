@@ -23,11 +23,6 @@ textarea{
     font: 700 14px monospace;
 }
 button,
-.center,
-input{
-    text-align: center;
-}
-button,
 input,
 input::file-selector-button,
 select{
@@ -83,6 +78,10 @@ button.gridbuttonclickable{
     touch-action: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+}
+.center,
+input{
+    text-align: center;
 }
 #core_menu_info,
 .tabcontents div{
@@ -142,8 +141,7 @@ input[type=color],
 .mini{
     width: 5em;
 }
-.left,
-li{
+.left{
     text-align: left;
 }
 .medium{

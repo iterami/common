@@ -17,11 +17,6 @@ button{
     padding: 2px 7px;
 }
 button,
-.center,
-input{
-    text-align: center;
-}
-button,
 input,
 select{
     border: 2px solid #999;
@@ -30,6 +25,10 @@ select{
 button:enabled,
 select:enabled{
     cursor: pointer;
+}
+.center,
+input{
+    text-align: center;
 }
 code{
     border: 1px solid #444;
@@ -66,9 +65,6 @@ input:invalid{
 input:read-only,
 textarea:read-only{
     border-color: #555;
-}
-li{
-    text-align: left;
 }
 ol,
 ul{
