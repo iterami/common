@@ -87,12 +87,14 @@ function prefabs_webgl_football_pitch(args){
         'groups': [],
         'line_color': [1, 1, 1, 1],
         'line_width': .12,
+        'penalty_distance': 11,
         'penaltybox_length': 16.5,
         'penaltybox_width': 40.32,
         'pitch_length': 105,
         'pitch_width': 64,
         'prefix': entity_id_count,
         'scaling': 1,
+        'spot_radius': .15,
       },
     });
     const prefab_args = webgl_prefab_args(args);
@@ -106,8 +108,10 @@ function prefabs_webgl_football_pitch(args){
     const half_width = (args.pitch_width / 2) * args.scaling;
     const line_width = args.line_width * args.scaling;
     const line_width_half = line_width / 2;
+    const penalty_distance = half_length - args.penalty_distance * args.scaling;
     const penaltybox_length = args.penaltybox_length * args.scaling;
     const penaltybox_width_half = (args.penaltybox_width / 2) * args.scaling;
+    const spot_radius = args.spot_radius * args.scaling;
 
     webgl_entity_create({
       'character': args.character,
@@ -159,7 +163,7 @@ function prefabs_webgl_football_pitch(args){
         },
         {
           ...prefab_args,
-          'id': args.prefix + '_line_circle',
+          'id': args.prefix + '_circle_centre',
           'attach_type': 'webgl_characters',
           'collision': false,
           'draw_mode': 'TRIANGLE_STRIP',
@@ -175,6 +179,19 @@ function prefabs_webgl_football_pitch(args){
             circle_radius, .01, circle_radius,
             circle_radius - line_width, .01, -circle_radius + line_width,
             circle_radius, .01, -circle_radius,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_spot_centre',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'vertex_colors': args.line_color,
+          'vertices': [
+            spot_radius, .01, -spot_radius,
+            -spot_radius, .01, -spot_radius,
+            -spot_radius, .01, spot_radius,
+            spot_radius, .01, spot_radius,
           ],
         },
         {
@@ -247,6 +264,32 @@ function prefabs_webgl_football_pitch(args){
             half_length - penaltybox_length, .01, penaltybox_width_half,
             half_length - line_width, .01, penaltybox_width_half - line_width,
             half_length - line_width, .01, penaltybox_width_half,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_spot_penalty_0',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'vertex_colors': args.line_color,
+          'vertices': [
+            -penalty_distance + spot_radius, .01, -spot_radius,
+            -penalty_distance - spot_radius, .01, -spot_radius,
+            -penalty_distance - spot_radius, .01, spot_radius,
+            -penalty_distance + spot_radius, .01, spot_radius,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_spot_penalty_1',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'vertex_colors': args.line_color,
+          'vertices': [
+            penalty_distance + spot_radius, .01, -spot_radius,
+            penalty_distance - spot_radius, .01, -spot_radius,
+            penalty_distance - spot_radius, .01, spot_radius,
+            penalty_distance + spot_radius, .01, spot_radius,
           ],
         },
         {
