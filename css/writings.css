@@ -66,16 +66,19 @@ input:read-only,
 textarea:read-only{
     border-color: #555;
 }
-li{
-    margin-bottom: 4px;
-}
-ol{
+ol,
+ul{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style-position: inside;
     margin: 0;
-    padding-left: 30px;
+    padding-left: 0;
 }
 ol ol,
-ul{
-    margin: 0;
+ol ul,
+ul ol,
+ul ul{
     padding-left: 20px;
 }
 .right{
