@@ -103,6 +103,9 @@ textarea{
     max-width: 100%;
     width: 490px;
 }
+ul{
+    list-style-type: disc;
+}
 
 *:focus{
     outline: 2px solid #4c4;
