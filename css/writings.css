@@ -73,7 +73,7 @@ ul{
     gap: 4px;
     list-style-position: inside;
     margin: 0;
-    padding-left: 0;
+    padding-left: 1ch;
 }
 ol ol,
 ol ul,
