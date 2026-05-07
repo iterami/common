@@ -69,9 +69,9 @@ function core_events_bind({
         core_object_reset(core_keys);
     }
     if(keybinds !== false){
-        for(const keybind in keybinds){
-            core_keys[keybind] = core_object_defaults({
-              'object': keybinds[keybind],
+        for(const bind in keybinds){
+            core_keys[bind] = core_object_defaults({
+              'object': keybinds[bind],
               'defaults': {
                 'state': false,
               },
@@ -83,8 +83,8 @@ function core_events_bind({
         core_object_reset(core_pointer.todo);
     }
     if(pointerbinds !== false){
-        for(const pointerbind in pointerbinds){
-            core_pointer.todo[pointerbind] = {...pointerbinds[pointerbind]};
+        for(const bind in pointerbinds){
+            core_pointer.todo[bind] = {...pointerbinds[bind]};
         }
         if(pointerbinds.contextmenu){
             globalThis.addEventListener('contextmenu', core_handle_contextmenu);
@@ -108,11 +108,11 @@ function core_events_bind({
     }
 
     if(elements !== false){
-        for(const element in elements){
-            const domelement = core_getelement(element);
-            for(const event in elements[element]){
-                domelement[event] = elements[element][event];
-            }
+        for(const id in elements){
+            Object.assign(
+              core_getelement(id),
+              elements[id]
+            );
         }
     }
 }
@@ -403,7 +403,6 @@ function core_html({
     if(parent !== false){
         parent[todo](element);
     }
-
     if(store !== false){
         core_elements[store] = element;
     }
@@ -831,16 +830,16 @@ function core_repo_init({
     core_elements.repo_ui.innerHTML = ui;
 
     let have_default = false;
-    for(const tab in tabs){
+    for(const id in tabs){
+        const tab = tabs[id];
         core_tab_create({
-          'content': tabs[tab].content,
-          'group': tabs[tab].group,
-          'id': tab,
-          'label': tabs[tab].label,
+          'content': tab.content,
+          'group': tab.group,
+          'id': id,
+          'label': tab.label,
         });
-
-        if(tabs[tab].default){
-            core_tab_switch('tab_' + tab);
+        if(tab.default){
+            core_tab_switch('tab_' + id);
             have_default = true;
         }
     }
@@ -935,14 +934,14 @@ function core_repo_init({
       'pointerbinds': pointerbinds,
     });
 
-    for(const image in images){
+    for(const id in images){
         core_image({
           'id': image,
-          'src': images[image],
+          'src': images[id],
         });
     }
-    for(const element of ui_elements){
-        core_elements[element] = document.getElementById(element);
+    for(const id of ui_elements){
+        core_elements[id] = document.getElementById(id);
     }
 
     for(const todo of core_init_todo){
@@ -1004,7 +1003,6 @@ function core_round({
     }
     return returned;
 }
-
 
 function core_script({
   src,
@@ -1141,7 +1139,6 @@ function core_storage_element_property({
         ? 'textContent'
         : 'value');
 }
-
 
 function core_storage_reset({
   label,
@@ -1327,11 +1324,12 @@ function core_ui_update({
   todo = 'textContent',
 } = {}){
     for(const id in ids){
-        if(core_ui_values[id] === ids[id]){
+        const value = ids[id];
+        if(core_ui_values[id] === value){
             continue;
         }
 
-        core_ui_values[id] = ids[id];
+        core_ui_values[id] = value;
 
         if(!Object.hasOwn(core_elements, id)){
             core_elements[id] = document.getElementById(id);
@@ -1339,12 +1337,12 @@ function core_ui_update({
 
         const element = core_elements[id];
         if(element.type === 'checkbox'){
-            element.checked = Boolean(ids[id]);
+            element.checked = Boolean(value);
 
         }else{
             element[(element.tagName === 'BUTTON' || core_type(element.value) === 'undefined')
               ? todo
-              : 'value'] = ids[id];
+              : 'value'] = value;
         }
 
         if(!classname){
@@ -1354,12 +1352,12 @@ function core_ui_update({
         const elements = document.getElementsByClassName(id);
         for(const item of elements){
             if(item.type === 'checkbox'){
-                item.checked = Boolean(ids[id]);
+                item.checked = Boolean(value);
 
             }else{
                 item[(element.tagName === 'BUTTON' || core_type(item.value) === 'undefined')
                   ? todo
-                  : 'value'] = ids[id];
+                  : 'value'] = value;
             }
         }
     }
