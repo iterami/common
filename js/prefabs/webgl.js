@@ -78,6 +78,7 @@ function prefabs_webgl_football_pitch(args){
       'defaults': {
         'character': webgl_character_base,
         'circle_radius': 9.15,
+        'corner_radius': 1,
         'goal_color': [1, 1, 1, 1],
         'goal_height': 2.44,
         'goal_width': 7.32,
@@ -101,6 +102,7 @@ function prefabs_webgl_football_pitch(args){
     const prefab_args = webgl_prefab_args(args);
 
     const circle_radius = args.circle_radius * args.scaling;
+    const corner_radius = args.corner_radius * args.scaling;
     const goal_height = args.goal_height * args.scaling;
     const goal_width_half = (args.goal_width / 2) * args.scaling;
     const goalbox_length = args.goalbox_length * args.scaling;
@@ -292,6 +294,70 @@ function prefabs_webgl_football_pitch(args){
             penalty_distance - spot_radius, line_height, -spot_radius,
             penalty_distance - spot_radius, line_height, spot_radius,
             penalty_distance + spot_radius, line_height, spot_radius,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_corner_00',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            -half_length + corner_radius, line_height, -half_width + line_width,
+            -half_length + corner_radius - line_width, line_height, -half_width + line_width,
+            -half_length + corner_radius, line_height, -half_width + corner_radius,
+            -half_length + corner_radius - line_width, line_height, -half_width + corner_radius - line_width,
+            -half_length + line_width, line_height, -half_width + corner_radius,
+            -half_length + line_width, line_height, -half_width + corner_radius - line_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_corner_01',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            -half_length + line_width, line_height, half_width - corner_radius,
+            -half_length + line_width, line_height, half_width - corner_radius + line_width,
+            -half_length + corner_radius, line_height, half_width - corner_radius,
+            -half_length + corner_radius - line_width, line_height, half_width - corner_radius + line_width,
+            -half_length + corner_radius, line_height, half_width - line_width,
+            -half_length + corner_radius - line_width, line_height, half_width - line_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_corner_10',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            half_length - corner_radius + line_width, line_height, -half_width + line_width,
+            half_length - corner_radius, line_height, -half_width + line_width,
+            half_length - corner_radius + line_width, line_height, -half_width + corner_radius - line_width,
+            half_length - corner_radius, line_height, -half_width + corner_radius,
+            half_length - line_width, line_height, -half_width + corner_radius - line_width,
+            half_length - line_width, line_height, -half_width + corner_radius,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_corner_11',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            half_length - line_width, line_height, half_width - corner_radius + line_width,
+            half_length - line_width, line_height, half_width - corner_radius,
+            half_length - corner_radius + line_width, line_height, half_width - corner_radius + line_width,
+            half_length - corner_radius, line_height, half_width - corner_radius,
+            half_length - corner_radius + line_width, line_height, half_width - line_width,
+            half_length - corner_radius, line_height, half_width - line_width,
           ],
         },
         {
