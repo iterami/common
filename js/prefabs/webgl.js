@@ -115,6 +115,7 @@ function prefabs_webgl_football_pitch(args){
     const penalty_distance = half_length - args.penalty_distance * args.scaling;
     const penaltybox_length = args.penaltybox_length * args.scaling;
     const penaltybox_width_half = (args.penaltybox_width / 2) * args.scaling;
+    const penaltyarc_width_half = Math.sqrt(circle_radius ** 2 - (penaltybox_length - args.penalty_distance * args.scaling) ** 2);
     const spot_radius = args.spot_radius * args.scaling;
 
     webgl_entity_create({
@@ -268,6 +269,42 @@ function prefabs_webgl_football_pitch(args){
             half_length - penaltybox_length, line_height, penaltybox_width_half,
             half_length - line_width, line_height, penaltybox_width_half - line_width,
             half_length - line_width, line_height, penaltybox_width_half,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_penaltyarc_0',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            -half_length + penaltybox_length, line_height, -penaltyarc_width_half,
+            -half_length + penaltybox_length, line_height, -penaltyarc_width_half + line_width,
+            -penalty_distance + circle_radius, line_height, -penaltyarc_width_half,
+            -penalty_distance + circle_radius - line_width, line_height, -penaltyarc_width_half + line_width,
+            -penalty_distance + circle_radius, line_height, penaltyarc_width_half,
+            -penalty_distance + circle_radius - line_width, line_height, penaltyarc_width_half - line_width,
+            -half_length + penaltybox_length, line_height, penaltyarc_width_half,
+            -half_length + penaltybox_length, line_height, penaltyarc_width_half - line_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_line_penaltyarc_1',
+          'attach_type': 'webgl_characters',
+          'collision': false,
+          'draw_mode': 'TRIANGLE_STRIP',
+          'vertex_colors': args.line_color,
+          'vertices': [
+            half_length - penaltybox_length, line_height, -penaltyarc_width_half + line_width,
+            half_length - penaltybox_length, line_height, -penaltyarc_width_half,
+            penalty_distance - circle_radius + line_width, line_height, -penaltyarc_width_half + line_width,
+            penalty_distance - circle_radius, line_height, -penaltyarc_width_half,
+            penalty_distance - circle_radius + line_width, line_height, penaltyarc_width_half - line_width,
+            penalty_distance - circle_radius, line_height, penaltyarc_width_half,
+            half_length - penaltybox_length, line_height, penaltyarc_width_half - line_width,
+            half_length - penaltybox_length, line_height, penaltyarc_width_half,
           ],
         },
         {
