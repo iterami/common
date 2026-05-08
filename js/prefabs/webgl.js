@@ -121,6 +121,36 @@ function prefabs_webgl_football_pitch(args){
     const penaltyarc_width_half = Math.sqrt(circle_radius ** 2 - (penaltybox_length - args.penalty_distance * args.scaling) ** 2);
     const spot_radius = args.spot_radius * args.scaling;
 
+    const flag_properties = {
+      ...prefab_args,
+      'attach_type': 'webgl_characters',
+      //'billboard': true,
+      'collision': false,
+      'draw_mode': 'TRIANGLE_FAN',
+      'vertex_colors': args.flag_color,
+      'vertices': [
+        -half_length, flag_height * .8, -half_width,
+        -half_length + flag_height * .2, flag_height * .9, -half_width,
+        -half_length, flag_height, -half_width,
+        -half_length - flag_height * .02, 0, -half_width,
+        -half_length + flag_height * .02, 0, -half_width,
+      ],
+    };
+    const goal_properties = {
+      ...prefab_args,
+      'attach_type': 'webgl_characters',
+      'collision': false,
+      'draw_mode': 'LINE_STRIP',
+      'vertex_colors': args.goal_color,
+    };
+    const line_properties = {
+      ...prefab_args,
+      'attach_type': 'webgl_characters',
+      'collision': false,
+      'draw_mode': 'TRIANGLE_STRIP',
+      'vertex_colors': args.line_color,
+    };
+
     webgl_entity_create({
       'character': args.character,
       'entities': [
@@ -137,12 +167,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_outer',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             half_length - line_width, line_height, -half_width + line_width,
             half_length, line_height, -half_width,
@@ -157,25 +183,18 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_half',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'vertex_colors': args.line_color,
           'vertices': [
             line_width_half, line_height, -half_width + line_width,
             -line_width_half, line_height, -half_width + line_width,
-            -line_width_half, line_height, half_width - line_width,
             line_width_half, line_height, half_width - line_width,
+            -line_width_half, line_height, half_width - line_width,
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_circle_centre',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             circle_radius - line_width, line_height, -circle_radius + line_width,
             circle_radius, line_height, -circle_radius,
@@ -190,24 +209,18 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_spot_centre',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'vertex_colors': args.line_color,
           'vertices': [
             spot_radius, line_height, -spot_radius,
             -spot_radius, line_height, -spot_radius,
-            -spot_radius, line_height, spot_radius,
             spot_radius, line_height, spot_radius,
+            -spot_radius, line_height, spot_radius,
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_goalbox_0',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
           'vertex_colors': args.line_color,
           'vertices': [
             -half_length + line_width, line_height, -goalbox_width_half,
@@ -221,12 +234,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_goalbox_1',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             half_length - line_width, line_height, -goalbox_width_half + line_width,
             half_length - line_width, line_height, -goalbox_width_half,
@@ -239,12 +248,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_penaltybox_0',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             -half_length + line_width, line_height, -penaltybox_width_half,
             -half_length + line_width, line_height, -penaltybox_width_half + line_width,
@@ -257,12 +262,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_penaltybox_1',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             half_length - line_width, line_height, -penaltybox_width_half + line_width,
             half_length - line_width, line_height, -penaltybox_width_half,
@@ -275,12 +276,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_penaltyarc_0',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             -half_length + penaltybox_length, line_height, -penaltyarc_width_half,
             -half_length + penaltybox_length, line_height, -penaltyarc_width_half + line_width,
@@ -293,12 +290,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_penaltyarc_1',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             half_length - penaltybox_length, line_height, -penaltyarc_width_half + line_width,
             half_length - penaltybox_length, line_height, -penaltyarc_width_half,
@@ -311,38 +304,28 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_spot_penalty_0',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'vertex_colors': args.line_color,
           'vertices': [
             -penalty_distance + spot_radius, line_height, -spot_radius,
             -penalty_distance - spot_radius, line_height, -spot_radius,
-            -penalty_distance - spot_radius, line_height, spot_radius,
             -penalty_distance + spot_radius, line_height, spot_radius,
+            -penalty_distance - spot_radius, line_height, spot_radius,
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_spot_penalty_1',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'vertex_colors': args.line_color,
           'vertices': [
             penalty_distance + spot_radius, line_height, -spot_radius,
             penalty_distance - spot_radius, line_height, -spot_radius,
-            penalty_distance - spot_radius, line_height, spot_radius,
             penalty_distance + spot_radius, line_height, spot_radius,
+            penalty_distance - spot_radius, line_height, spot_radius,
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_corner_00',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             -half_length + corner_radius, line_height, -half_width + line_width,
             -half_length + corner_radius - line_width, line_height, -half_width + line_width,
@@ -353,12 +336,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_corner_01',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             -half_length + line_width, line_height, half_width - corner_radius,
             -half_length + line_width, line_height, half_width - corner_radius + line_width,
@@ -369,12 +348,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_corner_10',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             half_length - corner_radius + line_width, line_height, -half_width + line_width,
             half_length - corner_radius, line_height, -half_width + line_width,
@@ -385,12 +360,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...line_properties,
           'id': args.prefix + '_line_corner_11',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'TRIANGLE_STRIP',
-          'vertex_colors': args.line_color,
           'vertices': [
             half_length - line_width, line_height, half_width - corner_radius + line_width,
             half_length - line_width, line_height, half_width - corner_radius,
@@ -401,13 +372,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...flag_properties,
           'id': args.prefix + '_flag_corner_00',
-          'attach_type': 'webgl_characters',
-          //'billboard': true,
-          'collision': false,
-          'draw_mode': 'TRIANGLE_FAN',
-          'vertex_colors': args.flag_color,
           'vertices': [
             -half_length, flag_height * .8, -half_width,
             -half_length + flag_height * .2, flag_height * .9, -half_width,
@@ -417,13 +383,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...flag_properties,
           'id': args.prefix + '_flag_corner_01',
-          'attach_type': 'webgl_characters',
-          //'billboard': true,
-          'collision': false,
-          'draw_mode': 'TRIANGLE_FAN',
-          'vertex_colors': args.flag_color,
           'vertices': [
             -half_length, flag_height * .8, half_width,
             -half_length + flag_height * .2, flag_height * .9, half_width,
@@ -433,13 +394,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...flag_properties,
           'id': args.prefix + '_flag_corner_10',
-          'attach_type': 'webgl_characters',
-          //'billboard': true,
-          'collision': false,
-          'draw_mode': 'TRIANGLE_FAN',
-          'vertex_colors': args.flag_color,
           'vertices': [
             half_length, flag_height * .8, -half_width,
             half_length + flag_height * .2, flag_height * .9, -half_width,
@@ -449,13 +405,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...flag_properties,
           'id': args.prefix + '_flag_corner_11',
-          'attach_type': 'webgl_characters',
-          //'billboard': true,
-          'collision': false,
-          'draw_mode': 'TRIANGLE_FAN',
-          'vertex_colors': args.flag_color,
           'vertices': [
             half_length, flag_height * .8, half_width,
             half_length + flag_height * .2, flag_height * .9, half_width,
@@ -465,12 +416,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...goal_properties,
           'id': args.prefix + '_goal_0',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'LINE_STRIP',
-          'vertex_colors': args.goal_color,
           'vertices': [
             -half_length, 0, -goal_width_half,
             -half_length, goal_height, -goal_width_half,
@@ -479,12 +426,8 @@ function prefabs_webgl_football_pitch(args){
           ],
         },
         {
-          ...prefab_args,
+          ...goal_properties,
           'id': args.prefix + '_goal_1',
-          'attach_type': 'webgl_characters',
-          'collision': false,
-          'draw_mode': 'LINE_STRIP',
-          'vertex_colors': args.goal_color,
           'vertices': [
             half_length, 0, -goal_width_half,
             half_length, goal_height, -goal_width_half,
