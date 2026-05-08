@@ -79,6 +79,8 @@ function prefabs_webgl_football_pitch(args){
         'character': webgl_character_base,
         'circle_radius': 9.15,
         'corner_radius': 1,
+        'flag_color': [1, 1, 1, 1],
+        'flag_height': 1.5,
         'goal_color': [1, 1, 1, 1],
         'goal_height': 2.44,
         'goal_width': 7.32,
@@ -103,6 +105,7 @@ function prefabs_webgl_football_pitch(args){
 
     const circle_radius = args.circle_radius * args.scaling;
     const corner_radius = args.corner_radius * args.scaling;
+    const flag_height = args.flag_height * args.scaling;
     const goal_height = args.goal_height * args.scaling;
     const goal_width_half = (args.goal_width / 2) * args.scaling;
     const goalbox_length = args.goalbox_length * args.scaling;
@@ -395,6 +398,70 @@ function prefabs_webgl_football_pitch(args){
             half_length - corner_radius, line_height, half_width - corner_radius,
             half_length - corner_radius + line_width, line_height, half_width - line_width,
             half_length - corner_radius, line_height, half_width - line_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_flag_corner_00',
+          'attach_type': 'webgl_characters',
+          //'billboard': true,
+          'collision': false,
+          'draw_mode': 'TRIANGLE_FAN',
+          'vertex_colors': args.flag_color,
+          'vertices': [
+            -half_length, flag_height * .8, -half_width,
+            -half_length + flag_height * .2, flag_height * .9, -half_width,
+            -half_length, flag_height, -half_width,
+            -half_length - flag_height * .02, 0, -half_width,
+            -half_length + flag_height * .02, 0, -half_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_flag_corner_01',
+          'attach_type': 'webgl_characters',
+          //'billboard': true,
+          'collision': false,
+          'draw_mode': 'TRIANGLE_FAN',
+          'vertex_colors': args.flag_color,
+          'vertices': [
+            -half_length, flag_height * .8, half_width,
+            -half_length + flag_height * .2, flag_height * .9, half_width,
+            -half_length, flag_height, half_width,
+            -half_length - flag_height * .02, 0, half_width,
+            -half_length + flag_height * .02, 0, half_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_flag_corner_10',
+          'attach_type': 'webgl_characters',
+          //'billboard': true,
+          'collision': false,
+          'draw_mode': 'TRIANGLE_FAN',
+          'vertex_colors': args.flag_color,
+          'vertices': [
+            half_length, flag_height * .8, -half_width,
+            half_length + flag_height * .2, flag_height * .9, -half_width,
+            half_length, flag_height, -half_width,
+            half_length - flag_height * .02, 0, -half_width,
+            half_length + flag_height * .02, 0, -half_width,
+          ],
+        },
+        {
+          ...prefab_args,
+          'id': args.prefix + '_flag_corner_11',
+          'attach_type': 'webgl_characters',
+          //'billboard': true,
+          'collision': false,
+          'draw_mode': 'TRIANGLE_FAN',
+          'vertex_colors': args.flag_color,
+          'vertices': [
+            half_length, flag_height * .8, half_width,
+            half_length + flag_height * .2, flag_height * .9, half_width,
+            half_length, flag_height, half_width,
+            half_length - flag_height * .02, 0, half_width,
+            half_length + flag_height * .02, 0, half_width,
           ],
         },
         {
