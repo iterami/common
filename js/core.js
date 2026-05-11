@@ -241,7 +241,7 @@ function core_handle_pointercancel(event){
 function core_handle_pointerdown(event){
     if(!event.isPrimary
       || (core_menu_open && core_menu_block_events)
-      || event.target.id === 'core_toggle'){
+      || core_elements.core_ui.contains(event.target)){
         return;
     }
 
@@ -316,7 +316,7 @@ function core_handle_pointerup(event){
     core_pointer.down_4 = false;
 
     if(core_pointer.todo.pointerup
-      && event.target.id !== 'core_toggle'){
+      && !core_elements.core_ui.contains(event.target)){
         core_handle_prevent(event);
         core_pointer.todo.pointerup.todo?.(event);
     }
@@ -336,7 +336,7 @@ function core_handle_prevent(event){
 
 function core_handle_touch(event){
     if((core_menu_open && core_menu_block_events)
-      || event.target.id === 'core_toggle'){
+      || core_elements.core_ui.contains(event.target)){
         return;
     }
 
