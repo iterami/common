@@ -72,13 +72,14 @@ ul{
     flex-direction: column;
     gap: 4px;
     list-style-position: inside;
-    margin: 0;
+    margin: 4px 0;
     padding-left: 1ch;
 }
 ol ol,
 ol ul,
 ul ol,
 ul ul{
+    margin-bottom: 0;
     padding-left: 20px;
 }
 .right{
