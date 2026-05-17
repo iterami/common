@@ -1756,6 +1756,7 @@ function webgl_init(){
         webgl_pixelbuffers.push({
           'buffer': webgl.createBuffer(),
           'cursor': true,
+          'picked': false,
           'sync': null,
           'x': 0,
           'y': 0,
@@ -2044,6 +2045,7 @@ function webgl_level_init({
         if(pixelbuffer.sync !== null){
             webgl.deleteSync(pixelbuffer.sync);
             pixelbuffer.sync = null;
+            pixelbuffer.picked = false;
         }
     }
     if(json.picking > 0
@@ -2918,18 +2920,7 @@ function webgl_path_use({
 }
 
 function webgl_pick(cursor){
-    if(core_menu_open
-      || webgl_properties.picking < 1){
-        return;
-    }
-
-    const character = webgl_characters[webgl_character_id];
-    if(character.life <= 0){
-        return;
-    }
-
-    const level = webgl_character_level(character);
-    if(level < -1 || (level >= 0 && webgl_properties.paused)){
+    if(!webgl_pick_check()){
         return;
     }
 
@@ -2997,11 +2988,51 @@ function webgl_pick(cursor){
     webgl_draw();
 }
 
+function webgl_pick_check(){
+    if(core_menu_open
+      || webgl_properties.picking < 1){
+        return false;
+    }
+
+    const character = webgl_characters[webgl_character_id];
+    if(character.life <= 0){
+        return false;
+    }
+    const level = webgl_character_level(character);
+    if(level < -1 || (level >= 0 && webgl_properties.paused)){
+        return false;
+    }
+
+    return true;
+}
+
+function webgl_pick_entity({
+  end = -1,
+  start = 0,
+} = {}){
+    if(!webgl_pick_check()){
+        return;
+    }
+
+    if(end < start){
+        end = webgl_pixelbuffers.length - 1;
+    }
+
+    for(let i = start; i <= end; i++){
+        const pixelbuffer = webgl_pixelbuffers[i];
+        if(pixelbuffer.sync === null
+          && pixelbuffer.picked !== false){
+            return pixelbuffer;
+        }
+    }
+
+    return false;
+}
+
 function webgl_pick_event({
   color,
   pixelbuffer,
 } = {}){
-    const character = webgl_characters[webgl_character_id];
     pixelbuffer.picked = false;
 
     if(color[0] !== 0
@@ -3028,12 +3059,12 @@ function webgl_pick_event({
 
         for(const id in entity_entities){
             const entity = entity_entities[id];
-
             if(entity.picking
               && color_blue === entity.picking[2]
               && color_green === entity.picking[1]
               && color_red === entity.picking[0]){
                 if(entity.picking_range > 0){
+                    const character = webgl_characters[webgl_character_id];
                     const position = webgl_get_position(entity);
                     const distance = math_distance({
                       'x0': character.position_x,
@@ -3066,7 +3097,7 @@ function webgl_pick_event({
         }else{
             webgl_event({
               'parent': picked,
-              'target': character,
+              'target': webgl_characters[webgl_character_id],
             });
         }
 
