@@ -11,7 +11,7 @@ select,
 textarea{
     background-color: #000;
     color: #ccc;
-    font: 700 14px monospace;
+    font: 700 1rem monospace;
 }
 button{
     padding: 2px 7px;
