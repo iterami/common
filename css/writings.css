@@ -14,7 +14,7 @@ textarea{
     font: 700 1rem monospace;
 }
 button{
-    padding: 2px 7px;
+    padding: .1rem .4rem;
 }
 button,
 input,
@@ -33,7 +33,7 @@ input{
 code{
     border: 1px solid #444;
     display: block;
-    padding: 5px;
+    padding: .3rem;
     white-space: pre;
 }
 .external{
@@ -94,7 +94,7 @@ td{
 td,
 textarea{
     border: 1px solid #444;
-    padding: 4px;
+    padding: .3rem;
     vertical-align: top;
 }
 textarea{
