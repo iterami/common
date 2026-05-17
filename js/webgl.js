@@ -2954,14 +2954,14 @@ function webgl_pick(cursor){
           webgl_draw_picking();
 
           webgl.bindBuffer(webgl.PIXEL_PACK_BUFFER, pixelbuffer.buffer);
-          webgl.bufferData(webgl.PIXEL_PACK_BUFFER, 3, webgl.STREAM_READ);
+          webgl.bufferData(webgl.PIXEL_PACK_BUFFER, 4, webgl.STREAM_READ);
 
           webgl.readPixels(
             x,
             webgl.drawingBufferHeight - y,
             1,
             1,
-            webgl.RGB,
+            webgl.RGBA,
             webgl.UNSIGNED_BYTE,
             0
           );
