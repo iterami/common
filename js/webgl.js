@@ -1661,11 +1661,11 @@ function webgl_framebuffer_resize(){
     webgl.texImage2D(
       webgl.TEXTURE_2D,
       0,
-      webgl.RGB,
+      webgl.RGBA,
       globalThis.innerWidth,
       globalThis.innerHeight,
       0,
-      webgl.RGB,
+      webgl.RGBA,
       webgl.UNSIGNED_BYTE,
       null
     );
