@@ -105,7 +105,7 @@ textarea{
     width: 30rem;
 }
 ul{
-    list-style-type: disc;
+    list-style-type: "- ";
 }
 
 *:focus{
