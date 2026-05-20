@@ -53,26 +53,6 @@ label,
 select:enabled{
     cursor: pointer;
 }
-button.gridbutton{
-    background-color: #222;
-    border-width: 0;
-    font-size: 20px;
-    height: 25px;
-    margin: 1px;
-    padding: 0;
-    vertical-align: top;
-    width: 25px;
-}
-button.gridbuttonclickable{
-    background-color: #222;
-    border-width: 0;
-    color: #000;
-    font-size: 40px;
-    height: 50px;
-    margin: 1px;
-    padding: 0;
-    width: 50px;
-}
 #canvas{
     inset: 0;
     position: fixed;
@@ -106,6 +86,26 @@ input{
 .external::after{
     content: "↗";
     line-height: 1;
+}
+.gridbutton{
+    background-color: #222;
+    border-width: 0;
+    font-size: 20px;
+    height: 25px;
+    margin: 1px;
+    padding: 0;
+    vertical-align: top;
+    width: 25px;
+}
+.gridbuttonclickable{
+    background-color: #222;
+    border-width: 0;
+    color: #000;
+    font-size: 40px;
+    height: 50px;
+    margin: 1px;
+    padding: 0;
+    width: 50px;
 }
 .header{
     background-color: #333;
