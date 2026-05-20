@@ -2138,27 +2138,26 @@ function webgl_level_init({
 
     if(json.reticle){
         const reticle = core_html({
-          'parent': core_elements.core_ui,
+          'parent': document.body,
           'properties': {
             'id': 'reticle',
           },
           'store': 'reticle',
         });
-        reticle.setAttribute(
-          'style',
-          'left:50%;pointer-events:none;position:fixed;top:50%;transform:translate(-50%,-50%);' + (json.reticle === true
-            ? 'background:#fff;height:4px;width:4px;'
-            : json.reticle)
+        Object.assign(
+          reticle.style,
+          {
+            'background': '#fff',
+            'display': '',
+            'left': '50%',
+            'pointer-events': 'none',
+            'position': 'fixed',
+            'top': '50%',
+            'transform': 'translate(-50%,-50%)',
+            'zIndex': 8,
+            ...json.reticle,
+          }
         );
-        reticle.setAttribute(
-          'data-height',
-          reticle.offsetHeight
-        );
-        reticle.setAttribute(
-          'data-width',
-          reticle.offsetWidth
-        );
-        reticle.style.display = '';
 
     }else if(core_elements.reticle){
         core_elements.reticle.style.display = 'none';
@@ -3090,8 +3089,8 @@ function webgl_pick_event({
         if(pixelbuffer.cursor){
             webgl.canvas.style.cursor = 'pointer';
             if(core_elements.reticle){
-                core_elements.reticle.style.height = Math.ceil(core_elements.reticle.dataset.height * 1.5) + 'px';
-                core_elements.reticle.style.width = Math.ceil(core_elements.reticle.dataset.width * 1.5) + 'px';
+                core_elements.reticle.style.height = '.6vw';
+                core_elements.reticle.style.width = '.6vw';
             }
 
         }else{
@@ -3104,8 +3103,8 @@ function webgl_pick_event({
     }else if(pixelbuffer.cursor){
         webgl.canvas.style.cursor = 'auto';
         if(core_elements.reticle){
-            core_elements.reticle.style.height = core_elements.reticle.dataset.height + 'px';
-            core_elements.reticle.style.width = core_elements.reticle.dataset.width + 'px';
+            core_elements.reticle.style.height = '.4vw';
+            core_elements.reticle.style.width = '.4vw';
         }
     }
 }
