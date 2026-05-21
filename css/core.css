@@ -44,11 +44,8 @@ button:enabled,
 input:enabled::file-selector-button,
 input[type=checkbox]:enabled,
 input[type=color]:enabled,
-input[type=date]:enabled,
-input[type=datetime-local]:enabled,
 input[type=file]:enabled,
 input[type=range]:enabled,
-input[type=time]:enabled,
 label,
 select:enabled{
     cursor: pointer;
