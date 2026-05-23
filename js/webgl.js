@@ -172,7 +172,7 @@ function webgl_camera_rotate({
 }
 
 function webgl_character_automove(id){
-    if(!id){
+    if(core_type(id) !== 'string'){
         id = webgl_character_id;
     }
     const character = webgl_characters[id];
@@ -180,7 +180,7 @@ function webgl_character_automove(id){
 }
 
 function webgl_character_die(id){
-    if(!id){
+    if(core_type(id) !== 'string'){
         id = webgl_character_id;
     }
     webgl_stat_modify({
@@ -441,7 +441,7 @@ function webgl_character_set(id){
 }
 
 function webgl_character_spawn(id){
-    if(!id){
+    if(core_type(id) !== 'string'){
         id = webgl_character_id;
     }
     const character = webgl_characters[id];
