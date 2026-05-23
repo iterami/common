@@ -14,7 +14,7 @@ function prefabs_webgl_cuboid_tree(args){
         'leaf_size_y': 10,
         'leaf_size_z': 10,
         'leaf_texture': 'lavaleaf.png',
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'trunk_collision': true,
         'trunk_color': [
           .8, .4, 0, 1,
@@ -96,7 +96,7 @@ function prefabs_webgl_football_pitch(args){
         'penaltybox_width': 40.32,
         'pitch_length': 105,
         'pitch_width': 64,
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'scaling': 1,
         'spot_radius': .15,
       },
@@ -459,7 +459,7 @@ function prefabs_webgl_frustum_tree(args){
         'leaf_points': 3,
         'leaf_separate': 4,
         'leaf_size': 4,
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'trunk_color': [
           .4, .2, 0, 1,
         ],
@@ -508,7 +508,7 @@ function prefabs_webgl_humanoid(args){
       'defaults': {
         'character': webgl_character_base,
         'groups': [],
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'scale': 1,
       },
     });
@@ -592,7 +592,7 @@ function prefabs_webgl_lines_path(args){
         'character': webgl_character_base,
         'colors': [],
         'groups': [],
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
       },
     });
     const prefab_args = webgl_prefab_args(args);
@@ -666,7 +666,7 @@ function prefabs_webgl_lines_shrub(args){
         ],
         'leaf_distance': 5,
         'points': 100,
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'type': 'range',
         'x_max': 5,
         'x_min': -5,
@@ -746,7 +746,7 @@ function prefabs_webgl_lines_tree(args){
         'leaf_color': [
           0, .5, 0, 1,
         ],
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'trunk_branch_max': 4,
         'trunk_branch_min': 0,
         'trunk_color': [
@@ -834,7 +834,7 @@ function prefabs_webgl_trap(args){
         'frames_random_active': 0,
         'frames_random_inactive': 0,
         'groups': [],
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'size_x': 10,
         'size_y': 10,
         'size_z': 10,
@@ -950,7 +950,7 @@ function prefabs_webgl_tree_2d(args){
         'leaf_color': [
           .1, .3, .1, 1,
         ],
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'width_base': 1,
         'width_leaf': 6,
       },

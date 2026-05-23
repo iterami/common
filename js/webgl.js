@@ -3131,7 +3131,7 @@ function webgl_prefab_remake({
 function webgl_prefab_repeat({
   characters = false,
   count = 1,
-  prefix = entity_id_count,
+  prefix = String(entity_id_count),
   properties = {},
   type,
   x_max = 0,
@@ -3184,7 +3184,7 @@ function webgl_primitive_cuboid(args){
         'front': {},
         'groups': [],
         'left': {},
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'right': {},
         'size_x': 1,
         'size_y': 1,
@@ -3403,7 +3403,7 @@ function webgl_primitive_ellipsoid(args){
         'color_top0': [],
         'color_top1': [],
         'groups': [],
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'radius_x': 5,
         'radius_y': 5,
         'radius_z': 5,
@@ -3506,7 +3506,7 @@ function webgl_primitive_frustum(args){
         'length': 2,
         'middle': true,
         'points': 8,
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'size_bottom': 2,
         'size_top': 1,
         'top': true,
@@ -3685,7 +3685,7 @@ function webgl_primitive_particle(args){
         'entities': [],
         'groups': [],
         'particle': {},
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
       },
     });
     const prefab_args = webgl_prefab_args(args);
@@ -3733,7 +3733,7 @@ function webgl_primitive_projectile(args){
       'object': args,
       'defaults': {
         'groups': [],
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'speed': 1,
       },
     });
@@ -3790,7 +3790,7 @@ function webgl_primitive_stars(args){
         'groups': [],
         'height_limit': 1,
         'point_size': 500,
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'radius': 250,
         'range': 100,
         'stars': 100,
@@ -3845,7 +3845,7 @@ function webgl_primitive_terrain(args){
         'groups': [],
         'height_random': 10,
         'heights': [],
-        'prefix': entity_id_count,
+        'prefix': String(entity_id_count),
         'tiles_x': 10,
         'tiles_x_size': 10,
         'tiles_z': 10,
@@ -4466,7 +4466,7 @@ function webgl_tiles(args){
                   'character': attached
                     ? prefix + prefab.properties.character
                     : args.character,
-                  'prefix': prefix + (prefab.properties.prefix || entity_id_count),
+                  'prefix': prefix + (prefab.properties.prefix || String(entity_id_count)),
                   'position_x': (prefab.properties.position_x || 0) + (attached
                     ? 0
                     : tile_offset_x),
@@ -4522,7 +4522,7 @@ function webgl_timer_add({
   event_repeat = void 0,
   frames_max = 100,
   frames_random = 0,
-  id = webgl_timer_count,
+  id = String(webgl_timer_count),
   repeat = 0,
 } = {}){
     let max = frames_max;
