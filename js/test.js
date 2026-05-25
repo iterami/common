@@ -17,7 +17,7 @@ function test_consts({
             value = eval(label);
             result = value !== void 0;
         }catch{}
-        table += '<tr ' + (!result ? ' style=background-color:#600' : '') + '>'
+        table += '<tr ' + (!result ? ' class=failed' : '') + '>'
           + '<td>' + label
           + '<td>' + (value || 'undefined');
 
@@ -128,7 +128,7 @@ function test_run({
           2
         );
 
-        table += '<tr ' + (!result.test ? ' style=background-color:#600' : '') + '>'
+        table += '<tr ' + (!result.test ? ' class=failed' : '') + '>'
           + '<td><a href=' + link + test.todo + '.htm target=_blank>' + test.todo + '()</a>: ' + result.test
           + '<br><textarea readonly>' + args_json
           + '</textarea><td><pre>' + returned_json
