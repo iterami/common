@@ -22,8 +22,8 @@ select{
     border: 2px solid #999;
     vertical-align: middle;
 }
-button:enabled,
-select:enabled{
+button,
+select{
     cursor: pointer;
 }
 .center,
@@ -115,7 +115,7 @@ ul{
     outline: 2px solid #07f;
 }
 a:hover,
-button:enabled:hover{
+button:hover{
     color: #07f;
 }
 a:hover::after{
