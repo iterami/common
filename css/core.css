@@ -116,6 +116,7 @@ input{
 }
 input,
 progress{
+    margin: 0;
     width: 13rem;
 }
 input[type=checkbox],
