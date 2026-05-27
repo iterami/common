@@ -15,7 +15,6 @@ body{
 body,
 button,
 input,
-input::file-selector-button,
 select,
 textarea{
     background-color: #000;
@@ -24,24 +23,18 @@ textarea{
 }
 button,
 input,
-input::file-selector-button,
 select{
     border: 2px solid #999;
+    padding: .2rem .4rem;
     vertical-align: middle;
-}
-button,
-input::file-selector-button{
-    padding: .1rem .4rem;
 }
 button:disabled,
 input:disabled,
-input:disabled::file-selector-button,
 input:not([type=color]):not([type=file]):read-only,
 textarea:read-only{
     border-color: #555;
 }
 button:enabled,
-input:enabled::file-selector-button,
 input[type=checkbox]:enabled,
 input[type=color]:enabled,
 input[type=file]:enabled,
@@ -111,7 +104,8 @@ input{
 .header td{
     vertical-align: bottom;
 }
-.hidden{
+.hidden,
+input::file-selector-button{
     display: none;
 }
 input,
@@ -119,8 +113,7 @@ progress{
     margin: 0;
     width: 13rem;
 }
-input[type=checkbox],
-input[type=file]{
+input[type=checkbox]{
     width: auto;
 }
 input[type=checkbox],
@@ -136,11 +129,12 @@ input[type=color],
 .mini{
     width: 5rem;
 }
-input:invalid{
-    border-color: #f00;
-}
+input[type=file],
 .left{
     text-align: left;
+}
+input:invalid{
+    border-color: #f00;
 }
 .medium{
     font-size: 150%;
