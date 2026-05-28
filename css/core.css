@@ -121,12 +121,17 @@ input[type=range],
 progress{
     accent-color: #07f;
 }
-input[type=color]{
+input[type=color],
+input[type=color]::-webkit-color-swatch-wrapper{
     padding: 0;
 }
 input[type=color],
 .mini{
     width: 5rem;
+}
+input[type=color]::-moz-color-swatch,
+input[type=color]::-webkit-color-swatch{
+    border: 0;
 }
 input[type=file]{
     min-height: 1rem;
