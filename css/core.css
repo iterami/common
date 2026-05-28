@@ -105,7 +105,7 @@ input{
     vertical-align: bottom;
 }
 .hidden,
-input::file-selector-button{
+::file-selector-button{
     display: none;
 }
 input,
@@ -122,16 +122,12 @@ progress{
     accent-color: #07f;
 }
 input[type=color],
-input[type=color]::-webkit-color-swatch-wrapper{
+::-webkit-color-swatch-wrapper{
     padding: 0;
 }
 input[type=color],
 .mini{
     width: 5rem;
-}
-input[type=color]::-moz-color-swatch,
-input[type=color]::-webkit-color-swatch{
-    border: 0;
 }
 input[type=file]{
     min-height: 1rem;
@@ -165,6 +161,11 @@ textarea{
     height: 12rem;
     max-width: 100%;
     width: 30rem;
+}
+
+::-moz-color-swatch,
+::-webkit-color-swatch{
+    border: 0;
 }
 
 *:focus{
