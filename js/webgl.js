@@ -1155,10 +1155,10 @@ function webgl_draw_entity(entity){
       webgl_matrices[entity.id]
     );
     if(webgl_shader_id === 'picking'){
-        webgl.uniform3fv(
-          uniforms.pick_color,
+        webgl.uniform1f(
+          uniforms.pick_id,
           entity.picking === false
-           ? [0, 0, 0]
+           ? 0
            : entity.picking
         );
     }
@@ -1176,7 +1176,7 @@ function webgl_drawloop(){
 }
 
 function webgl_draw_picking(){
-    webgl.clearColor(0, 0, 0, 1);
+    webgl.clearColor(0, 0, 0, 0);
     webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
 
     webgl.disable(webgl.DEPTH_TEST);
@@ -1338,20 +1338,7 @@ function webgl_entity_init(entity){
     webgl_entity_normals(entity);
 
     if(entity.picking === true){
-        entity.picking = [
-          core_round({
-            'decimals': 3,
-            'number': (entity_id_count % 255) / 255,
-          }),
-          core_round({
-            'decimals': 3,
-            'number': Math.floor(entity_id_count / 255) / 255,
-          }),
-          core_round({
-            'decimals': 3,
-            'number': Math.floor(entity_id_count / 65025) / 255,
-          }),
-        ];
+        entity.picking = ++webgl_pick_id;
     }
     const texture_align = entity.texture_align;
     const textureData = [];
@@ -1586,9 +1573,8 @@ function webgl_framebuffer_init(){
       'uniforms': [
         'camera',
         'perspective',
-        'pick_color',
+        'pick_id',
         'point_size',
-        'xyz',
       ],
       'fragment':
 `#version 300 es
@@ -1602,27 +1588,22 @@ void main(void){
 `#version 300 es
 layout (location = 0) in vec3 vertexPosition;
 out vec4 color;
-uniform bool xyz;
 uniform float point_size;
 uniform mat4 camera;
 uniform mat4 perspective;
-uniform vec3 pick_color;
+uniform float pick_id;
 void main(void){
-    vec4 positionCamera = camera * vec4(vertexPosition, 1.0);
+    vec4 positionCamera = camera * vec4(vertexPosition, 1.);
     gl_Position = perspective * positionCamera;
-    if(point_size > 0.0){
+    if(point_size > 0.){
         gl_PointSize = point_size / length(positionCamera);
     }
-    if(xyz){
-        color = vec4(
-          (normalize(vertexPosition.x) + 1.0) / 2.0,
-          (normalize(vertexPosition.y) + 1.0) / 2.0,
-          (normalize(vertexPosition.z) + 1.0) / 2.0,
-          1
-        );
-    }else{
-        color = vec4(pick_color, 1);
-    }
+    color = vec4(
+      (normalize(vertexPosition.x) + 1.) / 2.,
+      (normalize(vertexPosition.y) + 1.) / 2.,
+      (normalize(vertexPosition.z) + 1.) / 2.,
+      pick_id / 255.
+    );
 }`,
     });
 
@@ -1674,10 +1655,6 @@ function webgl_framebuffer_resize(){
       false,
       webgl_matrices.perspective
     );
-    webgl.uniform1i(
-      webgl_shaders.picking.uniforms.xyz,
-      false
-    );
 
     webgl_shader_use('default');
 }
@@ -1720,7 +1697,7 @@ function webgl_init(){
     webgl = canvas.getContext(
       'webgl2',
       {
-        'alpha': false,
+        'alpha': true,
         'antialias': true,
         'depth': true,
         'desynchronized': false,
@@ -1807,11 +1784,11 @@ uniform vec3 light_color[16];
 uniform vec3 light_position[16];
 void main(void){
     fragment = color;
-    if(fog_end > 0.0){
+    if(fog_end > 0.){
         fragment.rgb = mix(
           fragment.rgb,
           clear_color,
-          clamp((length(positionCamera) - fog_start) / (fog_end - fog_start), 0.0, 1.0)
+          clamp((length(positionCamera) - fog_start) / (fog_end - fog_start), 0., 1.)
         );
     }
     for(int i = 0; i < light_count; i++) {
@@ -1823,7 +1800,7 @@ void main(void){
             fragment.rgb = mix(
               light_color[i],
               fragment.rgb,
-              clamp(range / light_range[i], 0.0, 1.0)
+              clamp(range / light_range[i], 0., 1.)
             );
         }
     }
@@ -1849,15 +1826,15 @@ uniform vec3 directional_vector;
 uniform vec3 normals;
 void main(void){
     positionVertex = vertexPosition;
-    positionCamera = camera * vec4(vertexPosition, 1.0);
+    positionCamera = camera * vec4(vertexPosition, 1.);
     gl_Position = perspective * positionCamera;
-    if(point_size > 0.0){
+    if(point_size > 0.){
         gl_PointSize = point_size / length(positionCamera);
     }
     positionTexture = texturePosition;
     vec4 lighting = vec4(ambient_color, alpha);
     if(directional){
-        lighting.rgb += directional_color * max(dot(normals, directional_vector), 0.0);
+        lighting.rgb += directional_color * max(dot(normals, directional_vector), 0.);
     }
     color = vertexColor * lighting;
 }`,
@@ -1894,7 +1871,6 @@ void main(void){
         'picking': false,
         'picking_exclude': false,
         'picking_range': 0,
-        'picking_xyz': false,
         'point_size': 0,
         'position_x': 0,
         'position_y': 0,
@@ -2056,6 +2032,7 @@ function webgl_level_init({
     }
 
     entity_id_count = 0;
+    webgl_pick_id = 0;
     core_object_reset(webgl_properties);
     Object.assign(
       webgl_properties,
@@ -2428,7 +2405,7 @@ function webgl_logic(){
             }
 
             if(state !== webgl.WAIT_FAILED){
-                const color = new Uint8Array(3);
+                const color = new Uint8Array(4);
 
                 webgl.bindBuffer(webgl.PIXEL_PACK_BUFFER, pixelbuffer.buffer);
                 webgl.getBufferSubData(webgl.PIXEL_PACK_BUFFER, 0, color);
@@ -2962,6 +2939,7 @@ function webgl_pick(cursor){
     pixelbuffer.y = y;
 
     webgl_shader_use('picking');
+    webgl.disable(webgl.BLEND);
     webgl_scissor({
       'todo': function(){
           webgl_draw_picking();
@@ -2986,6 +2964,7 @@ function webgl_pick(cursor){
       'x': x,
       'y': y,
     });
+    webgl.enable(webgl.BLEND);
     webgl_shader_use('default');
 
     const clear_color = webgl_properties.clear_color;
@@ -3023,34 +3002,10 @@ function webgl_pick_event({
 } = {}){
     pixelbuffer.picked = false;
 
-    if(color[0] !== 0
-      || color[1] !== 0
-      || color[2] !== 0){
-        const color_blue = color[2] === 0
-          ? 0
-          : core_round({
-              'decimals': 3,
-              'number': color[2] / 255,
-            });
-        const color_green = color[1] === 0
-          ? 0
-          : core_round({
-              'decimals': 3,
-              'number': color[1] / 255,
-            });
-        const color_red = color[0] === 0
-          ? 0
-          : core_round({
-              'decimals': 3,
-              'number': color[0] / 255,
-            });
-
+    if(color[3] !== 0){
         for(const id in entity_entities){
             const entity = entity_entities[id];
-            if(entity.picking
-              && color_blue === entity.picking[2]
-              && color_green === entity.picking[1]
-              && color_red === entity.picking[0]){
+            if(color[3] === entity.picking){
                 if(entity.picking_range > 0){
                     const character = webgl_characters[webgl_character_id];
                     const position = webgl_get_position(entity);
@@ -3075,6 +3030,11 @@ function webgl_pick_event({
 
     const picked = pixelbuffer.picked;
     if(picked){
+        const position = webgl_get_position(picked);
+        webgl_picked_x = position.x + (color[0] / 255 - .5) * (picked.vertices[0] - picked.vertices[3]);
+        webgl_picked_y = position.y + (color[1] / 255 - .5) * (picked.vertices[1] - picked.vertices[7]);
+        webgl_picked_z = position.z + (color[2] / 255 - .5) * (picked.vertices[8] - picked.vertices[2]);
+
         if(pixelbuffer.cursor){
             webgl.canvas.style.cursor = 'pointer';
             if(core_elements.reticle){
@@ -4706,6 +4666,10 @@ globalThis.webgl_framebuffer = 0;
 globalThis.webgl_matrices = {};
 globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
+globalThis.webgl_pick_id = 0;
+globalThis.webgl_picked_x = 0;
+globalThis.webgl_picked_y = 0;
+globalThis.webgl_picked_z = 0;
 globalThis.webgl_pixelbuffers = [];
 globalThis.webgl_properties = {};
 globalThis.webgl_shader_id = 'default';
