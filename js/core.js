@@ -132,7 +132,16 @@ function core_float_compare({
   b,
   precision = Number.EPSILON,
 } = {}){
-    return Math.abs(a - b) < precision;
+    if(a === b){
+        return true;
+    }
+
+    const scale = Math.max(
+      1,
+      Math.abs(a),
+      Math.abs(b)
+    );
+    return Math.abs(a - b) < precision * scale;
 }
 
 function core_getelement(id){
