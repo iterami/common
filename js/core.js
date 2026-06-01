@@ -130,18 +130,21 @@ function core_file({
 function core_float_compare({
   a,
   b,
-  precision = Number.EPSILON,
+  precision,
 } = {}){
     if(a === b){
         return true;
     }
 
-    const scale = Math.max(
-      1,
-      Math.abs(a),
-      Math.abs(b)
-    );
-    return Math.abs(a - b) < precision * scale;
+    if(!precision){
+        precision = Number.EPSILON * Math.max(
+          1,
+          Math.abs(a),
+          Math.abs(b)
+        );
+    }
+
+    return Math.abs(a - b) < precision;
 }
 
 function core_getelement(id){
