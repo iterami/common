@@ -134,7 +134,7 @@ input[type=color],
 .mini{
     width: 5rem;
 }
-input:invalid{
+:invalid{
     border-color: #f00;
 }
 .left{

@@ -57,12 +57,12 @@ hr{
 input{
     width: 13rem;
 }
-input:invalid{
-    border-color: #f00;
-}
 input:read-only,
 textarea:read-only{
     border-color: #555;
+}
+:invalid{
+    border-color: #f00;
 }
 ol,
 ul{
