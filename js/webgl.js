@@ -3059,16 +3059,22 @@ function webgl_pick_event({
 }
 
 function webgl_prefab_args(args){
-    const prefab_args = globalThis.structuredClone(args);
-    for(const arg in prefab_args){
+    const clone = globalThis.structuredClone(args);
+    for(const arg in clone){
         if(entity_info.opaque.default[arg] === void 0){
-            delete prefab_args[arg];
+            delete clone[arg];
         }
     }
-    return core_object_defaults({
-      'object': prefab_args,
+
+    const prefab_args = core_object_defaults({
+      'object': clone,
       'defaults': entity_info.opaque.default,
     });
+    if(prefab_args.picking === true){
+        prefab_args.picking = ++webgl_pick_id;
+    }
+
+    return prefab_args;
 }
 
 function webgl_prefab_remake({
