@@ -4616,7 +4616,7 @@ function webgl_vehicle_toggle({
             character['change_rotate_' + axis] = 0;
             character['change_position_' + axis] = 0;
         }
-        character.camera_rotate_y = vehicle.rotate_y;
+        character.camera_rotate_y = vehicle_new.rotate_y;
     }
 }
 
