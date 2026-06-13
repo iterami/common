@@ -2671,16 +2671,14 @@ function webgl_model_create({
     const xz = character.collide_xz * 2;
 
     webgl_primitive_cuboid({
-      'all': {
-        'collision': false,
-        'texture': 'grid.png',
-      },
       'character': id,
+      'collision': false,
       'prefix': id,
       'position_y': (character.collide_top - character.collide_bottom) / 2,
       'size_x': xz,
       'size_y': character.collide_bottom + character.collide_top,
       'size_z': xz,
+      'texture': 'grid.png',
       ...model,
     });
 }
@@ -3143,7 +3141,6 @@ function webgl_primitive_cuboid(args){
     core_object_defaults({
       'object': args,
       'defaults': {
-        'all': {},
         'back': {},
         'bottom': {},
         'character': webgl_character_base,
@@ -3175,7 +3172,7 @@ function webgl_primitive_cuboid(args){
           'attach_z': prefab_args.position_z,
           'id': args.prefix + '_top',
           'vertex_colors': webgl_vertexcolorarray({
-            'colors': args.top.vertex_colors,
+            'colors': args.top.vertex_colors || args.vertex_colors,
           }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
@@ -3186,7 +3183,6 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args.all,
           args.top
         );
         webgl_entity_create({
@@ -3207,7 +3203,7 @@ function webgl_primitive_cuboid(args){
           'id': args.prefix + '_bottom',
           'rotate_x': 180,
           'vertex_colors': webgl_vertexcolorarray({
-            'colors': args.bottom.vertex_colors,
+            'colors': args.bottom.vertex_colors || args.vertex_colors,
           }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_z,
@@ -3218,7 +3214,6 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args.all,
           args.bottom
         );
         webgl_entity_create({
@@ -3239,7 +3234,7 @@ function webgl_primitive_cuboid(args){
           'id': args.prefix + '_back',
           'rotate_x': 90,
           'vertex_colors': webgl_vertexcolorarray({
-            'colors': args.back.vertex_colors,
+            'colors': args.back.vertex_colors || args.vertex_colors,
           }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
@@ -3250,7 +3245,6 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args.all,
           args.back
         );
         webgl_entity_create({
@@ -3271,7 +3265,7 @@ function webgl_primitive_cuboid(args){
           'id': args.prefix + '_front',
           'rotate_x': 270,
           'vertex_colors': webgl_vertexcolorarray({
-            'colors': args.front.vertex_colors,
+            'colors': args.front.vertex_colors || args.vertex_colors,
           }),
           'vertices': [
             vertices_size_x, 0, -vertices_size_y,
@@ -3282,7 +3276,6 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args.all,
           args.front
         );
         webgl_entity_create({
@@ -3303,7 +3296,7 @@ function webgl_primitive_cuboid(args){
           'id': args.prefix + '_left',
           'rotate_z': 90,
           'vertex_colors': webgl_vertexcolorarray({
-            'colors': args.left.vertex_colors,
+            'colors': args.left.vertex_colors || args.vertex_colors,
           }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
@@ -3314,7 +3307,6 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args.all,
           args.left
         );
         webgl_entity_create({
@@ -3335,7 +3327,7 @@ function webgl_primitive_cuboid(args){
           'id': args.prefix + '_right',
           'rotate_z': 270,
           'vertex_colors': webgl_vertexcolorarray({
-            'colors': args.right.vertex_colors,
+            'colors': args.right.vertex_colors || args.vertex_colors,
           }),
           'vertices': [
             vertices_size_y, 0, -vertices_size_z,
@@ -3346,7 +3338,6 @@ function webgl_primitive_cuboid(args){
         };
         Object.assign(
           properties,
-          args.all,
           args.right
         );
         webgl_entity_create({

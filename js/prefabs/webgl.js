@@ -29,16 +29,11 @@ function prefabs_webgl_cuboid_tree(args){
 
     webgl_primitive_cuboid({
       ...prefab_args,
-      'all': {
-        'collision': args.trunk_collision,
-        'texture': args.trunk_texture,
-        'texture_y': 2,
-        'vertex_colors': args.trunk_color,
-      },
       'bottom': {
         'exclude': true,
       },
       'character': args.character,
+      'collision': args.trunk_collision,
       'left': {
         'texture_align': '10110100',
       },
@@ -52,23 +47,24 @@ function prefabs_webgl_cuboid_tree(args){
       'size_x': args.trunk_size_x,
       'size_y': args.trunk_size_y,
       'size_z': args.trunk_size_z,
+      'texture': args.trunk_texture,
+      'texture_y': 2,
       'top': {
         'exclude': true,
       },
+      'vertex_colors': args.trunk_color,
     });
     webgl_primitive_cuboid({
       ...prefab_args,
-      'all': {
-        'collision': args.leaf_collision,
-        'texture': args.leaf_texture,
-        'vertex_colors': args.leaf_color,
-      },
       'character': args.character,
+      'collision': args.leaf_collision,
       'position_y': prefab_args.position_y + args.trunk_size_y + args.leaf_size_y / 2,
       'prefix': args.prefix + '_leaf',
       'size_x': args.leaf_size_x,
       'size_y': args.leaf_size_y,
       'size_z': args.leaf_size_z,
+      'texture': args.leaf_texture,
+      'vertex_colors': args.leaf_color,
     });
 }
 
