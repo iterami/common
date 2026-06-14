@@ -1193,23 +1193,26 @@ function core_storage_save({
             continue;
         }
 
+        const default_value = core_storage_info[key].default;
         const data = core_type_convert({
-          'template': core_storage_info[key].default,
+          'template': default_value,
           'value': element[property],
         });
-        core_storage_data[key] = data;
 
         if(data !== void 0
+          && data !== default_value
           && !Number.isNaN(data)
-          && String(data).length
-          && data !== core_storage_info[key].default){
+          && String(data).length){
             globalThis.localStorage.setItem(
               core_storage_info[key].prefix + key,
               data
             );
+            core_storage_data[key] = data;
 
         }else{
             globalThis.localStorage.removeItem(core_storage_info[key].prefix + key);
+            core_storage_data[key] = default_value;
+            element[property] = default_value;
         }
     }
 
