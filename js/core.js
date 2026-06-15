@@ -148,7 +148,7 @@ function core_float_compare({
 }
 
 function core_getelement(id){
-    if(Object.hasOwn(core_elements, id)){
+    if(id in core_elements){
         return core_elements[id];
     }
 
@@ -1346,7 +1346,7 @@ function core_ui_update({
 
         core_ui_values[id] = value;
 
-        if(!Object.hasOwn(core_elements, id)){
+        if(!(id in core_elements)){
             core_elements[id] = document.getElementById(id);
         }
 
