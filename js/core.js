@@ -123,7 +123,7 @@ function core_file({
   type = 'readAsDataURL',
 } = {}){
     const filereader = new FileReader();
-    filereader.onloadend = todo;
+    filereader.onload = todo;
     filereader[type](file);
 }
 
