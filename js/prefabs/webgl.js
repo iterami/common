@@ -124,13 +124,6 @@ function prefabs_webgl_football_pitch(args){
       'collision': false,
       'draw_mode': 'TRIANGLE_FAN',
       'vertex_colors': args.flag_color,
-      'vertices': [
-        -half_length, flag_height * .8, -half_width,
-        -half_length + flag_height * .2, flag_height * .9, -half_width,
-        -half_length, flag_height, -half_width,
-        -half_length - flag_height * .02, 0, -half_width,
-        -half_length + flag_height * .02, 0, -half_width,
-      ],
     };
     const goal_properties = {
       ...prefab_args,
@@ -217,7 +210,6 @@ function prefabs_webgl_football_pitch(args){
         {
           ...line_properties,
           'id': args.prefix + '_line_goalbox_0',
-          'vertex_colors': args.line_color,
           'vertices': [
             -half_length + line_width, line_height, -goalbox_width_half,
             -half_length + line_width, line_height, -goalbox_width_half + line_width,
