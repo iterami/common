@@ -1,8 +1,7 @@
 a{
     color: #4c4;
     cursor: pointer;
-    text-decoration: underline;
-    text-decoration-thickness: .125rem;
+    text-decoration: underline .125rem #191;
 }
 .big{
     font-size: 225%;
@@ -77,6 +76,7 @@ input{
 }
 .external{
     color: #f99;
+    text-decoration-color: #c66;
 }
 .external::after{
     content: "↗";
