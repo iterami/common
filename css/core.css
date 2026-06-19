@@ -2,6 +2,7 @@ a{
     color: #4c4;
     cursor: pointer;
     text-decoration: underline;
+    text-decoration-thickness: .125rem;
 }
 .big{
     font-size: 225%;
