@@ -312,8 +312,14 @@ function core_handle_pointermove(event){
         movement_x = core_pointer.x - old_x;
         movement_y = core_pointer.y - old_y;
     }
-    core_pointer.movement_x = core_storage_data.pointer_horizontal * movement_x;
-    core_pointer.movement_y = core_storage_data.pointer_vertical * movement_y;
+    if('pointer_horizontal' in core_storage_data){
+        movement_x *= core_storage_data.pointer_horizontal;
+    }
+    if('pointer_vertical' in core_storage_data){
+        movement_y *= core_storage_data.pointer_vertical;
+    }
+    core_pointer.movement_x = movement_x;
+    core_pointer.movement_y = movement_y;
 
     if(core_pointer.todo.pointermove){
         core_handle_prevent(event);
