@@ -292,6 +292,7 @@ function core_handle_pointermove(event){
         return;
     }
 
+    core_mobile = event.pointerType !== 'mouse';
     const old_x = core_pointer.x;
     const old_y = core_pointer.y;
     core_pointer.x = event.pageX;
@@ -301,18 +302,18 @@ function core_handle_pointermove(event){
         return;
     }
 
-    core_mobile = event.pointerType !== 'mouse';
     for(let i = 0; i < 5; i++){
         core_pointer['down_' + i] = Boolean(event.buttons & (1 << i));
     }
-    if(core_mobile){
-        core_pointer.movement_x = (core_pointer.x - old_x) * (core_storage_data.pointer_horizontal || 1);
-        core_pointer.movement_y = (core_pointer.y - old_y) * (core_storage_data.pointer_vertical || 1);
 
-    }else{
-        core_pointer.movement_x = event.movementX * (core_storage_data.pointer_horizontal || 1);
-        core_pointer.movement_y = event.movementY * (core_storage_data.pointer_vertical || 1);
+    let movement_x = event.movementX;
+    let movement_y = event.movementY;
+    if(core_mobile){
+        movement_x = core_pointer.x - old_x;
+        movement_y = core_pointer.y - old_y;
     }
+    core_pointer.movement_x = core_storage_data.pointer_horizontal * movement_x;
+    core_pointer.movement_y = core_storage_data.pointer_vertical * movement_y;
 
     if(core_pointer.todo.pointermove){
         core_handle_prevent(event);
