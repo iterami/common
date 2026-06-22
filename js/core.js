@@ -1385,17 +1385,6 @@ function core_ui_update({
     }
 }
 
-function core_uri({
-  element,
-  quality = 1,
-  type = 'image/png',
-} = {}){
-    return element.toDataURL(
-      type,
-      quality
-    );
-}
-
 globalThis.core_elements = {};
 globalThis.core_events = {};
 globalThis.core_images = {};
