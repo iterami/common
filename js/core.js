@@ -1361,10 +1361,11 @@ function core_ui_update({
         if(element.type === 'checkbox'){
             element.checked = Boolean(value);
 
+        }else if(element.tagName === 'BUTTON' || core_type(element.value) === 'undefined'){
+            element[todo] = value;
+
         }else{
-            element[(element.tagName === 'BUTTON' || core_type(element.value) === 'undefined')
-              ? todo
-              : 'value'] = value;
+            element.value = value;
         }
 
         if(!classname){
@@ -1376,10 +1377,11 @@ function core_ui_update({
             if(item.type === 'checkbox'){
                 item.checked = Boolean(value);
 
+            }else if(item.tagName === 'BUTTON' || core_type(item.value) === 'undefined'){
+                item[todo] = value;
+
             }else{
-                item[(element.tagName === 'BUTTON' || core_type(item.value) === 'undefined')
-                  ? todo
-                  : 'value'] = value;
+                item.value = value;
             }
         }
     }
