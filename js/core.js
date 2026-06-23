@@ -1152,11 +1152,13 @@ function core_storage_element_property({
   element,
   key,
 } = {}){
-    return core_type(core_storage_info[key].default) === 'boolean'
-      ? 'checked'
-      : (core_type(element.value) === 'undefined'
-        ? 'textContent'
-        : 'value');
+    if(core_type(core_storage_info[key].default) === 'boolean'){
+        return 'checked';
+    }
+    if(core_type(element.value) === 'undefined'){
+        return 'textContent';
+    }
+    return 'value';
 }
 
 function core_storage_reset({
@@ -1232,7 +1234,6 @@ function core_storage_update(keys){
     if(core_type(keys) !== 'array'){
         keys = Object.keys(core_storage_data);
     }
-
     for(const key of keys){
         const element = core_elements[key];
         element[core_storage_element_property({
