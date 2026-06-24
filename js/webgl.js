@@ -3954,27 +3954,6 @@ function webgl_scissor({
     return result;
 }
 
-function webgl_screenshot({
-  quality = 1,
-  type = 'image/png',
-} = {}){
-    if(webgl === 0){
-        return;
-    }
-
-    webgl_draw();
-    webgl.canvas.toBlob(
-      function(blob){
-          globalThis.open(
-            URL.createObjectURL(blob),
-            '_blank'
-          );
-      },
-      type,
-      quality
-    );
-}
-
 function webgl_shader({
   attributes,
   fragment,
