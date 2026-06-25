@@ -62,10 +62,7 @@ function math_distance({
   z0 = 0,
   z1 = 0,
 } = {}){
-    const x = x0 - x1;
-    const y = y0 - y1;
-    const z = z0 - z1;
-    return Math.sqrt(x * x + y * y + z * z);
+    return Math.hypot(x0 - x1, y0 - y1, z0 - z1);
 }
 
 function math_fixed_length_line({
