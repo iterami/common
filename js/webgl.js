@@ -1729,6 +1729,12 @@ function webgl_init(){
       webgl.FASTEST
     );
 
+    webgl_picked = {
+      'id': '',
+      'x': 0,
+      'y': 0,
+      'z': 0,
+    };
     for(let i = 0; i < 4; i++){
         webgl_pixelbuffers.push({
           'buffer': webgl.createBuffer(),
@@ -3029,9 +3035,10 @@ function webgl_pick_event({
     const picked = pixelbuffer.picked;
     if(picked){
         const position = webgl_get_position(picked);
-        webgl_picked_x = position.x + (color[0] / 255 - .5) * (picked.vertices[0] - picked.vertices[3]);
-        webgl_picked_y = position.y + (color[1] / 255 - .5) * (picked.vertices[1] - picked.vertices[7]);
-        webgl_picked_z = position.z + (color[2] / 255 - .5) * (picked.vertices[8] - picked.vertices[2]);
+        webgl_picked.id = picked.id;
+        webgl_picked.x = position.x + (color[0] / 255 - .5) * (picked.vertices[0] - picked.vertices[3]);
+        webgl_picked.y = position.y + (color[1] / 255 - .5) * (picked.vertices[1] - picked.vertices[7]);
+        webgl_picked.z = position.z + (color[2] / 255 - .5) * (picked.vertices[8] - picked.vertices[2]);
 
         if(pixelbuffer.cursor){
             webgl.canvas.style.cursor = 'pointer';
@@ -4643,9 +4650,7 @@ globalThis.webgl_matrices = {};
 globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_pick_id = 0;
-globalThis.webgl_picked_x = 0;
-globalThis.webgl_picked_y = 0;
-globalThis.webgl_picked_z = 0;
+globalThis.webgl_picked = {};
 globalThis.webgl_pixelbuffers = [];
 globalThis.webgl_properties = {};
 globalThis.webgl_shader_id = 'default';
