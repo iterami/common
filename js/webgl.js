@@ -2689,25 +2689,6 @@ function webgl_model_create({
     });
 }
 
-function webgl_move_to({
-  move,
-  target = false,
-  x = 0,
-  y = 0,
-  z = 0,
-} = {}){
-    if(target){
-        move.position_x = target.position_x;
-        move.position_y = target.position_y;
-        move.position_z = target.position_z;
-        return;
-    }
-
-    move.position_x = x;
-    move.position_y = y;
-    move.position_z = z;
-}
-
 function webgl_particle_create(particle){
     webgl_particles[particle.id] = {
       ...core_object_defaults({
@@ -3893,10 +3874,9 @@ function webgl_projectile({
         const parent = webgl_characters[character];
         const projectile_character = webgl_characters[projectile];
 
-        webgl_move_to({
-          'move': projectile_character,
-          'target': parent,
-        });
+        projectile_character.position_x = parent.position_x;
+        projectile_character.position_y = parent.position_y;
+        projectile_character.position_z = parent.position_z;
         projectile_character.rotate_y = parent.rotate_y;
 
     }else{
