@@ -160,9 +160,7 @@ function core_getpointerlock(){
 }
 
 function core_handle_beforeunload(event){
-    if(core_events.beforeunload){
-        core_events.beforeunload.todo?.(event);
-    }
+    core_events.beforeunload?.todo?.(event);
 }
 
 function core_handle_blur(event){
@@ -203,8 +201,7 @@ function core_handle_keydown(event){
         return;
     }
 
-    if(core_menu_open
-      && core_menu_block_events
+    if(core_menu_open && core_menu_block_events
       && event.code !== 'Escape'){
         return;
     }
@@ -265,12 +262,12 @@ function core_handle_pointerdown(event){
         return;
     }
 
-    core_pointer.movement_x = 0;
-    core_pointer.movement_y = 0;
     core_pointer.x = event.pageX;
     core_pointer.y = event.pageY;
     core_pointer.down_x = event.pageX;
     core_pointer.down_y = event.pageY;
+    core_pointer.movement_x = 0;
+    core_pointer.movement_y = 0;
 
     if(core_pointer.todo.pointerdown){
         core_handle_prevent(event);
@@ -347,7 +344,6 @@ function core_handle_prevent(event){
     }
 
     event.stopPropagation();
-
     if(event.cancelable !== false){
         event.preventDefault();
     }
@@ -363,8 +359,7 @@ function core_handle_touch(event){
 }
 
 function core_handle_wheel(event){
-    if(core_menu_open
-      && core_menu_block_events){
+    if(core_menu_open && core_menu_block_events){
         return;
     }
 
