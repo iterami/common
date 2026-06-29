@@ -33,7 +33,6 @@ function core_escape(force){
     if(core_menu_open){
         core_interval_pause_all();
         core_handle_blur();
-        core_elements.repo_ui.style.display = 'none';
         core_elements.core_ui.style.userSelect = 'auto';
         core_elements.core_menu.style.display = 'inline';
 
@@ -41,7 +40,6 @@ function core_escape(force){
         core_elements.core_toggle.blur();
         core_elements.core_menu.style.display = 'none';
         core_elements.core_ui.style.userSelect = 'none';
-        core_elements.repo_ui.style.display = 'inline';
         core_interval_resume_all();
     }
 
