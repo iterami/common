@@ -975,7 +975,17 @@ function core_requestpointerlock(element){
         return;
     }
 
-    element.requestPointerLock();
+    let request;
+    try{
+        request = element.requestPointerLock();
+
+    }catch(error){
+        return;
+    }
+
+    if(request && core_type(request.then) === 'function'){
+        request.catch(function(error){});
+    }
 }
 
 function core_round({
