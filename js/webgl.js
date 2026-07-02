@@ -2134,11 +2134,13 @@ function webgl_level_init({
           {
             'background': '#fff',
             'display': '',
+            'height': '5px',
             'left': '50%',
             'pointer-events': 'none',
             'position': 'fixed',
             'top': '50%',
             'transform': 'translate(-50%,-50%)',
+            'width': '5px',
             'zIndex': 1,
             ...json.reticle,
           }
@@ -3024,8 +3026,8 @@ function webgl_pick_event({
         if(pixelbuffer.cursor){
             webgl.canvas.style.cursor = 'pointer';
             if(core_elements.reticle){
-                core_elements.reticle.style.height = '.6vw';
-                core_elements.reticle.style.width = '.6vw';
+                core_elements.reticle.style.height = '8px';
+                core_elements.reticle.style.width = '8px';
             }
 
         }else{
@@ -3038,8 +3040,8 @@ function webgl_pick_event({
     }else if(pixelbuffer.cursor){
         webgl.canvas.style.cursor = 'auto';
         if(core_elements.reticle){
-            core_elements.reticle.style.height = '.4vw';
-            core_elements.reticle.style.width = '.4vw';
+            core_elements.reticle.style.height = '5px';
+            core_elements.reticle.style.width = '5px';
         }
     }
 }
