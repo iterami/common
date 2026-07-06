@@ -79,7 +79,7 @@ input{
     text-decoration-color: #c66;
 }
 .external::after{
-    content: "↗";
+    content: '↗';
     line-height: 1;
 }
 .gridbutton{

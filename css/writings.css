@@ -40,7 +40,7 @@ code{
     text-decoration-color: #c66;
 }
 .external::after{
-    content: "↗";
+    content: '↗';
     line-height: 1;
 }
 .gold{
@@ -105,7 +105,7 @@ textarea{
     width: 30rem;
 }
 ul{
-    list-style-type: "- ";
+    list-style-type: '- ';
 }
 
 *:focus{
