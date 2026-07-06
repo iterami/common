@@ -1305,8 +1305,8 @@ function core_tab_switch(id){
 
     const state = tab.style.display === 'block';
     const tabs = tab.parentElement.children;
-    for(let tab = 0; tab < tabs.length; tab++){
-        tabs[tab].style.display = 'none';
+    for(const tab of tabs){
+        tab.style.display = 'none';
     }
     tab.style.display = state
       ? 'none'
