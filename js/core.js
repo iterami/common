@@ -789,7 +789,6 @@ function core_repo_init({
   blur = false,
   events = {},
   globals = {},
-  images = {},
   info = '',
   keybinds = false,
   link = false,
@@ -946,12 +945,6 @@ function core_repo_init({
       'pointerbinds': pointerbinds,
     });
 
-    for(const id in images){
-        core_image({
-          'id': image,
-          'src': images[id],
-        });
-    }
     for(const id of ui_elements){
         core_elements[id] = document.getElementById(id);
     }
