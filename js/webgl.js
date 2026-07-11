@@ -163,9 +163,7 @@ function webgl_camera_rotate({
 
     if(normals){
         entity_group_modify({
-          'groups': [
-            'webgl_characters_' + character,
-          ],
+          'groups': ['webgl_characters_' + character],
           'todo': webgl_entity_normals,
         });
     }
@@ -312,8 +310,7 @@ function webgl_character_init(args){
       'entities': entities,
     });
 
-    if(args.vehicle_stats
-      && args.vehicle_stats.character){
+    if(args.vehicle_stats?.character){
         const character = webgl_characters[args.id].vehicle_stats.character;
         webgl_characters[args.id].vehicle_stats.character = false;
         webgl_vehicle_toggle({
@@ -400,9 +397,7 @@ function webgl_character_scale({
     }
 
     entity_group_modify({
-      'groups': [
-        'webgl_characters_' + id,
-      ],
+      'groups': ['webgl_characters_' + id],
       'todo': function(entity){
           if(entity_groups.skybox?.[entity.id]){
               return;
@@ -424,14 +419,10 @@ function webgl_character_set(id){
     webgl_character_id = id;
 
     entity_group_modify({
-      'groups': [
-        'skybox',
-      ],
+      'groups': ['skybox'],
       'todo': function(entity){
           entity_group_move({
-            'entities': [
-              entity.id,
-            ],
+            'entities': [entity.id],
             'from': 'webgl_characters_' + entity.attach_to,
             'to': 'webgl_characters_' + webgl_character_id,
           });
@@ -1108,9 +1099,7 @@ function webgl_draw(){
 
     webgl.disable(webgl.DEPTH_TEST);
     entity_group_modify({
-      'groups': [
-        'skybox',
-      ],
+      'groups': ['skybox'],
       'todo': webgl_draw_entity,
     });
     webgl.enable(webgl.DEPTH_TEST);
@@ -1181,9 +1170,7 @@ function webgl_draw_picking(){
 
     webgl.disable(webgl.DEPTH_TEST);
     entity_group_modify({
-      'groups': [
-        'skybox',
-      ],
+      'groups': ['skybox'],
       'todo': function(entity){
           if(entity.picking_exclude){
               return;
@@ -1218,18 +1205,14 @@ function webgl_entity_alpha({
 
     if(alpha === 1){
         entity_group_move({
-          'entities': [
-            entity.id,
-          ],
+          'entities': [entity.id],
           'from': 'transparent',
           'to': 'opaque',
         });
 
     }else{
         entity_group_move({
-          'entities': [
-            entity.id,
-          ],
+          'entities': [entity.id],
           'from': 'opaque',
           'to': 'transparent',
         });
@@ -1250,33 +1233,25 @@ function webgl_entity_create({
         });
         webgl_matrices[entity.id] = math_matrix_create();
 
-        const entitygroups = [
-          ...groups,
-        ];
+        const entitygroups = [...groups];
         if(entity.groups){
             entitygroups.push(entity.groups);
             delete entity.groups;
         }
         for(const group of entitygroups){
             entity_group_add({
-              'entities': [
-                entity.id,
-              ],
+              'entities': [entity.id],
               'group': group,
             });
         }
 
         if(entity_groups.skybox?.[entity.id]){
             entity_group_remove({
-              'entities': [
-                entity.id,
-              ],
+              'entities': [entity.id],
               'group': 'opaque',
             });
             entity_group_remove({
-              'entities': [
-                entity.id,
-              ],
+              'entities': [entity.id],
               'group': 'transparent',
             });
             entity.attach_to = webgl_character_id;
@@ -1304,9 +1279,7 @@ function webgl_entity_create({
           'z': entity.attach_z,
         });
         entity_group_add({
-          'entities': [
-            entity.id,
-          ],
+          'entities': [entity.id],
           'group': 'webgl_characters_' + entity.attach_to,
         });
         const attach_to = webgl_characters[entity.attach_to];
@@ -3072,9 +3045,7 @@ function webgl_prefab_remake({
     for(const entity in entity_entities){
         if(entity_entities[entity].id.startsWith(prefix)){
             entity_remove({
-              'entities': [
-                entity.id,
-              ],
+              'entities': [entity.id],
             });
         }
     }
@@ -3177,9 +3148,7 @@ function webgl_primitive_cuboid(args){
         );
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }
@@ -3208,9 +3177,7 @@ function webgl_primitive_cuboid(args){
         );
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }
@@ -3239,9 +3206,7 @@ function webgl_primitive_cuboid(args){
         );
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }
@@ -3270,9 +3235,7 @@ function webgl_primitive_cuboid(args){
         );
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }
@@ -3301,9 +3264,7 @@ function webgl_primitive_cuboid(args){
         );
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }
@@ -3332,9 +3293,7 @@ function webgl_primitive_cuboid(args){
         );
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }
@@ -3434,9 +3393,7 @@ function webgl_primitive_ellipsoid(args){
 
     webgl_entity_create({
       'character': args.character,
-      'entities': [
-        properties,
-      ],
+      'entities': [properties],
       'groups': args.groups,
     });
 }
@@ -3497,9 +3454,7 @@ function webgl_primitive_frustum(args){
 
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
         return;
@@ -3507,12 +3462,8 @@ function webgl_primitive_frustum(args){
 
     if(args.bottom){
         properties.id = args.prefix + '_bottom';
-        properties.vertex_colors = [
-          args.color_bottom[0], args.color_bottom[1], args.color_bottom[2], args.color_bottom[3],
-        ];
-        properties.vertices = [
-          0, 0, 0,
-        ];
+        properties.vertex_colors = [args.color_bottom[0], args.color_bottom[1], args.color_bottom[2], args.color_bottom[3]];
+        properties.vertices = [0, 0, 0];
         for(let i = 0; i <= args.points; i++){
             const point_rotation = -i * rotation;
             const cos_rotation = Math.cos(point_rotation);
@@ -3537,21 +3488,15 @@ function webgl_primitive_frustum(args){
         }
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }
 
     if(args.top){
         properties.id = args.prefix + '_top';
-        properties.vertex_colors = [
-          args.color_top[0], args.color_top[1], args.color_top[2], args.color_top[3],
-        ];
-        properties.vertices = [
-          0, args.length, 0,
-        ];
+        properties.vertex_colors = [args.color_top[0], args.color_top[1], args.color_top[2], args.color_top[3]];
+        properties.vertices = [0, args.length, 0];
         for(let i = 0; i <= args.points; i++){
             const point_rotation = i * rotation;
             const cos_rotation = Math.cos(point_rotation);
@@ -3576,9 +3521,7 @@ function webgl_primitive_frustum(args){
         }
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }
@@ -3588,9 +3531,7 @@ function webgl_primitive_frustum(args){
       && args.size_top !== 0){
         properties.draw_mode = 'TRIANGLE_STRIP';
         properties.id = args.prefix + '_middle';
-        properties.vertex_colors = [
-          args.color_top[0], args.color_top[1], args.color_top[2], args.color_top[3],
-        ];
+        properties.vertex_colors = [args.color_top[0], args.color_top[1], args.color_top[2], args.color_top[3]];
         properties.vertices = [
           args.size_top * Math.sin(rotation),
           args.length,
@@ -3615,9 +3556,7 @@ function webgl_primitive_frustum(args){
         }
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
     }

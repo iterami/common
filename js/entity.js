@@ -63,9 +63,7 @@ function entity_group_add({
   group,
 } = {}){
     if(!(group in entity_groups)){
-        entity_group_create([
-          group,
-        ]);
+        entity_group_create([group]);
     }
 
     for(const entity of entities){
@@ -169,9 +167,7 @@ function entity_handle_defaults({
 
     if(entity_groups[type][id] === void 0){
         entity_group_add({
-          'entities': [
-            id,
-          ],
+          'entities': [id],
           'group': type,
         });
 
@@ -180,9 +176,7 @@ function entity_handle_defaults({
 
     for(const group of entity_info[type].groups){
         entity_group_add({
-          'entities': [
-            id,
-          ],
+          'entities': [id],
           'group': group,
         });
     }
@@ -214,9 +208,7 @@ function entity_remove_all({
 
         entity_remove({
           'delete_empty': delete_empty,
-          'entities': [
-            entity,
-          ],
+          'entities': [entity],
         });
     }
 }
@@ -243,9 +235,7 @@ function entity_set({
         entity_types_default.push(type);
     }
 
-    entity_group_create([
-      type,
-    ]);
+    entity_group_create([type]);
 }
 
 globalThis.entity_entities = {};
