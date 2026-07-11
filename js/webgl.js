@@ -1843,7 +1843,7 @@ void main(void){
         'event_limit': false,
         'event_range': false,
         'event_todo': [],
-        'light_color': [1, 1, 1,],
+        'light_color': [1, 1, 1],
         'light_range': 0,
         'normals': [],
         'particle': false,

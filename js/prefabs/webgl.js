@@ -7,18 +7,14 @@ function prefabs_webgl_cuboid_tree(args){
         'character': webgl_character_base,
         'groups': [],
         'leaf_collision': true,
-        'leaf_color': [
-          0, 1, 0, 1,
-        ],
+        'leaf_color': [0, 1, 0, 1],
         'leaf_size_x': 10,
         'leaf_size_y': 10,
         'leaf_size_z': 10,
         'leaf_texture': 'lavaleaf.png',
         'prefix': String(entity_id_count),
         'trunk_collision': true,
-        'trunk_color': [
-          .8, .4, 0, 1,
-        ],
+        'trunk_color': [.8, .4, 0, 1],
         'trunk_size_x': 2,
         'trunk_size_y': 10,
         'trunk_size_z': 2,
@@ -437,20 +433,14 @@ function prefabs_webgl_frustum_tree(args){
         'groups': [],
         'height': 20,
         'height_range': 0,
-        'leaf_color_bottom': [
-          .05, .15, .05, 1,
-        ],
-        'leaf_color_top': [
-          .1, .3, .1, 1,
-        ],
+        'leaf_color_bottom': [.05, .15, .05, 1],
+        'leaf_color_top': [.1, .3, .1, 1],
         'leaf_count': 3,
         'leaf_points': 3,
         'leaf_separate': 4,
         'leaf_size': 4,
         'prefix': String(entity_id_count),
-        'trunk_color': [
-          .4, .2, 0, 1,
-        ],
+        'trunk_color': [.4, .2, 0, 1],
         'trunk_points': 4,
         'trunk_size': 1,
       },
@@ -643,15 +633,11 @@ function prefabs_webgl_lines_shrub(args){
     core_object_defaults({
       'object': args,
       'defaults': {
-        'base_color': [
-          .3, .15, 0, 1,
-        ],
+        'base_color': [.3, .15, 0, 1],
         'character': webgl_character_base,
         'draw_mode': 'LINE_STRIP',
         'groups': [],
-        'leaf_color': [
-          0, 1, 0, 1,
-        ],
+        'leaf_color': [0, 1, 0, 1],
         'leaf_distance': 5,
         'points': 100,
         'prefix': String(entity_id_count),
@@ -667,9 +653,7 @@ function prefabs_webgl_lines_shrub(args){
     const prefab_args = webgl_prefab_args(args);
 
     const colors = [...args.base_color];
-    const points = [
-      0, 0, 0,
-    ];
+    const points = [0, 0, 0];
     let x = 0;
     let y = 0;
     let z = 0;
@@ -731,15 +715,11 @@ function prefabs_webgl_lines_tree(args){
       'defaults': {
         'character': webgl_character_base,
         'groups': [],
-        'leaf_color': [
-          0, .5, 0, 1,
-        ],
+        'leaf_color': [0, .5, 0, 1],
         'prefix': String(entity_id_count),
         'trunk_branch_max': 4,
         'trunk_branch_min': 0,
-        'trunk_color': [
-          .4, .2, 0, 1,
-        ],
+        'trunk_color': [.4, .2, 0, 1],
         'trunk_count_max': 10,
         'trunk_count_min': 1,
         'trunk_length': 10,
@@ -775,9 +755,7 @@ function prefabs_webgl_lines_tree(args){
         ];
         webgl_entity_create({
           'character': args.character,
-          'entities': [
-            properties,
-          ],
+          'entities': [properties],
           'groups': args.groups,
         });
 
@@ -801,9 +779,7 @@ function prefabs_webgl_lines_tree(args){
 
             webgl_entity_create({
               'character': args.character,
-              'entities': [
-                properties,
-              ],
+              'entities': [properties],
               'groups': args.groups,
             });
         }
@@ -815,8 +791,8 @@ function prefabs_webgl_trap(args){
       'object': args,
       'defaults': {
         'character': webgl_character_base,
-        'color_active': [1, 0, 0, 1,],
-        'color_inactive': [0, 0, 1, 1,],
+        'color_active': [1, 0, 0, 1],
+        'color_inactive': [0, 0, 1, 1],
         'frames_max_active': 50,
         'frames_max_inactive': 150,
         'frames_random_active': 0,
@@ -928,16 +904,12 @@ function prefabs_webgl_tree_2d(args){
     core_object_defaults({
       'object': args,
       'defaults': {
-        'base_color': [
-          .4, .2, 0, 1,
-        ],
+        'base_color': [.4, .2, 0, 1],
         'character': webgl_character_base,
         'groups': [],
         'height': 5,
         'height_range': 0,
-        'leaf_color': [
-          .1, .3, .1, 1,
-        ],
+        'leaf_color': [.1, .3, .1, 1],
         'prefix': String(entity_id_count),
         'width_base': 1,
         'width_leaf': 6,
