@@ -4057,7 +4057,7 @@ function webgl_texture_animate(id){
         return;
     }
 
-    const image = core_images[texture.image];
+    const image = webgl_images[texture.image];
 
     const width = image.width;
     let offset_x = texture.offset_x + texture.speed_x;
@@ -4129,14 +4129,16 @@ function webgl_texture_init(id){
         if(split.length > 1){
             webgl_textures[id].ready = false;
         }
-        core_image({
-          'id': image,
-          'src': webgl_uris[image] || webgl_uris[webgl_default_texture],
-          'todo': function(){
-              webgl_texture_init(id);
-          },
-        });
-        return;
+
+        if(!webgl_images[image]){
+            const img = new Image();
+            img.onload = function(event){
+                webgl_images[image] = event.target;
+                webgl_texture_init(id);
+            };
+            img.src = webgl_uris[image] || webgl_uris[webgl_default_texture];
+            return;
+        }
     }
 
     const texture = webgl_textures[id];
@@ -4153,9 +4155,9 @@ function webgl_texture_init(id){
             'type': 'div',
           }),
           'properties': {
-            'height': core_images[image].height,
+            'height': webgl_images[image].height,
             'id': texture_id,
-            'width': core_images[image].width,
+            'width': webgl_images[image].width,
           },
           'store': texture_id,
           'type': 'canvas',
@@ -4178,7 +4180,7 @@ function webgl_texture_init(id){
       webgl.RGBA,
       webgl.RGBA,
       webgl.UNSIGNED_BYTE,
-      core_images[image]
+      webgl_images[image]
     );
     webgl.texParameterf(
       webgl.TEXTURE_2D,
@@ -4567,6 +4569,7 @@ globalThis.webgl_character_id = '_me';
 globalThis.webgl_character_base = webgl_character_id;
 globalThis.webgl_characters = {};
 globalThis.webgl_framebuffer = 0;
+globalThis.webgl_images = {};
 globalThis.webgl_matrices = {};
 globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};

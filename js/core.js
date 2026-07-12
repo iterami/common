@@ -437,18 +437,6 @@ function core_html_format(string){
     });
 }
 
-function core_image({
-  id,
-  src,
-  todo,
-} = {}){
-    const image = new Image();
-    image.onload = todo;
-    image.src = src;
-    core_images[id] = image;
-    return image;
-}
-
 function core_init(){
     core_html({
       'parent': document.body,
@@ -1386,7 +1374,6 @@ function core_ui_update({
 
 globalThis.core_elements = {};
 globalThis.core_events = {};
-globalThis.core_images = {};
 globalThis.core_init_todo = [];
 globalThis.core_intervals = {};
 globalThis.core_key_rebinds = {};
