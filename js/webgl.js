@@ -238,6 +238,7 @@ function webgl_character_init(args){
         'scale_z': 1,
         'spawn': {},
         'speed': .66,
+        'state': 'air',
         'turn_speed': 3,
         'vehicle_stats': false,
       },
@@ -265,7 +266,6 @@ function webgl_character_init(args){
       'change_rotate_x': 0,
       'change_rotate_y': 0,
       'change_rotate_z': 0,
-      'jump_allow': false,
       'keys': false,
       'life': args.life_max,
       'locked': {},
@@ -449,7 +449,7 @@ function webgl_character_spawn(id){
         character['position_' + axis] = 0;
         character['rotate_' + axis] = 0;
     }
-    character.jump_allow = false;
+    character.state = 'air';
 
     Object.assign(
       character,
@@ -635,8 +635,8 @@ function webgl_collision({
 
     if(collision === 'y'){
         if(target.normals[1] > .5){
-            if(!collider.jump_allow){
-                collider.jump_allow = true;
+            if(collider.state !== 'ground'){
+                collider.state = 'ground';
 
                 if(webgl_properties.gravity_damage
                   && collider.level >= 0
@@ -717,7 +717,7 @@ function webgl_controls_keyboard(character){
     if(character.vehicle_stats){
         const vehicle = character.vehicle_stats;
         if(vehicle.character
-          || !character.jump_allow){
+          || character.state !== 'ground'){
             return;
         }
         let speed = 0;
@@ -802,7 +802,7 @@ function webgl_controls_keyboard(character){
         const vehicle = webgl_characters[character.vehicle];
         let speed = 0;
         let turn = 0;
-        if(vehicle.jump_allow){
+        if(vehicle.state === 'ground'){
             if(forward){
                 speed = Math.min(
                   vehicle.vehicle_stats.speed + vehicle.vehicle_stats.speed_forward,
@@ -906,7 +906,7 @@ function webgl_controls_keyboard(character){
         }
     }
 
-    if(level > -1 && !character.jump_allow){
+    if(level > -1 && character.state !== 'ground'){
         return;
     }
 
@@ -946,7 +946,7 @@ function webgl_controls_keyboard(character){
             });
 
         }else{
-            character.jump_allow = false;
+            character.state = 'air';
             character.change_position_y = character.jump_height;
         }
     }
@@ -2287,7 +2287,7 @@ function webgl_logic(){
         let change_position_x = character.change_position_x;
         let change_position_z = character.change_position_z;
         if(character.change_position_y !== 0){
-            character.jump_allow = false;
+            character.state = 'air';
         }
 
         if(character.collides
@@ -2319,7 +2319,7 @@ function webgl_logic(){
             continue;
         }
 
-        if(character.jump_allow){
+        if(character.state === 'ground'){
             character.change_position_x -= change_position_x;
             character.change_position_z -= change_position_z;
         }
