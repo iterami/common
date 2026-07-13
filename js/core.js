@@ -78,7 +78,7 @@ function core_events_bind({
 
     if(pointerbinds !== false){
         for(const bind in pointerbinds){
-            core_events[bind] = {...pointerbinds[bind]};
+            core_events[bind] = pointerbinds[bind];
         }
         if(pointerbinds.contextmenu){
             globalThis.addEventListener('contextmenu', core_handle_contextmenu);
@@ -154,7 +154,7 @@ function core_getpointerlock(){
 }
 
 function core_handle_beforeunload(event){
-    core_events.beforeunload?.todo?.(event);
+    core_events.beforeunload?.(event);
 }
 
 function core_handle_blur(event){
@@ -173,7 +173,7 @@ function core_handle_blur(event){
 
     if(core_events.blur){
         core_handle_prevent(event);
-        core_events.blur.todo?.(event);
+        core_events.blur(event);
     }
 }
 
@@ -181,7 +181,7 @@ function core_handle_contextmenu(event){
     if(!core_menu_open
       && core_events.contextmenu){
         core_handle_prevent(event);
-        core_events.contextmenu.todo?.(event);
+        core_events.contextmenu(event);
         return false;
     }
 }
@@ -237,7 +237,7 @@ function core_handle_pointercancel(event){
 
     if(core_events.pointercancel){
         core_handle_prevent(event);
-        core_events.pointercancel.todo?.(event);
+        core_events.pointercancel(event);
     }
 }
 
@@ -265,7 +265,7 @@ function core_handle_pointerdown(event){
 
     if(core_events.pointerdown){
         core_handle_prevent(event);
-        core_events.pointerdown.todo?.(event);
+        core_events.pointerdown(event);
     }
 }
 
@@ -314,7 +314,7 @@ function core_handle_pointermove(event){
 
     if(core_events.pointermove){
         core_handle_prevent(event);
-        core_events.pointermove.todo?.(event);
+        core_events.pointermove(event);
     }
 }
 
@@ -328,7 +328,7 @@ function core_handle_pointerup(event){
     if(core_events.pointerup
       && !core_elements.core_ui.contains(event.target)){
         core_handle_prevent(event);
-        core_events.pointerup.todo?.(event);
+        core_events.pointerup(event);
     }
 }
 
@@ -359,7 +359,7 @@ function core_handle_wheel(event){
 
     if(core_events.wheel){
         core_handle_prevent(event);
-        core_events.wheel.todo?.(event);
+        core_events.wheel(event);
     }
 }
 
