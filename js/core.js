@@ -50,7 +50,6 @@ function core_events_bind({
   beforeunload = false,
   blur = false,
   clearkeys = false,
-  clearpointer = false,
   elements = false,
   keybinds = false,
   pointerbinds = false,
@@ -77,12 +76,9 @@ function core_events_bind({
         }
     }
 
-    if(clearpointer){
-        core_object_reset(core_pointer.todo);
-    }
     if(pointerbinds !== false){
         for(const bind in pointerbinds){
-            core_pointer.todo[bind] = {...pointerbinds[bind]};
+            core_events[bind] = {...pointerbinds[bind]};
         }
         if(pointerbinds.contextmenu){
             globalThis.addEventListener('contextmenu', core_handle_contextmenu);
@@ -183,9 +179,9 @@ function core_handle_blur(event){
 
 function core_handle_contextmenu(event){
     if(!core_menu_open
-      && core_pointer.todo.contextmenu){
+      && core_events.contextmenu){
         core_handle_prevent(event);
-        core_pointer.todo.contextmenu.todo?.(event);
+        core_events.contextmenu.todo?.(event);
         return false;
     }
 }
@@ -239,9 +235,9 @@ function core_handle_pointercancel(event){
     core_pointer.movement_x = 0;
     core_pointer.movement_y = 0;
 
-    if(core_pointer.todo.pointercancel){
+    if(core_events.pointercancel){
         core_handle_prevent(event);
-        core_pointer.todo.pointercancel.todo?.(event);
+        core_events.pointercancel.todo?.(event);
     }
 }
 
@@ -267,9 +263,9 @@ function core_handle_pointerdown(event){
     core_pointer.movement_x = 0;
     core_pointer.movement_y = 0;
 
-    if(core_pointer.todo.pointerdown){
+    if(core_events.pointerdown){
         core_handle_prevent(event);
-        core_pointer.todo.pointerdown.todo?.(event);
+        core_events.pointerdown.todo?.(event);
     }
 }
 
@@ -316,9 +312,9 @@ function core_handle_pointermove(event){
     core_pointer.movement_x = movement_x;
     core_pointer.movement_y = movement_y;
 
-    if(core_pointer.todo.pointermove){
+    if(core_events.pointermove){
         core_handle_prevent(event);
-        core_pointer.todo.pointermove.todo?.(event);
+        core_events.pointermove.todo?.(event);
     }
 }
 
@@ -329,10 +325,10 @@ function core_handle_pointerup(event){
     core_pointer.down_3 = false;
     core_pointer.down_4 = false;
 
-    if(core_pointer.todo.pointerup
+    if(core_events.pointerup
       && !core_elements.core_ui.contains(event.target)){
         core_handle_prevent(event);
-        core_pointer.todo.pointerup.todo?.(event);
+        core_events.pointerup.todo?.(event);
     }
 }
 
@@ -361,9 +357,9 @@ function core_handle_wheel(event){
         return;
     }
 
-    if(core_pointer.todo.wheel){
+    if(core_events.wheel){
         core_handle_prevent(event);
-        core_pointer.todo.wheel.todo?.(event);
+        core_events.wheel.todo?.(event);
     }
 }
 
@@ -485,7 +481,6 @@ function core_init(){
       'down_y': 0,
       'movement_x': 0,
       'movement_y': 0,
-      'todo': {},
       'x': 0,
       'y': 0,
     };
