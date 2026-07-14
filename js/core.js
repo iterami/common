@@ -33,13 +33,26 @@ function core_escape(force){
     if(core_menu_open){
         core_interval_pause_all();
         core_handle_blur();
-        core_elements.core_ui.style.userSelect = 'auto';
+        globalThis.scrollTo(0, 0);
+        Object.assign(
+          core_elements.core_ui.style,
+          {
+            'position': 'absolute',
+            'userSelect': 'auto',
+          }
+        );
         core_elements.core_menu.style.display = 'inline';
 
     }else{
         core_elements.core_toggle.blur();
         core_elements.core_menu.style.display = 'none';
-        core_elements.core_ui.style.userSelect = 'none';
+        Object.assign(
+          core_elements.core_ui.style,
+          {
+            'position': 'fixed',
+            'userSelect': 'none',
+          }
+        );
         core_interval_resume_all();
     }
 
