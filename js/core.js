@@ -41,11 +41,11 @@ function core_escape(force){
             'userSelect': 'auto',
           }
         );
-        core_elements.core_menu.style.display = 'inline';
+        core_elements.core_menu.classList.remove('hidden');
 
     }else{
         core_elements.core_toggle.blur();
-        core_elements.core_menu.style.display = 'none';
+        core_elements.core_menu.classList.add('hidden');
         Object.assign(
           core_elements.core_ui.style,
           {
@@ -469,8 +469,8 @@ function core_init(){
       'parent': core_elements.core_ui,
       'properties': {
         'id': 'core_menu',
+        'class': 'hidden',
         'innerHTML': '<a id=core_menu_root></a>/<a class=external id=core_menu_title rel=noreferrer target=_blank></a>',
-        'style': 'display:none',
       },
       'store': 'core_menu',
       'type': 'span',
@@ -1280,8 +1280,8 @@ function core_tab_create({
       'parent': document.getElementById(tabcontents_id),
       'properties': {
         'id': 'tabcontent_' + id,
+        'class': 'hidden',
         'innerHTML': content,
-        'style': 'display:none',
       },
     });
 }
@@ -1292,14 +1292,14 @@ function core_tab_switch(id){
         return;
     }
 
-    const state = tab.style.display === 'block';
+    const state = tab.classList.contains('hidden');
     const tabs = tab.parentElement.children;
-    for(const tab of tabs){
-        tab.style.display = 'none';
+    for(const child of tabs){
+        child.classList.add('hidden');
     }
-    tab.style.display = state
-      ? 'none'
-      : 'block';
+    if(state){
+        tab.classList.remove('hidden');
+    }
 }
 
 function core_type(variable){
