@@ -69,7 +69,12 @@ input{
     position: fixed;
     text-align: left;
     top: 0;
+    user-select: none;
     z-index: 9;
+}
+#core_ui.open{
+    position: absolute;
+    user-select: auto;
 }
 #core_ui table{
     margin: 0;
