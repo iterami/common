@@ -114,13 +114,15 @@ ul{
 *:target{
     outline: 2px solid #07f;
 }
-a:hover,
-button:hover{
-    color: #07f;
-}
-a:hover::after{
-    color: #f00;
-}
-tr:hover{
-    background-color: #111;
+@media (hover: hover) and (pointer: fine){
+  a:hover,
+  button:hover{
+      color: #07f;
+  }
+  a:hover::after{
+      color: #f00;
+  }
+  tr:hover{
+      background-color: #111;
+  }
 }
