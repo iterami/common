@@ -635,12 +635,12 @@ function core_number_format({
     }
 
     return new Intl.NumberFormat(
-        void 0,
-        {
-          'maximumFractionDigits': decimals_max,
-          'minimumFractionDigits': decimals_min,
-        }
-      ).format(number);
+      void 0,
+      {
+        'maximumFractionDigits': decimals_max,
+        'minimumFractionDigits': decimals_min,
+      }
+    ).format(number);
 }
 
 function core_object_defaults({
@@ -720,7 +720,6 @@ function core_random_integer(max){
 
 function core_random_key(object){
     const keys = Object.keys(object);
-
     return keys[core_random_integer(keys.length)];
 }
 
@@ -764,7 +763,6 @@ function core_replace({
           patterns[pattern]
         );
     }
-
     return string_value;
 }
 
@@ -888,8 +886,7 @@ function core_repo_init({
     }
     if(storage !== false){
         core_tab_create({
-          'content': storage_menu
-            + '<button id=storage_reset_repo type=button>Reset ' + core_repo_title + ' Settings</button>',
+          'content': storage_menu + '<button id=storage_reset_repo type=button>Reset ' + core_repo_title + ' Settings</button>',
           'group': 'core_menu',
           'id': 'repo',
           'label': core_repo_title,
@@ -938,8 +935,7 @@ function core_repo_init({
     }
     delete globalThis.core_init_todo;
 
-    if(menu
-      || menu_lock){
+    if(menu || menu_lock){
         core_escape(true);
     }
 }
@@ -970,10 +966,7 @@ function core_round({
   number,
 } = {}){
     let returned = 0;
-    const result = Number(
-      Math.round(number + 'e+' + decimals)
-        + 'e-' + decimals
-    );
+    const result = Number(Math.round(number + 'e+' + decimals) + 'e-' + decimals);
 
     if(globalThis.isNaN(result)){
         const eIndex = String(number).indexOf('e');

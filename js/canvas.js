@@ -56,10 +56,7 @@ function canvas_draw_path({
 } = {}){
     if(translate){
         canvas.save();
-        canvas.translate(
-          x,
-          y
-        );
+        canvas.translate(x, y);
     }
 
     canvas.beginPath();

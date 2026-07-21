@@ -20,7 +20,6 @@ function entity_create({
   properties = {},
   types = [],
 } = {}){
-    entity_id_count++;
     const entity = {
       'id': id,
     };
@@ -45,7 +44,6 @@ function entity_create({
       entity,
       properties,
     );
-
     entity_entities[id] = entity;
 
     for(const type of entity_types_default){
@@ -55,6 +53,7 @@ function entity_create({
         entity_info[type].todo?.(entity);
     }
 
+    entity_id_count++;
     return entity;
 }
 
@@ -72,7 +71,6 @@ function entity_group_add({
         }
 
         entity_groups[group][entity] = true;
-
         entity_groups._length[group]++;
     }
 }

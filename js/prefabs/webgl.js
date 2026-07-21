@@ -601,8 +601,7 @@ function prefabs_webgl_lines_path(args){
         }
 
         vertices.push(x, y, z);
-        color++;
-        if(color >= args.colors.length){
+        if(++color >= args.colors.length){
             color = 0;
         }
         vertex_colors.push(...args.colors[color]);
@@ -674,9 +673,7 @@ function prefabs_webgl_lines_shrub(args){
             z += random_z;
         }
 
-        points.push(
-          x, y, z
-        );
+        points.push(x, y, z);
         if(math_distance({
             'x1': x,
             'y1': y,

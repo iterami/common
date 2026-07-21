@@ -100,7 +100,7 @@ function webgl_camera_rotate({
         return;
     }
 
-    let normals = false;
+    let normals = !camera;
     if(camera){
         rotated.camera_rotate_x = math_clamp({
           'max': 360,
@@ -156,9 +156,6 @@ function webgl_camera_rotate({
                 : rotated.rotate_y + y;
             normals = true;
         }
-
-    }else{
-        normals = true;
     }
 
     if(normals){

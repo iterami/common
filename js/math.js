@@ -108,20 +108,17 @@ function math_fraction_reduce({
         );
     }
 
-    let done = false;
-    while(!done){
+    while(true){
         const gcd = math_greatest_common_divisor({
           'a': numerator,
           'b': denominator,
         });
-
-        if(gcd > 1){
-            denominator /= gcd;
-            numerator /= gcd;
-
-        }else{
-            done = true;
+        if(gcd <= 1){
+            break;
         }
+
+        denominator /= gcd;
+        numerator /= gcd;
     }
 
     return {
