@@ -631,7 +631,7 @@ function webgl_collision({
     collider[change_label] = character[change_label];
 
     if(collision === 'y'){
-        if(target.normals[1] > .5){
+        if(target.normals[1] > target.climbable){
             if(collider.state !== 'ground'){
                 collider.state = 'ground';
 
@@ -1833,6 +1833,7 @@ void main(void){
         'change_rotate_x': 0,
         'change_rotate_y': 0,
         'change_rotate_z': 0,
+        'climbable': .5,
         'collision': true,
         'draw': true,
         'draw_mode': 'TRIANGLE_FAN',
