@@ -456,8 +456,8 @@ function core_init(){
     core_html({
       'parent': core_elements.core_ui,
       'properties': {
-        'id': 'core_menu',
         'class': 'hidden',
+        'id': 'core_menu',
         'innerHTML': '<a id=core_menu_root></a>/<a class=external id=core_menu_title rel=noreferrer target=_blank></a>',
       },
       'store': 'core_menu',
@@ -1260,8 +1260,8 @@ function core_tab_create({
     core_html({
       'parent': document.getElementById(tabcontents_id),
       'properties': {
-        'id': 'tabcontent_' + id,
         'class': 'hidden',
+        'id': 'tabcontent_' + id,
         'innerHTML': content,
       },
     });
@@ -1274,11 +1274,19 @@ function core_tab_switch(id){
     }
 
     const state = tab.classList.contains('hidden');
+
     const tabs = tab.parentElement.children;
     for(const child of tabs){
         child.classList.add('hidden');
     }
+    const button = document.getElementById(id);
+    const buttons = button.parentElement.children;
+    for(const child of buttons){
+        child.classList.remove('active');
+    }
+
     if(state){
+        button.classList.add('active');
         tab.classList.remove('hidden');
     }
 }

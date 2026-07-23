@@ -3,6 +3,9 @@ a{
     cursor: pointer;
     text-decoration: underline .125rem #191;
 }
+.active{
+    text-decoration: underline .125rem;
+}
 .big{
     font-size: 225%;
 }
