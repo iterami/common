@@ -302,6 +302,12 @@ function webgl_character_init(args){
     webgl_character_count++;
 
     entity_group_create(['webgl_characters_' + args.id]);
+    if(model){
+        webgl_model_create({
+          'id': args.id,
+          'model': model,
+        });
+    }
     webgl_entity_create({
       'character': args.id,
       'entities': entities,
@@ -313,13 +319,6 @@ function webgl_character_init(args){
         webgl_vehicle_toggle({
           'id': character,
           'vehicle': args.id,
-        });
-    }
-
-    if(model){
-        webgl_model_create({
-          'id': args.id,
-          'model': model,
         });
     }
 
@@ -1994,20 +1993,6 @@ function webgl_level_init({
       },
     });
 
-    for(const id in webgl_pixelbuffers){
-        const pixelbuffer = webgl_pixelbuffers[id];
-        pixelbuffer.checked = false;
-        pixelbuffer.picked = false;
-        if(pixelbuffer.sync !== null){
-            webgl.deleteSync(pixelbuffer.sync);
-            pixelbuffer.sync = null;
-        }
-    }
-    if(json.picking > 0
-      && webgl_framebuffer === 0){
-        webgl_framebuffer_init();
-    }
-
     entity_id_count = 0;
     webgl_pick_id = 0;
     core_object_reset(webgl_properties);
@@ -2036,13 +2021,25 @@ function webgl_level_init({
         'y_min': json.y_min,
       }
     );
+    webgl_color_set({
+      'blue': webgl_properties.clear_color[2],
+      'green': webgl_properties.clear_color[1],
+      'red': webgl_properties.clear_color[0],
+    });
 
-    json.groups.unshift(
-      'opaque',
-      'transparent',
-      'skybox',
-    );
-    entity_group_create(json.groups);
+    for(const id in webgl_pixelbuffers){
+        const pixelbuffer = webgl_pixelbuffers[id];
+        pixelbuffer.checked = false;
+        pixelbuffer.picked = false;
+        if(pixelbuffer.sync !== null){
+            webgl.deleteSync(pixelbuffer.sync);
+            pixelbuffer.sync = null;
+        }
+    }
+    if(json.picking > 0
+      && webgl_framebuffer === 0){
+        webgl_framebuffer_init();
+    }
 
     if(json.textures !== false){
         Object.assign(
@@ -2051,17 +2048,21 @@ function webgl_level_init({
         );
     }
 
-    for(const properties of json.particles){
-        webgl_particle_create(properties);
-    }
+    json.groups.unshift(
+      'opaque',
+      'transparent',
+      'skybox',
+    );
+    entity_group_create(json.groups);
+
     for(const id in json.paths){
         const path = json.paths[id];
         webgl_paths[path.id] = {
           ...path,
         };
     }
-    for(const timer of json.timers){
-        webgl_timer_add(timer);
+    for(const properties of json.particles){
+        webgl_particle_create(properties);
     }
 
     if(character === -1){
@@ -2084,13 +2085,6 @@ function webgl_level_init({
     for(const prefab of json.prefabs){
         globalThis[prefab.type](prefab.properties);
     }
-
-    webgl_color_set({
-      'blue': webgl_properties.clear_color[2],
-      'green': webgl_properties.clear_color[1],
-      'red': webgl_properties.clear_color[0],
-    });
-    globalThis.repo_level_load?.();
 
     if(json.reticle){
         const reticle = core_html({
@@ -2120,6 +2114,11 @@ function webgl_level_init({
     }else if(core_elements.reticle){
         core_elements.reticle.style.display = 'none';
     }
+
+    for(const timer of json.timers){
+        webgl_timer_add(timer);
+    }
+    globalThis.repo_level_load?.();
 
     if(core_menu_open){
         core_escape(false);
