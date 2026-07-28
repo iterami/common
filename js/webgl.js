@@ -1916,6 +1916,7 @@ function webgl_level_init({
       'red': webgl_properties.clear_color[0],
     });
 
+    webgl.canvas.style.cursor = '';
     if(json.picking > 0
       && webgl_framebuffer === 0){
         webgl_pick_init();
@@ -2894,7 +2895,7 @@ function webgl_pick_event({
         }
 
     }else if(pixelbuffer.cursor){
-        webgl.canvas.style.cursor = 'auto';
+        webgl.canvas.style.cursor = '';
         if(core_elements.reticle){
             core_elements.reticle.style.height = '5px';
             core_elements.reticle.style.width = '5px';
