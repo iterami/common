@@ -1535,99 +1535,6 @@ function webgl_event_replace(modify, replace){
     }
 }
 
-function webgl_framebuffer_init(){
-    webgl_shader({
-      'id': 'picking',
-      'attributes': [],
-      'uniforms': [
-        'camera',
-        'perspective',
-        'pick_id',
-        'point_size',
-      ],
-      'fragment':
-`#version 300 es
-precision highp float;
-in vec4 color;
-out vec4 fragment;
-void main(void){
-    fragment = color;
-}`,
-      'vertex':
-`#version 300 es
-layout (location = 0) in vec3 vertexPosition;
-out vec4 color;
-uniform float point_size;
-uniform mat4 camera;
-uniform mat4 perspective;
-uniform float pick_id;
-void main(void){
-    vec4 positionCamera = camera * vec4(vertexPosition, 1.);
-    gl_Position = perspective * positionCamera;
-    if(point_size > 0.){
-        gl_PointSize = point_size / length(positionCamera);
-    }
-    color = vec4(
-      (normalize(vertexPosition.x) + 1.) / 2.,
-      (normalize(vertexPosition.y) + 1.) / 2.,
-      (normalize(vertexPosition.z) + 1.) / 2.,
-      pick_id / 255.
-    );
-}`,
-    });
-
-    webgl_framebuffer = webgl.createTexture();
-    webgl_framebuffer_resize();
-
-    const framebuffer = webgl.createFramebuffer();
-    webgl.bindFramebuffer(
-      webgl.FRAMEBUFFER,
-      framebuffer
-    );
-    webgl.framebufferTexture2D(
-      webgl.FRAMEBUFFER,
-      webgl.COLOR_ATTACHMENT0,
-      webgl.TEXTURE_2D,
-      webgl_framebuffer,
-      0
-    );
-    webgl.bindFramebuffer(
-      webgl.FRAMEBUFFER,
-      null
-    );
-}
-
-function webgl_framebuffer_resize(){
-    if(webgl_framebuffer === 0){
-        return;
-    }
-
-    webgl_shader_use('picking');
-
-    webgl.bindTexture(
-      webgl.TEXTURE_2D,
-      webgl_framebuffer
-    );
-    webgl.texImage2D(
-      webgl.TEXTURE_2D,
-      0,
-      webgl.RGBA,
-      globalThis.innerWidth,
-      globalThis.innerHeight,
-      0,
-      webgl.RGBA,
-      webgl.UNSIGNED_BYTE,
-      null
-    );
-    webgl.uniformMatrix4fv(
-      webgl_shaders.picking.uniforms.perspective,
-      false,
-      webgl_matrices.perspective
-    );
-
-    webgl_shader_use('default');
-}
-
 function webgl_get_position(entity){
     if(!entity.attach_to){
         return {
@@ -1697,24 +1604,6 @@ function webgl_init(){
       webgl.GENERATE_MIPMAP_HINT,
       webgl.FASTEST
     );
-
-    webgl_picked = {
-      'id': '',
-      'x': 0,
-      'y': 0,
-      'z': 0,
-    };
-    for(let i = 0; i < 4; i++){
-        webgl_pixelbuffers.push({
-          'buffer': webgl.createBuffer(),
-          'checked': false,
-          'cursor': true,
-          'picked': false,
-          'sync': null,
-          'x': 0,
-          'y': 0,
-        });
-    }
 
     webgl_shader({
       'id': 'default',
@@ -2027,18 +1916,17 @@ function webgl_level_init({
       'red': webgl_properties.clear_color[0],
     });
 
-    for(const id in webgl_pixelbuffers){
-        const pixelbuffer = webgl_pixelbuffers[id];
-        pixelbuffer.checked = false;
-        pixelbuffer.picked = false;
-        if(pixelbuffer.sync !== null){
-            webgl.deleteSync(pixelbuffer.sync);
-            pixelbuffer.sync = null;
-        }
-    }
     if(json.picking > 0
       && webgl_framebuffer === 0){
-        webgl_framebuffer_init();
+        webgl_pick_init();
+    }
+    for(const buffer of webgl_pixelbuffers){
+        buffer.checked = false;
+        buffer.picked = false;
+        if(buffer.sync !== null){
+            webgl.deleteSync(buffer.sync);
+            buffer.sync = null;
+        }
     }
 
     if(json.textures !== false){
@@ -2055,8 +1943,7 @@ function webgl_level_init({
     );
     entity_group_create(json.groups);
 
-    for(const id in json.paths){
-        const path = json.paths[id];
+    for(const path of json.paths){
         webgl_paths[path.id] = {
           ...path,
         };
@@ -2370,14 +2257,13 @@ function webgl_logic(){
     );
 
     if(webgl_properties.picking > 0){
-        for(const id in webgl_pixelbuffers){
-            const pixelbuffer = webgl_pixelbuffers[id];
-            if(!pixelbuffer.checked
-              || pixelbuffer.sync === null){
+        for(const buffer of webgl_pixelbuffers){
+            if(!buffer.checked
+              || buffer.sync === null){
                 continue;
             }
 
-            const state = webgl.clientWaitSync(pixelbuffer.sync, 0, 0);
+            const state = webgl.clientWaitSync(buffer.sync, 0, 0);
             if(state === webgl.TIMEOUT_EXPIRED){
                 continue;
             }
@@ -2385,19 +2271,19 @@ function webgl_logic(){
             if(state !== webgl.WAIT_FAILED){
                 const color = new Uint8Array(4);
 
-                webgl.bindBuffer(webgl.PIXEL_PACK_BUFFER, pixelbuffer.buffer);
+                webgl.bindBuffer(webgl.PIXEL_PACK_BUFFER, buffer.buffer);
                 webgl.getBufferSubData(webgl.PIXEL_PACK_BUFFER, 0, color);
                 webgl.bindBuffer(webgl.PIXEL_PACK_BUFFER, null);
 
                 webgl_pick_event({
                   'color': color,
-                  'pixelbuffer': pixelbuffer,
+                  'pixelbuffer': buffer,
                 });
             }
 
-            webgl.deleteSync(pixelbuffer.sync);
-            pixelbuffer.sync = null;
-            pixelbuffer.checked = false;
+            webgl.deleteSync(buffer.sync);
+            buffer.sync = null;
+            buffer.checked = false;
         }
 
         if(webgl_properties.picking === 2){
@@ -2416,20 +2302,20 @@ function webgl_logic(){
     while(webgl_shader_light_color.length < 48){
         webgl_shader_light_color.push(0);
     }
-    while(webgl_shader_light_position.length < 48){
-        webgl_shader_light_position.push(0);
-    }
-    while(webgl_shader_light_range.length < 16){
-        webgl_shader_light_range.push(0);
-    }
     webgl.uniform3fv(
       uniforms.light_color,
       webgl_shader_light_color
     );
+    while(webgl_shader_light_position.length < 48){
+        webgl_shader_light_position.push(0);
+    }
     webgl.uniform3fv(
       uniforms.light_position,
       webgl_shader_light_position
     );
+    while(webgl_shader_light_range.length < 16){
+        webgl_shader_light_range.push(0);
+    }
     webgl.uniform1fv(
       uniforms.light_range,
       webgl_shader_light_range
@@ -3014,6 +2900,117 @@ function webgl_pick_event({
             core_elements.reticle.style.width = '5px';
         }
     }
+}
+
+function webgl_pick_init(){
+    webgl_picked = {
+      'id': '',
+      'x': 0,
+      'y': 0,
+      'z': 0,
+    };
+    for(let i = 0; i < 4; i++){
+        webgl_pixelbuffers.push({
+          'buffer': webgl.createBuffer(),
+          'checked': false,
+          'cursor': true,
+          'picked': false,
+          'sync': null,
+          'x': 0,
+          'y': 0,
+        });
+    }
+
+    webgl_shader({
+      'id': 'picking',
+      'attributes': [],
+      'uniforms': [
+        'camera',
+        'perspective',
+        'pick_id',
+        'point_size',
+      ],
+      'fragment':
+`#version 300 es
+precision highp float;
+in vec4 color;
+out vec4 fragment;
+void main(void){
+    fragment = color;
+}`,
+      'vertex':
+`#version 300 es
+layout (location = 0) in vec3 vertexPosition;
+out vec4 color;
+uniform float point_size;
+uniform mat4 camera;
+uniform mat4 perspective;
+uniform float pick_id;
+void main(void){
+    vec4 positionCamera = camera * vec4(vertexPosition, 1.);
+    gl_Position = perspective * positionCamera;
+    if(point_size > 0.){
+        gl_PointSize = point_size / length(positionCamera);
+    }
+    color = vec4(
+      (normalize(vertexPosition.x) + 1.) / 2.,
+      (normalize(vertexPosition.y) + 1.) / 2.,
+      (normalize(vertexPosition.z) + 1.) / 2.,
+      pick_id / 255.
+    );
+}`,
+    });
+
+    webgl_framebuffer = webgl.createTexture();
+    webgl_pick_resize();
+
+    const framebuffer = webgl.createFramebuffer();
+    webgl.bindFramebuffer(
+      webgl.FRAMEBUFFER,
+      framebuffer
+    );
+    webgl.framebufferTexture2D(
+      webgl.FRAMEBUFFER,
+      webgl.COLOR_ATTACHMENT0,
+      webgl.TEXTURE_2D,
+      webgl_framebuffer,
+      0
+    );
+    webgl.bindFramebuffer(
+      webgl.FRAMEBUFFER,
+      null
+    );
+}
+
+function webgl_pick_resize(){
+    if(webgl_framebuffer === 0){
+        return;
+    }
+
+    webgl_shader_use('picking');
+
+    webgl.bindTexture(
+      webgl.TEXTURE_2D,
+      webgl_framebuffer
+    );
+    webgl.texImage2D(
+      webgl.TEXTURE_2D,
+      0,
+      webgl.RGBA,
+      globalThis.innerWidth,
+      globalThis.innerHeight,
+      0,
+      webgl.RGBA,
+      webgl.UNSIGNED_BYTE,
+      null
+    );
+    webgl.uniformMatrix4fv(
+      webgl_shaders.picking.uniforms.perspective,
+      false,
+      webgl_matrices.perspective
+    );
+
+    webgl_shader_use('default');
 }
 
 function webgl_prefab_args(args){
@@ -3851,7 +3848,7 @@ function webgl_resize(){
       false,
       webgl_matrices.perspective
     );
-    webgl_framebuffer_resize();
+    webgl_pick_resize();
 
     if(core_menu_open
       && webgl !== 0){
