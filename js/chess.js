@@ -620,9 +620,8 @@ function chess_validate(args){
             game.threefold[threefold_string] = 0;
         }
 
-        game.threefold[threefold_string]++;
         game.threefold_highest = Math.max(
-          game.threefold[threefold_string],
+          ++game.threefold[threefold_string],
           game.threefold_highest
         );
     }

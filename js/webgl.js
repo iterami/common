@@ -4408,8 +4408,7 @@ function webgl_timer_handle(timer){
         return;
     }
 
-    timer.frames--;
-    if(timer.frames > 0){
+    if(--timer.frames > 0){
         return;
     }
 
