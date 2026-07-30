@@ -20,14 +20,15 @@ function entity_create({
   properties = {},
   types = [],
 } = {}){
+    const entity_id = String(id);
     const entity = {
-      'id': id,
+      'id': entity_id,
     };
 
     for(const type of entity_types_default){
         entity_handle_defaults({
           'entity': entity,
-          'id': id,
+          'id': entity_id,
           'type': type,
         });
     }
@@ -35,7 +36,7 @@ function entity_create({
     for(const type of types){
         entity_handle_defaults({
           'entity': entity,
-          'id': id,
+          'id': entity_id,
           'type': type,
         });
     }
@@ -44,7 +45,7 @@ function entity_create({
       entity,
       properties,
     );
-    entity_entities[id] = entity;
+    entity_entities[entity_id] = entity;
 
     for(const type of entity_types_default){
         entity_info[type].todo?.(entity);

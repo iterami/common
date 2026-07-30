@@ -243,14 +243,16 @@ function webgl_character_init(args){
 
     const entities = args.entities;
     delete args.entities;
+    const id = String(args.id);
+    delete args.id;
     const model = args.model;
     delete args.model;
     if(args.base){
-        webgl_character_base = args.id;
+        webgl_character_base = id;
     }
     delete args.base;
 
-    webgl_characters[args.id] = {
+    webgl_characters[id] = {
       'camera_rotate_x': 0,
       'camera_rotate_y': 0,
       'camera_rotate_z': 0,
@@ -283,6 +285,7 @@ function webgl_character_init(args){
             : webgl_properties.camera_zoom_min
         )
       ),
+      'id': id,
       'vehicle': false,
       'vehicle_stats': args.vehicle_stats === false
         ? false
@@ -301,28 +304,28 @@ function webgl_character_init(args){
     };
     webgl_character_count++;
 
-    entity_group_create(['webgl_characters_' + args.id]);
+    entity_group_create(['webgl_characters_' + id]);
     if(model){
         webgl_model_create({
-          'id': args.id,
+          'id': id,
           'model': model,
         });
     }
     webgl_entity_create({
-      'character': args.id,
+      'character': id,
       'entities': entities,
     });
 
     if(args.vehicle_stats?.character){
-        const character = webgl_characters[args.id].vehicle_stats.character;
-        webgl_characters[args.id].vehicle_stats.character = false;
+        const character = webgl_characters[id].vehicle_stats.character;
+        webgl_characters[id].vehicle_stats.character = false;
         webgl_vehicle_toggle({
           'id': character,
-          'vehicle': args.id,
+          'vehicle': id,
         });
     }
 
-    webgl_character_spawn(args.id);
+    webgl_character_spawn(id);
 }
 
 function webgl_character_level(character){
@@ -1220,12 +1223,12 @@ function webgl_entity_create({
   entities = [],
   groups = [],
 } = {}){
-    for(const id of entities){
-        id.attach_to = character;
+    for(const properties of entities){
+        properties.attach_to = character;
         const entity = entity_create({
-          'id': id.id,
-          'properties': id,
-          'types': id.types,
+          'id': properties.id,
+          'properties': properties,
+          'types': properties.types,
         });
         webgl_matrices[entity.id] = math_matrix_create();
 
@@ -3051,7 +3054,7 @@ function webgl_prefab_remake({
 function webgl_prefab_repeat({
   characters = false,
   count = 1,
-  prefix = String(entity_id_count),
+  prefix = entity_id_count,
   properties = {},
   type,
   x_max = 0,
@@ -3103,7 +3106,7 @@ function webgl_primitive_cuboid(args){
         'front': {},
         'groups': [],
         'left': {},
-        'prefix': String(entity_id_count),
+        'prefix': entity_id_count,
         'right': {},
         'size_x': 1,
         'size_y': 1,
@@ -3304,7 +3307,7 @@ function webgl_primitive_ellipsoid(args){
         'color_top0': [],
         'color_top1': [],
         'groups': [],
-        'prefix': String(entity_id_count),
+        'prefix': entity_id_count,
         'radius_x': 5,
         'radius_y': 5,
         'radius_z': 5,
@@ -3405,7 +3408,7 @@ function webgl_primitive_frustum(args){
         'length': 2,
         'middle': true,
         'points': 8,
-        'prefix': String(entity_id_count),
+        'prefix': entity_id_count,
         'size_bottom': 2,
         'size_top': 1,
         'top': true,
@@ -3566,7 +3569,7 @@ function webgl_primitive_particle(args){
         'entities': [],
         'groups': [],
         'particle': {},
-        'prefix': String(entity_id_count),
+        'prefix': entity_id_count,
       },
     });
     const prefab_args = webgl_prefab_args(args);
@@ -3614,7 +3617,7 @@ function webgl_primitive_projectile(args){
       'object': args,
       'defaults': {
         'groups': [],
-        'prefix': String(entity_id_count),
+        'prefix': entity_id_count,
         'speed': 1,
       },
     });
@@ -3671,7 +3674,7 @@ function webgl_primitive_stars(args){
         'groups': [],
         'height_limit': 1,
         'point_size': 500,
-        'prefix': String(entity_id_count),
+        'prefix': entity_id_count,
         'radius': 250,
         'range': 100,
         'stars': 100,
@@ -3726,7 +3729,7 @@ function webgl_primitive_terrain(args){
         'groups': [],
         'height_random': 10,
         'heights': [],
-        'prefix': String(entity_id_count),
+        'prefix': entity_id_count,
         'tiles_x': 10,
         'tiles_x_size': 10,
         'tiles_z': 10,
@@ -4327,7 +4330,7 @@ function webgl_tiles(args){
                   'character': attached
                     ? prefix + prefab.properties.character
                     : args.character,
-                  'prefix': prefix + (prefab.properties.prefix || String(entity_id_count)),
+                  'prefix': prefix + (prefab.properties.prefix || entity_id_count),
                   'position_x': (prefab.properties.position_x || 0) + (attached
                     ? 0
                     : tile_offset_x),
@@ -4383,21 +4386,22 @@ function webgl_timer_add({
   event_repeat = void 0,
   frames_max = 100,
   frames_random = 0,
-  id = String(webgl_timer_count),
+  id = webgl_timer_count,
   repeat = 0,
 } = {}){
     let max = frames_max;
     if(frames_random){
         max += core_random_integer(frames_random);
     }
-    webgl_timers[id] = {
+    const timer_id = String(id);
+    webgl_timers[timer_id] = {
       'active': active,
       'event_end': event_end,
       'event_repeat': event_repeat,
       'frames': max,
       'frames_max': frames_max,
       'frames_random': frames_random,
-      'id': id,
+      'id': timer_id,
       'repeat': repeat,
     };
     webgl_timer_count++;
