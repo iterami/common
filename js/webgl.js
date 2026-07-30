@@ -15,28 +15,28 @@ function webgl_audio({
         });
     }
 
-    const character = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_character_id];
     const position = webgl_get_position(globalThis[type][target]);
-    const radians_y = math_degrees_to_radians(character.rotate_y);
+    const radians_y = math_degrees_to_radians(player.rotate_y);
     audio_start_at?.({
       'forwardX': Math.sin(-radians_y),
       'forwardY': 0,
       'forwardZ': Math.cos(radians_y),
       'id': id,
-      'positionX': (character.position_x - position.x) / divider_x,
-      'positionY': (character.position_y - position.y) / divider_y,
-      'positionZ': (character.position_z - position.z) / divider_z,
+      'positionX': (player.position_x - position.x) / divider_x,
+      'positionY': (player.position_y - position.y) / divider_y,
+      'positionZ': (player.position_z - position.z) / divider_z,
     });
 }
 
 function webgl_billboard(id){
-    const character = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_character_id];
     const entity = entity_entities[id];
     const position = webgl_get_position(entity);
 
     entity.rotate_y = 360 - math_radians_to_degrees(Math.atan2(
-      position.z - character.camera_z,
-      position.x - character.camera_x,
+      position.z - player.camera_z,
+      position.x - player.camera_x,
     ) + 1.5707963267948966);
 }
 
@@ -634,7 +634,7 @@ function webgl_collision({
 
     if(collision === 'y'){
         if(target.normals[1] > target.climbable){
-            if(collider.state !== 'ground'){
+            if(collider.state === 'air'){
                 collider.state = 'ground';
 
                 if(webgl_properties.gravity_damage
@@ -716,7 +716,7 @@ function webgl_controls_keyboard(character){
     if(character.vehicle_stats){
         const vehicle = character.vehicle_stats;
         if(vehicle.character
-          || character.state !== 'ground'){
+          || character.state === 'air'){
             return;
         }
         let speed = 0;
@@ -801,17 +801,23 @@ function webgl_controls_keyboard(character){
         const vehicle = webgl_characters[character.vehicle];
         let speed = 0;
         let turn = 0;
-        if(vehicle.state === 'ground'){
+        if(vehicle.state !== 'air'){
+            let speed_max_backward = vehicle.vehicle_stats.speed_max_backward;
+            let speed_max_forward = vehicle.vehicle_stats.speed_max_forward;
+            if(vehicle.state === 'water'){
+                speed_max_backward /= 2;
+                speed_max_forward /= 2;
+            }
             if(forward){
                 speed = Math.min(
                   vehicle.vehicle_stats.speed + vehicle.vehicle_stats.speed_forward,
-                  vehicle.vehicle_stats.speed_max_forward
+                  speed_max_forward
                 );
 
             }else if(back){
                 speed = Math.max(
                   vehicle.vehicle_stats.speed + vehicle.vehicle_stats.speed_backward,
-                  vehicle.vehicle_stats.speed_max_backward
+                  speed_max_backward
                 );
 
             }else if(vehicle.vehicle_stats.speed >= 0){
@@ -905,7 +911,7 @@ function webgl_controls_keyboard(character){
         }
     }
 
-    if(level > -1 && character.state !== 'ground'){
+    if(level > -1 && character.state === 'air'){
         return;
     }
 
@@ -944,17 +950,22 @@ function webgl_controls_keyboard(character){
               'y': true,
             });
 
-        }else{
+        }else if(character.state === 'ground'){
             character.state = 'air';
             character.change_position_y = character.jump_height;
         }
     }
 
-    if(level > -1
-      && leftright !== 0
-      && forwardback !== 0){
-        forwardback *= .7;
-        leftright *= .7;
+    if(level > -1){
+        if(leftright !== 0
+          && forwardback !== 0){
+            forwardback *= .7;
+            leftright *= .7;
+        }
+        if(character.state === 'water'){
+            forwardback *= .5;
+            leftright *= .5;
+        }
     }
 
     if(leftright !== 0){
@@ -1066,28 +1077,28 @@ function webgl_controls_pointer(character){
 }
 
 function webgl_controls_wheel(event){
-    const character = webgl_characters[webgl_character_id];
-    if(webgl_character_level(character) < -1){
+    const player = webgl_characters[webgl_character_id];
+    if(webgl_character_level(player) < -1){
         return;
     }
 
     if(event.deltaY > 0){
-        character.camera_zoom = core_key_shift
+        player.camera_zoom = core_key_shift
           ? webgl_properties.camera_zoom_max
           : Math.min(
-              character.camera_zoom + 1,
+              player.camera_zoom + 1,
               webgl_properties.camera_zoom_max
             );
 
     }else{
-        const min = character.level === -1
+        const min = player.level === -1
           ? 0
           : webgl_properties.camera_zoom_min;
 
-        character.camera_zoom = core_key_shift
+        player.camera_zoom = core_key_shift
           ? min
           : Math.max(
-              character.camera_zoom - 1,
+              player.camera_zoom - 1,
               min
             );
     }
@@ -1881,6 +1892,7 @@ function webgl_level_init({
         'textures': false,
         'timers': [],
         'title': false,
+        'water': [],
         'y_min': false,
       },
     });
@@ -1948,13 +1960,12 @@ function webgl_level_init({
     entity_group_create(json.groups);
 
     for(const path of json.paths){
-        webgl_paths[String(path.id)] = {
-          ...path,
-        };
+        webgl_paths[String(path.id)] = {...path};
     }
     for(const properties of json.particles){
         webgl_particle_create(properties);
     }
+    webgl_water.push(...json.water);
 
     if(character === -1){
         webgl_character_init({
@@ -1992,7 +2003,7 @@ function webgl_level_init({
             'display': '',
             'height': '5px',
             'left': '50%',
-            'pointer-events': 'none',
+            'pointerEvents': 'none',
             'position': 'fixed',
             'top': '50%',
             'transform': 'translate(-50%,-50%)',
@@ -2051,13 +2062,13 @@ function webgl_level_load({
 }
 
 function webgl_level_unload(base){
-    const character = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_character_id];
     const properties = {};
-    if(base && character){
+    if(base && player){
         Object.assign(
           properties,
-          character,
-          character.locked
+          player,
+          player.locked
         );
         delete properties.lock;
         delete properties.locked;
@@ -2081,6 +2092,7 @@ function webgl_level_unload(base){
     core_object_reset(webgl_shader_light_position);
     core_object_reset(webgl_shader_light_range);
     core_object_reset(webgl_timers);
+    core_object_reset(webgl_water);
 
     webgl_character_count = 0;
     webgl_timer_count = 0;
@@ -2125,20 +2137,52 @@ function webgl_logic(){
             continue;
         }
 
+        const collides = character.collides
+          && webgl_paths[character.path_id]?.collision !== false;
+        let water_depth = 0;
+        if(collides){
+            for(const water of webgl_water){
+                if(character.position_y - character.collide_bottom < water.y_max
+                  && character.position_y + character.collide_top > water.y_min
+                  && character.position_x - character.collide_xz < water.x_max
+                  && character.position_x + character.collide_xz > water.x_min
+                  && character.position_z - character.collide_xz < water.z_max
+                  && character.position_z + character.collide_xz > water.z_min){
+                    water_depth = Math.min(
+                      (water.y_max - character.position_y) / 100,
+                      1
+                    );
+                }
+            }
+        }
+        if(water_depth > 0){
+            character.state = 'water';
+
+        }else if(character.state === 'water'){
+            character.state = 'air';
+        }
+
         webgl_controls_keyboard(character);
 
         if(character.vehicle){
             continue;
         }
 
-        if(character.gravity !== 0){
+        if(character.path_id.length){
+            webgl_path_move(character);
+
+        }else if(level !== -1 && water_depth > 0){
+            character.change_position_y = Math.min(
+              character.change_position_y + water_depth / 2,
+              water_depth + .1
+            );
+
+        }else if(character.gravity !== 0){
             character.change_position_y = Math.max(
               character.change_position_y + webgl_properties.gravity_acceleration * character.gravity,
               webgl_properties.gravity_max * character.gravity
             );
         }
-
-        webgl_path_move(character);
 
         if(character.change_rotate_x !== 0
           || character.change_rotate_y !== 0
@@ -2151,7 +2195,6 @@ function webgl_logic(){
               'z': character.change_rotate_z,
             });
         }
-
         const axes = 'xyz';
         for(const axis of axes){
             const position = 'position_' + axis;
@@ -2165,7 +2208,6 @@ function webgl_logic(){
               'wrap': true,
             });
         }
-
         Object.assign(
            character,
            character.lock,
@@ -2174,12 +2216,11 @@ function webgl_logic(){
 
         let change_position_x = character.change_position_x;
         let change_position_z = character.change_position_z;
-        if(character.change_position_y !== 0){
+        if(character.state === 'ground'
+          && character.change_position_y !== 0){
             character.state = 'air';
         }
-
-        if(character.collides
-          && webgl_paths[character.path_id]?.collision !== false){
+        if(collides){
             for(const id in entity_entities){
                 const entity = entity_entities[id];
                 if(entity.collision){
@@ -2206,8 +2247,7 @@ function webgl_logic(){
             character.change_position_z = 0;
             continue;
         }
-
-        if(character.state === 'ground'){
+        if(character.state !== 'air'){
             character.change_position_x -= change_position_x;
             character.change_position_z -= change_position_z;
         }
@@ -2228,21 +2268,21 @@ function webgl_logic(){
         }
     }
 
-    const character = webgl_characters[webgl_character_id];
-    const radians_x = math_degrees_to_radians(character.camera_rotate_x);
-    const radians_y = math_degrees_to_radians(character.camera_rotate_y);
-    if(character.camera_lock){
-        if(character.camera_zoom > 0){
-            const zoom_cos_x = character.camera_zoom * Math.cos(radians_x);
+    const player = webgl_characters[webgl_character_id];
+    const radians_x = math_degrees_to_radians(player.camera_rotate_x);
+    const radians_y = math_degrees_to_radians(player.camera_rotate_y);
+    if(player.camera_lock){
+        if(player.camera_zoom > 0){
+            const zoom_cos_x = player.camera_zoom * Math.cos(radians_x);
 
-            character.camera_x = character.position_x + Math.sin(-radians_y) * zoom_cos_x;
-            character.camera_y = character.position_y + Math.sin(radians_x) * character.camera_zoom;
-            character.camera_z = character.position_z + Math.cos(radians_y) * zoom_cos_x;
+            player.camera_x = player.position_x + Math.sin(-radians_y) * zoom_cos_x;
+            player.camera_y = player.position_y + Math.sin(radians_x) * player.camera_zoom;
+            player.camera_z = player.position_z + Math.cos(radians_y) * zoom_cos_x;
 
         }else{
-            character.camera_x = character.position_x;
-            character.camera_y = character.position_y;
-            character.camera_z = character.position_z;
+            player.camera_x = player.position_x;
+            player.camera_y = player.position_y;
+            player.camera_z = player.position_z;
         }
     }
 
@@ -2251,14 +2291,43 @@ function webgl_logic(){
       webgl_matrices.camera,
       radians_x,
       radians_y,
-      math_degrees_to_radians(character.camera_rotate_z)
+      math_degrees_to_radians(player.camera_rotate_z)
     );
     math_matrix_translate(
       webgl_matrices.camera,
-      character.camera_x,
-      character.camera_y,
-      character.camera_z
+      player.camera_x,
+      player.camera_y,
+      player.camera_z
     );
+
+    const uniforms = webgl_shaders.default.uniforms;
+    webgl.uniform1i(
+      uniforms.light_count,
+      webgl_shader_light_range.length
+    );
+    if(webgl_shader_light_range.length){
+        while(webgl_shader_light_color.length < 48){
+            webgl_shader_light_color.push(0);
+        }
+        webgl.uniform3fv(
+          uniforms.light_color,
+          webgl_shader_light_color
+        );
+        while(webgl_shader_light_position.length < 48){
+            webgl_shader_light_position.push(0);
+        }
+        webgl.uniform3fv(
+          uniforms.light_position,
+          webgl_shader_light_position
+        );
+        while(webgl_shader_light_range.length < 16){
+            webgl_shader_light_range.push(0);
+        }
+        webgl.uniform1fv(
+          uniforms.light_range,
+          webgl_shader_light_range
+        );
+    }
 
     if(webgl_properties.picking > 0){
         for(const buffer of webgl_pixelbuffers){
@@ -2294,36 +2363,6 @@ function webgl_logic(){
             webgl_pick(true);
         }
     }
-
-    const uniforms = webgl_shaders.default.uniforms;
-    webgl.uniform1i(
-      uniforms.light_count,
-      webgl_shader_light_range.length
-    );
-    if(!webgl_shader_light_range.length){
-        return;
-    }
-    while(webgl_shader_light_color.length < 48){
-        webgl_shader_light_color.push(0);
-    }
-    webgl.uniform3fv(
-      uniforms.light_color,
-      webgl_shader_light_color
-    );
-    while(webgl_shader_light_position.length < 48){
-        webgl_shader_light_position.push(0);
-    }
-    webgl.uniform3fv(
-      uniforms.light_position,
-      webgl_shader_light_position
-    );
-    while(webgl_shader_light_range.length < 16){
-        webgl_shader_light_range.push(0);
-    }
-    webgl.uniform1fv(
-      uniforms.light_range,
-      webgl_shader_light_range
-    );
 }
 
 function webgl_logic_entity(entity){
@@ -2401,12 +2440,12 @@ function webgl_logic_entity(entity){
 
     const draw_range = entity.draw_range || webgl_properties.draw_range;
     if(draw_range){
-        const character = webgl_characters[webgl_character_id];
+        const player = webgl_characters[webgl_character_id];
         const position = webgl_get_position(entity);
         entity.visible = math_distance({
-            'x0': character.camera_x,
-            'y0': character.camera_y,
-            'z0': character.camera_z,
+            'x0': player.camera_x,
+            'y0': player.camera_y,
+            'z0': player.camera_z,
             'x1': position.x,
             'y1': position.y,
             'z1': position.z,
@@ -2576,10 +2615,6 @@ function webgl_particle_create(particle){
 }
 
 function webgl_path_move(character){
-    if(!webgl_paths[character.path_id]){
-        return;
-    }
-
     const path = globalThis.structuredClone(webgl_paths[character.path_id]);
     const point = core_object_defaults({
       'object': path.points[character.path_point],
@@ -2756,11 +2791,11 @@ function webgl_pick(cursor){
         return;
     }
 
-    const character = webgl_characters[webgl_character_id];
-    if(character.life <= 0){
+    const player = webgl_characters[webgl_character_id];
+    if(player.life <= 0){
         return;
     }
-    const level = webgl_character_level(character);
+    const level = webgl_character_level(player);
     if(level < -1 || (level >= 0 && webgl_properties.paused)){
         return;
     }
@@ -2858,12 +2893,12 @@ function webgl_pick_event({
             const entity = entity_entities[id];
             if(color[3] === entity.picking){
                 if(entity.picking_range > 0){
-                    const character = webgl_characters[webgl_character_id];
+                    const player = webgl_characters[webgl_character_id];
                     const position = webgl_get_position(entity);
                     const distance = math_distance({
-                      'x0': character.position_x,
-                      'y0': character.position_y,
-                      'z0': character.position_z,
+                      'x0': player.position_x,
+                      'y0': player.position_y,
+                      'z0': player.position_z,
                       'x1': position.x,
                       'y1': position.y,
                       'z1': position.z,
@@ -4586,3 +4621,4 @@ globalThis.webgl_shaders = {};
 globalThis.webgl_textures = {};
 globalThis.webgl_timer_count = 0;
 globalThis.webgl_timers = {};
+globalThis.webgl_water = [];
