@@ -1948,7 +1948,7 @@ function webgl_level_init({
     entity_group_create(json.groups);
 
     for(const path of json.paths){
-        webgl_paths[path.id] = {
+        webgl_paths[String(path.id)] = {
           ...path,
         };
     }
@@ -2552,7 +2552,8 @@ function webgl_model_create({
 }
 
 function webgl_particle_create(particle){
-    webgl_particles[particle.id] = {
+    const id = String(particle.id);
+    webgl_particles[id] = {
       ...core_object_defaults({
         'object': particle,
         'defaults': {
@@ -2568,7 +2569,10 @@ function webgl_particle_create(particle){
           'z_min': -100,
         },
       }),
+      'id': id,
     };
+
+    return webgl_particles[id];
 }
 
 function webgl_path_move(character){
@@ -3574,11 +3578,10 @@ function webgl_primitive_particle(args){
     });
     const prefab_args = webgl_prefab_args(args);
 
-    const particle = {
+    const particle = webgl_particle_create({
       'id': args.id,
       ...args.particle,
-    };
-    webgl_particle_create(particle);
+    });
 
     for(const entity of args.entities){
         const vertices = [];
@@ -3599,7 +3602,7 @@ function webgl_primitive_particle(args){
               ...prefab_args,
               ...entity,
               'collision': false,
-              'particle': args.id,
+              'particle': particle.id,
               'vertex_colors': entity.vertex_colors || webgl_vertexcolorarray({
                 'vertexcount': 1,
               }),
