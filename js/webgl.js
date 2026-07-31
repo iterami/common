@@ -2148,9 +2148,10 @@ function webgl_logic(){
                   && character.position_x + character.collide_xz > water.x_min
                   && character.position_z - character.collide_xz < water.z_max
                   && character.position_z + character.collide_xz > water.z_min){
+                    const diff = water.y_max - character.position_y;
                     pressure = Math.min(
-                      (water.y_max - character.position_y) / water.density,
-                      1
+                      diff * water.density,
+                      diff / 2
                     );
                     break;
                 }
