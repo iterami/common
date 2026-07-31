@@ -15,7 +15,7 @@ function webgl_audio({
         });
     }
 
-    const player = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_player_id];
     const position = webgl_get_position(globalThis[type][target]);
     const radians_y = math_degrees_to_radians(player.rotate_y);
     audio_start_at?.({
@@ -30,7 +30,7 @@ function webgl_audio({
 }
 
 function webgl_billboard(id){
-    const player = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_player_id];
     const entity = entity_entities[id];
     const position = webgl_get_position(entity);
 
@@ -72,7 +72,7 @@ function webgl_buffer_set({
 
 function webgl_camera_rotate({
   camera = true,
-  character = webgl_character_id,
+  character = webgl_player_id,
   pointer = true,
   set = false,
   x = false,
@@ -135,7 +135,7 @@ function webgl_camera_rotate({
 
         let pointer_0_down = false;
         let pointer_1_down = false;
-        if(character === webgl_character_id){
+        if(character === webgl_player_id){
             pointer_0_down = core_pointer.down_0;
             pointer_1_down = core_pointer.down_1;
         }
@@ -168,7 +168,7 @@ function webgl_camera_rotate({
 
 function webgl_character_automove(id){
     if(core_type(id) !== 'string'){
-        id = webgl_character_id;
+        id = webgl_player_id;
     }
     const character = webgl_characters[id];
     character.automove = !character.automove;
@@ -176,7 +176,7 @@ function webgl_character_automove(id){
 
 function webgl_character_die(id){
     if(core_type(id) !== 'string'){
-        id = webgl_character_id;
+        id = webgl_player_id;
     }
     webgl_stat_modify({
       'set': true,
@@ -187,8 +187,8 @@ function webgl_character_die(id){
 }
 
 function webgl_character_hit({
-  id = webgl_character_id,
-  target = webgl_character_id,
+  id = webgl_player_id,
+  target = webgl_player_id,
   xz = 1,
   y = 1,
 } = {}){
@@ -218,7 +218,7 @@ function webgl_character_init(args){
         'controls': '',
         'entities': [],
         'gravity': 0,
-        'id': webgl_character_id,
+        'id': webgl_player_id,
         'jump_height': 1,
         'level': -2,
         'level_xp': 0,
@@ -330,7 +330,7 @@ function webgl_character_init(args){
 
 function webgl_character_level(character){
     if(!character){
-        character = webgl_characters[webgl_character_id];
+        character = webgl_characters[webgl_player_id];
     }
 
     if(core_type(character.level) === 'number'){
@@ -342,7 +342,7 @@ function webgl_character_level(character){
 
 function webgl_character_move({
   angle = true,
-  id = webgl_character_id,
+  id = webgl_player_id,
   speed = 1,
   strafe = false,
   y = false,
@@ -366,7 +366,7 @@ function webgl_character_move({
 }
 
 function webgl_character_scale({
-  id = webgl_character_id,
+  id = webgl_player_id,
   set = false,
   x = false,
   y = false,
@@ -415,7 +415,7 @@ function webgl_character_scale({
 }
 
 function webgl_character_set(id){
-    webgl_character_id = id;
+    webgl_player_id = id;
 
     entity_group_modify({
       'groups': ['skybox'],
@@ -423,16 +423,16 @@ function webgl_character_set(id){
           entity_group_move({
             'entities': [entity.id],
             'from': 'webgl_characters_' + entity.attach_to,
-            'to': 'webgl_characters_' + webgl_character_id,
+            'to': 'webgl_characters_' + webgl_player_id,
           });
-          entity.attach_to = webgl_character_id;
+          entity.attach_to = webgl_player_id;
       },
     });
 }
 
 function webgl_character_spawn(id){
     if(core_type(id) !== 'string'){
-        id = webgl_character_id;
+        id = webgl_player_id;
     }
     const character = webgl_characters[id];
     if(!character
@@ -490,7 +490,7 @@ function webgl_character_strafe(character){
       || character.controls === 'arpg'
       || character.controls === 'rts';
 
-    if(character.id !== webgl_character_id){
+    if(character.id !== webgl_player_id){
         return checks;
     }
 
@@ -757,7 +757,7 @@ function webgl_controls_keyboard(character){
     let pointer_x = 0;
     let right = false;
 
-    if(character.id === webgl_character_id){
+    if(character.id === webgl_player_id){
         pointer_0_down = core_pointer.down_0;
         pointer_1_down = core_pointer.down_1;
         pointer_x = core_pointer.x;
@@ -1020,7 +1020,7 @@ function webgl_controls_keyboard(character){
 
 function webgl_controls_pointer(character){
     if(!character){
-        character = webgl_characters[webgl_character_id];
+        character = webgl_characters[webgl_player_id];
     }
     const controls = character.controls;
     if(controls.length === 0){
@@ -1038,7 +1038,7 @@ function webgl_controls_pointer(character){
     let movement_y = 0;
     let shift_key = false;
 
-    if(character.id === webgl_character_id){
+    if(character.id === webgl_player_id){
         pointer_0_down = core_pointer.down_0;
         pointer_1_down = core_pointer.down_1;
         movement_x = core_pointer.movement_x;
@@ -1077,7 +1077,7 @@ function webgl_controls_pointer(character){
 }
 
 function webgl_controls_wheel(event){
-    const player = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_player_id];
     if(webgl_character_level(player) < -1){
         return;
     }
@@ -1264,7 +1264,7 @@ function webgl_entity_create({
               'entities': [entity.id],
               'group': 'transparent',
             });
-            entity.attach_to = webgl_character_id;
+            entity.attach_to = webgl_player_id;
         }
 
         if(entity.scale_x !== 1
@@ -1726,7 +1726,7 @@ void main(void){
       'defaults': true,
       'properties': {
         'alpha': 1,
-        'attach_to': webgl_character_id,
+        'attach_to': webgl_player_id,
         'attach_type': 'webgl_characters',
         'attach_x': 0,
         'attach_y': 0,
@@ -1820,19 +1820,19 @@ function webgl_level_init({
 
         let id = 0;
         for(const player of json.characters){
-            if(player.id === webgl_character_id){
+            if(player.id === webgl_player_id){
                 id = player;
                 break;
             }
         }
         character = json.characters[id];
-        webgl_character_id = id;
+        webgl_player_id = id;
 
     }else if(character === 0
       && base.level < -1){
         return;
     }
-    webgl_character_base = webgl_character_id;
+    webgl_character_base = webgl_player_id;
 
     const randomized = json.randomized;
     if(randomized){
@@ -2062,7 +2062,7 @@ function webgl_level_load({
 }
 
 function webgl_level_unload(base){
-    const player = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_player_id];
     const properties = {};
     if(base && player){
         Object.assign(
@@ -2075,7 +2075,7 @@ function webgl_level_unload(base){
         properties.entities = [];
         for(const id in entity_entities){
             const entity = entity_entities[id];
-            if(entity.attach_to === webgl_character_id
+            if(entity.attach_to === webgl_player_id
               && entity_groups.skybox[id] !== true){
                 properties.entities.push(entity);
             }
@@ -2269,7 +2269,7 @@ function webgl_logic(){
         }
     }
 
-    const player = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_player_id];
     const radians_x = math_degrees_to_radians(player.camera_rotate_x);
     const radians_y = math_degrees_to_radians(player.camera_rotate_y);
     if(player.camera_lock){
@@ -2441,7 +2441,7 @@ function webgl_logic_entity(entity){
 
     const draw_range = entity.draw_range || webgl_properties.draw_range;
     if(draw_range){
-        const player = webgl_characters[webgl_character_id];
+        const player = webgl_characters[webgl_player_id];
         const position = webgl_get_position(entity);
         entity.visible = math_distance({
             'x0': player.camera_x,
@@ -2767,7 +2767,7 @@ function webgl_path_move(character){
 }
 
 function webgl_path_use({
-  id = webgl_character_id,
+  id = webgl_player_id,
   path_id = '',
   use_path_properties = true,
 } = {}){
@@ -2792,7 +2792,7 @@ function webgl_pick(cursor){
         return;
     }
 
-    const player = webgl_characters[webgl_character_id];
+    const player = webgl_characters[webgl_player_id];
     if(player.life <= 0){
         return;
     }
@@ -2894,7 +2894,7 @@ function webgl_pick_event({
             const entity = entity_entities[id];
             if(color[3] === entity.picking){
                 if(entity.picking_range > 0){
-                    const player = webgl_characters[webgl_character_id];
+                    const player = webgl_characters[webgl_player_id];
                     const position = webgl_get_position(entity);
                     const distance = math_distance({
                       'x0': player.position_x,
@@ -2933,7 +2933,7 @@ function webgl_pick_event({
         }else{
             webgl_event({
               'parent': picked,
-              'target': webgl_characters[webgl_character_id],
+              'target': webgl_characters[webgl_player_id],
             });
         }
 
@@ -3845,7 +3845,7 @@ function webgl_primitive_terrain(args){
 }
 
 function webgl_projectile({
-  character = webgl_character_id,
+  character = webgl_player_id,
   projectile,
 } = {}){
     if(!projectile || core_type(projectile) === 'string'){
@@ -4529,7 +4529,7 @@ function webgl_uniform_update(){
 }
 
 function webgl_vehicle_toggle({
-  id = webgl_character_id,
+  id = webgl_player_id,
   vehicle = false,
 } = {}){
     const vehicle_new = webgl_characters[vehicle];
@@ -4601,9 +4601,8 @@ globalThis.webgl_uris = globalThis.uris || {
 };
 delete globalThis.uris;
 globalThis.webgl = 0;
+globalThis.webgl_character_base = '';
 globalThis.webgl_character_count = 0;
-globalThis.webgl_character_id = '_me';
-globalThis.webgl_character_base = webgl_character_id;
 globalThis.webgl_characters = {};
 globalThis.webgl_framebuffer = 0;
 globalThis.webgl_images = {};
@@ -4613,6 +4612,7 @@ globalThis.webgl_paths = {};
 globalThis.webgl_pick_id = 0;
 globalThis.webgl_picked = {};
 globalThis.webgl_pixelbuffers = [];
+globalThis.webgl_player_id = '_me';
 globalThis.webgl_properties = {};
 globalThis.webgl_shader_id = 'default';
 globalThis.webgl_shader_light_color = [];
