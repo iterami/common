@@ -2139,7 +2139,7 @@ function webgl_logic(){
 
         const collides = character.collides
           && webgl_paths[character.path_id]?.collision !== false;
-        let water_depth = 0;
+        let pressure = 0;
         if(collides){
             for(const water of webgl_water){
                 if(character.position_y - character.collide_bottom < water.y_max
@@ -2148,14 +2148,15 @@ function webgl_logic(){
                   && character.position_x + character.collide_xz > water.x_min
                   && character.position_z - character.collide_xz < water.z_max
                   && character.position_z + character.collide_xz > water.z_min){
-                    water_depth = Math.min(
-                      (water.y_max - character.position_y) / 100,
+                    pressure = Math.min(
+                      (water.y_max - character.position_y) / water.density,
                       1
                     );
+                    break;
                 }
             }
         }
-        if(water_depth > 0){
+        if(pressure > 0){
             character.state = 'water';
 
         }else if(character.state === 'water'){
@@ -2171,10 +2172,10 @@ function webgl_logic(){
         if(character.path_id.length){
             webgl_path_move(character);
 
-        }else if(level !== -1 && water_depth > 0){
+        }else if(level !== -1 && pressure > 0){
             character.change_position_y = Math.min(
-              character.change_position_y + water_depth / 2,
-              water_depth + .1
+              character.change_position_y + pressure / 2,
+              pressure + .1
             );
 
         }else if(character.gravity !== 0){
