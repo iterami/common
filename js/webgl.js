@@ -456,6 +456,10 @@ function webgl_character_spawn(id){
       webgl_properties.spawn,
       character.spawn
     );
+    if(character.camera_rotate_x === 0
+      && character.camera_zoom > 0){
+        character.camera_rotate_x = 25;
+    }
     if(character.spawn.path_id){
         webgl_path_use({
           'id': id,
