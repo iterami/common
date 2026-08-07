@@ -414,22 +414,6 @@ function webgl_character_scale({
     });
 }
 
-function webgl_character_set(id){
-    webgl_player_id = id;
-
-    entity_group_modify({
-      'groups': ['skybox'],
-      'todo': function(entity){
-          entity_group_move({
-            'entities': [entity.id],
-            'from': 'webgl_characters_' + entity.attach_to,
-            'to': 'webgl_characters_' + webgl_player_id,
-          });
-          entity.attach_to = webgl_player_id;
-      },
-    });
-}
-
 function webgl_character_spawn(id){
     if(core_type(id) !== 'string'){
         id = webgl_player_id;
@@ -3060,6 +3044,22 @@ function webgl_pick_resize(){
     );
 
     webgl_shader_use('default');
+}
+
+function webgl_player_set(id){
+    webgl_player_id = id;
+
+    entity_group_modify({
+      'groups': ['skybox'],
+      'todo': function(entity){
+          entity_group_move({
+            'entities': [entity.id],
+            'from': 'webgl_characters_' + entity.attach_to,
+            'to': 'webgl_characters_' + webgl_player_id,
+          });
+          entity.attach_to = webgl_player_id;
+      },
+    });
 }
 
 function webgl_prefab_args(args){
