@@ -3030,7 +3030,7 @@ function webgl_primitive_cuboid(args){
     const vertices_size_y = Math.abs(half_size_y);
     const vertices_size_z = Math.abs(half_size_z);
 
-    if(args.top.exclude !== true){
+    if(args.top !== false){
         const properties = {
           ...prefab_args,
           'attach_x': prefab_args.position_x,
@@ -3058,7 +3058,7 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    if(args.bottom.exclude !== true){
+    if(args.bottom !== false){
         const properties = {
           ...prefab_args,
           'attach_x': prefab_args.position_x,
@@ -3087,7 +3087,7 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    if(args.back.exclude !== true){
+    if(args.back !== false){
         const properties = {
           ...prefab_args,
           'attach_x': prefab_args.position_x,
@@ -3116,7 +3116,7 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    if(args.front.exclude !== true){
+    if(args.front !== false){
         const properties = {
           ...prefab_args,
           'attach_x': prefab_args.position_x,
@@ -3145,7 +3145,7 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    if(args.left.exclude !== true){
+    if(args.left !== false){
         const properties = {
           ...prefab_args,
           'attach_x': prefab_args.position_x - half_size_x,
@@ -3174,7 +3174,7 @@ function webgl_primitive_cuboid(args){
         });
     }
 
-    if(args.right.exclude !== true){
+    if(args.right !== false){
         const properties = {
           ...prefab_args,
           'attach_x': prefab_args.position_x + half_size_x,

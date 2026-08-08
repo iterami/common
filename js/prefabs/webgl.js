@@ -25,9 +25,7 @@ function prefabs_webgl_cuboid_tree(args){
 
     webgl_primitive_cuboid({
       ...prefab_args,
-      'bottom': {
-        'exclude': true,
-      },
+      'bottom': false,
       'character': args.character,
       'collision': args.trunk_collision,
       'left': {
@@ -45,9 +43,7 @@ function prefabs_webgl_cuboid_tree(args){
       'size_z': args.trunk_size_z,
       'texture': args.trunk_texture,
       'texture_y': 2,
-      'top': {
-        'exclude': true,
-      },
+      'top': false,
       'vertex_colors': args.trunk_color,
     });
     webgl_primitive_cuboid({
