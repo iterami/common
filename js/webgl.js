@@ -4180,7 +4180,6 @@ function webgl_tiles(args){
                 webgl_paths[prefix + path_object.id] = path_object;
             }
         }
-
         if(tile.characters){
             for(const character of tile.characters){
                 const spawn = character.spawn || {};
@@ -4199,7 +4198,6 @@ function webgl_tiles(args){
                 });
             }
         }
-
         if(tile.entities){
             for(const id in tile.entities){
                 const entity = tile.entities[id];
@@ -4222,7 +4220,6 @@ function webgl_tiles(args){
                 });
             }
         }
-
         if(tile.prefabs){
             for(const prefab of tile.prefabs){
                 const attached = prefab.properties.character !== void 0;
@@ -4313,7 +4310,6 @@ function webgl_timer_handle(timer){
     if(!timer.active){
         return;
     }
-
     if(--timer.frames > 0){
         return;
     }
@@ -4353,21 +4349,22 @@ function webgl_timer_toggle(id){
 }
 
 function webgl_uniform_update(){
-    const uniforms = webgl_shaders.default.uniforms;
-    webgl.uniform3fv(
-      uniforms.ambient_color,
-      webgl_properties.ambient_color
-    );
     const clear_color = webgl_properties.clear_color;
-    webgl.uniform3fv(
-      uniforms.clear_color,
-      clear_color
-    );
     webgl.clearColor(
       clear_color[0],
       clear_color[1],
       clear_color[2],
       1
+    );
+
+    const uniforms = webgl_shaders.default.uniforms;
+    webgl.uniform3fv(
+      uniforms.ambient_color,
+      webgl_properties.ambient_color
+    );
+    webgl.uniform3fv(
+      uniforms.clear_color,
+      clear_color
     );
     webgl.uniform1i(
       uniforms.directional,
