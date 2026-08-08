@@ -230,9 +230,6 @@ function webgl_character_init(args){
         'path_end': '',
         'path_id': '',
         'path_point': 0,
-        'scale_x': 1,
-        'scale_y': 1,
-        'scale_z': 1,
         'spawn': {},
         'speed': .66,
         'state': 'air',
@@ -363,55 +360,6 @@ function webgl_character_move({
     });
     webgl_characters[id].change_position_x += movement.x;
     webgl_characters[id].change_position_z += movement.z;
-}
-
-function webgl_character_scale({
-  id = webgl_player_id,
-  set = false,
-  x = false,
-  y = false,
-  z = false,
-} = {}){
-    const character = webgl_characters[id];
-    let scaled = false;
-    const axes = {x, y, z};
-    for(const axis in axes){
-        let value = axes[axis];
-        if(value === false){
-            continue;
-        }
-
-        const scale = 'scale_' + axis;
-        if(!set){
-            value += character[scale];
-        }
-        if(character[scale] !== value){
-            scaled = true;
-            character[scale] = value;
-        }
-    }
-
-    if(!scaled){
-        return;
-    }
-
-    entity_group_modify({
-      'groups': ['webgl_characters_' + id],
-      'todo': function(entity){
-          if(entity_groups.skybox?.[entity.id]){
-              return;
-          }
-
-          webgl_entity_scale({
-            'id': entity.id,
-            'set': true,
-            'update': false,
-            'x': entity.scale_x * character.scale_x,
-            'y': entity.scale_y * character.scale_y,
-            'z': entity.scale_z * character.scale_z,
-          });
-      },
-    });
 }
 
 function webgl_character_spawn(id){
@@ -1157,11 +1105,6 @@ function webgl_draw_entity(entity){
     );
 }
 
-function webgl_drawloop(){
-    webgl_draw();
-    core_interval_animationFrame('webgl_drawloop');
-}
-
 function webgl_draw_picking(){
     webgl.clearColor(0, 0, 0, 0);
     webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
@@ -1192,6 +1135,11 @@ function webgl_draw_picking(){
           webgl_draw_entity(entity);
       },
     });
+}
+
+function webgl_drawloop(){
+    webgl_draw();
+    core_interval_animationFrame('webgl_drawloop');
 }
 
 function webgl_entity_alpha({
@@ -1255,19 +1203,6 @@ function webgl_entity_create({
             entity.attach_to = webgl_player_id;
         }
 
-        if(entity.scale_x !== 1
-          || entity.scale_y !== 1
-          || entity.scale_z !== 1){
-            webgl_entity_scale({
-              'id': entity.id,
-              'init': true,
-              'set': true,
-              'x': entity.scale_x,
-              'y': entity.scale_y,
-              'z': entity.scale_z,
-            });
-        }
-
         entity_attach({
           'entity': entity,
           'to': entity.attach_to,
@@ -1281,14 +1216,6 @@ function webgl_entity_create({
           'group': 'webgl_characters_' + entity.attach_to,
         });
         const attach_to = webgl_characters[entity.attach_to];
-        webgl_entity_scale({
-          'id': entity.id,
-          'set': true,
-          'update': false,
-          'x': entity.scale_x * attach_to.scale_x,
-          'y': entity.scale_y * attach_to.scale_y,
-          'z': entity.scale_z * attach_to.scale_z,
-        });
     }
 }
 
@@ -1379,62 +1306,6 @@ function webgl_entity_normals(entity){
           : Math.sin(radians_x) * cos_y,
       }),
     ];
-}
-
-function webgl_entity_scale({
-  id,
-  init = false,
-  set = false,
-  todo = true,
-  update = true,
-  x = false,
-  y = false,
-  z = false,
-} = {}){
-    const entity = entity_entities[id];
-    let offset = 0;
-    let scaled = init;
-    const axes = {x, y, z};
-    for(const axis in axes){
-        let value = axes[axis];
-        if(value === false){
-            continue;
-        }
-
-        const scale = 'scale_' + axis;
-        const old_scale = entity[scale];
-        if(!set){
-            value += old_scale;
-        }
-        if(value !== old_scale || init){
-            scaled = true;
-
-            if(update){
-                entity[scale] = value;
-            }
-
-            for(let i = offset++; i < entity.vertices_length * 3; i += 3){
-                if(!init){
-                    entity.vertices[i] /= old_scale;
-                }
-                entity.vertices[i] *= value;
-            }
-            const attach = 'attach_' + axis;
-            if(!init){
-                entity[attach] /= old_scale;
-            }
-            entity[attach] *= value;
-        }
-    }
-
-    if(scaled && todo){
-        webgl.bindVertexArray(entity.vao);
-        webgl_buffer_set({
-          'attribute': webgl_shaders.default.attributes.vertexPosition,
-          'data': entity.vertices,
-          'size': 3,
-        });
-    }
 }
 
 function webgl_event({
@@ -1692,7 +1563,7 @@ uniform vec3 directional_vector;
 uniform vec3 normals;
 void main(void){
     positionVertex = vertexPosition;
-    positionCamera = camera * vec4(vertexPosition, 1.);
+    positionCamera = camera * vec4(positionVertex, 1.);
     gl_Position = perspective * positionCamera;
     if(point_size > 0.){
         gl_PointSize = point_size / length(positionCamera);
@@ -1745,9 +1616,6 @@ void main(void){
         'rotate_x': 0,
         'rotate_y': 0,
         'rotate_z': 0,
-        'scale_x': 1,
-        'scale_y': 1,
-        'scale_z': 1,
         'texture': webgl_default_texture,
         'texture_align': '11010010',
         'texture_x': 1,
