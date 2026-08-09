@@ -457,12 +457,22 @@ function webgl_collision({
   collider,
   target,
 } = {}){
-    const character = webgl_characters[target.attach_to];
+    const attached = globalThis[target.attach_type][target.attach_to];
     const collider_position = webgl_get_position(collider);
     const target_position = webgl_get_position(target);
-    const diffs_x = collider.change_position_x - character.change_position_x;
-    const diffs_y = collider.change_position_y - character.change_position_y;
-    const diffs_z = collider.change_position_z - character.change_position_z;
+    const change_position = {
+      'x': 0,
+      'y': 0,
+      'z': 0,
+    };
+    if(attached.change_position_x !== void 0){
+        change_position.x = attached.change_position_x;
+        change_position.y = attached.change_position_y;
+        change_position.z = attached.change_position_z;
+    }
+    const diff_x = collider.change_position_x - change_position.x;
+    const diff_y = collider.change_position_y - change_position.y;
+    const diff_z = collider.change_position_z - change_position.z;
     const normal_x = 1 - Math.abs(target.normals[0]);
     const normal_y = 1 - Math.abs(target.normals[1]);
     const normal_z = 1 - Math.abs(target.normals[2]);
@@ -497,8 +507,8 @@ function webgl_collision({
             range_y_max -= collision_modifier;
             range_y_min -= collision_modifier;
 
-        }else if(diffs_y === 0
-          || Math.sign(diffs_y) === collision_sign){
+        }else if(diff_y === 0
+          || Math.sign(diff_y) === collision_sign){
             return;
         }
 
@@ -511,8 +521,8 @@ function webgl_collision({
     }else if(normal_x !== 1){
         collision_sign = Math.sign(target.normals[0]);
 
-        if(diffs_x === 0
-          || Math.sign(diffs_x) === collision_sign){
+        if(diff_x === 0
+          || Math.sign(diff_x) === collision_sign){
             return;
         }
 
@@ -525,8 +535,8 @@ function webgl_collision({
     }else if(normal_z !== 1){
         collision_sign = Math.sign(target.normals[2]);
 
-        if(diffs_z === 0
-          || Math.sign(diffs_z) === collision_sign){
+        if(diff_z === 0
+          || Math.sign(diff_z) === collision_sign){
             return;
         }
 
@@ -537,10 +547,10 @@ function webgl_collision({
         range_y_min += target.vertices[2];
     }
 
-    const range_x = collider.collide_xz + Math.abs(diffs_x);
-    const range_y_bottom = collider.collide_bottom + Math.abs(diffs_y);
-    const range_y_top = collider.collide_top + Math.abs(diffs_y);
-    const range_z = collider.collide_xz + Math.abs(diffs_z);
+    const range_x = collider.collide_xz + Math.abs(diff_x);
+    const range_y_bottom = collider.collide_bottom + Math.abs(diff_y);
+    const range_y_top = collider.collide_top + Math.abs(diff_y);
+    const range_z = collider.collide_xz + Math.abs(diff_z);
     range_x_max += target_position.x + range_x;
     range_x_min += target_position.x - range_x;
     range_y_max += target_position.y + range_y_bottom;
@@ -564,8 +574,8 @@ function webgl_collision({
 
     collider['position_' + collision] = target_position[collision]
       + collider[collide_label] * collision_sign
-      + character[change_label] - collision_modifier;
-    collider[change_label] = character[change_label];
+      + change_position[collision] - collision_modifier;
+    collider[change_label] = change_position[collision];
 
     if(collision === 'y'){
         if(target.normals[1] > target.climbable){
@@ -583,8 +593,8 @@ function webgl_collision({
                 }
             }
 
-            change.x -= character.change_position_x;
-            change.z -= character.change_position_z;
+            change.x -= change_position.x;
+            change.z -= change_position.z;
 
         }else if(target.normals[0] !== 0){
             collider.change_position_x = Math.sign(target.normals[0]) * .2;
@@ -1281,11 +1291,11 @@ function webgl_entity_normals(entity){
         });
     }
 
-    const attached_to = globalThis[entity.attach_type][entity.attach_to];
-    const degrees_x = entity.rotate_x + attached_to.rotate_x;
-    const degrees_z = entity.rotate_z + attached_to.rotate_z;
+    const attached = globalThis[entity.attach_type][entity.attach_to];
+    const degrees_x = entity.rotate_x + attached.rotate_x;
+    const degrees_z = entity.rotate_z + attached.rotate_z;
     const radians_x = math_degrees_to_radians(degrees_x);
-    const radians_y = math_degrees_to_radians(entity.rotate_y + (entity.billboard ? 0 : attached_to.rotate_y));
+    const radians_y = math_degrees_to_radians(entity.rotate_y + (entity.billboard ? 0 : attached.rotate_y));
     const radians_z = -math_degrees_to_radians(degrees_z);
     const cos_y = Math.cos(radians_y);
 
@@ -1413,11 +1423,11 @@ function webgl_get_position(entity){
         };
     }
 
-    const target = globalThis[entity.attach_type][entity.attach_to];
+    const attached = globalThis[entity.attach_type][entity.attach_to];
     return {
-      'x': target.position_x + entity.attach_x,
-      'y': target.position_y + entity.attach_y,
-      'z': target.position_z + entity.attach_z,
+      'x': attached.position_x + entity.attach_x,
+      'y': attached.position_y + entity.attach_y,
+      'z': attached.position_z + entity.attach_z,
     };
 }
 
@@ -2218,17 +2228,17 @@ function webgl_logic(){
 }
 
 function webgl_logic_entity(entity){
-    const target = globalThis[entity.attach_type][entity.attach_to];
+    const attached = globalThis[entity.attach_type][entity.attach_to];
 
     if(entity_groups.skybox[entity.id]){
-        entity.position_x = target.camera_x;
-        entity.position_y = target.camera_y;
-        entity.position_z = target.camera_z;
+        entity.position_x = attached.camera_x;
+        entity.position_y = attached.camera_y;
+        entity.position_z = attached.camera_z;
 
     }else{
-        entity.position_x = target.position_x;
-        entity.position_y = target.position_y;
-        entity.position_z = target.position_z;
+        entity.position_x = attached.position_x;
+        entity.position_y = attached.position_y;
+        entity.position_z = attached.position_z;
     }
 
     if(entity.event_range){
@@ -2354,12 +2364,11 @@ function webgl_logic_entity(entity){
       -entity.position_z
     );
     if(entity_groups.skybox[entity.id] !== true){
-        const target = globalThis[entity.attach_type][entity.attach_to];
         math_matrix_rotate(
           webgl_matrices[entity.id],
-          math_degrees_to_radians(target.rotate_x),
-          entity.billboard ? 0 : math_degrees_to_radians(-target.rotate_y),
-          math_degrees_to_radians(target.rotate_z)
+          math_degrees_to_radians(attached.rotate_x),
+          entity.billboard ? 0 : math_degrees_to_radians(-attached.rotate_y),
+          math_degrees_to_radians(attached.rotate_z)
         );
     }
     math_matrix_translate(

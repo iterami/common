@@ -111,7 +111,6 @@ function prefabs_webgl_football_pitch(args){
 
     const flag_properties = {
       ...prefab_args,
-      'attach_type': 'webgl_characters',
       //'billboard': true,
       'collision': false,
       'draw_mode': 'TRIANGLE_FAN',
@@ -119,14 +118,12 @@ function prefabs_webgl_football_pitch(args){
     };
     const goal_properties = {
       ...prefab_args,
-      'attach_type': 'webgl_characters',
       'collision': false,
       'draw_mode': 'LINE_STRIP',
       'vertex_colors': args.goal_color,
     };
     const line_properties = {
       ...prefab_args,
-      'attach_type': 'webgl_characters',
       'collision': false,
       'draw_mode': 'TRIANGLE_STRIP',
       'vertex_colors': args.line_color,
@@ -138,7 +135,6 @@ function prefabs_webgl_football_pitch(args){
         {
           ...prefab_args,
           'id': args.prefix + '_grass',
-          'attach_type': 'webgl_characters',
           'vertex_colors': args.grass_color,
           'vertices': [
             half_length, 0, -half_width,
@@ -540,7 +536,6 @@ function prefabs_webgl_humanoid(args){
           'entities': [
             {
               ...prefab_args,
-              'attach_type': 'webgl_characters',
               'attach_x': prefab_args.position_x,
               'attach_y': prefab_args.position_y,
               'attach_z': prefab_args.position_z,
@@ -608,7 +603,6 @@ function prefabs_webgl_lines_path(args){
       'entities': [
         {
           ...prefab_args,
-          'attach_type': 'webgl_characters',
           'draw_mode': vertices.length === 3
             ? 'POINTS'
             : (webgl_paths[args.path].end !== 'loop'
@@ -687,7 +681,6 @@ function prefabs_webgl_lines_shrub(args){
       'entities': [
         {
           ...prefab_args,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z,
@@ -724,7 +717,6 @@ function prefabs_webgl_lines_tree(args){
 
     const properties = {
       ...prefab_args,
-      'attach_type': 'webgl_characters',
       'attach_x': prefab_args.position_x,
       'attach_y': prefab_args.position_y,
       'attach_z': prefab_args.position_z,
@@ -808,7 +800,6 @@ function prefabs_webgl_trap(args){
         {
           ...prefab_args,
           'id': id_trap,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z,
@@ -916,7 +907,6 @@ function prefabs_webgl_tree_2d(args){
       'entities': [
         {
           ...prefab_args,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z,
@@ -932,7 +922,6 @@ function prefabs_webgl_tree_2d(args){
         },
         {
           ...prefab_args,
-          'attach_type': 'webgl_characters',
           'attach_x': prefab_args.position_x,
           'attach_y': prefab_args.position_y,
           'attach_z': prefab_args.position_z,
