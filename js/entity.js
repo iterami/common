@@ -66,12 +66,13 @@ function entity_group_add({
         entity_group_create([group]);
     }
 
+    const entity_group = entity_groups[group];
     for(const entity of entities){
-        if(entity_groups[group][entity]){
+        if(entity_group[entity]){
             return;
         }
 
-        entity_groups[group][entity] = true;
+        entity_group[entity] = true;
         entity_groups._length[group]++;
     }
 }
@@ -114,16 +115,17 @@ function entity_group_remove({
   entities,
   group,
 } = {}){
-    if(entity_groups[group] === void 0){
+    const entity_group = entity_groups[group];
+    if(entity_group === void 0){
         return;
     }
 
     for(const entity of entities){
-        if(!entity_groups[group][entity]){
+        if(!entity_group[entity]){
             continue;
         }
 
-        delete entity_groups[group][entity];
+        delete entity_group[entity];
         entity_groups._length[group]--;
         if(entity_info[group]){
             entity_info[group].count--;
@@ -199,9 +201,10 @@ function entity_remove_all({
   delete_empty = false,
   group = false,
 } = {}){
+    const entity_group = entity_groups[group];
     for(const entity in entity_entities){
         if(group !== false
-          && !entity_groups[group][entity]){
+          && !entity_group[entity]){
             continue;
         }
 
