@@ -102,19 +102,19 @@ function webgl_camera_rotate({
 
     let normals = !camera;
     if(camera){
-        rotated.camera_rotate_x = math_clamp({
+        const x = math_clamp({
           'max': 360,
           'min': 0,
           'value': rotated.camera_rotate_x,
           'wrap': true,
         });
-        const max = rotated.camera_rotate_x > 180
+        const max = x > 180
           ? 360
           : 90;
         rotated.camera_rotate_x = math_clamp({
           'max': max,
           'min': max - 90,
-          'value': rotated.camera_rotate_x,
+          'value': x,
         });
         rotated.camera_rotate_y = math_clamp({
           'max': 360,
@@ -457,14 +457,12 @@ function webgl_collision({
   collider,
   target,
 } = {}){
-    const attached = globalThis[target.attach_type][target.attach_to];
-    const collider_position = webgl_get_position(collider);
-    const target_position = webgl_get_position(target);
     const change_position = {
       'x': 0,
       'y': 0,
       'z': 0,
     };
+    const attached = globalThis[target.attach_type][target.attach_to];
     if(attached.change_position_x !== void 0){
         change_position.x = attached.change_position_x;
         change_position.y = attached.change_position_y;
@@ -485,6 +483,8 @@ function webgl_collision({
     let collision = '';
     let collision_modifier = 0;
     let collision_sign = 0;
+    const collider_position = webgl_get_position(collider);
+    const target_position = webgl_get_position(target);
 
     if(normal_y !== 1){
         collision_sign = Math.sign(target.normals[1]);
@@ -548,13 +548,15 @@ function webgl_collision({
     }
 
     const range_x = collider.collide_xz + Math.abs(diff_x);
-    const range_y_bottom = collider.collide_bottom + Math.abs(diff_y);
-    const range_y_top = collider.collide_top + Math.abs(diff_y);
-    const range_z = collider.collide_xz + Math.abs(diff_z);
     range_x_max += target_position.x + range_x;
     range_x_min += target_position.x - range_x;
+
+    const range_y_bottom = collider.collide_bottom + Math.abs(diff_y);
+    const range_y_top = collider.collide_top + Math.abs(diff_y);
     range_y_max += target_position.y + range_y_bottom;
     range_y_min += target_position.y - range_y_top;
+
+    const range_z = collider.collide_xz + Math.abs(diff_z);
     range_z_max += target_position.z + range_z;
     range_z_min += target_position.z - range_z;
 
@@ -1076,10 +1078,19 @@ function webgl_draw_entity(entity){
 
     webgl.bindVertexArray(entity.vao);
 
-    const uniforms = webgl_shaders[webgl_shader_id].uniforms;
     webgl.bindTexture(
       webgl.TEXTURE_2D,
       webgl_textures[entity.texture].gl
+    );
+    const uniforms = webgl_shaders[webgl_shader_id].uniforms;
+    webgl.uniformMatrix4fv(
+      uniforms.camera,
+      false,
+      webgl_matrices[entity.id]
+    );
+    webgl.uniform3fv(
+      uniforms.normals,
+      entity.normals
     );
     webgl.uniform1f(
       uniforms.alpha,
@@ -1088,15 +1099,6 @@ function webgl_draw_entity(entity){
     webgl.uniform1f(
       uniforms.point_size,
       entity.point_size
-    );
-    webgl.uniform3fv(
-      uniforms.normals,
-      entity.normals
-    );
-    webgl.uniformMatrix4fv(
-      uniforms.camera,
-      false,
-      webgl_matrices[entity.id]
     );
     if(webgl_shader_id === 'picking'){
         webgl.uniform1f(
@@ -1683,7 +1685,6 @@ function webgl_level_init({
       && base.level < -1){
         return;
     }
-    webgl_character_base = webgl_player_id;
 
     if(json.randomized){
         for(const random of json.randomized){
@@ -1943,6 +1944,7 @@ function webgl_level_unload(base){
     core_object_reset(webgl_timers);
     core_object_reset(webgl_water);
 
+    webgl_character_base = webgl_player_id;
     webgl_character_count = 0;
     webgl_timer_count = 0;
 
