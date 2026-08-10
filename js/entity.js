@@ -1,20 +1,5 @@
 'use strict';
 
-function entity_attach({
-  entity,
-  to,
-  type = 'entity_entities',
-  x = 0,
-  y = 0,
-  z = 0,
-} = {}){
-    entity.attach_x = x;
-    entity.attach_y = y;
-    entity.attach_z = z;
-    entity.attach_to = to;
-    entity.attach_type = type;
-}
-
 function entity_create({
   id = entity_id_count,
   properties = {},

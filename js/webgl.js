@@ -1199,7 +1199,6 @@ function webgl_entity_create({
               'group': group,
             });
         }
-
         if(entity_groups.skybox?.[entity.id]){
             entity_group_remove({
               'entities': [entity.id],
@@ -1211,15 +1210,6 @@ function webgl_entity_create({
             });
             entity.attach_to = webgl_player_id;
         }
-
-        entity_attach({
-          'entity': entity,
-          'to': entity.attach_to,
-          'type': entity.attach_type,
-          'x': entity.attach_x,
-          'y': entity.attach_y,
-          'z': entity.attach_z,
-        });
         entity_group_add({
           'entities': [entity.id],
           'group': 'webgl_characters_' + entity.attach_to,
@@ -1232,23 +1222,21 @@ function webgl_entity_init(entity){
         webgl_texture_init(entity.texture);
     }
 
-    webgl_entity_alpha({
-      'alpha': entity.alpha,
-      'id': entity.id,
-    });
+    if(entity.picking === true){
+        entity.picking = ++webgl_pick_id;
+    }
     entity.vertices_length = entity.vertices.length / 3;
     entity.vertex_colors = webgl_vertexcolorarray({
       'colors': entity.vertex_colors,
       'vertexcount': entity.vertices_length,
     });
-    webgl_entity_normals(entity);
-
-    if(entity.picking === true){
-        entity.picking = ++webgl_pick_id;
-    }
+    webgl_entity_alpha({
+      'alpha': entity.alpha,
+      'id': entity.id,
+    });
     const texture_align = entity.texture_align;
-    const textureData = [];
     const half_length = texture_align.length / 2;
+    const textureData = [];
     for(let i = 0; i < entity.vertices_length; i++){
         const align = i < half_length
           ? i * 2
@@ -1258,10 +1246,16 @@ function webgl_entity_init(entity){
           texture_align[align + 1] * entity.texture_y
         );
     }
+    webgl_entity_normals(entity);
 
     const attributes = webgl_shaders.default.attributes;
     entity.vao = webgl.createVertexArray();
     webgl.bindVertexArray(entity.vao);
+    webgl_buffer_set({
+      'attribute': attributes.vertexPosition,
+      'data': entity.vertices,
+      'size': 3,
+    });
     webgl_buffer_set({
       'attribute': attributes.vertexColor,
       'data': entity.vertex_colors,
@@ -1271,11 +1265,6 @@ function webgl_entity_init(entity){
       'attribute': attributes.texturePosition,
       'data': textureData,
       'size': 2,
-    });
-    webgl_buffer_set({
-      'attribute': attributes.vertexPosition,
-      'data': entity.vertices,
-      'size': 3,
     });
 }
 
