@@ -1414,12 +1414,28 @@ function webgl_get_position(entity){
         };
     }
 
-    const attached = globalThis[entity.attach_type][entity.attach_to];
-    return {
-      'x': attached.position_x + entity.attach_x,
-      'y': attached.position_y + entity.attach_y,
-      'z': attached.position_z + entity.attach_z,
-    };
+    const position = {
+      'x': entity.attach_x,
+      'y': entity.attach_y,
+      'z': entity.attach_z,
+    }
+    let attached = globalThis[entity.attach_type][entity.attach_to];
+    while(true){
+        if(!attached.attach_to
+          || attached.id === entity.id){
+            position.x += attached.position_x;
+            position.y += attached.position_y;
+            position.z += attached.position_z;
+            break;
+
+        }else{
+            position.x += attached.attach_x;
+            position.y += attached.attach_y;
+            position.z += attached.attach_z;
+            attached = globalThis[attached.attach_type][attached.attach_to];
+        }
+    }
+    return position;
 }
 
 function webgl_init(){
