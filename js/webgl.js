@@ -457,26 +457,12 @@ function webgl_collision({
   collider,
   target,
 } = {}){
+    let attached = webgl_characters[target.attach_to];
     const change_position = {
-      'x': 0,
-      'y': 0,
-      'z': 0,
+      'x': attached.change_position_x,
+      'y': attached.change_position_y,
+      'z': attached.change_position_z,
     };
-    let attached = globalThis[target.attach_type][target.attach_to];
-    const set = new Set([target.id]);
-    while(true){
-        if(set.has(attached.id)){
-            break;
-        }
-        if(!attached.attach_to){
-            change_position.x += attached.change_position_x;
-            change_position.y += attached.change_position_y;
-            change_position.z += attached.change_position_z;
-            break;
-        }
-        set.add(attached.id);
-        attached = globalThis[attached.attach_type][attached.attach_to];
-    }
     const diff_x = collider.change_position_x - change_position.x;
     const diff_y = collider.change_position_y - change_position.y;
     const diff_z = collider.change_position_z - change_position.z;
@@ -1293,36 +1279,20 @@ function webgl_entity_normals(entity){
         });
     }
 
-    const degrees = {
-      'x': entity.rotate_x,
-      'y': entity.rotate_y,
-      'z': entity.rotate_z,
-    }
-    let attached = globalThis[entity.attach_type][entity.attach_to];
-    const set = new Set([entity.id]);
-    while(true){
-        if(set.has(attached.id)){
-            break;
-        }
-        if(!attached.attach_to){
-            degrees.x += attached.rotate_x;
-            degrees.y += attached.rotate_y;
-            degrees.z += attached.rotate_z;
-            break;
-        }
-        set.add(attached.id);
-        attached = globalThis[attached.attach_type][attached.attach_to];
-    }
-    const radians_x = math_degrees_to_radians(degrees.x);
+    let attached = webgl_characters[entity.attach_to];
+    const degrees_x = entity.rotate_x + attached.rotate_x;
+    const degrees_y = entity.rotate_y + attached.rotate_y;
+    const degrees_z = entity.rotate_z + attached.rotate_z;
+    const radians_x = math_degrees_to_radians(degrees_x);
     const radians_y = math_degrees_to_radians(entity.billboard
       ? entity.rotate_y
-      : degrees.y);
-    const radians_z = -math_degrees_to_radians(degrees.z);
+      : degrees_y);
+    const radians_z = -math_degrees_to_radians(degrees_z);
     const cos_y = Math.cos(radians_y);
 
     entity.normals = [
       core_round({
-        'number': (degrees.x === 90 || degrees.x === 270)
+        'number': (degrees_x === 90 || degrees_x === 270)
           ? Math.sin(radians_y)
           : Math.sin(radians_z) * cos_y,
       }),
@@ -1330,7 +1300,7 @@ function webgl_entity_normals(entity){
         'number': Math.cos(radians_x) * Math.cos(radians_z),
       }),
       core_round({
-        'number': (degrees.z === 90 || degrees.z === 270)
+        'number': (degrees_z === 90 || degrees_z === 270)
           ? Math.sin(radians_y)
           : Math.sin(radians_x) * cos_y,
       }),
@@ -1444,28 +1414,12 @@ function webgl_get_position(entity){
         };
     }
 
-    const position = {
-      'x': entity.attach_x,
-      'y': entity.attach_y,
-      'z': entity.attach_z,
+    let attached = webgl_characters[entity.attach_to];
+    return {
+      'x': attached.position_x + entity.attach_x,
+      'y': attached.position_y + entity.attach_y,
+      'z': attached.position_z + entity.attach_z,
     }
-    let attached = globalThis[entity.attach_type][entity.attach_to];
-    const set = new Set([entity.id]);
-    while(true){
-        if(!attached.attach_to
-          || set.has(attached.id)){
-            position.x += attached.position_x;
-            position.y += attached.position_y;
-            position.z += attached.position_z;
-            break;
-        }
-        position.x += attached.attach_x;
-        position.y += attached.attach_y;
-        position.z += attached.attach_z;
-        attached = globalThis[attached.attach_type][attached.attach_to];
-        set.add(attached.id);
-    }
-    return position;
 }
 
 function webgl_init(){
@@ -1629,7 +1583,6 @@ void main(void){
       'properties': {
         'alpha': 1,
         'attach_to': '',
-        'attach_type': 'webgl_characters',
         'attach_x': 0,
         'attach_y': 0,
         'attach_z': 0,
@@ -2265,7 +2218,7 @@ function webgl_logic(){
 }
 
 function webgl_logic_entity(entity){
-    const attached = globalThis[entity.attach_type][entity.attach_to];
+    const attached = webgl_characters[entity.attach_to];
 
     if(entity_groups.skybox[entity.id]){
         entity.position_x = attached.camera_x;
