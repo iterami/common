@@ -1414,6 +1414,7 @@ function webgl_get_position(entity){
         };
     }
 
+    const set = new Set([entity.id]);
     const position = {
       'x': entity.attach_x,
       'y': entity.attach_y,
@@ -1422,7 +1423,7 @@ function webgl_get_position(entity){
     let attached = globalThis[entity.attach_type][entity.attach_to];
     while(true){
         if(!attached.attach_to
-          || attached.id === entity.id){
+          || set.has(attached.id)){
             position.x += attached.position_x;
             position.y += attached.position_y;
             position.z += attached.position_z;
@@ -1434,6 +1435,8 @@ function webgl_get_position(entity){
             position.z += attached.attach_z;
             attached = globalThis[attached.attach_type][attached.attach_to];
         }
+
+        set.add(attached.id);
     }
     return position;
 }
