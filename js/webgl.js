@@ -1191,7 +1191,9 @@ function webgl_entity_create({
   groups = [],
 } = {}){
     for(const properties of entities){
-        properties.attach_to = character;
+        if(!properties.attach_to){
+            properties.attach_to = character;
+        }
         const entity = entity_create({
           'id': properties.id,
           'properties': properties,
@@ -1626,7 +1628,7 @@ void main(void){
       'defaults': true,
       'properties': {
         'alpha': 1,
-        'attach_to': webgl_player_id,
+        'attach_to': '',
         'attach_type': 'webgl_characters',
         'attach_x': 0,
         'attach_y': 0,
