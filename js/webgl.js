@@ -1998,7 +1998,7 @@ function webgl_logic(){
                   && character.position_x + character.collide_xz > water.x_min
                   && character.position_z - character.collide_xz < water.z_max
                   && character.position_z + character.collide_xz > water.z_min){
-                    const diff = water.y_max - character.position_y;
+                    const diff = water.y_max - character.position_y + character.collide_bottom / 2;
                     pressure = Math.min(
                       diff * water.density,
                       diff / 2
@@ -2426,16 +2426,24 @@ function webgl_model_create({
   model,
 } = {}){
     const character = webgl_characters[id];
-    const xz = character.collide_xz * 2;
-
     webgl_primitive_cuboid({
       'character': id,
       'collision': false,
-      'prefix': id,
-      'position_y': (character.collide_top - character.collide_bottom) / 2,
-      'size_x': xz,
-      'size_y': character.collide_bottom + character.collide_top,
-      'size_z': xz,
+      'prefix': id + '_head',
+      'size_x': character.collide_top * 2,
+      'size_y': character.collide_top * 2,
+      'size_z': character.collide_top * 2,
+      'texture': 'grid.png',
+      ...model,
+    });
+    webgl_primitive_cuboid({
+      'character': id,
+      'collision': false,
+      'prefix': id + '_body',
+      'position_y': -character.collide_bottom + character.collide_top * 2,
+      'size_x': character.collide_xz * 2,
+      'size_y': character.collide_bottom - character.collide_top,
+      'size_z': character.collide_xz / 1.5,
       'texture': 'grid.png',
       ...model,
     });
