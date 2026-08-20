@@ -853,7 +853,7 @@ function webgl_controls_keyboard(character){
         }
     }
 
-    if(level > -1 && character.state === 'air'){
+    if(level >= 0 && character.state === 'air'){
         return;
     }
 
@@ -898,7 +898,7 @@ function webgl_controls_keyboard(character){
         }
     }
 
-    if(level > -1){
+    if(level >= 0){
         if(leftright !== 0
           && forwardback !== 0){
             forwardback *= .7;
@@ -1246,6 +1246,26 @@ function webgl_entity_init(entity){
         );
     }
     webgl_entity_normals(entity);
+    if(entity.area !== false){
+        entity.area = core_object_defaults({
+          'object': entity.area,
+          'defaults': {
+            'current': 0,
+            'density': 0,
+            'particle': false,
+            'randomize': true,
+            'speed_x': 0,
+            'speed_y': 0,
+            'speed_z': 0,
+            'x_max': 0,
+            'x_min': 0,
+            'y_max': 0,
+            'y_min': 0,
+            'z_max': 0,
+            'z_min': 0,
+          },
+        });
+    }
 
     const attributes = webgl_shaders.default.attributes;
     entity.vao = webgl.createVertexArray();
@@ -1582,6 +1602,7 @@ void main(void){
       'defaults': true,
       'properties': {
         'alpha': 1,
+        'area': false,
         'attach_to': '',
         'attach_x': 0,
         'attach_y': 0,
@@ -1601,7 +1622,6 @@ void main(void){
         'light_color': [1, 1, 1],
         'light_range': 0,
         'normals': [],
-        'particle': false,
         'picking': false,
         'picking_exclude': false,
         'picking_range': 0,
@@ -1731,7 +1751,6 @@ function webgl_level_init({
         'groups': [],
         'lock': {},
         'paused': false,
-        'particles': [],
         'paths': [],
         'picking': 0,
         'pointerlock': false,
@@ -1741,7 +1760,6 @@ function webgl_level_init({
         'textures': false,
         'timers': [],
         'title': false,
-        'water': [],
         'y_min': false,
       },
     });
@@ -1811,10 +1829,6 @@ function webgl_level_init({
     for(const path of json.paths){
         webgl_paths[String(path.id)] = {...path};
     }
-    for(const properties of json.particles){
-        webgl_particle_create(properties);
-    }
-    webgl_water.push(...json.water);
 
     if(character === -1){
         webgl_character_init({
@@ -1935,13 +1949,11 @@ function webgl_level_unload(base){
       'delete_empty': true,
     });
     core_object_reset(webgl_characters);
-    core_object_reset(webgl_particles);
     core_object_reset(webgl_paths);
     core_object_reset(webgl_shader_light_color);
     core_object_reset(webgl_shader_light_position);
     core_object_reset(webgl_shader_light_range);
     core_object_reset(webgl_timers);
-    core_object_reset(webgl_water);
 
     webgl_character_base = webgl_player_id;
     webgl_character_count = 0;
@@ -1990,19 +2002,42 @@ function webgl_logic(){
         const collides = character.collides
           && webgl_paths[character.path_id]?.collision !== false;
         let pressure = 0;
-        if(collides){
-            for(const water of webgl_water){
-                if(character.position_y - character.collide_bottom < water.y_max
-                  && character.position_y + character.collide_top > water.y_min
-                  && character.position_x - character.collide_xz < water.x_max
-                  && character.position_x + character.collide_xz > water.x_min
-                  && character.position_z - character.collide_xz < water.z_max
-                  && character.position_z + character.collide_xz > water.z_min){
-                    const diff = water.y_max - character.position_y + character.collide_bottom / 2;
+        if(collides
+          && level >= 0){
+            for(const eid in entity_entities){
+                const entity = entity_entities[eid];
+                if(entity.area === false
+                  || entity.density === 0
+                  || entity.attach_to === id){
+                    continue;
+                }
+
+                const area = entity.area;
+                const position = webgl_get_position(entity);
+                if(character.position_y - character.collide_bottom < position.y + area.y_max
+                  && character.position_y + character.collide_top > position.y + area.y_min
+                  && character.position_x - character.collide_xz < position.x + area.x_max
+                  && character.position_x + character.collide_xz > position.x + area.x_min
+                  && character.position_z - character.collide_xz < position.z + area.z_max
+                  && character.position_z + character.collide_xz > position.z + area.z_min){
+                    const diff = position.y + area.y_max - character.position_y + character.collide_bottom / 2;
                     pressure = Math.min(
-                      diff * water.density,
+                      diff * area.density,
                       diff / 2
                     );
+
+                    if(area.current){
+                        if(area.speed_x !== 0){
+                            character.change_position_x = area.speed_x * area.current;
+                        }
+                        if(area.speed_y !== 0){
+                            character.change_position_y = area.speed_y * area.current;
+                        }
+                        if(area.speed_z !== 0){
+                            character.change_position_z = area.speed_z * area.current;
+                        }
+                    }
+
                     break;
                 }
             }
@@ -2023,7 +2058,7 @@ function webgl_logic(){
         if(character.path_id.length){
             webgl_path_move(character);
 
-        }else if(level !== -1 && pressure > 0){
+        }else if(pressure > 0){
             character.change_position_y = Math.min(
               character.change_position_y + pressure / 2,
               pressure + .1
@@ -2073,8 +2108,8 @@ function webgl_logic(){
             character.state = 'air';
         }
         if(collides){
-            for(const id in entity_entities){
-                const entity = entity_entities[id];
+            for(const eid in entity_entities){
+                const entity = entity_entities[eid];
                 if(entity.collision){
                     const change = webgl_collision({
                       'collider': character,
@@ -2338,7 +2373,7 @@ function webgl_logic_entity(entity){
         );
         webgl_shader_light_range.push(entity.light_range);
     }
-    if(entity.particle
+    if(entity.area?.particle
       && !webgl_properties.paused){
         webgl_logic_particle(entity);
     }
@@ -2376,39 +2411,39 @@ function webgl_logic_entity(entity){
 }
 
 function webgl_logic_particle(entity){
-    const particle = webgl_particles[entity.particle];
+    const area = entity.area;
     const repeat = entity.vertices_length * 3;
 
-    if(particle.randomize){
+    if(area.randomize){
         for(let vertex = 0; vertex < repeat; vertex += 3){
-            const y_vertex = entity.vertices[vertex + 1] + particle.speed_y;
-            if(y_vertex < particle.y_min
-              || y_vertex > particle.y_max){
-                entity.vertices[vertex] = particle.x_min
-                  + Math.random() * (particle.x_max - particle.x_min);
-                entity.vertices[vertex + 2] = particle.z_min
-                  + Math.random() * (particle.z_max - particle.z_min);
+            const y_vertex = entity.vertices[vertex + 1] + area.speed_y;
+            if(y_vertex < area.y_min
+              || y_vertex > area.y_max){
+                entity.vertices[vertex] = area.x_min
+                  + Math.random() * (area.x_max - area.x_min);
+                entity.vertices[vertex + 2] = area.z_min
+                  + Math.random() * (area.z_max - area.z_min);
             }
         }
     }
 
     for(let vertex = 0; vertex < repeat; vertex += 3){
         entity.vertices[vertex] = math_clamp({
-          'max': particle.x_max,
-          'min': particle.x_min,
-          'value': entity.vertices[vertex] + particle.speed_x,
+          'max': area.x_max,
+          'min': area.x_min,
+          'value': entity.vertices[vertex] + area.speed_x,
           'wrap': true,
         });
         entity.vertices[vertex + 1] = math_clamp({
-          'max': particle.y_max,
-          'min': particle.y_min,
-          'value': entity.vertices[vertex + 1] + particle.speed_y,
+          'max': area.y_max,
+          'min': area.y_min,
+          'value': entity.vertices[vertex + 1] + area.speed_y,
           'wrap': true,
         });
         entity.vertices[vertex + 2] = math_clamp({
-          'max': particle.z_max,
-          'min': particle.z_min,
-          'value': entity.vertices[vertex + 2] + particle.speed_z,
+          'max': area.z_max,
+          'min': area.z_min,
+          'value': entity.vertices[vertex + 2] + area.speed_z,
           'wrap': true,
         });
     }
@@ -2447,30 +2482,6 @@ function webgl_model_create({
       'texture': 'grid.png',
       ...model,
     });
-}
-
-function webgl_particle_create(particle){
-    const id = String(particle.id);
-    webgl_particles[id] = {
-      ...core_object_defaults({
-        'object': particle,
-        'defaults': {
-          'randomize': true,
-          'speed_x': 0,
-          'speed_y': 0,
-          'speed_z': 0,
-          'x_max': 100,
-          'x_min': -100,
-          'y_max': 100,
-          'y_min': -100,
-          'z_max': 100,
-          'z_min': -100,
-        },
-      }),
-      'id': id,
-    };
-
-    return webgl_particles[id];
 }
 
 function webgl_path_move(character){
@@ -3010,6 +3021,57 @@ function webgl_prefab_repeat({
     }
 }
 
+// Required args: id
+function webgl_primitive_area(args){
+    core_object_defaults({
+      'object': args,
+      'defaults': {
+        'area': {},
+        'character': webgl_character_base,
+        'entities': [],
+        'groups': [],
+      },
+    });
+    const prefab_args = webgl_prefab_args(args);
+
+    const x_min = args.area.x_min || 0;
+    const y_min = args.area.y_min || 0;
+    const z_min = args.area.z_min || 0;
+    const x_range = (args.area.x_max || 0) - x_min;
+    const y_range = (args.area.y_max || 0) - y_min;
+    const z_range = (args.area.z_max || 0) - z_min;
+
+    for(const entity of args.entities){
+        const vertices = [];
+        if(core_type(entity.vertices) === 'number'){
+            for(let vertex = 0; vertex <= entity.vertices; vertex++){
+                vertices.push(
+                  x_min + Math.random() * x_range,
+                  y_min + Math.random() * y_range,
+                  z_min + Math.random() * z_range
+                );
+            }
+
+        }else{
+            vertices.push(entity.vertices);
+        }
+
+        webgl_entity_create({
+          'character': args.character,
+          'entities': [
+            {
+              ...prefab_args,
+              ...entity,
+              'area': {...args.area},
+              'collision': false,
+              'vertices': vertices,
+            },
+          ],
+          'groups': args.groups,
+        });
+    }
+}
+
 function webgl_primitive_cuboid(args){
     core_object_defaults({
       'object': args,
@@ -3469,56 +3531,6 @@ function webgl_primitive_frustum(args){
         webgl_entity_create({
           'character': args.character,
           'entities': [properties],
-          'groups': args.groups,
-        });
-    }
-}
-
-// Required args: id
-function webgl_primitive_particle(args){
-    core_object_defaults({
-      'object': args,
-      'defaults': {
-        'character': webgl_character_base,
-        'entities': [],
-        'groups': [],
-        'particle': {},
-        'prefix': entity_id_count,
-      },
-    });
-    const prefab_args = webgl_prefab_args(args);
-
-    const particle = webgl_particle_create({
-      'id': args.id,
-      ...args.particle,
-    });
-
-    for(const entity of args.entities){
-        const vertices = [];
-        const vertexcount = entity.vertex_repeat;
-        delete entity.vertex_repeat;
-        for(let vertex = 0; vertex <= vertexcount; vertex++){
-            vertices.push(
-              particle.x_min + Math.random() * (particle.x_max - particle.x_min),
-              particle.y_min + Math.random() * (particle.y_max - particle.y_min),
-              particle.z_min + Math.random() * (particle.z_max - particle.z_min)
-            );
-        }
-
-        webgl_entity_create({
-          'character': args.character,
-          'entities': [
-            {
-              ...prefab_args,
-              ...entity,
-              'collision': false,
-              'particle': particle.id,
-              'vertex_colors': entity.vertex_colors || webgl_vertexcolorarray({
-                'vertexcount': 1,
-              }),
-              'vertices': vertices,
-            },
-          ],
           'groups': args.groups,
         });
     }
@@ -4474,7 +4486,6 @@ globalThis.webgl_characters = {};
 globalThis.webgl_framebuffer = 0;
 globalThis.webgl_images = {};
 globalThis.webgl_matrices = {};
-globalThis.webgl_particles = {};
 globalThis.webgl_paths = {};
 globalThis.webgl_pick_id = 0;
 globalThis.webgl_picked = {};
@@ -4489,4 +4500,3 @@ globalThis.webgl_shaders = {};
 globalThis.webgl_textures = {};
 globalThis.webgl_timer_count = 0;
 globalThis.webgl_timers = {};
-globalThis.webgl_water = [];
