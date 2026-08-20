@@ -1253,7 +1253,7 @@ function webgl_entity_init(entity){
             'current': 0,
             'density': 0,
             'particle': false,
-            'randomize': true,
+            'randomize': false,
             'speed_x': 0,
             'speed_y': 0,
             'speed_z': 0,
