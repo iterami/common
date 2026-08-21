@@ -2006,13 +2006,16 @@ function webgl_logic(){
           && level >= 0){
             for(const eid in entity_entities){
                 const entity = entity_entities[eid];
-                if(entity.area === false
-                  || entity.density === 0
-                  || entity.attach_to === id){
+                if(entity.attach_to === id){
                     continue;
                 }
 
                 const area = entity.area;
+                if(area === false
+                  || (area.current === 0 && area.density === 0)){
+                    continue;
+                }
+
                 const position = webgl_get_position(entity);
                 if(character.position_y - character.collide_bottom < position.y + area.y_max
                   && character.position_y + character.collide_top > position.y + area.y_min
@@ -2020,12 +2023,6 @@ function webgl_logic(){
                   && character.position_x + character.collide_xz > position.x + area.x_min
                   && character.position_z - character.collide_xz < position.z + area.z_max
                   && character.position_z + character.collide_xz > position.z + area.z_min){
-                    const diff = position.y + area.y_max - character.position_y + character.collide_bottom / 2;
-                    pressure = Math.min(
-                      diff * area.density,
-                      diff / 2
-                    );
-
                     if(area.current){
                         if(area.speed_x !== 0){
                             character.change_position_x = area.speed_x * area.current;
@@ -2036,6 +2033,13 @@ function webgl_logic(){
                         if(area.speed_z !== 0){
                             character.change_position_z = area.speed_z * area.current;
                         }
+                    }
+                    if(area.density){
+                        const diff = position.y + area.y_max - character.position_y + character.collide_bottom / 2;
+                        pressure = Math.min(
+                          diff * area.density,
+                          diff / 2
+                        );
                     }
 
                     break;
