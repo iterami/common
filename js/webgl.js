@@ -2163,17 +2163,21 @@ function webgl_logic(){
     const radians_x = math_degrees_to_radians(player.camera_rotate_x);
     const radians_y = math_degrees_to_radians(player.camera_rotate_y);
     if(player.camera_lock){
+        const target = player.camera_lock === true
+          ? player
+          : webgl_characters[player.camera_lock];
+
         if(player.camera_zoom > 0){
             const zoom_cos_x = player.camera_zoom * Math.cos(radians_x);
 
-            player.camera_x = player.position_x + Math.sin(-radians_y) * zoom_cos_x;
-            player.camera_y = player.position_y + Math.sin(radians_x) * player.camera_zoom;
-            player.camera_z = player.position_z + Math.cos(radians_y) * zoom_cos_x;
+            player.camera_x = target.position_x + Math.sin(-radians_y) * zoom_cos_x;
+            player.camera_y = target.position_y + Math.sin(radians_x) * player.camera_zoom;
+            player.camera_z = target.position_z + Math.cos(radians_y) * zoom_cos_x;
 
         }else{
-            player.camera_x = player.position_x;
-            player.camera_y = player.position_y;
-            player.camera_z = player.position_z;
+            player.camera_x = target.position_x;
+            player.camera_y = target.position_y;
+            player.camera_z = target.position_z;
         }
     }
 
