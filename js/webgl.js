@@ -45,10 +45,6 @@ function webgl_buffer_set({
   data,
   size,
 } = {}){
-    if(attribute < 0){
-        return;
-    }
-
     webgl.bindBuffer(
       webgl.ARRAY_BUFFER,
       webgl.createBuffer()
