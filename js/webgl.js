@@ -2418,38 +2418,51 @@ function webgl_logic_particle(entity){
     const area = entity.area;
     const repeat = entity.vertices_length * 3;
 
-    if(area.randomize){
-        for(let vertex = 0; vertex < repeat; vertex += 3){
-            const y_vertex = entity.vertices[vertex + 1] + area.speed_y;
-            if(y_vertex < area.y_min
-              || y_vertex > area.y_max){
-                entity.vertices[vertex] = area.x_min
-                  + Math.random() * (area.x_max - area.x_min);
-                entity.vertices[vertex + 2] = area.z_min
-                  + Math.random() * (area.z_max - area.z_min);
+    for(let vertex = 0; vertex < repeat; vertex += 3){
+        let x = entity.vertices[vertex] + area.speed_x;
+        let y = entity.vertices[vertex + 1] + area.speed_y;
+        let z = entity.vertices[vertex + 2] + area.speed_z;
+
+        if(x < area.x_min || x > area.x_max){
+            x = math_clamp({
+              'max': area.x_max,
+              'min': area.x_min,
+              'value': x,
+              'wrap': true,
+            });
+            if(area.randomize){
+                y = area.y_min + Math.random() * (area.y_max - area.y_min);
+                z = area.z_min + Math.random() * (area.z_max - area.z_min);
+            }
+
+        }else if(y < area.y_min || y > area.y_max){
+            y = math_clamp({
+              'max': area.y_max,
+              'min': area.y_min,
+              'value': y,
+              'wrap': true,
+            });
+            if(area.randomize){
+                x = area.x_min + Math.random() * (area.x_max - area.x_min);
+                z = area.z_min + Math.random() * (area.z_max - area.z_min);
+            }
+
+        }else if(z < area.z_min || z > area.z_max){
+            z = math_clamp({
+              'max': area.z_max,
+              'min': area.z_min,
+              'value': z,
+              'wrap': true,
+            });
+            if(area.randomize){
+                x = area.x_min + Math.random() * (area.x_max - area.x_min);
+                y = area.y_min + Math.random() * (area.y_max - area.y_min);
             }
         }
-    }
 
-    for(let vertex = 0; vertex < repeat; vertex += 3){
-        entity.vertices[vertex] = math_clamp({
-          'max': area.x_max,
-          'min': area.x_min,
-          'value': entity.vertices[vertex] + area.speed_x,
-          'wrap': true,
-        });
-        entity.vertices[vertex + 1] = math_clamp({
-          'max': area.y_max,
-          'min': area.y_min,
-          'value': entity.vertices[vertex + 1] + area.speed_y,
-          'wrap': true,
-        });
-        entity.vertices[vertex + 2] = math_clamp({
-          'max': area.z_max,
-          'min': area.z_min,
-          'value': entity.vertices[vertex + 2] + area.speed_z,
-          'wrap': true,
-        });
+        entity.vertices[vertex] = x;
+        entity.vertices[vertex + 1] = y;
+        entity.vertices[vertex + 2] = z;
     }
 
     webgl.bindVertexArray(entity.vao);
