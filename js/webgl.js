@@ -3051,14 +3051,18 @@ function webgl_primitive_area(args){
     });
     const prefab_args = webgl_prefab_args(args);
 
-    const x_min = args.area.x_min || 0;
-    const y_min = args.area.y_min || 0;
-    const z_min = args.area.z_min || 0;
-    const x_range = (args.area.x_max || 0) - x_min;
-    const y_range = (args.area.y_max || 0) - y_min;
-    const z_range = (args.area.z_max || 0) - z_min;
-
     for(const entity of args.entities){
+        const area = {
+          ...args.area,
+          ...entity.area,
+        };
+        const x_min = area.x_min || 0;
+        const y_min = area.y_min || 0;
+        const z_min = area.z_min || 0;
+        const x_range = (area.x_max || 0) - x_min;
+        const y_range = (area.y_max || 0) - y_min;
+        const z_range = (area.z_max || 0) - z_min;
+
         const vertices = [];
         if(core_type(entity.vertices) === 'number'){
             for(let vertex = 0; vertex <= entity.vertices; vertex++){
@@ -3079,7 +3083,7 @@ function webgl_primitive_area(args){
             {
               ...prefab_args,
               ...entity,
-              'area': {...args.area},
+              'area': area,
               'collision': false,
               'vertices': vertices,
             },
