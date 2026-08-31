@@ -3064,9 +3064,10 @@ function webgl_primitive_area(args){
         const x_range = (area.x_max || 0) - x_min;
         const y_range = (area.y_max || 0) - y_min;
         const z_range = (area.z_max || 0) - z_min;
+        const color = entity.vertex_colors || prefab_args.vertex_colors;
 
         const vertices = [];
-        const colors = [...prefab_args.vertex_colors];
+        const colors = [...color];
         if(core_type(entity.vertices) === 'number'){
             for(let vertex = 0; vertex <= entity.vertices; vertex++){
                 vertices.push(
@@ -3075,7 +3076,7 @@ function webgl_primitive_area(args){
                   z_min + Math.random() * z_range
                 );
 
-                if(prefab_args.vertex_colors.length === 0){
+                if(color.length === 0){
                     colors.push(
                       Math.random(),
                       Math.random(),
