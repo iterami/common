@@ -42,12 +42,17 @@ function webgl_billboard(id){
 
 function webgl_buffer_set({
   attribute,
+  buffers,
   data,
   size,
 } = {}){
+    if(!buffers[attribute]){
+        buffers[attribute] = webgl.createBuffer();
+    }
+
     webgl.bindBuffer(
       webgl.ARRAY_BUFFER,
-      webgl.createBuffer()
+      buffers[attribute]
     );
     webgl.bufferData(
       webgl.ARRAY_BUFFER,
@@ -1263,21 +1268,29 @@ function webgl_entity_init(entity){
         });
     }
 
-    const attributes = webgl_shaders.default.attributes;
+    if(entity.buffers){
+        webgl_entity_unload(entity);
+    }
+    entity.buffers = {};
     entity.vao = webgl.createVertexArray();
+
+    const attributes = webgl_shaders.default.attributes;
     webgl.bindVertexArray(entity.vao);
     webgl_buffer_set({
       'attribute': attributes.vertexPosition,
+      'buffers': entity.buffers,
       'data': entity.vertices,
       'size': 3,
     });
     webgl_buffer_set({
       'attribute': attributes.vertexColor,
+      'buffers': entity.buffers,
       'data': entity.vertex_colors,
       'size': 4,
     });
     webgl_buffer_set({
       'attribute': attributes.texturePosition,
+      'buffers': entity.buffers,
       'data': textureData,
       'size': 2,
     });
@@ -1321,6 +1334,16 @@ function webgl_entity_normals(entity){
           : Math.sin(radians_x) * cos_y,
       }),
     ];
+}
+
+function webgl_entity_unload(entity){
+    for(const buffer in entity.buffers){
+        webgl.deleteBuffer(entity.buffers[buffer]);
+    }
+    delete entity.buffers;
+
+    webgl.deleteVertexArray(entity.vao);
+    delete entity.vao;
 }
 
 function webgl_event({
@@ -1923,6 +1946,10 @@ function webgl_level_load({
 }
 
 function webgl_level_unload(base){
+    for(const id in entity_entities){
+        webgl_entity_unload(entity_entities[id]);
+    }
+
     const player = webgl_characters[webgl_player_id];
     const properties = {};
     if(base && player){
@@ -2470,6 +2497,7 @@ function webgl_logic_particle(entity){
     webgl.bindVertexArray(entity.vao);
     webgl_buffer_set({
       'attribute': webgl_shaders.default.attributes.vertexPosition,
+      'buffers': entity.buffers,
       'data': entity.vertices,
       'size': 3,
     });
@@ -3926,6 +3954,7 @@ function webgl_stat_modify({
         webgl.bindVertexArray(target.vao);
         webgl_buffer_set({
           'attribute': webgl_shaders.default.attributes.vertexColor,
+          'buffers': target.buffers,
           'data': webgl_vertexcolorarray({
             'colors': target.vertex_colors,
             'vertexcount': target.vertices_length,
