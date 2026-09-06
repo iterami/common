@@ -633,11 +633,23 @@ function webgl_context_lost(event){
 }
 
 function webgl_context_restored(){
+    core_object_reset(webgl_shaders);
     core_object_reset(webgl_textures);
+    core_object_reset(webgl_pixelbuffers);
+    const pick_init = webgl_framebuffer !== 0;
+    webgl_framebuffer = 0;
+
     webgl_init();
     webgl_uniform_update();
-    for(const entity in entity_entities){
-        webgl_entity_init(entity_entities[entity]);
+
+    if(pick_init !== 0){
+        webgl_pick_init();
+    }
+    for(const id in entity_entities){
+        const entity = entity_entities[id];
+        delete entity.buffers;
+        delete entity.vao;
+        webgl_entity_init(entity);
     }
 
     if(core_menu_open){
