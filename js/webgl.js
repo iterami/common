@@ -3644,10 +3644,16 @@ function webgl_primitive_projectile(args){
     const prefab_args = webgl_prefab_args(args);
 
     const character = webgl_characters[args.character];
-    const properties = {
+    const rotate_x = math_degrees_to_radians(character.camera_rotate_x);
+    const rotate_y = math_degrees_to_radians(character.rotate_y + 90);
+    const cos_y_speed = -Math.cos(rotate_x) * args.speed;
+    webgl_character_init({
       'camera_rotate_x': character.camera_rotate_x,
       'camera_rotate_y': character.camera_rotate_y,
       'camera_rotate_z': character.camera_rotate_z,
+      'change_position_x': Math.cos(rotate_y) * cos_y_speed,
+      'change_position_y': -Math.sin(rotate_x) * args.speed,
+      'change_position_z': Math.sin(rotate_y) * cos_y_speed,
       'collides': true,
       'controls': 'projectile',
       'gravity': 0,
@@ -3675,14 +3681,6 @@ function webgl_primitive_projectile(args){
           ],
         },
       ],
-    };
-    webgl_character_init(properties);
-
-    const projectile = webgl_characters[args.prefix];
-    webgl_character_move({
-      'angle': projectile.rotate_y,
-      'id': projectile.id,
-      'speed': -projectile.speed,
     });
 }
 
