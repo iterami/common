@@ -3671,14 +3671,10 @@ function webgl_primitive_projectile(args){
         {
           ...prefab_args,
           'id': args.prefix,
-          'billboard': true,
           'collision': false,
-          'vertices': [
-            .5, .5, 0,
-            -.5, .5, 0,
-            -.5, -.5, 0,
-            .5, -.5, 0,
-          ],
+          'draw_mode': 'POINTS',
+          'point_size': 250,
+          'vertices': [0, 0, 0],
         },
       ],
     });
