@@ -115,21 +115,19 @@ ul{
     outline: 2px solid #07f;
 }
 a:active,
+a:hover,
 button:active{
     color: #07f;
 }
-a:active::after{
+a:active::after,
+a:hover::after{
     color: #f00;
 }
 tr:hover{
     background-color: #111;
 }
-@media (hover: hover) and (pointer: fine){
-  a:hover,
+@media (hover:hover) and (pointer:fine){
   button:hover{
       color: #07f;
-  }
-  a:hover::after{
-      color: #f00;
   }
 }

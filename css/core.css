@@ -181,23 +181,21 @@ textarea{
     outline: 2px solid #4c4;
 }
 a:active,
+a:hover,
 button:enabled:active,
 input[type=file]:enabled:active::file-selector-button{
     color: #07f;
 }
-a:active::after{
+a:active::after,
+a:hover::after{
     color: #f00;
 }
 tr:hover{
     background-color: #111;
 }
-@media (hover: hover) and (pointer: fine){
-  a:hover,
+@media (hover:hover) and (pointer:fine){
   button:enabled:hover,
   input[type=file]:enabled:hover::file-selector-button{
       color: #07f;
-  }
-  a:hover::after{
-      color: #f00;
   }
 }
