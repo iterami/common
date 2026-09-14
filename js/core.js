@@ -76,7 +76,7 @@ function core_events_bind({
         for(const bind in pointerbinds){
             core_events[bind] = pointerbinds[bind];
         }
-        if(pointerbinds.contextmenu){
+        if(core_events.contextmenu){
             globalThis.addEventListener('contextmenu', core_handle_contextmenu);
         }
 
@@ -170,11 +170,9 @@ function core_handle_blur(event){
 }
 
 function core_handle_contextmenu(event){
-    if(!core_menu_open
-      && core_events.contextmenu){
+    if(!core_menu_open){
         core_handle_prevent(event);
         core_events.contextmenu(event);
-        return false;
     }
 }
 
