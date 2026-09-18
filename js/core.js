@@ -1079,9 +1079,19 @@ function core_storage_add({
   storage,
 } = {}){
     for(const key in storage){
+        core_elements[key] = document.getElementById(key);
+        let property = 'value';
+        if(core_type(storage[key]) === 'boolean'){
+            property = 'checked';
+
+        }else if(core_type(core_elements[key].value) === 'undefined'){
+            property = 'textContent';
+        }
+
         core_storage_info[key] = {
           'default': storage[key],
           'prefix': prefix,
+          'property': property,
         };
         const value = globalThis.localStorage.getItem(prefix + key);
         core_storage_data[key] = value === null
@@ -1090,7 +1100,6 @@ function core_storage_add({
               'template': core_storage_info[key].default,
               'value': value,
             });
-        core_elements[key] = document.getElementById(key);
     }
 
     if(!document.getElementById('storage_save')){
@@ -1106,19 +1115,6 @@ function core_storage_add({
           'type': 'button',
         });
     }
-}
-
-function core_storage_element_property({
-  element,
-  key,
-} = {}){
-    if(core_type(core_storage_info[key].default) === 'boolean'){
-        return 'checked';
-    }
-    if(core_type(element.value) === 'undefined'){
-        return 'textContent';
-    }
-    return 'value';
 }
 
 function core_storage_reset({
@@ -1152,10 +1148,7 @@ function core_storage_save({
     }
     for(const key of keys){
         const element = core_elements[key];
-        const property = core_storage_element_property({
-          'element': element,
-          'key': key,
-        });
+        const property = core_storage_info[key].property;
 
         if(element.validity && !element.validity.valid){
             element[property] = core_storage_data[key];
@@ -1196,10 +1189,7 @@ function core_storage_update(keys){
     }
     for(const key of keys){
         const element = core_elements[key];
-        element[core_storage_element_property({
-          'element': element,
-          'key': key,
-        })] = core_storage_data[key];
+        element[core_storage_info[key].property] = core_storage_data[key];
     }
 }
 
