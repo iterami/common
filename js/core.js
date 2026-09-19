@@ -192,10 +192,10 @@ function core_handle_keydown(event){
 
     const key = core_keys[event.code];
     if(key){
-        if(key.state){
+        core_handle_prevent(event);
+        if(event.repeat && key.state){
             return;
         }
-        core_handle_prevent(event);
         key.state = true;
         key.down?.(event);
     }
