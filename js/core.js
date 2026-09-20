@@ -1293,8 +1293,8 @@ function core_type_convert({
       && core_type(value) !== 'boolean'){
         return value === 'true';
     }
-    if(!globalThis.isNaN(Number.parseFloat(template))){
-        return Number.parseFloat(value);
+    if(!globalThis.isNaN(Number(template))){
+        return Number(value);
     }
     return value;
 }
