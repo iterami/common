@@ -87,20 +87,17 @@ function time_from_inputs(){
       'second': 0,
       'year': 0,
     };
-    for(const value in date){
-        const element = core_getelement(value);
+    for(const part in date){
+        const element = core_getelement(part);
         if(!element){
             continue;
         }
 
-        date[value] = Number.parseInt(
-          element.value,
-          10
-        );
-
-        if(globalThis.isNaN(date[value])){
-            date[value] = 0;
+        let value = Number(element.value);
+        if(globalThis.isNaN(value)){
+            value = 0;
         }
+        date[part] = value;
     }
 
     return date_to_timestamp(date);
