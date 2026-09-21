@@ -1281,22 +1281,17 @@ function core_type_convert({
   template,
   value,
 } = {}){
-    const type = core_type(template);
-    if(type === 'string'){
-        return String(value);
-    }
-    if(type === 'array'
-      || type === 'object'){
+    const template_type = core_type(template);
+    const value_type = core_type(value);
+    if(value_type === template_type){
         return value;
     }
-    if(type === 'boolean'
-      && core_type(value) !== 'boolean'){
+
+    if(template_type === 'boolean'){
         return value === 'true';
     }
-    if(!globalThis.isNaN(Number(template))){
-        return Number(value);
-    }
-    return value;
+
+    return globalThis[template.constructor.name](value);
 }
 
 function core_ui_update({
