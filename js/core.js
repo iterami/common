@@ -1269,12 +1269,7 @@ function core_tab_switch(id){
 }
 
 function core_type(variable){
-    if(variable === void 0
-      || variable === null){
-        return 'undefined';
-    }
-
-    return variable.constructor.name;
+    return variable?.constructor.name ?? 'undefined';
 }
 
 function core_type_convert({
