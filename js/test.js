@@ -40,11 +40,11 @@ function test_function({
       : 'undefined function';
     const type = core_type(expect);
 
-    if(type === 'function'){
+    if(type === 'Function'){
         test = expect(returned);
 
-    }else if(type === 'array'
-      || type === 'object'){
+    }else if(type === 'Object'
+      || type === 'Array'){
         test = true;
         for(const item in returned){
             if(expect[item] === void 0
@@ -82,11 +82,11 @@ function test_run({
         );
         const args_type = core_type(test.args);
         let args_json = '';
-        if(args_type === 'object'){
+        if(args_type === 'Object'){
             test_args.args = {...test.args};
             const args_object = {};
             for(const arg in test_args.args){
-                if(core_type(test_args.args[arg]) === 'function'){
+                if(core_type(test_args.args[arg]) === 'Function'){
                     args_object[arg] = core_replace({
                       'patterns': {
                         '\n': '<br>',
@@ -103,7 +103,7 @@ function test_run({
               2
             );
 
-        }else if(args_type === 'function'){
+        }else if(args_type === 'Function'){
             args_json = test_trim(test_args.args.toString());
 
         }else{
@@ -115,7 +115,7 @@ function test_run({
             );
         }
         const result = test_function(test_args);
-        const expect = core_type(test.expect) === 'function'
+        const expect = core_type(test.expect) === 'Function'
           ? test_trim(test.expect.toString())
           : JSON.stringify(
             test.expect,

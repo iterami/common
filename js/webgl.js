@@ -168,7 +168,7 @@ function webgl_camera_rotate({
 }
 
 function webgl_character_automove(id){
-    if(core_type(id) !== 'string'){
+    if(core_type(id) !== 'String'){
         id = webgl_player_id;
     }
     const character = webgl_characters[id];
@@ -176,7 +176,7 @@ function webgl_character_automove(id){
 }
 
 function webgl_character_die(id){
-    if(core_type(id) !== 'string'){
+    if(core_type(id) !== 'String'){
         id = webgl_player_id;
     }
     webgl_stat_modify({
@@ -331,7 +331,7 @@ function webgl_character_level(character){
         character = webgl_characters[webgl_player_id];
     }
 
-    if(core_type(character.level) === 'number'){
+    if(core_type(character.level) === 'Number'){
         return character.level;
     }
 
@@ -374,7 +374,7 @@ function webgl_character_remove(id){
 }
 
 function webgl_character_spawn(id){
-    if(core_type(id) !== 'string'){
+    if(core_type(id) !== 'String'){
         id = webgl_player_id;
     }
     const character = webgl_characters[id];
@@ -1381,7 +1381,7 @@ function webgl_event({
   parent,
   target,
 } = {}){
-    const array = core_type(parent) === 'array';
+    const array = core_type(parent) === 'Array';
     const event_todo = array
       ? parent
       : parent.event_todo;
@@ -1470,7 +1470,7 @@ function webgl_event_replace(modify, replace){
         }
 
         const type = core_type(modify[property]);
-        if(type === 'object' || type === 'array'){
+        if(type === 'Object' || type === 'Array'){
             webgl_event_replace(modify[property], replace);
         }
     }
@@ -1890,7 +1890,7 @@ function webgl_level_init({
           'level': -1,
         });
 
-    }else if(core_type(character) === 'object'){
+    }else if(core_type(character) === 'Object'){
         webgl_character_init(character);
 
     }else{
@@ -2339,7 +2339,7 @@ function webgl_logic_entity(entity){
     if(entity.event_range){
         const event_position = webgl_get_position(entity);
 
-        if(core_type(entity.event_range) === 'array'){
+        if(core_type(entity.event_range) === 'Array'){
             const event_x = event_position.x + entity.event_range[0];
             const event_y = event_position.y + entity.event_range[1];
             const event_z = event_position.z + entity.event_range[2];
@@ -3140,7 +3140,7 @@ function webgl_primitive_area(args){
 
         const vertices = [];
         const colors = [...color];
-        if(core_type(entity.vertices) === 'number'){
+        if(core_type(entity.vertices) === 'Number'){
             for(let vertex = 0; vertex <= entity.vertices; vertex++){
                 vertices.push(
                   x_min + Math.random() * x_range,
@@ -3832,7 +3832,7 @@ function webgl_projectile({
   character = webgl_player_id,
   projectile,
 } = {}){
-    if(!projectile || core_type(projectile) === 'string'){
+    if(!projectile || core_type(projectile) === 'String'){
         const parent = webgl_characters[character];
         const projectile_character = webgl_characters[projectile];
 
@@ -3987,7 +3987,7 @@ function webgl_stat_modify({
         webgl_camera_rotate(rotate_args);
 
     }else if(stat === 'vertex_colors'){
-        target.vertex_colors = core_type(value) === 'array'
+        target.vertex_colors = core_type(value) === 'Array'
           ? value
           : webgl_vertexcolorarray();
         webgl.bindVertexArray(target.vao);
@@ -4014,7 +4014,7 @@ function webgl_stat_modify({
             return;
         }
 
-        target[stat] = (set || core_type(value) !== 'number')
+        target[stat] = (set || core_type(value) !== 'Number')
           ? value
           : (round === false
             ? target[stat] + value

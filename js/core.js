@@ -20,7 +20,7 @@ function core_escape(force){
       && force !== true){
         return;
     }
-    if(core_type(force) === 'boolean'){
+    if(core_type(force) === 'Boolean'){
         if(core_menu_open === force){
             return;
         }
@@ -649,7 +649,7 @@ function core_object_defaults({
 }
 
 function core_object_reset(object){
-    if(core_type(object) === 'array'){
+    if(core_type(object) === 'Array'){
         object.length = 0;
         return;
     }
@@ -943,7 +943,7 @@ function core_requestpointerlock(element){
         return;
     }
 
-    if(request && core_type(request.then) === 'function'){
+    if(request && core_type(request.then) === 'Function'){
         request.catch(function(error){});
     }
 }
@@ -1081,7 +1081,7 @@ function core_storage_add({
     for(const key in storage){
         core_elements[key] = document.getElementById(key);
         let property = 'value';
-        if(core_type(storage[key]) === 'boolean'){
+        if(core_type(storage[key]) === 'Boolean'){
             property = 'checked';
 
         }else if(core_type(core_elements[key].value) === 'undefined'){
@@ -1143,7 +1143,7 @@ function core_storage_save({
   keys = false,
   rebind = true,
 } = {}){
-    if(core_type(keys) !== 'array'){
+    if(core_type(keys) !== 'Array'){
         keys = Object.keys(core_storage_data);
     }
     for(const key of keys){
@@ -1184,7 +1184,7 @@ function core_storage_save({
 }
 
 function core_storage_update(keys){
-    if(core_type(keys) !== 'array'){
+    if(core_type(keys) !== 'Array'){
         keys = Object.keys(core_storage_data);
     }
     for(const key of keys){
@@ -1274,7 +1274,7 @@ function core_type(variable){
         return 'undefined';
     }
 
-    return variable.constructor.name.toLowerCase();
+    return variable.constructor.name;
 }
 
 function core_type_convert({
@@ -1283,11 +1283,13 @@ function core_type_convert({
 } = {}){
     const template_type = core_type(template);
     const value_type = core_type(value);
-    if(value_type === template_type){
+    if(value_type === template_type
+      || template_type === 'undefined'
+      || value_type === 'undefined'){
         return value;
     }
 
-    if(template_type === 'boolean'){
+    if(template_type === 'Boolean'){
         return value === 'true';
     }
 
