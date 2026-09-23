@@ -80,6 +80,7 @@ input{
     user-select: auto;
 }
 #core_ui table{
+    background-color: #000;
     margin: 0;
 }
 .external{
