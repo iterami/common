@@ -423,64 +423,6 @@ function core_html_format(string){
     });
 }
 
-function core_init(){
-    core_html({
-      'parent': document.body,
-      'properties': {
-        'id': 'core_ui',
-      },
-      'store': 'core_ui',
-      'todo': 'prepend',
-    });
-    core_html({
-      'parent': core_elements.core_ui,
-      'properties': {
-        'id': 'core_toggle',
-        'onclick': core_escape,
-        'textContent': '☰',
-      },
-      'store': 'core_toggle',
-      'type': 'button',
-    });
-    core_html({
-      'parent': core_elements.core_ui,
-      'properties': {
-        'class': 'hidden',
-        'id': 'core_menu',
-        'innerHTML': '<a id=core_menu_root></a>/<a class=external id=core_menu_title rel=noreferrer target=_blank></a>',
-      },
-      'store': 'core_menu',
-      'type': 'span',
-    });
-    core_html({
-      'parent': core_elements.core_ui,
-      'properties': {
-        'id': 'repo_ui',
-      },
-      'store': 'repo_ui',
-      'type': 'span',
-    });
-
-    core_pointer = {
-      'down_0': false,
-      'down_1': false,
-      'down_2': false,
-      'down_3': false,
-      'down_4': false,
-      'down_x': 0,
-      'down_y': 0,
-      'movement_x': 0,
-      'movement_y': 0,
-      'x': 0,
-      'y': 0,
-    };
-    globalThis.addEventListener('blur', core_handle_blur);
-    globalThis.addEventListener('keydown', core_handle_keydown);
-    globalThis.addEventListener('keyup', core_handle_keyup);
-
-    globalThis.repo_init();
-}
-
 function core_interval_animationFrame(id){
     const interval = core_intervals[id];
     interval.var = globalThis.requestAnimationFrame(interval.todo);
@@ -1356,4 +1298,60 @@ globalThis.core_storage_data = {};
 globalThis.core_storage_info = {};
 globalThis.core_ui_values = {};
 
-globalThis.onload = core_init;
+globalThis.onload = function(){
+    core_html({
+      'parent': document.body,
+      'properties': {
+        'id': 'core_ui',
+      },
+      'store': 'core_ui',
+      'todo': 'prepend',
+    });
+    core_html({
+      'parent': core_elements.core_ui,
+      'properties': {
+        'id': 'core_toggle',
+        'onclick': core_escape,
+        'textContent': '☰',
+      },
+      'store': 'core_toggle',
+      'type': 'button',
+    });
+    core_html({
+      'parent': core_elements.core_ui,
+      'properties': {
+        'class': 'hidden',
+        'id': 'core_menu',
+        'innerHTML': '<a id=core_menu_root></a>/<a class=external id=core_menu_title rel=noreferrer target=_blank></a>',
+      },
+      'store': 'core_menu',
+      'type': 'span',
+    });
+    core_html({
+      'parent': core_elements.core_ui,
+      'properties': {
+        'id': 'repo_ui',
+      },
+      'store': 'repo_ui',
+      'type': 'span',
+    });
+
+    core_pointer = {
+      'down_0': false,
+      'down_1': false,
+      'down_2': false,
+      'down_3': false,
+      'down_4': false,
+      'down_x': 0,
+      'down_y': 0,
+      'movement_x': 0,
+      'movement_y': 0,
+      'x': 0,
+      'y': 0,
+    };
+    globalThis.addEventListener('blur', core_handle_blur);
+    globalThis.addEventListener('keydown', core_handle_keydown);
+    globalThis.addEventListener('keyup', core_handle_keyup);
+
+    globalThis.repo_init();
+}
