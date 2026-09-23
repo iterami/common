@@ -859,11 +859,6 @@ function core_repo_init({
         core_elements[id] = document.getElementById(id);
     }
 
-    for(const todo of core_init_todo){
-        todo();
-    }
-    delete globalThis.core_init_todo;
-
     if(menu || menu_lock){
         core_escape(true);
     }
@@ -1282,7 +1277,6 @@ function core_ui_update({
 
 globalThis.core_elements = {};
 globalThis.core_events = {};
-globalThis.core_init_todo = [];
 globalThis.core_intervals = {};
 globalThis.core_key_rebinds = {};
 globalThis.core_key_shift = false;
@@ -1298,7 +1292,7 @@ globalThis.core_storage_data = {};
 globalThis.core_storage_info = {};
 globalThis.core_ui_values = {};
 
-globalThis.onload = function(){
+globalThis.addEventListener('load', function(){
     core_html({
       'parent': document.body,
       'properties': {
@@ -1354,4 +1348,4 @@ globalThis.onload = function(){
     globalThis.addEventListener('keyup', core_handle_keyup);
 
     globalThis.repo_init();
-}
+});

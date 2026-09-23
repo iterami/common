@@ -169,7 +169,7 @@ globalThis.audio_listener = {
   'forwardZ': -1,
 };
 
-core_init_todo.push(function(){
+globalThis.addEventListener('load', function(){
     core_tab_create({
       'content': '<table><tr><td><input class=mini id=audio_volume min=0 step=.001 type=number><td><label>Volume <input id=audio_enabled type=checkbox></label></table>'
         + '<button id=storage_reset_audio type=button>Reset Audio Settings</button>',
