@@ -121,16 +121,8 @@ function canvas_init({
       'properties': properties,
       'type': 'canvas',
     });
-    canvas_element.addEventListener(
-      'contextlost',
-      canvas_context_lost,
-      false
-    );
-    canvas_element.addEventListener(
-      'contextrestored',
-      canvas_context_restored,
-      false
-    );
+    canvas_element.addEventListener('contextlost', canvas_context_lost);
+    canvas_element.addEventListener('contextrestored', canvas_context_restored);
     canvas = canvas_element.getContext(
       '2d',
       {

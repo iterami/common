@@ -1501,16 +1501,8 @@ function webgl_init(){
       },
       'type': 'canvas',
     });
-    canvas.addEventListener(
-      'webglcontextlost',
-      webgl_context_lost,
-      false
-    );
-    canvas.addEventListener(
-      'webglcontextrestored',
-      webgl_context_restored,
-      false
-    );
+    canvas.addEventListener('webglcontextlost', webgl_context_lost);
+    canvas.addEventListener('webglcontextrestored', webgl_context_restored);
     webgl = canvas.getContext(
       'webgl2',
       {
