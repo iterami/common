@@ -204,4 +204,4 @@ globalThis.addEventListener('load', function(){
     audio_create({
       'boop': true,
     });
-});
+}, {'once': true});

@@ -1348,4 +1348,4 @@ globalThis.addEventListener('load', function(){
     globalThis.addEventListener('keyup', core_handle_keyup);
 
     globalThis.repo_init();
-});
+}, {'once': true});
