@@ -1580,7 +1580,7 @@ uniform vec3 clear_color;
 uniform vec3 light_color[16];
 uniform vec3 light_position[16];
 void main(void){
-    fragment = color;
+    fragment = texture(sampler, positionTexture) * color;
     if(fog_end > 0.){
         fragment.rgb = mix(
           fragment.rgb,
@@ -1601,7 +1601,6 @@ void main(void){
             );
         }
     }
-    fragment *= texture(sampler, positionTexture);
 }`,
       'vertex':
 `#version 300 es
