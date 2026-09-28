@@ -109,10 +109,10 @@ ul{
 }
 
 *:focus{
-    outline: 2px solid #4c4;
+    outline: 3px solid #4c4;
 }
 *:target{
-    outline: 2px solid #07f;
+    outline: 4px solid #07f;
 }
 a:active,
 a:hover,
