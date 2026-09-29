@@ -113,6 +113,10 @@ function test_run({
               void 0,
               2
             );
+            if(args_json === '{}'
+              || args_json === 'null'){
+                args_json = test.args;
+            }
         }
         const result = test_function(test_args);
         const expect = core_type(test.expect) === 'Function'
