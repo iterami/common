@@ -1585,7 +1585,7 @@ void main(void){
         fragment.rgb = mix(
           fragment.rgb,
           clear_color,
-          clamp((length(positionCamera) - fog_start) / (fog_end - fog_start), 0., 1.)
+          smoothstep(fog_start, fog_end, length(positionCamera))
         );
     }
     for(int i = 0; i < light_count; i++) {
