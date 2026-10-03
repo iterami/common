@@ -668,6 +668,9 @@ function core_repo_init({
       globalThis,
       globals
     );
+    for(const id of ui_elements){
+        core_elements[id] = document.getElementById(id);
+    }
 
     core_repo_title = title;
     if(info.length){
@@ -681,14 +684,14 @@ function core_repo_init({
         });
     }
     Object.assign(
-      document.getElementById('core_menu_root'),
+      core_getelement('core_menu_root'),
       {
         'href': root,
         'textContent': owner,
       }
     );
     Object.assign(
-      document.getElementById('core_menu_title'),
+      core_getelement('core_menu_title'),
       {
         'href': link === false
           ? 'https://github.com/' + owner + '/' + core_repo_title
@@ -757,7 +760,7 @@ function core_repo_init({
             'move_right': true,
             'move_up': true,
             ...storage_controls,
-          },
+          }
         );
     }
     if(storage !== false){
@@ -785,20 +788,20 @@ function core_repo_init({
         core_tab_switch('tab_repo');
     }
 
-    if(keybinds !== false){
-        Object.assign(
-          core_key_rebinds,
-          keybinds,
-        );
-    }
-    core_keys_rebind();
-
     core_menu_block_events = menu_block_events;
     core_menu_lock = menu_lock;
 
     if(blur !== false){
         core_events.blur = blur;
     }
+
+    if(keybinds !== false){
+        Object.assign(
+          core_key_rebinds,
+          keybinds
+        );
+    }
+    core_keys_rebind();
 
     if(pointerbinds !== false){
         for(const bind in pointerbinds){
@@ -825,9 +828,6 @@ function core_repo_init({
         globalThis.addEventListener('touchstart', core_handle_touch, options);
     }
 
-    for(const id of ui_elements){
-        core_elements[id] = document.getElementById(id);
-    }
     for(const id in events){
         Object.assign(
           core_getelement(id),
@@ -1015,7 +1015,7 @@ function core_storage_add({
             });
     }
 
-    if(!document.getElementById('storage_save')){
+    if(!core_getelement('storage_save')){
         core_html({
           'parent': core_elements.core_menu,
           'properties': {
@@ -1116,7 +1116,7 @@ function core_tab_create({
     const tabs_id = 'tabs_' + group;
     const tabcontents_id = 'tabcontents_' + group;
 
-    let tabs = document.getElementById(tabs_id);
+    let tabs = core_getelement(tabs_id);
     if(!tabs){
         tabs = core_html({
           'parent': core_elements.core_menu,
@@ -1148,7 +1148,7 @@ function core_tab_create({
       'type': 'button',
     });
     core_html({
-      'parent': document.getElementById(tabcontents_id),
+      'parent': core_getelement(tabcontents_id),
       'properties': {
         'class': 'hidden',
         'id': 'tabcontent_' + id,
@@ -1158,7 +1158,7 @@ function core_tab_create({
 }
 
 function core_tab_switch(id){
-    const tab = document.getElementById('tabcontent_' + id.substring(4));
+    const tab = core_getelement('tabcontent_' + id.substring(4));
     if(!tab){
         return;
     }
@@ -1169,7 +1169,7 @@ function core_tab_switch(id){
     for(const child of tabs){
         child.classList.add('hidden');
     }
-    const button = document.getElementById(id);
+    const button = core_getelement(id);
     const buttons = button.parentElement.children;
     for(const child of buttons){
         child.classList.remove('active');
