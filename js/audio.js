@@ -184,18 +184,17 @@ globalThis.addEventListener('load', function(){
         'audio_volume': 1,
       },
     });
-    core_events_bind({
-      'elements': {
-        'storage_reset_audio': {
-          'onclick': function(){
-              core_storage_reset({
-                'label': 'audio',
-                'prefix': 'audio_',
-              });
-          },
+    Object.assign(
+      core_getelement('storage_reset_audio'),
+      {
+        'onclick': function(){
+            core_storage_reset({
+              'label': 'audio',
+              'prefix': 'audio_',
+            });
         },
-      },
-    });
+      }
+    );
     core_storage_update([
       'audio_enabled',
       'audio_volume',

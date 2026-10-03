@@ -47,63 +47,6 @@ function core_escape(force){
     globalThis.repo_escape?.();
 }
 
-function core_events_bind({
-  blur = false,
-  elements = false,
-  keybinds = false,
-  pointerbinds = false,
-} = {}){
-    if(blur !== false){
-        core_events.blur = blur;
-    }
-
-    if(keybinds !== false){
-        core_object_reset(core_keys);
-        for(const bind in keybinds){
-            core_keys[bind] = core_object_defaults({
-              'object': keybinds[bind],
-              'defaults': {
-                'state': false,
-              },
-            });
-        }
-    }
-
-    if(pointerbinds !== false){
-        for(const bind in pointerbinds){
-            core_events[bind] = pointerbinds[bind];
-        }
-        if(core_events.contextmenu){
-            globalThis.addEventListener('contextmenu', core_handle_contextmenu);
-        }
-
-        const options = {
-          'passive': false,
-        };
-
-        document.addEventListener('pointerlockchange', core_handle_pointerlockchange);
-        globalThis.addEventListener('pointercancel', core_handle_pointercancel, options);
-        globalThis.addEventListener('pointerdown', core_handle_pointerdown, options);
-        globalThis.addEventListener('pointermove', core_handle_pointermove, options);
-        globalThis.addEventListener('pointerup', core_handle_pointerup, options);
-        globalThis.addEventListener('wheel', core_handle_wheel, options);
-
-        globalThis.addEventListener('touchcancel', core_handle_touch, options);
-        globalThis.addEventListener('touchend', core_handle_touch, options);
-        globalThis.addEventListener('touchmove', core_handle_touch, options);
-        globalThis.addEventListener('touchstart', core_handle_touch, options);
-    }
-
-    if(elements !== false){
-        for(const id in elements){
-            Object.assign(
-              core_getelement(id),
-              elements[id]
-            );
-        }
-    }
-}
-
 function core_file({
   file,
   todo,
@@ -547,9 +490,16 @@ function core_keys_rebind(){
           ...core_key_rebinds[id],
         };
     }
-    core_events_bind({
-      'keybinds': keys,
-    });
+
+    core_object_reset(core_keys);
+    for(const bind in keys){
+        core_keys[bind] = core_object_defaults({
+          'object': keys[bind],
+          'defaults': {
+            'state': false,
+          },
+        });
+    }
 }
 
 function core_number_format({
@@ -845,14 +795,44 @@ function core_repo_init({
 
     core_menu_block_events = menu_block_events;
     core_menu_lock = menu_lock;
-    core_events_bind({
-      'blur': blur,
-      'elements': events,
-      'pointerbinds': pointerbinds,
-    });
+
+    if(blur !== false){
+        core_events.blur = blur;
+    }
+
+    if(pointerbinds !== false){
+        for(const bind in pointerbinds){
+            core_events[bind] = pointerbinds[bind];
+        }
+        if(core_events.contextmenu){
+            globalThis.addEventListener('contextmenu', core_handle_contextmenu);
+        }
+
+        const options = {
+          'passive': false,
+        };
+
+        document.addEventListener('pointerlockchange', core_handle_pointerlockchange);
+        globalThis.addEventListener('pointercancel', core_handle_pointercancel, options);
+        globalThis.addEventListener('pointerdown', core_handle_pointerdown, options);
+        globalThis.addEventListener('pointermove', core_handle_pointermove, options);
+        globalThis.addEventListener('pointerup', core_handle_pointerup, options);
+        globalThis.addEventListener('wheel', core_handle_wheel, options);
+
+        globalThis.addEventListener('touchcancel', core_handle_touch, options);
+        globalThis.addEventListener('touchend', core_handle_touch, options);
+        globalThis.addEventListener('touchmove', core_handle_touch, options);
+        globalThis.addEventListener('touchstart', core_handle_touch, options);
+    }
 
     for(const id of ui_elements){
         core_elements[id] = document.getElementById(id);
+    }
+    for(const id in events){
+        Object.assign(
+          core_getelement(id),
+          events[id]
+        );
     }
 
     if(menu || menu_lock){
