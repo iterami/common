@@ -49,7 +49,6 @@ function core_escape(force){
 
 function core_events_bind({
   blur = false,
-  clearkeys = false,
   elements = false,
   keybinds = false,
   pointerbinds = false,
@@ -58,10 +57,8 @@ function core_events_bind({
         core_events.blur = blur;
     }
 
-    if(clearkeys){
-        core_object_reset(core_keys);
-    }
     if(keybinds !== false){
+        core_object_reset(core_keys);
         for(const bind in keybinds){
             core_keys[bind] = core_object_defaults({
               'object': keybinds[bind],
@@ -551,7 +548,6 @@ function core_keys_rebind(){
         };
     }
     core_events_bind({
-      'clearkeys': true,
       'keybinds': keys,
     });
 }
