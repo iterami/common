@@ -31,8 +31,7 @@ input{
 }
 code{
     border: 2px solid #444;
-    display: block;
-    padding: .3rem;
+    display: inline-block;
     white-space: pre;
 }
 .external{
