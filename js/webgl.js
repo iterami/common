@@ -1674,7 +1674,7 @@ void main(void){
         'rotate_x': 0,
         'rotate_y': 0,
         'rotate_z': 0,
-        'texture': webgl_default_texture,
+        'texture': 'default.png',
         'texture_align': '11010010',
         'texture_x': 1,
         'texture_y': 1,
@@ -4149,7 +4149,7 @@ function webgl_texture_init(id){
                 webgl_images[image] = event.target;
                 webgl_texture_init(id);
             };
-            img.src = webgl_uris[image] || webgl_uris[webgl_default_texture];
+            img.src = webgl_uris[image] || webgl_uris['default.png'];
             return;
         }
     }
@@ -4564,11 +4564,6 @@ function webgl_vertexcolorarray({
     return color;
 }
 
-globalThis.webgl_default_texture = 'default.png';
-globalThis.webgl_uris = globalThis.uris || {
-  [webgl_default_texture]: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
-};
-delete globalThis.uris;
 globalThis.webgl = 0;
 globalThis.webgl_character_base = '';
 globalThis.webgl_character_count = 0;
@@ -4590,3 +4585,15 @@ globalThis.webgl_shaders = {};
 globalThis.webgl_textures = {};
 globalThis.webgl_timer_count = 0;
 globalThis.webgl_timers = {};
+globalThis.webgl_uris = {};
+
+globalThis.addEventListener('load', function(){
+    Object.assign(
+      webgl_uris,
+      {
+        'default.png': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
+      },
+      globalThis.uris
+    );
+    delete globalThis.uris;
+}, {'once': true});
