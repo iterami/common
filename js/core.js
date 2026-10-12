@@ -664,24 +664,16 @@ function core_repo_init({
   ui = '',
   ui_elements = [],
 } = {}){
+    core_menu_block_events = menu_block_events;
+    core_menu_lock = menu_lock;
+    core_repo_title = title;
     Object.assign(
       globalThis,
       globals
     );
+
     for(const id of ui_elements){
         core_elements[id] = document.getElementById(id);
-    }
-
-    core_repo_title = title;
-    if(info.length){
-        core_html({
-          'parent': core_elements.core_menu,
-          'properties': {
-            'id': 'core_menu_info',
-            'innerHTML': info,
-          },
-          'todo': 'append',
-        });
     }
     Object.assign(
       core_getelement('core_menu_root'),
@@ -699,6 +691,16 @@ function core_repo_init({
         'textContent': core_repo_title,
       }
     );
+    if(info.length){
+        core_html({
+          'parent': core_elements.core_menu,
+          'properties': {
+            'id': 'core_menu_info',
+            'innerHTML': info,
+          },
+          'todo': 'append',
+        });
+    }
     core_elements.repo_ui.innerHTML = ui;
 
     let have_default = false;
@@ -788,13 +790,6 @@ function core_repo_init({
         core_tab_switch('tab_repo');
     }
 
-    core_menu_block_events = menu_block_events;
-    core_menu_lock = menu_lock;
-
-    if(blur !== false){
-        core_events.blur = blur;
-    }
-
     if(keybinds !== false){
         Object.assign(
           core_key_rebinds,
@@ -802,7 +797,6 @@ function core_repo_init({
         );
     }
     core_keys_rebind();
-
     if(pointerbinds !== false){
         for(const bind in pointerbinds){
             core_events[bind] = pointerbinds[bind];
@@ -827,7 +821,9 @@ function core_repo_init({
         globalThis.addEventListener('touchmove', core_handle_touch, options);
         globalThis.addEventListener('touchstart', core_handle_touch, options);
     }
-
+    if(blur !== false){
+        core_events.blur = blur;
+    }
     for(const id in events){
         Object.assign(
           core_getelement(id),
