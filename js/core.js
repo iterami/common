@@ -1265,6 +1265,24 @@ globalThis.core_storage_info = {};
 globalThis.core_ui_values = {};
 
 globalThis.addEventListener('load', function(){
+    core_pointer = {
+      'down_0': false,
+      'down_1': false,
+      'down_2': false,
+      'down_3': false,
+      'down_4': false,
+      'down_x': 0,
+      'down_y': 0,
+      'movement_x': 0,
+      'movement_y': 0,
+      'x': 0,
+      'y': 0,
+    };
+
+    globalThis.addEventListener('blur', core_handle_blur);
+    globalThis.addEventListener('keydown', core_handle_keydown);
+    globalThis.addEventListener('keyup', core_handle_keyup);
+
     core_html({
       'parent': document.body,
       'properties': {
@@ -1301,23 +1319,6 @@ globalThis.addEventListener('load', function(){
       'store': 'repo_ui',
       'type': 'span',
     });
-
-    core_pointer = {
-      'down_0': false,
-      'down_1': false,
-      'down_2': false,
-      'down_3': false,
-      'down_4': false,
-      'down_x': 0,
-      'down_y': 0,
-      'movement_x': 0,
-      'movement_y': 0,
-      'x': 0,
-      'y': 0,
-    };
-    globalThis.addEventListener('blur', core_handle_blur);
-    globalThis.addEventListener('keydown', core_handle_keydown);
-    globalThis.addEventListener('keyup', core_handle_keyup);
 
     globalThis.repo_init();
 }, {'once': true});
