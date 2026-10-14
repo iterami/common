@@ -672,9 +672,21 @@ function core_repo_init({
       globals
     );
 
+    if(info.length){
+        core_html({
+          'parent': core_elements.core_menu,
+          'properties': {
+            'id': 'core_menu_info',
+            'innerHTML': info,
+          },
+          'todo': 'append',
+        });
+    }
+    core_elements.repo_ui.innerHTML = ui;
     for(const id of ui_elements){
         core_elements[id] = document.getElementById(id);
     }
+
     Object.assign(
       core_getelement('core_menu_root'),
       {
@@ -691,18 +703,6 @@ function core_repo_init({
         'textContent': core_repo_title,
       }
     );
-    if(info.length){
-        core_html({
-          'parent': core_elements.core_menu,
-          'properties': {
-            'id': 'core_menu_info',
-            'innerHTML': info,
-          },
-          'todo': 'append',
-        });
-    }
-    core_elements.repo_ui.innerHTML = ui;
-
     let have_default = false;
     for(const id in tabs){
         const tab = tabs[id];
