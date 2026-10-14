@@ -683,26 +683,7 @@ function core_repo_init({
         });
     }
     core_elements.repo_ui.innerHTML = ui;
-    for(const id of ui_elements){
-        core_elements[id] = document.getElementById(id);
-    }
 
-    Object.assign(
-      core_getelement('core_menu_root'),
-      {
-        'href': root,
-        'textContent': owner,
-      }
-    );
-    Object.assign(
-      core_getelement('core_menu_title'),
-      {
-        'href': link === false
-          ? 'https://github.com/' + owner + '/' + core_repo_title
-          : link,
-        'textContent': core_repo_title,
-      }
-    );
     let have_default = false;
     for(const id in tabs){
         const tab = tabs[id];
@@ -824,6 +805,26 @@ function core_repo_init({
     if(blur !== false){
         core_events.blur = blur;
     }
+
+    for(const id of ui_elements){
+        core_elements[id] = document.getElementById(id);
+    }
+    Object.assign(
+      core_getelement('core_menu_root'),
+      {
+        'href': root,
+        'textContent': owner,
+      }
+    );
+    Object.assign(
+      core_getelement('core_menu_title'),
+      {
+        'href': link === false
+          ? 'https://github.com/' + owner + '/' + core_repo_title
+          : link,
+        'textContent': core_repo_title,
+      }
+    );
     for(const id in events){
         Object.assign(
           core_getelement(id),
