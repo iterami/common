@@ -862,35 +862,8 @@ function core_round({
   decimals = 7,
   number,
 } = {}){
-    let returned = 0;
-    const result = Number(Math.round(number + 'e+' + decimals) + 'e-' + decimals);
-
-    if(globalThis.isNaN(result)){
-        const eIndex = String(number).indexOf('e');
-        let eString = '';
-        if(eIndex >= 0){
-            eString = String(number).slice(eIndex);
-            number = String(number).slice(
-              0,
-              eIndex
-            );
-
-            const power = Number(eString.slice(2));
-            if(power === decimals){
-                eString = 'e-' + (power + 1);
-            }
-        }
-
-        returned = Number(Number(Math.round(number + 'e+' + decimals) + 'e-' + decimals) + eString);
-
-    }else{
-        returned = result;
-    }
-
-    if(Math.abs(returned) < Number('1e-' + decimals)){
-        return 0;
-    }
-    return returned;
+    const power = 10 ** decimals;
+    return Math.round((number + number * Number.EPSILON) * power) / power;
 }
 
 function core_script({
