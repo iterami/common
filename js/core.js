@@ -862,8 +862,11 @@ function core_round({
   decimals = 7,
   number,
 } = {}){
+    const value = number < 0
+      ? number + number * Number.EPSILON
+      : number;
     const power = 10 ** decimals;
-    return Math.round((number + number * Number.EPSILON) * power) / power;
+    return Math.round(value * power) / power;
 }
 
 function core_script({
