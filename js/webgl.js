@@ -2703,20 +2703,14 @@ function webgl_path_move(character){
       point.position_x - character.position_x
     );
     const angle_y = Math.asin(Math.abs(character.position_y - point.position_y) / distance);
+    const change_position_y = Math.sin(angle_y) * speed;
     const cos_y_speed = Math.cos(angle_y) * speed;
-    character.change_position_x = core_round({
-      'number': Math.cos(angle_xz) * cos_y_speed,
-    });
-    let change_position_y = Math.sin(angle_y) * speed;
-    if(character.position_y > point.position_y){
-        change_position_y *= -1;
-    }
-    character.change_position_y = core_round({
-      'number': change_position_y,
-    });
-    character.change_position_z = core_round({
-      'number': Math.sin(angle_xz) * cos_y_speed,
-    });
+
+    character.change_position_x = Math.cos(angle_xz) * cos_y_speed;
+    character.change_position_y = character.position_y > point.position_y
+      ? -change_position_y
+      : change_position_y;
+    character.change_position_z = Math.sin(angle_xz) * cos_y_speed;
 }
 
 function webgl_path_use({
