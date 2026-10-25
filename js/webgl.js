@@ -1580,26 +1580,27 @@ uniform vec3 clear_color;
 uniform vec3 light_color[16];
 uniform vec3 light_position[16];
 void main(void){
-    fragment = texture(sampler, positionTexture) * color;
-    if(fog_end > 0.){
-        fragment.rgb = mix(
-          fragment.rgb,
-          clear_color,
-          smoothstep(fog_start, fog_end, length(positionCamera))
-        );
-    }
+    vec4 fragcolor = color;
     for(int i = 0; i < light_count; i++) {
         float range = distance(
           light_position[i],
           positionVertex
         );
         if(range < light_range[i]){
-            fragment.rgb = mix(
+            fragcolor.rgb = mix(
               light_color[i],
-              fragment.rgb,
+              fragcolor.rgb,
               clamp(range / light_range[i], 0., 1.)
             );
         }
+    }
+    fragment = texture(sampler, positionTexture) * fragcolor;
+    if(fog_end > 0.){
+        fragment.rgb = mix(
+          fragment.rgb,
+          clear_color,
+          smoothstep(fog_start, fog_end, length(positionCamera))
+        );
     }
 }`,
       'vertex':
