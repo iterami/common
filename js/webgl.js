@@ -1102,7 +1102,7 @@ function webgl_draw_entity(entity){
     );
     const uniforms = webgl_shaders[webgl_shader_id].uniforms;
     webgl.uniformMatrix4fv(
-      uniforms.camera,
+      uniforms.entity,
       false,
       webgl_matrices[entity.id]
     );
@@ -1137,6 +1137,13 @@ function webgl_draw_entity(entity){
 function webgl_draw_picking(){
     webgl.clearColor(0, 0, 0, 0);
     webgl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
+
+    const uniforms = webgl_shaders[webgl_shader_id].uniforms;
+    webgl.uniformMatrix4fv(
+      uniforms.camera,
+      false,
+      webgl_matrices.camera
+    );
 
     webgl.disable(webgl.DEPTH_TEST);
     entity_group_modify({
@@ -1553,6 +1560,7 @@ function webgl_init(){
         'directional',
         'directional_color',
         'directional_vector',
+        'entity',
         'fog_end',
         'fog_start',
         'light_color',
@@ -1616,14 +1624,16 @@ uniform bool directional;
 uniform float alpha;
 uniform float point_size;
 uniform mat4 camera;
+uniform mat4 entity;
 uniform mat4 perspective;
 uniform vec3 ambient_color;
 uniform vec3 directional_color;
 uniform vec3 directional_vector;
 uniform vec3 normals;
 void main(void){
-    positionVertex = vertexPosition;
-    positionCamera = camera * vec4(positionVertex, 1.);
+    vec4 positionEntity = entity * vec4(vertexPosition, 1.);
+    positionCamera = camera * positionEntity;
+    positionVertex = positionEntity.xyz;
     gl_Position = perspective * positionCamera;
     if(point_size > 0.){
         gl_PointSize = point_size / length(positionCamera);
@@ -2250,6 +2260,12 @@ function webgl_logic(){
     );
 
     const uniforms = webgl_shaders.default.uniforms;
+    webgl.uniformMatrix4fv(
+      uniforms.camera,
+      false,
+      webgl_matrices.camera
+    );
+
     webgl.uniform1i(
       uniforms.light_count,
       webgl_shader_light_range.length
@@ -2449,10 +2465,7 @@ function webgl_logic_entity(entity){
         webgl_logic_particle(entity);
     }
 
-    Object.assign(
-      webgl_matrices[entity.id],
-      webgl_matrices.camera
-    );
+    math_matrix_identity(webgl_matrices[entity.id]);
     math_matrix_translate(
       webgl_matrices[entity.id],
       -entity.position_x,
@@ -2915,9 +2928,12 @@ function webgl_pick_init(){
 
     webgl_shader({
       'id': 'picking',
-      'attributes': [],
+      'attributes': [
+        'vertexPosition',
+      ],
       'uniforms': [
         'camera',
+        'entity',
         'perspective',
         'pick_id',
         'point_size',
@@ -2936,10 +2952,11 @@ layout (location = 0) in vec3 vertexPosition;
 out vec4 color;
 uniform float point_size;
 uniform mat4 camera;
+uniform mat4 entity;
 uniform mat4 perspective;
 uniform float pick_id;
 void main(void){
-    vec4 positionCamera = camera * vec4(vertexPosition, 1.);
+    vec4 positionCamera = camera * (entity * vec4(vertexPosition, 1.));
     gl_Position = perspective * positionCamera;
     if(point_size > 0.){
         gl_PointSize = point_size / length(positionCamera);
