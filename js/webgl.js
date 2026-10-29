@@ -2332,8 +2332,9 @@ function webgl_logic(){
 
 function webgl_logic_entity(entity){
     const attached = webgl_characters[entity.attach_to];
+    const skybox = entity_groups.skybox[entity.id] === true;
 
-    if(entity_groups.skybox[entity.id]){
+    if(skybox){
         entity.position_x = attached.camera_x;
         entity.position_y = attached.camera_y;
         entity.position_z = attached.camera_z;
@@ -2472,7 +2473,7 @@ function webgl_logic_entity(entity){
       -entity.position_y,
       -entity.position_z
     );
-    if(entity_groups.skybox[entity.id] !== true){
+    if(!skybox){
         math_matrix_rotate(
           webgl_matrices[entity.id],
           math_degrees_to_radians(attached.rotate_x),
