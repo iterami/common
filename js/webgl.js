@@ -2046,10 +2046,6 @@ function webgl_logic(){
 
     globalThis.repo_logic?.();
 
-    for(const entity in entity_entities){
-        webgl_logic_entity(entity_entities[entity]);
-    }
-
     loop:for(const id in webgl_characters){
         const character = webgl_characters[id];
         const level = webgl_character_level(character);
@@ -2243,6 +2239,10 @@ function webgl_logic(){
             player.camera_y = target.position_y;
             player.camera_z = target.position_z;
         }
+    }
+
+    for(const entity in entity_entities){
+        webgl_logic_entity(entity_entities[entity]);
     }
 
     math_matrix_identity(webgl_matrices.camera);
