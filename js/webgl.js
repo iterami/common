@@ -3084,6 +3084,13 @@ function webgl_prefab_repeat({
   z_max = 0,
   z_min = 0,
 } = {}){
+    const x = x_max - x_min;
+    const y = y_max - y_min;
+    const z = z_max - z_min;
+    const random_x = x !== 0;
+    const random_y = y !== 0;
+    const random_z = z !== 0;
+
     if(characters){
         for(let i = 0; i < count; i++){
             const id = prefix + '_' + i;
@@ -3091,9 +3098,9 @@ function webgl_prefab_repeat({
               ...characters,
               'id': id,
               'spawn': {
-                'position_x': Math.random() * (x_max - x_min) + x_min,
-                'position_y': Math.random() * (y_max - y_min) + y_min,
-                'position_z': Math.random() * (z_max - z_min) + z_min,
+                'position_x': x_min + (random_x ? (x * Math.random()) : x),
+                'position_y': y_min + (random_y ? (y * Math.random()) : y),
+                'position_z': z_min + (random_z ? (z * Math.random()) : z),
                 ...characters.spawn,
               },
             });
@@ -3108,9 +3115,9 @@ function webgl_prefab_repeat({
 
     for(let i = 0; i < count; i++){
         properties.prefix = prefix + '_' + i;
-        properties.position_x = Math.random() * (x_max - x_min) + x_min;
-        properties.position_y = Math.random() * (y_max - y_min) + y_min;
-        properties.position_z = Math.random() * (z_max - z_min) + z_min;
+        properties.position_x = x_min + (random_x ? (x * Math.random()) : x);
+        properties.position_y = y_min + (random_y ? (y * Math.random()) : y);
+        properties.position_z = z_min + (random_z ? (z * Math.random()) : z);
 
         globalThis[type](properties);
     }
