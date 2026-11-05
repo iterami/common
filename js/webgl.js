@@ -3072,54 +3072,64 @@ function webgl_prefab_remake({
 }
 
 function webgl_prefab_repeat({
+  areas,
   characters = false,
-  count = 1,
   prefix = entity_id_count,
   properties = {},
   type,
-  x_max = 0,
-  x_min = 0,
-  y_max = 0,
-  y_min = 0,
-  z_max = 0,
-  z_min = 0,
 } = {}){
-    const x = x_max - x_min;
-    const y = y_max - y_min;
-    const z = z_max - z_min;
-    const random_x = x !== 0;
-    const random_y = y !== 0;
-    const random_z = z !== 0;
+    let id_count = 0;
 
-    if(characters){
-        for(let i = 0; i < count; i++){
-            const id = prefix + '_' + i;
-            webgl_character_init({
-              ...characters,
-              'id': id,
-              'spawn': {
-                'position_x': x_min + (random_x ? (x * Math.random()) : x),
-                'position_y': y_min + (random_y ? (y * Math.random()) : y),
-                'position_z': z_min + (random_z ? (z * Math.random()) : z),
-                ...characters.spawn,
-              },
-            });
+    for(const area of areas){
+        core_object_defaults({
+          'object': area,
+          'defaults': {
+            'count': 1,
+            'x_max': 0,
+            'x_min': 0,
+            'y_max': 0,
+            'y_min': 0,
+            'z_max': 0,
+            'z_min': 0,
+          },
+        });
+        const x_range = area.x_max - area.x_min;
+        const y_range = area.y_max - area.y_min;
+        const z_range = area.z_max - area.z_min;
+        const random_x = x_range !== 0;
+        const random_y = y_range !== 0;
+        const random_z = z_range !== 0;
 
-            properties.character = id;
-            properties.prefix = id;
+        if(characters){
+            for(let i = 0; i < area.count; i++){
+                const id = prefix + '_' + id_count++;
+                webgl_character_init({
+                  ...characters,
+                  'id': id,
+                  'spawn': {
+                    'position_x': area.x_min + (random_x ? (x_range * Math.random()) : x_range),
+                    'position_y': area.y_min + (random_y ? (y_range * Math.random()) : y_range),
+                    'position_z': area.z_min + (random_z ? (z_range * Math.random()) : z_range),
+                    ...characters.spawn,
+                  },
+                });
 
-            globalThis[type]?.(properties);
+                properties.character = id;
+                properties.prefix = id;
+
+                globalThis[type]?.(properties);
+            }
+            continue;
         }
-        return;
-    }
 
-    for(let i = 0; i < count; i++){
-        properties.prefix = prefix + '_' + i;
-        properties.position_x = x_min + (random_x ? (x * Math.random()) : x);
-        properties.position_y = y_min + (random_y ? (y * Math.random()) : y);
-        properties.position_z = z_min + (random_z ? (z * Math.random()) : z);
+        for(let i = 0; i < area.count; i++){
+            properties.prefix = prefix + '_' + id_count++;
+            properties.position_x = area.x_min + (random_x ? (x_range * Math.random()) : x_range);
+            properties.position_y = area.y_min + (random_y ? (y_range * Math.random()) : y_range);
+            properties.position_z = area.z_min + (random_z ? (z_range * Math.random()) : z_range);
 
-        globalThis[type](properties);
+            globalThis[type](properties);
+        }
     }
 }
 
@@ -3137,29 +3147,40 @@ function webgl_primitive_area(args){
     const prefab_args = webgl_prefab_args(args);
 
     for(const entity of args.entities){
-        const area = {
-          ...args.area,
-          ...entity.area,
-        };
-        const x_min = area.x_min || 0;
-        const y_min = area.y_min || 0;
-        const z_min = area.z_min || 0;
-        const x_range = (area.x_max || 0) - x_min;
-        const y_range = (area.y_max || 0) - y_min;
-        const z_range = (area.z_max || 0) - z_min;
-        const color = entity.vertex_colors || prefab_args.vertex_colors;
+        const area = core_object_defaults({
+          'object': {
+            'color': entity.vertex_colors,
+            ...args.area,
+            ...entity.area,
+          },
+          'defaults': {
+            'color': prefab_args.vertex_colors,
+            'x_max': 0,
+            'x_min': 0,
+            'y_max': 0,
+            'y_min': 0,
+            'z_max': 0,
+            'z_min': 0,
+          },
+        });
+        const x_range = area.x_max - area.x_min;
+        const y_range = area.y_max - area.y_min;
+        const z_range = area.z_max - area.z_min;
+        const random_x = x_range !== 0;
+        const random_y = y_range !== 0;
+        const random_z = z_range !== 0;
 
         const vertices = [];
-        const colors = [...color];
+        const colors = [...area.color];
         if(core_type(entity.vertices) === 'Number'){
             for(let vertex = 0; vertex <= entity.vertices; vertex++){
                 vertices.push(
-                  x_min + Math.random() * x_range,
-                  y_min + Math.random() * y_range,
-                  z_min + Math.random() * z_range
+                  area.x_min + (random_x ? (x_range * Math.random()) : x_range),
+                  area.y_min + (random_y ? (y_range * Math.random()) : y_range),
+                  area.z_min + (random_z ? (z_range * Math.random()) : z_range)
                 );
 
-                if(color.length === 0){
+                if(area.color.length === 0){
                     colors.push(
                       Math.random(),
                       Math.random(),
