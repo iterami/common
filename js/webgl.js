@@ -3113,22 +3113,25 @@ function webgl_prefab_repeat({
                     ...characters.spawn,
                   },
                 });
-
-                properties.character = id;
-                properties.prefix = id;
-
-                globalThis[type]?.(properties);
+                globalThis[type]?.({
+                  ...properties,
+                  'character': id,
+                  'prefix': id,
+                  ...area.properties,
+                });
             }
             continue;
         }
 
         for(let i = 0; i < area.count; i++){
-            properties.prefix = prefix + '_' + id_count++;
-            properties.position_x = area.x_min + (random_x ? (x_range * Math.random()) : x_range);
-            properties.position_y = area.y_min + (random_y ? (y_range * Math.random()) : y_range);
-            properties.position_z = area.z_min + (random_z ? (z_range * Math.random()) : z_range);
-
-            globalThis[type](properties);
+            globalThis[type]({
+              ...properties,
+              'prefix': prefix + '_' + id_count++,
+              'position_x': area.x_min + (random_x ? (x_range * Math.random()) : x_range),
+              'position_y': area.y_min + (random_y ? (y_range * Math.random()) : y_range),
+              'position_z': area.z_min + (random_z ? (z_range * Math.random()) : z_range),
+              ...area.properties,
+            });
         }
     }
 }
