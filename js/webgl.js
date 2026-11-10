@@ -3100,17 +3100,19 @@ function webgl_prefab_repeat({
         const random_y = y_range !== 0;
         const random_z = z_range !== 0;
 
-        if(characters){
+        if(characters || area.characters){
             for(let i = 0; i < area.count; i++){
                 const id = prefix + '_' + id_count++;
                 webgl_character_init({
                   ...characters,
+                  ...area.characters,
                   'id': id,
                   'spawn': {
                     'position_x': area.x_min + (random_x ? (x_range * Math.random()) : x_range),
                     'position_y': area.y_min + (random_y ? (y_range * Math.random()) : y_range),
                     'position_z': area.z_min + (random_z ? (z_range * Math.random()) : z_range),
                     ...characters.spawn,
+                    ...area.characters?.spawn,
                   },
                 });
                 globalThis[type]?.({
