@@ -1526,13 +1526,6 @@ function webgl_init(){
       }
     );
 
-    webgl_matrices.camera = math_matrix_create();
-    webgl_matrices.perspective = math_matrix_create();
-    webgl_matrices.perspective[5] = 1;
-    webgl_matrices.perspective[10] = -1;
-    webgl_matrices.perspective[11] = -1;
-    webgl_matrices.perspective[14] = -2;
-
     webgl.enable(webgl.BLEND);
     webgl.blendFunc(
       webgl.SRC_ALPHA,
@@ -1545,6 +1538,8 @@ function webgl_init(){
       webgl.FASTEST
     );
 
+    webgl_matrices.camera = math_matrix_create();
+    webgl_matrices.perspective = math_matrix_create();
     webgl_shader({
       'id': 'default',
       'attributes': [
@@ -1782,10 +1777,6 @@ function webgl_level_init({
         }
     }
 
-    if(webgl === 0){
-        webgl_init();
-    }
-
     core_object_defaults({
       'object': json,
       'defaults': {
@@ -1800,6 +1791,7 @@ function webgl_level_init({
         'draw_range': false,
         'fog_end': 0,
         'fog_start': 0,
+        'fov': 90,
         'gravity_acceleration': -.04,
         'gravity_damage': false,
         'gravity_max': -2,
@@ -1835,6 +1827,7 @@ function webgl_level_init({
         'draw_range': json.draw_range,
         'fog_end': json.fog_end,
         'fog_start': json.fog_start,
+        'fov': json.fov,
         'gravity_acceleration': json.gravity_acceleration,
         'gravity_damage': json.gravity_damage,
         'gravity_max': json.gravity_max,
@@ -1847,6 +1840,11 @@ function webgl_level_init({
         'y_min': json.y_min,
       }
     );
+
+    if(webgl === 0){
+        webgl_init();
+    }
+    webgl_perspective();
     webgl_color_set({
       'blue': webgl_properties.clear_color[2],
       'green': webgl_properties.clear_color[1],
@@ -2746,6 +2744,22 @@ function webgl_path_use({
         character.path_end = path.end || '';
         character.path_point = path.point || 0;
     }
+}
+
+function webgl_perspective(){
+    const fov = 1 / Math.tan(math_degrees_to_radians(webgl_properties.fov || 90) / 2);
+
+    webgl_matrices.perspective[0] = fov * (webgl.drawingBufferHeight / webgl.drawingBufferWidth);
+    webgl_matrices.perspective[5] = fov;
+    webgl_matrices.perspective[10] = -1;
+    webgl_matrices.perspective[11] = -1;
+    webgl_matrices.perspective[14] = -2;
+
+    webgl.uniformMatrix4fv(
+      webgl_shaders.default.uniforms.perspective,
+      false,
+      webgl_matrices.perspective
+    );
 }
 
 function webgl_pick(cursor){
@@ -3899,19 +3913,9 @@ function webgl_random_vertex(entity){
 function webgl_resize(){
     webgl.canvas.height = globalThis.innerHeight;
     webgl.canvas.width = globalThis.innerWidth;
-    webgl.viewport(
-      0,
-      0,
-      webgl.drawingBufferWidth,
-      webgl.drawingBufferHeight
-    );
 
-    webgl_matrices.perspective[0] = webgl.drawingBufferHeight / webgl.drawingBufferWidth;
-    webgl.uniformMatrix4fv(
-      webgl_shaders.default.uniforms.perspective,
-      false,
-      webgl_matrices.perspective
-    );
+    webgl.viewport(0, 0, webgl.drawingBufferWidth, webgl.drawingBufferHeight);
+    webgl_perspective();
     webgl_pick_resize();
 
     if(core_menu_open
