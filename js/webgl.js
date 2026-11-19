@@ -1791,7 +1791,7 @@ function webgl_level_init({
         'draw_range': false,
         'fog_end': 0,
         'fog_start': 0,
-        'fov': 90,
+        'fov': 70,
         'gravity_acceleration': -.04,
         'gravity_damage': false,
         'gravity_max': -2,
