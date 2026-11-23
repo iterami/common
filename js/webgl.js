@@ -4635,9 +4635,8 @@ globalThis.webgl_shaders = {};
 globalThis.webgl_textures = {};
 globalThis.webgl_timer_count = 0;
 globalThis.webgl_timers = {};
-globalThis.webgl_uris = {'default.png': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg=='};
-
-globalThis.addEventListener('load', function(){
-    Object.assign(webgl_uris, globalThis.uris);
-    delete globalThis.uris;
-}, {'once': true});
+globalThis.webgl_uris = {
+  'default.png': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIW2P8////fwAKAAP+j4hsjgAAAABJRU5ErkJggg==',
+  ...globalThis.uris,
+};
+delete globalThis.uris;
