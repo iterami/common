@@ -1235,27 +1235,25 @@ globalThis.core_menu_lock = false;
 globalThis.core_menu_open = false;
 globalThis.core_mobile = 'TouchEvent' in globalThis;
 globalThis.core_mode = 0;
-globalThis.core_pointer = {};
+globalThis.core_pointer = {
+  'down_0': false,
+  'down_1': false,
+  'down_2': false,
+  'down_3': false,
+  'down_4': false,
+  'down_x': 0,
+  'down_y': 0,
+  'movement_x': 0,
+  'movement_y': 0,
+  'x': 0,
+  'y': 0,
+};
 globalThis.core_repo_title = '';
 globalThis.core_storage_data = {};
 globalThis.core_storage_info = {};
 globalThis.core_ui_values = {};
 
 globalThis.addEventListener('load', function(){
-    core_pointer = {
-      'down_0': false,
-      'down_1': false,
-      'down_2': false,
-      'down_3': false,
-      'down_4': false,
-      'down_x': 0,
-      'down_y': 0,
-      'movement_x': 0,
-      'movement_y': 0,
-      'x': 0,
-      'y': 0,
-    };
-
     globalThis.addEventListener('blur', core_handle_blur);
     globalThis.addEventListener('keydown', core_handle_keydown);
     globalThis.addEventListener('keyup', core_handle_keyup);
