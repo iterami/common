@@ -1742,7 +1742,7 @@ function webgl_level_init({
             }
         }
         character = json.characters[id];
-        webgl_player_id = id;
+        webgl_player_id = character.id;
 
     }else if(character === 0
       && base.level < -1){
