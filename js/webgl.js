@@ -1527,16 +1527,10 @@ function webgl_init(){
     );
 
     webgl.enable(webgl.BLEND);
-    webgl.blendFunc(
-      webgl.SRC_ALPHA,
-      webgl.ONE_MINUS_SRC_ALPHA
-    );
+    webgl.blendFunc(webgl.SRC_ALPHA, webgl.ONE_MINUS_SRC_ALPHA);
     webgl.enable(webgl.CULL_FACE);
     webgl.enable(webgl.DEPTH_TEST);
-    webgl.hint(
-      webgl.GENERATE_MIPMAP_HINT,
-      webgl.FASTEST
-    );
+    webgl.hint(webgl.GENERATE_MIPMAP_HINT, webgl.FASTEST);
 
     webgl_matrices.camera = math_matrix_create();
     webgl_matrices.perspective = math_matrix_create();
@@ -1883,6 +1877,7 @@ function webgl_level_init({
         webgl_paths[String(path.id)] = {...path};
     }
 
+    webgl_character_base = webgl_player_id;
     if(character === -1){
         webgl_character_init({
           'collides': true,
@@ -2012,7 +2007,7 @@ function webgl_level_unload(base){
     core_object_reset(webgl_shader_light_range);
     core_object_reset(webgl_timers);
 
-    webgl_character_base = webgl_player_id;
+    webgl_character_base = '';
     webgl_character_count = 0;
     webgl_timer_count = 0;
 
