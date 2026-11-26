@@ -3253,162 +3253,138 @@ function webgl_primitive_cuboid(args){
     const vertices_size_z = Math.abs(half_size_z);
 
     if(args.top !== false){
-        const properties = {
-          ...prefab_args,
-          'attach_x': prefab_args.position_x,
-          'attach_y': prefab_args.position_y + half_size_y,
-          'attach_z': prefab_args.position_z,
-          'id': args.prefix + '_top',
-          'vertex_colors': args.top.vertex_colors || prefab_args.vertex_colors,
-          'vertices': [
-            vertices_size_x, 0, -vertices_size_z,
-            -vertices_size_x, 0, -vertices_size_z,
-            -vertices_size_x, 0, vertices_size_z,
-            vertices_size_x, 0, vertices_size_z,
-          ],
-        };
-        Object.assign(
-          properties,
-          args.top
-        );
         webgl_entity_create({
           'character': args.character,
-          'entities': [properties],
+          'entities': [{
+            ...prefab_args,
+            'attach_x': prefab_args.position_x,
+            'attach_y': prefab_args.position_y + half_size_y,
+            'attach_z': prefab_args.position_z,
+            'id': args.prefix + '_top',
+            'texture_align': '11010010',
+            'vertex_colors': args.top.vertex_colors || prefab_args.vertex_colors,
+            'vertices': [
+              vertices_size_x, 0, -vertices_size_z,
+              -vertices_size_x, 0, -vertices_size_z,
+              -vertices_size_x, 0, vertices_size_z,
+              vertices_size_x, 0, vertices_size_z,
+            ],
+            ...args.top,
+          }],
           'groups': args.groups,
         });
     }
-
     if(args.bottom !== false){
-        const properties = {
-          ...prefab_args,
-          'attach_x': prefab_args.position_x,
-          'attach_y': prefab_args.position_y - half_size_y,
-          'attach_z': prefab_args.position_z,
-          'id': args.prefix + '_bottom',
-          'rotate_x': 180,
-          'vertex_colors': args.bottom.vertex_colors || prefab_args.vertex_colors,
-          'vertices': [
-            vertices_size_x, 0, -vertices_size_z,
-            -vertices_size_x, 0, -vertices_size_z,
-            -vertices_size_x, 0, vertices_size_z,
-            vertices_size_x, 0, vertices_size_z,
-          ],
-        };
-        Object.assign(
-          properties,
-          args.bottom
-        );
         webgl_entity_create({
           'character': args.character,
-          'entities': [properties],
+          'entities': [{
+            ...prefab_args,
+            'attach_x': prefab_args.position_x,
+            'attach_y': prefab_args.position_y - half_size_y,
+            'attach_z': prefab_args.position_z,
+            'id': args.prefix + '_bottom',
+            'rotate_x': 180,
+            'texture_align': '00101101',
+            'vertex_colors': args.bottom.vertex_colors || prefab_args.vertex_colors,
+            'vertices': [
+              vertices_size_x, 0, -vertices_size_z,
+              -vertices_size_x, 0, -vertices_size_z,
+              -vertices_size_x, 0, vertices_size_z,
+              vertices_size_x, 0, vertices_size_z,
+            ],
+            ...args.bottom,
+          }],
           'groups': args.groups,
         });
     }
-
     if(args.back !== false){
-        const properties = {
-          ...prefab_args,
-          'attach_x': prefab_args.position_x,
-          'attach_y': prefab_args.position_y,
-          'attach_z': prefab_args.position_z + half_size_z,
-          'id': args.prefix + '_back',
-          'rotate_x': 90,
-          'vertex_colors': args.back.vertex_colors || prefab_args.vertex_colors,
-          'vertices': [
-            vertices_size_x, 0, -vertices_size_y,
-            -vertices_size_x, 0, -vertices_size_y,
-            -vertices_size_x, 0, vertices_size_y,
-            vertices_size_x, 0, vertices_size_y,
-          ],
-        };
-        Object.assign(
-          properties,
-          args.back
-        );
         webgl_entity_create({
           'character': args.character,
-          'entities': [properties],
+          'entities': [{
+            ...prefab_args,
+            'attach_x': prefab_args.position_x,
+            'attach_y': prefab_args.position_y,
+            'attach_z': prefab_args.position_z + half_size_z,
+            'id': args.prefix + '_back',
+            'rotate_x': 90,
+            'texture_align': '00101101',
+            'vertex_colors': args.back.vertex_colors || prefab_args.vertex_colors,
+            'vertices': [
+              vertices_size_x, 0, -vertices_size_y,
+              -vertices_size_x, 0, -vertices_size_y,
+              -vertices_size_x, 0, vertices_size_y,
+              vertices_size_x, 0, vertices_size_y,
+            ],
+            ...args.back,
+          }],
           'groups': args.groups,
         });
     }
-
     if(args.front !== false){
-        const properties = {
-          ...prefab_args,
-          'attach_x': prefab_args.position_x,
-          'attach_y': prefab_args.position_y,
-          'attach_z': prefab_args.position_z - half_size_z,
-          'id': args.prefix + '_front',
-          'rotate_x': 270,
-          'vertex_colors': args.front.vertex_colors || prefab_args.vertex_colors,
-          'vertices': [
-            vertices_size_x, 0, -vertices_size_y,
-            -vertices_size_x, 0, -vertices_size_y,
-            -vertices_size_x, 0, vertices_size_y,
-            vertices_size_x, 0, vertices_size_y,
-          ],
-        };
-        Object.assign(
-          properties,
-          args.front
-        );
         webgl_entity_create({
           'character': args.character,
-          'entities': [properties],
+          'entities': [{
+            ...prefab_args,
+            'attach_x': prefab_args.position_x,
+            'attach_y': prefab_args.position_y,
+            'attach_z': prefab_args.position_z - half_size_z,
+            'id': args.prefix + '_front',
+            'rotate_x': 270,
+            'vertex_colors': args.front.vertex_colors || prefab_args.vertex_colors,
+            'vertices': [
+              vertices_size_x, 0, -vertices_size_y,
+              -vertices_size_x, 0, -vertices_size_y,
+              -vertices_size_x, 0, vertices_size_y,
+              vertices_size_x, 0, vertices_size_y,
+            ],
+            ...args.front,
+          }],
           'groups': args.groups,
         });
     }
-
     if(args.left !== false){
-        const properties = {
-          ...prefab_args,
-          'attach_x': prefab_args.position_x - half_size_x,
-          'attach_y': prefab_args.position_y,
-          'attach_z': prefab_args.position_z,
-          'id': args.prefix + '_left',
-          'rotate_z': 90,
-          'vertex_colors': args.left.vertex_colors || prefab_args.vertex_colors,
-          'vertices': [
-            vertices_size_y, 0, -vertices_size_z,
-            -vertices_size_y, 0, -vertices_size_z,
-            -vertices_size_y, 0, vertices_size_z,
-            vertices_size_y, 0, vertices_size_z,
-          ],
-        };
-        Object.assign(
-          properties,
-          args.left
-        );
         webgl_entity_create({
           'character': args.character,
-          'entities': [properties],
+          'entities': [{
+            ...prefab_args,
+            'attach_x': prefab_args.position_x - half_size_x,
+            'attach_y': prefab_args.position_y,
+            'attach_z': prefab_args.position_z,
+            'id': args.prefix + '_left',
+            'rotate_z': 90,
+            'texture_align': '10110100',
+            'vertex_colors': args.left.vertex_colors || prefab_args.vertex_colors,
+            'vertices': [
+              vertices_size_y, 0, -vertices_size_z,
+              -vertices_size_y, 0, -vertices_size_z,
+              -vertices_size_y, 0, vertices_size_z,
+              vertices_size_y, 0, vertices_size_z,
+            ],
+            ...args.left,
+          }],
           'groups': args.groups,
         });
     }
-
     if(args.right !== false){
-        const properties = {
-          ...prefab_args,
-          'attach_x': prefab_args.position_x + half_size_x,
-          'attach_y': prefab_args.position_y,
-          'attach_z': prefab_args.position_z,
-          'id': args.prefix + '_right',
-          'rotate_z': 270,
-          'vertex_colors': args.right.vertex_colors || prefab_args.vertex_colors,
-          'vertices': [
-            vertices_size_y, 0, -vertices_size_z,
-            -vertices_size_y, 0, -vertices_size_z,
-            -vertices_size_y, 0, vertices_size_z,
-            vertices_size_y, 0, vertices_size_z,
-          ],
-        };
-        Object.assign(
-          properties,
-          args.right
-        );
         webgl_entity_create({
           'character': args.character,
-          'entities': [properties],
+          'entities': [{
+            ...prefab_args,
+            'attach_x': prefab_args.position_x + half_size_x,
+            'attach_y': prefab_args.position_y,
+            'attach_z': prefab_args.position_z,
+            'id': args.prefix + '_right',
+            'rotate_z': 270,
+            'texture_align': '01001011',
+            'vertex_colors': args.right.vertex_colors || prefab_args.vertex_colors,
+            'vertices': [
+              vertices_size_y, 0, -vertices_size_z,
+              -vertices_size_y, 0, -vertices_size_z,
+              -vertices_size_y, 0, vertices_size_z,
+              vertices_size_y, 0, vertices_size_z,
+            ],
+            ...args.right,
+          }],
           'groups': args.groups,
         });
     }

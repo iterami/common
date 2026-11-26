@@ -28,16 +28,10 @@ function prefabs_webgl_cuboid_tree(args){
       'bottom': false,
       'character': args.character,
       'collision': args.trunk_collision,
-      'left': {
-        'texture_align': '10110100',
-      },
       'position_x': prefab_args.position_x,
       'position_y': prefab_args.position_y + args.trunk_size_y / 2,
       'position_z': prefab_args.position_z,
       'prefix': args.prefix + '_trunk',
-      'right': {
-        'texture_align': '10110100',
-      },
       'size_x': args.trunk_size_x,
       'size_y': args.trunk_size_y,
       'size_z': args.trunk_size_z,
