@@ -1675,7 +1675,7 @@ void main(void){
         'rotate_y': 0,
         'rotate_z': 0,
         'texture': 'default.png',
-        'texture_align': '11010010',
+        'texture_align': '01111000',
         'texture_x': 1,
         'texture_y': 1,
         'vertex_colors': [],
@@ -3261,7 +3261,6 @@ function webgl_primitive_cuboid(args){
             'attach_y': prefab_args.position_y + half_size_y,
             'attach_z': prefab_args.position_z,
             'id': args.prefix + '_top',
-            'texture_align': '11010010',
             'vertex_colors': args.top.vertex_colors || prefab_args.vertex_colors,
             'vertices': [
               vertices_size_x, 0, -vertices_size_z,
@@ -3284,7 +3283,6 @@ function webgl_primitive_cuboid(args){
             'attach_z': prefab_args.position_z,
             'id': args.prefix + '_bottom',
             'rotate_x': 180,
-            'texture_align': '00101101',
             'vertex_colors': args.bottom.vertex_colors || prefab_args.vertex_colors,
             'vertices': [
               vertices_size_x, 0, -vertices_size_z,
@@ -3307,7 +3305,7 @@ function webgl_primitive_cuboid(args){
             'attach_z': prefab_args.position_z + half_size_z,
             'id': args.prefix + '_back',
             'rotate_x': 90,
-            'texture_align': '00101101',
+            'texture_align': '10000111',
             'vertex_colors': args.back.vertex_colors || prefab_args.vertex_colors,
             'vertices': [
               vertices_size_x, 0, -vertices_size_y,
@@ -3352,7 +3350,7 @@ function webgl_primitive_cuboid(args){
             'attach_z': prefab_args.position_z,
             'id': args.prefix + '_left',
             'rotate_z': 90,
-            'texture_align': '10110100',
+            'texture_align': '00011110',
             'vertex_colors': args.left.vertex_colors || prefab_args.vertex_colors,
             'vertices': [
               vertices_size_y, 0, -vertices_size_z,
@@ -3375,7 +3373,7 @@ function webgl_primitive_cuboid(args){
             'attach_z': prefab_args.position_z,
             'id': args.prefix + '_right',
             'rotate_z': 270,
-            'texture_align': '01001011',
+            'texture_align': '11100001',
             'vertex_colors': args.right.vertex_colors || prefab_args.vertex_colors,
             'vertices': [
               vertices_size_y, 0, -vertices_size_z,
